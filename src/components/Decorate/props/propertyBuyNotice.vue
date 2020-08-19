@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
       <el-form-item label="购买公告" prop="buyType">
         <el-radio-group v-model="ruleForm.buyType">
@@ -28,12 +28,13 @@
        <el-form-item label="公告商品" prop="goods">
         <div class="goods_list">
           <ul>
-            <li v-for="(item, key) of list" :key="key">
+            <li v-for="(item, key) of displayList" :key="key">
               <img :src="item.mainImage" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
             <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectGoods'">
               <i class="inner"></i>
+              <p>添加商品</p>
             </li>
           </ul>
         </div>
@@ -46,11 +47,11 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
-import dialogSelectGoods from '@/views/shop/dialogs/decorateDialogs/dialogSelectGoods';
+import mixinPropsData from '../mixins/mixinPropsData';
+import dialogSelectGoods from '@/components/Decorate/dialogs/dialogSelectGoods';
 export default {
   name: 'propertyBuyNotice',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsData],
   components: {dialogSelectGoods},
   data () {
     return {
@@ -58,22 +59,20 @@ export default {
         buyType: 1,// 购买公告类型
         intervalStart: 10,//间隔时间开始
         intervalEnd: 60,// 间隔时间结束 
-        backgroundColor: 'rgb(255,248,233)',//背景颜色
-        fontColor: 'rgb(102,102,102)',//字体颜色
+        backgroundColor: 'rgba(0,0,0,0.4)',//背景颜色
+        fontColor: 'rgba(255,255,255,1)',//字体颜色
         ids: []//商品id列表
       },
+      displayList: [],
       rules: {
 
       },
-      list: [],
       echoList: [],
       dialogVisible: false,
       currentDialog: ''
     }
   },
-  created() {
-    this.fetch(false);
-  },
+
   watch: {
     'items': {
       handler(newValue) {
@@ -103,7 +102,7 @@ export default {
     fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
         if(componentData) {
-          bNeedUpdateMiddle && this._globalEvent.$emit('fetchBuyNotice', this.ruleForm, this.$parent.currentComponentId);
+          bNeedUpdateMiddle && this.syncToMiddle();
           if(Array.isArray(componentData.ids) && componentData.ids.length){
             this.loading = true;
             this._apis.goods.fetchAllSpuGoodsList({
@@ -114,18 +113,18 @@ export default {
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.list = [];
+                this.displayList = [];
                 this.loading = false;
             });
           }else{
-            this.list = [];
+            this.displayList = [];
           }
         }
     },
       /* 创建数据 */
     createList(datas) {
-      this.list = datas;
-    },
+      this.displayList = datas;
+    }
   }
 }
 </script>

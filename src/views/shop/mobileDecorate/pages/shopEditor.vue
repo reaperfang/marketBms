@@ -2,7 +2,18 @@
   <div>
 
     <!-- 装修编辑器 -->
-    <Decorate ref="Decorate" :decorateData="decorateData" :config="config" :height="146+10"></Decorate>
+    <Decorate 
+      ref="Decorate" 
+      :decorateData="decorateData" 
+      :config="config" 
+      @widgetPanelInited="widgetPanelInited"
+      @renderPanelInited="renderPanelInited"
+      @propsPanelInited="propsPanelInited"
+      @responseDataInited="responseDataInited"
+      @propDataChanged="propDataChanged"
+      @dataLoadProgress="dataLoadProgress"
+      @finished="finished"
+    ></Decorate>
 
     <!-- 动态弹窗 预览 -->
     <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :decorateData="decorateData"></component>
@@ -12,7 +23,9 @@
 <script>
 import Decorate from '@/components/Decorate';
 import utils from '@/utils';
-import dialogDecoratePreview from '@/views/shop/dialogs/decorateDialogs/dialogDecoratePreview';
+import dialogDecoratePreview from '@/components/Decorate/dialogs/dialogDecoratePreview';
+import SAVE_BLACK_LIST from '@/components/Decorate/config/saveBlackList'
+import widget from '@/components/Decorate/config/widgetConfig';
 export default {
   name: "shopEditor",
   props: ["pageId"],
@@ -31,13 +44,16 @@ export default {
         pageBase: {  //装修页面基础信息
           type: 'pageInfo'
         },
+        components: {
+          // 可在此处覆写配置表中的所有组件配置
+        },
         buttons: {  //按钮组
           saveData: {
             title: '保存草稿',
             function: this.saveData,
             type: 'primary',
             show: () => {
-              return this.decorateData && this.decorateData.isHomePage !== 1;
+              return !this.decorateData || (this.decorateData && this.decorateData.isHomePage !== 1);
             },
             loading: false
           },
@@ -75,7 +91,10 @@ export default {
         },
         showWidget: true,  //是否显示左侧控件面板
         showProp: true,  //是否显示右侧属性面板
-        dragable: true   //是否可拖拽排序
+        dragable: true,   //是否可拖拽排序
+        widgetCalcHeight: 66, //控件区扣减高度
+        renderCalcHeight: 66+10,  //渲染区扣减高度
+        propCalcHeight: 66 //属性区扣减高度
       },
       decorateData: null
     };
@@ -85,12 +104,12 @@ export default {
       if (newValue) {
         this.id = newValue;
       }
-      this.$store.commit("clearAllData");
+      this.$store.commit("clearEditor");
       this.fetch();
     }
   },
   created() {
-    this.$store.commit("clearAllData");
+    this.$store.commit("clearEditor");
     this.fetch();
   },
   computed: {
@@ -132,18 +151,21 @@ export default {
         explain: data.explain,
         pageCategoryInfoId: data.pageCategoryInfoId,
         colorStyle: data.colorStyle,
-        pageKey: data.pageKey
+        pageKey: data.pageKey,
+        pageTemplateId: data.pageTemplateId
       }
     },
 
     /* 保存数据 */
     saveData() {
       this.saveType = 'save';
-      let resultData = this.$refs.Decorate.collectData();
+      let resultDatas = this.$refs.Decorate.collectData();
+      let resultData = utils.deepClone(resultDatas);
       if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
         this.id && (resultData['id'] = this.id);
         resultData['status'] = '1';
         if(this.checkInput(resultData)) {
+          this.washData(resultData);
           this.setLoading(true);
           if(this.id) {
             this.sendRequest({methodName: 'editPageInfo', resultData, tipWord: '编辑成功!'});
@@ -157,11 +179,13 @@ export default {
     /* 保存并生效数据 */
     saveAndApplyData() {
       this.saveType = 'saveAndApply';
-      let resultData = this.$refs.Decorate.collectData();
+      let resultDatas = this.$refs.Decorate.collectData();
+      let resultData = utils.deepClone(resultDatas);
       if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
         this.id && (resultData['id'] = this.id);
         resultData['status'] = '0';
         if(this.checkInput(resultData)) {
+          this.washData(resultData);
           this.setLoading(true);
           if(this.id) {
             this.sendRequest({methodName: 'editPageInfo', resultData, tipWord: '编辑成功!'});
@@ -174,42 +198,22 @@ export default {
 
     /* 检查输入正确性 */
     checkInput(resultData) {
-      if (this.baseInfo.vError) {
-        this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
-            confirmButtonText: '确定',
-            callback: action => {
-              //打开基础信息面板
-              this.$store.commit('setCurrentComponentId', this.basePropertyId);
-              this.setLoading(false);
-            }
-          });
-        // this.$message({ message: '请填写正确信息', type: 'warning' });
-        return false;
-      }else{
-        if(!resultData.name || !resultData.title || !resultData.explain) {
-          this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
-            confirmButtonText: '确定',
-            callback: action => {
-              //打开基础信息面板
-              this.$store.commit('setCurrentComponentId', this.basePropertyId);
-              this.setLoading(false);
-            }
-          });
-          return false;
-        }else{
-          return true;
-        }
-      }
-      return true;
+      return this.checkBaseInfo(resultData);
     },
 
     /* 发起请求 */
     sendRequest(params) {
+      let pageData = params.resultData.pageData;
+      params.resultData.pageData = this.utils.compileStr(JSON.stringify(pageData));
       this._apis.shop[params.methodName](params.resultData).then((response)=>{
           this.$message.success(params.tipWord);
           this.setLoading(false);
           this._routeTo('m_pageManageIndex');
         }).catch((error)=>{
+          if(error === '微页面名称已存在') {
+            //打开基础信息面板
+            this.$store.commit('setCurrentComponentId', this.basePropertyId);
+          }
           this.$message.error(error);
           this.setLoading(false);
         });
@@ -241,10 +245,96 @@ export default {
       }).then(() => {
         this._routeTo('m_pageManageIndex');
       })
+    },
+
+    /* 清洗数据 */
+    washData(data) {
+      let copyData = [...data.pageData];
+      for(let item of copyData) {
+
+        /* 图片广告清除无图片或者图片地址无效的数据（临时需求2020/7/7）start  */
+        if(item.type === 'articleAD') {
+          this.deleteEmptyArticleAD(item);
+        }
+        /* 图片广告清除无图片或者图片地址无效的数据（临时需求2020/7/  end  */
+
+        const keys = Object.keys(item.data);
+        for(let item2 of keys) {
+          if(SAVE_BLACK_LIST.includes(item2)) {
+            delete item.data[item2];
+          }
+        }
+      }
+      data.pageData = copyData;
+    },
+
+    /* 删除空的图文广告（临时需求） */
+    deleteEmptyArticleAD(data) {
+      const templateItemList = [...data.data.itemList];
+      for(let i=0;i<templateItemList.length;i++) {
+        if(!templateItemList[i].url || !this.utils.validate.isURL(templateItemList[i].url) || !this.utils.validate.isPic(templateItemList[i].url)) {
+          templateItemList.splice(i, 1);
+          i--;
+        }
+      }
+      data.data.itemList = templateItemList;
+    },
+
+    /* 检测基础信息 */
+    checkBaseInfo(data) {
+      if (this.baseInfo.vError || !data.name || !data.title || !data.explain) {
+        this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
+          confirmButtonText: '确定',
+          callback: action => {
+            //打开基础信息面板
+            this.$store.commit('setCurrentComponentId', this.basePropertyId);
+            this.setLoading(false);
+          }
+        });
+        return false;
+      }
+      return true;
+    },
+
+    /* 控件面板初始化 */
+    widgetPanelInited(scope) {
+      // console.log('控件面板初始化结束');
+    },
+    
+    /* 渲染面板初始化 */
+    renderPanelInited(scope) {
+      // console.log('渲染面板初始化结束');
+    },
+    
+    /* 属性面板初始化 */
+    propsPanelInited(scope) {
+      // console.log('属性面板初始化结束');
+    },
+
+    /* 请求数据转换初始化事件 */
+    responseDataInited(scope) {
+      // console.log('请求数据转换初始化结束');
+    },
+
+    /* 组件数据发生改变事件 */
+    propDataChanged(scope, id, data) {
+      // console.log('组件数据发生改变');
+    },
+
+    /* 组件数据加载进度事件 */
+    dataLoadProgress(scope, value, component) {
+      // console.log('组件数据加载进度');
+    },
+
+    /* 编辑器整体加载完毕事件 */
+    finished(scope) {
+      // console.log('编辑器整体加载完毕');
     }
 
   },
 
 };
 </script>
+<style lang="scss">
+</style>
 

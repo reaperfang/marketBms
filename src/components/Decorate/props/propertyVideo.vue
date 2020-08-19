@@ -1,10 +1,10 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="70px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="60px">
     <div class="block form">
       <el-form-item label="视频" prop="source">
         <el-radio-group v-model="source">
           <el-radio :label="1">选择视频</el-radio>
-          <el-radio :label="2">粘贴视频地址(小程序v2.15<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;及以上版本支持)</el-radio>
+          <el-radio :label="2">粘贴视频地址 <span class="prop-message">小程序v2.15及以上版本支持</span></el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="" v-if="source === 1" prop="videoUrl">
@@ -20,12 +20,14 @@
         </div>
         <div class="add_button" v-else @click="dialogVisible=true; currentDialog='dialogSelectVideo'">
           <i class="inner"></i>
+          <p>添加视频</p>
         </div>
-        <p style="color:rgb(211, 211, 211);margin-top:5px;">建议视频宽高比16：9</p>
+        <p class="prop-message" style="margin-top:5px;">视频大小不超过10mb；仅支持.mp4格式的播放地址</p>
       </el-form-item>
       <el-form-item label="" v-if="source === 2" prop="videoUrl">
         <el-input  v-model="ruleForm.videoUrl" placeholder="此处粘贴视频播放地址"></el-input>
-        <p style="color:rgb(211, 211, 211);margin-top:5px;">仅支持.mp4格式的播放地址</p>
+        <p v-show="videoUrlError" style="color:#fd4c2b;margin-top:5px;font-size:12px;line-height:1;">您输入的视频格式有误，请您重新输入</p>
+        <p class="prop-message" style="margin-top:5px;">视频大小不超过10mb；仅支持.mp4格式的播放地址</p>
       </el-form-item>
       <el-form-item label="封面图" v-if="ruleForm.videoUrl">
         <el-radio-group v-model="coverType">
@@ -41,8 +43,9 @@
         </div>
         <div v-else-if="coverType === 2" class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
           <i class="inner"></i>
+          <p>添加图片</p>
         </div>
-        建议图片宽高比16:9
+        <p class="prop-message">建议图片宽高比16:9</p>
       </el-form-item>
     </div>
 
@@ -52,12 +55,12 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsBase from '../mixins/mixinPropsBase';
 import dialogSelectVideo from '@/views/shop/dialogs/dialogSelectVideo';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 export default {
   name: 'propertyVideo',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {dialogSelectVideo, dialogSelectImageMaterial},
   data () {
     return {
@@ -74,7 +77,8 @@ export default {
       },
       dialogVisible: false,
       currentDialog: '',
-      originAble: true
+      originAble: true,
+      videoUrlError: false
     }
   },
   watch: {
@@ -99,6 +103,14 @@ export default {
         this.$set(this.ruleForm, 'coverUrl', '');
         this.customCoverUrl = '';
         this.originCoverUrl = '';
+      }else{
+        if(this.utils.validate.validateMP4(newValue)){
+          this.videoUrlError = false;
+          this.$set(this.ruleForm, 'videoUrl', newValue);
+        }else{
+          this.videoUrlError = true;
+          //this.$set(this.ruleForm, 'videoUrl', '');
+        }
       }
     }
   },

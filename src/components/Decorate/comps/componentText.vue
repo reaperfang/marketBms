@@ -1,6 +1,6 @@
 <template>
   <!-- 文本 -->
-  <div class="component_wrapper">
+  <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div
       class="componentText"
       :style="{'backgroundColor':currentComponentData.data.backgroundColor}"
@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsBase from '../mixins/mixinCompsBase';
 export default {
   name: 'componentText',
-  mixins:[componentMixin],
+  mixins:[mixinCompsBase],
   components: {},
   data () {
     return {
@@ -31,6 +31,9 @@ export default {
   },
   created() {
 
+  },
+  mounted() {
+    this.dataLoaded = true;
   },
   computed: {
     /* 检测是否有数据 */

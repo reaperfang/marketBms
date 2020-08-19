@@ -1,5 +1,5 @@
 <template>
-    <div class="component_wrapper">
+    <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
       <div v-if="currentComponentData && currentComponentData.data">
           <ul class="cube cube_preview">
 
@@ -20,7 +20,7 @@
                   <img
                     class="default_image"
                     :style="{padding: currentComponentData.data.pagePadding + 'px'}"
-                    src="../../../assets/images/shop/defaultImage/cube1.png"
+                    src="../../../assets/images/shop/defaultImage/cube1.jpg"
                     alt
                   />
                 </template>
@@ -50,7 +50,7 @@
                   <img
                     class="default_image"
                     :style="{padding: currentComponentData.data.pagePadding + 'px'}"
-                    src="../../../assets/images/shop/defaultImage/cube2.png"
+                    src="../../../assets/images/shop/defaultImage/cube2.jpg"
                     alt
                   />
                 </template>
@@ -85,7 +85,7 @@
                   <img
                     class="default_image"
                     :style="{padding: currentComponentData.data.pagePadding + 'px'}"
-                    src="../../../assets/images/shop/defaultImage/cube3.png"
+                    src="../../../assets/images/shop/defaultImage/cube3.jpg"
                     alt
                   />
                 </template>
@@ -134,7 +134,7 @@
                   <img
                     class="default_image"
                     :style="{padding: currentComponentData.data.pagePadding + 'px'}"
-                    src="../../../assets/images/shop/defaultImage/cube4.png"
+                    src="../../../assets/images/shop/defaultImage/cube4.jpg"
                     alt
                   />
                 </template>
@@ -169,7 +169,7 @@
                   <img
                     class="default_image"
                     :style="{padding: currentComponentData.data.pagePadding + 'px'}"
-                    src="../../../assets/images/shop/defaultImage/cube5.png"
+                    src="../../../assets/images/shop/defaultImage/cube5.jpg"
                     alt
                   />
                 </template>
@@ -201,7 +201,7 @@
                   <img
                     class="default_image"
                     :style="{padding: currentComponentData.data.pagePadding + 'px'}"
-                    src="../../../assets/images/shop/defaultImage/cube6.png"
+                    src="../../../assets/images/shop/defaultImage/cube6.jpg"
                     alt
                   />
                 </template>
@@ -243,7 +243,7 @@
                   <img
                     class="default_image"
                     :style="{padding: currentComponentData.data.pagePadding + 'px'}"
-                    src="../../../assets/images/shop/defaultImage/cube7.png"
+                    src="../../../assets/images/shop/defaultImage/cube7.jpg"
                     alt
                   />
                 </template>
@@ -254,10 +254,10 @@
 </template>
 
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsBase from '../mixins/mixinCompsBase';
 export default {
   name: 'componentCube',
-  mixins:[componentMixin],
+  mixins:[mixinCompsBase],
   components: {},
   data () {
     return {
@@ -266,6 +266,10 @@ export default {
   },
   created() {
     const _self = this;
+    console.log(this.currentComponentData.data.list['2'])
+  },
+  mounted() {
+    this.dataLoaded = true;
   },
   computed: {
 
@@ -290,7 +294,6 @@ export default {
 
 <style lang="scss" scoped>
 .default_image{
-  object-fit: none;
   width:100%;
 }
 .cube_preview{

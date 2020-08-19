@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
       <el-form-item label="选择模板" prop="templateType">
       </el-form-item>
@@ -204,7 +204,7 @@
             </div>
           </li>
         </ul>
-        <p>选定布局并在下方添加图片，建议图片比例一致</p>
+        <p class="message">选定布局并在下方添加图片，建议图片比例一致</p>
       </div>
       <el-form-item label="图片间隙" prop="imgMargin" v-if="hasContent">
         <div class="slider-wrapper">
@@ -226,6 +226,7 @@
         </div>
         <div v-else class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'">
           <i class="inner"></i>
+          <p>上传图片</p>
         </div>
       </el-form-item>
       <el-form-item label="跳转链接" prop="pageLink" v-if="hasContent">
@@ -249,12 +250,12 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsBase from '../mixins/mixinPropsBase';
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
 export default {
   name: 'propertyCube',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {dialogSelectJumpPage, dialogSelectImageMaterial},
   data () {
     return {
@@ -344,11 +345,12 @@ export default {
 }
 ul.cube.template_type{
   li{
-    border:1px solid rgb(228,227,235);
+    border:1px dashed #B6B5C8;
     padding:10px;
     cursor:pointer;
     margin-right: 18px;
     width: 84px;
+    border-radius:4px;
     &:nth-child(3n){
       margin-right: 0;
     }
@@ -387,8 +389,9 @@ ul.cube.template_type{
     }
   }
   p{
-    color:rgba(211,211,211,1);
-    margin-top:5px;
+    color:rgba(146,146,155,1);
+    font-size:12px;
+    margin-top:12px;
     margin-bottom: 20px;
   }
 }
@@ -396,7 +399,7 @@ ul.cube.template_type{
   text-align:center;
   font-size:12px;
   font-family:MicrosoftYaHei;
-  color:rgba(101,94,255,1);
+  color:rgba(110,110,114,1);
   position:absolute;
   top:50%;
   left:50%;
@@ -405,5 +408,4 @@ ul.cube.template_type{
   box-sizing: border-box;
   width:100%;
 }
-
 </style>

@@ -36,7 +36,11 @@
             </template>
           </el-table-column>
           <el-table-column prop="productCatalogInfoName" label="所属分类"></el-table-column>
-          <el-table-column prop="saleCount" label="总销量"></el-table-column>
+          <el-table-column prop="saleCount" label="总销量">
+            <template slot-scope="scope">
+              <span>{{scope.row.saleCount}}&nbsp;{{scope.row.productUnit}}</span>
+            </template>
+          </el-table-column>
         </el-table>
       <div class="pagination">
         <el-pagination

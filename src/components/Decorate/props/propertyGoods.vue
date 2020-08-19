@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
       <el-form-item label="商品来源" prop="source">
         <el-radio-group v-model="ruleForm.source">
@@ -10,18 +10,22 @@
       <el-form-item label="选择商品" v-if="ruleForm.source === 1" prop="goods">
         <div class="goods_list" v-if="ruleForm.source === 1" prop="goods" v-loading="loading">
           <ul>
-            <li v-for="(item, key) of list" :key="key" :title="item.name">
+            <li v-for="(item, key) of displayList" :key="key" :title="item.name">
               <img :src="item.mainImage" alt="">
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
             <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectGoods'">
               <i class="inner"></i>
+              <p>上传商品</p>
             </li>
           </ul>
         </div>
       </el-form-item>
       <el-form-item label="商品分类" v-if="ruleForm.source === 2" prop="goodsGroup">
-        <el-button type="text"  @click="pageDialogVisible=true; currentPageDialog='goodsGroup'">{{seletedGroup && seletedGroup.data.name || '从商品分类中选择'}}</el-button>
+        <div class="add-button-x select-goods-button" @click="pageDialogVisible=true; currentPageDialog='goodsGroup'">
+          <i class="el-icon-plus"></i>
+          {{seletedGroup && seletedGroup.data.name || '从商品分类中选择'}}
+        </div>
       </el-form-item>
       <!-- <el-form-item label="显示个数" v-if="ruleForm.source === 2" prop="showNumber">
         <el-input  v-model="ruleForm.showNumber" placeholder="请输入个数"></el-input>
@@ -29,12 +33,12 @@
       </el-form-item> -->
       <el-form-item label="列表样式" prop="listStyle">
         <el-radio-group v-model="ruleForm.listStyle">
-          <el-radio :label="1">大图模式</el-radio>
-          <el-radio :label="2">一行两个</el-radio>
-          <el-radio :label="3">一行三个</el-radio>
-          <el-radio :label="4">详细列表</el-radio>
-          <el-radio :label="5">一大两小</el-radio>
-          <el-radio :label="6">横向滑动</el-radio>
+          <div><el-radio :label="1">大图模式</el-radio></div>
+          <div><el-radio :label="2">一行两个</el-radio></div>
+          <div><el-radio :label="3">一行三个</el-radio></div>
+          <div><el-radio :label="4">详细列表</el-radio></div>
+          <div><el-radio :label="5">一大两小</el-radio></div>
+          <div><el-radio :label="6">横向滑动</el-radio></div>
         </el-radio-group>
       </el-form-item>
     </div>
@@ -58,10 +62,10 @@
     <div class="block form">
       <el-form-item label="商品样式" prop="goodsStyle">
         <el-radio-group v-model="ruleForm.goodsStyle">
-          <el-radio :label="1">无边白底</el-radio>
-          <el-radio :label="2">卡片投影</el-radio>
-          <el-radio :label="3">描边白底</el-radio>
-          <el-radio :label="4">无边透明底</el-radio>
+          <div><el-radio :label="1">无边白底</el-radio></div>
+          <div><el-radio :label="2">卡片投影</el-radio></div>
+          <div><el-radio :label="3">描边白底</el-radio></div>
+          <div><el-radio :label="4">无边透明底</el-radio></div>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="商品倒角"  prop="goodsChamfer">
@@ -72,10 +76,10 @@
       </el-form-item>
       <el-form-item label="图片比例" prop="goodsRatio">
         <el-radio-group v-model="ruleForm.goodsRatio">
-          <el-radio :label="1">3:2</el-radio>
-          <el-radio :label="2">1:1</el-radio>
-          <el-radio :label="3">3:4</el-radio>
-          <el-radio :label="4">16:9</el-radio>
+          <div><el-radio :label="1">3:2</el-radio></div>
+          <div><el-radio :label="2">1:1</el-radio></div>
+          <div><el-radio :label="3">3:4</el-radio></div>
+          <div><el-radio :label="4">16:9</el-radio></div>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="图片填充" prop="goodsFill">
@@ -118,7 +122,7 @@
           <el-radio :label="8">样式8</el-radio>
           <el-radio :label="9">样式9</el-radio>
         </el-radio-group>
-        <el-input v-if="ruleForm.showContents.includes('4') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText"></el-input>
+        <el-input v-if="ruleForm.showContents.includes('4') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText" placeholder="请输入标题"></el-input>
       </el-form-item>
     </div>
     
@@ -133,15 +137,13 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';
+import mixinPropsData from '../mixins/mixinPropsData';
 import DialogBase from "@/components/DialogBase";
-import dialogSelectGoods from '@/views/shop/dialogs/decorateDialogs/dialogSelectGoods';
+import dialogSelectGoods from '@/components/Decorate/dialogs/dialogSelectGoods';
 import goodsGroup from '@/views/shop/dialogs/jumpLists/goodsGroup';
-import GOODS_LIST from '@/assets/json/goodsList.json'; 
-import GOODS_LIST_PROD from '@/assets/json/goodsListProd.json'; 
 export default {
   name: 'propertyGoods',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsData],
   components: {DialogBase, dialogSelectGoods, goodsGroup},
   data () {
     return {
@@ -163,10 +165,10 @@ export default {
         currentCatagoryId: '',  //选中的商品分类id
         buttonText: '加入购物车'
       },
+      displayList: [],
       rules: {
 
       },
-      list: [],
       echoList: [],
       dialogVisible: false,
       currentDialog: '',
@@ -178,7 +180,6 @@ export default {
   },
   created() {
     this.fetchCatagoryDetail();
-    this.fetch(false);
   },
   watch: {
     'items': {
@@ -249,7 +250,7 @@ export default {
     fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
         if(componentData) {
-          bNeedUpdateMiddle && this._globalEvent.$emit('fetchGoods', this.ruleForm, this.$parent.currentComponentId);
+          bNeedUpdateMiddle && this.syncToMiddle();
             let params = {};
             if(!componentData.source || (componentData.source === 1)) {
                 const ids = componentData.ids;
@@ -257,30 +258,30 @@ export default {
                    if(Object.prototype.toString.call(ids) === '[object Object]') {
                         params = this.setGroupGoodsParams(ids);
                         if(!params.ids || !params.ids.length) {
-                            this.list = [];
+                            this.displayList = [];
                             return;
                         }
                     }else if(Array.isArray(ids) && ids.length){
                         params = this.setNormalGoodsParams(ids);
                         if(!params.ids || !params.ids.length) {
-                            this.list = [];
+                            this.displayList = [];
                             return;
                         }
                     }else{
-                      this.list = [];
+                      this.displayList = [];
                         return;
                     }
                 }else{
-                      this.list = [];
+                      this.displayList = [];
                     return;
                 }
             }else if(componentData.source === 2){
               if(!this.ruleForm.currentCatagoryId) {
-                this.list = [];
+                this.displayList = [];
                 return;
               }
               params = {
-                  // status: '1',
+                  status: '1',
                   productCatalogInfoId: this.ruleForm.currentCatagoryId
               };
             }
@@ -291,7 +292,7 @@ export default {
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.list = [];
+                this.displayList = [];
                 this.loading = false;
             });
         }
@@ -299,9 +300,9 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-      this.list = datas;
+      this.displayList = datas;
       if(this.currentComponentData.data.source === 2) {
-          this._globalEvent.$emit('goodsListOfGroupChange', datas, this.$parent.currentComponentId);  //告知中央组件list数据更改
+          this.syncToMiddle('goodsListOfGroupChange', datas);
       }
     },
 
@@ -373,5 +374,8 @@ export default {
   .el-checkbox{
     margin-right: 10px;
   }
+}
+.select-goods-button {
+  width: 154px;
 }
 </style>

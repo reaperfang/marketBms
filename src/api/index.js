@@ -13,9 +13,10 @@ import * as data from "./data"; //数据模块
 import * as overview from "./overview"; //概况
 import * as set from "./set"; //设置模块
 import * as profile from "./profile"; //帮助中心
-
-
+import * as industry from "./industry"; //行业
+import * as templatePay from "./templatePay"; //模板支付
 import * as map from "./map"
+
 
 export default {
 	demo,
@@ -33,5 +34,7 @@ export default {
 	set,
 	overview,
 	profile,
+	industry,
+	templatePay,
 	map
 };

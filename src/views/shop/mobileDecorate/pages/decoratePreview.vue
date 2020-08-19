@@ -2,8 +2,19 @@
 <template>
   <div class="preview_wrapper">
     <!-- 装修编辑器 -->
-    <Decorate ref="Decorate" :decorateData="decorateData" :config="config"></Decorate>
-    <div class="shop_info">
+    <Decorate 
+      ref="Decorate" 
+      :decorateData="decorateData" 
+      :config="config" 
+      @widgetPanelInited="widgetPanelInited"
+      @renderPanelInited="renderPanelInited"
+      @propsPanelInited="propsPanelInited"
+      @responseDataInited="responseDataInited"
+      @propDataChanged="propDataChanged"
+      @dataLoadProgress="dataLoadProgress"
+      @finished="finished"
+    ></Decorate>
+    <div class="shop_info" v-calcHeight="66+30">
       <img class="shop_logo" :src="shopInfo.logoCircle || shopInfo.logo" alt />
       <div class="shop_name">{{shopInfo.shopName || '店铺名称'}}</div>
       <div class="shop_code">
@@ -32,12 +43,16 @@ export default {
         pageBase: {
           type: 'pageInfo'
         },
+        components: {
+          // 可在此处覆写配置表中的所有组件配置
+        },
         callbacks: {
           setBaseInfo: this.setBaseInfo
         },
         showWidget: false,
         showProp: false,
-        dragable: false
+        dragable: false,
+        renderCalcHeight: 66+10+20  //渲染区扣减高度
       },
       decorateData: null,
       id: this.pageId || this.$route.query.pageId
@@ -62,7 +77,7 @@ export default {
   },
   created() {
     this.$store.dispatch('getShopInfo');
-    this.$store.commit("clearAllData");
+    this.$store.commit("clearEditor");
     this.fetch();
   },
   mounted() {
@@ -102,7 +117,8 @@ export default {
         explain: data.explain,
         pageCategoryInfoId: data.pageCategoryInfoId,
         colorStyle: data.colorStyle,
-        pageKey: data.pageKey
+        pageKey: data.pageKey,
+        pageTemplateId: data.pageTemplateId
       }
     },
 
@@ -123,6 +139,41 @@ export default {
         console.error(error);
       });
     },
+
+    /* 控件面板初始化 */
+    widgetPanelInited(scope) {
+      // console.log('控件面板初始化结束');
+    },
+    
+    /* 渲染面板初始化 */
+    renderPanelInited(scope) {
+      // console.log('渲染面板初始化结束');
+    },
+    
+    /* 属性面板初始化 */
+    propsPanelInited(scope) {
+      // console.log('属性面板初始化结束');
+    },
+
+    /* 请求数据转换初始化事件 */
+    responseDataInited(scope) {
+      // console.log('请求数据转换初始化结束');
+    },
+
+    /* 组件数据发生改变事件 */
+    propDataChanged(scope, id, data) {
+      // console.log('组件数据发生改变');
+    },
+
+    /* 组件数据加载进度事件 */
+    dataLoadProgress(scope, value, component) {
+      // console.log('组件数据加载进度');
+    },
+
+    /* 编辑器整体加载完毕事件 */
+    finished(scope) {
+      // console.log('编辑器整体加载完毕');
+    }
   }
 };
 </script>
@@ -143,6 +194,7 @@ export default {
     }
     .shop_info{
       width:336px;
+      overflow-y: auto;
       margin-left:64px;
       .shop_logo{
         height:100px;

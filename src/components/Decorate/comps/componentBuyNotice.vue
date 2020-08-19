@@ -1,49 +1,46 @@
 <template>
   <!-- 购买公告 -->
-  <div class="component_wrapper" v-loading="loading">
+  <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div class="componentBuyNotice" v-if="currentComponentData && currentComponentData.data">
-      <ul :style="{'backgroundColor':currentComponentData.data.backgroundColor}">
-        <li>
-          <i class="van-icon van-icon-volume-o van-notice-bar__left-icon" style="color: #fc3d42;"><!----></i>
-        </li>
-        <li class="ellipsis">
-          <div class="nwwest-roll" id="nwwest-roll">
-            <ul id="roll-ul" :style="{'color':currentComponentData.data.fontColor}">
-              <li ref="rollul" v-for="(item, key) in list" :key="key" class="ellipsis" :class="{anim:animate===true}">
-                <img :src="item.member" alt="">
-                <span class="name">{{item.content}}</span>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li :style="{'color':currentComponentData.data.fontColor}">刚刚</li>
-      </ul>
+      <template v-if="hasRealData || hasFakeData">
+        <ul :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-if="hasRealData">
+          <li class="ellipsis">
+            <div class="nwwest-roll" id="nwwest-roll">
+              <ul id="roll-ul" :style="{'color':currentComponentData.data.fontColor}">
+                <li ref="rollul" v-for="(item, key) in displayList" :key="key" class="ellipsis" :class="{anim:animate===true}">
+                  <img :src="item.member" alt="">
+		              <p :style="{'color':currentComponentData.data.fontColor}">刚刚</p>
+                  <span class="name">{{item.content}}</span>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <div v-else>
+          <img :src="currentComponentData.data.fakeList[0].fileUrl" alt="" style="width:100%;height:35px;vertical-align: bottom;">
+        </div>
+      </template>
+      <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
   </div>
 </template>
 
 <script>
-import componentMixin from "../mixins/mixinComps";
+import mixinCompsData from "../mixins/mixinCompsData";
 export default {
   name: "componentBuyNotice",
-  mixins: [componentMixin],
+  mixins: [mixinCompsData],
   components: {},
   data() {
     return { 
-      allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
       animate: true, 
-      list: [],
+      displayList: [],
       timer: null ,
       loading: false
     };
   },
-  created() {
-    this.fetch();
-    this._globalEvent.$on('fetchBuyNotice', (componentData, componentId) => {
-      if(this.currentComponentId === componentId) {
-        this.fetch(componentData);
-      }
-    });
+  mounted() {
+    this.timer = setInterval(this.scroll, 2000);
   },
   watch: {
     'currentComponentData.data.ids': {
@@ -53,18 +50,22 @@ export default {
               }
           },
           deep: true
-      }
+      },
   },
   methods: {
+  
     scroll() {
+      if(!this.$refs.rollul) {
+        return;
+      }
       let con1 = this.$refs.rollul;
       if (con1.length>0) {
         con1[0].style.marginTop = "30px";
         this.animate = !this.animate;
         var that = this; // 在异步函数中会出现this的偏移问题，此处一定要先保存好this的指向
         setTimeout(function() {
-          that.list.push(that.list[0]);
-          that.list.shift();
+          that.displayList.push(that.displayList[0]);
+          that.displayList.shift();
           con1[0].style.marginTop = "0px";
           that.animate = !that.animate; // 这个地方如果不把animate 取反会出现消息回滚的现象，此时把ul 元素的过渡属性取消掉就可以完美实现无缝滚动的效果了
         }, 0);
@@ -80,31 +81,41 @@ export default {
                     productIds: componentData.ids,
                 }).then((response)=>{
                 this.createList(response);
+                this.dataLoaded = true;
                 this.loading = false;
             }).catch((error)=>{
                 console.error(error);
-                this.list = [];
+                this.displayList = [];
                 this.loading = false;
+                this.dataLoaded = true;
             });
           }else{
-            this.list = [];
+            this.displayList = [];
+            this.dataLoaded = true;
           }
         }
     },
 
       /* 创建数据 */
     createList(datas) {
-      this.list = datas;
-      this.allLoaded = true;
+      this.displayList = datas;
     },
 
-  },
-  mounted() {
-    this.timer = setInterval(this.scroll, 2000);
-  },
-  beforeDestroy() {
-      //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
-      this._globalEvent.$off('fetchBuyNotice');
+    /* 检查真数据 */
+    checkRealData(newValue) {
+      this.hasRealData = !!newValue.length;
+      this.upadteComponentData();
+    },
+
+    /* 检查假数据 */
+    checkFakeData(newValue) {
+      this.hasFakeData = false;
+        if(newValue && newValue.length) {
+          this.hasFakeData = true;
+        }
+      this.upadteComponentData();
+    }
+
   },
   destroyed() {
     clearInterval(this.timer);
@@ -114,22 +125,17 @@ export default {
 
 <style lang="scss" scoped>
 .nwwest-roll {
-  padding-left: 15px;
+  padding-left: 7.5px;
   margin: 0 auto;
   overflow: hidden;
   transition: all 0.5s;
   & > ul {
-    height: 35px;
+    // height: 17.5px;
+    height: 20px;
     overflow: hidden;
     & > li {
-      height: 35px;
-      line-height: 35px;
-      display:flex;
-      img{
-        width:35px;
-        height:35px;
-        margin-right:10px;
-      }
+      height: 20px;
+      line-height: 20px;
     }
   }
 }
@@ -137,27 +143,37 @@ export default {
   transition: all 0.5s;
 }
 .componentBuyNotice {
-  // height: 29px;
-  // line-height: 29px;
   & > ul {
-    padding: 0px 10px;
+    height: 29px;
+    line-height: 29px;
+    padding: 0px 10px 0 5px;
     display: flex;
     align-items: center;
-    & > li:nth-child(1) {
-      width: 22px;
+    li{
       height: 22px;
-      & > img {
-        width: 100%;
-        height: 100%;
+      width: 100%;
+      img {
+        height: 17px;
+        width:17px;
         border-radius: 50%;
+        float:left;
+        margin-top:2.5px;
+        margin-right:5px;
       }
-    }
-    & > li:nth-child(2) {
-      flex: 1;
-    }
-    & > li:nth-child(3) {
-      flex: 0 0 50px;
-      text-align: right;
+      span{
+        line-height:22px;
+        overflow:hidden;
+        display:block;
+        @extend .ellipsis;
+        font-size:12px;
+      }
+      p{
+        float:right;
+        margin-right:5px;
+        line-height:22px;
+        text-align:right;
+        font-size:12px;
+      }
     }
   }
   .van-notice-bar {

@@ -1,6 +1,6 @@
 <template>
 <!-- 组件-公用搜索框 -->
-    <div class="component_wrapper">
+    <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
         <div class="componentGoodsSearch" style="z-index:4;" :style="[{background:backgroundColor}]" v-if="currentComponentData && currentComponentData.data">
             <div class="inputBox" :class="[{'textPosition':textPosition!=1},{'borderStyle':borderStyle!=1}]" :style="[{background:'#eff1f0'},{height:borderHeight+'px'},{border:'1px solid #eff1f0'},{color:fontColor},{marginRight:shoppingCartBtn==1 ? '0px' : '10px'}]">
                 <img src="@/assets/images/shop/fdj.png" class="fdj" />
@@ -18,10 +18,10 @@
     </div>
 </template>
 <script> 
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsBase from '../mixins/mixinCompsBase';
 export default {
     name:"componentGoodsSearch",
-    mixins:[componentMixin],
+    mixins:[mixinCompsBase],
     data(){
         return{
             "hotWords": [
@@ -40,6 +40,9 @@ export default {
     },
     created(){
         this.decoration();
+    },
+    mounted() {
+        this.dataLoaded = true;
     },
     watch: {
       data: {
@@ -149,6 +152,8 @@ export default {
         flex:1;
         align-items:center;
         padding:0 10px;
+        background:#eff1f0;
+        border:1px solid #eff1f0;
         .fdj{
             width:14px;
             height:14px;

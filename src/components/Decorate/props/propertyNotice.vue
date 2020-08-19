@@ -1,8 +1,10 @@
 <template>
-  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" v-calcHeight="height">
+  <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
     <div class="block form">
       <el-form-item label="公告" prop="notice">
         <el-input
+          type="textarea"
+          :rows="2"
           placeholder="请填写内容，如果过长，将会在手机上滚动显示"
           v-model="ruleForm.notice">
         </el-input>
@@ -26,17 +28,17 @@
 </template>
 
 <script>
-import propertyMixin from '../mixins/mixinProps';;
+import mixinPropsBase from '../mixins/mixinPropsBase';;
 export default {
   name: 'propertyNotice',
-  mixins: [propertyMixin],
+  mixins: [mixinPropsBase],
   components: {},
   data () {
     return {
       ruleForm: {
         notice: '',//公告文本
-        backgroundColor: 'rgb(255,248,233)',//背景颜色 
-        fontColor: 'rgb(102,102,102)'//文字颜色 
+        backgroundColor: 'rgba(255,229,202,0.4)',//背景颜色 
+        fontColor: 'rgba(51,51,51,1)'//文字颜色 
       },
       rules: {
 

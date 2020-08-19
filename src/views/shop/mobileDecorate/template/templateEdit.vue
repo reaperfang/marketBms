@@ -1,15 +1,19 @@
 <template>
   <div>
-    <div v-if="pageList.length" v-loading="loading">
-      <div class="tabs">
-        <span type="primary" v-for="(item, key) of pageList" :key="key" :class="{'myActive': item.active === true}" @click="tabClick($event, item)" plain>{{item.name || '页面'}}</span>
-      </div>
-
+    <div v-loading="loading">
       <!-- 装修编辑器 -->
-      <Decorate ref="Decorate" :decorateData="decorateData" :config="config"></Decorate>
-    </div>
-    <div v-else v-loading="loading" style="padding:50px;">
-      暂无可用页面
+      <Decorate 
+      ref="Decorate" 
+      :decorateData="decorateData" 
+      :config="config" 
+      @widgetPanelInited="widgetPanelInited"
+      @renderPanelInited="renderPanelInited"
+      @propsPanelInited="propsPanelInited"
+      @responseDataInited="responseDataInited"
+      @propDataChanged="propDataChanged"
+      @dataLoadProgress="dataLoadProgress"
+      @finished="finished"
+    ></Decorate>
     </div>
   </div>
 </template>
@@ -17,6 +21,8 @@
 <script>
 import Decorate from '@/components/Decorate';
 import utils from "@/utils";
+import SAVE_BLACK_LIST from '@/components/Decorate/config/saveBlackList'
+import widget from '@/components/Decorate/config/widgetConfig';
 export default {
   name: "templateEdit",
   components: { Decorate },
@@ -33,6 +39,9 @@ export default {
           isBase: true,
           hidden: true,
           title: '页面信息'
+        },
+        components: {
+          // 可在此处覆写配置表中的所有组件配置
         },
         buttons: {
           saveData: {
@@ -62,7 +71,10 @@ export default {
         },
         showWidget: true,
         showProp: true,
-        dragable: true
+        dragable: true,
+        widgetCalcHeight: 66, //控件区扣减高度
+        renderCalcHeight: 66+10+24,  //渲染区扣减高度
+        propCalcHeight: 66 //属性区扣减高度
       },
       decorateData: null,
       pageList: [],  //页面列表
@@ -71,7 +83,8 @@ export default {
     };
   },
   created() {
-    this.getPageList();
+    this.$store.commit("clearEditor");
+    this.fetchTemplateStatus();
   },
   computed: {
     baseInfo() {
@@ -100,22 +113,77 @@ export default {
   },
   methods: {
 
+    /* 模板是否已过期 */
+    fetchTemplateStatus() {
+      this.loading = true;
+      this._apis.shop.getTemplateInfo({pageTemplateId: this.id}).then(res => {
+        if (res) {
+          if(res.templateStatus === 1) {
+            if(res.status !== 2) {
+              this.getPageList();
+            }else {
+              this.confirm({
+                title: '提示',
+                icon: true,
+                showCancelButton: false,
+                confirmText: '我知道了',
+                text: `模板已过期`
+              });
+              this.config.buttons.saveData.show = () => false;
+              this.config.buttons.saveAndApplyData.show = () => false;
+              this.loading = false;
+            }
+          }else if(res.templateStatus === 2) {
+            this.confirm({
+              title: '提示',
+              icon: true,
+              showCancelButton: false,
+              confirmText: '我知道了',
+              text: `模板已下架`
+            });
+            this.config.buttons.saveData.show = () => false;
+            this.config.buttons.saveAndApplyData.show = () => false;
+            this.loading = false;
+          }
+          
+        } else {  // res == null，未购买 / 不在我的模板里
+          this.confirm({
+            title: '提示',
+            icon: true,
+            showCancelButton: false,
+            confirmText: '我知道了',
+            text: `模板未付费`
+          });
+          this.config.buttons.saveData.show = () => false;
+          this.config.buttons.saveAndApplyData.show = () => false;
+          this.loading = false;
+        }
+      }).catch((error)=>{
+        console.error(error);
+        this.loading = false;
+      })
+    },
+
     /* 获取模板下的页面列表 */
     getPageList() {
-      this.loading = true;
-      this._apis.goodsOperate.getPagesByTemplateId({pageTemplateId: this.id}).then((response)=>{
-        this.pageList = response;
+      this._apis.goodsOperate.getPagesByTemplateId({pageTemplateId: this.id}).then((response) => {
+        if (!response || response.length === 0) {
+          this.loading = false
+          return
+        }
+
+        this.pageList = [response];
         this.loading = false;
-        if(!response || !response.length) {
+        if (!this.pageList || !this.pageList.length) {
           return;
         }
-        for(let item of response) {
+        for (let item of this.pageList) {
           this.pageMaps[item.id] = item;
         }
-        response[0]['active'] = true;
-        this.pageId = response[0].id;
-        this.fetch(response[0].id);
-      }).catch((error)=>{
+        this.pageList[0]['active'] = true;
+        this.pageId = this.pageList[0].id;
+        this.fetch(this.pageList[0].id);
+      }).catch((error) => {
         console.error(error);
         this.loading = false;
       });
@@ -124,7 +192,7 @@ export default {
     /* 获取某个页面的装修数据 */
     fetch(newValue) {
       if(newValue) {
-        this.$store.commit("clearAllData");
+        this.$store.commit("clearEditor");
         this.decorateRender = false;
         setTimeout(()=>{
           this.decorateRender = true;
@@ -141,17 +209,21 @@ export default {
         explain: data.explain,
         pageCategoryInfoId: data.pageCategoryInfoId,
         colorStyle: data.colorStyle,
-        pageKey: data.pageKey
+        pageKey: data.pageKey,
+        pageTemplateId: data.pageTemplateId
       }
     },
 
      /* 保存数据 */
     saveData() {
+      
       this.saveType = 'save';
-      let resultData = this.$refs.Decorate.collectData();
+      let resultDatas = this.$refs.Decorate.collectData();
+      let resultData = utils.deepClone(resultDatas);
       if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
         resultData['status'] = '1';
         if(this.checkInput(resultData)) {
+          this.washData(resultData);
           this.setLoading(true);
           this.sendRequest({methodName: 'createPage', resultData, tipWord: '保存成功!'});
         };
@@ -160,10 +232,12 @@ export default {
     /* 保存并生效数据 */
     saveAndApplyData() {
       this.saveType = 'saveAndApply';
-      let resultData = this.$refs.Decorate.collectData();
+      let resultDatas = this.$refs.Decorate.collectData();
+      let resultData = utils.deepClone(resultDatas);
       if(resultData && Object.prototype.toString.call(resultData) === '[object Object]') {
         resultData['status'] = '0';
         if(this.checkInput(resultData)) {
+          this.washData(resultData);
           this.setLoading(true);
           this.sendRequest({methodName: 'createPage', resultData, tipWord: '保存并上架成功!'});
         };
@@ -172,57 +246,26 @@ export default {
 
     /* 检查输入正确性 */
     checkInput(resultData) {
-      if (this.baseInfo.vError) {
-        this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
-            confirmButtonText: '确定',
-            callback: action => {
-              //打开基础信息面板
-              this.$store.commit('setCurrentComponentId', this.basePropertyId);
-              this.setLoading(false);
-            }
-          });
-        // this.$message({ message: '请填写正确信息', type: 'warning' });
+      const baseFlag = this.checkBaseInfo(resultData);
+      if(baseFlag) {
+        return this.checkFakeData(resultData);
+      }else {
         return false;
-      }else{
-        if(!resultData.name || !resultData.title || !resultData.explain) {
-          this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
-            confirmButtonText: '确定',
-            callback: action => {
-              //打开基础信息面板
-              this.$store.commit('setCurrentComponentId', this.basePropertyId);
-              this.setLoading(false);
-            }
-          });
-          return false;
-        }else{
-          // for(let item of this.componentDataIds) {
-          //   const componentData = this.componentDataMap[item];
-          //   if(componentData.type === 'goods') {
-          //     if(componentData.data.ids && !componentData.data.ids.length) {
-          //       this.$alert('请在右侧选择真实商品后重试', '提示', {
-          //         confirmButtonText: '确定',
-          //         callback: action => {
-          //           //打开基础信息面板
-          //           this.$store.commit('setCurrentComponentId', componentData.id);
-          //           this.setLoading(false);
-          //         }
-          //       });
-          //       return false;
-          //     }
-          //   }
-          // }
-          return true;
-        }
       }
-      return true;
     },
 
     /* 发起请求 */
     sendRequest(params) {
+      let pageData = params.resultData.pageData;
+      params.resultData.pageData = this.utils.compileStr(JSON.stringify(pageData));
       this._apis.shop[params.methodName](params.resultData).then((response)=>{
           this.$message.success(params.tipWord);
           this.setLoading(false);
         }).catch((error)=>{
+          if(error === '微页面名称已存在') {
+            //打开基础信息面板
+            this.$store.commit('setCurrentComponentId', this.basePropertyId);
+          }
           this.$message.error(error);
           this.setLoading(false);
         });
@@ -240,9 +283,9 @@ export default {
 
     tabClick(event, item) {
       this.confirm({
-        title: '提示', 
-        customClass: 'goods-custom', 
-        icon: true, 
+        title: '提示',
+        customClass: 'goods-custom',
+        icon: true,
         text: '是否要离开当前页面？离开将不会保存。'
       }).then(() => {
         const tempItems = [...this.pageList];
@@ -260,13 +303,119 @@ export default {
     /* 取消保存 */
     cancelSave() {
       this.confirm({
-        title: '确认取消？', 
-        customClass: 'goods-custom', 
-        icon: true, 
+        title: '确认取消？',
+        customClass: 'goods-custom',
+        icon: true,
         text: `<h3 style="font-size:18px;color:rgba(68,61,74,1);margin-bottom:10px;">确认取消？</h3><span style="font-size:16px;color:rgba(110,110,114,1);">取消后，放弃当前编辑数据，且无法恢复。</span>`
       }).then(() => {
         this._routeTo('m_templateManageIndex');
       })
+    },
+
+    /* 清洗数据 */
+    washData(data) {
+      let copyData = [...data.pageData];
+      for(let item of copyData) {
+
+        /* 图片广告清除无图片或者图片地址无效的数据（临时需求2020/7/7）start  */
+        if(item.type === 'articleAD') {
+          this.deleteEmptyArticleAD(item);
+        }
+        /* 图片广告清除无图片或者图片地址无效的数据（临时需求2020/7/  end  */
+
+        const keys = Object.keys(item.data);
+        for(let item2 of keys) {
+          if(SAVE_BLACK_LIST.includes(item2)) {
+            delete item.data[item2];
+          }
+        }
+      }
+      data.pageData = copyData;
+    },
+
+    /* 删除空的图文广告（临时需求） */
+    deleteEmptyArticleAD(data) {
+      const templateItemList = [...data.data.itemList];
+      for(let i=0;i<templateItemList.length;i++) {
+        if(!templateItemList[i].url || !this.utils.validate.isURL(templateItemList[i].url) || !this.utils.validate.isPic(templateItemList[i].url)) {
+          templateItemList.splice(i, 1);
+          i--;
+        }
+      }
+      data.data.itemList = templateItemList;
+    },
+
+    /* 检测基础信息 */
+    checkBaseInfo(data) {
+      if (this.baseInfo.vError || !data.name || !data.title || !data.explain) {
+        this.$alert('请填写基础信息后重试，点击确认返回编辑页面信息!', '警告', {
+          confirmButtonText: '确定',
+          callback: action => {
+            //打开基础信息面板
+            this.$store.commit('setCurrentComponentId', this.basePropertyId);
+            this.setLoading(false);
+          }
+        });
+        return false;
+      }
+      return true;
+    },
+
+    /* 检测假数据 */
+    checkFakeData(data) {
+
+      for(let item of this.componentDataIds) {
+        const componentData = this.componentDataMap[item];
+        if(widget.getNeedFakeDataWidgetTypes().includes(componentData.type)) {
+          if(componentData.data.needReplace) {
+            this.$store.commit('setCurrentComponentId', componentData.id);
+            this.$alert(`【${componentData.title} - ${componentData.id.substring(componentData.id.length - 6)}】组件尚未更换真实数据，请在右侧选择真实数据后重试`, '提示', {
+              confirmButtonText: '确定',
+              callback: action => {
+                //打开基础信息面板
+                this.setLoading(false);
+              }
+            });
+            return false;
+          }
+        }
+      }
+      return true;
+    },
+
+    /* 控件面板初始化 */
+    widgetPanelInited(scope) {
+      // console.log('控件面板初始化结束');
+    },
+    
+    /* 渲染面板初始化 */
+    renderPanelInited(scope) {
+      // console.log('渲染面板初始化结束');
+    },
+    
+    /* 属性面板初始化 */
+    propsPanelInited(scope) {
+      // console.log('属性面板初始化结束');
+    },
+
+    /* 请求数据转换初始化事件 */
+    responseDataInited(scope) {
+      // console.log('请求数据转换初始化结束');
+    },
+
+    /* 组件数据发生改变事件 */
+    propDataChanged(scope, id, data) {
+      // console.log('组件数据发生改变');
+    },
+
+    /* 组件数据加载进度事件 */
+    dataLoadProgress(scope, value, component) {
+      // console.log('组件数据加载进度');
+    },
+
+    /* 编辑器整体加载完毕事件 */
+    finished(scope) {
+      // console.log('编辑器整体加载完毕');
     }
   }
 };

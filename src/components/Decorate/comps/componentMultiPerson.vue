@@ -1,74 +1,88 @@
 <template>
 <!-- 组件-多人拼团 -->
-    <div class="component_wrapper" v-loading="loading">
-        <div class="componentMultiPerson" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle" v-if="currentComponentData && currentComponentData.data && hasContent">
-            <ul>
-                <template  v-for="(item,key) of list">
-                    <li :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
-                        <div class="img_box">
-                            <p class="label" v-if="showContents.indexOf('6')!=-1">{{item.sold > -1 ? item.sold : 0}}人已团</p>
-                            <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
-                        </div>
-                        <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
-                            <!-- <h1 class="title">{{item.activeName || '多人拼团'}}</h1> -->
-                            <h1 class="title">多人拼团</h1>
-                            <div class="countdown">
-                                <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
-                                <div class="content">
-                                    <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
-                                    <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
-                                    <!-- <p class="time">{{item.endTime}}</p> -->
-                                    <!-- <van-count-down :time="
-                                item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
-                                " class="time">
-                                    <template v-slot="timeData">
-                                        <span class="item">{{ utils.addZero(timeData.days) }}</span>
-                                        <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
-                                        <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
-                                        <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
-                                    </template>
-                                </van-count-down> -->
-                                </div>
+    <div class="component_wrapper" v-loading="loading" :style="{cursor: dragable ? 'pointer' : 'text'}">
+        <div class="componentMultiPerson" :style="[{padding:pageMargin+'px'}]" :class="'listStyle'+listStyle" v-if="currentComponentData && currentComponentData.data">
+            <template v-if="hasRealData || hasFakeData">
+                <ul v-if="hasRealData">
+                    <template  v-for="(item,key) of displayList">
+                        <li :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
+                            <div class="img_box">
+                                <p class="label" v-if="showContents.indexOf('6')!=-1">{{item.joinedActivityPeopleNum > -1 ? item.joinedActivityPeopleNum : 0}}人已团</p>
+                                <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
                             </div>
-                        </div>
-                        <div class="info_box"  v-if="showContents.length > 0">
-                            <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">{{item.sold || 0}}人团</font>{{item.goodName}}</p>
-                            <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.goodDes}}</p>
-                            <div class="limit_line">
-                                <div class="label">{{item.peopleNum || 0}}人团</div>
-                                <p class="limit" v-if="showContents.indexOf('7')!=-1">{{item.buyLimit==-1?'不限':'限'+item.buyLimit+'件/人'}}</p>
-                                <div class="remainder_box">
-                                    <div class="jd_line">
-                                        <div class="current_line" :style="{width:(item.stock - item.remainStock)/item.stock*100+'%'}"></div>
+                            <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
+                                <!-- <h1 class="title">{{item.activeName || '多人拼团'}}</h1> -->
+                                <h1 class="title">多人拼团</h1>
+                                <div class="countdown">
+                                    <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
+                                    <div class="content">
+                                        <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
+                                        <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
+                                        <!-- <p class="time">{{item.endTime}}</p> -->
+                                        <!-- <van-count-down :time="
+                                    item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
+                                    " class="time">
+                                        <template v-slot="timeData">
+                                            <span class="item">{{ utils.addZero(timeData.days) }}</span>
+                                            <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
+                                            <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
+                                            <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
+                                        </template>
+                                    </van-count-down> -->
                                     </div>
-                                    <p>仅剩{{item.remainStock}}件</p>
                                 </div>
                             </div>
-                            <div class="price_line">
-                                <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.status==1 && listStyle != 3 && listStyle != 6" class="kai button"></componentButton>
-                                <p class="activity_end" v-if="item.status==2">活动已结束</p>
-                                <p class="activity_end" v-if="item.status==0">活动未开始</p>
-                                <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.reductionUnitPrice || 0}}</font></p>
-                                <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.salePrice || 0}}</p>
-                            </div>
+                            <div class="info_box"  v-if="showContents.length > 0">
+                                <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1"><font class="label">{{item.peopleNum || 0}}人团</font>{{item.goodName}}</p>
+                                <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">{{item.goodDes}}</p>
+                                <div class="limit_line">
+                                    <div class="label">{{item.peopleNum || 0}}人团</div>
+                                    <p class="limit" v-if="showContents.indexOf('7')!=-1">{{item.buyLimit==-1?'不限':'限'+item.buyLimit+'件/人'}}</p>
+                                    <div class="remainder_box">
+                                        <div class="jd_line">
+                                            <div class="current_line" :style="{width:(item.stock - item.remainStock)/item.stock*100+'%'}"></div>
+                                        </div>
+                                        <p>仅剩{{item.remainStock}}件</p>
+                                    </div>
+                                </div>
+                                <div class="price_line">
+                                    <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonTextPrimary" v-if="showContents.indexOf('8')!=-1&&item.status==1 && listStyle != 3 && listStyle != 6" class="kai button"></componentButton>
+                                    <p class="activity_end" v-if="item.status==2">已结束</p>
+                                    <p class="activity_end" v-if="item.status==0">未开始</p>
+                                    <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.reductionUnitPrice || 0}}</font></p>
+                                    <p class="yPrice" v-if="showContents.indexOf('4')!=-1">￥{{item.salePrice || 0}}</p>
+                                </div>
 
-                        </div>
-                    </li>
-                </template>
-            </ul>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+                <ul v-else>
+                    <template  v-for="(item,key) of currentComponentData.data.fakeList[listStyle - 1]">
+                        <li :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio, 'fakeData']">
+                            <div class="img_box"  v-if="listStyle != 4">
+                                <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
+                            </div>
+                            <div v-else class="img_box fake">
+                                <img :src="item.fileUrl" alt="" :class="{goodsFill:goodsFill!=1}">
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
         </div>
         <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
     </div>
 
 </template>
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsData from '../mixins/mixinCompsData';
 export default {
     name:"componentMultiPerson",
-    mixins:[componentMixin],
+    mixins:[mixinCompsData],
     data(){
         return{
-            allLoaded: false,  //因为有异步数据，所以初始化加载状态是false
             // 样式属性
             showNumber: "",
             showAllBtns: true,
@@ -88,25 +102,11 @@ export default {
             // 自己定义的
             goodWidth:'',
             goodMargin:'',
-            list: [],
+            displayList: [],
             loading: false
         }
     },
-    created() {
-        this.fetch();
-        this._globalEvent.$on('fetchMultiPerson', (componentData, componentId) => {
-            if(this.currentComponentId === componentId) {
-                this.fetch(componentData);
-            }
-        });
-    },
-    mounted() {
-        this.decoration();
-    },
     watch: {
-        currentComponentData(){
-            this.decoration();
-        },
         'currentComponentData.data.ids': {
             handler(newValue, oldValue) {
                 if(!this.utils.isIdsUpdate(newValue, oldValue)) {
@@ -120,9 +120,10 @@ export default {
                 return;
             }
             if(newValue == 2) {
+                this.displayList = [];
                 this.fetch();
             }else{
-                this.list = [];
+                this.displayList = [];
                 this.fetch();
             }
         },
@@ -138,34 +139,23 @@ export default {
             }
             this.fetch();
         },
-        'ruleForm.hideSaledGoods'(newValue, oldValue) {
+        'currentComponentData.data.hideSaledGoods'(newValue, oldValue) {
             if(newValue === oldValue) {
                 return;
             }
             this.fetch();
         },
-        'ruleForm.hideEndGoods'(newValue, oldValue) {
+        'currentComponentData.data.hideEndGoods'(newValue, oldValue) {
             if(newValue === oldValue) {
                 return;
             }
             this.fetch();
         },
-        'ruleForm.hideType'(newValue, oldValue) {
+        'currentComponentData.data.hideType'(newValue, oldValue) {
             if(newValue === oldValue) {
                 return;
             }
             this.fetch();
-        },
-    },
-    computed: {
-
-         /* 检测是否有数据 */
-        hasContent() {
-            let value = false;
-            if(this.list && this.list.length) {
-                value = true;
-            }
-            return value;
         }
     },
     methods:{
@@ -258,7 +248,8 @@ export default {
                             hideStatus: hideStatus
                         };
                     }else{
-                        this.list = [];
+                        this.displayList = [];
+                        this.dataLoaded = true;
                         return;
                     }
                 }
@@ -267,25 +258,41 @@ export default {
                 this._apis.shop.getMultiPersonListByIds(params).then((response)=>{
                     this.createList(response);
                     this.loading = false;
+                    this.dataLoaded = true;
                 }).catch((error)=>{
                     console.error(error);
-                    this.list = [];
+                    this.displayList = [];
                     this.loading = false;
+                    this.dataLoaded = true;
                 });
             }
         },
 
         /* 创建数据 */
         createList(datas) {
-            this.list = datas;
-            this.allLoaded = true;
+            this.displayList = datas;
+        },
+
+        /* 检查真数据 */
+        checkRealData(newValue) {
+            console.log(newValue)
+            this.hasRealData = !!newValue.length;
+            this.upadteComponentData();
+        },
+
+        /* 检查假数据 */
+        checkFakeData(newValue) {
+            this.hasFakeData = false;
+            for(let item of newValue) {
+                if(item && item.length) {
+                    this.hasFakeData = true;
+                    break;
+                }
+            }
+            this.upadteComponentData();
         }
 
-    },
-    beforeDestroy() {
-        //组件销毁前需要解绑事件。否则会出现重复触发事件的问题
-        this._globalEvent.$off('fetchMultiPerson');
-    },
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -424,7 +431,6 @@ export default {
                         display:none;
                     }
                     .content{
-                        // @extend .flexCenterMiddle;
                         display:flex;
                         align-items:center;
                         padding:0 10px;
@@ -624,6 +630,15 @@ export default {
             float:left;
             margin-right:10px;
             width:36%;
+        }
+        &.fakeData{
+            padding: 0;
+            .img_box{
+                width:100%;
+                img{
+                    object-fit: initial!important;
+                }
+            }
         }
         .countdown_Bar{
             width:33%;
@@ -967,7 +982,7 @@ export default {
                         right:10px;
                         bottom:15px;
                         font-size:13px;
-                        width:84px;
+                        //width:84px;
                         height:31px;
                     }
                     .pin{
@@ -975,7 +990,7 @@ export default {
                         height:31px;
                         right:102.5px;
                         bottom:15px;
-                        width:84px;
+                        //width:84px;
                         position:absolute;
                     }
                     .button{
@@ -1134,10 +1149,14 @@ export default {
 }
 .componentMultiPerson.listStyle6{
     background:#fff;
+    &.fakeData{
+                background:transparent!important;  
+    }
     ul{
         display:flex;
         display:-webkit-flex;
         overflow-x:scroll;
+         -webkit-overflow-scrolling: touch;
         li{
             flex:0 0 100px;
             &:first-child{
@@ -1199,6 +1218,9 @@ export default {
     li{
         overflow:hidden;
         background:#fff;
+        &.fakeData{
+            background:transparent!important;
+        }
         &:first-child{
             margin-top:0;
         }
@@ -1386,7 +1408,7 @@ export default {
                 right:10px;
                 bottom:15px;
                 font-size:13px;
-                width:84px;
+                //width:84px;
                 height:31px;
             }
             .pin{
@@ -1394,7 +1416,7 @@ export default {
                 height:31px;
                 right:102.5px;
                 bottom:15px;
-                width:84px;
+                //width:84px;
                 position:absolute;
             }
             .activity_end{
@@ -1407,14 +1429,23 @@ export default {
     li.goodsStyle1{
         border:0;
         background:#fff;
+        &.fakeData{
+                background:transparent!important;  
+        }
     }
     li.goodsStyle2{
         background:#fff;
+        &.fakeData{
+            background:transparent!important;  
+        }
         box-shadow:0px 1px 3px 0px rgba(154,154,154,0.19);
     }
     li.goodsStyle3{
         border:1px solid #eee;
         background:#fff;
+        &.fakeData{
+            background:transparent!important;  
+        }
     }
     li.goodsStyle4{
         border:0;

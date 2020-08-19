@@ -1,6 +1,6 @@
 <template>
   <!-- 图文导航 -->
-  <div class="component_wrapper">
+  <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div class="componentArticleNav" :style="{'backgroundColor':currentComponentData.data.backgroundColor}" v-if="currentComponentData && currentComponentData.data">
 
         <!-- 1、图片导航 -->
@@ -21,7 +21,7 @@
                   <img
                     class="default_image"
                     :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                    src="../../../assets/images/shop/defaultImage/nav1.png"
+                    src="../../../assets/images/shop/defaultImage/nav1.jpg"
                     alt
                   />
                 </template>
@@ -42,7 +42,7 @@
                   <img
                     class="default_image"
                     :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                    src="../../../assets/images/shop/defaultImage/nav2.png"
+                    src="../../../assets/images/shop/defaultImage/nav2.jpg"
                     alt
                   />
                 </template>
@@ -63,7 +63,7 @@
                 <img
                   class="default_image"
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                  src="../../../assets/images/shop/defaultImage/nav3.png"
+                  src="../../../assets/images/shop/defaultImage/nav3.jpg"
                   alt
                 />
               </template>
@@ -81,7 +81,7 @@
                 <img
                   class="default_image"
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                  src="../../../assets/images/shop/defaultImage/nav4.png"
+                  src="../../../assets/images/shop/defaultImage/nav4.jpg"
                   alt
                 />
               </template>
@@ -91,10 +91,10 @@
   </div>
 </template>
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsBase from '../mixins/mixinCompsBase';
 export default {
   name: "componentArticleNav",
-  mixins:[componentMixin],
+  mixins:[mixinCompsBase],
   components: {},
   data() {
     return {
@@ -103,6 +103,7 @@ export default {
   },
   created() {},
   mounted() {
+    this.dataLoaded = true;
     this.calcScroll();
   },
   watch: {
@@ -123,15 +124,7 @@ export default {
           if(Object.prototype.toString.call(this.currentComponentData.data.itemList) === '[object Object]') {
             this.currentComponentData.data.itemList = [...this.currentComponentData.data.itemList];
           }
-          for(let item of this.currentComponentData.data.itemList) {
-            if(this.currentComponentData.data.templateType===1 && item.url) {
-              value = true;
-              break;
-            }else if(this.currentComponentData.data.templateType===2 && item.title){
-              value = true;
-              break;
-            }
-          }
+          return !!this.currentComponentData.data.itemList.length
         }
         return value;
     }
@@ -156,7 +149,6 @@ export default {
     overflow-x: auto;
   }
   .default_image{
-    object-fit: none;
     width:100%;
   }
 
@@ -184,7 +176,7 @@ export default {
       }
       & > p {
         font-size: 14px;
-        padding: 5px 0px;
+        margin-top: 2.5px;
         text-align:center;
       }
     }
@@ -231,17 +223,11 @@ export default {
   // }
   //   横向滑动
   .img_nav2 {
-    // display: -webkit-box;
-    // display: -moz-box;
-    // display: -ms-flexbox;
-    // display: -o-box;
-    // display: box;
-    // overflow-x: scroll;
+    display: -webkit-box;
+    overflow-x: scroll;
     & > li {
-      // width: 20%;
       width: 80px;
       text-align: center;
-      float:left;
       & > div {
         margin: 0 auto;
         & > img {
@@ -327,22 +313,14 @@ export default {
   }
   // 文字导航横向滑动
   .img_nav5 {
-    // display: -webkit-box;
-    // display: -moz-box;
-    // display: -ms-flexbox;
-    // display: -o-box;
-    // display: box;
+    display: -webkit-box;
     width: 100%;
-    // overflow-x: scroll;
     height: 42px;
     & > li {
-      // width: 20%;
       width: 75px;
-      height: 100%;
       text-align: center;
       box-sizing: border-box;
       position: relative;
-      float:left;
       & > span {
         font-size: 14px;
         position: absolute;

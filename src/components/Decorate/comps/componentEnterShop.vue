@@ -1,6 +1,6 @@
 <template>
   <!-- 进入店铺 -->
-  <div class="component_wrapper">
+  <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
     <div class="componentEnterShop" v-if="currentComponentData && currentComponentData.data">
       <div class="group_shop">
         <ul>
@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsBase from '../mixins/mixinCompsBase';
 export default {
   name: 'componentEnterShop',
-  mixins:[componentMixin],
+  mixins:[mixinCompsBase],
   components: {},
   data () {
     return {
@@ -31,6 +31,9 @@ export default {
   },
   created() {
     this.$store.dispatch('getShopInfo');
+  },
+  mounted() {
+    this.dataLoaded = true;
   },
   computed: {
     shopInfo() {
@@ -82,8 +85,8 @@ export default {
           width: 6px;
           height: 12px;
           display: inline-block;
-          margin-left: 8px;
-          margin-top: 14px;
+          margin-left: 7.5px;
+          margin-top: 13.5px;
         }
       }
     }

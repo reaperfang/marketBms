@@ -538,7 +538,7 @@ table.yuan-table{
           padding-left: 10px;
       }
   }
-} 
+}
 
 .blue {
   color: $globalMainColor;
@@ -659,6 +659,11 @@ table.yuan-table{
       display: block;
       margin-left: 30px;
   }
+}
+
+.know-custom.confirm.no-cancel .el-message-box__btns .el-button {
+  letter-spacing: 0;
+  padding: 9px 11px;
 }
 
 .goods-specs {
@@ -842,15 +847,15 @@ table.yuan-table{
   }
   ul,ol, li, dl, dt, dd{
     list-style: inherit!important;
-  } 
+  }
 
 }
 input:-ms-input-placeholder{
   color:#92929B;
 }
-textarea:-ms-input-placeholder { 
-  color: #92929B; 
-} 
+textarea:-ms-input-placeholder {
+  color: #92929B;
+}
 #app.hide-fenlei + script + script + script + script + .fenlei-popper {
   display: none!important;
 }
@@ -874,4 +879,39 @@ textarea:-ms-input-placeholder {
 }
 .el-dialog__headerbtn .el-dialog__close {
   font-size: 18px;
+}
+.editor-view-popover {
+  min-width: 76px!important;
+  padding: 7px 0!important;
+  text-align: center!important;
+  color: #96969f!important;
+  font-size: 12px!important;
+  cursor: pointer;
+  .el-icon-delete {
+    color: #f05027;
+  }
+  .popper__arrow::after {
+    display: none!important;
+  }
+  .popper__arrow {
+    border-width: 1px!important;
+    width: 8px!important;
+    height: 8px!important;
+    background: url('../assets/images/shop/editor/arrow.png') no-repeat;
+    left: -8px!important;
+    top: calc(50% - 4px)!important;
+    border: none!important;
+  }
+  &.active {
+    //background-color: #f05027;
+    //color: #fff!important;
+    .popper__arrow {
+      //background: url('../assets/images/shop/editor/arrow-active.png') no-repeat;
+    }
+  }
+}
+// 修复富文本秀米图标错误问题
+.edui-button.edui-for-xiumi-connect .edui-button-wrap .edui-button-body .edui-icon {
+    background-image: url("http://xiumi.us/connect/ue/xiumi-connect-icon.png") !important;
+    background-size: contain!important;
 }

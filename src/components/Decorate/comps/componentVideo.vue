@@ -1,7 +1,7 @@
 <template>
   <!-- 视频 -->
-  <div class="component_wrapper">
-    <div class="componentVideo" v-if="currentComponentData && currentComponentData.data">
+  <div class="component_wrapper" :style="{cursor: dragable ? 'pointer' : 'text'}">
+    <div class="componentVideo" v-if="currentComponentData && currentComponentData.data && hasContent">
       <div>
         <video
           v-if="show"
@@ -12,14 +12,15 @@
         >您的浏览器不支持 video 标签。</video>
       </div>
     </div>
+    <componentEmpty v-else :componentData="currentComponentData"></componentEmpty>
   </div>
 </template>
 
 <script>
-import componentMixin from '../mixins/mixinComps';
+import mixinCompsBase from '../mixins/mixinCompsBase';
 export default {
   name: 'componentVideo',
-  mixins:[componentMixin],
+  mixins:[mixinCompsBase],
   components: {},
   data () {
     return {
@@ -29,12 +30,26 @@ export default {
   created() {
 
   },
+  mounted() {
+    this.dataLoaded = true;
+  },
   computed: {
-   
+    /* 检测是否有数据 */
+    hasContent() {
+        let value = false;
+        if(this.currentComponentData.data.videoUrl) {
+            value = true;
+        }
+        return value;
+    }
   },
   watch: {
-    'currentComponentData.data.coverType': {
-      handler(newValue) {
+    'currentComponentData.data.coverUrl': {
+      handler(newValue, oldValue) {
+        console.log(newValue)
+        if(newValue === oldValue){
+          return;
+        }
         this.show = false;
         this.$nextTick(()=>{
           this.show = true;
@@ -50,6 +65,7 @@ export default {
 
 <style lang="scss" scoped>
 .componentVideo {
+  height: 210px;
   .video {
     width: 100%;
     height: 210px;
