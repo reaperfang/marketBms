@@ -287,10 +287,14 @@ export default {
     isNotUpdateMerchantAddress(res) {
       // 当前地址是否保存默认发货地址
       // 原地址是否为默认发货地址
-      const oldIsTrue = res && res.isDefaltSenderAddress
-      const newIsTrue = this.ruleForm.type.includes(3)
-      
-      return oldIsTrue && !newIsTrue
+      //同城配送发货地址为默认地址
+      const oldIsTrue = res && ((res.addressType === 0 || res.addressType === 2) && res.isDefaltSenderAddress === 1)
+      const newIsTrue = this.hasChecked(3) && this.hasChecked(1)
+      console.log('---newIsTrue, oldIsTrue--',newIsTrue, oldIsTrue)
+      // 同城配送发货地址不为默认地址
+      const oldIsTrue1 = res && ((res.addressType === 0 || res.addressType === 2) && res.isDefaltSenderAddress === 0)
+      const newIsTrue1 = this.hasChecked(1)
+      return !((oldIsTrue && newIsTrue) || (oldIsTrue1 && newIsTrue1))
     },
     // 处理开启商家配送提醒
     hanldeIsOpenDelivery(res) {

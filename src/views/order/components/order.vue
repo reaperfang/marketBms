@@ -31,7 +31,7 @@
                     </div>
                     <div class="item righter">
                         <span>订单类型：{{order.orderType | orderTypeFilter}}</span>
-                        <span><i class="memberLevelImg" :style="{background: `url(${order.memberLevelImg})`}"></i>用户昵称：<span class="pointer" :title="order.memberName">{{order.memberName | memberNameFilter}}</span></span>
+                        <span><i v-if="order.memberLevelImg" class="memberLevelImg" :style="{background: `url(${order.memberLevelImg})`}"></i>用户昵称：<span class="pointer" :title="order.memberName">{{order.memberName | memberNameFilter}}</span></span>
                         <span>订单来源：{{order.channelName}}</span>
                         <!-- <i v-permission="['订单', '订单查询', '商城订单', '删除订单']" @click="closeOrder(order.id)" v-if="order.orderStatus == 2" class="el-icon-delete"></i> -->
                     </div>
@@ -97,13 +97,13 @@
                         <template v-else-if="order.orderStatus == 3">
                             <!-- 待发货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
-                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '发货']" @click="$router.push('/order/deliverGoods?orderType=order&sendType=one&ids=' + order.id)">发货</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '发货']" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${order.id}`)">发货</p>
                             <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">关闭订单</p>
                         </template>
                         <template v-else-if="order.orderStatus == 4">
                             <!-- 部分发货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
-                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '继续发货']" @click="$router.push('/order/deliverGoods?orderType=order&sendType=one&ids=' + order.id)">继续发货</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '继续发货']" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${order.id}`)">继续发货</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
                             <!-- <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '提前关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">提前关闭订单</p> -->
                         </template>
@@ -111,7 +111,7 @@
                             <!-- 待收货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
-                            <p v-show="!authHide" v-permission="['订单', '订单查询', '商城订单', '补填物流']" v-if="order.isFillUp == 1" @click="$router.push('/order/supplementaryLogistics?id=' + order.id)">补填物流</p>
+                            <p v-show="!authHide" v-permission="['订单', '订单查询', '商城订单', '补填物流']" v-if="order.isFillUp == 1" @click="$router.push(`/order/supplementaryLogistics?id=${order.id}&ids=${order.id}`)">补填物流</p>
                         </template>
                         <template v-else-if="order.orderStatus == 6">
                             <!-- 完成 -->
@@ -401,8 +401,15 @@ export default {
                        }
                     }
                     .righter {
-                        span {
-                            margin-right: 20px;
+                        >span {
+                            padding-left: 12px;
+                            padding-right: 12px;
+                            &:nth-child(1) {
+                                border-right: 1px solid #dadae3;
+                            }
+                            &:nth-child(2) {
+                                border-right: 1px solid #dadae3;
+                            }
                         }
                     }
                     .item {

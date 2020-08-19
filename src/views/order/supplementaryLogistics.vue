@@ -194,7 +194,16 @@
                 <el-button v-if="orderInfo.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">确定</el-button>
             </div>
         </div>
-        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods" :ajax="ajax" @getDetail="getOrderDetail"></component>
+        <component 
+            v-if="dialogVisible" 
+            :is="currentDialog" 
+            :dialogVisible.sync="dialogVisible" 
+            :data="currentData" 
+            @submit="onSubmit" 
+            :sendGoods="sendGoods" 
+            :ajax="ajax" 
+            @getDetail="getOrderDetail"
+            :_ids="_ids"></component>
     </div>
 </template>
 <script>
@@ -281,7 +290,8 @@ export default {
             distributorId: '', //配送员id
             isDistributorShow: false, //尚未创建配送员信息提示控制
             distributorSet: false,
-            ajax: true
+            ajax: true,
+            _ids: []
         }
     },
     created() {
@@ -644,7 +654,7 @@ export default {
                 this.orderSendInfo = res[0]
                 this.tableData = res[0].orderItemList
                 this.orderInfo = res[0]
-
+                this._ids = [this.orderInfo.id]
                 if(!this.orderInfo.sendAddress) {
                     this.fetchOrderAddress(_address)
                 }
