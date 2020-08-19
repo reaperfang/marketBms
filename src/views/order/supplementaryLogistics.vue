@@ -205,7 +205,8 @@
             @getDetail="getOrderDetail"
             :orderSendGoodsHander="orderSendGoodsHander"
             :params="params"
-            :list="_list">
+            :list="_list"
+            :_ids="_ids">
         </component>
     </div>
 </template>
@@ -295,6 +296,7 @@ export default {
             isDistributorShow: false, //尚未创建配送员信息提示控制
             distributorSet: false,
             ajax: true,
+            _ids: [],
             params: {},
             _list: []
         }
@@ -686,7 +688,7 @@ export default {
                 this._list = res
                 this.tableData = res[0].orderItemList
                 this.orderInfo = res[0]
-
+                this._ids = [this.orderInfo.id]
                 if(!this.orderInfo.sendAddress) {
                     this.fetchOrderAddress(_address)
                 }

@@ -124,7 +124,7 @@
 
     
     <div class="block form">
-      <el-form-item label="显示内容" prop="buttonTextPrimary">
+      <el-form-item label="显示内容" prop="buttonTextPrimary" ref="itemShowContents">
         <el-checkbox-group v-model="ruleForm.showContents">
           <el-checkbox label="1">商品名称</el-checkbox>
           <el-checkbox label="2" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 6">商品描述</el-checkbox>
@@ -234,8 +234,37 @@ export default {
     'ruleForm.listStyle'(newValue, oldValue) {
       if([3,6].includes(newValue) && ![3,6].includes(oldValue)) { 
         this.ruleForm.buttonStyle = 3;
+        this.$nextTick(() => {
+          this.$refs['itemShowContents'].clearValidate();
+        })
       }
     },
+
+    'ruleForm.buttonStyle'(newValue, oldValue) {
+      //购买按钮样式不为3、4、7、8时清除错误提示
+      if(![3,4,7,8].includes(newValue)){
+        this.$nextTick(() => {
+          this.$refs['itemShowContents'].clearValidate();
+        })
+      }
+    },
+
+    'ruleForm.showContents'(newValue, oldValue) {
+      //如果包含购买按钮
+      if(newValue.includes('8')){
+        //购买按钮样式不为3、4、7、8时清除错误提示
+        if(![3,4,7,8].includes(this.ruleForm.buttonStyle)){
+          this.$nextTick(() => {
+            this.$refs['itemShowContents'].clearValidate();
+          })
+        }
+      }else{ //不包含购买按钮则直接清除错误提示
+        this.$nextTick(() => {
+          this.$refs['itemShowContents'].clearValidate();
+        })
+      }
+    },
+
     'ruleForm.addType'(newValue, oldValue) {
         if(newValue === oldValue) {
             return;
