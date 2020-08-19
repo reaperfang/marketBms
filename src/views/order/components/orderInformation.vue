@@ -15,15 +15,15 @@
                                 <p>姓名：{{orderInfo.receivedName}}</p>
                                 <p>联系电话：{{orderInfo.receivedPhone}}</p>
                                 <p>预约自提时间：{{orderInfo.deliveryDate | formatDateRemoveZero}} {{orderInfo.deliveryTime}}</p>
-            
                             </div>
                         </div>
                         <div class="item">
                             <div class="label">自提点信息</div> 
                             <div class="value">
-                                <p>地址</p>
-                                <p>联系人：</p>
-                                <p>联系电话：</p>
+                                <p>{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.pickUpName:''}}</p>
+                                <p>{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.addressDetail:''}}</p>
+                                <p>联系人：{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.name:''}}</p>
+                                <p>联系电话：{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.mobile:''}}</p>
                             </div>
                         </div>
                     </template>
@@ -310,37 +310,6 @@
                         <div class="col">积分抵现:</div>
                         <div class="col">- ¥{{orderDetail.orderInfo.consumeScoreConvertMoney || '0.00'}}</div>
                     </div>
-                    <!-- <div class="row align-center">
-                        <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
-                            <el-select style="margin-right: 5px;" v-model="orderInfo.consultType" placeholder="请选择">
-                                <el-option
-                                v-for="item in reducePriceTypeList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </div>
-                        <div v-else-if="orderDetail.orderInfo.consultMoney">
-                            <el-select disabled style="margin-right: 5px;" v-model="orderInfo.consultType" placeholder="请选择">
-                                <el-option
-                                v-for="item in reducePriceTypeList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </div>
-                        <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
-                            <el-input @input="handleInput2" v-if="changePriceVisible" min="0" type="number" class="reduce-price-input" v-model="orderInfo.consultMoney"></el-input>
-                            <span v-if="!changePriceVisible">{{orderInfo.consultMoney}}</span>
-                            <span class="blue pointer" v-if="!changePriceVisible" @click="changePriceVisible = true">改价</span>
-                            <span class="blue pointer" v-if="changePriceVisible" @click="reducePriceHandler">完成</span>
-                        </div>
-                        <div v-else-if="orderDetail.orderInfo.consultMoney">
-                            <span>¥{{orderDetail.orderInfo.consultMoney}}</span>
-                        </div>
-                    </div> -->
                 </section>
                 <section>
                     <div class="row strong" style="align-items: center;">
@@ -632,28 +601,7 @@ export default {
             //this.goodsListMessage.consultMoney = (this.goodsListMessage.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
             this.orderInfo.consultMoney = (this.orderInfo.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
         },
-        // reducePriceHandler() {
-        //     if(this.orderInfo.consultType == 2) {
-        //         if(this.orderDetail.orderInfo.receivableMoney < this.orderInfo.consultMoney) {
-        //             this.$message({
-        //                 message: '不能大于第三方待支付金额',
-        //                 type: 'warning'
-        //             });
-        //             return
-        //         }
-        //     }
-        //     this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
-        //     consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
-        //         this.changePriceVisible = false
-        //         // this.$message.success('添加成功！');
-        //         this.currentDialog = 'ChangePriceDialog'
-        //         this.dialogVisible = true
-        //         this.getDetail()
-        //     }).catch(error => {
-        //         this.changePriceVisible = false
-        //         this.$message.error(error);
-        //     }) 
-        // },
+       
         reducePriceHandler() {
             if(this.orderInfo.consultType == 2) {
                 if(parseFloat(this.orderDetail.orderInfo.receivableMoney) < this.orderInfo.consultMoney) {
@@ -962,6 +910,9 @@ export default {
                 }
                 .value {
                     color: #9FA29F;
+                    p{
+                        margin-bottom:5px;
+                    }
                 }
             }
         }
