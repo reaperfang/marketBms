@@ -107,8 +107,7 @@ export default {
         },
         title: {
             type: String,
-            default: '提示',
-            required: true
+            default: '提示'
         },
         orderSendGoodsHander: {
 

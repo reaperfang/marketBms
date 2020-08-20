@@ -9,7 +9,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="电子面单" v-show="listQuery.deliveryWay == 1">
-          <el-select v-model="listQuery.isSupportElectronicSheet">
+          <el-select v-model="listQuery.isExpressElectronicSheet">
             <el-option label="全部" value></el-option>
             <el-option label="是" :value="1"></el-option>
             <el-option label="否" :value="0"></el-option>
