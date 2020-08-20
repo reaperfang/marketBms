@@ -132,7 +132,7 @@
                       </el-form>
                     </template>
                     <template v-else>
-                      <p style="width: 285px; text-align: center; margin-top: 29px;">{{(item.deliveryDate ? item.deliveryDate.split(' ')[0] : '') + item.deliveryTime}}</p>
+                      <p style="width: 285px; text-align: center; margin-top: 29px;">{{(item.deliveryDate ? item.deliveryDate.split(' ')[0] : '') + ' ' + item.deliveryTime}}</p>
                     </template>
                   </div>
                 </div>

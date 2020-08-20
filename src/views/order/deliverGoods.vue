@@ -145,7 +145,7 @@
               </div>
               <div class="item">
                 <div class="label">预约提货时间</div>
-                <div class="value">{{(orderInfo.deliveryDate ? orderInfo.deliveryDate.split(' ')[0] : '') + orderInfo.deliveryTime}}</div>
+                <div class="value">{{(orderInfo.deliveryDate ? orderInfo.deliveryDate.split(' ')[0] : '') + ' ' + orderInfo.deliveryTime}}</div>
               </div>
             </div>
           </div>
