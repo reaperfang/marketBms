@@ -58,7 +58,7 @@
                       <div class="message-item">{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.pickUpName:''}}</div>
                     </div>
                     <div class="message-item-list">
-                      <div class="message-item">{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.address:''}}</div>
+                      <div class="message-item">{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.address +' '+ orderDetail.pickUpInfoDto.addressDetail:''}}</div>
                     </div>
                   </div>
                   <div class="message">

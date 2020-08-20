@@ -80,14 +80,18 @@ export default {
           this.$parent.$parent.getList()
         } else if(this.$route.name == 'orderDetail') {
           this.$parent.$parent.getDetail()
+        } else if(this.$route.name == 'deliveryManagement') {
+          this.$parent.getList()
         }
         }else{//自提码验证失败
            self.isShowError = true;
            self.errorMsg = res.msg
         }
       }).catch(err=>{
-        console.log('报错啦error')
-        console.log(err)
+        this.$message({
+            message: err,
+            type: "error"
+           });
       })
       
     },

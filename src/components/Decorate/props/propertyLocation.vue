@@ -29,7 +29,7 @@
               <p style="font-size: 14px;">上传图片</p>
             </div>
           </div>
-          <p class="prop-message">建议尺寸: <br>300*40像素或同等比例<br>大小不超过3M</p>
+          <p class="prop-message">建议尺寸: 300*40像素或同等比例<br>大小不超过3M</p>
         </el-radio-group>
       </el-form-item>
       
