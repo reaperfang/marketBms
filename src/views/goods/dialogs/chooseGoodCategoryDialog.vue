@@ -283,7 +283,6 @@ export default {
               }
             });
             this.operateCategoryList = res;
-            debugger
             this.itemCatList = arr;
             this.firstCatList = arr;
             this.getHistoryProductCategory(this.data)
