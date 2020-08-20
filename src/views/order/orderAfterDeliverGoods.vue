@@ -124,8 +124,8 @@
                             </el-select>
                             <el-input v-if="ruleForm.expressCompanyCode == 'other'" v-model="ruleForm.other" placeholder="请输入快递公司名称"></el-input>
                         </el-form-item>
-                        <el-form-item label="快递单号" prop="expressNos">
-                            <el-input :disabled="!express" v-model="ruleForm.expressNos" :placeholder="!express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" maxlength="20"></el-input>
+                        <el-form-item label="快递单号" prop="expressNos" :class="{'is-disabled': express != null}">
+                            <el-input :disabled="express != null" v-model="ruleForm.expressNos" :placeholder="express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" maxlength="20"></el-input>
                         </el-form-item>
                         <el-form-item label="物流备注" prop="remark">
                             <el-input
@@ -271,7 +271,7 @@ export default {
             isReceived: true,
             title: '',
             sendGoods: '',
-            express: true,
+            express: null,
             sending: false,
             distributorList: [], //配送员筛选后的数据
             distributorListFilter: [], //所有配送员数据
@@ -443,19 +443,37 @@ export default {
             window.open(routeData.href, '_blank');
         },
         fetchOrderAddress() {
-      this._apis.order
-        .fetchOrderAddress({ id: this.cid, cid: this.cid })
+    //   this._apis.order
+    //     .fetchOrderAddress({ id: this.cid, cid: this.cid })
+    //     .then(res => {
+    //       this.orderAfterSaleSendInfo.sendName = res.senderName;
+    //       this.orderAfterSaleSendInfo.sendPhone = res.senderPhone;
+    //       this.orderAfterSaleSendInfo.sendProvinceCode = res.provinceCode;
+    //       this.orderAfterSaleSendInfo.sendProvinceName = res.province;
+    //       this.orderAfterSaleSendInfo.sendCityCode = res.cityCode;
+    //       this.orderAfterSaleSendInfo.sendCityName = res.city;
+    //       this.orderAfterSaleSendInfo.sendAreaCode = res.areaCode;
+    //       this.orderAfterSaleSendInfo.sendAreaName = res.area;
+    //       this.orderAfterSaleSendInfo.sendAddress = res.sendAddress;
+    //       this.orderAfterSaleSendInfo.sendDetail = res.address;
+    //     })
+    //     .catch(error => {
+    //       this.visible = false;
+    //       this.$message.error(error);
+    //     });
+        this._apis.order
+        .getShopAddress({ cid: this.cid })
         .then(res => {
-          this.orderAfterSaleSendInfo.sendName = res.senderName;
-          this.orderAfterSaleSendInfo.sendPhone = res.senderPhone;
+          this.orderAfterSaleSendInfo.sendName = res.name;
+          this.orderAfterSaleSendInfo.sendPhone = res.mobile;
           this.orderAfterSaleSendInfo.sendProvinceCode = res.provinceCode;
-          this.orderAfterSaleSendInfo.sendProvinceName = res.province;
+          this.orderAfterSaleSendInfo.sendProvinceName = res.provinceName;
           this.orderAfterSaleSendInfo.sendCityCode = res.cityCode;
-          this.orderAfterSaleSendInfo.sendCityName = res.city;
+          this.orderAfterSaleSendInfo.sendCityName = res.cityName;
           this.orderAfterSaleSendInfo.sendAreaCode = res.areaCode;
-          this.orderAfterSaleSendInfo.sendAreaName = res.area;
-          this.orderAfterSaleSendInfo.sendAddress = res.sendAddress;
-          this.orderAfterSaleSendInfo.sendDetail = res.address;
+          this.orderAfterSaleSendInfo.sendAreaName = res.areaName;
+          this.orderAfterSaleSendInfo.sendAddress = res.address;
+          this.orderAfterSaleSendInfo.sendDetail = res.addressDetail;
         })
         .catch(error => {
           this.visible = false;
@@ -476,7 +494,7 @@ export default {
             .checkExpress({expressName})
             .then(res => {
             this.express = res;
-            if(this.express) {
+            if(this.express == null) {
                 this.$set(this.rules, "expressNos", [
                     { required: true, message: "请输入快递单号", trigger: "blur" }
                 ]);

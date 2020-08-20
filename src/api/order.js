@@ -723,3 +723,13 @@ export function getPickInfo(data) {
     data
   })
 }
+
+//地址库默认退货地址查询
+export function getShopAddress(data) {
+  return request({
+    target: 'SHOP-ADDRESS-DEFAULT-RETURN-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
