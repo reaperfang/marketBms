@@ -186,7 +186,7 @@
                         </div>
                         <i class="el-icon-warning-outline sku-code"></i>
                     </el-tooltip>
-                <el-input :disabled="!ruleForm.productCategoryInfoId || (ruleForm.productCategoryInfoId && (ruleForm.isSyncProduct == 1 && authHide))" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入SKU编码"></el-input>
+                <el-input :disabled="(!ruleForm.productCategoryInfoId || (editor && ruleForm.activity))" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入SKU编码"></el-input>
                 </el-form-item>
                 <el-form-item  label="成本价" prop="costPrice">
                     <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.costPrice" placeholder="请输入成本价"></el-input>
