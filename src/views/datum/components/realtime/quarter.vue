@@ -89,7 +89,7 @@ export default {
       season: '',
       year: new Date().getFullYear(),
       yearcur: new Date().getFullYear(),
-      monthcur:Math.ceil((new Date().getMonth()+1)/3),
+      monthcur:(Math.ceil((new Date().getMonth()+1)/3)-1),//当前季度前一季度
       showValue: ''
     }
   },
@@ -141,7 +141,22 @@ export default {
       that.getValue(that.year + arr[0] + '-' + that.year + arr[1])
       that.showSeason = false
       this.showValue = `${this.year}年${this.season}季度`
-      this.$emit("change",`${this.year}-${this.season}`)
+
+      // ['01-03', '04-06', '07-09', '10-12']  取选中季度的最后一天日期 时间戳
+      var  lastday=''
+      if(this.season==1){
+        lastday=(new Date(this.year+'-03-31')).getTime()
+      }
+      if(this.season==2){
+        lastday=(new Date(this.year+'-06-30')).getTime()
+      }
+      if(this.season==3){
+        lastday=(new Date(this.year+'-09-30')).getTime()
+      }
+      if(this.season==4){
+        lastday=(new Date(this.year+'-12-31')).getTime()
+      }
+      this.$emit("change",{units:4,date:lastday})
     }
   }
 }

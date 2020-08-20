@@ -478,7 +478,8 @@ margin-left: 12px;
 	  position: relative;
       padding: 14px 0;
       .p_screening{
-          width: calc(100% - 580px);
+        //   width: calc(100% - 580px);
+        width: 50%;
           color: #92929B;
           font-size: 14px;
           line-height: 16px;
@@ -503,8 +504,10 @@ margin-left: 12px;
       
   }
   .card-content{
-      width: 558px;
+    //   width: 558px;
+    width: 50%;
       float: right;
+      padding-left: 30px;
       .card-item{
           width:176px;
         height:106px;

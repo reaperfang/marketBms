@@ -1,6 +1,6 @@
 <template>
 <div class="fr clearfix" style="position:relative;">
-                        <el-select class="dayselect" v-model="value" placeholder="请选择">
+                        <el-select class="dayselect" v-model="value" placeholder="请选择" @change="value2=''">
                             <el-option label="日" value="1"></el-option>
                             <el-option label="周" value="2"></el-option>
                             <el-option label="月" value="3"></el-option>
@@ -19,13 +19,13 @@
                         v-model="value2" @change="getData"
                         type="week"
                         format="yyyy 第 WW 周"
-                        placeholder="选择周" :picker-options="pickerOptions">
+                        placeholder="选择周" :picker-options="pickerWeek">
                         </el-date-picker>
                         <el-date-picker class="dayinput" v-if="value==3"
                         v-model="value2" @change="getData"
                         type="month"
                         format="yyyy-MM"
-                        placeholder="选择月" :picker-options="pickerOptions">
+                        placeholder="选择月" :picker-options="pickerMonth">
                         </el-date-picker>
                         <quarter class="fl" v-if="value==4" />
                     </div>
@@ -36,11 +36,23 @@ export default {
     components: { quarter },
   data() {
     return {
-      pickerOptions: {
+      pickerOptions: {//日期
             disabledDate(time) {
-            return time.getTime() > Date.now();
+                return time.getTime() > Date.now() - 8.64e7;
             },
+        },
+        pickerWeek: {//周  https://www.cnblogs.com/lvsige/p/13474932.html
+            disabledDate(time) {
+                let wk = new Date().getDay() + 1
+                return time.getTime() > Date.now() - 8.64e7*wk;
             },
+        },
+        pickerMonth: {//月
+            disabledDate(time) {
+                var curday=new Date().getDate()
+                return time.getTime() > Date.now() - 8.64e7*curday;
+            },
+        },
         value2: '',
         value:'1',
     }
@@ -49,7 +61,20 @@ export default {
   },
   methods: {
     getData(){
-        this.$emit("change",this.value2)
+        var lastday=''
+        if(this.value==2){//选中周的 周日 日期 时间戳 到秒
+            lastday=this.value2.getTime()+(8.64e7*6)
+            console.log(lastday)
+            console.log((new Date('2020-08-16 00:00:00')).getTime())
+        }else if(this.value==3){//选中月的最后一天时间戳 到秒
+            lastday=this.value2.getTime()+8.64e7*7
+            console.log(lastday)
+            console.log((new Date('2020-09-30')).getTime())
+        }else{
+            lastday=this.value2
+        }
+
+        this.$emit("change",{units:this.value,date:lastday})
     }
   }
 }
