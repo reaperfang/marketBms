@@ -137,15 +137,15 @@
             <div class="content">
               <div class="item">
                 <div class="label">提货人</div>
-                <div class="value">{{orderInfo.receivedName}}</div>
+                <div class="value">{{orderInfo.receivedName}} {{orderInfo.receivedPhone}}</div>
               </div>
               <div class="item">
                 <div class="label">自提点信息</div>
-                <div class="value">{{orderInfo.receivedPhone}}</div>
+                <div class="value">{{orderInfo.pickUpName}} {{orderInfo.sendAddress}} {{orderInfo.sendDetail}}</div>
               </div>
               <div class="item">
                 <div class="label">预约提货时间</div>
-                <div class="value">{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}</div>
+                <div class="value">{{(orderInfo.deliveryDate ? orderInfo.deliveryDate.split(' ')[0] : '') + orderInfo.deliveryTime}}</div>
               </div>
             </div>
           </div>
@@ -943,11 +943,24 @@ export default {
               val.showError = false
               val.errorMessage = ''
             })
+            res[0].pickUpName = ''
             this.tableData = res[0].orderItemList;
             this.tableData.forEach(row => {
               this.$refs.table.toggleRowSelection(row);
             })
             this.orderInfo = res[0];
+            if(this.orderInfo.deliveryWay == 4) {
+              let pickId = this.orderInfo.pickId
+
+              this._apis.order
+              .getPickInfo({id: pickId})
+              .then(res => {
+                this.orderInfo.pickUpName = res.pickUpName
+              })
+              .catch(error => {
+                this.$message.error(error);
+              });
+            }
             this._ids = [this.orderInfo.id]
             if(!this.orderInfo.sendAddress) {
               this.fetchOrderAddress(_address);
