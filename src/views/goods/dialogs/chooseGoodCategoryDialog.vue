@@ -132,7 +132,7 @@ export default {
                   value: _temp.id,
                   label: `${_parentTemp.name}->${_temp.name}`,
                 };
-                if(!this.commonCategories.find(val=>val.value==item.id)){
+                if(!this.commonCategories.find(val=>val.value==item.productCategoryInfoId)){
                     this.commonCategories.push(elem);
                 }
                 
@@ -283,6 +283,7 @@ export default {
               }
             });
             this.operateCategoryList = res;
+            debugger
             this.itemCatList = arr;
             this.firstCatList = arr;
             this.getHistoryProductCategory(this.data)
