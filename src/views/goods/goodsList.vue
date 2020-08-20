@@ -761,7 +761,7 @@ export default {
                 }).catch(error=>{
                     this.$message({
                     message: "序号保存失败",
-                    type: "warning"
+                    type: "error"
                     });
                 }) 
 

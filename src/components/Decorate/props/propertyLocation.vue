@@ -29,7 +29,7 @@
               <p style="font-size: 14px;">上传图片</p>
             </div>
           </div>
-          <p class="prop-message">建议尺寸: <br>300*40像素或同等比例<br>大小不超过3M</p>
+          <p class="prop-message">建议尺寸: 300*40像素或同等比例<br>大小不超过3M</p>
         </el-radio-group>
       </el-form-item>
       
@@ -54,8 +54,7 @@ export default {
         fontColor: 'rgba(0,0,0,1)',
         bgType: 1,// 背景类型
         backgroundColor: 'rgba(255,255,255,1)',//背景颜色
-        backgroundImage: '',
-        saveCallBack: this.saveCallBack //保存时需要触发的回调函数
+        backgroundImage: ''
       },
       rules: {
 

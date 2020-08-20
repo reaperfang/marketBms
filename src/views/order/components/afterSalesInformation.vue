@@ -698,7 +698,7 @@ export default {
             .list-lefter {
                 margin-right: 20px;
                 width: 90px;
-                text-align: right;
+                text-align: left;
                 flex-shrink: 0;
             }
             .list-righter {
