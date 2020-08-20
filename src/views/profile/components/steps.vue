@@ -67,7 +67,15 @@ export default {
 
   methods: {
     handleClose() {
-      this.$router.push({ path: '/profile/profile' })
+      this.confirm({
+        title: '提示', 
+        text: '您将关闭当前开店引导，填写信息我们已帮您记录，请在首页概况模块，再次进入开店引导步骤。'
+      }).then(() => {
+        this.$router.push({ path: '/profile/profile' })
+      }).catch(() => {
+
+      })
+      
     }
   }
 }
