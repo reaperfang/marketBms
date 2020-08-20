@@ -265,7 +265,7 @@ export default {
         .getElectronicFaceSheetDetail({expressCompanyCode: this.$route.query.expressCompanyCode})
         .then(res => {
           console.log(res)
-			if (res.isClientNumber && res.isClientNumber * 1 === 1) {
+			if (res.expressCompanyAccount) {
 				this.isShowPwa = true
 			} else {
 				this.isShowPwa = false
