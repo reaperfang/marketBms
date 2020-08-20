@@ -132,7 +132,10 @@ export default {
                   value: _temp.id,
                   label: `${_parentTemp.name}->${_temp.name}`,
                 };
-                this.commonCategories.push(elem);
+                if(!this.commonCategories.find(val=>val.value==item.id)){
+                    this.commonCategories.push(elem);
+                }
+                
               }
             });
           }
