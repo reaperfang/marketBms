@@ -176,7 +176,7 @@
                                 <span v-else @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
                             </template>
                             <template v-if="scope.row.status == 5 && scope.row.deliveryWay == 4">
-                                <span @click="verificationHandler">核销验证</span>
+                                <span @click="verificationHandler(scope.row)">核销验证</span>
                             </template>
                         </div>
                     </template>
@@ -322,7 +322,8 @@ export default {
         }
     },
     methods: {
-        verificationHandler() {
+        verificationHandler(row) {
+            this.currentData = row.orderId
             this.currentDialog = 'VerificationDialog'
             this.dialogVisible = true
         },

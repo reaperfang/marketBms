@@ -77,7 +77,7 @@
                       <p>收货地址: {{item.receiveAddress}} {{item.receivedDetail}}</p>
                     </template>
                     <template v-else>
-                      <p>提货人: {{item.receivedName}} {{item.receivedPhone}}</p>
+                      <p>提货信息: {{item.receivedName}} {{item.receivedPhone}}</p>
                       <p>自提点名称: {{item.pickUpName}}</p>
                       <p>提货地址: {{item.sendAddress}} {{item.sendDetail}}</p>
                     </template>
@@ -861,6 +861,7 @@ export default {
             if(item.deliveryWay == 4) {
               obj.deliveryWay = 4;
               obj.verifyCode = item.verifyCode
+              obj.pickId = item.pickId
             }
             return obj;
           })
