@@ -51,11 +51,11 @@ export default {
       let self = this;
       if(self.selfCode===''){
         this.isShowError = true
-        self.errorMsg='请输入自提码'
+        self.errorMsg='验证码不可为空！'
         return
       }else if(this.selfCode.length!=6){
         this.isShowError = true
-         self.errorMsg='请核对自提码'
+         self.errorMsg='自提码为6位数字，请核对后重新输入！'
          return
       }
       //调取核销验证码接口
