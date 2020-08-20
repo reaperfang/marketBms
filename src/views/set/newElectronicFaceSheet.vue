@@ -27,23 +27,6 @@
             </el-form-item>
             <el-form-item v-if="isShowPwa" label="快递公司账号" prop="expressCompanyAccount">
                 <el-input v-model="ruleForm.expressCompanyAccount" placeholder="请输入，不超过20个字符"></el-input>
-				<!--<el-popover
-					placement="bottom-start"
-					width="1000"
-					trigger="click">
-					<p>快递公司支持情况</p>
-					<div style="margin-top: 15px">
-						顺丰速运、EMS、宅急送、圆通速递、百世快递、中通快递、韵达速递、申通快递、德邦快递、优速快递、京东快递、信丰物流、安能快递、国通快递、天天快递、跨越速运、邮政快递包裹、中铁快运、邮政国内标快、远成快运、全一快递、速尔快递、品骏快递。
-					</div>
-					<p style="margin-top: 15px">快运公司支持情况</p>
-					<div style="margin-top: 15px">德邦快运、安能快运、京东快运、龙邦快运。</div>
-					<el-table :data="tableData">
-						<el-table-column width="200" property="name" label="账号类型"></el-table-column>
-						<el-table-column width="780" property="company" label="支持快递公司"></el-table-column>
-					</el-table>
-					<span slot="reference" class="account-explain">查看账号说明</span>
-				</el-popover>-->
-
                 <el-popover
                     placement="bottom-start"
 					width="1000"
@@ -282,6 +265,11 @@ export default {
         .getElectronicFaceSheetDetail({expressCompanyCode: this.$route.query.expressCompanyCode})
         .then(res => {
           console.log(res)
+			if (res.isClientNumber && res.isClientNumber * 1 === 1) {
+				this.isShowPwa = true
+			} else {
+				this.isShowPwa = false
+			}
           this.ruleForm = Object.assign({}, res)
         })
         .catch(error => {
