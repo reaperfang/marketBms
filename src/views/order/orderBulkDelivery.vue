@@ -141,7 +141,7 @@
           </div>
         </div>
       </section>
-      <section v-if="list[0].deliveryWay != 4" class="send-goods">
+      <section v-if="list && list[0] && (list[0].deliveryWay != 4)" class="send-goods">
         <div class="container-item">
           <p>2.确认发货信息</p>
           <div class="container-item-content">
@@ -884,7 +884,7 @@ export default {
             }
           })
 
-          if(this._list.length) {
+          if(this.list[0].deliveryWay == 1 && this._list.length) {
             this.currentData = {
               list: this._list,
               expressCompanyList: this.expressCompanyList,

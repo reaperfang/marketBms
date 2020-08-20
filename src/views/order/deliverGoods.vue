@@ -851,7 +851,7 @@ export default {
             ]
           };
           this.params = params
-          if(this.express != null && !this.express.specificationSize) {
+          if(this.orderInfo.deliveryWay == 1 && this.express != null && !this.express.specificationSize) {
             try {
               let res = await this._apis.order.getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
 
@@ -963,6 +963,7 @@ export default {
               val.errorMessage = ''
             })
             res[0].pickUpName = ''
+            this._list = JSON.parse(JSON.stringify(res))
             this.tableData = res[0].orderItemList;
             this.tableData.forEach(row => {
               this.$refs.table.toggleRowSelection(row);
