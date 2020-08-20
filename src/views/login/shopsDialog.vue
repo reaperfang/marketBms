@@ -3,7 +3,7 @@
         <el-dialog
         title=""
         :visible.sync="showShopsDialog"
-        width="50%"
+        width="680px"
         :before-close="handleClose"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
@@ -157,9 +157,9 @@ export default {
 }
 .content{
   width: 100%;
-  margin:20px 0px 30px 0px;
+  margin:20px 0px 30px 10px;
   .shopItem{
-    width:30%;
+    width:200px;
     height:121px;
     background:rgba(255,255,255,1);
     border-radius:3px;
