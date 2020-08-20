@@ -145,7 +145,7 @@
               </div>
               <div class="item">
                 <div class="label">预约提货时间</div>
-                <div class="value">{{(orderInfo.deliveryDate ? orderInfo.deliveryDate.split(' ')[0] : '') + orderInfo.deliveryTime}}</div>
+                <div class="value">{{(orderInfo.deliveryDate ? orderInfo.deliveryDate.split(' ')[0] : '') + ' ' + orderInfo.deliveryTime}}</div>
               </div>
             </div>
           </div>
@@ -668,6 +668,25 @@ export default {
       this.orderInfo.sendAddress = address.address;
       this.orderInfo.sendDetail = address.addressDetail;
     },
+    fetchPickInfo(id) {
+      this._apis.order
+        .getPickInfo({ id })
+        .then(res => {
+          this.orderInfo.sendName = res.name;
+          this.orderInfo.sendPhone = res.mobile;
+          this.orderInfo.sendProvinceCode = res.provinceCode;
+          this.orderInfo.sendProvinceName = res.provinceName;
+          this.orderInfo.sendCityCode = res.cityCode;
+          this.orderInfo.sendCityName = res.cityName;
+          this.orderInfo.sendAreaCode = res.areaCode;
+          this.orderInfo.sendAreaName = res.areaName;
+          this.orderInfo.sendAddress = res.address;
+          this.orderInfo.sendDetail = res.addressDetail;
+        })
+        .catch(error => {
+          this.$message.error(error);
+        });
+    },
     getExpressCompanyList() {
       this._apis.order
         .getElectronicFaceSheetExpressCompanyList()
@@ -832,7 +851,7 @@ export default {
             ]
           };
           this.params = params
-          if(this.express != null && !this.express.specificationSize) {
+          if(this.orderInfo.deliveryWay == 1 && this.express != null && !this.express.specificationSize) {
             try {
               let res = await this._apis.order.getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
 
@@ -944,6 +963,7 @@ export default {
               val.errorMessage = ''
             })
             res[0].pickUpName = ''
+            this._list = JSON.parse(JSON.stringify(res))
             this.tableData = res[0].orderItemList;
             this.tableData.forEach(row => {
               this.$refs.table.toggleRowSelection(row);
@@ -963,7 +983,11 @@ export default {
             }
             this._ids = [this.orderInfo.id]
             if(!this.orderInfo.sendAddress) {
-              this.fetchOrderAddress(_address);
+              if(this.orderInfo.deliveryWay != 4) {
+                this.fetchOrderAddress(_address);
+              } else {
+                this.fetchPickInfo(this.orderInfo.pickId)
+              }
             }
 
             //如果是商家配送，则需要请求拿到配送员列表

@@ -373,7 +373,11 @@ export default {
         let text = '上门自提开启成功！'
         if (!isHasLocation) {
           showConfirmButton = false
-          const url = `${location.protocol}//${location.host}/bp/shop/m_shopEditor?pageId=${pageId}`
+          let url = `${location.protocol}//${location.host}/bp/shop/m_wxShopIndex`;
+          if(pageId){
+            url = `${location.protocol}//${location.host}/bp/shop/m_shopEditor?pageId=${pageId}`;
+          }
+          
           text = `<p style="font-size:16px;color:rgba(68,67,75,1);">上门自提开启成功！</p><p style="font-size:12px;color:rgba(68,67,75,1);">您还没有装修位置组件<a href="${url}" style="color:#655EFF;text-decoration: underline;" target="_blank">去装修 &gt;</a></p>`
           this.confirm({
             title: "提示",
@@ -405,6 +409,11 @@ export default {
         console.log('isExistEnabled',isExistEnabled)
         if (isExistEnabled) {
           this._apis.shop.getHomePage({pageTag:0}).then((res) => {
+            //如果店铺主页不存在，则正常提示去装修，去装修跳转至店铺主页即可
+            if(!res){
+              this.openSelfLiftSuccess(false, false);
+              return;
+            }
             const str = utils.uncompileStr(res.pageData);
             const pageData = JSON.parse(str);
             if (pageData && pageData.length > 0) {

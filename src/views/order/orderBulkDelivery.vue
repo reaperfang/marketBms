@@ -132,7 +132,7 @@
                       </el-form>
                     </template>
                     <template v-else>
-                      <p style="width: 285px; text-align: center; margin-top: 29px;">{{(item.deliveryDate ? item.deliveryDate.split(' ')[0] : '') + item.deliveryTime}}</p>
+                      <p style="width: 285px; text-align: center; margin-top: 29px;">{{(item.deliveryDate ? item.deliveryDate.split(' ')[0] : '') + ' ' + item.deliveryTime}}</p>
                     </template>
                   </div>
                 </div>
@@ -141,7 +141,7 @@
           </div>
         </div>
       </section>
-      <section class="send-goods">
+      <section v-if="list && list[0] && (list[0].deliveryWay != 4)" class="send-goods">
         <div class="container-item">
           <p>2.确认发货信息</p>
           <div class="container-item-content">
@@ -884,7 +884,7 @@ export default {
             }
           })
 
-          if(this._list.length) {
+          if(this.list[0].deliveryWay == 1 && this._list.length) {
             this.currentData = {
               list: this._list,
               expressCompanyList: this.expressCompanyList,
@@ -1094,16 +1094,36 @@ export default {
           //   });
           this.list.forEach(res => {
             if(!res.sendAddress) {
-              res.sendName = _address.name;
-              res.sendPhone = _address.mobile;
-              res.sendProvinceCode = _address.provinceCode;
-              res.sendProvinceName = _address.provinceName;
-              res.sendCityCode = _address.cityCode;
-              res.sendCityName = _address.cityName;
-              res.sendAreaCode = _address.areaCode;
-              res.sendAreaName = _address.areaName;
-              res.sendAddress = _address.address;
-              res.sendDetail = _address.addressDetail;
+              if(res.deliveryWay != 4) {
+                res.sendName = _address.name;
+                res.sendPhone = _address.mobile;
+                res.sendProvinceCode = _address.provinceCode;
+                res.sendProvinceName = _address.provinceName;
+                res.sendCityCode = _address.cityCode;
+                res.sendCityName = _address.cityName;
+                res.sendAreaCode = _address.areaCode;
+                res.sendAreaName = _address.areaName;
+                res.sendAddress = _address.address;
+                res.sendDetail = _address.addressDetail;
+              } else {
+                this._apis.order
+                  .getPickInfo({ id: res.pickId })
+                  .then(_res => {
+                    res.sendName = _res.name;
+                    res.sendPhone = _res.mobile;
+                    res.sendProvinceCode = _res.provinceCode;
+                    res.sendProvinceName = _res.provinceName;
+                    res.sendCityCode = _res.cityCode;
+                    res.sendCityName = _res.cityName;
+                    res.sendAreaCode = _res.areaCode;
+                    res.sendAreaName = _res.areaName;
+                    res.sendAddress = _res.address;
+                    res.sendDetail = _res.addressDetail;
+                  })
+                  .catch(error => {
+                    this.$message.error(error);
+                  });
+              }
             }
           });
         })
@@ -1194,6 +1214,7 @@ export default {
   }
   .footer {
     text-align: center;
+    margin-top: 20px;
   }
 }
 .container-item {

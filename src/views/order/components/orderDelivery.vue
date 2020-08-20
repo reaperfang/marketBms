@@ -241,7 +241,8 @@ export default {
                 deliveryWay: "", // 配送方式:1普通快递,2商家配送
                 deliveryDate: "", //商家配送-日期
                 deliveryTime: "", //商家配送-时间段
-                isSupportElectronicSheet: 0
+                isSupportElectronicSheet: 0,
+                isExpressElectronicSheet: 0,
             },
             tableData: [],
             loading: false,
