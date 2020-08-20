@@ -222,7 +222,8 @@ export default {
         for(let item of newValue) {
           this.ruleForm.ids.push({
             spuId: item.spuId,
-            activityId: item.activityId || item.activeId
+            activityId: item.activityId || item.activeId,
+            activeId: item.activityId || item.activeId
           });
         }
         this.fetch();
@@ -313,7 +314,7 @@ export default {
         if(!this.utils.isIdsUpdate(newValue, oldValue)) {
           this.echoList = [];
           newValue.forEach((item)=>{
-            _self.echoList.push({activityId: item.activityId, spuId: item.spuId});
+            _self.echoList.push({activityId: item.activityId, activeId: item.activityId, spuId: item.spuId});
           })
         }
       },
@@ -338,7 +339,7 @@ export default {
             let newParams = [];
             if(typeof componentData.ids[0] === 'string') {
               for(let item of componentData.ids){
-                newParams.push({spuId: item, activityId: ''})
+                newParams.push({spuId: item, activityId: '', activeId: ''})
               }
             }else{
               newParams = componentData.ids;
