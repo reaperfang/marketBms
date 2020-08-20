@@ -771,6 +771,7 @@ export default {
             this.$message.error('保存失败')
             this.ruleForm.address = ''
             this.$refs.ruleForm.validateField('address')
+            this.isLoading = false
             return false
           }
           this.isLoading = true
