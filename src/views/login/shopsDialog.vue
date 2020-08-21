@@ -8,7 +8,7 @@
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         :show-close="showClose"
-        style="margin-top:20vh;">
+        style="margin-top:5vh;">
         <span slot="title" class="dialog_title">
             我的店铺
         </span>
@@ -157,7 +157,9 @@ export default {
 }
 .content{
   width: 100%;
-  margin:20px 0px 30px 10px;
+  height: 430px;
+  margin-left:10px;
+  overflow-y:auto;
   .shopItem{
     width:200px;
     height:121px;
