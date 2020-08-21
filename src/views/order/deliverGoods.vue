@@ -274,6 +274,8 @@
       :orderSendGoodsHander="orderSendGoodsHander"
       :params="params"
       :list="_list"
+      @cancel="cancel"
+      :express="express"
     ></component>
   </div>
 </template>
@@ -421,6 +423,9 @@ export default {
     },
   },
   methods: {
+    cancel() {
+      this.sending = false
+    },
     //检测是否有配置子帐号的权限
     checkSet(){
         const setConfig = asyncRouterMap.filter(item => item.name === 'set');
@@ -629,7 +634,8 @@ export default {
           }
 
           this._list.splice(0, 1, Object.assign({}, this._list[0], {
-            expressCompanyCodes: this.ruleForm.expressCompanyCode
+            expressCompanyCodes: this.ruleForm.expressCompanyCode,
+            express: res
           }))
           console.log(this._list)
         })

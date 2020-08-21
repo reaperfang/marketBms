@@ -6,7 +6,7 @@
          <el-form-item class="status" label="自提点状态" prop="status">
           <el-radio-group v-model="ruleForm.status">
             <el-radio class="radio" :label="1">启用</el-radio>
-            <el-radio class="radio" :label="0">停用</el-radio>
+            <el-radio class="radio" :label="0">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item v-if="ruleForm.pickUpId" label="自提点编号" prop="pickUpId">
@@ -197,7 +197,7 @@ export default {
         province: null,
         city: null,
         area: null,
-        addressDetail: null,
+        addressDetail: '',
         deliveryTimeType: 1, // 配送时间类型
         repeatCycle: 1, // 重复周期
         weeks: [], // 重复日
@@ -317,7 +317,7 @@ export default {
       this.ruleForm.contactPerson = data.name || null
       this.ruleForm.mobile = data.mobile || null
       this.ruleForm.address = data.address || ''
-      this.ruleForm.addressDetail = data.addressDetail || null
+      this.ruleForm.addressDetail = data.addressDetail || ''
       this.ruleForm.lat = data.latitude || null
       this.ruleForm.lng = data.longitude || null
       this.ruleForm.provinceCode = data.provinceCode || null
@@ -393,7 +393,7 @@ export default {
       this.ruleForm.contactPerson = res.name || null
       this.ruleForm.mobile = res.mobile || null
       this.ruleForm.address = res.address || ''
-      this.ruleForm.addressDetail = res.addressDetail || null
+      this.ruleForm.addressDetail = res.addressDetail || ''
       this.ruleForm.provinceCode = res.provinceCode || null
       this.ruleForm.province = res.provinceName || null
       this.ruleForm.cityCode = res.cityCode || null
@@ -783,7 +783,7 @@ export default {
             let txt = ''
             if (!id) {
               const url = `${location.protocol}//${location.host}/bp/set/addSelfLift`
-              txt = `<p style="font-size:16px;color:rgba(68,67,75,1);">保存成功</p><p style="font-size:12px;color:rgba(68,67,75,1);"><a href="${url}" style="color:#655EFF;text-decoration: underline;" target="_blank">继续新建自提点</a></p>`
+              txt = `<p style="font-size:16px;color:rgba(68,67,75,1);">保存成功</p><p style="font-size:12px;color:rgba(68,67,75,1);"><a href="${url}" style="color:#655EFF;text-decoration: underline;">继续新建自提点</a></p>`
             } else {
               txt = `<p style="font-size:16px;color:rgba(68,67,75,1);">保存成功</p>`
             }

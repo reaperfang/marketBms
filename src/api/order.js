@@ -733,3 +733,13 @@ export function getShopAddress(data) {
     data
   })
 }
+
+//更新电子面单
+export function editorExpressSize(data) {
+  return request({
+    target: 'EDIT-EXPRESS-ELECTRONIC-SHEET-PROCESSOR',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}

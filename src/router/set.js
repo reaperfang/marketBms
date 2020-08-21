@@ -166,7 +166,14 @@ export default [
                 component: () => import('@/views/set/addSelfLift'),
                 name: 'addSelfLift',
                 hidden: true,
-                meta: { title: '新建', noCache: true, tabTitle: '配送设置' ,navType:4},
+                meta: { title: '新建自提点/从地址库选择', noCache: true, tabTitle: '配送设置' ,navType:5},
+            },
+            {
+                path: 'editSelfLift',
+                component: () => import('@/views/set/addSelfLift'),
+                name: 'editSelfLift',
+                hidden: true,
+                meta: { title: '编辑', noCache: true, tabTitle: '配送设置' ,navType:5},
             },
             {
                 path: 'selfLift',

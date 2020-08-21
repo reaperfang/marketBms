@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" :title="title" width="640px" :showFooter="showFooter">
+    <DialogBase :visible.sync="visible" @submit="submit" :title="title" width="640px" :showFooter="showFooter" @close="close">
         <div>
             <div>
                 <div class="header">
@@ -26,7 +26,7 @@
             </div>
             <div class="footer">
                 <el-button @click="submit" type="primary">继续</el-button>
-                <el-button @click="visible = false">取消</el-button>
+                <el-button @click="cancelHandler">取消</el-button>
             </div>
         </div>
     </DialogBase>
@@ -49,6 +49,13 @@ export default {
         }
     },
     methods: {
+        close() {
+            this.$emit('cancel')
+        },
+        cancelHandler() {
+            this.visible = false
+            this.$emit('cancel')
+        },
         specificationSizeChange(value, index) {
             if(!value) {
                 this.$set(this.data.list, index, Object.assign({}, this.data.list[index], {
@@ -80,6 +87,21 @@ export default {
             if(this.data.list.find(item => !item.specificationSize)) {
                 return
             }
+            this.data.list.forEach((item, index) => {
+                this._apis.order
+                .editorExpressSize({
+                    id: item.express ? item.express.id : '',
+                    cid: item.express ? item.express.cid : '',
+                    specificationSize: item.specificationSize,
+                    expressCompanyCode: item.expressCompanyCode
+                })
+                .then(res => {
+                    
+                })
+                .catch(error => {
+                    this.$message.error(error);
+                });
+            })
             this.orderSendGoodsHander(_params)
             this.visible = false
         }
@@ -95,6 +117,10 @@ export default {
             set(val) {
                 this.$emit('update:dialogVisible', val)
             }
+        },
+        cid() {
+            let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+            return shopInfo.id;
         },
     },
     props: {
@@ -116,6 +142,9 @@ export default {
 
         },
         list: {
+
+        },
+        express: {
 
         }
     },
