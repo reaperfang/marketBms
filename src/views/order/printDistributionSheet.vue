@@ -65,6 +65,7 @@
                             <div class="item">联系电话：{{item.receivedPhone}}</div>
                         </div>
                         <div class="item-box">
+                            <div class="item" v-if="!!item.deliveryDate" style="white-space:nowrap;">配送时间：{{item.deliveryDate | formatDateRemoveZero}} {{item.deliveryTime}}</div>
                             <div class="item">收货地址：{{item.orderInfoView.receiveAddress}} {{item.orderInfoView.receivedDetail}}</div>
                         </div>
                     </template>
