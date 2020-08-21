@@ -110,7 +110,7 @@
           <el-radio :label="7" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 5 || ruleForm.listStyle === 6">样式7</el-radio>
           <el-radio :label="8" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 5 || ruleForm.listStyle === 6">样式8</el-radio>
         </el-radio-group>
-        <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText" placeholder="请输入标题"></el-input>
+        <el-input ref="buyInput" v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText" placeholder="请输入标题"></el-input>
       </el-form-item>
       <el-form-item label="更多设置">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
@@ -156,17 +156,19 @@ export default {
         buttonText: '立即抢购'//按钮文字
       },
       displayList: [],
-      rules: {
+      initRules: {
         buttonText: [
-          { required: true, message: "请输入标题", trigger: "change" },
+          { required: true, message: "请输入标题", trigger: "change", validator: this.utils.ruleValidator.validateRequired },
           {
             min: 1,
             max: 5,
             message: "最多支持5个字符",
-            trigger: "change"
+            trigger: "change",
+            validator: this.utils.ruleValidator.validateMax
           }
-        ],
+        ]
       },
+      rules: {},
       echoList: [],
       dialogVisible: false,
       currentDialog: '',
@@ -181,6 +183,20 @@ export default {
           this.ruleForm.ids.push(item.activityId);
         }
         this.fetch();
+      },
+      deep: true
+    },
+
+    ruleForm: {
+      handler(newValue) {
+        this.$nextTick(() => {
+          //如果存在购买文本输入框，则恢复rules，否则不需要验证规则
+          if(this.$refs.buyInput){
+            this.rules = this.initRules;
+          }else{
+            this.rules = {};
+          }
+        })
       },
       deep: true
     },

@@ -87,6 +87,21 @@ export default {
             if(this.data.list.find(item => !item.specificationSize)) {
                 return
             }
+            this.data.list.forEach((item, index) => {
+                this._apis.order
+                .editorExpressSize({
+                    id: item.express ? item.express.id : '',
+                    cid: item.express ? item.express.cid : '',
+                    specificationSize: item.specificationSize,
+                    expressCompanyCode: item.expressCompanyCode
+                })
+                .then(res => {
+                    
+                })
+                .catch(error => {
+                    this.$message.error(error);
+                });
+            })
             this.orderSendGoodsHander(_params)
             this.visible = false
         }
@@ -102,6 +117,10 @@ export default {
             set(val) {
                 this.$emit('update:dialogVisible', val)
             }
+        },
+        cid() {
+            let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+            return shopInfo.id;
         },
     },
     props: {
@@ -123,6 +142,9 @@ export default {
 
         },
         list: {
+
+        },
+        express: {
 
         }
     },
