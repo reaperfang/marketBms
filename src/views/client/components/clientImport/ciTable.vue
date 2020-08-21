@@ -38,8 +38,8 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
             <div class="btns clearfix">
-                <span @click="addTag(scope.row)">添加标签</span>
-                <span @click="modify(scope.row)">修改身份等级</span>
+                <span @click="addTag(scope.row)" :class="scope.row.successNum == 0?'gray':''">添加标签</span>
+                <span @click="modify(scope.row)" :class="scope.row.successNum == 0?'gray':''">修改身份等级</span>
             </div>
         </template>
       </el-table-column>
@@ -166,6 +166,9 @@ export default {
                     &:first-child{
                       padding-right: 5px;
                       border-right: 1px solid #dadae3;
+                    }
+                    &.gray{
+                      color: #c9c9c9;
                     }
                 }
             }

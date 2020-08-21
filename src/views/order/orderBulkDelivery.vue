@@ -187,6 +187,7 @@
       :orderSendGoodsHander="orderSendGoodsHander"
       :params="params"
       :list="list"
+      @cancel="cancel"
     ></component>
   </div>
 </template>
@@ -252,6 +253,9 @@ export default {
     }
   },
   methods: {
+    cancel() {
+      this.sending = false
+    },
     allcheckHandler() {
       if(this.list[0].deliveryWay == 4) {
         return

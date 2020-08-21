@@ -159,7 +159,8 @@
       @getDetail="getDetail"
       :orderSendGoodsHander="orderSendGoodsHander"
       :params="params"
-      :list="list"></component>
+      :list="list"
+      @cancel="cancel"></component>
   </div>
 </template>
 <script>
@@ -205,6 +206,9 @@ export default {
         }
     },
   methods: {
+    cancel() {
+        this.sending = false
+    },
     //检测是否有配置子帐号的权限
     checkSet(){
         const setConfig = asyncRouterMap.filter(item => item.name === 'set');
