@@ -66,27 +66,41 @@
                 style="width: 100%">
                 <el-table-column
                     prop="number"
+                    align="left"
+                    header-align="left"
                     label="序号"
-                    width="180">
+                    width="180"
+                    style="padding-left:20px;"
+                    >
                 </el-table-column>
                 <el-table-column
+                    align="right"
+                    header-align="right"
                     prop="importCount"
                     label="导入数量"
                     width="180">
                 </el-table-column>
                 <el-table-column
+                    align="right"
                     prop="importSuccessCount"
+                    header-align="right"
                     label="导入成功数">
                 </el-table-column>
                 <el-table-column
+                    align="right"
+                    header-align="right"
                     prop="importFailCount"
                     label="导入失败数">
                 </el-table-column>
                 <el-table-column
+                    align="center"
+                    header-align="center"
                     prop="createUserName"
                     label="操作人">
                 </el-table-column>
                 <el-table-column
+                    align="center"
+                    header-align="center"
                     prop="createTime"
                     label="导入时间">
                 </el-table-column>
@@ -229,6 +243,12 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+     /deep/.el-table td:nth-child(1){
+         padding-left:10px;
+     }
+     /deep/.el-table th:nth-child(1){
+         padding-left:10px;
+     }
     .import {
         position: relative;
         background-color: #fff;
