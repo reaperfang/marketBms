@@ -42,10 +42,30 @@ export default {
       for(let item of this.componentDataIds) {
         const componentData = this.componentDataMap[item];
         const saveCallBack = componentData.data.saveCallBack;
-        if(!!saveCallBack && !saveCallBack(componentData.data)){
+        if(!!saveCallBack && !saveCallBack(componentData)){
           this.$store.commit('setCheckErrorId', uuidv4());
           setTimeout(() => {
+            //如果是当前编辑区，没有发生切换，则时长为0
+            let wait = 0;
+            //如果是切换编辑区，则时长需要设置长一些，以此来保证获取到的offsetTop是准确的
+            if(this.$store.getters.currentComponentId !== componentData.id){
+              wait = 280;
+            }
+
             this.$store.commit('setCurrentComponentId', componentData.id);
+
+            //延时执行，待右侧属性编辑区加载完成以便获取到具体第一个错误容器，来达到定位效果
+            setTimeout(()=>{
+              const errorTag = document.querySelector('.is-error');
+              if(errorTag){
+                const container = document.querySelector('.props_form');
+                const top = errorTag.offsetTop - 58;
+                container.scrollTo({
+                  top: top,
+                  behavior: "smooth"
+                });
+              }
+            }, wait)
           })
           this.setLoading(false);
           return false;
