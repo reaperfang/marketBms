@@ -38,7 +38,9 @@
         props: {
             listQuery: {
                 type: Object,
-                default: {}
+                default: {
+                    isExpressElectronicSheet: ''
+                }
             },
             isAfterSales: { //是否为售后，如果为售后则文本改为 退货方式  与   取货时间
                 type: Boolean,

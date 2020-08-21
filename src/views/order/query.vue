@@ -177,7 +177,8 @@ export default {
         orderTimeValue: "",
         startIndex: 1,
         pageSize: 20,
-        isInvoice: ""
+        isInvoice: "",
+        isExpressElectronicSheet: ''
       },
       activeName: "shop",
       resellConfigInfo: null,

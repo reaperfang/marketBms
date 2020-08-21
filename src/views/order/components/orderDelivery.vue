@@ -242,7 +242,7 @@ export default {
                 deliveryDate: "", //商家配送-日期
                 deliveryTime: "", //商家配送-时间段
                 isSupportElectronicSheet: 0,
-                isExpressElectronicSheet: 0,
+                isExpressElectronicSheet: '',
             },
             tableData: [],
             loading: false,
