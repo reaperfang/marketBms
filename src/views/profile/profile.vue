@@ -53,32 +53,32 @@
           <p class="title1">待办提醒：</p>
           <div class="dealt_list">
             <div class="dealt_list_l">
-              <p>
-                <span class="name">待发货订单</span>
-                <router-link to="/order/deliveryManagement?status=3">
+              <router-link to="/order/deliveryManagement?status=3">
+                <p class="dealt_item_1">
+                  <span class="name">待发货订单</span>
                   <span class="num">{{staySendCount || 0}}</span>
-                </router-link>
-              </p>
-              <p>
-                <span class="name">商品售罄</span>
-                <router-link to="/goods/goodsList?status=-1">
+                </p>
+              </router-link>
+              <router-link to="/goods/goodsList?status=-1">
+                <p class="dealt_item_2">
+                  <span class="name">商品售罄</span>
                   <span class="num">{{toBeSoldOut || 0}}</span>
-                </router-link>
-              </p>
+                </p>
+              </router-link>
             </div>
             <div class="dealt_list_r">
-              <p>
-                <span class="name">维权待审核</span>
-                <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=0">
+              <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=0">
+                <p class="dealt_item_3">
+                  <span class="name">维权待审核</span>
                   <span class="num">{{stayAuthCount || 0}}</span>
-                </router-link>
-              </p>
-              <p>
-                <span class="name">维权中订单</span>
-                <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=2">
+                </p>
+              </router-link>
+              <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=2">
+                <p class="dealt_item_4">
+                  <span class="name">维权中订单</span>
                   <span class="num">{{stayProcessedCount || 0}}</span>
-                </router-link>
-              </p>
+                </p>
+              </router-link>
             </div>
           </div>
         </div>
@@ -308,15 +308,17 @@ export default {
       isReleaseGZ:false,//微信公众号是否发布
       zxLink: `${process.env.ZX_HELP}`, //链接
       productNews: [],
-      helpNews: []
+      helpNews: [],
+      cid:''
     };
   },
-  computed: {
-    cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-      return shopInfo.id;
+
+  watch:{
+    cid(newValue,oldValue){
+      return newValue;
     }
   },
+
   created() {
     this._globalEvent.$on("refreshProfile", () => {
       this.init();
@@ -351,6 +353,7 @@ export default {
   methods: {
     ...mapMutations(["SETCURRENT"]),
     init() {
+      this.cid = JSON.parse(localStorage.getItem("shopInfos")).id
       this._apis.shop
         .getShopInfo({ id: this.cid })
         .then(response => {
@@ -675,13 +678,13 @@ export default {
             }
           }
           .dealt_list_l{  
-            p:nth-of-type(1){
+            .dealt_item_1{
               width: 94px;
               height: 110px;
               background:#FEEDE9;
               border-radius:8px;
             }
-            p:nth-of-type(2){
+            .dealt_item_2{
               width:94px;
               height:78px;
               background:#E8FAF5;
@@ -690,13 +693,13 @@ export default {
             }
           }
           .dealt_list_r{
-            p:nth-of-type(1){
+            .dealt_item_3{
               width: 94px;
               height: 78px;
               background:rgba(101,94,255,.1);
               border-radius:8px;
             }
-            p:nth-of-type(2){
+            .dealt_item_4{
               width:94px;
               height:110px;
               background:#FEEDE9;
@@ -771,6 +774,10 @@ export default {
             }
             .opt{
               margin-top: 20px;
+              button{
+                color: #655EFF;
+                border: 1px solid #655EFF;
+              }
             }
           }
         }

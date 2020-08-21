@@ -413,6 +413,7 @@ export default {
                     background:rgba(208,214,228,.2);
                     height: 50px;
                     padding: 0 20px;
+                    padding-right: 8px;
                     color:#44434B;
                     font-weight:400;
                     border-radius: 10px 10px 0 0;

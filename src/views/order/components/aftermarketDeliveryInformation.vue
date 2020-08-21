@@ -30,12 +30,12 @@
                         <p>
                             <span>收货信息</span>
                             <span>{{orderSendReceivedAddress.receivedName}} {{orderSendReceivedAddress.receivedPhone && '/'}} {{orderSendReceivedAddress.receivedPhone}}</span>
-                            <span>{{orderSendReceivedAddress.receivedProvinceName}} {{orderSendReceivedAddress.receivedCityName}} {{orderSendReceivedAddress.receivedAreaName}} {{orderSendReceivedAddress.receivedDetail}} </span>
+                            <span>{{orderSendReceivedAddress.receiveAddress}} {{orderSendReceivedAddress.receivedDetail}} </span>
                         </p>
                         <p>
                             <span>发货信息</span>
                             <span>{{orderSendReceivedAddress.sendName}} {{orderSendReceivedAddress.sendPhone && '/'}} {{orderSendReceivedAddress.sendPhone}}</span>
-                            <span>{{orderSendReceivedAddress.sendProvinceName}} {{orderSendReceivedAddress.sendCityName}} {{orderSendReceivedAddress.sendAreaName}} {{orderSendReceivedAddress.sendDetail}} </span>
+                            <span>{{orderSendReceivedAddress.sendAddress}} {{orderSendReceivedAddress.sendDetail}} </span>
                         </p>
                     </div>
                     <el-table

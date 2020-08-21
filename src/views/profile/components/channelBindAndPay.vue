@@ -20,7 +20,7 @@
        <li class="pay">
          <p><i :class="[isOpenPay ? 'icon-success' : 'el-icon-error']"></i><span>支付开通：</span></p>
          <div class="btn-area">
-            <el-button class="btn-opeate" :disabled="isOpenPay" @click="setPayInfo">开启支付</el-button>
+            <el-button class="btn-opeate" :disabled="!isAuthGzhOrXcx" @click="setPayInfo">开启支付</el-button>
             <p class="prompt2">请您先进行【渠道绑定】操作后再进行【开启支付】操作</p>
          </div>
        </li>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 import utils from "@/utils";
 import Steps from './steps'
 export default {
@@ -89,6 +90,7 @@ export default {
   mounted() {},
 
   methods: {
+    ...mapMutations(["SETCURRENT"]),
     getIsAuth() {
       // 需要调用微信是否授权接口
       const id = this.cid
@@ -101,7 +103,13 @@ export default {
       })
     },
     goGzh() {
-      this.utils.addNewApply('/application/channelapp/publicnum', 3)
+      // this.utils.addNewApply('/application/channelapp/publicnum', 3)
+     const routeData =  this.$router.resolve({
+        path:'/apply',
+        query:{paths:'/application/channelapp/publicnum',applyId:'3'
+      }})
+      window.open(routeData.href, '_blank');
+      this.SETCURRENT(8)
       this.confirm({
         title: "提示",
         icon: true,
@@ -115,7 +123,13 @@ export default {
       });
     },
     goXcx() {
-      this.utils.addNewApply('/application/channelapp/smallapp', 3)
+      const routeData = this.$router.resolve({
+        path:'/apply',
+        query:{paths:'/application/channelapp/smallapp',applyId:'3'
+      }})
+      window.open(routeData.href, '_blank');
+
+      this.SETCURRENT(8)
       this.confirm({
         title: "提示",
         icon: true,

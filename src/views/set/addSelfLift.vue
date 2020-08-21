@@ -197,7 +197,7 @@ export default {
         province: null,
         city: null,
         area: null,
-        addressDetail: null,
+        addressDetail: '',
         deliveryTimeType: 1, // 配送时间类型
         repeatCycle: 1, // 重复周期
         weeks: [], // 重复日
@@ -317,7 +317,7 @@ export default {
       this.ruleForm.contactPerson = data.name || null
       this.ruleForm.mobile = data.mobile || null
       this.ruleForm.address = data.address || ''
-      this.ruleForm.addressDetail = data.addressDetail || null
+      this.ruleForm.addressDetail = data.addressDetail || ''
       this.ruleForm.lat = data.latitude || null
       this.ruleForm.lng = data.longitude || null
       this.ruleForm.provinceCode = data.provinceCode || null
@@ -393,7 +393,7 @@ export default {
       this.ruleForm.contactPerson = res.name || null
       this.ruleForm.mobile = res.mobile || null
       this.ruleForm.address = res.address || ''
-      this.ruleForm.addressDetail = res.addressDetail || null
+      this.ruleForm.addressDetail = res.addressDetail || ''
       this.ruleForm.provinceCode = res.provinceCode || null
       this.ruleForm.province = res.provinceName || null
       this.ruleForm.cityCode = res.cityCode || null

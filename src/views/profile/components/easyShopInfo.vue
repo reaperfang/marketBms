@@ -5,7 +5,7 @@
     <el-form class="form" ref="form" :model="form" :rules="rules" label-width="160px">
       <h2>店铺信息</h2>
       <el-form-item label="店铺名称:" prop="shopName">
-        <el-input v-model.trim="form.shopName" style="width:226px;"></el-input>
+        <el-input v-model.trim="form.shopName" placeholder="请输入店铺名称" style="width:226px;"></el-input>
          <span class="shopInfo-show">
           <!--用于展示给消费者的品牌形象 -->
           <span @mouseover="showShop = true" @mouseout="showShop = false">查看样例</span>
@@ -41,13 +41,13 @@
       <el-form-item label="客服电话:" prop="phone">
         <!-- <el-input v-model="form.phone" placeholder="区号" style="width:70px;"></el-input>
         ——-->
-        <el-input v-model="form.phone" placeholder="请输入手机号，不填区号" style="width:226px;"></el-input>
+        <el-input v-model="form.phone" placeholder="请输入客服手机号" style="width:226px;"></el-input>
       </el-form-item>
       <el-form-item label="联系邮箱:" prop="companyEmail">
-        <el-input v-model="form.companyEmail" placeholder="请输入公司邮箱" style="width:226px;"></el-input>
+        <el-input v-model="form.companyEmail" placeholder="请输入联系邮箱" style="width:226px;"></el-input>
       </el-form-item>
       <el-form-item label="联系地址:" prop="sendAddress">
-        <el-input v-model="form.sendAddress" @change="handleChangeAddress" style="width:226px;" placeholder="请输入并点击搜索图标确定联系地址" />
+        <el-input v-model="form.sendAddress" @change="handleChangeAddress" style="width:226px;" placeholder="请输入联系地址" />
         <DialogMapSearch @getMapClickPoi="getMapClickPoi" :sendAddress="form.sendAddress"></DialogMapSearch>
         <!-- <el-button class="search-map" @click="searchMap" plain>搜索地图<i class="el-icon-search"></i></el-button> -->
       </el-form-item>
@@ -76,6 +76,7 @@
         <el-button
           class="next"
           type="primary"
+          :disabled="isDisabled"
           @click="onSubmit('form')"
           v-loading="loading"
         >下一步</el-button>
@@ -110,6 +111,28 @@ export default {
   data() {
     return {
     };
+  },
+  computed: {
+    isDisabled() {
+      // shopName: "",
+      //   logo: "",
+      //   logoCircle: "",
+      //   phone: "",
+      //   addressCode: "",
+      //   address: null,
+      //   shopIntroduce: null,
+      //   business: null,
+      //   itemCat: "",
+      //   sellCategoryId: null,
+      //   sellCategory: null,
+      //   companyName: "",
+      //   companyEmail: null,
+      //   lat: "",
+      //   lng: "",
+      //   sendAddress: "",
+      //   businessChannel: [2]
+      return !this.form.shopName || !this.form.phone || !this.form.sendAddress || !this.form.companyName || !this.form.companyEmail
+    }
   },
   components: { Steps },
   watch: {},
