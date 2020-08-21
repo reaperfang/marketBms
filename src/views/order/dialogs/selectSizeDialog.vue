@@ -96,7 +96,7 @@ export default {
                     expressCompanyCode: item.expressCompanyCode
                 })
                 .then(res => {
-                    alert('res')
+                    
                 })
                 .catch(error => {
                     this.$message.error(error);
