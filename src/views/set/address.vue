@@ -161,6 +161,7 @@ export default {
       })
     },
     getAddressList(req) {
+      this.loading = true
       this.ApiGetAddressList(req).then((res) => {
         console.log(res)
         if (res) {
@@ -169,6 +170,8 @@ export default {
         }
       }).catch((err) => {
         this.$message.error(err || '获取数据失败')
+      }).finally(() => {
+        this.loading = false
       })
     },
     handleSizeChange(val) {

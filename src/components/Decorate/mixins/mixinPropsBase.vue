@@ -54,7 +54,7 @@ export default {
     },
 
     //保存时需要触发的回调函数
-    saveCallBack(data) {
+    saveCallBack(componentData) {
       const rules = this.rules;
       if(!!rules && Object.prototype.toString.call(rules) === '[object Object]'){
         const keys = Object.keys(rules);
@@ -63,11 +63,11 @@ export default {
           for(let j = 0; j < ruleArr.length; j++){
             if(ruleArr[j].validator){
               let res = null;
-              ruleArr[j].validator.call(this, ruleArr[j], data[keys[i]], (result) => {
+              ruleArr[j].validator.call(this, ruleArr[j], componentData.data[keys[i]], (result) => {
                 res = result;
               })
               if(!!res){
-                const message = this.errorMessage ? this.errorMessage : res.toString().split(':')[1] + '!';
+                const message = this.errorMessage ? this.errorMessage : `【${componentData.title}】组件${res.toString().split(':')[1]}!`;
                 this.$alert(message, '警告', {
                   confirmButtonText: '确定'
                 });
