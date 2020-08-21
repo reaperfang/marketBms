@@ -13,8 +13,8 @@
     </div>
     <!-- 按钮区域 -->
     <div class="btn-area">
-      <el-button class="primary" type="primary" @click="handleAddSelfLift()" v-permission="['设置', '上门自提', '默认页面', '新建自提点']">新建自提点</el-button>
-      <el-button v-if="addressTotal > 0" v-permission="['设置', '上门自提', '默认页面', '从地址库选择']" @click="handleChooseAddress" class="text" type="text">从地址库中选择</el-button>
+      <el-button class="primary" type="primary" @click="handleAddSelfLift()" v-permission="['设置', '上门自提', '默认页面', '新建自提点/从地址库选择']">新建自提点</el-button>
+      <el-button v-if="addressTotal > 0" v-permission="['设置', '上门自提', '默认页面', '新建自提点/从地址库选择']" @click="handleChooseAddress" class="text" type="text">从地址库中选择</el-button>
     </div>
     <!-- 列表 -->
     <el-table
@@ -78,7 +78,7 @@
           <div class="opeater">
             <el-button class="btn" @click="goEdit(scope.row.id)" type="text" v-permission="['设置', '上门自提','默认页面', '编辑']">编辑</el-button>
             <span>|</span>
-            <el-button class="btn" type="text" v-permission="['设置', '上门自提','默认页面', '启用']" @click="handleEnableSelfLift(scope.row)">{{ getStatusTxt(scope.row) }}</el-button>
+            <el-button class="btn" type="text" v-permission="['设置', '上门自提','默认页面', '启用/禁用']" @click="handleEnableSelfLift(scope.row)">{{ getStatusTxt(scope.row) }}</el-button>
           </div>
         </template>
       </el-table-column>
@@ -178,7 +178,7 @@ export default {
       })
     },
     goEdit(id) {
-      this.$router.push({ path: '/set/addSelfLift',query: { id } })
+      this.$router.push({ path: '/set/editSelfLift',query: { id } })
     },
     ApiEditSelfLiftById(req) {
       return new Promise((resolve, reject) => {
@@ -328,12 +328,15 @@ export default {
       })
     },
     getSelfLift() {
+      this.loading = true
       const req = this.getReqData()
       this.ApiGetSelfLiftList(req).then((res) => {
         this.dataList = res.list
         this.total = +res.total || 0
       }).catch((err) => {
         this.$message.error(err || '获取数据失败')
+      }).finally(() => {
+        this.loading = false
       })
     },
     updateShopInfo(data) {
