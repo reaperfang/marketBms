@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" :title="title" width="640px" :showFooter="showFooter">
+    <DialogBase :visible.sync="visible" @submit="submit" :title="title" width="640px" :showFooter="showFooter" @close="close">
         <div>
             <div>
                 <div class="header">
@@ -26,7 +26,7 @@
             </div>
             <div class="footer">
                 <el-button @click="submit" type="primary">继续</el-button>
-                <el-button @click="visible = false">取消</el-button>
+                <el-button @click="cancelHandler">取消</el-button>
             </div>
         </div>
     </DialogBase>
@@ -49,6 +49,13 @@ export default {
         }
     },
     methods: {
+        close() {
+            this.$emit('cancel')
+        },
+        cancelHandler() {
+            this.visible = false
+            this.$emit('cancel')
+        },
         specificationSizeChange(value, index) {
             if(!value) {
                 this.$set(this.data.list, index, Object.assign({}, this.data.list[index], {
