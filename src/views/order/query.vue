@@ -371,7 +371,8 @@ export default {
           deliveryWay: "", // 配送方式:1普通快递,2商家配送
           deliveryDate: "", //商家配送-日期
           deliveryTime: "", //商家配送-时间段
-          searchType2: 'resellerPhone'
+          searchType2: 'resellerPhone',
+          isExpressElectronicSheet: ''
         }
       } else {
         this.listQuery = {
@@ -400,7 +401,8 @@ export default {
           deliveryWay: "", // 配送方式:1普通快递,2商家配送,4上门自提
           deliveryDate: "", //商家配送-日期
           deliveryTime: "", //商家配送-时间段
-          isInvoice: ""
+          isInvoice: "",
+          isExpressElectronicSheet: ''
         }
       }
       this.checkedLength = 0
