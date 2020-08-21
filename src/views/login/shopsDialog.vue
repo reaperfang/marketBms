@@ -157,9 +157,7 @@ export default {
 }
 .content{
   width: 100%;
-  height: 430px;
   margin-left:10px;
-  overflow-y:auto;
   .shopItem{
     width:200px;
     height:121px;
