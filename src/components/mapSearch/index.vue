@@ -222,6 +222,11 @@ export default {
     },
     //执行搜索
     search() {
+      if (!this.keyword) {
+        this.totalNum = 0
+        this.pois = []
+        return false
+      }
       this.clearAllMaker()
       if (this.info) {
         this.info.close();

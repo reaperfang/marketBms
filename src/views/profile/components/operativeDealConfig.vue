@@ -116,6 +116,11 @@ export default {
       window.open(routeData.href, '_blank');
     },
     setSms() {
+      const routeData =  this.$router.resolve({
+        path:'/apply',
+        query:{paths:'/application/toolapp/paySms',applyId: '3'
+      }})
+      window.open(routeData.href, '_blank');
       this.confirm({
         title: "提示",
         icon: true,
@@ -128,7 +133,7 @@ export default {
         
       });
       // /application/toolapp/paySms
-      this.utils.addNewApply('/application/toolapp/paySms', 3)
+      // this.utils.addNewApply('/application/toolapp/paySms', 3)
     },
     getIsHasGoods() {
       const req = {

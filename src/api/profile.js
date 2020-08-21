@@ -82,7 +82,7 @@ export function getSmallRelease (data) {
 //获取店铺列表
 export function getShopList (data) {
   return request({
-    target: 'SHOP-API-110-PROCESSOR',
+    target: 'SHOP-API-115-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     noCid:'true',
