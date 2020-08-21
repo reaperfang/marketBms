@@ -608,6 +608,8 @@ export default {
                 case "salePrice":
                     if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(+this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字'));  
+                    }else if(+this.singleSpec[rule.field]> 10000000){
+                        callback(new Error('当前售卖价最大限制为10000000，请您重新输入'));  
                     }else if(+this.singleSpec.costPrice > +this.singleSpec.salePrice){
                         callback(new Error('售卖价不得低于成本价'));
                     }else{
@@ -1085,6 +1087,13 @@ export default {
                     });
                     return false
                 }
+                if(+obj.costPrice > 10000000) {
+                    this.$message({
+                        message: '当前成本价最大限制为10000000，请您重新输入',
+                        type: 'warning'
+                    });
+                    return false
+                }
                 if(obj.salePrice == '') {
                     this.$message({
                         message: '请输入售卖价',
@@ -1095,6 +1104,13 @@ export default {
                 if(+obj.salePrice <= 0) {
                     this.$message({
                         message: '售卖价必须大于0',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(+obj.salePrice > 10000000) {
+                    this.$message({
+                        message: '当前售卖价最大限制为10000000，请您重新输入',
                         type: 'warning'
                     });
                     return false
@@ -2642,6 +2658,11 @@ export default {
                             return
                         }
                     }
+                if(this.specRadio===0){//单一规格商品输入值校验
+                    if(!this.validateGoodsInfos(this.singleSpec)){
+                        return
+                    }
+                }
                 if (valid) {
                     if(this.ruleForm.other) {
                         if(/\s+/.test(this.ruleForm.otherUnit)) {
@@ -2688,11 +2709,7 @@ export default {
                     } catch(e) {
                         console.error(e)
                     }
-                }else {//单一规格属性值校验
-                    if(!this.validateGoodsInfos(this.singleSpec)){
-                        return
-                    }
-                }
+                 }
                 if(this.ruleForm.name == '' || /^\s+$/.test(this.ruleForm.name)) {
                     this.$message({
                         message: '商品名称不能为空',

@@ -159,6 +159,9 @@ export default {
             text-align: left;
             padding-left: 20px;
         }
+        &:nth-child(5) {
+            text-align: left;
+        }
     }
 /deep/ .el-table td{
   &:nth-child(5) {

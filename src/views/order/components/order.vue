@@ -371,7 +371,7 @@ export default {
             font-weight:500;
             .item {
                 width: 80px;
-                margin-right: 20px;
+                margin-right: 30px;
                 &:last-child {
                     margin-right: 0;
                 }
@@ -476,7 +476,7 @@ export default {
                     }
                     >.item {
                         width: 80px;
-                        margin-right: 17px;
+                        margin-right: 27px;
                         &:nth-child(2) {
                             padding-left: 5px;
                             p {
