@@ -92,7 +92,8 @@ export default {
                 .editorExpressSize({
                     id: item.express ? item.express.id : '',
                     cid: item.express ? item.express.cid : '',
-                    specificationSize: item.specificationSize
+                    specificationSize: item.specificationSize,
+                    expressCompanyCode: item.expressCompanyCode
                 })
                 .then(res => {
                     alert('res')
