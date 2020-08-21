@@ -331,6 +331,11 @@ export default {
                         showCostPriceError: true,
                         costPriceErrorMessage: '请输入正确的数字'
                     }))
+                }else if(+this.list[index].costPrice > 10000000 ){
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showCostPriceError: true,
+                        costPriceErrorMessage: '当前成本价最大限制为10000000，请您重新输入'
+                    }))
                 } else {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showCostPriceError: false,
@@ -342,6 +347,11 @@ export default {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showSalePriceError: true,
                         salePriceErrorMessage: '请输入正确的数字'
+                    }))
+                } else if(+this.list[index].salePrice > 10000000){
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showSalePriceError: true,
+                        salePriceErrorMessage: '当前售卖价最大限制为10000000，请您重新输入'
                     }))
                 } else if(+this.list[index].costPrice > +this.list[index].salePrice){
                         this.list.splice(index, 1, Object.assign({}, this.list[index], {
