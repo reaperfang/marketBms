@@ -186,7 +186,7 @@
                     <img class="fl" src="@/assets/images/realtime/hoverTips.png" alt="">
                     </el-tooltip> -->
                     <div class="fr clearfix">
-                        <serchRt class="fr ml12" />
+                        <serchRt class="fr ml12" @change="getUserVal" />
                         <el-radio-group class="fr radioBox" v-model="userType" @change="alluserType">
                             <el-radio-button class="btn_bor" label="0" v-permission="['数据', '客流分析', '全部']">全部</el-radio-button>
                             <el-radio-button class="btn_bor" label="1" v-permission="['数据', '客流分析', '小程序']">小程序</el-radio-button>
@@ -356,6 +356,7 @@ export default {
         seachTime:'',
         userType:0, //1 小程序 2 公众号  ， 用户
         visitSourceType: 1, //1 小程序 2 公众号  ， 渠道转化
+        idData:false,//数据是否计算 成功 
     };
   },
   created() {
@@ -420,7 +421,11 @@ export default {
     getVal(val){
         console.log(val)
         this.seachTime=val
-    }
+    },
+    getUserVal(val){
+        console.log(val)
+        this.seachTime=val
+    },
   },
 };
 </script>

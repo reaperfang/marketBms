@@ -145,18 +145,18 @@ export default {
       // ['01-03', '04-06', '07-09', '10-12']  取选中季度的最后一天日期 时间戳
       var  lastday=''
       if(this.season==1){
-        lastday=(new Date(this.year+'-03-31')).getTime()
+        lastday=(new Date(this.year+'-03-31 00:00:00')).getTime()
       }
       if(this.season==2){
-        lastday=(new Date(this.year+'-06-30')).getTime()
+        lastday=(new Date(this.year+'-06-30 00:00:00')).getTime()
       }
       if(this.season==3){
-        lastday=(new Date(this.year+'-09-30')).getTime()
+        lastday=(new Date(this.year+'-09-30 00:00:00')).getTime()
       }
       if(this.season==4){
-        lastday=(new Date(this.year+'-12-31')).getTime()
+        lastday=(new Date(this.year+'-12-31 00:00:00')).getTime()
       }
-      this.$emit("change",{units:4,date:lastday})
+      this.$emit("change",lastday)
     }
   }
 }

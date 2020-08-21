@@ -27,7 +27,7 @@
                         format="yyyy-MM"
                         placeholder="选择月" :picker-options="pickerMonth">
                         </el-date-picker>
-                        <quarter class="fl" v-if="value==4" />
+                        <quarter class="fl" v-if="value==4" @change="getquar" />
                     </div>
 </template>
 <script>
@@ -43,9 +43,10 @@ export default {
         },
         pickerWeek: {//周  https://www.cnblogs.com/lvsige/p/13474932.html
             disabledDate(time) {
-                let wk = new Date().getDay() + 1
+                let wk = new Date().getDay()
                 return time.getTime() > Date.now() - 8.64e7*wk;
             },
+            firstDayOfWeek: 1
         },
         pickerMonth: {//月
             disabledDate(time) {
@@ -55,25 +56,35 @@ export default {
         },
         value2: '',
         value:'1',
+        getquarter:''
     }
   },
   created() {
   },
   methods: {
+      getquar(val){
+          this.getquarter=val
+          this.$emit("change",{units:this.value,date:this.getquarter})
+      },
     getData(){
         var lastday=''
         if(this.value==2){//选中周的 周日 日期 时间戳 到秒
             lastday=this.value2.getTime()+(8.64e7*6)
-            console.log(lastday)
-            console.log((new Date('2020-08-16 00:00:00')).getTime())
+            // console.log(lastday)
+            // console.log((new Date('2020-08-16 00:00:00')).getTime())
         }else if(this.value==3){//选中月的最后一天时间戳 到秒
-            lastday=this.value2.getTime()+8.64e7*7
-            console.log(lastday)
-            console.log((new Date('2020-09-30')).getTime())
-        }else{
+            var nowMonth = this.value2.getMonth(); //当前月 
+            var nowYear = this.value2.getFullYear(); //当前年 
+            //本月的开始时间
+            // var monthStartDate = new Date(nowYear, nowMonth, 1); 
+            //本月的结束时间
+            var monthEndDate = new Date(nowYear, nowMonth+1, 0);
+            // var timeStar=Date.parse(monthStartDate)/1000;//s
+            var timeEnd=Date.parse(monthEndDate);//s
+            lastday=timeEnd
+        }else if(this.value==1){
             lastday=this.value2
         }
-
         this.$emit("change",{units:this.value,date:lastday})
     }
   }
