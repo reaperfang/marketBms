@@ -30,7 +30,7 @@
             </li>
           </ul>
           <p class="prompt" v-if="loading">加载中。。。</p>
-          <p class="prompt" v-if="isCompleted">已经到底了</p>
+          <p class="prompt" v-if="isCompleted && total > 5">已经到底了</p>
         </dd>
       </dl>
     </div>
@@ -83,6 +83,7 @@ export default {
         pageSize: 5
       },
       list: [],
+      total: 0,
       currAddress: null,
       loading: false,
       isCompleted: false
@@ -132,7 +133,7 @@ export default {
           this.list = this.list.concat(res.list)
           this.ruleForm.startIndex++
         }
-        // this.total = res.total
+        this.total = res.total
       }).catch((err) => {
         // this.$message.error(err || '获取数据失败')
       }).finally(() => {
@@ -187,6 +188,22 @@ export default {
         text-align: left;
         max-width: 441px;
         overflow: hidden;
+        /deep/ .el-radio {
+          position: relative;
+          .el-radio__input {
+            position: absolute;
+            left: 0;
+            top: 0;
+          }
+          .el-radio__label {
+            display: block;
+            width: 360px;
+            padding-left: 30px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
       }
       .name {
         width: 120px;
