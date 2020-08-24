@@ -174,6 +174,7 @@ export default {
         this.confirm({
           title: '提示', 
           iconWarning: true, 
+          customClass: 'goods-custom',
           text: html,
           confirmText: '我知道了',
           showCancelButton: false
@@ -185,6 +186,7 @@ export default {
         this.confirm({
           title: '提示', 
           iconWarning: true, 
+          customClass: 'goods-custom',
           text: html,
           // confirmText: '我知道了',
           // showCancelButton: false
@@ -233,6 +235,7 @@ export default {
         this.confirm({
           title: '提示', 
           iconWarning: true, 
+          customClass: 'goods-custom',
           text: html,
           // confirmText: '我知道了',
           // showCancelButton: false
@@ -295,6 +298,7 @@ export default {
         this.confirm({
           title: '提示', 
           iconWarning: true, 
+          customClass: 'goods-custom',
           text: html,
           // confirmText: '我知道了',
           // showCancelButton: false
@@ -347,10 +351,11 @@ export default {
           this.payOnDelivery = true
         });
       } else {
-        const html = '<p>您确定要关闭账户余额吗？</p><p style="color:rgba(146,146,155,1);font-size:16px;">关闭后买家将无法使用余额支付完成订单付款。</p>'
+        const html = '<p>您确定要关闭货到付款吗？</p><p style="color:rgba(146,146,155,1);font-size:16px;">关闭后买家将无法使用货到付款完成订单付款。</p>'
         this.confirm({
           title: '提示', 
           iconWarning: true, 
+          customClass: 'goods-custom',
           text: html,
           // confirmText: '我知道了',
           // showCancelButton: false
