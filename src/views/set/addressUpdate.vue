@@ -178,6 +178,10 @@ export default {
       this.isDisabled = this.$route.query && this.$route.query.source === 1 ? true : false
       if (this.ruleForm.id) {
         this.getAddressById(this.ruleForm.id)
+      } 
+      // 如果没有id 则为新建，如果商家配送页面点击新建跳转过来，需要默认选中发货地址
+      if (this.isDisabled && !this.ruleForm.id) {
+        this.ruleForm.type.push(1)
       }
     },
     // 格式化回显地址类型数据

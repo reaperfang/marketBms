@@ -1021,7 +1021,7 @@ export default {
         this.confirm({
           title: "提示",
           icon: true,
-          text: '当前地址无法获取经纬度，请重新修改取货地址',
+          text: '当前地址无法获取经纬度，请重新修改发货地址',
           confirmText: '我知道了',
           showCancelButton: false
         })
