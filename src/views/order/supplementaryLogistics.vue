@@ -694,7 +694,10 @@ export default {
                 this.tableData = res[0].orderItemList
                 this.orderInfo = res[0]
                 this._ids = [this.orderInfo.id]
-                if(!this.orderInfo.sendAddress) {
+                // if(!this.orderInfo.sendAddress) {
+                //     this.fetchOrderAddress(_address)
+                // }
+                if(this.orderInfo.deliveryWay == 1) {
                     this.fetchOrderAddress(_address)
                 }
 
