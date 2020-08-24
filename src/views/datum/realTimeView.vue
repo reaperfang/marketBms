@@ -35,7 +35,7 @@
                     <p>支付金额（元）</p>
                     <span> <strong>8,233,000</strong> </span>
                 </div>
-                <p>昨日全天：<span>860</span></p>
+                <p>昨日全天：<span >860</span></p>
             </div>
             <div class="card-item">
                 <div class="item-top">
