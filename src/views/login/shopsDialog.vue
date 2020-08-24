@@ -78,7 +78,6 @@ export default {
   },
 
   created(){
-    // this.getNewShopList()
   },
 
   methods: {
@@ -108,11 +107,10 @@ export default {
       })
     },
 
-    //获取实时最新登录信息（userInfo）
-    getNewShopList(){
-      this._apis.profile.getNewShopList().then(res =>{
+    //进入店铺 获取实时最新登录信息（userInfo）
+    toShop(shop){
+      this._apis.profile.getNewShopList({cid:shop.id}).then(res =>{
         let info = res.info
-        console.log('2222222',info)
         localStorage.setItem('userInfo',info);//更新本地存储的账号信息
 
         let shopInfoMap = JSON.parse(info).shopInfoMap
@@ -120,22 +118,19 @@ export default {
           let shopObj = shopInfoMap[key]
           this.newShopList.push(shopObj)
         } 
-        console.log('11111111',this.newShopList)
+        this.saveShop(shop)
       }).catch(error =>{
         console.log('error',error)
       })
     },
     
-    //进入店铺
-    toShop(shop){
+    //保存当前选择店铺的信息
+    saveShop(shop){
       this._apis.set.getShopInfo({cid:shop.id,id:shop.id}).then(response =>{
           let shopInfo = {}
-          this.shopList.map(item =>{
+          this.newShopList.map(item =>{
             item.id == shop.id && (shopInfo = item)
           })
-          // this.newShopList.map(item =>{
-          //   item.id == shop.id && (shopInfo = item)
-          // })
           this.$store.dispatch('setShopInfos',shopInfo).then(() => {
             this.$store.dispatch('getShopInfo')
             this._globalEvent.$emit('refreshProfile')
