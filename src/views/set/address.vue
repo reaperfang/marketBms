@@ -201,6 +201,17 @@ export default {
       }).catch(() => {
       });
     },
+    updateShopInfo(data) {
+      const id = this.cid
+      return new Promise((resolve, reject) => {
+        this._apis.set.updateShopInfo({...data, id }).then(response =>{
+          this.$store.dispatch('getShopInfo');    
+          resolve(response)
+        }).catch(error =>{
+          reject(error)
+        })
+      })
+    },
     // 关闭商家配送
     closeMerchantDeliver() {
       return new Promise((resolve, reject) => {
@@ -235,19 +246,13 @@ export default {
             const p1 = this.closeMerchantDeliver()
             const p2 = this.ApiDelAddressById(id, addressType)
             Promise.all([p1, p2]).then((arr) => {
-              if(arr && arr.length > 0) {
-                this.confirm({
-                  title: "提示",
-                  iconSuccess: true,
-                  text: '保存成功',
-                  confirmText: '确定',
-                  cancelButtonText: '取消'
-                }).then(() => {
-                  this.ruleForm.pageNo = 1
-                  const req = this.getReqData(this.ruleForm)
-                  this.getAddressList(req)
-                });
-              }
+              console.log('arr',arr)
+               this.ruleForm.pageNo = 1
+              const req = this.getReqData(this.ruleForm)
+              this.getAddressList(req)
+              // if(arr && arr.length > 0) {
+                this.$message.success('保存成功')
+              // }
             }).catch((err) => {
               this.$message.error(err || '保存失败')
             })
