@@ -621,7 +621,7 @@ export default {
           console.log('---validateTimeRangesStart:prev:curr:time---', prev, curr)
           if (prev >= curr) {
             isValidated = false
-            callback(new Error('当前时间段的开始时间不能早于上一个时间段的开始时间。'))
+            callback(new Error('当前时间段的开始时间需晚于上一个时间段的开始时间'))
           }
         } 
       }

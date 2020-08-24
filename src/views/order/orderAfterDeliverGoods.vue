@@ -641,7 +641,10 @@ export default {
             this._apis.order.orderAfterSaleDetail({orderAfterSaleIds: [this.$route.query.ids || this.$route.query.id]}).then((res) => {
                 this.itemList = res[0].itemList
                 this.orderAfterSaleSendInfo = res[0].orderAfterSaleSendInfo
-                if(!this.orderAfterSaleSendInfo.sendAddress) {
+                // if(!this.orderAfterSaleSendInfo.sendAddress) {
+                //     this.fetchOrderAddress();
+                // }
+                if(this.orderAfterSaleSendInfo.deliveryWay == 1) {
                     this.fetchOrderAddress();
                 }
 

@@ -27,7 +27,7 @@
           </div>
           <p class="p_center">
             <el-pagination
-              v-if="shopLists.length >= 9"
+              v-if="shopLists.length > 9"
               @current-change="handleCurrentChange"
               :current-page="Number(startIndex) || 1"
               :page-size="pageSize*1"
@@ -63,7 +63,8 @@ export default {
           startIndex:1,
           pageSize:9,
           total:0,
-          loading:true
+          loading:true,
+          newShopList:[]
       }
   },
   props:['showShopsDialog','shopList','route','showClose','background'],
@@ -106,11 +107,28 @@ export default {
       })
     },
 
-    //进入店铺
+    //进入店铺 获取实时最新登录信息（userInfo）
     toShop(shop){
+      this._apis.profile.getNewShopList({cid:shop.id}).then(res =>{
+        let info = res.info
+        localStorage.setItem('userInfo',info);//更新本地存储的账号信息
+
+        let shopInfoMap = JSON.parse(info).shopInfoMap
+        for(let key in shopInfoMap){
+          let shopObj = shopInfoMap[key]
+          this.newShopList.push(shopObj)
+        } 
+        this.saveShop(shop)
+      }).catch(error =>{
+        console.log('error',error)
+      })
+    },
+    
+    //保存当前选择店铺的信息
+    saveShop(shop){
       this._apis.set.getShopInfo({cid:shop.id,id:shop.id}).then(response =>{
           let shopInfo = {}
-          this.shopList.map(item =>{
+          this.newShopList.map(item =>{
             item.id == shop.id && (shopInfo = item)
           })
           this.$store.dispatch('setShopInfos',shopInfo).then(() => {

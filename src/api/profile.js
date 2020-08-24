@@ -89,3 +89,13 @@ export function getShopList (data) {
     data
   })
 }
+
+//获取实时最新店铺列表
+export function getNewShopList (data) {
+  return request({
+    target: 'REFRESH-USERINFO-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
