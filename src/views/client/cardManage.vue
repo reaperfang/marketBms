@@ -97,8 +97,13 @@ export default {
     },
     methods: {
         imageSelected(item) {
-            this.imgUrl = item.filePath;
-            this.addCardBg();
+            this.imgUrl = "";
+            this.imgLoading = true;
+            let _this = this;
+            setTimeout(() => {
+                _this.imgUrl = item.filePath;
+                _this.addCardBg();
+            },2000);
         },
         handleAvatarSuccess(res, file) {
             this.imgUrl = res.data.url;
