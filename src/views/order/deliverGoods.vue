@@ -767,16 +767,16 @@ export default {
         return;
       }
 
-      if(this.orderInfo.deliveryWay == 1) {
-        if(!this.shopAddressInfo) {
-          this.confirm({
-            title: "提示",
-            icon: true,
-            text: "发货信息不能为空"
-          });
-          return;
-        }
-      }
+      // if(this.orderInfo.deliveryWay == 1) {
+      //   if(!this.shopAddressInfo) {
+      //     this.confirm({
+      //       title: "提示",
+      //       icon: true,
+      //       text: "发货信息不能为空"
+      //     });
+      //     return;
+      //   }
+      // }
      
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
