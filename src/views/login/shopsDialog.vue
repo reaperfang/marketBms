@@ -27,7 +27,7 @@
           </div>
           <p class="p_center">
             <el-pagination
-              v-if="shopLists.length > 9"
+              v-if="total > 9"
               @current-change="handleCurrentChange"
               :current-page="Number(startIndex) || 1"
               :page-size="pageSize*1"
@@ -163,6 +163,7 @@ export default {
     
     handleCurrentChange(val){
       this.startIndex = val
+      this.getShopList()
     }
   }
 }
