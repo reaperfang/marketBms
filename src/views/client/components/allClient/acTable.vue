@@ -340,6 +340,9 @@ export default {
         &:nth-child(2) {
             text-align: left;
         }
+        &:nth-child(3) {
+            text-align: left;
+        }
         &:nth-child(5) {
             text-align: left;
         }
