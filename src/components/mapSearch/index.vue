@@ -40,6 +40,7 @@
 <script>
 import mapBase from "@/components/MapBase";
 import appConfig from '@/system/appConfig';
+import { debounce } from '@/utils/base.js'
 export default {
   name: "mapSearch",
   extends: mapBase,
@@ -77,8 +78,12 @@ export default {
       totalNum: 0,
       keyword: '',
       markerClusterer: null,
-      isLoded: false
+      isLoded: false,
+      debounceSearch: null
     };
+  },
+  created() {
+     this.debounceSearch = debounce(this.search)
   },
   methods: {
     getParentAreaCode(tencentCode) {
@@ -122,7 +127,8 @@ export default {
     },
     handleCurrentChange(val) {
       this.page = val
-      this.search()
+      this.debounceSearch()
+      // this.search()
     },
     //实例初始化结束
     inited() {
@@ -218,7 +224,7 @@ export default {
     },
     handleKeyWordSearch() {
       this.page = 1
-      this.search()
+      this.debounceSearch()
     },
     //执行搜索
     search() {
