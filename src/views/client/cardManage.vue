@@ -86,7 +86,7 @@ export default {
             loading: false,
             dialogVisible: false,
             currentDialog:"",
-            imgLoading: true
+            imgLoading: false
         }
     },
     computed:{
@@ -155,14 +155,14 @@ export default {
             this.imgLoading = true;
             this._apis.client.checkCardBg({}).then((response) => {
                 if(response) {
-                    this.imgLoading = true;
+                    this.imgLoading = false;
                     this.imgUrl = response.imgUrl;
                     this.imgId = response.id;
                 }else{
-                    this.imgLoading = true;
+                    this.imgLoading = false;
                 }
             }).catch((error) => {
-                this.imgLoading = true;
+                this.imgLoading = false;
                 console.log(error);
             })
         }
