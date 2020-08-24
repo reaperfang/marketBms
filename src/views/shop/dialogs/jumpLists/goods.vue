@@ -25,7 +25,7 @@
               <el-input v-model="ruleForm.id" placeholder="请输入编码"></el-input>
             </el-form-item> -->
             <el-form-item label="" prop="">
-              <el-button type="primary" @click="fetch">搜  索</el-button>
+              <el-button type="primary" @click="search">搜  索</el-button>
             </el-form-item>
           </div>
           <div class="inline-head">
@@ -109,6 +109,11 @@ export default {
     },
   },
   methods: {
+    search() {
+      this.startIndex = 1;
+      this.ruleForm.startIndex = 1;
+      this.fetch();
+    },
     /* 获取分类列表 */
     getGoodsClassifyList() {
       this._apis.goods.fetchCategoryList({
