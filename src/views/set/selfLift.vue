@@ -440,11 +440,13 @@ export default {
             title: "提示",
             text: '当前没有启用的自提点信息，请先新建或启用自提点后再开启。',
             confirmText: '我知道了',
-            cancelButtonText: '去新建'
+            cancelButtonText: '去新建',
+            distinguishCancelAndClose: true
           }).then(() => {
             // 关闭弹窗
-          }).catch(()=> {
-            this.$router.push({ path: '/set/addSelfLift' })
+          }).catch((action)=> {
+            console.log('action',action)
+            if (action === 'cancel') this.$router.push({ path: '/set/addSelfLift' })
           }).finally(() => {
             this.isOpen = false
           });

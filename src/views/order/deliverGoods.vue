@@ -948,7 +948,7 @@ export default {
             })
             this.orderInfo = res[0];
             this._ids = [this.orderInfo.id]
-            if(!this.orderInfo.sendAddress) {
+            if(this.orderInfo.deliveryWay == 1) {
               this.fetchOrderAddress();
             }
 
@@ -988,12 +988,18 @@ export default {
               });
             }
             this._ids = [this.orderInfo.id]
-            if(!this.orderInfo.sendAddress) {
-              if(this.orderInfo.deliveryWay != 4) {
-                this.fetchOrderAddress(_address);
-              } else {
-                this.fetchPickInfo(this.orderInfo.pickId)
-              }
+            // if(!this.orderInfo.sendAddress) {
+            //   if(this.orderInfo.deliveryWay != 4) {
+            //     this.fetchOrderAddress(_address);
+            //   } else {
+            //     this.fetchPickInfo(this.orderInfo.pickId)
+            //   }
+            // }
+
+            if(this.orderInfo.deliveryWay == 1) {
+              this.fetchOrderAddress(_address);
+            } else if(this.orderInfo.deliveryWay == 4) {
+              this.fetchPickInfo(this.orderInfo.pickId)
             }
 
             //如果是商家配送，则需要请求拿到配送员列表

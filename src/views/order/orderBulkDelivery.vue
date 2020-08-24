@@ -1051,9 +1051,8 @@ export default {
             val.pickUpName = '';
 
             this._apis.order
-            .getPickInfo({id: val.pickId || 4})
+            .getPickInfo({id: val.pickId})
             .then(res => {
-              console.log(res)
               val.pickUpName = res.pickUpName
             })
             .catch(error => {
@@ -1073,7 +1072,6 @@ export default {
             //获取配送员列表
             this.getDistributorList(res.length);
           }
-          this.list = res;
           // this._apis.order
           //   .fetchOrderAddress({ id: this.cid, cid: this.cid })
           //   .then(response => {
@@ -1096,40 +1094,42 @@ export default {
           //     this.visible = false;
           //     this.$message.error(error);
           //   });
-          this.list.forEach(res => {
-            if(!res.sendAddress) {
-              if(res.deliveryWay != 4) {
-                res.sendName = _address.name;
-                res.sendPhone = _address.mobile;
-                res.sendProvinceCode = _address.provinceCode;
-                res.sendProvinceName = _address.provinceName;
-                res.sendCityCode = _address.cityCode;
-                res.sendCityName = _address.cityName;
-                res.sendAreaCode = _address.areaCode;
-                res.sendAreaName = _address.areaName;
-                res.sendAddress = _address.address;
-                res.sendDetail = _address.addressDetail;
-              } else {
+          res.forEach(item => {
+            //if(!res.sendAddress) {
+              if(item.deliveryWay == 1) {
+                item.sendName = _address.name;
+                item.sendPhone = _address.mobile;
+                item.sendProvinceCode = _address.provinceCode;
+                item.sendProvinceName = _address.provinceName;
+                item.sendCityCode = _address.cityCode;
+                item.sendCityName = _address.cityName;
+                item.sendAreaCode = _address.areaCode;
+                item.sendAreaName = _address.areaName;
+                item.sendAddress = _address.address;
+                item.sendDetail = _address.addressDetail;
+              } else if(item.deliveryWay == 4) {
                 this._apis.order
-                  .getPickInfo({ id: res.pickId })
+                  .getPickInfo({ id: item.pickId })
                   .then(_res => {
-                    res.sendName = _res.name;
-                    res.sendPhone = _res.mobile;
-                    res.sendProvinceCode = _res.provinceCode;
-                    res.sendProvinceName = _res.provinceName;
-                    res.sendCityCode = _res.cityCode;
-                    res.sendCityName = _res.cityName;
-                    res.sendAreaCode = _res.areaCode;
-                    res.sendAreaName = _res.areaName;
-                    res.sendAddress = _res.address;
-                    res.sendDetail = _res.addressDetail;
+                    item.sendName = _res.name;
+                    item.sendPhone = _res.mobile;
+                    item.sendProvinceCode = _res.provinceCode;
+                    item.sendProvinceName = _res.provinceName;
+                    item.sendCityCode = _res.cityCode;
+                    item.sendCityName = _res.cityName;
+                    item.sendAreaCode = _res.areaCode;
+                    item.sendAreaName = _res.areaName;
+                    item.sendAddress = _res.address;
+                    item.sendDetail = _res.addressDetail;
                   })
                   .catch(error => {
                     this.$message.error(error);
                   });
               }
-            }
+            //}
           });
+
+          this.list = res;
         })
         .catch(error => {
           this.visible = false;
