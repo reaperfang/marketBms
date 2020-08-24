@@ -59,7 +59,7 @@
                   <el-button type="text" class="more" @click="showMoreAreaInfoList(scope.row)" v-if="scope.row.areaInfoList && scope.row.areaInfoList.length > 4">更多</el-button>
                 </template>
               </el-table-column>
-              <el-table-column :label="one" width="250" align="center">
+              <el-table-column :label="one" min-width="300" align="center">
                 <template slot-scope="scope">
                   <!-- <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.theFirst"></el-input> -->
                   <el-input-number  size="large" :disabled="$route.query.mode == 'look'" style="width: 160px"  v-model="scope.row.theFirst" controls-position="right" :min="0" ></el-input-number>
@@ -72,7 +72,7 @@
                   <el-input-number  size="large" :disabled="$route.query.mode == 'look'" style="width: 160px"  v-model="scope.row.freight" controls-position="right" :min="0" ></el-input-number>
                 </template>
               </el-table-column>
-              <el-table-column :label="two" width="250" align="center">
+              <el-table-column :label="two" min-width="300" align="center">
                 <template slot-scope="scope">
                   每增加
                   <!-- <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.superaddition"></el-input> -->
