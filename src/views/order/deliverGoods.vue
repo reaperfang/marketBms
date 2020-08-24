@@ -368,7 +368,8 @@ export default {
       ajax: true,
       _ids: [],
       params: {},
-      _list: []
+      _list: [],
+      shopAddressInfo: null
     };
   },
   created() {
@@ -765,6 +766,17 @@ export default {
         });
         return;
       }
+
+      if(this.orderInfo.deliveryWay == 1) {
+        if(!this.shopAddressInfo) {
+          this.confirm({
+            title: "提示",
+            icon: true,
+            text: "发货信息不能为空"
+          });
+          return;
+        }
+      }
      
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
@@ -959,6 +971,7 @@ export default {
           } else {
             let _address = res.shopAddressInfo
 
+            this.shopAddressInfo = res.shopAddressInfo
             res = res.sendInfoListData
             res[0].orderItemList.forEach(val => {
               val.cacheSendCount = val.sendCount;
