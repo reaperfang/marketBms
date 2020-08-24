@@ -27,7 +27,7 @@
               </div>
               <div class="col">
                 <div class="row align-center row-margin">
-                  <div class="col" style="width: 180px;">{{list[0].deliveryWay != 4 ? '收货信息' : '提货信息'}}</div>
+                  <div class="col" style="width: 186px;">{{list[0].deliveryWay != 4 ? '收货信息' : '提货信息'}}</div>
                   <div class="col" style="width: 281px; text-align: center;">{{list[0].deliveryWay != 4 ? '物流信息' : '提货时间'}}</div>
                 </div>
               </div>
@@ -70,16 +70,22 @@
               </div>
               <div class="col">
                 <div class="row row-margin">
-                  <div class="col" style="width: 180px;">
+                  <div class="col message-box" style="width: 186px;">
                     <template v-if="list[0].deliveryWay != 4">
-                      <p>收货人: {{item.receivedName}}</p>
-                      <p>联系电话: {{item.receivedPhone}}</p>
-                      <p>收货地址: {{item.receiveAddress}} {{item.receivedDetail}}</p>
+                      <div>收货人: {{item.receivedName}}</div>
+                      <div>联系电话: {{item.receivedPhone}}</div>
+                      <div class="message-box-address">
+                        <div class="label">收货地址: </div> 
+                        <div>{{item.receiveAddress}} {{item.receivedDetail}}</div>
+                      </div>
                     </template>
                     <template v-else>
-                      <p>提货信息: {{item.receivedName}} {{item.receivedPhone}}</p>
-                      <p>自提点名称: {{item.pickUpName}}</p>
-                      <p>提货地址: {{item.sendAddress}} {{item.sendDetail}}</p>
+                      <div>提货信息: {{item.receivedName}} {{item.receivedPhone}}</div>
+                      <div>自提点名称: {{item.pickUpName}}</div>
+                      <div class="message-box-address">
+                        <div class="label">提货地址: </div> 
+                        <div>{{item.sendAddress}} {{item.sendDetail}}</div>
+                      </div>
                     </template>
                   </div>
                   <div class="col">
@@ -219,7 +225,8 @@ export default {
       allchecked: true,
       ajax: true,
       _list: [],
-      params: {}
+      params: {},
+      shopAddressInfo: null
     };
   },
   created() {
@@ -647,6 +654,7 @@ export default {
           return;
         }
 
+
         // if (
         //   this.list
         //     .reduce((total, val) => {
@@ -795,6 +803,17 @@ export default {
             document.querySelector('.content-main').scrollTop = scrollTop - 40
           })
           return
+        }
+
+        if(this.list && this.list[0] && this.list[0].deliveryWay == 1) {
+          if(!this.shopAddressInfo) {
+            this.confirm({
+              title: "提示",
+              icon: true,
+              text: "发货信息不能为空"
+            });
+            return;
+          }
         }
 
         this.sending = true
@@ -1016,9 +1035,9 @@ export default {
           ids: this.$route.query.ids.split(",").map(val => +val)
         })
         .then(res => {
-          console.log(res);
           let _address = res.shopAddressInfo
-            
+          
+          this.shopAddressInfo = res.shopAddressInfo
           res = res.sendInfoListData
           res.forEach(val => {
             val.express = null
@@ -1050,15 +1069,17 @@ export default {
             val.errorMessagePhone = '';
             val.pickUpName = '';
 
-            this._apis.order
-            .getPickInfo({id: val.pickId})
-            .then(res => {
-              val.pickUpName = res.pickUpName
-            })
-            .catch(error => {
-              this.visible = false;
-              this.$message.error(error);
-            });
+            if(val.deliveryWay == 4) {
+              this._apis.order
+              .getPickInfo({id: val.pickId})
+              .then(res => {
+                val.pickUpName = res.pickUpName
+              })
+              .catch(error => {
+                this.visible = false;
+                this.$message.error(error);
+              });
+            }
           });
           // res.forEach(val => {
           //   val.orderItemList.forEach(item => {
@@ -1335,5 +1356,21 @@ export default {
 }
 .send-count {
   text-align: center;
+}
+.message-box {
+  >div {
+    margin-bottom: 10px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .message-box-address {
+    display: flex;
+    line-height: 21px;
+    .label {
+      flex-shrink: 0;
+      padding-right: 2px;
+    }
+  }
 }
 </style>

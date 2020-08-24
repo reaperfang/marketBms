@@ -86,7 +86,7 @@ export default {
             loading: false,
             dialogVisible: false,
             currentDialog:"",
-            imgLoading: true
+            imgLoading: false
         }
     },
     computed:{
@@ -97,8 +97,13 @@ export default {
     },
     methods: {
         imageSelected(item) {
-            this.imgUrl = item.filePath;
-            this.addCardBg();
+            this.imgUrl = "";
+            this.imgLoading = true;
+            let _this = this;
+            setTimeout(() => {
+                _this.imgUrl = item.filePath;
+                _this.addCardBg();
+            },2000);
         },
         handleAvatarSuccess(res, file) {
             this.imgUrl = res.data.url;
@@ -155,14 +160,14 @@ export default {
             this.imgLoading = true;
             this._apis.client.checkCardBg({}).then((response) => {
                 if(response) {
-                    this.imgLoading = true;
+                    this.imgLoading = false;
                     this.imgUrl = response.imgUrl;
                     this.imgId = response.id;
                 }else{
-                    this.imgLoading = true;
+                    this.imgLoading = false;
                 }
             }).catch((error) => {
-                this.imgLoading = true;
+                this.imgLoading = false;
                 console.log(error);
             })
         }
