@@ -522,6 +522,28 @@ export default {
           }
         }
       }
+      // 获取后一个的值，进行校验处理
+      console.log('ruleForm.index',ruleForm[index])
+      if (ruleForm[index].end) {
+        let end = this.formatDate(ruleForm[index].end)
+        end = new Date(end)
+
+        // 重新处理时间，因为element-ui框架手动输入的时间与初始化时通过选择的时间的年月日不一致导致， 这里重新定义日期
+        let date = new Date()
+        const year = date.getFullYear()
+        const month = this.formatTime(date.getMonth() + 1)
+        const day = this.formatTime(date.getDate())
+        const hours = this.formatTime(end.getHours())
+        const minutes = this.formatTime(end.getMinutes())
+        const newValue = `${year}/${month}/${day} ${hours}:${minutes}:00`
+        end = new Date(newValue)
+        console.log(end)
+        end = end.getTime()
+        if (curr > end) {
+          isValidated = false
+          return callback(new Error('结束时间不能早于开始时间'))
+        }
+      }
       // console.log('validateArr', validateArr)
       if (isValidated) {
         callback()
