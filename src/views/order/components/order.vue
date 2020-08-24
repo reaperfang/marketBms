@@ -4,7 +4,7 @@
             <div class="item goods">
                 <div class="row justify-between">
                     <div class="col">商品信息</div>
-                    <div class="col">数量</div>
+                    <div class="col" style="margin-right: 26px;">数量</div>
                 </div>
             </div>
             <div class="item" style="width: 120px;">应收金额</div>
@@ -53,7 +53,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col">
+                                    <div class="col" style="margin-right: 26px;">
                                         {{goods.goodsCount}}
                                     </div>
                                 </div>

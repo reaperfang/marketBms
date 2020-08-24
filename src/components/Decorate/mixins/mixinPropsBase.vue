@@ -55,6 +55,7 @@ export default {
 
     //保存时需要触发的回调函数
     saveCallBack(componentData) {
+      //rules验证
       const rules = this.rules;
       if(!!rules && Object.prototype.toString.call(rules) === '[object Object]'){
         const keys = Object.keys(rules);
@@ -77,6 +78,9 @@ export default {
           }
         }
       }
+      //保存时另外需要执行的
+      this.saveCallBackOther && this.saveCallBackOther(componentData)
+
       return true;
     },
   }

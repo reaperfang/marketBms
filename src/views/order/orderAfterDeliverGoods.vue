@@ -279,7 +279,8 @@ export default {
             distributorId: '', //配送员id
             isDistributorShow: false, //尚未创建配送员信息提示控制
             distributorSet: false,
-            ajax: true
+            ajax: true,
+            shopAddressInfo: null
         }
     },
     created() {
@@ -464,6 +465,7 @@ export default {
         this._apis.order
         .getShopAddress({ cid: this.cid })
         .then(res => {
+          this.shopAddressInfo = res
           this.orderAfterSaleSendInfo.sendName = res.name;
           this.orderAfterSaleSendInfo.sendPhone = res.mobile;
           this.orderAfterSaleSendInfo.sendProvinceCode = res.provinceCode;
@@ -538,6 +540,17 @@ export default {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择需要发货的商品'})
                 return
+            }
+
+            if(this.orderInfo.deliveryWay == 1) {
+                if(!this.shopAddressInfo) {
+                this.confirm({
+                    title: "提示",
+                    icon: true,
+                    text: "发货信息不能为空"
+                });
+                return;
+                }
             }
 
             this.$refs[formName].validate((valid) => {
@@ -641,7 +654,10 @@ export default {
             this._apis.order.orderAfterSaleDetail({orderAfterSaleIds: [this.$route.query.ids || this.$route.query.id]}).then((res) => {
                 this.itemList = res[0].itemList
                 this.orderAfterSaleSendInfo = res[0].orderAfterSaleSendInfo
-                if(!this.orderAfterSaleSendInfo.sendAddress) {
+                // if(!this.orderAfterSaleSendInfo.sendAddress) {
+                //     this.fetchOrderAddress();
+                // }
+                if(this.orderAfterSaleSendInfo.deliveryWay == 1) {
                     this.fetchOrderAddress();
                 }
 

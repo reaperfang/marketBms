@@ -191,7 +191,8 @@ export default {
       distributorSet: false,
       ajax: true,
       _list: [],
-      params: {}
+      params: {},
+      shopAddressInfo: null
     };
   },
   created() {
@@ -582,6 +583,17 @@ export default {
               return
             }
 
+            if(this.list && this.list[0] && this.list[0].deliveryWay == 1) {
+              if(!this.shopAddressInfo) {
+                this.confirm({
+                  title: "提示",
+                  icon: true,
+                  text: "发货信息不能为空"
+                });
+                return;
+              }
+            }
+
             this.sending = true
 
             params = {
@@ -761,7 +773,8 @@ export default {
         .then(res => {
           console.log(res)
           let _address = res.shopAddressInfo
-            
+          
+          this.shopAddressInfo = res.shopAddressInfo
           res = res.sendInfoListData
           res.forEach(val => {
             val.express = null
@@ -804,7 +817,6 @@ export default {
           }
 
           
-          this.list = res;
 
           // this._apis.order
           //   .fetchOrderAddress({ id: this.cid, cid: this.cid })
@@ -828,20 +840,24 @@ export default {
           //     this.visible = false;
           //     this.$message.error(error);
           //   });
-          this.list.forEach(res => {
-            if(!res.sendAddress) {
-              res.sendName = _address.name;
-              res.sendPhone = _address.mobile;
-              res.sendProvinceCode = _address.provinceCode;
-              res.sendProvinceName = _address.provinceName;
-              res.sendCityCode = _address.cityCode;
-              res.sendCityName = _address.cityName;
-              res.sendAreaCode = _address.areaCode;
-              res.sendAreaName = _address.areaName;
-              res.sendAddress = _address.address;
-              res.sendDetail = _address.addressDetail;
-            }
+          res.forEach(item => {
+            //if(!res.sendAddress) {
+              if(item.deliveryWay == 1) {
+                item.sendName = _address.name;
+                item.sendPhone = _address.mobile;
+                item.sendProvinceCode = _address.provinceCode;
+                item.sendProvinceName = _address.provinceName;
+                item.sendCityCode = _address.cityCode;
+                item.sendCityName = _address.cityName;
+                item.sendAreaCode = _address.areaCode;
+                item.sendAreaName = _address.areaName;
+                item.sendAddress = _address.address;
+                item.sendDetail = _address.addressDetail;
+              }
+            //}
           });
+
+          this.list = res;
         })
         .catch(error => {
           this.visible = false;
