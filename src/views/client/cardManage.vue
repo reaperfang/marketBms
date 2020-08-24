@@ -97,8 +97,13 @@ export default {
     },
     methods: {
         imageSelected(item) {
-            this.imgUrl = item.filePath;
-            this.addCardBg();
+            this.imgUrl = "";
+            this.imgLoading = true;
+            let _this = this;
+            setTimeout(() => {
+                _this.imgUrl = item.filePath;
+                _this.addCardBg();
+            },2000);
         },
         handleAvatarSuccess(res, file) {
             this.imgUrl = res.data.url;
@@ -158,12 +163,6 @@ export default {
                     this.imgLoading = false;
                     this.imgUrl = response.imgUrl;
                     this.imgId = response.id;
-                    if(!this.imgUrl) {
-                        let _this = this;
-                        setTimeout(() => {
-                            _this.imgLoading = false;
-                        },5000);
-                    }
                 }else{
                     this.imgLoading = false;
                 }
