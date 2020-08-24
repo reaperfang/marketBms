@@ -8,6 +8,7 @@
                             <span>会员卡领取引导图</span>
                             <img src="../../assets/images/client/icon_ask.png" alt="" v-popover:popover class="pop_img">
                         </p>
+                        <div v-if="showDefault" class="cardImg2"></div>
                         <div v-if="!imgUrl" class="cardImg" v-loading="imgLoading"></div>
                         <img v-else :src="imgUrl" class="cardImg"/>
                         <!-- <img v-else src="../../assets/images/client/guide_img.png" alt class="cardImg" /> -->
@@ -86,7 +87,8 @@ export default {
             loading: false,
             dialogVisible: false,
             currentDialog:"",
-            imgLoading: false
+            imgLoading: false,
+            showDefault: false
         }
     },
     computed:{
@@ -164,6 +166,7 @@ export default {
                     this.imgUrl = response.imgUrl;
                     this.imgId = response.id;
                 }else{
+                    this.showDefault = true;
                     this.imgLoading = false;
                 }
             }).catch((error) => {
@@ -231,6 +234,11 @@ export default {
             bottom: 18px;
         }
         .cardImg{
+            width: 326px;
+            height: 62px;
+            border-radius: 10px;
+        }
+        .cardImg2{
             width: 326px;
             height: 62px;
             border-radius: 10px;
