@@ -174,6 +174,7 @@ export default {
         this.confirm({
           title: '提示', 
           iconWarning: true, 
+          customClass: 'goods-custom',
           text: html,
           confirmText: '我知道了',
           showCancelButton: false
@@ -185,6 +186,7 @@ export default {
         this.confirm({
           title: '提示', 
           iconWarning: true, 
+          customClass: 'goods-custom',
           text: html,
           // confirmText: '我知道了',
           // showCancelButton: false
@@ -233,6 +235,7 @@ export default {
         this.confirm({
           title: '提示', 
           iconWarning: true, 
+          customClass: 'goods-custom',
           text: html,
           // confirmText: '我知道了',
           // showCancelButton: false
@@ -295,6 +298,7 @@ export default {
         this.confirm({
           title: '提示', 
           iconWarning: true, 
+          customClass: 'goods-custom',
           text: html,
           // confirmText: '我知道了',
           // showCancelButton: false
@@ -351,6 +355,7 @@ export default {
         this.confirm({
           title: '提示', 
           iconWarning: true, 
+          customClass: 'goods-custom',
           text: html,
           // confirmText: '我知道了',
           // showCancelButton: false
