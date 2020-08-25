@@ -25,7 +25,7 @@
         <el-table-column
           type="selection"
           :selectable='selectInit'
-          width="30">
+          width="34">
         </el-table-column>
         <el-table-column prop="name" label="页面名称">
           <template slot-scope="scope">
@@ -299,6 +299,15 @@ export default {
     margin-bottom:20px;
   }
 }
+/deep/ .el-table-column--selection .cell {
+  padding-left: 20px;
+}
+.multiple_selection {
+  margin-left: 20px;
+  /deep/ .el-checkbox__label {
+    padding-left: 18px;
+  }
+}
 /deep/ thead th{
   background: #f6f7fa;
   color:#44434B!important;
@@ -307,7 +316,7 @@ export default {
   text-align: center;
   &:nth-child(2) {
       text-align: left;
-      padding-left: 20px;
+      padding-left: 10px;
   }
 }
 /deep/ .el-table td{

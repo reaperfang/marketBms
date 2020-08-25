@@ -169,7 +169,7 @@ export default {
   text-align: center;
   &:nth-child(1) {
       text-align: left;
-      padding-left: 20px;
+      padding-left: 10px;
   }
 }
 /deep/ .el-table td{
