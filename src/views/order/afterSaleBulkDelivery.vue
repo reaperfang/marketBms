@@ -654,7 +654,7 @@ export default {
         })
         .then(res => {
           res.forEach(val => {
-            val.express = true
+            val.express = null
             val.other = "";
             val.checked = false;
             val.expressNos = "";
@@ -710,7 +710,7 @@ export default {
           //     this.$message.error(error);
           //   });
           res.forEach(item => {
-            //if(!res.sendAddress) {
+            if(!res.sendAddress) {
               if(item.orderAfterSaleSendInfo && item.orderAfterSaleSendInfo.deliveryWay == 1) {
                 this._apis.order
                 .getShopAddress({ cid: this.cid })
@@ -731,7 +731,7 @@ export default {
                   this.$message.error(error);
                 });
               }
-            //}
+            }
           });
         })
         .catch(error => {

@@ -1116,7 +1116,7 @@ export default {
           //     this.$message.error(error);
           //   });
           res.forEach(item => {
-            //if(!res.sendAddress) {
+            if(!res.sendAddress) {
               if(item.deliveryWay == 1) {
                 item.sendName = _address.name;
                 item.sendPhone = _address.mobile;
@@ -1147,7 +1147,7 @@ export default {
                     this.$message.error(error);
                   });
               }
-            //}
+            }
           });
 
           this.list = res;
