@@ -27,7 +27,7 @@ Object.keys(utils).forEach(key => {
   Vue.filter(key, utils[key])
 })
 
-//讲工具箱里的方法绑定到vue实例上
+//将工具箱里的方法绑定到vue实例上
 Vue.prototype.utils = utils;
 
 //全局路由跳转快捷方式  routeTo('login', {a:1, b:2})
