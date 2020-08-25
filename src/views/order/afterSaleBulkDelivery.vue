@@ -713,22 +713,22 @@ export default {
           //     this.$message.error(error);
           //   });
           res.forEach(item => {
-            if(!res.sendAddress) {
+            if(!item.orderAfterSaleSendInfo.sendAddress) {
               if(item.orderAfterSaleSendInfo && item.orderAfterSaleSendInfo.deliveryWay == 1) {
                 this._apis.order
                 .getShopAddress({ cid: this.cid })
                 .then(res => {
                   this.shopAddressInfo = res
-                  item.sendName = res.name;
-                  item.sendPhone = res.mobile;
-                  item.sendProvinceCode = res.provinceCode;
-                  item.sendProvinceName = res.provinceName;
-                  item.sendCityCode = res.cityCode;
-                  item.sendCityName = res.cityName;
-                  item.sendAreaCode = res.areaCode;
-                  item.sendAreaName = res.areaName;
-                  item.sendAddress = res.address;
-                  item.sendDetail = res.addressDetail;
+                  item.orderAfterSaleSendInfo.sendName = res.name;
+                  item.orderAfterSaleSendInfo.sendPhone = res.mobile;
+                  item.orderAfterSaleSendInfo.sendProvinceCode = res.provinceCode;
+                  item.orderAfterSaleSendInfo.sendProvinceName = res.provinceName;
+                  item.orderAfterSaleSendInfo.sendCityCode = res.cityCode;
+                  item.orderAfterSaleSendInfo.sendCityName = res.cityName;
+                  item.orderAfterSaleSendInfo.sendAreaCode = res.areaCode;
+                  item.orderAfterSaleSendInfo.sendAreaName = res.areaName;
+                  item.orderAfterSaleSendInfo.sendAddress = res.address;
+                  item.orderAfterSaleSendInfo.sendDetail = res.addressDetail;
                 })
                 .catch(error => {
                   this.$message.error(error);
