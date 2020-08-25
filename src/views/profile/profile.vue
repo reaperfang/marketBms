@@ -765,8 +765,8 @@ export default {
               color: #92929B;
             }
             .erweima{
-              width: 76px;
-              height: 76px;
+              width: 100px;
+              height: auto;
             }
             .no_release{
               width: 61px;

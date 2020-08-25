@@ -74,7 +74,7 @@
                         ></el-input>
                         </el-form-item>
                         <el-form-item label="快递单号" prop="expressNos">
-                            <el-input :disabled="!item.express" v-model="item.orderAfterSaleSendInfo.expressNos"></el-input>
+                            <el-input :disabled="item.express != null" v-model="item.orderAfterSaleSendInfo.expressNos" :placeholder="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" :title="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" @input="ExpressNosInput(index)"></el-input>
                         </el-form-item>
                     </el-form>
                     <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 2">
@@ -159,13 +159,15 @@ export default {
       currentData: '',
       sendGoods: '',
       title: '',
+      express: null,
       expressCompanyList: [],
       distributorList: [], //每个订单对应的筛选后的配送员列表
       distributorListFilter: [], //配送员列表
       distributorNameFirst: true, //配送员名字第一次输入标记
       distributorPhoneFirst: true, //配送员联系方式第一次输入标记
       distributorSet: false,
-      ajax: true
+      ajax: true,
+      shopAddressInfo: null
     };
   },
   created() {
@@ -180,6 +182,33 @@ export default {
     }
   },
   methods: {
+    ExpressNosInput(index) {
+      let item = this.list[index]
+
+      if(!item.expressCompanyCodes) {
+        this.list.splice(index, 1, Object.assign({}, this.list[index], {
+          showErrorExpressCompany: true,
+          errorMessageExpressCompany: '请选择快递公司'
+        }))
+
+        setTimeout(() => {
+          this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              expressNos: ''
+            }))
+        }, 500)
+      } else {
+        if(!this.list[index].expressNos) {
+          this.list.splice(index, 1, Object.assign({}, this.list[index], {
+            showErrorExpressNos: true,
+            errorMessageExpressNos: '请输入快递单号'
+          }))
+        }else{
+          this.list.splice(index, 1, Object.assign({}, this.list[index], {
+            showErrorExpressNos: false
+          }))
+        }
+      }
+    },
     //检测是否有配置子帐号的权限
     checkSet(){
         const setConfig = asyncRouterMap.filter(item => item.name === 'set');
@@ -563,7 +592,11 @@ export default {
           }
       },
       getExpressCompanyList() {
-        this._apis.order.fetchExpressCompanyList().then((res) => {
+        this._apis.order.getElectronicFaceSheetExpressCompanyList().then((res) => {
+          res.forEach(val => {
+            val.expressCompanyCode = val.expressCode
+            val.expressCompany = val.expressName
+          })
           res.push({
             expressCompanyCode: "other",
             expressCompany: "其他"
@@ -654,28 +687,52 @@ export default {
 
           this.list = res;
 
-          this._apis.order
-            .fetchOrderAddress({ id: this.cid, cid: this.cid })
-            .then(response => {
-              this.list.forEach(res => {
-                if(!res.orderAfterSaleSendInfo.sendAddress) {
-                  res.orderAfterSaleSendInfo.sendName = response.senderName;
-                  res.orderAfterSaleSendInfo.sendPhone = response.senderPhone;
-                  res.orderAfterSaleSendInfo.sendProvinceCode = response.provinceCode;
-                  res.orderAfterSaleSendInfo.sendProvinceName = response.province;
-                  res.orderAfterSaleSendInfo.sendCityCode = response.cityCode;
-                  res.orderAfterSaleSendInfo.sendCityName = response.city;
-                  res.orderAfterSaleSendInfo.sendAreaCode = response.areaCode;
-                  res.orderAfterSaleSendInfo.sendAreaName = response.area;
-                  res.orderAfterSaleSendInfo.sendAddress = response.sendAddress;
-                  res.orderAfterSaleSendInfo.sendDetail = response.address;
-                }
-              });
-            })
-            .catch(error => {
-              this.visible = false;
-              this.$message.error(error);
-            });
+          // this._apis.order
+          //   .fetchOrderAddress({ id: this.cid, cid: this.cid })
+          //   .then(response => {
+          //     this.list.forEach(res => {
+          //       if(!res.orderAfterSaleSendInfo.sendAddress) {
+          //         res.orderAfterSaleSendInfo.sendName = response.senderName;
+          //         res.orderAfterSaleSendInfo.sendPhone = response.senderPhone;
+          //         res.orderAfterSaleSendInfo.sendProvinceCode = response.provinceCode;
+          //         res.orderAfterSaleSendInfo.sendProvinceName = response.province;
+          //         res.orderAfterSaleSendInfo.sendCityCode = response.cityCode;
+          //         res.orderAfterSaleSendInfo.sendCityName = response.city;
+          //         res.orderAfterSaleSendInfo.sendAreaCode = response.areaCode;
+          //         res.orderAfterSaleSendInfo.sendAreaName = response.area;
+          //         res.orderAfterSaleSendInfo.sendAddress = response.sendAddress;
+          //         res.orderAfterSaleSendInfo.sendDetail = response.address;
+          //       }
+          //     });
+          //   })
+          //   .catch(error => {
+          //     this.visible = false;
+          //     this.$message.error(error);
+          //   });
+          res.forEach(item => {
+            //if(!res.sendAddress) {
+              if(item.orderAfterSaleSendInfo && item.orderAfterSaleSendInfo.deliveryWay == 1) {
+                this._apis.order
+                .getShopAddress({ cid: this.cid })
+                .then(res => {
+                  this.shopAddressInfo = res
+                  item.sendName = res.name;
+                  item.sendPhone = res.mobile;
+                  item.sendProvinceCode = res.provinceCode;
+                  item.sendProvinceName = res.provinceName;
+                  item.sendCityCode = res.cityCode;
+                  item.sendCityName = res.cityName;
+                  item.sendAreaCode = res.areaCode;
+                  item.sendAreaName = res.areaName;
+                  item.sendAddress = res.address;
+                  item.sendDetail = res.addressDetail;
+                })
+                .catch(error => {
+                  this.$message.error(error);
+                });
+              }
+            //}
+          });
         })
         .catch(error => {
           this.visible = false;
