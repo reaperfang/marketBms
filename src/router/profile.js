@@ -39,6 +39,12 @@ export default [
         name: 'passwordChange',
         hidden: false,
         meta: { title: '修改密码', noCache: true, tabTitle: '概况',navType:2 }
+      },
+      {
+	      path: 'intelligent',
+        component: () => import('@/views/profile/intelligent'),
+        hidden: false,
+        meta: {title: '智能开店', noCache: true, tabTitle: '概况', navType: 2}
       }
     ]
 	}
