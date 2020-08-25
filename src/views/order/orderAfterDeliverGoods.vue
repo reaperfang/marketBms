@@ -466,16 +466,29 @@ export default {
         .getShopAddress({ cid: this.cid })
         .then(res => {
           this.shopAddressInfo = res
-          this.orderAfterSaleSendInfo.sendName = res.name;
-          this.orderAfterSaleSendInfo.sendPhone = res.mobile;
-          this.orderAfterSaleSendInfo.sendProvinceCode = res.provinceCode;
-          this.orderAfterSaleSendInfo.sendProvinceName = res.provinceName;
-          this.orderAfterSaleSendInfo.sendCityCode = res.cityCode;
-          this.orderAfterSaleSendInfo.sendCityName = res.cityName;
-          this.orderAfterSaleSendInfo.sendAreaCode = res.areaCode;
-          this.orderAfterSaleSendInfo.sendAreaName = res.areaName;
-          this.orderAfterSaleSendInfo.sendAddress = res.address;
-          this.orderAfterSaleSendInfo.sendDetail = res.addressDetail;
+          if(res) {
+              this.orderAfterSaleSendInfo.sendName = res.name;
+                this.orderAfterSaleSendInfo.sendPhone = res.mobile;
+                this.orderAfterSaleSendInfo.sendProvinceCode = res.provinceCode;
+                this.orderAfterSaleSendInfo.sendProvinceName = res.provinceName;
+                this.orderAfterSaleSendInfo.sendCityCode = res.cityCode;
+                this.orderAfterSaleSendInfo.sendCityName = res.cityName;
+                this.orderAfterSaleSendInfo.sendAreaCode = res.areaCode;
+                this.orderAfterSaleSendInfo.sendAreaName = res.areaName;
+                this.orderAfterSaleSendInfo.sendAddress = res.address;
+                this.orderAfterSaleSendInfo.sendDetail = res.addressDetail;
+          } else {
+              this.orderAfterSaleSendInfo.sendName = '';
+                this.orderAfterSaleSendInfo.sendPhone = '';
+                this.orderAfterSaleSendInfo.sendProvinceCode = '';
+                this.orderAfterSaleSendInfo.sendProvinceName = '';
+                this.orderAfterSaleSendInfo.sendCityCode = '';
+                this.orderAfterSaleSendInfo.sendCityName = '';
+                this.orderAfterSaleSendInfo.sendAreaCode = '';
+                this.orderAfterSaleSendInfo.sendAreaName = '';
+                this.orderAfterSaleSendInfo.sendAddress = '';
+                this.orderAfterSaleSendInfo.sendDetail = '';
+          }
         })
         .catch(error => {
           this.visible = false;
@@ -542,16 +555,16 @@ export default {
                 return
             }
 
-            if(this.orderAfterSaleSendInfo.deliveryWay == 1) {
-                if(!this.shopAddressInfo) {
-                this.confirm({
-                    title: "提示",
-                    icon: true,
-                    text: "发货信息不能为空"
-                });
-                return;
-                }
-            }
+            // if(this.orderAfterSaleSendInfo.deliveryWay == 1) {
+            //     if(!this.shopAddressInfo) {
+            //     this.confirm({
+            //         title: "提示",
+            //         icon: true,
+            //         text: "发货信息不能为空"
+            //     });
+            //     return;
+            //     }
+            // }
 
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -649,17 +662,31 @@ export default {
         },
         onSubmit(value) {
             this.orderAfterSaleSendInfo = Object.assign({}, this.orderAfterSaleSendInfo, value)
+            // if(this.sendGoods == 'send') {
+            //     this.orderAfterSaleSendInfo = Object.assign({}, this.orderAfterSaleSendInfo, {
+            //         sendName: value.sendName,
+            //         sendPhone: value.sendPhone,
+            //         sendAddress: value.sendAddress,
+            //         sendDetail: value.sendDetail,
+            //         sendAreaCode: value.tencentCode,
+            //         sendLatitude: value.sendLatitude,
+            //         sendLongitude: value.sendLongitude
+            //     })
+            //     this.shopAddressInfo = true
+            // } else {
+                
+            // }
         },
         getOrderDetail() {
             this._apis.order.orderAfterSaleDetail({orderAfterSaleIds: [this.$route.query.ids || this.$route.query.id]}).then((res) => {
                 this.itemList = res[0].itemList
                 this.orderAfterSaleSendInfo = res[0].orderAfterSaleSendInfo
-                // if(!this.orderAfterSaleSendInfo.sendAddress) {
-                //     this.fetchOrderAddress();
-                // }
-                if(this.orderAfterSaleSendInfo.deliveryWay == 1) {
+                if(!this.orderAfterSaleSendInfo.sendAddress) {
                     this.fetchOrderAddress();
                 }
+                // if(this.orderAfterSaleSendInfo.deliveryWay == 1) {
+                //     this.fetchOrderAddress();
+                // }
 
                 this.orderDetail = res[0];
                 //如果是商家配送，则需要请求拿到配送员列表

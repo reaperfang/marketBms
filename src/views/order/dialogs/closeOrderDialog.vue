@@ -19,7 +19,9 @@
                     type="textarea"
                     :rows="2"
                     placeholder="请输入内容"
-                    v-model="operationRemark">
+                    v-model="operationRemark"
+                    maxlength="50"
+                    >
                 </el-input>
             </div>
         </div>
