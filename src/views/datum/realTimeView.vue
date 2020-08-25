@@ -35,56 +35,64 @@
                     <p>支付金额（元）</p>
                     <span> <strong>8,233,000</strong> </span>
                 </div>
-                <p>昨日全天：<span >860</span></p>
+                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>支付订单数（单）</p>
                     <span> <strong>50</strong> <el-button type="text" @click="_routeTo('query')">查看</el-button> </span>
                 </div>
-                <p>昨日全天：<span>860</span></p>
+                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>支付人数（人）</p>
                     <span> <strong>8,233,000</strong> </span>
                 </div>
-                <p>昨日全天：<span>860</span></p>
+                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>退款金额（元）</p>
                     <span> <strong>8,233,000</strong></span>
                 </div>
-                <p>昨日全天：<span>860</span></p>
+                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>退款订单数（单）</p>
                     <span> <strong>50</strong> <el-button type="text" @click="_routeTo('afterSalesManagement')">查看</el-button> </span>
                 </div>
-                <p>昨日全天：<span>860</span></p>
+                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>客单价（元）</p>
                     <span> <strong>5033</strong>  </span>
                 </div>
-                <p>昨日全天：<span>860</span></p>
+                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>访客数量（次）</p>
                     <span> <strong>50</strong> </span>
                 </div>
-                <p>昨日全天：<span>860</span></p>
+                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>浏览数量（次）</p>
                     <span> <strong>50</strong> </span>
                 </div>
-                <p>昨日全天：<span>860</span></p>
+                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-else>昨日全天：更新中~</p>
             </div>
         </div>
       </div>
