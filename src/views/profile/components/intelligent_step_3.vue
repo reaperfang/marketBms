@@ -7,7 +7,7 @@
 
 <script>
   export default {
-    name: "intelligent_step_3"
+    name: "intelligent_ enable"
   }
 </script>
 

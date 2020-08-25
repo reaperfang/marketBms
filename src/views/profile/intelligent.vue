@@ -30,7 +30,7 @@
   import stepEnable from './components/intelligent_step_3'
   import stepBase from './components/intelligent_step_4'
   export default {
-    name: 'smart-shop',
+    name: 'intelligent-shop',
     components: { guide, stepIndustry, stepPreview, stepEnable, stepBase },
     data() {
       return {
@@ -57,5 +57,7 @@
 <style lang="scss">
   #intelligent_shop {
     position: relative;
+    min-height: 100%;
+    background-color: #fff;
   }
 </style>
