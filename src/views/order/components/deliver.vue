@@ -743,10 +743,14 @@ export default {
         //   icon: true,
         //   text: "请填写发货商品数量"
         // });
-        document.querySelector('.send-input').scrollIntoView()
-        let scrollTop = document.querySelector('.content-main').scrollTop
+        try {
+          document.querySelector('.send-input').scrollIntoView()
+          let scrollTop = document.querySelector('.content-main').scrollTop
 
-        document.querySelector('.content-main').scrollTop = scrollTop - 8
+          document.querySelector('.content-main').scrollTop = scrollTop - 8
+        }catch(e) {
+          console.error(e)
+        }
         return;
       }
 
