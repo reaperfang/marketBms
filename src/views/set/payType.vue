@@ -188,7 +188,7 @@ export default {
           iconWarning: true, 
           customClass: 'goods-custom',
           text: html,
-          // confirmText: '我知道了',
+          confirmText: '确定',
           // showCancelButton: false
         }).then(() => {
           const data = {
@@ -237,7 +237,7 @@ export default {
           iconWarning: true, 
           customClass: 'goods-custom',
           text: html,
-          // confirmText: '我知道了',
+          confirmText: '确定',
           // showCancelButton: false
         }).then(() => {
           const data = {
@@ -300,7 +300,7 @@ export default {
           iconWarning: true, 
           customClass: 'goods-custom',
           text: html,
-          // confirmText: '我知道了',
+          confirmText: '确定',
           // showCancelButton: false
         }).then(() => {
           const data = {
@@ -357,7 +357,7 @@ export default {
           iconWarning: true, 
           customClass: 'goods-custom',
           text: html,
-          // confirmText: '我知道了',
+          confirmText: '确定',
           // showCancelButton: false
         }).then(() => {
           const data = {
