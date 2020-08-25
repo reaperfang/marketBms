@@ -218,14 +218,14 @@ export default {
       }
       >.img {
         box-sizing: content-box;
-        width: 150px;
-        height: 150px;
+        width: 80px;
+        height: 80px;
         padding: 21px 0 27px 0;
         margin: 0 auto;
         background: url('~@/assets/images/profile/no_empower.png') no-repeat center;
         img {
           width: 100%;
-          height: 100%;
+          height: auto;
           border:0;
           display: block;
         }
