@@ -108,27 +108,37 @@ export default {
       })
     },
 
-    //进入店铺 获取实时最新登录信息（userInfo）
+    //进入店铺 
     toShop(shop){
-      this._apis.profile.getNewShopList({cid:shop.id}).then(res =>{
-        let info = JSON.parse(res.info)
-        let shopInfoMap = info.shopInfoMap
-        for(let key in shopInfoMap){
-          // 所有店铺的功能点列表由扁平化数据转为树形结构
-          if(shopInfoMap[key].data){
-            let list = JSON.parse(JSON.stringify(shopInfoMap[key].data.msfList))
-            let functions = utils.buildTree(list)
-            shopInfoMap[key].data = Object.assign(shopInfoMap[key].data,{functions:functions})
-          }
-          //获取新的店铺列表
-          let shopObj = shopInfoMap[key]
-          this.newShopList.push(shopObj)
-        } 
-        localStorage.setItem('userInfo',JSON.stringify(info));//更新本地存储的账号信息
-        this.saveShop(shop)
-      }).catch(error =>{
-        console.log('error',error)
+      let shopIds = []
+      this.shopList.map(item =>{
+        shopIds.push(item.id)
       })
+      
+      if(shopIds.includes(shop.id*1)){// 登录之后没有新开的店铺
+        this.newShopList = this.shopList
+        this.saveShop(shop)
+      }else{ //登录之后有新开的店铺 获取实时最新登录信息（userInfo）
+        this._apis.profile.getNewShopList({cid:shop.id}).then(res =>{
+          let info = JSON.parse(res.info)
+          let shopInfoMap = info.shopInfoMap
+          for(let key in shopInfoMap){
+            // 所有店铺的功能点列表由扁平化数据转为树形结构
+            if(shopInfoMap[key].data){
+              let list = JSON.parse(JSON.stringify(shopInfoMap[key].data.msfList))
+              let functions = utils.buildTree(list)
+              shopInfoMap[key].data = Object.assign(shopInfoMap[key].data,{functions:functions})
+            }
+            //获取新的店铺列表
+            let shopObj = shopInfoMap[key]
+            this.newShopList.push(shopObj)
+          } 
+          localStorage.setItem('userInfo',JSON.stringify(info));//更新本地存储的账号信息
+          this.saveShop(shop)
+        }).catch(error =>{
+          console.log('error',error)
+        })
+      }
     },
     
     //保存当前选择店铺的信息
