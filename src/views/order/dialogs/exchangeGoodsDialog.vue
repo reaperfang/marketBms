@@ -33,7 +33,7 @@ export default {
             // })
             let params = {
                 id: this.data.id,
-                orderAfterSaleStatus: this.data.orderAfterSaleStatus
+                orderAfterSaleStatus: this.exchangeConfirmation == "0"?2:1
             }
             this._apis.order.orderAfterSaleUpdateStatus(params).then((res) => {
                     this._apis.order.orderAfterSaleConfirmExchange({id: this.data.id, orderAfterSaleStatus: this.exchangeConfirmation == "0"?2:1, exchangeConfirmation: this.exchangeConfirmation}).then((res) => {
