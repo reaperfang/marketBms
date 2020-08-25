@@ -64,8 +64,8 @@
         ></el-input>
       </el-form-item> -->
       <h2>店铺渠道</h2>
-      
-      <el-form-item prop="businessChannel">
+      <p class="channelPrompt">请您告诉我们您将在哪个渠道经营您的店铺：</p>
+      <el-form-item prop="businessChannel" class="businessChannel">
         <el-checkbox-group v-model="form.businessChannel">
           <el-checkbox :label="2" style="margin-right:78px;" disabled name="businessChannel">微信公众号</el-checkbox>
           <el-checkbox :label="1" name="businessChannel">微信小程序</el-checkbox>
@@ -263,6 +263,19 @@ export default {
     color:rgba(101,94,255,1);
     i {
       padding-left: 6px;
+    }
+  }
+  .channelPrompt {
+    padding-left: 100px;
+    font-size:14px;
+    font-weight:400;
+    color:rgba(68,67,75,1);
+    line-height:20px;
+    padding-bottom: 15px;
+  }
+  .businessChannel {
+    /deep/ .el-form-item__content {
+      margin-left: 100px !important;
     }
   }
 }

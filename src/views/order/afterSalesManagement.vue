@@ -246,6 +246,8 @@ export default {
             }
              else if(code == 5) {
                 return '已关闭'
+            } else if(code == 6 || code == 7) {
+                return '待处理'
             }
         }
     },
