@@ -183,6 +183,10 @@ export default {
     resetData() {
       this._apis.shop.resetPersonalInfo({pageTag: 0}).then((response)=>{
         this.$message.success('重置成功！')
+        if(!response){
+          this._globalEvent.$emit('userCenterResetLoading', true);
+          response = {};
+        }
         //如果还未保存过，则重置后应变为初始化
         if(!response.pageData) {
           this.ruleForm = utils.deepClone(this.initRuleForm);
