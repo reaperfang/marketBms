@@ -36,7 +36,7 @@
       <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"  
-          width="30">
+          width="34">
         </el-table-column>
         <el-table-column prop="imagePath" label="广告图">
           <template slot-scope="scope">
@@ -282,6 +282,15 @@ export default {
     margin-bottom:20px;
   }
 }
+/deep/ .el-table-column--selection .cell {
+  padding-left: 20px;
+}
+.multiple_selection {
+  margin-left: 20px;
+  /deep/ .el-checkbox__label {
+    padding-left: 18px;
+  }
+}
 /deep/ thead th{
   background: #f6f7fa!important;
   color:#44434B!important;
@@ -290,7 +299,7 @@ export default {
   text-align: center;
   &:nth-child(2) {
       text-align: left;
-      padding-left: 20px;
+      padding-left: 10px;
   }
 }
 /deep/ .el-table td{
