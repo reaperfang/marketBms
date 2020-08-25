@@ -218,8 +218,8 @@ export default {
       }
       >.img {
         box-sizing: content-box;
-        width: 100px;
-        height: 100px;
+        width: 150px;
+        height: 150px;
         padding: 21px 0 27px 0;
         margin: 0 auto;
         background: url('~@/assets/images/profile/no_empower.png') no-repeat center;
