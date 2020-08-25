@@ -108,6 +108,9 @@ export default {
         sendAddress: [
           { required: true, message: "联系地址不能为空，请输入后点击搜索地图，在地图上选择准确位置", trigger: "blur" }
         ],
+        address: [
+          { required: true, message: "详细地址不能为空", trigger: "blur" }
+        ],
         type: [
           // { type: 'array', required: true, message: '必选项', trigger: 'change' }
           { validator: validateType, trigger: "change"}
