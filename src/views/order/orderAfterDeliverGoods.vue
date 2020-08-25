@@ -542,7 +542,7 @@ export default {
                 return
             }
 
-            if(this.orderInfo.deliveryWay == 1) {
+            if(this.orderAfterSaleSendInfo.deliveryWay == 1) {
                 if(!this.shopAddressInfo) {
                 this.confirm({
                     title: "提示",
