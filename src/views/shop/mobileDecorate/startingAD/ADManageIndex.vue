@@ -284,6 +284,7 @@ export default {
 }
 /deep/ .el-table-column--selection .cell {
   padding-left: 20px;
+  overflow: inherit;
 }
 .multiple_selection {
   margin-left: 20px;
