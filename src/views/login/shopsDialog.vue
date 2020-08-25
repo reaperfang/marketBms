@@ -3,7 +3,7 @@
         <el-dialog
         title=""
         :visible.sync="showShopsDialog"
-        width="680px"
+        width="740px"
         :before-close="handleClose"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
@@ -27,7 +27,7 @@
           </div>
           <p class="p_center">
             <el-pagination
-              v-if="shopLists.length > 9"
+              v-if="total > 9"
               @current-change="handleCurrentChange"
               :current-page="Number(startIndex) || 1"
               :page-size="pageSize*1"
@@ -44,6 +44,7 @@
 <script>
 import DialogBase from "@/components/DialogBase";
 import { removeToken } from '@/system/auth'
+import utils from "@/utils";
 export default {
   name: 'shopsDialog',
   computed: {
@@ -107,21 +108,37 @@ export default {
       })
     },
 
-    //进入店铺 获取实时最新登录信息（userInfo）
+    //进入店铺 
     toShop(shop){
-      this._apis.profile.getNewShopList({cid:shop.id}).then(res =>{
-        let info = res.info
-        localStorage.setItem('userInfo',info);//更新本地存储的账号信息
-
-        let shopInfoMap = JSON.parse(info).shopInfoMap
-        for(let key in shopInfoMap){
-          let shopObj = shopInfoMap[key]
-          this.newShopList.push(shopObj)
-        } 
-        this.saveShop(shop)
-      }).catch(error =>{
-        console.log('error',error)
+      let shopIds = []
+      this.shopList.map(item =>{
+        shopIds.push(item.id)
       })
+      
+      if(shopIds.includes(shop.id*1)){// 登录之后没有新开的店铺
+        this.newShopList = this.shopList
+        this.saveShop(shop)
+      }else{ //登录之后有新开的店铺 获取实时最新登录信息（userInfo）
+        this._apis.profile.getNewShopList({cid:shop.id}).then(res =>{
+          let info = JSON.parse(res.info)
+          let shopInfoMap = info.shopInfoMap
+          for(let key in shopInfoMap){
+            // 所有店铺的功能点列表由扁平化数据转为树形结构
+            if(shopInfoMap[key].data){
+              let list = JSON.parse(JSON.stringify(shopInfoMap[key].data.msfList))
+              let functions = utils.buildTree(list)
+              shopInfoMap[key].data = Object.assign(shopInfoMap[key].data,{functions:functions})
+            }
+            //获取新的店铺列表
+            let shopObj = shopInfoMap[key]
+            this.newShopList.push(shopObj)
+          } 
+          localStorage.setItem('userInfo',JSON.stringify(info));//更新本地存储的账号信息
+          this.saveShop(shop)
+        }).catch(error =>{
+          console.log('error',error)
+        })
+      }
     },
     
     //保存当前选择店铺的信息
@@ -163,6 +180,7 @@ export default {
     
     handleCurrentChange(val){
       this.startIndex = val
+      this.getShopList()
     }
   }
 }
@@ -177,7 +195,7 @@ export default {
   width: 100%;
   margin-left:10px;
   .shopItem{
-    width:200px;
+    width:220px;
     height:121px;
     background:rgba(255,255,255,1);
     border-radius:3px;

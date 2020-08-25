@@ -191,7 +191,8 @@ export default {
       distributorSet: false,
       ajax: true,
       _list: [],
-      params: {}
+      params: {},
+      shopAddressInfo: null
     };
   },
   created() {
@@ -582,6 +583,17 @@ export default {
               return
             }
 
+            if(this.list && this.list[0] && this.list[0].deliveryWay == 1) {
+              if(!this.shopAddressInfo) {
+                this.confirm({
+                  title: "提示",
+                  icon: true,
+                  text: "发货信息不能为空"
+                });
+                return;
+              }
+            }
+
             this.sending = true
 
             params = {
@@ -761,7 +773,8 @@ export default {
         .then(res => {
           console.log(res)
           let _address = res.shopAddressInfo
-            
+          
+          this.shopAddressInfo = res.shopAddressInfo
           res = res.sendInfoListData
           res.forEach(val => {
             val.express = null

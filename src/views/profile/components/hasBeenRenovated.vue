@@ -39,7 +39,7 @@ export default {
     return {
       businessChannel: null, // 
       qrCode: null,
-      smallQRcode: null,
+      smallQRcode: '',
       isBindGzh: false, // 是否绑定公众号
       isBindXcx: false // 是否绑定小程序
     }
@@ -109,16 +109,18 @@ export default {
         this.isBindGzh = response && response.bindWechatAccount === 1 || false
         this.isBindXcx = response && response.bindWechatApplet === 1 || false
       }).catch((err) => {
-        console.log(err)
+        console.error(error);
+        this.$message({ message: error, type: 'error' });
       })
     },
     getSmallQRcode() {
       const id = this.cid
       this._apis.profile.getSmallQRcode({ id }).then(response => {
-        console.log('getSmallQRcode',response)
-        this.smallQRcode = response ? `data:image/png;base64,${response}` : null
+        // console.log('getSmallQRcode',response)
+        this.smallQRcode = response ? `data:image/png;base64,${response}` : ''
       }).catch((err) => {
-        console.log(err)
+        console.error(error);
+        this.$message({ message: error, type: 'error' });
       })
     },
     getShopInfo() {
@@ -223,7 +225,7 @@ export default {
         background: url('~@/assets/images/profile/no_empower.png') no-repeat center;
         img {
           width: 100%;
-          height: 100%;
+          height: auto;
           border:0;
           display: block;
         }

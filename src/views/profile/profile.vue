@@ -162,7 +162,7 @@
                   <el-button @click="linkTo({text:'绑定微信小程序'})">立即授权</el-button>
                 </p>
               </div>
-              <div v-if="!isEmpowerWX &&  isReleaseWX">
+              <div v-if="!isEmpowerWX && isReleaseWX">
                 <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="no_release" alt/>
                 <p class="title4">您当前还未发布小程序</p>
                 <p class="opt">
@@ -546,7 +546,7 @@ export default {
     getIsReleaseWX(){
       this._apis.profile
         .getSmallRelease({id:this.cid}).then(response => {
-          this.isReleaseWX = response.status ? false :  true
+          this.isReleaseWX = response.status ? true :  false
         })
         .catch(error => {
           console.error(error);
@@ -765,8 +765,8 @@ export default {
               color: #92929B;
             }
             .erweima{
-              width: 76px;
-              height: 76px;
+              width: 100px;
+              height: auto;
             }
             .no_release{
               width: 61px;

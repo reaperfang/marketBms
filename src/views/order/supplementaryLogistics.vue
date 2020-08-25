@@ -299,7 +299,8 @@ export default {
             ajax: true,
             _ids: [],
             params: {},
-            _list: []
+            _list: [],
+            shopAddressInfo: null
         }
     },
     created() {
@@ -558,7 +559,16 @@ export default {
             })
         },
         sendGoodsHandler(formName) {
-            
+            if(this.orderInfo.deliveryWay == 1) {
+                if(!this.shopAddressInfo) {
+                this.confirm({
+                    title: "提示",
+                    icon: true,
+                    text: "发货信息不能为空"
+                });
+                return;
+                }
+            }
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     let params
@@ -684,6 +694,7 @@ export default {
             this._apis.order.orderSendDetail({ids: [this.$route.query.ids || this.$route.query.id]}).then((res) => {
                 let _address = res.shopAddressInfo
 
+                this.shopAddressInfo = res.shopAddressInfo
                 res = res.sendInfoListData
                 res[0].orderItemList.forEach(val => {
                     val.sendCount =  val.goodsCount

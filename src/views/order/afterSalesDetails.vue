@@ -56,6 +56,12 @@ export default {
     created() {
         this.getDetail()
     },
+    computed: {
+        cid() {
+            let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+            return shopInfo.id;
+        }
+    },
     filters: {
         typeFilter(code) {
             if(code == 1) {
@@ -163,6 +169,25 @@ export default {
                 this.catchRealReturnBalance = this.orderAfterSale.realReturnBalance
                 //this.orderAfterSale.realReturnScore = this.orderAfterSale.shouldReturnScore || 0
                 this.orderSendInfo = res.orderSendInfo
+                if(res.orderSendInfo.deliveryWay == 1) {
+                    this._apis.order
+                    .getShopAddress({ cid: this.cid })
+                    .then(_res => {
+                        this.orderSendInfo.sendName = _res.name;
+                        this.orderSendInfo.sendPhone = _res.mobile;
+                        this.orderSendInfo.sendProvinceCode = _res.provinceCode;
+                        this.orderSendInfo.sendProvinceName = _res.provinceName;
+                        this.orderSendInfo.sendCityCode = _res.cityCode;
+                        this.orderSendInfo.sendCityName = _res.cityName;
+                        this.orderSendInfo.sendAreaCode = _res.areaCode;
+                        this.orderSendInfo.sendAreaName = _res.areaName;
+                        this.orderSendInfo.sendAddress = _res.address;
+                        this.orderSendInfo.sendDetail = _res.addressDetail;
+                    })
+                    .catch(error => {
+                        this.$message.error(error);
+                    });
+                }
                 this.catchOrderAfterSale = JSON.parse(JSON.stringify(res.orderAfterSale))
             }).catch(error => {
                 this.visible = false

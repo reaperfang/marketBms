@@ -36,19 +36,19 @@
       </el-table-column>
       <el-table-column label="余额" sortable="custom" prop="balance">
         <template slot-scope="scope">
-          ¥{{scope.row.balance}}
+          ¥{{scope.row.balance || '0.00'}}
         </template>
       </el-table-column>
       <el-table-column prop="score" label="积分" sortable="custom"></el-table-column>
       <el-table-column label="累计消费金额" sortable="custom" prop="totalDealMoney">
         <template slot-scope="scope">
-          ¥{{scope.row.totalDealMoney}}
+          ¥{{scope.row.totalDealMoney || 0.00}}
         </template>
       </el-table-column>
       <el-table-column prop="dealTimes" label="购买次数" sortable="custom"></el-table-column>
       <el-table-column label="客单价（元）" prop="perUnitPrice" sortable="custom">
         <template slot-scope="scope">
-          ¥{{scope.row.perUnitPrice}}
+          ¥{{scope.row.perUnitPrice || 0.00}}
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200">
@@ -338,6 +338,9 @@ export default {
 /deep/ .el-table td, /deep/ .el-table th {
         text-align: center;
         &:nth-child(2) {
+            text-align: left;
+        }
+        &:nth-child(3) {
             text-align: left;
         }
         &:nth-child(5) {

@@ -25,7 +25,7 @@
         <el-table-column
           type="selection"
           :selectable='selectInit'
-          width="30">
+          width="34">
         </el-table-column>
         <el-table-column prop="name" label="页面名称">
           <template slot-scope="scope">
@@ -79,13 +79,14 @@
       </div>
       <div class="pagination" v-if="tableData.length">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(startIndex) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
           >
         </el-pagination>
       </div>
@@ -299,6 +300,16 @@ export default {
     margin-bottom:20px;
   }
 }
+/deep/ .el-table-column--selection .cell {
+  padding-left: 20px;
+  overflow: inherit;
+}
+.multiple_selection {
+  margin-left: 20px;
+  /deep/ .el-checkbox__label {
+    padding-left: 18px;
+  }
+}
 /deep/ thead th{
   background: #f6f7fa;
   color:#44434B!important;
@@ -307,7 +318,7 @@ export default {
   text-align: center;
   &:nth-child(2) {
       text-align: left;
-      padding-left: 20px;
+      padding-left: 10px;
   }
 }
 /deep/ .el-table td{
