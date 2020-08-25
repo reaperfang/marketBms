@@ -767,16 +767,16 @@ export default {
               color: #92929B;
             }
             .erweima{
-              width: 100px;
+              width: 150px;
               height: auto;
             }
             .no_isEmpower{
-              width: 86px;
-              height: 86px;
+              width: auto;
+              height: 136px;
             }
             .no_release{
-              width: 86px;
-              height: 86px;
+              width: auto;
+              height: 136px;
             }
             .opt{
               margin-top: 20px;
