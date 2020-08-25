@@ -81,6 +81,14 @@ export default {
         });
         return;
       }
+      if(Number(this.adjustmentBalance) > 100000000) {
+        this.btnLoading = false;
+        this.$message({
+          message: '增加余额不能超过1亿',
+          type: 'warning'
+        });
+        return;
+      }
       let params = {
         id: this.data.id,
         currentBalance: Number(this.data.balance),
@@ -108,13 +116,12 @@ export default {
       }else{
         this.showError = false;
       }
-      if(Number(this.adjustmentBalance) > 100000000) {
-        this.$message({
-          message: '增加余额不能超过1亿',
-          type: 'warning'
-        });
-        this.adjustmentBalance = "";
-      }
+      // if(Number(this.adjustmentBalance) > 100000000) {
+      //   this.$message({
+      //     message: '增加余额不能超过1亿',
+      //     type: 'warning'
+      //   });
+      // }
     },
     handleAdjust(val) {
       if(val == "1") {

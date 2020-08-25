@@ -99,6 +99,7 @@ export default {
     },
     methods: {
         imageSelected(item) {
+            this.showDefault = false;
             this.imgUrl = "";
             this.imgLoading = true;
             let _this = this;
@@ -162,6 +163,7 @@ export default {
             this.imgLoading = true;
             this._apis.client.checkCardBg({}).then((response) => {
                 if(response) {
+                    this.showDefault = false;
                     this.imgLoading = false;
                     this.imgUrl = response.imgUrl;
                     this.imgId = response.id;

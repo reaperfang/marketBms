@@ -766,7 +766,7 @@ export default {
             }
             .erweima{
               width: 100px;
-              height: 100px;
+              height: auto;
             }
             .no_release{
               width: 61px;
