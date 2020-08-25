@@ -310,6 +310,10 @@ export default {
                 this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出配送方式为普通快递-电子面单的单据，再进行批量打印电子面单。'})
                 return;
             }
+            if(this.multipleSelection.some(val => (!val.isSupportElectronicSheet))) {
+                this.confirm({title: '提示', icon: true, text: '含有不支持打印电子面单的售后单，不能批量打印电子面单。'})
+                return
+            }
             let ids = this.multipleSelection.map(val => val.orderAfterSaleId).join(',')
 
             this.$router.push('/order/printingElectronicForm?ids=' + ids + '&afterSale=' + true)
