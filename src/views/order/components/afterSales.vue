@@ -531,6 +531,9 @@ export default {
     /deep/ .input-with-select .el-input-group__prepend {
         background-color: #fff;
     }
+    /deep/.el-table td:nth-child(1){
+         padding-left:10px;
+     }
 </style>
 
 
