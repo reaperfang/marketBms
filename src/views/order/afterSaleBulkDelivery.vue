@@ -23,7 +23,7 @@
               </div>
               <div class="col">
                 <div class="row align-center row-margin">
-                  <div class="col" style="width: 180px;">收货信息</div>
+                  <div class="col" style="width: 186px;">收货信息</div>
                   <div class="col">查看物流</div>
                 </div>
               </div>
@@ -55,10 +55,13 @@
               </div>
               <div class="col">
                 <div class="row row-margin">
-                  <div class="col" style="width: 180px;">
-                    <p>收货人: {{item.orderAfterSaleSendInfo.receivedName}}</p>
-                    <p>联系电话: {{item.orderAfterSaleSendInfo.receivedPhone}}</p>
-                    <p>收货地址: {{item.orderAfterSaleSendInfo.receiveAddress}} {{item.orderAfterSaleSendInfo.receivedDetail}}</p>
+                  <div class="col  message-box" style="width: 186px;">
+                    <div>收货人: {{item.orderAfterSaleSendInfo.receivedName}}</div>
+                    <div>联系电话: {{item.orderAfterSaleSendInfo.receivedPhone}}</div>
+                    <div class="message-box-address">
+                      <div class="label">收货地址: </div>
+                      <div>{{item.orderAfterSaleSendInfo.receiveAddress}} {{item.orderAfterSaleSendInfo.receivedDetail}}</div>
+                    </div>
                   </div>
                   <div class="col">
                     <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 1">
@@ -908,5 +911,21 @@ export default {
   line-height: 21px;
   padding-top: 2px;
   margin-bottom: 0;
+}
+.message-box {
+  >div {
+    margin-bottom: 10px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .message-box-address {
+    display: flex;
+    line-height: 21px;
+    .label {
+      flex-shrink: 0;
+      padding-right: 2px;
+    }
+  }
 }
 </style>
