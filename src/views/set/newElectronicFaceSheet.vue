@@ -106,6 +106,18 @@ export default {
           callback();
         // }
       };
+      const validateExpressCompanyAccount = (rule, value, callback) => {
+        if (/^\s*$/.test(value)) {
+          return callback(new Error('请输入快递公司账号'));
+        }
+        return callback();
+      };
+      const validateExpressCompanyPassword = (rule, value, callback) => {
+        if (/^\s*$/.test(value)) {
+          return callback(new Error('请输入密码'));
+        }
+        return callback();
+      };
         return {
           popVisible: false,
           isChooseExpressCompany: true, // 是否选择快递公司
@@ -134,10 +146,12 @@ export default {
             ],
             expressCompanyAccount: [
               { required: true, message: '请输入快递公司账号', trigger: 'blur' },
+              { validator: validateExpressCompanyAccount, trigger: 'blur' },
               { max: 20, message: '快递公司账号不超过20个字符', trigger: 'blur' }
             ],
             expressCompanyPassword: [
               { required: true, message: '请输入密码', trigger: 'blur' },
+              { validator: validateExpressCompanyPassword, trigger: 'blur' },
               { max: 20, message: '密码不超过20个字符', trigger: 'blur' }
             ],
             monthCode: [
