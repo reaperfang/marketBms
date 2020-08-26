@@ -736,6 +736,14 @@ export default {
         });
         return;
       }
+      if(this.multipleSelection.every(val => val.sendCount == 0)) {
+        this.confirm({
+          title: "提示",
+          icon: true,
+          text: "请选择需要发货的商品"
+        });
+        return;
+      }
 
       if (curItem.some(val => !val.sendCount)) {        
         // this.confirm({
