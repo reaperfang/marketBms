@@ -1016,8 +1016,8 @@ export default {
             setTimeout(() => {
               if(selectArr) {
                 this.$refs.table.clearSelection();
-                selectArr.forEach(row => {
-                  this.$refs.table.toggleRowSelection(row);
+                selectArr.forEach((row, index) => {
+                  this.$refs.table.toggleRowSelection(this.tableData[index]);
                 });
               }
             }, 0)
