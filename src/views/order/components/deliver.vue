@@ -1014,10 +1014,12 @@ export default {
               this.$refs.table.toggleRowSelection(row);
             })
             setTimeout(() => {
-              this.$refs.table.clearSelection();
-              selectArr.forEach(row => {
-                this.$refs.table.toggleRowSelection(row);
-              });
+              if(selectArr) {
+                this.$refs.table.clearSelection();
+                selectArr.forEach(row => {
+                  this.$refs.table.toggleRowSelection(row);
+                });
+              }
             }, 0)
             this.orderInfo = res[0];
             if(this.orderInfo.deliveryWay == 4) {
