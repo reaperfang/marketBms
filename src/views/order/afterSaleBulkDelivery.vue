@@ -541,7 +541,7 @@ export default {
                     let obj = {
                         orderAfterSaleId: item.orderAfterSaleSendInfo.orderAfterSaleId,
                         memberInfoId: item.orderAfterSaleSendInfo.memberInfoId,
-                        orderAfterSaleCode: item.orderAfterSaleSendInfo.code,
+                        orderAfterSaleCode: item.orderAfterSaleSendInfo.orderAfterSaleCode,
                         receivedName: item.orderAfterSaleSendInfo.receivedName,
                         receivedPhone: item.orderAfterSaleSendInfo.receivedPhone,
                         receivedProvinceCode: item.orderAfterSaleSendInfo.receivedProvinceCode,
