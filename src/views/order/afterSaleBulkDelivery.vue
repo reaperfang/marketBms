@@ -4,6 +4,9 @@
     <div class="container">
       <section>
         <div class="title">1. 选择您要进行发货的商品并填写物流信息</div>
+        <div class="checkbox-box">
+          <i @click="allcheckHandler" class="checkbox" :class="{checked: allchecked}"></i>商品清单
+        </div>
         <div class="goods-item" v-for="(item, index) in list" :key="index">
           <div class="item-title">
             <span>商品清单</span>
@@ -186,7 +189,8 @@ export default {
       ajax: true,
       _list: [],
       params: {},
-      shopAddressInfo: null
+      shopAddressInfo: null,
+      allchecked: true,
     };
   },
   created() {
@@ -201,6 +205,23 @@ export default {
     }
   },
   methods: {
+    allcheckHandler() {
+      if(this.list[0].deliveryWay == 4) {
+        return
+      }
+      this.allchecked = !this.allchecked
+
+      let _list = JSON.parse(JSON.stringify(this.list))
+
+      _list.forEach(val => {
+        val.checked = this.allchecked;
+        val.itemList.forEach(goods => {
+          goods.checked = this.allchecked;
+        });
+      });
+
+      this.list = _list
+    },
     deleteOrder(index) {
       this.list.splice(index, 1);
     },
@@ -466,6 +487,14 @@ export default {
           val.checked = false;
         });
       }
+
+      let _arr = this.list.reduce((pre, cur) => pre.concat(cur.itemList), [])
+      
+      if(_arr.every(val => val.checked)) {
+        this.allchecked = true
+      } else {
+        this.allchecked = false
+      }
     },
       sendGoodsHandler() {
           //配送方式
@@ -641,6 +670,14 @@ export default {
               } else {
                 this.list[index].checked = false;
               }
+
+              let _arr = _list.reduce((pre, cur) => pre.concat(cur.itemList), [])
+        
+              if(_arr.every(val => val.checked)) {
+                this.allchecked = true
+              } else {
+                this.allchecked = false
+              }
           }catch(e) {
 
           }
@@ -709,14 +746,14 @@ export default {
         .then(res => {
           res.forEach(val => {
             val.express = null
+            val.checked = true;
             val.other = "";
-            val.checked = false;
             val.expressNos = "";
             val.orderAfterSaleSendInfo.expressCompanyCodes = ''
             val.orderAfterSaleSendInfo.expressNos = ''
             val.expressCompanyCodes = "";
               val.itemList.forEach(goods => {
-                  goods.checked = false
+                  goods.checked = true
                   goods.sendCount = "";
               })
 
@@ -985,5 +1022,26 @@ export default {
 .el-icon-delete {
   float: right;
   cursor: pointer;
+}
+.checkbox-box {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  .checkbox {
+    margin-right: 15px;
+  }
+}
+.checkbox {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url(../../assets/images/order/checkbox.png) no-repeat;
+}
+.checkbox.checked {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url(../../assets/images/order/checkbox-checked.png)
+    no-repeat;
 }
 </style>
