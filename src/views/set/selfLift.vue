@@ -25,6 +25,7 @@
       :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '400'}"
       >
       <el-table-column
+        class-name="pickUpId"
         prop="pickUpId"
         label="自提点编号"
         width="150"
@@ -532,6 +533,10 @@ export default {
   }
   .btn-area {
     padding-top: 30px;
+    .primary, .text {
+      font-size: 14px;
+    }
+    
   }
   .table {
     padding-top: 20px;
@@ -540,6 +545,9 @@ export default {
     }
     /deep/ th>.cell {
       line-height: 30px;
+    }
+    /deep/ .pickUpId {
+      padding-left: 10px;
     }
     &::before {
       height: 0;

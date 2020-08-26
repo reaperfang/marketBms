@@ -4,10 +4,14 @@
     <div class="container">
       <section>
         <div class="title">1. 选择您要进行发货的商品并填写物流信息</div>
+        <div class="checkbox-box">
+          <i @click="allcheckHandler" class="checkbox" :class="{checked: allchecked}"></i>商品清单
+        </div>
         <div class="goods-item" v-for="(item, index) in list" :key="index">
           <div class="item-title">
             <span>商品清单</span>
             <span>售后单编号 {{item.orderAfterSaleSendInfo.orderAfterSaleCode}}</span>
+            <i v-if="list.length > 1" @click="deleteOrder(index)" class="el-icon-delete"></i>
           </div>
           <div class="item-content">
             <div class="row align-center table-title">
@@ -64,7 +68,7 @@
                     </div>
                   </div>
                   <div class="col">
-                    <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 1">
+                    <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 4">
                         <el-form-item label="快递公司" prop="expressCompanyCodes">
                             <el-select @change="checkExpress(index)" v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
@@ -141,7 +145,19 @@
           <el-button @click="sendGoodsHandler" type="primary">批量发货</el-button>
       </div>
     </div>
-    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods" :title="title" :ajax="ajax" @getDetail="getDetail"></component>
+    <component 
+      :is="currentDialog" 
+      :dialogVisible.sync="dialogVisible" 
+      :data="currentData" 
+      @submit="onSubmit" 
+      :sendGoods="sendGoods" 
+      :title="title" 
+      :ajax="ajax" 
+      @getDetail="getDetail"
+      :orderSendGoodsHander="orderSendGoodsHander"
+      :params="params"
+      :list="list">
+    </component>
   </div>
 </template>
 <script>
@@ -150,6 +166,7 @@ import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDi
 import { validatePhone } from "@/utils/validate.js"
 
 import { asyncRouterMap } from '@/router'
+import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
 
 export default {
   data() {
@@ -170,7 +187,10 @@ export default {
       distributorPhoneFirst: true, //配送员联系方式第一次输入标记
       distributorSet: false,
       ajax: true,
-      shopAddressInfo: null
+      _list: [],
+      params: {},
+      shopAddressInfo: null,
+      allchecked: true,
     };
   },
   created() {
@@ -185,6 +205,26 @@ export default {
     }
   },
   methods: {
+    allcheckHandler() {
+      if(this.list[0].deliveryWay == 4) {
+        return
+      }
+      this.allchecked = !this.allchecked
+
+      let _list = JSON.parse(JSON.stringify(this.list))
+
+      _list.forEach(val => {
+        val.checked = this.allchecked;
+        val.itemList.forEach(goods => {
+          goods.checked = this.allchecked;
+        });
+      });
+
+      this.list = _list
+    },
+    deleteOrder(index) {
+      this.list.splice(index, 1);
+    },
     ExpressNosInput(index) {
       let item = this.list[index]
 
@@ -447,6 +487,14 @@ export default {
           val.checked = false;
         });
       }
+
+      let _arr = this.list.reduce((pre, cur) => pre.concat(cur.itemList), [])
+      
+      if(_arr.every(val => val.checked)) {
+        this.allchecked = true
+      } else {
+        this.allchecked = false
+      }
     },
       sendGoodsHandler() {
           //配送方式
@@ -510,7 +558,7 @@ export default {
                 orderAfterSaleSendInfoDtoList: this.list.map(item => {
                     let expressCompanys = ''
                     
-                    if(item.orderAfterSaleSendInfo.deliveryWay == 1){ //如果为普通快递在对快递单号等进行处理
+                    if(item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 4){ //如果为普通快递在对快递单号等进行处理
                       if (item.expressCompanyCodes == "other") {
                         expressCompanys = item.other;
                       } else {
@@ -522,7 +570,7 @@ export default {
                     let obj = {
                         orderAfterSaleId: item.orderAfterSaleSendInfo.orderAfterSaleId,
                         memberInfoId: item.orderAfterSaleSendInfo.memberInfoId,
-                        orderAfterSaleCode: item.orderAfterSaleSendInfo.code,
+                        orderAfterSaleCode: item.orderAfterSaleSendInfo.orderAfterSaleCode,
                         receivedName: item.orderAfterSaleSendInfo.receivedName,
                         receivedPhone: item.orderAfterSaleSendInfo.receivedPhone,
                         receivedProvinceCode: item.orderAfterSaleSendInfo.receivedProvinceCode,
@@ -546,7 +594,7 @@ export default {
                         remark: item.orderAfterSaleSendInfo.remark 
                     };
                     //如果是普通快递，则添加快递公司与快递单号
-                    if(item.orderAfterSaleSendInfo.deliveryWay == 1){
+                    if(item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 4){
                       obj.deliveryWay = 1;
                       obj.expressCompanys = expressCompanys;
                       obj.expressNos = item.orderAfterSaleSendInfo.expressNos;
@@ -562,16 +610,48 @@ export default {
                     return obj
                 })
             }
+            this.params = params
+            let _arr = []
 
-            this._apis.order.orderAfterSaleSend(params).then((res) => {
+            this.list.forEach(item => {
+              let pro = this._apis.order.getExpressSpec({ companyCode: item.expressCompanyCodes, cid: this.cid })
+
+              _arr.push(pro)
+            })
+            this._list = JSON.parse(JSON.stringify(this.list)) 
+            Promise.all(_arr).then((values) => {
+              values.forEach((item, index) => {
+                this._list[index].sizeList = item
+                if(item && item.length) {
+                  this._list.splice(index, 1)
+                }
+              })
+
+              this._list = this._list.filter(val => val.express != null)
+
+              if(this.list[0].deliveryWay == 1 && this._list.length) {
+                this.currentData = {
+                  list: this._list,
+                  expressCompanyList: this.expressCompanyList,
+                }
+                this.currentDialog = 'SelectSizeDialog'
+                this.title = '提示'
+                this.dialogVisible = true
+              } else {
+                this.orderSendGoodsHander(params)
+              }
+            });
+          }catch(e) {
+              console.error(e)
+          }
+        },
+        orderSendGoodsHander(params) {
+          this._apis.order.orderAfterSaleSend(params).then((res) => {
                 this.$message.success('发货成功');
                 this.$router.push('/order/deliverGoodsSuccess?ids=' + this.$route.query.ids + '&type=afterSaleBulkDelivery')
             }).catch(error => {
                 this.$message.error(error);
             })
-          }catch(e) {
-              console.error(e)
-          }
         },
       select(index, i) {
           try {
@@ -589,6 +669,14 @@ export default {
                 this.list[index].checked = true;
               } else {
                 this.list[index].checked = false;
+              }
+
+              let _arr = _list.reduce((pre, cur) => pre.concat(cur.itemList), [])
+        
+              if(_arr.every(val => val.checked)) {
+                this.allchecked = true
+              } else {
+                this.allchecked = false
               }
           }catch(e) {
 
@@ -658,14 +746,14 @@ export default {
         .then(res => {
           res.forEach(val => {
             val.express = null
+            val.checked = true;
             val.other = "";
-            val.checked = false;
             val.expressNos = "";
             val.orderAfterSaleSendInfo.expressCompanyCodes = ''
             val.orderAfterSaleSendInfo.expressNos = ''
             val.expressCompanyCodes = "";
               val.itemList.forEach(goods => {
-                  goods.checked = false
+                  goods.checked = true
                   goods.sendCount = "";
               })
 
@@ -714,7 +802,7 @@ export default {
           //   });
           res.forEach(item => {
             if(!item.orderAfterSaleSendInfo.sendAddress) {
-              if(item.orderAfterSaleSendInfo && item.orderAfterSaleSendInfo.deliveryWay == 1) {
+              if(item.orderAfterSaleSendInfo && (item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 2)) {
                 this._apis.order
                 .getShopAddress({ cid: this.cid })
                 .then(res => {
@@ -729,6 +817,8 @@ export default {
                   item.orderAfterSaleSendInfo.sendAreaName = res.areaName;
                   item.orderAfterSaleSendInfo.sendAddress = res.address;
                   item.orderAfterSaleSendInfo.sendDetail = res.addressDetail;
+                  item.orderAfterSaleSendInfo.sendLatitude = res.latitude;
+                  item.orderAfterSaleSendInfo.sendLongitude = res.longitude;
                 })
                 .catch(error => {
                   this.$message.error(error);
@@ -744,7 +834,8 @@ export default {
     }
   },
   components: {
-      ReceiveInformationDialog
+      ReceiveInformationDialog,
+      SelectSizeDialog
   }
 };
 </script>
@@ -927,5 +1018,30 @@ export default {
       padding-right: 2px;
     }
   }
+}
+.el-icon-delete {
+  float: right;
+  cursor: pointer;
+}
+.checkbox-box {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  .checkbox {
+    margin-right: 15px;
+  }
+}
+.checkbox {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url(../../assets/images/order/checkbox.png) no-repeat;
+}
+.checkbox.checked {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url(../../assets/images/order/checkbox-checked.png)
+    no-repeat;
 }
 </style>
