@@ -774,6 +774,7 @@ ul.cube {
 
 .app-main .content-box .content-main.m_shopEditor {
       padding: 0 !important;
+      padding-left: 1px !important;
       overflow: hidden !important;
 }
 
@@ -783,16 +784,15 @@ ul.cube {
             width: 348px;
             form {
                   overflow-y: auto;
+                  border: 1px #D0D6E4 solid;
             }
 
             .block.header {
                   padding: 10px;
-                  border: 1px #D0D6E4 solid;
             }
 
             .block.form {
                   padding: 30px 20px 20px 20px;
-                  border: 1px #D0D6E4 solid;
             }
 
             .block.button {
