@@ -250,7 +250,8 @@ export default {
                     }
                     params = {
                         status: '1',
-                        productCatalogInfoId: componentData.currentCatagoryId
+                        productCatalogInfoId: componentData.currentCatagoryId,
+			            pageSize: '1000',
                     };
                 }
 
@@ -285,13 +286,15 @@ export default {
                 }
                 params = {
                     // status: '1',
-                    ids: allIds
+                    ids: allIds,
+		            pageSize:'1000'
                 }
             }else{
                 params = {
                     // status: '1',
                     ids: ids[this.currentCatagoryId],
-                    productCatalogInfoId: this.currentCatagoryId
+                    productCatalogInfoId: this.currentCatagoryId,
+		            pageSize:'1000'
                 }
             }
             return params;
@@ -302,6 +305,7 @@ export default {
             return {
                 // status: '1',
                 ids: ids,
+		        pageSize:ids.length
             }
         },
 
