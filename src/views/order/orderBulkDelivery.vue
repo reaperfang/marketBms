@@ -1130,6 +1130,8 @@ export default {
                 item.sendAreaName = _address.areaName;
                 item.sendAddress = _address.address;
                 item.sendDetail = _address.addressDetail;
+                item.sendLatitude = _address.latitude
+                item.sendLongitude = _address.longitude
               } else if(item.deliveryWay == 4) {
                 this._apis.order
                   .getPickInfo({ id: item.pickId })

@@ -578,6 +578,9 @@ export default {
                       //obj.distributorId = item.distributorId;
                       obj.distributorPhone = item.phone;
                     }
+                    if(item.orderAfterSaleSendInfo.deliveryWay == 4) {
+                      obj.deliveryWay = 4;
+                    }
                     return obj
                 })
             }
@@ -780,6 +783,8 @@ export default {
                   item.orderAfterSaleSendInfo.sendAreaName = res.areaName;
                   item.orderAfterSaleSendInfo.sendAddress = res.address;
                   item.orderAfterSaleSendInfo.sendDetail = res.addressDetail;
+                  item.orderAfterSaleSendInfo.sendLatitude = res.latitude;
+                  item.orderAfterSaleSendInfo.sendLongitude = res.longitude;
                 })
                 .catch(error => {
                   this.$message.error(error);
