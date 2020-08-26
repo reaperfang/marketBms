@@ -45,6 +45,7 @@
           </div>
         </div>
       </div>
+      <profileIntelligent></profileIntelligent>
       <div class="p_l_item p_l_main">
         <p class="p_title">
           智能助手：
@@ -193,9 +194,10 @@ import { mapMutations } from "vuex";
 import profileCont from "@/system/constant/profile";
 import Clipboard from "clipboard";
 import flowPath from "./flowPath";
+import profileIntelligent from "./components/profile_intelligent";
 export default {
   name: "profile",
-  components: { flowPath },
+  components: { flowPath, profileIntelligent },
   data() {
     return {
       profileData: "",
