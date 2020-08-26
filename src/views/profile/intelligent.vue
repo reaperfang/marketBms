@@ -34,8 +34,8 @@
     components: { guide, stepIndustry, stepPreview, stepEnable, stepBase },
     data() {
       return {
-        isShowGuide: true,  // 是否是显示引导（首次进入）
-        stepStatus: 1, // 进行到了第几步
+        isShowGuide: false,  // 是否是显示引导（首次进入）
+        stepStatus: 2, // 进行到了第几步
         stepArray: ['industry', 'preview', 'enable', 'base']
       }
     },
@@ -59,5 +59,9 @@
     position: relative;
     min-height: 100%;
     background-color: #fff;
+
+    .bottom_buttons {
+      text-align: center;
+    }
   }
 </style>

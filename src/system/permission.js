@@ -13,7 +13,7 @@ NProgress.configure({ showSpinner: false })// NProgress Configuration
 function hasPermission(msfList, route) {
   if (route && route.path) {
     let title =  route.meta.title;
-    return msfList.some(item => title == item.name) || route.name == 'profile' || route.path == '/401' || route.path == '/login' || route.matched[0].path == '/shop' || route.name == 'accountInfo' || route.name == 'passwordChange'
+    return msfList.some(item => title == item.name) || route.name == 'profile' || route.path == '/401' || route.path == '/login' || route.matched[0].path == '/shop' || route.name == 'accountInfo' || route.name == 'passwordChange' || route.name == 'intelligent'
   } else {
     return true
   }
@@ -24,7 +24,7 @@ const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
 let flag = 0
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
-  //  if (true) { // determine if there has token  
+  //  if (true) { // determine if there has token
   if(store.getters.token){
     const localMsfList = localStorage.getItem('shopInfos');
     let msfList = [];
