@@ -10,6 +10,12 @@
                 alt
               />
               <span>店 铺 名 称</span>
+              <img
+                src="../../../../assets/images/dashboard/head/time/default.png"
+                alt
+                style="margin:0 3px 0 10px"
+              />
+              <span> {{ currentTime }}</span>
             </div>
           </el-col>
           <el-col :xs="12" :sm="14" :md="14" :lg="14" :xl="16" class="content">
@@ -54,13 +60,49 @@ export default {
   },
   components: {},
   data: function() {
-    return {};
+    return {
+      timer: "", //定义一个定时器的变量
+      currentTime: new Date(), // 获取当前时间
+    };
   },
   computed: {
     //...mapState([""])
   },
-  mounted() {},
-  beforeCreate() {},
+  mounted() {
+    var _this = this; //声明一个变量指向Vue实例this，保证作用域一致
+    this.timer = setInterval(function() {
+      // _this.currentTime = //修改数据date
+      //   new Date().getFullYear() +
+      //   "-" +
+      //   (new Date().getMonth() + 1) +
+      //   "-" +
+      //   new Date().getDate() +
+      //   " " +
+      //   new Date().getHours() +
+      //   ":" +
+      //   new Date().getMinutes() +
+      //   ": " +
+      //   new Date().getSeconds();
+
+      _this.currentTime = //修改数据date
+        new Date().getFullYear() +
+        "年" +
+        (new Date().getMonth() + 1) +
+        "月" +
+        new Date().getDate() +
+        "日 " +
+        new Date().getHours() +
+        ":" +
+        new Date().getMinutes() +
+        ": " +
+        new Date().getSeconds();
+    }, 1000);
+  },
+  beforeCreate() {
+    if (this.timer) {
+      clearInterval(this.timer); // 在Vue实例销毁前，清除我们的定时器
+    }
+  },
   created() {},
   beforeMount() {},
   beforeUpdate() {},
@@ -111,7 +153,7 @@ export default {
     -webkit-background-size: cover;
     -o-background-size: cover;
     background-position: center 0;
-    height:100%;
+    height: 100%;
     .left {
       margin: 15px 0 0 35px;
       display: flex;

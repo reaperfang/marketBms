@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import echarts from "echarts";
 import gridtitle from "../../components/title/index";
 import vline from "../../components/v-chart/line/index";
 import { mapGetters, mapActions, mapState } from "vuex";
@@ -46,7 +47,29 @@ export default {
         ],
       },
       chartSettings: {
-        area: true
+        
+        area: true,
+        areaStyle: {
+          normal: {
+            color: new echarts.graphic.LinearGradient(
+              0,
+              0,
+              0,
+              1,
+              [
+                {
+                  offset: 0,
+                  color: "rgba(43,193,145,0.3)",
+                },
+                {
+                  offset: 1,
+                  color: "rgba(43,193,145,0)",
+                },
+              ],
+              false
+            ),
+          },
+        },
       },
       chartExtend: {
         color: "rgba(71, 225, 255, 0.15)",
@@ -74,22 +97,6 @@ export default {
             show: false,
           },
         },
-
-        // series: [
-        //   {
-        //     name: "",
-        //     type: "line",
-        //     // smooth: true, //是否平滑
-        //     showAllSymbol: false,
-        //     symbol: "circle",
-        //     symbolSize: 10,
-        //     lineStyle: {
-        //       normal: {
-        //         color: "#48B3FF",
-        //       },
-        //     },
-        //   },
-        // ],
       },
     };
   },

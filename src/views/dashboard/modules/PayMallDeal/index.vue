@@ -28,6 +28,7 @@
                   :city="item.city"
                   :barColor="item.barColor"
                 ></pchart>
+                <!-- <echartprogress></echartprogress> -->
 				</div
             ></el-col>
           </el-row>
@@ -41,7 +42,8 @@
 import gridtitle from "../../components/title/index";
 import vpay from "../../components/pay/index";
 // import pchart from "../../components/v-chart/canvaspersent/index";
-import pchart from "../../components/v-chart/pie/index";
+import pchart from "../../components/v-chart/pie/index"; //v-chart
+import echartprogress from "../../components/echart/progress/index";
 import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
@@ -55,7 +57,7 @@ export default {
     //   default: false
     // }
   },
-  components: { gridtitle, vpay, pchart },
+  components: { gridtitle, vpay, pchart ,echartprogress},
   data: function() {
     return {
       startVal: 0,

@@ -1,7 +1,12 @@
 <template>
   <div class="panel-content">
-    <div
+    <!-- <div
       style="display:inline-block;width:100%;height:100%;"
+      ref="chartContentPietest"
+    ></div> -->
+
+    <div
+      style="display:inline-block;width:100vw;height:100vh;"
       ref="chartContentPietest"
     ></div>
   </div>
@@ -139,9 +144,7 @@ export default {
                 insick,
               } = data;
               // const tip = `<b>${name}</b><br />${getTextForKey('现存确诊：')}${insick}<br />${getTextForKey('累计确诊：')}${confirmed}<br />${getTextForKey('治愈人数：')}${cured}<br />${getTextForKey('死亡人数：')}${dead}<br />${getTextForKey('新增确诊：')}${increased}`;
-              const tip = `<b>${name}</b><br />${"订单总数："}${
-                data.value[2]
-              }<br />`;
+              const tip = `<b>${name}</b><br />${"订单总数："}${data.value[2]}<br />`;
               return tip;
             }
             return `<b>${name}</b><br />${"暂无数据"}`;
@@ -188,10 +191,6 @@ export default {
         // },
         visualMap: {
           show: true,
-          textStyle: {
-            fontSize: 12,
-            color: "#FFFFFF",
-          },
           min: 1,
           max: 3000,
           right: 26,
@@ -319,22 +318,6 @@ export default {
       }
       return geoJSON;
     },
-    convertData(geoCoordMap, data) {
-      var res = [];
-      for (var i = 0; i < data.length; i++) {
-        var geoCoord = geoCoordMap[data[i].showName];
-        if (geoCoord) {
-          geoCoord[0] = +geoCoord[0] + 0.2 + "";
-          geoCoord[1] = +geoCoord[1] + 0.1 + "";
-          res.push({
-            name: data[i].showName,
-            // insickCount: geoCoord.concat(data[i].insickCount),
-            value: geoCoord.concat(data[i].insickCount),
-          });
-        }
-      }
-      return res;
-    },
   },
   components: {},
 };
@@ -342,6 +325,7 @@ export default {
 
 <style scoped>
 .panel-content {
+  position: relative;
   height: 100%;
 }
 </style>

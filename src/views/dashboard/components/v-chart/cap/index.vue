@@ -18,16 +18,15 @@ export default {
   mounted() {
     this.showChart();
     window.addEventListener("resize", (ev) => {
-        this.chart.resize();
-      // this.$dt.start({
-      //   type: "debounce",
-      //     time: 100,
-      //   immediate: true,
-      //   success: () => {
-      //    console.log("cap chart size changed!");
-      //    this.chart.resize();
-      //   },
-      // });
+      this.$dt.start({
+        type: "debounce",
+          time: 100,
+        immediate: true,
+        success: () => {
+         console.log("cap chart size changed!");
+         this.chart.resize();
+        },
+      });
     });
   },
   methods: {
