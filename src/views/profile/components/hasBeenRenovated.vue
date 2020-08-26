@@ -2,17 +2,17 @@
    <div class="hasBeenRenovated">
      <h2>您已设置店铺装修，请您预览店铺：</h2>
      <ul>
-       <li v-if="isHasBindGzh">
+       <li v-if="isHasBindGzh" class="gzh">
          <p>微信公众号商城</p>
-         <div class="img">
-          <img v-if="qrCode" :src="qrCode" class="public">
+         <div class="img" :class="{ 'no-bind': !isBindGzh, 'no-release': isBindGzh && !isReleaseGZ }">
+          <img v-if="isBindGzh && qrCode && isReleaseGZ" :src="qrCode" class="public">
          </div>
          <p class="prompt">{{ getPublicPrompt }}</p>
        </li>
-       <li v-if="isHasBindXcx">
+       <li v-if="isHasBindXcx" class="xcx">
          <p>微信小程序商城</p>
-         <div class="img">
-          <img v-if="smallQRcode" :src="smallQRcode" class="small">
+         <div class="img" :class="{ 'no-bind': !isBindXcx, 'no-release': isBindXcx && !isReleaseWX }">
+          <img v-if="isBindXcx && smallQRcode && isReleaseWX" :src="smallQRcode" class="small">
          </div>
          <p class="prompt">{{ getSmallPrompt }}</p>
        </li>
@@ -41,7 +41,9 @@ export default {
       qrCode: null,
       smallQRcode: '',
       isBindGzh: false, // 是否绑定公众号
-      isBindXcx: false // 是否绑定小程序
+      isBindXcx: false, // 是否绑定小程序
+      isReleaseWX: false, // 小程序是否发布
+      isReleaseGZ: false // 公众号是否发布
     }
   },
 
@@ -51,10 +53,16 @@ export default {
       return shopInfo.id;
     },
     getPublicPrompt() {
-      return this.qrCode ? '微信扫一扫，预览商城' : '未成功发布您的公众号'
+      if (!this.isBindGzh) return '您当前还未授权公众号'
+      if (!this.isReleaseGZ) return '您当前还未设置商城首页'
+      if (this.qrCode) return '微信扫一扫，预览商城'
+      return ''
     },
     getSmallPrompt() {
-      return this.smallQRcode ? '微信扫一扫，预览商城' : '未成功发布您的小程序'
+      if (!this.isBindXcx) return '您当前还未授权小程序'
+      if (!this.isReleaseWX) return '您当前还未发布小程序'
+      if (this.smallQRcode) return '微信扫一扫，预览商城'
+      return ''
     },
     // 判断是否店铺勾选微信公众号
     isHasBindGzh() {
@@ -74,14 +82,36 @@ export default {
 
   created() {
     this.getShopInfo()
-    // this.getwxBindStatus() // 是否绑定
+    this.getwxBindStatus() // 是否绑定
     this.getQrcode()
     this.getSmallQRcode()
+    this.getIsReleaseWX()
+    this.getIsReleaseGZ()
   },
 
   mounted() {},
 
   methods: {
+    //判断公众号是否设置商城首页
+    getIsReleaseGZ(){
+      this._apis.shop
+        .getHomePage({pageTag:0}).then(response => {
+          this.isReleaseGZ = response ? true : false
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+    //判断小程序是否发布
+    getIsReleaseWX(){
+      this._apis.profile
+        .getSmallRelease({id:this.cid}).then(response => {
+          this.isReleaseWX = response.status === 0 ? true :  false
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
     //获取二维码
     getQrcode() {
       if (this.shareUrl) {
@@ -222,12 +252,26 @@ export default {
         height: 150px;
         padding: 21px 0 27px 0;
         margin: 0 auto;
-        background: url('~@/assets/images/profile/no_empower.png') no-repeat center;
         img {
           width: 100%;
           height: auto;
           border:0;
           display: block;
+        }
+      }
+      &.gzh, &.xcx {
+        >.no-bind {
+          background: url('~@/assets/images/profile/no_empower.png') no-repeat center;
+        }
+      }
+      &.gzh {
+        >.no-release {
+          background: url('~@/assets/images/profile/no_release_gz.png') no-repeat center;
+        }
+      }
+      &.xcx {
+        >.no-release {
+          background: url('~@/assets/images/profile/no_release_wx.png') no-repeat center;
         }
       }
     }
