@@ -11,7 +11,7 @@
     </el-steps>
 
     <!--  step_1  选择行业-->
-    <step-industry v-if="stepStatus === 1" @update-step="updateStep"></step-industry>
+    <step-industry v-show="stepStatus === 1" @update-step="updateStep"></step-industry>
 
     <!--  step_2  预览模板-->
     <step-preview v-if="stepStatus === 2" @update-step="updateStep"></step-preview>
