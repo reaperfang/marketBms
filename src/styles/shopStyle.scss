@@ -780,25 +780,28 @@ ul.cube {
 /* 微信店铺、移动H5、启动广告右侧编辑器公共样式 */
 .group-wrapper {
       .module.props {
+            width: 348px;
             form {
                   overflow-y: auto;
             }
 
             .block.header {
                   padding: 10px;
+                  border: 1px #D0D6E4 solid;
             }
 
             .block.form {
                   padding: 30px 20px 20px 20px;
+                  border: 1px #D0D6E4 solid;
             }
 
             .block.button {
                   z-index: 2000;
                   position: absolute;
-                  bottom: 6px;
-                  width: 346px;
+                  bottom: 43px;
+                  width: 348px;
                   padding: 0;
-
+                  border: 1px #D0D6E4 solid;
                   .buttons {
                         margin-top: 30px;
                         padding-bottom: 30px;

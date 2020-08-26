@@ -15,12 +15,12 @@ export default {
 /* 移动H5个人中心装修 -- 独立存在，不在继承微信个人中心装修 */
 <template>
   <div class="group-wrapper">
-    <div class="module view">
+    <div class="module view" v-calcHeight="197">
       <div class="phone-head">
         <img :src="require('@/assets/images/shop/editor/phone_head.png')" alt="">
         <span>个人中心</span>
       </div>
-      <div class="phone-body" v-calcHeight="220+20">
+      <div class="phone-body">
         <componentUserCenter 
         :data="ruleForm" 
         :isOpenResell="shopInfo.isOpenResell"
@@ -183,6 +183,16 @@ export default {
 .group-wrapper{
   display:flex;
   flex-direction: row;
-  margin-top:10px;
+  margin-top:20px;
+  .module {
+    &.view {
+      width: 377px;
+      border: 1px #D0D6E4 solid;
+      box-shadow: none !important;
+      .phone-body {
+        height: calc(100% - 64px) !important;
+      }
+    }
+  }
 }
 </style>

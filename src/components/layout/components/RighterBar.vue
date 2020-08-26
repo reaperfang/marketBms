@@ -196,12 +196,12 @@ export default {
       height: calc(100% - 60px);
       overflow-y: scroll;
     }
-    border-right: 1px solid rgba(242,242,249,1);
+    // border-right: 1px solid rgba(242,242,249,1);
     font-size: 14px;
     //border-top: 1px solid #f2f2f9;
     position: fixed;
     left: 120px;
-    top: 66px;
+    top: 60px;
     z-index: 1000;
     background-color: #fff;
     width: 122px;
@@ -209,8 +209,8 @@ export default {
     .item {
       position: static;
       border-top: 1px solid #f2f2f5;
-      padding-top: 23px;
-      padding-bottom: 20px;
+      padding-top: 16px;
+      padding-bottom: 10px;
       text-align: left;
       a {
         position: relative;
@@ -243,7 +243,7 @@ export default {
         border: none;
       }
       &:last-child {
-        border-bottom: 1px solid #f2f2f5;
+        // border-bottom: 1px solid #f2f2f5;
       }
       h2, .item-child {
         margin-bottom: 10px;

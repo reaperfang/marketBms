@@ -1,6 +1,6 @@
 /* 移动H5已装修 -- 继承自 微信已装修 */
 <template>
-  <div class="shop_index_wrapper" v-loading="loading" v-calcHeight="160">
+  <div class="shop_index_wrapper" v-loading="loading">
     <div v-if="!webStatus || (webStatus === 0) || (webStatus === 2)" class="no_open">
       <img src="../../../../assets/images/shop/no-open-h5.png" alt="">
       <p>您尚未开启移动H5店铺，请您去“应用中心-渠道应用”设置域名并开启店铺：</p>
@@ -13,15 +13,15 @@
     </div> -->
     <template v-if="webStatus === 1">
       <div class="tips">
-        <i></i>
+        <!-- <i></i> -->
         <div class="words">
-          <p>店铺的“个人中心”“商品分类”“店铺导航”记得要去开启生效哦~ </p>
-          <p>否则会影响店铺在C端的显示~ </p>
+          <p>店铺的“个人中心”“商品分类”“店铺导航”记得要去开启生效哦~ 否则会影响店铺在C端的显示~ </p>
         </div>
       </div>
       <div class="preview_wrapper">
         <!-- 装修编辑器 -->
         <Decorate 
+          v-calcHeight="242"
           ref="Decorate" 
           :decorateData="decorateData" 
           :config="config" 
@@ -33,7 +33,7 @@
           @dataLoadProgress="dataLoadProgress"
           @finished="finished"
         ></Decorate>
-        <div class="shop_info" v-calcHeight="260+10">
+        <div class="shop_info" v-calcHeight="242">
           <div class="shop_code">
             <h3>H5店铺手机预览</h3>
             <h4>请您使用手机内自带浏览器扫描二维码，预览店铺效果</h4>
@@ -227,7 +227,7 @@ export default {
 </script>
 <style lang="scss">
 .shop_index_wrapper{
-   min-height: 500px!important;
+  //  min-height: 500px!important;
   .no_open,.no_bind{
     display:flex;
     flex-direction: column;
@@ -273,7 +273,9 @@ export default {
     display:flex;
     justify-content: flex-start;
     align-items: center;
-    margin-top:18px;
+    background:rgba(253,147,43,0.08);
+    padding: 10px 20px;
+    line-height: 24px;
     i{
       background: url('../../../../assets/images/shop/abc.png') no-repeat 0 0;
       width: 18px;
@@ -282,15 +284,16 @@ export default {
       margin-right:14px;
     }
     .words{
-      font-size:16px;
+      font-size:14px;
       font-family:MicrosoftYaHei;
-      color:rgba(101,94,255,1);
+      color:#FD932B;
     }
   }
   .url{
     background: #fff;
     padding: 25px 20px 15px 20px;
     margin-top: 10px;
+    border: 1px #D0D6E4 solid;
     h3{
       font-size:18px;
       font-family:MicrosoftYaHei;
