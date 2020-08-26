@@ -8,6 +8,7 @@
           <div class="item-title">
             <span>商品清单</span>
             <span>售后单编号 {{item.orderAfterSaleSendInfo.orderAfterSaleCode}}</span>
+            <i v-if="list.length > 1" @click="deleteOrder(index)" class="el-icon-delete"></i>
           </div>
           <div class="item-content">
             <div class="row align-center table-title">
@@ -200,6 +201,9 @@ export default {
     }
   },
   methods: {
+    deleteOrder(index) {
+      this.list.splice(index, 1);
+    },
     ExpressNosInput(index) {
       let item = this.list[index]
 
@@ -975,5 +979,9 @@ export default {
       padding-right: 2px;
     }
   }
+}
+.el-icon-delete {
+  float: right;
+  cursor: pointer;
 }
 </style>

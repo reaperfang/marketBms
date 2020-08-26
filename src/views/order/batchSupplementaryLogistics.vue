@@ -83,7 +83,7 @@
                         <p v-if="item.expressCompanyCodes == 'other' && item.showErrorOther" class="error-message">{{item.errorMessageOther}}</p>
                         </el-form-item>
                         <el-form-item label="快递单号" prop="expressNos">
-                            <el-input :disabled="item.express != null" v-model="item.expressNos" @input="ExpressNosInput(index)" maxlength="20"></el-input>
+                            <el-input :disabled="item.express != null" v-model="item.expressNos" @input="ExpressNosInput(index)" maxlength="20" :placeholder="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'"></el-input>
                             <p v-if="item.express && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
                         </el-form-item>
                     </el-form>
