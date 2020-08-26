@@ -65,7 +65,7 @@
                     </div>
                   </div>
                   <div class="col">
-                    <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 1">
+                    <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 4">
                         <el-form-item label="快递公司" prop="expressCompanyCodes">
                             <el-select @change="checkExpress(index)" v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
@@ -529,7 +529,7 @@ export default {
                 orderAfterSaleSendInfoDtoList: this.list.map(item => {
                     let expressCompanys = ''
                     
-                    if(item.orderAfterSaleSendInfo.deliveryWay == 1){ //如果为普通快递在对快递单号等进行处理
+                    if(item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 4){ //如果为普通快递在对快递单号等进行处理
                       if (item.expressCompanyCodes == "other") {
                         expressCompanys = item.other;
                       } else {
@@ -565,7 +565,7 @@ export default {
                         remark: item.orderAfterSaleSendInfo.remark 
                     };
                     //如果是普通快递，则添加快递公司与快递单号
-                    if(item.orderAfterSaleSendInfo.deliveryWay == 1){
+                    if(item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 4){
                       obj.deliveryWay = 1;
                       obj.expressCompanys = expressCompanys;
                       obj.expressNos = item.orderAfterSaleSendInfo.expressNos;
@@ -577,9 +577,6 @@ export default {
                       obj.distributorName = item.distributorName;
                       //obj.distributorId = item.distributorId;
                       obj.distributorPhone = item.phone;
-                    }
-                    if(item.orderAfterSaleSendInfo.deliveryWay == 4) {
-                      obj.deliveryWay = 4;
                     }
                     return obj
                 })
