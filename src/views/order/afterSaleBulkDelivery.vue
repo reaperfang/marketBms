@@ -141,7 +141,19 @@
           <el-button @click="sendGoodsHandler" type="primary">批量发货</el-button>
       </div>
     </div>
-    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods" :title="title" :ajax="ajax" @getDetail="getDetail"></component>
+    <component 
+      :is="currentDialog" 
+      :dialogVisible.sync="dialogVisible" 
+      :data="currentData" 
+      @submit="onSubmit" 
+      :sendGoods="sendGoods" 
+      :title="title" 
+      :ajax="ajax" 
+      @getDetail="getDetail"
+      :orderSendGoodsHander="orderSendGoodsHander"
+      :params="params"
+      :list="list">
+    </component>
   </div>
 </template>
 <script>
@@ -150,6 +162,7 @@ import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDi
 import { validatePhone } from "@/utils/validate.js"
 
 import { asyncRouterMap } from '@/router'
+import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
 
 export default {
   data() {
@@ -170,6 +183,8 @@ export default {
       distributorPhoneFirst: true, //配送员联系方式第一次输入标记
       distributorSet: false,
       ajax: true,
+      _list: [],
+      params: {},
       shopAddressInfo: null
     };
   },
@@ -562,16 +577,48 @@ export default {
                     return obj
                 })
             }
+            this.params = params
+            let _arr = []
 
-            this._apis.order.orderAfterSaleSend(params).then((res) => {
+            this.list.forEach(item => {
+              let pro = this._apis.order.getExpressSpec({ companyCode: item.expressCompanyCodes, cid: this.cid })
+
+              _arr.push(pro)
+            })
+            this._list = JSON.parse(JSON.stringify(this.list)) 
+            Promise.all(_arr).then((values) => {
+              values.forEach((item, index) => {
+                this._list[index].sizeList = item
+                if(item && item.length) {
+                  this._list.splice(index, 1)
+                }
+              })
+
+              this._list = this._list.filter(val => val.express != null)
+
+              if(this.list[0].deliveryWay == 1 && this._list.length) {
+                this.currentData = {
+                  list: this._list,
+                  expressCompanyList: this.expressCompanyList,
+                }
+                this.currentDialog = 'SelectSizeDialog'
+                this.title = '提示'
+                this.dialogVisible = true
+              } else {
+                this.orderSendGoodsHander(params)
+              }
+            });
+          }catch(e) {
+              console.error(e)
+          }
+        },
+        orderSendGoodsHander(params) {
+          this._apis.order.orderAfterSaleSend(params).then((res) => {
                 this.$message.success('发货成功');
                 this.$router.push('/order/deliverGoodsSuccess?ids=' + this.$route.query.ids + '&type=afterSaleBulkDelivery')
             }).catch(error => {
                 this.$message.error(error);
             })
-          }catch(e) {
-              console.error(e)
-          }
         },
       select(index, i) {
           try {
@@ -744,7 +791,8 @@ export default {
     }
   },
   components: {
-      ReceiveInformationDialog
+      ReceiveInformationDialog,
+      SelectSizeDialog
   }
 };
 </script>
