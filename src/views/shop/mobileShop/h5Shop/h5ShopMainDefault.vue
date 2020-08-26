@@ -1,7 +1,7 @@
 /* 移动H5未装修 -- 继承自 微信未装修 */
 <!--商户信息-->
 <template>
-  <div class="app-container" v-loading="loading" v-calcHeight="160">
+  <div class="app-container" v-loading="loading">
     <div v-if="!webStatus || (webStatus === 0) || (webStatus === 2)" class="no_open">
       <img src="../../../../assets/images/shop/no-open-h5.png" alt="">
       <p>您尚未开启移动H5店铺，请您去“应用中心-渠道应用”设置域名并开启店铺：</p>
