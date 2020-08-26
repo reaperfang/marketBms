@@ -488,6 +488,8 @@ export default {
                 this.orderAfterSaleSendInfo.sendAreaName = res.areaName;
                 this.orderAfterSaleSendInfo.sendAddress = res.address;
                 this.orderAfterSaleSendInfo.sendDetail = res.addressDetail;
+                this.orderAfterSaleSendInfo.sendLatitude = res.latitude;
+                this.orderAfterSaleSendInfo.sendLongitude = res.longitude;
           } else {
               this.orderAfterSaleSendInfo.sendName = '';
                 this.orderAfterSaleSendInfo.sendPhone = '';
@@ -499,6 +501,8 @@ export default {
                 this.orderAfterSaleSendInfo.sendAreaName = '';
                 this.orderAfterSaleSendInfo.sendAddress = '';
                 this.orderAfterSaleSendInfo.sendDetail = '';
+                this.orderAfterSaleSendInfo.sendLatitude = ''
+                this.orderAfterSaleSendInfo.sendLongitude = ''
           }
         })
         .catch(error => {

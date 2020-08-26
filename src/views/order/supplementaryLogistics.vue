@@ -535,6 +535,8 @@ export default {
           this.orderInfo.sendAreaName = address.areaName;
           this.orderInfo.sendAddress = address.address;
           this.orderInfo.sendDetail = address.addressDetail;
+          this.orderInfo.sendLatitude = address.latitude;
+          this.orderInfo.sendLongitude = address.longitude
         },
         printDistributionSheet() {
             this.$router.push('/order/printDistributionSheet?ids=' + this.orderInfo.id + '&type=supplementaryLogistics')
