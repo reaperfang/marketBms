@@ -313,6 +313,15 @@ export default {
         }
     }
 }
+.border-button {
+        border:1px solid rgba(218,218,227,1)!important;
+        color: #44434B!important;
+        &:hover {
+            border:1px solid #655EFF!important;
+            color: #655EFF!important;
+            background-color: #fff;
+        }
+    }
 .blue {
   color: $globalMainColor;
 }
