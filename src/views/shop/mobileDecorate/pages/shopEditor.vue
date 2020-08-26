@@ -93,9 +93,9 @@ export default {
         showWidget: true,  //是否显示左侧控件面板
         showProp: true,  //是否显示右侧属性面板
         dragable: true,   //是否可拖拽排序
-        widgetCalcHeight: 66, //控件区扣减高度
-        renderCalcHeight: 66+10,  //渲染区扣减高度
-        propCalcHeight: 66 //属性区扣减高度
+        widgetCalcHeight: 60, //控件区扣减高度
+        renderCalcHeight: 60+10,  //渲染区扣减高度
+        propCalcHeight: 60 //属性区扣减高度
       },
       decorateData: null
     };

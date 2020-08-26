@@ -60,7 +60,7 @@
 
       <!-- 右侧属性区 -->
       <div class="module props">
-        <div class="block header">
+        <div class="block header" style="border: 1px #D0D6E4 solid;">
             <p class="title">导航设置</p>
         </div>
         <el-form :model="currentNav" :rules="ruleForm.navStyle.id == 2 ? {} : rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" v-calcHeight="470">
