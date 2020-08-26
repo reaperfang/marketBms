@@ -342,6 +342,7 @@
 </template>
 <script>
 import {GetDateStr} from "@/utils/validate.js"
+import {dataView} from "@/api/realSurvey"
 import serchRt from "./components/realtime/serchRt";//季度
 import pfChart from "./components/pfChart";
 import screeningChart from "./components/realtime/screeningChart";
@@ -415,22 +416,29 @@ export default {
         this.$message.error(error);
       });
     },
-
-    chooseType(type){
+    getdataView(){//数据总览数据
+      this._apis.realSurvey.dataView().then(response => {
+        this.dataChart1 = response
+      }).catch(error => {
+        this.$message.error(error);
+      });
+    },
+    
+    chooseType(type){//交易看板选择金额类型
         this.activetype=type
     },
     //用户  全部 or  小程序  or  公众号
-    alluserType() {
+    alluserType() {// userType
       
     },
-    all() { //渠道
+    all() { //渠道  visitSourceType
       
     },
-    getVal(val){
+    getVal(val){//交易看板 组件传值
         console.log(val)
         this.seachTime=val
     },
-    getUserVal(val){
+    getUserVal(val){//用户概览 组件传值
         console.log(val)
         this.seachTime=val
     },

@@ -96,7 +96,7 @@ export default [
           component: () => import('@/views/datum/accessPath'),
           name: 'accessPath',
           meta: { title: '路径转化', noCache: true, tabTitle: '流量分析', navType:2 }
-        },
+        }
       ]
   },
 ]
