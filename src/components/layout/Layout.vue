@@ -180,20 +180,24 @@ export default {
       color: #9596a9;
       font-size:16px;
       ul li {
-        padding: 15px 0 15px 17px;
         display: flex;
+        height: 60px;
         align-items: center;
         cursor: pointer;
+        &:hover {
+          background-color: #4b4c6c;
+        }
         &.active {
           border-left: 4px solid #655eff;
           background-color: #4b4c6c;
           color: #fff;
+          i {
+            margin-left: 13px;
+          }
         }
         i {
-          margin-right: 9px;
-        }
-        span {
-          padding-right: 5px;
+          margin-left: 17px;
+          margin-right: 5px;
         }
         &:first-child {
           margin-top: 15px;
@@ -232,8 +236,8 @@ export default {
     z-index: 999;
   }
   .icons{
-    width: 18px;
-    height: 18px;
+    width: 26px;
+    height: 26px;
   }
   .icon_profile{
     background: url('../../assets/images/icons/profile.png') no-repeat;

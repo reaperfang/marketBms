@@ -57,7 +57,7 @@
             <div class="export-header">
                 <p>已选择 <span>{{multipleSelection.length}}</span> 项，全部<span>{{total}}</span>项</p>
                 <el-tooltip class="item" effect="dark" content="当前最多支持导出1000条数据" placement="top">
-                <el-button v-permission="['订单', '售后管理', '默认页', '导出']" class="border-button" @click="exportOrder">导出</el-button>
+                <el-button style="margin-top: -20px;" v-permission="['订单', '售后管理', '默认页', '导出']" class="border-button" @click="exportOrder">导出</el-button>
                 </el-tooltip>
             </div>
             <el-table
@@ -213,8 +213,10 @@ export default {
                 return '232'
             } else if(this.tableData.some(item => item.exchangeConfirmation ==1  &&  (item.isSellerReceived == 0))){
                 return '130'
+            } else if(this.tableData.some(item => item.orderAfterSaleStatus == 2 && item.type != 3 && item.exchangeConfirmation == 1 && item.deliveryWay == 1 && item.orderAfterSaleStatus == 2 && item.type != 2)) {
+                return '155'
             } else if(this.tableData.some(item => item.orderAfterSaleStatus == 0 || item.orderAfterSaleStatus == 2)){
-                return '100'
+                return '130'
             } else {
                 return '60'
             }
@@ -586,6 +588,12 @@ export default {
 /deep/ .input-with-select .el-input-group__prepend {
     background-color: #fff;
 }
+/deep/.el-table td:nth-child(1){
+         padding-left:20px;
+         .cell {
+            text-overflow: clip;
+         }
+     }
 </style>
 
 

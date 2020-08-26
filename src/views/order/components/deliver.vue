@@ -276,6 +276,7 @@
       :list="_list"
       @cancel="cancel"
       :express="express"
+      :multipleSelection="JSON.parse(JSON.stringify(multipleSelection))"
     ></component>
   </div>
 </template>
@@ -674,6 +675,8 @@ export default {
       this.orderInfo.sendAreaName = address.areaName;
       this.orderInfo.sendAddress = address.address;
       this.orderInfo.sendDetail = address.addressDetail;
+      this.orderInfo.sendLatitude = address.latitude
+      this.orderInfo.sendLongitude = address.longitude
     },
     fetchPickInfo(id) {
       this._apis.order
@@ -728,6 +731,7 @@ export default {
        if( this.multipleSelection.some(val => val.id== item.id))
         curItem.push(item)
       })
+      curItem = this.multipleSelection.filter(val => val.sendCount)
       if (!curItem.length) {
         this.confirm({
           title: "提示",
@@ -961,7 +965,7 @@ export default {
         
       // }
     },
-    _orderDetail() {
+    _orderDetail(selectArr) {
       let id = this.$route.query.id || this.$route.query.ids;
 
       this._apis.order
@@ -1009,6 +1013,14 @@ export default {
             this.tableData.forEach(row => {
               this.$refs.table.toggleRowSelection(row);
             })
+            setTimeout(() => {
+              if(selectArr) {
+                this.$refs.table.clearSelection();
+                selectArr.forEach(row => {
+                  this.$refs.table.toggleRowSelection(row);
+                });
+              }
+            }, 0)
             this.orderInfo = res[0];
             if(this.orderInfo.deliveryWay == 4) {
               let pickId = this.orderInfo.pickId
@@ -1056,8 +1068,8 @@ export default {
         })
         .catch(error => {});
     },
-    getDetail() {
-      this._orderDetail();
+    getDetail(selectArr) {
+      this._orderDetail(selectArr);
         // try {
         //   let ids = this.$route.query.ids || this.$route.query.id;
         //   let orderType = this.$route.query.orderType
@@ -1108,6 +1120,8 @@ export default {
               item.sendAreaCode = res.areaCode;
               item.sendAreaName = res.area;
               item.sendDetail = res.address;
+              item.latitude = res.latitude;
+              item.longitude = res.longitude
             })
 
             this.list = list

@@ -103,19 +103,19 @@ export default {
             this.currentData.row = row;
             break;
           case 'Sign'://签到有礼            
-            this.$router.push({path:'/apply',query:{paths:'/application/customarket/checkin'}})
+            this.$router.push({path:'/apply',query:{paths:'/application/customarket/checkin',applyId:'6'}})
             this.SETCURRENT(8)
             break;
           case 'SuperPoster'://超级海报
-            this.$router.push({path:'/apply',query:{paths:'/application/feature/posterList'}})
+            this.$router.push({path:'/apply',query:{paths:'/application/feature/posterList',applyId:'5'}})
             this.SETCURRENT(8)
             break;
           case 'FullReduction'://满减/满折
-            this.$router.push({path:'/apply',query:{paths:'/application/promotion/fullreduce'}})
+            this.$router.push({path:'/apply',query:{paths:'/application/promotion/fullreduce',applyId:'4'}})
             this.SETCURRENT(8)
             break;
           case 'Holiday'://节日有礼
-            this.$router.push({path:'/apply',query:{paths:'/application/customarket/festival'}})
+            this.$router.push({path:'/apply',query:{paths:'/application/customarket/festival',applyId:'6'}})
             this.SETCURRENT(8)
             break;
           default:

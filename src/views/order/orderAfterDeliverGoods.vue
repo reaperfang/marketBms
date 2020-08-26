@@ -191,7 +191,18 @@
                 <el-button v-if="orderAfterSaleSendInfo.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">发 货</el-button>
             </div>
         </div>
-        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods" :title="title" :ajax="ajax" @getDetail="getOrderDetail"></component>
+        <component 
+            v-if="dialogVisible" 
+            :is="currentDialog" 
+            :dialogVisible.sync="dialogVisible" 
+            :data="currentData" 
+            @submit="onSubmit" 
+            :sendGoods="sendGoods" 
+            :title="title" 
+            :ajax="ajax" 
+            @getDetail="getOrderDetail"
+            :multipleSelection="JSON.parse(JSON.stringify(multipleSelection))">
+        </component>
     </div>
 </template>
 <script>
@@ -477,6 +488,8 @@ export default {
                 this.orderAfterSaleSendInfo.sendAreaName = res.areaName;
                 this.orderAfterSaleSendInfo.sendAddress = res.address;
                 this.orderAfterSaleSendInfo.sendDetail = res.addressDetail;
+                this.orderAfterSaleSendInfo.sendLatitude = res.latitude;
+                this.orderAfterSaleSendInfo.sendLongitude = res.longitude;
           } else {
               this.orderAfterSaleSendInfo.sendName = '';
                 this.orderAfterSaleSendInfo.sendPhone = '';
@@ -488,6 +501,8 @@ export default {
                 this.orderAfterSaleSendInfo.sendAreaName = '';
                 this.orderAfterSaleSendInfo.sendAddress = '';
                 this.orderAfterSaleSendInfo.sendDetail = '';
+                this.orderAfterSaleSendInfo.sendLatitude = ''
+                this.orderAfterSaleSendInfo.sendLongitude = ''
           }
         })
         .catch(error => {
@@ -677,12 +692,22 @@ export default {
                 
             // }
         },
-        getOrderDetail() {
+        getOrderDetail(selectArr) {
             this._apis.order.orderAfterSaleDetail({orderAfterSaleIds: [this.$route.query.ids || this.$route.query.id]}).then((res) => {
                 this.itemList = res[0].itemList
+                setTimeout(() => {
+                    this.$refs.table.clearSelection();
+                    if(selectArr) {
+                        selectArr.forEach((row, index) => {
+                            this.$refs.table.toggleRowSelection(this.itemList[index]);
+                        });
+                    }
+                }, 0)
                 this.orderAfterSaleSendInfo = res[0].orderAfterSaleSendInfo
                 if(!this.orderAfterSaleSendInfo.sendAddress) {
-                    this.fetchOrderAddress();
+                    if(this.orderAfterSaleSendInfo.deliveryWay == 1) {
+                        this.fetchOrderAddress();
+                    }
                 }
                 // if(this.orderAfterSaleSendInfo.deliveryWay == 1) {
                 //     this.fetchOrderAddress();

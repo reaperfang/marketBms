@@ -8,7 +8,7 @@
         <el-input v-model.trim="form.shopName" placeholder="请输入店铺名称" style="width:226px;"></el-input>
          <span class="shopInfo-show">
           <!--用于展示给消费者的品牌形象 -->
-          <span @mouseover="showShop = true" @mouseout="showShop = false">查看样例</span>
+          <span @mouseover="showShop = true" @mouseout="showShop = true">查看样例</span>
         </span>
       </el-form-item>
       <el-form-item label="店铺LOGO:">
@@ -441,6 +441,11 @@ export default {
       color: #000000;
       transform: translateX(-50%);
       font-weight: 400;
+      overflow: hidden;
+      width: 150px;
+      height: 18px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .center {
       position: absolute;
