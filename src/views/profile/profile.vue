@@ -155,14 +155,15 @@
                   <el-button @click="downs(wxQrcode,'微信小程序商城二维码')">下载</el-button>
                 </p>
               </div>
-              <div v-if="isEmpowerWX">
-                <img  :src="require('@/assets/images/profile/no_empower.png')" alt/>
+              <div v-else-if="isEmpowerWX">
+                <img  :src="require('@/assets/images/profile/no_empower.png')" class="no_isEmpower" alt/>
                 <p class="title4">您当前还未授权小程序</p>
                 <p class="opt">
                   <el-button @click="linkTo({text:'绑定微信小程序'})">立即授权</el-button>
                 </p>
               </div>
-              <div v-if="!isEmpowerWX && isReleaseWX">
+              <!-- v-if="!isEmpowerWX && isReleaseWX" -->
+              <div v-else>
                 <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="no_release" alt/>
                 <p class="title4">您当前还未发布小程序</p>
                 <p class="opt">
@@ -179,14 +180,15 @@
                   <el-button v-clipboard:copy="gzLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</el-button>
                 </p>
               </div>
-              <div v-if="isEmpowerGZ">
-                <img  :src="require('@/assets/images/profile/no_empower.png')" alt/>
+              <div v-else-if="isEmpowerGZ">
+                <img  :src="require('@/assets/images/profile/no_empower.png')" class="no_isEmpower" alt/>
                 <p class="title4">您当前还未授权公众号</p>
                 <p class="opt">
                   <el-button @click="linkTo({text:'绑定微信公众号'})">立即授权</el-button>
                 </p>
               </div>
-              <div v-if="!isEmpowerGZ && isReleaseGZ">
+              <!-- v-if="!isEmpowerGZ && isReleaseGZ" -->
+              <div v-else>
                 <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="no_release" alt/>
                 <p class="title4">您当前还未设置商城首页</p>
                 <p class="opt">
@@ -302,10 +304,10 @@ export default {
       qrCode: "",//客户工作台二维码
       wxQrcode:"",//小程序二维码
       gzQrcode:"",//公众号二维码
-      isEmpowerWX:false,//微信小程序是否授权
-      isEmpowerGZ:false,//微信公众号是否授权
-      isReleaseWX:false,//微信小程序是否发布
-      isReleaseGZ:false,//微信公众号是否发布
+      isEmpowerWX:true,//微信小程序是否授权
+      isEmpowerGZ:true,//微信公众号是否授权
+      isReleaseWX:true,//微信小程序是否发布
+      isReleaseGZ:true,//微信公众号是否发布
       zxLink: `${process.env.ZX_HELP}`, //链接
       productNews: [],
       helpNews: [],
@@ -765,12 +767,16 @@ export default {
               color: #92929B;
             }
             .erweima{
-              width: 100px;
+              width: 150px;
               height: auto;
             }
+            .no_isEmpower{
+              width: auto;
+              height: 136px;
+            }
             .no_release{
-              width: 61px;
-              height:61px;
+              width: auto;
+              height: 136px;
             }
             .opt{
               margin-top: 20px;

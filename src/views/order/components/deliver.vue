@@ -736,6 +736,14 @@ export default {
         });
         return;
       }
+      if(this.multipleSelection.every(val => val.sendCount == 0)) {
+        this.confirm({
+          title: "提示",
+          icon: true,
+          text: "请选择需要发货的商品"
+        });
+        return;
+      }
 
       if (curItem.some(val => !val.sendCount)) {        
         // this.confirm({
@@ -743,10 +751,14 @@ export default {
         //   icon: true,
         //   text: "请填写发货商品数量"
         // });
-        document.querySelector('.send-input').scrollIntoView()
-        let scrollTop = document.querySelector('.content-main').scrollTop
+        try {
+          document.querySelector('.send-input').scrollIntoView()
+          let scrollTop = document.querySelector('.content-main').scrollTop
 
-        document.querySelector('.content-main').scrollTop = scrollTop - 8
+          document.querySelector('.content-main').scrollTop = scrollTop - 8
+        }catch(e) {
+          console.error(e)
+        }
         return;
       }
 
@@ -938,6 +950,16 @@ export default {
     },
     onSubmit(value) {
       this.orderInfo = Object.assign({}, this.orderInfo, value);
+      // if(this.sendGoods == 'send') {
+      //   this.orderInfo = Object.assign({}, this.orderInfo, {
+      //     sendName: value.sendName,
+      //     sendPhone: value.sendPhone,
+      //     sendAddress: value.address,
+      //     sendDetail: value.sendDetail
+      //   })
+      // } else {
+        
+      // }
     },
     _orderDetail() {
       let id = this.$route.query.id || this.$route.query.ids;
@@ -1001,19 +1023,19 @@ export default {
               });
             }
             this._ids = [this.orderInfo.id]
-            // if(!this.orderInfo.sendAddress) {
-            //   if(this.orderInfo.deliveryWay != 4) {
-            //     this.fetchOrderAddress(_address);
-            //   } else {
-            //     this.fetchPickInfo(this.orderInfo.pickId)
-            //   }
-            // }
-
-            if(this.orderInfo.deliveryWay == 1) {
-              this.fetchOrderAddress(_address);
-            } else if(this.orderInfo.deliveryWay == 4) {
-              this.fetchPickInfo(this.orderInfo.pickId)
+            if(!this.orderInfo.sendAddress) {
+              if(this.orderInfo.deliveryWay == 1) {
+                this.fetchOrderAddress(_address);
+              } else if(this.orderInfo.deliveryWay == 4) {
+                this.fetchPickInfo(this.orderInfo.pickId)
+              }
             }
+
+            // if(this.orderInfo.deliveryWay == 1) {
+            //   this.fetchOrderAddress(_address);
+            // } else if(this.orderInfo.deliveryWay == 4) {
+            //   this.fetchPickInfo(this.orderInfo.pickId)
+            // }
 
             //如果是商家配送，则需要请求拿到配送员列表
             if(this.orderInfo.deliveryWay == 2){

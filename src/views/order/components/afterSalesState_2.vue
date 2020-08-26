@@ -70,7 +70,7 @@
                     <p class="des">用户已退货，商户未发货</p>
                     <div class="button-box">
                         <el-button v-if="!authHide && !orderAfterSale.receiveGoodsTime && orderAfterSale.exchangeConfirmation != 0" @click="confirmTakeOver">确认收货</el-button>
-                        <el-button v-if="!authHide && orderAfterSale.exchangeConfirmation == 1" type="primary" @click="sendGoods">发货</el-button>
+                        <el-button v-if="!authHide" type="primary" @click="sendGoods">发货</el-button>
                     </div>
                 </div>
             </div>
