@@ -285,7 +285,7 @@ export default {
                 this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出普通快递、商家配送、第三方配送或上门自提的单据，再进行批量打印配送单。'})
                 return;
             }
-            if(this.multipleSelection.some(val => (val.status != 4 && val.status != 5 && val.status != 6))) {
+            if(this.multipleSelection.some(val => (val.status != 3 && val.status != 4))) {
                 this.confirm({title: '提示', icon: true, text: '没有完成发货，不能批量打印配送单。'})
                 return
             }
