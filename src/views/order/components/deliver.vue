@@ -674,6 +674,8 @@ export default {
       this.orderInfo.sendAreaName = address.areaName;
       this.orderInfo.sendAddress = address.address;
       this.orderInfo.sendDetail = address.addressDetail;
+      this.orderInfo.sendLatitude = address.latitude
+      this.orderInfo.sendLongitude = address.longitude
     },
     fetchPickInfo(id) {
       this._apis.order
@@ -1108,6 +1110,8 @@ export default {
               item.sendAreaCode = res.areaCode;
               item.sendAreaName = res.area;
               item.sendDetail = res.address;
+              item.latitude = res.latitude;
+              item.longitude = res.longitude
             })
 
             this.list = list

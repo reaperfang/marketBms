@@ -527,6 +527,9 @@ export default {
 }
 /deep/.el-table td:nth-child(1){
          padding-left:10px;
+         .cell {
+            text-overflow: clip;
+         }
      }
 </style>
 
