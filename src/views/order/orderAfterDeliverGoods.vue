@@ -705,7 +705,7 @@ export default {
                 }, 0)
                 this.orderAfterSaleSendInfo = res[0].orderAfterSaleSendInfo
                 if(!this.orderAfterSaleSendInfo.sendAddress) {
-                    if(this.orderAfterSaleSendInfo.deliveryWay == 1) {
+                    if(this.orderAfterSaleSendInfo.deliveryWay == 1 || this.orderAfterSaleSendInfo.deliveryWay == 2) {
                         this.fetchOrderAddress();
                     }
                 }
