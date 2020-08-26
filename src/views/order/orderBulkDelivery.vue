@@ -5,10 +5,11 @@
       <section>
         <div class="title">1. 选择您要进行发货的商品并填写物流信息</div>
         <div class="checkbox-box">
-          <i @click="allcheckHandler" class="checkbox" :class="{checked: allchecked, selfRaising: list[0] && (list[0].deliveryWay == 4)}"></i>商品清单
+          <i @click="allcheckHandler" class="checkbox" :class="{checked: allchecked}"></i>商品清单
         </div>
         <div class="goods-item" v-for="(item, index) in list" :key="index">
           <div class="item-title">
+            <span v-if="list[0].deliveryWay != 4">商品清单</span>
             <span>订单编号 {{item.orderCode}}</span>
             <i v-if="list.length > 1" @click="deleteOrder(index)" class="el-icon-delete"></i>
           </div>
@@ -17,7 +18,7 @@
               <div class="col table-title-left" style="width: 590px; margin-right: 40px;">
                 <div class="row align-center row-margin">
                   <div class="col">
-                    <i @click="changeAll(item)" class="checkbox" :class="{checked: item.checked, selfRaising: list[0] && (list[0].deliveryWay == 4)}"></i>
+                    <i @click="changeAll(item)" class="checkbox" :class="{checked: item.checked}"></i>
                   </div>
                   <div class="col table-title-left-goods" style="width: 310px;">商品</div>
                   <div class="col table-title-left-yingfa" style="width: 60px;">应发数量</div>
@@ -39,7 +40,7 @@
                   :key="i"
                 >
                   <div class="col">
-                    <i @click="select(index, i)" class="checkbox" :class="{checked: goods.checked, selfRaising: list[0] && (list[0].deliveryWay == 4)}"></i>
+                    <i @click="select(index, i)" class="checkbox" :class="{checked: goods.checked}"></i>
                   </div>
                   <div class="col goodsItem-left" style="width: 310px;">
                     <div class="row align-center">
@@ -1346,13 +1347,6 @@ export default {
   height: 20px;
   background: url(../../assets/images/order/checkbox-checked.png)
     no-repeat;
-  &.selfRaising {
-    background: url(../../assets/images/order/checkbox-checked-disabled.png)
-    no-repeat;
-    background-size: 100% 100%;
-    width: 18px;
-    height: 18px;
-  }
 }
 .checkbox-box {
   display: flex;

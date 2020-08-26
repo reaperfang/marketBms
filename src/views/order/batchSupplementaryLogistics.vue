@@ -8,6 +8,7 @@
           <div class="item-title">
             <span>商品清单</span>
             <span>订单编号 {{item.orderCode}}</span>
+            <i v-if="list.length > 1" @click="deleteOrder(index)" class="el-icon-delete"></i>
           </div>
           <div class="item-content">
             <div class="row align-center table-title">
@@ -210,6 +211,9 @@ export default {
         }
     },
   methods: {
+    deleteOrder(index) {
+      this.list.splice(index, 1);
+    },
     cancel() {
         this.sending = false
     },
@@ -896,10 +900,8 @@ export default {
         .item-title {
           background-color: #F6F7FA;
           color: #44434B;
-          padding: 0 20px;
+          padding: 20px;
           border-radius: 10px 10px 0 0;
-          height: 56px;
-          line-height: 56px;
         }
         .item-content {
           padding: 20px;
@@ -1045,5 +1047,9 @@ export default {
       padding-right: 2px;
     }
   }
+}
+.el-icon-delete {
+  float: right;
+  cursor: pointer;
 }
 </style>
