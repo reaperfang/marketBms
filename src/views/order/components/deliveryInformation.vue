@@ -201,9 +201,9 @@ export default {
     goodsStatus(value, orderDetail) {
       if(orderDetail.orderInfo.deliveryWay==4){
           let orderStatus = orderDetail.orderInfo.orderStatus;
-          if(orderStatus == 5|| orderStatus ==6){
+          if(orderStatus ==6){
             return '【用户签收】'
-          }else if(orderStatus == 3|| orderStatus ==4){
+          }else if(orderStatus == 3|| orderStatus ==4 || orderStatus == 5){
             return '【商户发货】'
           }else{
             return ''
