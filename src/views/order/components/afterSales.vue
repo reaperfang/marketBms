@@ -78,7 +78,7 @@
                 <el-table-column
                     prop="orderAfterSaleCode"
                     label="售后单编号"
-                    width="180">
+                    width="250">
                 </el-table-column>
                 <el-table-column
                     prop="memberName"
@@ -540,7 +540,10 @@ export default {
         background-color: #fff;
     }
     /deep/.el-table td:nth-child(1){
-         padding-left:10px;
+         padding-left:20px;
+         .cell {
+            text-overflow: clip;
+         }
      }
 </style>
 
