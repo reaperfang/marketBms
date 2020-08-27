@@ -14,7 +14,7 @@
     <step-industry v-show="stepStatus === 1" @update-step="updateStep"></step-industry>
 
     <!--  step_2  预览模板-->
-    <step-preview v-if="stepStatus === 2" @update-step="updateStep"></step-preview>
+    <step-preview v-if="stepStatus === 2" @update-step="updateStep" :industryId="industryId"></step-preview>
 
     <!--  step_3  启用模板-->
     <stepEnable v-if="stepStatus === 3" @update-step="updateStep"></stepEnable>
@@ -35,8 +35,9 @@
     data() {
       return {
         isShowGuide: false,  // 是否是显示引导（首次进入）
-        stepStatus: 2, // 进行到了第几步
-        stepArray: ['industry', 'preview', 'enable', 'base']
+        stepStatus: 4, // 进行到了第几步
+        stepArray: ['industry', 'preview', 'enable', 'base'],
+        industryId: 0
       }
     },
     methods: {

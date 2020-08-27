@@ -1,7 +1,7 @@
 <template>
   <section class="intelligent_preview">
     <swiper class="preview_swiper swiper-no-swiping" ref="mySwiper" :options="swiperOptions">
-      <swiper-slide>
+      <swiper-slide ref="mySwiperSlide">
         <p class="template_name"> xxx模板名称 </p>
         <div class="view">
           <img class="image" src="https://test2-omo.aiyouyi.cn/web-file/0/image/31064/4ac6b0cc430f4a16b3dec5949a0570e9.jpg" alt="图片丢失了">
@@ -12,7 +12,7 @@
           </div>
         </div>
         <div class="buttons">
-          <el-button> 手机预览 </el-button>
+          <el-button @click="showPreview"> 手机预览 </el-button>
           <el-button type="primary"> 选择 </el-button>
         </div>
       </swiper-slide>
@@ -49,8 +49,8 @@
       <p>店铺数据配置失败</p>
 
 
-      <div slot="footer" v-show="">
-        <el-button type="primary"> 再次加载 </el-button>
+      <div slot="footer" v-show="isConfigureFail">
+        <el-button type="primary" @click="againConfigure"> 再次加载 </el-button>
       </div>
     </el-dialog>
   </section>
@@ -62,6 +62,9 @@
   export default {
     name: "intelligent_preview",
     components: { Swiper, SwiperSlide },
+    props: {
+      industryId: 0, // 行业id, 用于请求行业模板
+    },
     data() {
       return {
         swiperOptions: {
@@ -73,19 +76,28 @@
           },
           listData: [
             {
-              title: '居家'
+              name: '家具专区',
+              previewPic: '',
+              qrCodePic: '',
+              isShowCode: false,
             }
           ]
         },
+        useSwiper: true,  // 是否启用swiper
+        selectTemplateId: null, // 当前选择
         isShowConfigureBox: false, // 是否显示
         isConfigureLoading: false, // 是否在配置中
-        isConfigureFail: true, // 是否配置失败了
+        isConfigureFail: false, // 是否已经配置过 且配置失败了
+        timerConfigure: null, // 定时任务，查询配置进度
       }
     },
     computed: {
       swiper() {
         return this.$refs.mySwiper.$swiper
       }
+    },
+    mounted() {
+      this.settingSwiper();
     },
     methods: {
       /** 上一张模板 */
@@ -99,19 +111,50 @@
 
       /** 确认启用模板 对话框 */
       confirmEnable() {
-
+        if(this.isConfigureFail) return; // 加载失败了，只能点击 '再次加载'
         this.confirm({
           title: "提示",
           icon: true,
-          text: "行业模板一经启用、无法重置修改，模板内的预设数据将自动为您配置为店铺内最新设置!<br>确认启用该行业模板吗？",
+          text: "<p style='font-size:14px;color:#ff4400;'>行业模板一经启用、无法重置修改，模板内的预设数据将自动为您配置为店铺内最新设置!</p><p>确认启用该行业模板吗？</p>",
           confirmText: "确认，启用模板",
           cancelText: "我再想想"
         }).then(() => {
           this.isShowConfigureBox = true;
-          // this.api.profile.xxx(data).then(()=> {})
+          // this._apis.profile.intelligentEnableTemplate(data).then(()=> {})
 
         }).catch();
-      }
+      },
+
+      /** 查询配置进度 */
+      timer() {
+        this.timerConfigure = setInterval(() => {
+          // this._apis.profile.intelligentConfigurationStatus()
+
+        }, 1500)
+      },
+
+      /** 再次加载 */
+      againConfigure() {
+
+        // this._apis.profile.intelligentEnableTemplate()
+      },
+
+      /** 设置是否启用swiper */
+      settingSwiper() {
+        console.log('%c' + this.swiper.width, 'color: deepskyblue');
+        if(this.swiper.width >= (256 * 5 + 100 * 4)) {
+          this.useSwiper = false
+        }else {
+          this.useSwiper = true
+        }
+      },
+
+
+      /** 展示二维码 */
+      showPreview() {
+
+      },
+
     }
   }
 </script>

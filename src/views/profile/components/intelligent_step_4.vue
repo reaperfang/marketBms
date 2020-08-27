@@ -1,12 +1,5 @@
 <template>
   <section class="intelligent_base">
-
-    <el-steps :active="baseStatus" :space="200" finish-status="success">
-      <el-step title="绑定渠道" :class="{'i_base_act': baseStatus === 1}"></el-step>
-      <el-step title="微信支付设置" :class="{'i_base_act': baseStatus === 2}"></el-step>
-      <el-step title="店铺基础信息建设" :class="{'i_base_act': baseStatus === 3}"></el-step>
-    </el-steps>
-
     <!--  绑定渠道  -->
     <channel v-if="baseStatus === 1" @base-step="baseStep"></channel>
 
@@ -24,7 +17,7 @@
   import wx from './intelligent_step_4_2'
   import shop from './intelligent_step_4_3'
   export default {
-    name: "intelligent_step_4",
+    name: "intelligent_base",
     components: { channel, wx, shop },
     data() {
       return {
@@ -36,7 +29,7 @@
        * 基础信息 步骤
        * @param {string} eventType 返回启用模板:'enable'，继续基础建设:'base'
        * @param {number} stepNum 去第几步
-       */ 
+       */
       baseStep(eventType, stepNum) {
         if (eventType === 'enable') {
           this.$emit('update-step', stepNum)
@@ -62,7 +55,7 @@
     text-align: center;
     margin-right: 5px;
   }
-  
+
   .i_base_act /deep/ .el-step__main {
     background: #655eff;
   }
@@ -84,5 +77,5 @@
     display: none;
   }
 
-  
+
 </style>

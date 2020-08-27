@@ -9,7 +9,7 @@
       :close-on-click-modal="false"
       center>
       <div style="height: 480px;">
-        <map-search 
+        <map-search
         class="map"
         ref="shopInfoMap"
         :scaleControl="mapStyle.scaleControl"
@@ -71,6 +71,7 @@ import mapSearch from '@/components/mapSearch'
     },
     methods: {
       handleOpen() {
+        if(this.sendAddress === '') this.sendAddress = '天安门';
         this.centerDialogVisible = true
         // this.$nextTick(()=> {
         // console.log('------',this.$refs.shopInfoMap)
