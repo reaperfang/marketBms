@@ -1,6 +1,6 @@
 <template>
   <div class="base_wxpay">
-    <div class="i_b_wxpay">
+    <div class="b_w_wrap">
       <p>请您先进行【渠道绑定】操作后再进行【开启支付】操作</p>
     </div>
     <div class="i_base_btns">
@@ -17,11 +17,13 @@
 </script>
 
 <style lang="scss" scope>
-  .i_b_wxpay {
-    height: 300px;
+  .b_w_wrap {
+    min-height: 300px;
     padding: 20px;
   }
   .i_base_btns {
-    margin-top: 60px;
+    width: 830px;
+    margin-top: 20px;
+    text-align: center;
   }
 </style>
