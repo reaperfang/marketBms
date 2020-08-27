@@ -230,6 +230,9 @@ export default {
         address: [
           { required: true, message: "联系地址不能为空，请输入后点击搜索地图，在地图上选择准确位置", trigger: "blur" }
         ],
+        addressDetail: [
+          { required: true, message: "必填项", trigger: "blur" }
+        ]
       },
       weeks: [
         {
