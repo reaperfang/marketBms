@@ -796,7 +796,7 @@ export default {
       //   }
       // }
      
-      this.$refs[formName].validate(async (valid) => {
+      this.$refs[formName][0].validate(async (valid) => {
         if (valid) {
           let params;
 
@@ -827,34 +827,34 @@ export default {
           this.sending = true
           let obj = {
                 orderId: this.$route.query.orderId || this.$route.query.id || this.$route.query.ids, // 订单id
-                memberInfoId: this.orderInfo.memberInfoId,
-                orderCode: this.orderInfo.orderCode,
+                memberInfoId: this.list[0].memberInfoId,
+                orderCode: this.list[0].orderCode,
                 orderItems: curItem.map(val => ({
                   id: val.id,
                   sendCount: val.sendCount
                 })), // 发货的商品列表
-                id: this.orderInfo.id,
-                memberSn: this.orderInfo.memberSn,
-                receivedName: this.orderInfo.receivedName,
-                receivedPhone: this.orderInfo.receivedPhone,
-                receivedProvinceCode: this.orderInfo.receivedProvinceCode,
-                receivedProvinceName: this.orderInfo.receivedProvinceName,
-                receivedCityCode: this.orderInfo.receivedCityCode,
-                receivedCityName: this.orderInfo.receivedCityName,
-                receivedAreaCode: this.orderInfo.receivedAreaCode,
-                receivedAreaName: this.orderInfo.receivedAreaName,
-                receiveAddress: this.orderInfo.receiveAddress,
-                sendAddress: this.orderInfo.sendAddress,
-                receivedDetail: this.orderInfo.receivedDetail,
-                sendName: this.orderInfo.sendName, // 发货人名称
-                sendPhone: this.orderInfo.sendPhone, // 发货人手机号
-                sendProvinceCode: this.orderInfo.sendProvinceCode, // 发货省cdoe
-                sendProvinceName: this.orderInfo.sendProvinceName, // 发货省名称
-                sendCityCode: this.orderInfo.sendCityCode, // 发货城市code
-                sendCityName: this.orderInfo.sendCityName, // 发货城市名称
-                sendAreaCode: this.orderInfo.sendAreaCode, // 发货区县code
-                sendAreaName: this.orderInfo.sendAreaName, // 发货区县名称
-                sendDetail: this.orderInfo.sendDetail // 发货人详细地址
+                id: this.list[0].id,
+                memberSn: this.list[0].memberSn,
+                receivedName: this.list[0].receivedName,
+                receivedPhone: this.list[0].receivedPhone,
+                receivedProvinceCode: this.list[0].receivedProvinceCode,
+                receivedProvinceName: this.list[0].receivedProvinceName,
+                receivedCityCode: this.list[0].receivedCityCode,
+                receivedCityName: this.list[0].receivedCityName,
+                receivedAreaCode: this.list[0].receivedAreaCode,
+                receivedAreaName: this.list[0].receivedAreaName,
+                receiveAddress: this.list[0].receiveAddress,
+                sendAddress: this.list[0].sendAddress,
+                receivedDetail: this.list[0].receivedDetail,
+                sendName: this.list[0].sendName, // 发货人名称
+                sendPhone: this.list[0].sendPhone, // 发货人手机号
+                sendProvinceCode: this.list[0].sendProvinceCode, // 发货省cdoe
+                sendProvinceName: this.list[0].sendProvinceName, // 发货省名称
+                sendCityCode: this.list[0].sendCityCode, // 发货城市code
+                sendCityName: this.list[0].sendCityName, // 发货城市名称
+                sendAreaCode: this.list[0].sendAreaCode, // 发货区县code
+                sendAreaName: this.list[0].sendAreaName, // 发货区县名称
+                sendDetail: this.list[0].sendDetail // 发货人详细地址
               };
 
           
