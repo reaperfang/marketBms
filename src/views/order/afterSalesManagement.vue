@@ -363,13 +363,20 @@ export default {
             console.log(value)
             if(value.status == 1) {
                 // 通过
-                this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 1}).then((res) => {
-                    console.log(res)
-                    this.getList()
-                    this.$message.success('审核成功！');
-                }).catch(error => {
-                    this.$message.error(error);
-                })
+                if(this.multipleSelection.some(val => val.type == 2).length) {
+                    this.currentDialog = 'ExchangeGoodsDialog'
+                    this.currentData = {id: this.multipleSelection.map(val => val.id).join(',')}
+                    this.dialogVisible = true
+                    return
+                } else {
+                    this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 1}).then((res) => {
+                        console.log(res)
+                        this.getList()
+                        this.$message.success('审核成功！');
+                    }).catch(error => {
+                        this.$message.error(error);
+                    })
+                }
             } else {
                 this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 5, refuseReason: value.refuseReason}).then((res) => {
                     console.log(res)
