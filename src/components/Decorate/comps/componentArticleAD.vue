@@ -79,7 +79,7 @@
         <div v-if="currentComponentData.data.templateType==4" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
           <template v-if="hasContent">
             <van-swipe :autoplay="2000" :duration="3000" :loop="true" :show-indicators="false" :width="118 + currentComponentData.data.imgMargin" :height="110">
-              <van-swipe-item class="pdr_16" v-for="(item, key) of currentComponentData.data.itemList" :key="key">
+              <van-swipe-item v-for="(item, key) of currentComponentData.data.itemList" :key="key">
                 <img
                   :src="item.url || require('../../../assets/images/shop/articleAD/AD-empty4.png')"
                   :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"

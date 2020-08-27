@@ -1,7 +1,7 @@
 /* 移动H5导航首页装修 */
 <template>
   <div>
-    <el-tabs v-model="navigation_type" type="card" @tab-click="handleClick">
+    <el-tabs class="el-tabs--button" v-model="navigation_type" @tab-click="handleClick">
       <el-tab-pane label="移动H5导航" name="0"></el-tab-pane>
     </el-tabs>
     <div class="on_off">
@@ -148,18 +148,28 @@ export default {
 <style lang="scss" scoped>
 .el-tabs {
   background: #fff;
-  padding: 20px;
+  padding: 20px 0;
 }
 .on_off{
-  height:36px;
-  background: rgb(255,233,210);
+  background:rgba(253,147,43,0.08);
   margin-bottom:20px;
   display:flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 9px;
+  padding: 10px 20px;
+  line-height: 24px;
   p{
-    color:rgba(146,146,155,1);
+    color:#FD932B;
   }
+  .el-switch {
+    margin-top: 2px;
+  }
+}
+.el-tabs--button {
+  /deep/ .el-tabs__item.is-active:last-child::after {
+      left: -1px;
+      width: calc(100% + 2px);
+      border-radius: 4px;
+    }
 }
 </style>

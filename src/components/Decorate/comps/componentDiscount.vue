@@ -224,7 +224,7 @@ export default {
         /* 获取减免数 */
         getReduce(item) {
             if(item.skuMidGoodsLimitDiscountEtcViewList && Array.isArray(item.skuMidGoodsLimitDiscountEtcViewList) && item.skuMidGoodsLimitDiscountEtcViewList.length) {
-                return item.skuMidGoodsLimitDiscountEtcViewList[0].activitReduction;
+                return item.skuMidGoodsLimitDiscountEtcViewList[0].activitReductionString;
             };
             return '';
         },
@@ -240,7 +240,7 @@ export default {
         /* 获取优惠价 */
         getReducePrice(item) {
             if(item.skuMidGoodsLimitDiscountEtcViewList && Array.isArray(item.skuMidGoodsLimitDiscountEtcViewList) && item.skuMidGoodsLimitDiscountEtcViewList.length) {
-                return item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPrice || 0;
+                return item.skuMidGoodsLimitDiscountEtcViewList[0].reductionPriceString || 0;
             };
             return 0;
         },
@@ -248,7 +248,7 @@ export default {
         /* 获取原价 */
         getYprice(item) {
             if(item.skuMidGoodsLimitDiscountEtcViewList && Array.isArray(item.skuMidGoodsLimitDiscountEtcViewList) && item.skuMidGoodsLimitDiscountEtcViewList.length) {
-                return item.skuMidGoodsLimitDiscountEtcViewList[0].salePrice || 0;
+                return item.skuMidGoodsLimitDiscountEtcViewList[0].salePriceString || 0;
             };
             return 0;
         },

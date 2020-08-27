@@ -17,7 +17,7 @@ export default {
 
 /* 移动H5个人中心装修属性区 -- 独立存在，不在继承微信个人中心装修属性区 */
 <template>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" v-calcHeight="154+102">
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" v-calcHeight="303">
         <div class="block header">
           <p class="title">个人信息页设置</p>
           <p class="state" :class="{'normal': ruleForm.status === 0}">{{ruleForm.status === 0 ? '生效中' : '未生效'}}</p>
@@ -88,7 +88,6 @@ export default {
         </div>  
 
         <div class="block button">
-          <div class="help_blank"></div>
           <div class="buttons">
             <el-button @click="resetLoading = true; resetData()" :loading="resetLoading">重    置</el-button>
             <el-button @click="userCenterSave()" :loading="saveDataLoading">保    存</el-button>
