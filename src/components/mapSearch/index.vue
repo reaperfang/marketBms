@@ -250,7 +250,7 @@ export default {
 
       this.getSearch(data).then((response) => {
         console.log(1111)
-        this.totalNum = response.count
+        this.totalNum = response.count >= 200 ? 200 : response.count
         this.pois = response.data || []
         if (this.pois.length > 0) {
           this.addMarkers(response)
