@@ -10,12 +10,12 @@
       <div class="b_c_content">
         <p class="b_c_description">绑定微信小程序和公众号，推广您的店铺。</p>
         <div>
-          <el-button type="primary" plain @click="linkTo({text:'绑定微信公众号'})"> 授权微信公众号 </el-button>
-          <el-button type="primary" plain @click="linkTo({text:'绑定微信小程序'})"> 授权微信小程序 </el-button>
+          <el-tag effect="plain" size="medium" class="b_c_btn" @click="linkTo({text:'绑定微信公众号'})"> 授权微信公众号 </el-tag>
+          <el-tag effect="plain" size="medium" class="b_c_btn" @click="linkTo({text:'绑定微信小程序'})"> 授权微信小程序 </el-tag>
         </div>
         <div>
-          <el-button type="info" plain> 公众号授权成功 </el-button>
-          <el-button type="info" plain disabled> 小程序授权成功 </el-button>
+          <el-tag type="info" effect="dark" size="medium"> 公众号授权成功 </el-tag>
+          <el-tag type="info" effect="dark" size="medium"> 小程序授权成功 </el-tag>
         </div>
       </div>
 
@@ -110,6 +110,10 @@
 
   .b_c_description {
     margin-bottom: 20px;
+  }
+
+  .b_c_btn {
+    cursor: pointer;
   }
 
   .i_base_btns {
