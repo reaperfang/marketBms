@@ -156,14 +156,14 @@
                     <el-button @click="downs(wxQrcode,'微信小程序商城二维码')">下载</el-button>
                   </p>
                 </div>
-                <div v-if="!isReleaseWX && isEmpowerWX">
+                <div v-if="isEmpowerWX">
                   <img  :src="require('@/assets/images/profile/no_empower.png')" class="no_isEmpower" alt/>
                   <p class="title4">您当前还未授权小程序</p>
                   <p class="opt">
                     <el-button @click="linkTo({text:'绑定微信小程序'})">立即授权</el-button>
                   </p>
                 </div>
-                <div v-if="isReleaseWX">
+                <div v-if="!isEmpowerWX && isReleaseWX">
                   <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="no_release" alt/>
                   <p class="title4">您当前还未发布小程序</p>
                   <p class="opt">
@@ -182,14 +182,14 @@
                     <el-button v-clipboard:copy="gzLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</el-button>
                   </p>
                 </div>
-                <div v-if="!isReleaseGZ && isEmpowerGZ">
+                <div v-if="isEmpowerGZ">
                   <img  :src="require('@/assets/images/profile/no_empower.png')" class="no_isEmpower" alt/>
                   <p class="title4">您当前还未授权公众号</p>
                   <p class="opt">
                     <el-button @click="linkTo({text:'绑定微信公众号'})">立即授权</el-button>
                   </p>
                 </div>
-                <div v-if="isReleaseGZ">
+                <div v-if="!isEmpowerGZ && isReleaseGZ">
                   <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="no_release" alt/>
                   <p class="title4">您当前还未设置商城首页</p>
                   <p class="opt">
