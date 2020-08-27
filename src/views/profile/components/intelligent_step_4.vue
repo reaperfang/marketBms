@@ -1,5 +1,12 @@
 <template>
   <section class="intelligent_base">
+
+    <el-steps :active="baseStatus" :space="200" finish-status="success">
+      <el-step title="绑定渠道" :class="{'i_base_act': baseStatus === 1}"></el-step>
+      <el-step title="微信支付设置" :class="{'i_base_act': baseStatus === 2}"></el-step>
+      <el-step title="店铺基础信息建设" :class="{'i_base_act': baseStatus === 3}"></el-step>
+    </el-steps>
+
     <!--  绑定渠道  -->
     <channel v-if="baseStatus === 1" @base-step="baseStep"></channel>
 
