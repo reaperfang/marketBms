@@ -9,7 +9,7 @@
         </div>
         <div class="goods-item" v-for="(item, index) in list" :key="index">
           <div class="item-title">
-            <span>商品清单</span>
+            <span v-if="list[0].deliveryWay != 4">商品清单</span>
             <span>订单编号 {{item.orderCode}}</span>
             <i v-if="list.length > 1" @click="deleteOrder(index)" class="el-icon-delete"></i>
           </div>
@@ -902,10 +902,12 @@ export default {
         Promise.all(_arr).then((values) => {
           values.forEach((item, index) => {
             this._list[index].sizeList = item
-            if(!item || !item.length) {
+            if(item && item.length) {
               this._list.splice(index, 1)
             }
           })
+
+          this._list = this._list.filter(val => val.express != null)
 
           if(this.list[0].deliveryWay == 1 && this._list.length) {
             this.currentData = {
@@ -1117,7 +1119,7 @@ export default {
           //   });
           res.forEach(item => {
             if(!res.sendAddress) {
-              if(item.deliveryWay == 1) {
+              if(item.deliveryWay == 1 || item.deliveryWay == 2) {
                 item.sendName = _address.name;
                 item.sendPhone = _address.mobile;
                 item.sendProvinceCode = _address.provinceCode;
@@ -1128,6 +1130,8 @@ export default {
                 item.sendAreaName = _address.areaName;
                 item.sendAddress = _address.address;
                 item.sendDetail = _address.addressDetail;
+                item.sendLatitude = _address.latitude
+                item.sendLongitude = _address.longitude
               } else if(item.deliveryWay == 4) {
                 this._apis.order
                   .getPickInfo({ id: item.pickId })

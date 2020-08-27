@@ -459,16 +459,16 @@
             <el-form-item label="配送方式" prop="deliveryWay">
                 <el-checkbox-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.deliveryWay">
                     <div class='checkbox-item'>
-                        <el-checkbox disabled :label="1" @change="((val)=>{deliveryWayChange(val, '1')})">普通快递</el-checkbox>
+                        <el-checkbox disabled :label="1" @change="((val)=>{deliveryWayChange(val, '1')})" style="margin-right:30px;">普通快递</el-checkbox>
                     </div>
                     <div class='checkbox-item' >
-                        <el-checkbox :label="4" @change="((val)=>{deliveryWayChange(val, '4')})" style="margin-left:50px;">上门自提</el-checkbox>
+                        <el-checkbox :label="4" @change="((val)=>{deliveryWayChange(val, '4')})" style="margin-right:30px;">上门自提</el-checkbox>
                         <div> 
                             <span class="prompt" v-show="!isSelfLiftSet" >“上门自提”需在设置-配送设置中开启后生效，去设置</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span>
                         </div>
                     </div>
                     <div class='checkbox-item'>
-                        <el-checkbox :label="2" @change="((val)=>{deliveryWayChange(val, '2')})" style="margin-left:50px;">同城配送</el-checkbox>
+                        <el-checkbox :label="2" @change="((val)=>{deliveryWayChange(val, '2')})" >同城配送</el-checkbox>
                         <div>
                         <span class="prompt" style="margin-left:30px;" v-show="!isDeliverySet">“同城配送”需在设置-配送设置中开启后生效，去设置</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
                         </div>
@@ -3298,7 +3298,7 @@ $blue: #655EFF;
 }
 
 /deep/.el-form-item--small .el-form-item__error{
-    left:76px;   
+    // left:76px;   
 }
 
 .add-goods {
@@ -4072,6 +4072,7 @@ $blue: #655EFF;
     width: 85px;
     height: 34px;
     background-color: #e6fbf3;
+    color:#6ACEA8;
     i {
         margin-left: 12px;
         display: inline-block;

@@ -222,9 +222,9 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .navbar {
-  height: 49px;
+  height: 60px;
   width: calc(100% - 120px);
-  line-height: 49px;
+  line-height: 60px;
   border-radius: 0px !important;
   background: #fff;
   color: #92929b;
@@ -284,11 +284,10 @@ export default {
       vertical-align: 15px;
     }
     .avatar-container {
-      height: 50px;
+      height: 60px;
       margin-right: 30px;
       .avatar-wrapper {
         cursor: pointer;
-        margin-top: 5px;
         position: relative;
         .user-avatar {
           width: 40px;
@@ -298,7 +297,7 @@ export default {
         .el-icon-caret-bottom {
           position: absolute;
           right: -20px;
-          top: 18px;
+          top: 24px;
           font-size: 12px;
         }
       }
@@ -332,7 +331,7 @@ export default {
   height: 22px;
 }
 .shop_name{
-  font-size: 20px;
+  font-size: 14px;
   color: #161617;
   font-family:PingFangSC-Medium,PingFang SC;
   font-weight:500;

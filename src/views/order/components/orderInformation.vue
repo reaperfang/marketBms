@@ -884,6 +884,9 @@ export default {
                     text-align: right;
                     margin-top: 10px;
                 }
+                .item {
+                    line-height: 21px;
+                }
             }
             &.righter {
                 border: none;

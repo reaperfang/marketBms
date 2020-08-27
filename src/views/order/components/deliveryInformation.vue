@@ -44,10 +44,10 @@
                     <div class="message-item">提货信息</div>
                   </div>
                   <div class="message-item-list">
-                    <div class="message-item">{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.name:''}}</div>
+                    <div class="message-item">{{item.receivedName}}</div>
                   </div>
                   <div class="message-item-list">
-                      <div class="message-item">{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.mobile:''}}</div>
+                      <div class="message-item">{{item.receivedPhone}}</div>
                   </div>
                   </div>
                   <div class="message">
@@ -199,14 +199,24 @@ export default {
   },
   filters: {
     goodsStatus(value, orderDetail) {
-      let status = orderDetail.expressNoStatusMap[value]
-
-      if(status == 3) {
-        return '【用户签收】'
-      } else if(status == 0 || status == 1 || status == 2 || status == 4) {
-        return '【商户发货】'
-      } else {
-        return ''
+      if(orderDetail.orderInfo.deliveryWay==4){
+          let orderStatus = orderDetail.orderInfo.orderStatus;
+          if(orderStatus ==6){
+            return '【用户签收】'
+          }else if(orderStatus == 3|| orderStatus ==4 || orderStatus == 5){
+            return '【商户发货】'
+          }else{
+            return ''
+          }
+      }else{
+        let  status= orderDetail.expressNoStatusMap[value]
+        if(status == 3) {
+            return '【用户签收】'
+          } else if(status == 0 || status == 1 || status == 2 || status == 4) {
+            return '【商户发货】'
+          } else {
+            return ''
+        }
       }
     },
     goodsSpecsFilter(value) {
@@ -290,7 +300,8 @@ export default {
                 shipperName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].expressCompany || '',
                 showContent: true,
                 sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
-                sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendName || '',
+                // sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendName || '',
+                sendName:this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5) && this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5).createUserName||'',
                 id: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].orderId || '',
                 createTime: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].createTime || '',
                 deliveryWay: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].deliveryWay || '',
@@ -315,7 +326,6 @@ export default {
           }
         }
       }
-      
       arr.sort((a, b) => {
         const thisTimeA = a.createTime.replace(/-/g, '/')
         const thisTimeB = b.createTime.replace(/-/g, '/')

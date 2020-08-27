@@ -109,8 +109,6 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .tabs{
-  // background:#fff; 
-  padding:10px 20px 0 20px;
   >>> .el-tabs__item {
     padding: 0;
     height: 57px;

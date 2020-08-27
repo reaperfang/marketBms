@@ -7,8 +7,8 @@
                     <div class="col" style="margin-right: 26px;">数量</div>
                 </div>
             </div>
-            <div class="item" style="width: 120px;">应收金额</div>
-            <div class="item" style="width: 120px;">收货人及联系方式</div>
+            <div class="item" style="width: 120px; margin-right: 16px;">应收金额</div>
+            <div class="item" style="width: 120px; margin-right: 75px;">收货人及联系方式</div>
             <div class="item" :class="{'item-storew': storeMark}">配送方式</div>
             <div class="item">状态</div>
             <div class="item">操作</div>
@@ -60,14 +60,14 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="item" style="width: 120px;">
+                    <div class="item" style="width: 120px; margin-right: 16px;">
                         <!-- <p class="pay-amount">实收：¥{{order.actualMoney}}</p>
                         <p class="payment-mode">{{order.channelName}}支付</p> -->
                         <!-- <p>¥{{order | yingshowFilter}}</p> -->
                         <p>¥{{order.receivableMoney}}</p>
                         <!-- <p>{{order.channelName}}支付</p> -->
                     </div>
-                    <div class="item" style="width: 120px;">
+                    <div class="item" style="width: 120px; margin-right: 75px;">
                         <p>{{order.receivedName}}</p>
                         <p>{{order.receivedPhone}}</p>
                     </div>

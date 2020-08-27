@@ -31,12 +31,12 @@
                         </div>
                         <div class="info_box" v-if="showContents.length > 0">
                             <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
-                            <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('5')!=-1">{{item.setMealPrice}}元任选{{item.goodsTotalNumber}}件商品</p>
+                            <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('5')!=-1">{{item.setMealPriceString}}元任选{{item.goodsTotalNumber}}件商品</p>
                             <div class="limit_line">
                                 <p class="limit" v-if="showContents.indexOf('4')!=-1">{{item.joinLimit==-1?'不限':'限'+item.joinLimit+'次/人'}}</p>
                             </div>
                             <div class="price_line">
-                                <p class="price" v-if="showContents.indexOf('2')!=-1">￥<font>{{item.setMealPrice || 0}}</font></p>
+                                <p class="price" v-if="showContents.indexOf('2')!=-1">￥<font>{{item.setMealPriceString || 0}}</font></p>
                             </div>
 
                             <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('7')!=-1&&item.status==1 && listStyle != 3 && listStyle != 6"></componentButton>
