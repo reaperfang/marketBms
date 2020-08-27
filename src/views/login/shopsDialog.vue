@@ -13,7 +13,7 @@
             我的店铺
         </span>
         <div class="content"  v-loading="loading">
-          <div v-for="item in shopLists" :key="item.id" @click="toShop(item)" class="shopItem">
+          <div v-for="item in shopLists" :key="item.id" @click="toShop(item)" :class="{'shopItem':true,'shopItemed':item.shopExpire !== 1}">
               <p>
                 <span :class="item.shopExpire == 1 ? 'e-shopName' : 'shopName'">{{item.shopName}}</span>
                 <span :class="item.shopExpire == 1 ? 'e-status' : 'status'">{{item.shopExpire == 1 ? '已过期' : '营业中'}}</span>
@@ -110,34 +110,38 @@ export default {
 
     //进入店铺 
     toShop(shop){
-      let shopIds = []
-      this.shopList.map(item =>{
-        shopIds.push(item.id)
-      })
-      
-      if(shopIds.includes(shop.id*1)){// 登录之后没有新开的店铺
-        this.newShopList = this.shopList
-        this.saveShop(shop)
-      }else{ //登录之后有新开的店铺 获取实时最新登录信息（userInfo）
-        this._apis.profile.getNewShopList({cid:shop.id}).then(res =>{
-          let info = JSON.parse(res.info)
-          let shopInfoMap = info.shopInfoMap
-          for(let key in shopInfoMap){
-            // 所有店铺的功能点列表由扁平化数据转为树形结构
-            if(shopInfoMap[key].data){
-              let list = JSON.parse(JSON.stringify(shopInfoMap[key].data.msfList))
-              let functions = utils.buildTree(list)
-              shopInfoMap[key].data = Object.assign(shopInfoMap[key].data,{functions:functions})
-            }
-            //获取新的店铺列表
-            let shopObj = shopInfoMap[key]
-            this.newShopList.push(shopObj)
-          } 
-          localStorage.setItem('userInfo',JSON.stringify(info));//更新本地存储的账号信息
-          this.saveShop(shop)
-        }).catch(error =>{
-          console.log('error',error)
+      if(shop.shopExpire !== 1){
+        let shopIds = []
+        this.shopList.map(item =>{
+          shopIds.push(item.id)
         })
+        
+        if(shopIds.includes(shop.id*1)){// 登录之后没有新开的店铺
+          this.newShopList = this.shopList
+          this.saveShop(shop)
+        }else{ //登录之后有新开的店铺 获取实时最新登录信息（userInfo）
+          this._apis.profile.getNewShopList({cid:shop.id}).then(res =>{
+            let info = JSON.parse(res.info)
+            let shopInfoMap = info.shopInfoMap
+            for(let key in shopInfoMap){
+              // 所有店铺的功能点列表由扁平化数据转为树形结构
+              if(shopInfoMap[key].data){
+                let list = JSON.parse(JSON.stringify(shopInfoMap[key].data.msfList))
+                let functions = utils.buildTree(list)
+                shopInfoMap[key].data = Object.assign(shopInfoMap[key].data,{functions:functions})
+              }
+              //获取新的店铺列表
+              let shopObj = shopInfoMap[key]
+              this.newShopList.push(shopObj)
+            } 
+            localStorage.setItem('userInfo',JSON.stringify(info));//更新本地存储的账号信息
+            this.saveShop(shop)
+          }).catch(error =>{
+            console.log('error',error)
+          })
+        }
+      }else{
+        this.$message.warning('该店铺已过期！');
       }
     },
     
@@ -202,7 +206,6 @@ export default {
     border:1px solid rgba(218,218,227,1);
     margin:0px 10px 10px 0px;
     padding: 10px;
-    cursor: pointer;
     display:inline-block;
     p:nth-of-type(1){
       display: flex;
@@ -254,9 +257,13 @@ export default {
       line-height: 25px;
     }
   }
-  .shopItem:hover{
+  .shopItemed{
+    cursor: pointer;
+  }
+  .shopItemed:hover{
     border:1px solid #5B54E6;
   }
+
 }
 /deep/ .el-dialog__header{
   background:rgba(101,94,255,0.09) !important;
