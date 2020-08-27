@@ -674,6 +674,9 @@ ul.cube {
                   margin-left: 16px;
             }
       }
+      .el-form--inline .el-form-item:last-child {
+            margin-right: 0;
+      }
 }
 
 .select_dialog {
