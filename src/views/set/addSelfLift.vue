@@ -342,9 +342,11 @@ export default {
       const date = new Date()
       const year = date.getFullYear()
       let month = date.getMonth() + 1
-      month = month > 10 ? month : `0${month}`
+      // month = month > 10 ? month : `0${month}`
+      month = this.formatLessTenTime(month)
       let day = date.getDate()
-      day = day > 10 ? day : `0${day}`
+      // day = day > 10 ? day : `0${day}`
+      day = this.formatLessTenTime(day)
       const timePeriods = arr.map(item => {
         const timeslot = item.split('~')
         let start = `${year}-${month}-${day} ${timeslot[0]}`
@@ -413,31 +415,14 @@ export default {
         this.$message.error(err || '获取数据失败')
       })
     },
-    formatTime(date){
+    // 格式化小于10的年/月/日
+    formatLessTenTime(date){
       return date >= 10 ? date : `0${date}`
-    },
-    formatDate(val){
-      const date = new Date(val)
-      const year = date.getFullYear()
-      let month = date.getMonth() + 1
-      month = this.formatTime(month)
-      let day = date.getDate()
-      day = this.formatTime(day)
-      let hour = date.getHours()
-      hour = this.formatTime(hour)
-      let minute = date.getMinutes()
-      minute = this.formatTime(minute)
-      return `${year}/${month}/${day} ${hour}:${minute}:00`
-      
     },
     getPrevVal(form, index, key) {
       console.log(form,index, key)
       if (index < 0) return null
       let prev =  form && form[index] && form[index][key]
-      // if (!prev) {
-      //   index--
-      //   prev = this.getPrevVal(form, index, key)
-      // }
       while(index >= 0 && !prev) {
         index--
         prev = form && form[index] && form[index][key]
@@ -456,175 +441,128 @@ export default {
       this.nextIndex = index
       return next
     },
+    /**
+     * 返回 fullField 中的索引值
+     * @param { String } fullField timePeriods.0.start
+     * @return { Number } -1 查找失败  
+     */
+    getRuleFullFieldIndex(fullField) {
+      const arr = fullField.split('.') // .fullField: "timePeriods.1.start"
+      const index = +arr[1] // 1
+      return index !== -1 ? index : -1
+    },
+    /**
+     * 此方法仅为了解决element-ui中的el-time-picker的bug
+     * 重新处理时间，因为element-ui框架手动输入的时间与初始化时通过选择的时间的年月日不一致导致， 这里重新定义日期
+     * @param { Date } 日期时间
+     * @return { Timestamp } 时间戳
+     */
+    getTimestamp(datetime) {
+      let curr = new Date(datetime)
+      // 重新处理时间，因为element-ui框架手动输入的时间与初始化时通过选择的时间的年月日不一致导致， 这里重新定义日期
+      const date = new Date()
+      const year = date.getFullYear()
+      const month = this.formatLessTenTime(date.getMonth() + 1)
+      const day = this.formatLessTenTime(date.getDate())
+      const hours = this.formatLessTenTime(curr.getHours())
+      const minutes = this.formatLessTenTime(curr.getMinutes())
+      const newValue = `${year}/${month}/${day} ${hours}:${minutes}:00`
+      curr = new Date(newValue)
+      curr = curr.getTime()
+      return curr
+    },
     // 校验时间区间start
     validateTimeRangesStart(rule, value, callback) {
-      console.log('---validateTimeRangesStart---', rule, value)
-      const arr = rule.fullField.split('.') // .fullField: "timePeriods.1.start"
-      const index = +arr[1] // 1
+      const index = this.getRuleFullFieldIndex(rule.fullField)
       const ruleForm = this.ruleForm.timePeriods
-      let curr = this.formatDate(value)
-      curr = new Date(curr)
-
-      // 重新处理时间，因为element-ui框架手动输入的时间与初始化时通过选择的时间的年月日不一致导致， 这里重新定义日期
-      let date = new Date()
-      const year = date.getFullYear()
-      const month = this.formatTime(date.getMonth() + 1)
-      const day = this.formatTime(date.getDate())
-      const hours = this.formatTime(curr.getHours())
-      const minutes = this.formatTime(curr.getMinutes())
-      const newValue = `${year}/${month}/${day} ${hours}:${minutes}:00`
-
-      console.log(newValue)
-      curr = new Date(newValue)
-
-      curr = curr.getTime()
+      const curr = this.getTimestamp(value)
       const len = ruleForm.length
-      let isValidated = true
-      // const validateArr = []
-      // this.clearValidate('start')
-        console.log('--index-------', index)
+      let isValid = true
+      console.log('validateTimeRangesStart',curr, this.getTimestamp(ruleForm[index].end))
       if (index > 0) {
-        // prev prev = ruleForm[index - 1].start
         let prev = this.getPrevVal(ruleForm, index - 1, 'start')
-        // let prev = oPrev && oPrev.value
-        console.log('------prev---', prev,'---curr--', curr)
         if (prev) {
-          // this.clearValidate('start')
           this.$refs.ruleForm.clearValidate(`timePeriods.${this.prevIndex}.start`)
-          // this.$refs.ruleForm.validateField(`timePeriods.${this.prevIndex}.start`);
-          console.log('---validateTimeRangesStart:prev:curr---', prev, curr)
-          prev = this.formatDate(prev)
-          prev = new Date(prev)
-          prev = prev.getTime()
-          console.log('---validateTimeRangesStart:prev:curr:time---', prev, curr)
+          prev = this.getTimestamp(prev)
           if (prev >= curr) {
-            isValidated = false
+            isValid = false
             callback(new Error('当前时间段的开始时间需晚于上一个时间段的开始时间'))
           }
         } 
       }
       if (index + 1 < len) {
-        // let next = ruleForm[index + 1].start
         let next = this.getNextVal(ruleForm, index + 1, 'start')
-        // let next = oNext && oNext.value
-        console.log('---next--',next)
         if (next) {
-          // this.clearValidate('start')
           this.$refs.ruleForm.clearValidate(`timePeriods.${this.nextIndex}.start`)
-          // this.$refs.ruleForm.validateField(`timePeriods.${this.nextIndex}.start`);
-          next = this.formatDate(next)
-          next = new Date(next)
-          next = next.getTime()
-          console.log('---validateTimeRangesStart:next:curr:time---', next, curr)
+          next = this.getTimestamp(next)
           if (next <= curr) {
-            isValidated = false
+            isValid = false
             callback(new Error('当前时间段的开始时间不能晚于下一个时间段的开始时间。'))
           }
         }
       }
       // 获取后一个的值，进行校验处理
-      console.log('ruleForm.index',ruleForm[index])
       if (ruleForm[index].end) {
-        let end = this.formatDate(ruleForm[index].end)
-        end = new Date(end)
-
-        // 重新处理时间，因为element-ui框架手动输入的时间与初始化时通过选择的时间的年月日不一致导致， 这里重新定义日期
-        let date = new Date()
-        const year = date.getFullYear()
-        const month = this.formatTime(date.getMonth() + 1)
-        const day = this.formatTime(date.getDate())
-        const hours = this.formatTime(end.getHours())
-        const minutes = this.formatTime(end.getMinutes())
-        const newValue = `${year}/${month}/${day} ${hours}:${minutes}:00`
-        end = new Date(newValue)
-        console.log(end)
-        end = end.getTime()
+        let end = this.getTimestamp(ruleForm[index].end)
+        // this.$refs.ruleForm.clearValidate(`timePeriods.${index}.end`)
         if (curr > end) {
-          isValidated = false
-          return callback(new Error('结束时间不能早于开始时间'))
+          isValid = false
+          callback(new Error('结束时间不能早于开始时间'))
         }
+        if (curr === end){
+          isValid = false
+          callback(new Error('结束时间不能等于开始时间'))
+        } 
       }
-      // console.log('validateArr', validateArr)
-      if (isValidated) {
-        callback()
-      }
-      // callback()
-      // const reg = /^[0-9]+$/
-      // if (value && reg.test(value)) {
-      //   callback();
-      // } else {
-        // callback(new Error('必填项，请输入天数，仅支持输入正整数'));
-      // }
+      if (isValid) callback()
     },
     // 校验时间区间 end
     validateTimeRangesEnd(rule, value, callback) {
-      // console.log('---validateTimeRangesEnd---',rule, value)
-      const arr = rule.fullField.split('.') // .fullField: "timePeriods.1.end"
-      const index = +arr[1] // 1
+      const index = this.getRuleFullFieldIndex(rule.fullField)
       const ruleForm = this.ruleForm.timePeriods
-      let curr = this.formatDate(value)
-      curr = new Date(curr)
-
-      // 重新处理时间，因为element-ui框架手动输入的时间与初始化时通过选择的时间的年月日不一致导致， 这里重新定义日期获取当前最新时间
-
-      let date = new Date()
-      const year = date.getFullYear()
-      const month = this.formatTime(date.getMonth() + 1)
-      const day = this.formatTime(date.getDate())
-      const hours = this.formatTime(curr.getHours())
-      const minutes = this.formatTime(curr.getMinutes())
-      const newValue = `${year}/${month}/${day} ${hours}:${minutes}:00`
-
-        console.log('---validateTimeRangesEnd:curr---', curr)
-      console.log(newValue)
-      curr = new Date(newValue)
-      
-      curr = curr.getTime()
+      const curr = this.getTimestamp(value)
       const len = ruleForm.length
-      // const validateArr = []
-      // this.clearValidate('end')
-      let isValidated = true
+      let isValid = true
+      console.log('validateTimeRangesEnd',curr, this.getTimestamp(ruleForm[index].start))
       if (index > 0) {
-        // let prev = ruleForm[index - 1].end
         let prev = this.getPrevVal(ruleForm, index - 1, 'end')
-        console.log('---validateTimeRangesEnd:prev---', prev)
         if (prev) {
-          // this.clearValidate('end')
           this.$refs.ruleForm.clearValidate(`timePeriods.${this.prevIndex}.end`)
-          prev = this.formatDate(prev)
-          prev = new Date(prev)
-          prev = prev.getTime()
-          console.log('---validateTimeRangesEnd:prev:curr:time---', prev, curr, prev >= curr)
+          prev = this.getTimestamp(prev)
           if (prev >= curr) {
-            console.log('12121212')
-            isValidated = false
+            isValid = false
             callback(new Error('时间段可以交叉，不能重叠。'))
           }
         }
-        //  else {
-        //    return callback(new Error('请选择时间'))
-        // }
       }
       if (index + 1 < len) {
-        // let next = ruleForm[index + 1].end
         let next = this.getNextVal(ruleForm, index + 1, 'end')
-        console.log('---next--',next)
         if (next) {
-          // this.clearValidate('end')
           this.$refs.ruleForm.clearValidate(`timePeriods.${this.nextIndex}.end`)
-          next = this.formatDate(next)
-          next = new Date(next)
-          next = next.getTime()
-          // console.log('---validateTimeRangesEnd:next:curr---', prev, curr)
+          next = this.getTimestamp(next)
           if (next <= curr) {
-            isValidated = false
+            isValid = false
             callback(new Error('时间段可以交叉，不能重叠。'))
           }
         }
       }
-      if (isValidated) {
-        callback()
+      
+      // // 获取后一个的值，进行校验处理
+      if (ruleForm[index].start) {
+      //   console.log('1111111')
+        this.$refs.ruleForm.validateField(`timePeriods.${index}.start`)
+      //   let start = this.getTimestamp(ruleForm[index].start)
+      //   // this.$refs.ruleForm.clearValidate(`timePeriods.${index}.start`)
+      //   if (curr < start) { 
+      //     isValid = false
+      //     callback(new Error('结束时间不能早于开始时间')) 
+      //   }
+      //   if (curr === start) {
+      //     isValid = false
+      //     callback(new Error('结束时间不能等于开始时间'))
+      //   }
       }
+      if (isValid) callback()
     },
     clearValidate(key) {
       const arr = []

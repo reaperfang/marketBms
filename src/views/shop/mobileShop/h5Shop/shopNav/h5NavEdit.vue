@@ -3,7 +3,7 @@
    <div class="group-wrapper">
 
       <!-- 预览区 -->
-      <div class="module view" ref="groupWrapper">
+      <div class="module view" ref="groupWrapper" v-calcHeight="314">
 
         <!-- 手机头部 -->
         <div class="phone-head">
@@ -12,7 +12,7 @@
         </div>
 
         <!-- 手机中部 -->
-        <div class="phone-body" v-calcHeight="364">
+        <div class="phone-body" v-calcHeight="442">
           <img :src="require('@/assets/images/shop/shopNav.png')" alt="">
         </div>
 
@@ -60,7 +60,7 @@
 
       <!-- 右侧属性区 -->
       <div class="module props">
-        <el-form :model="currentNav" :rules="ruleForm.navStyle.id == 2 ? {} : rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" v-calcHeight="364">
+        <el-form :model="currentNav" :rules="ruleForm.navStyle.id == 2 ? {} : rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" v-calcHeight="420">
           <div class="block header">
             <p class="title">导航设置</p>
             <p class="state" @click="deleteNav" style="cursor:pointer;">删除导航</p>
@@ -153,7 +153,6 @@
           </div>
 
           <div class="block button">
-            <div class="help_blank"></div>
             <div class="buttons">
               <el-button @click="resetData" :loading="resetDataLoading">重    置</el-button>
               <el-button @click="save" :loading="saveLoading">保    存</el-button>
@@ -646,6 +645,13 @@ export default {
           }
         }
       }
+    }
+  }
+  .module {
+    &.view {
+      width: 377px;
+      border: 1px #D0D6E4 solid;
+      box-shadow: none !important;
     }
   }
 }
