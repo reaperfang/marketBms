@@ -173,6 +173,7 @@ export default {
     handleClose() {
       this.showShopsDialog = false;
       this.getShopName();
+      this.getGuide();
     },
 
     //获取店铺名称
