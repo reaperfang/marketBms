@@ -149,51 +149,53 @@
           <div class="main">
             <div>
               <p class="title3">微信小程序商城</p>
-              <div v-if="!isReleaseWX && !isEmpowerWX && wxQrcode">
-                <img  class="erweima" :src="wxQrcode" alt/>
-                <p class="opt">
-                  <el-button @click="downs(wxQrcode,'微信小程序商城二维码')">下载</el-button>
-                </p>
-              </div>
-              <div v-else-if="isEmpowerWX">
-                <img  :src="require('@/assets/images/profile/no_empower.png')" class="no_isEmpower" alt/>
-                <p class="title4">您当前还未授权小程序</p>
-                <p class="opt">
-                  <el-button @click="linkTo({text:'绑定微信小程序'})">立即授权</el-button>
-                </p>
-              </div>
-              <!-- v-if="!isEmpowerWX && isReleaseWX" -->
-              <div v-else>
-                <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="no_release" alt/>
-                <p class="title4">您当前还未发布小程序</p>
-                <p class="opt">
-                  <el-button @click="linkTo({text:'绑定微信小程序'})">立即发布</el-button>
-                </p>
+              <div v-loading="isGetWXstatus">
+                <div v-if="!isReleaseWX && !isEmpowerWX && wxQrcode">
+                  <img  class="erweima" :src="wxQrcode" alt/>
+                  <p class="opt">
+                    <el-button @click="downs(wxQrcode,'微信小程序商城二维码')">下载</el-button>
+                  </p>
+                </div>
+                <div v-if="!isReleaseWX && isEmpowerWX">
+                  <img  :src="require('@/assets/images/profile/no_empower.png')" class="no_isEmpower" alt/>
+                  <p class="title4">您当前还未授权小程序</p>
+                  <p class="opt">
+                    <el-button @click="linkTo({text:'绑定微信小程序'})">立即授权</el-button>
+                  </p>
+                </div>
+                <div v-if="isReleaseWX">
+                  <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="no_release" alt/>
+                  <p class="title4">您当前还未发布小程序</p>
+                  <p class="opt">
+                    <el-button @click="linkTo({text:'绑定微信小程序'})">立即发布</el-button>
+                  </p>
+                </div>
               </div>
             </div>
             <div>
               <p class="title3">微信公众号商城</p>
-              <div v-if="!isReleaseGZ && !isEmpowerGZ && gzQrcode">
-                <img  class="erweima" :src="gzQrcode" alt>
-                <p class="opt">
-                  <el-button @click="downs(gzQrcode,'微信公众号商城二维码')">下载</el-button>
-                  <el-button v-clipboard:copy="gzLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</el-button>
-                </p>
-              </div>
-              <div v-else-if="isEmpowerGZ">
-                <img  :src="require('@/assets/images/profile/no_empower.png')" class="no_isEmpower" alt/>
-                <p class="title4">您当前还未授权公众号</p>
-                <p class="opt">
-                  <el-button @click="linkTo({text:'绑定微信公众号'})">立即授权</el-button>
-                </p>
-              </div>
-              <!-- v-if="!isEmpowerGZ && isReleaseGZ" -->
-              <div v-else>
-                <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="no_release" alt/>
-                <p class="title4">您当前还未设置商城首页</p>
-                <p class="opt">
-                  <el-button @click="linkTo({text:'设置首页',url:'/shop/m_wxShopIndex'})">设置首页</el-button>
-                </p>
+              <div v-loading="isGetGZstatus">
+                <div v-if="!isReleaseGZ && !isEmpowerGZ && gzQrcode">
+                  <img  class="erweima" :src="gzQrcode" alt>
+                  <p class="opt">
+                    <el-button @click="downs(gzQrcode,'微信公众号商城二维码')">下载</el-button>
+                    <el-button v-clipboard:copy="gzLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</el-button>
+                  </p>
+                </div>
+                <div v-if="!isReleaseGZ && isEmpowerGZ">
+                  <img  :src="require('@/assets/images/profile/no_empower.png')" class="no_isEmpower" alt/>
+                  <p class="title4">您当前还未授权公众号</p>
+                  <p class="opt">
+                    <el-button @click="linkTo({text:'绑定微信公众号'})">立即授权</el-button>
+                  </p>
+                </div>
+                <div v-if="isReleaseGZ">
+                  <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="no_release" alt/>
+                  <p class="title4">您当前还未设置商城首页</p>
+                  <p class="opt">
+                    <el-button @click="linkTo({text:'设置首页',url:'/shop/m_wxShopIndex'})">设置首页</el-button>
+                  </p>
+                </div>
               </div>
             </div>
           </div>  
@@ -311,7 +313,9 @@ export default {
       zxLink: `${process.env.ZX_HELP}`, //链接
       productNews: [],
       helpNews: [],
-      cid:''
+      cid:'',
+      isGetWXstatus:true,//是否获取到小程序状态数据
+      isGetGZstatus:true,//是否获取到公众号状态数据
     };
   },
 
@@ -549,9 +553,11 @@ export default {
       this._apis.profile
         .getSmallRelease({id:this.cid}).then(response => {
           this.isReleaseWX = response.status ? true :  false
+          this.isGetWXstatus = false
         })
         .catch(error => {
           console.error(error);
+          this.isGetWXstatus = false
         });
     },
 
@@ -560,9 +566,11 @@ export default {
       this._apis.shop
         .getHomePage({pageTag:0}).then(response => {
           this.isReleaseGZ = response ? false : true
+          this.isGetGZstatus = false
         })
         .catch(error => {
           console.error(error);
+          this.isGetGZstatus = false
         });
     },
 
@@ -767,16 +775,16 @@ export default {
               color: #92929B;
             }
             .erweima{
-              width: 150px;
+              width: 100px;
               height: auto;
             }
             .no_isEmpower{
-              width: auto;
-              height: 136px;
+              width: 86px;
+              height: 86px;
             }
             .no_release{
-              width: auto;
-              height: 136px;
+              width: 86px;
+              height: 86px;
             }
             .opt{
               margin-top: 20px;

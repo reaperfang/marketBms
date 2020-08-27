@@ -1178,6 +1178,34 @@ export default {
                     });
                     return false
                 }
+                if(+obj.weight  < 0) {
+                    this.$message({
+                        message: '重量不能为负值',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(+obj.weight  > 10000000) {
+                    this.$message({
+                        message: '重量不能超过10000000',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(+obj.volume  < 0) {
+                    this.$message({
+                        message: '体积不能为负值',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(+obj.volume  > 10000000) {
+                    this.$message({
+                        message: '体积不能超过10000000',
+                        type: 'warning'
+                    });
+                    return false
+                }
             //如果配送方式勾选了商家配送，则重量为必填项
                 if(this.ruleForm.deliveryWay.includes(2)){
                     if(!obj.weight) {

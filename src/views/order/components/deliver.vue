@@ -7,257 +7,259 @@
       </div>
     </div>
     <div class="container">
-      <div class="container-item">
-        <p class="deliver-goods-number">1. 选择您要进行发货的商品及数量</p>
-        <div class="container-item-content deliver-goods-list">
-          <div class="title">
-            <div>
-              <span>商品清单</span>
-              <span>订单编号 {{orderInfo.orderCode}}</span>
+      <div class="container-list" v-for="(orderInfo, index) in list" :key="index">
+        <div class="container-item">
+          <p class="deliver-goods-number">1. 选择您要进行发货的商品及数量</p>
+          <div class="container-item-content deliver-goods-list">
+              <div class="title">
+                <div>
+                  <span>商品清单</span>
+                  <span>订单编号 {{orderInfo.orderCode}}</span>
+                </div>
+              </div>
+              <div class="content">
+                <el-table
+                  :row-key="getRowKeys"
+                  :class="{isIE: isIE, disabledCheckAll: orderInfo.deliveryWay != 4}"
+                  ref="table"
+                  :data="orderInfo.orderItemList"
+                  style="width: 100%"
+                  @selection-change="handleSelectionChange"
+                  :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
+                >
+                  <el-table-column 
+                    type="selection" 
+                    width="51"
+                    :selectable="selectable"
+                    :reserve-selection="true"
+                  ></el-table-column>
+                  <el-table-column label="序号" width="180">
+                    <template slot-scope="scope">
+                      <span>{{scope.$index + 1}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="商品" width="380">
+                    <template slot-scope="scope">
+                      <div class="goods-detail">
+                        <div class="goods-detail-item">
+                          <img width="70" :src="scope.row.goodsImage" alt />
+                        </div>
+                        <div class="goods-detail-item">
+                          <p class="ellipsis">{{scope.row.goodsName}}</p>
+                          <p>{{scope.row.goodsSpecs | goodsSpecsFilter}}</p>
+                        </div>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="goodsCount" label="应发数量">
+                    <template slot-scope="scope">{{scope.row.goodsCount - scope.row.cacheSendCount}}</template>
+                  </el-table-column>
+                  <!-- <el-table-column
+                                    prop="realityNumber"
+                                    label="可发货数量">
+                  </el-table-column>-->
+                  <el-table-column prop="sendCount" label="本次发货数量">
+                    <template slot-scope="scope">
+                      <el-input
+                        :class="{'send-input': scope.row.errorMessage}"
+                        :disabled="orderInfo.deliveryWay == 4 || scope.row.goodsCount - scope.row.cacheSendCount == 0"
+                        type="number"
+                        step="1"
+                        :max="scope.row.goodsCount - scope.row.cacheSendCount"
+                        min="1"
+                        @input="inputHandler(scope.$index)"
+                        v-model="scope.row.sendCount"
+                      ></el-input>
+                      <p v-if="scope.row.showError" class="error-message">{{scope.row.errorMessage}}</p>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
             </div>
+        </div>
+        <div class="container-item">
+          <template v-if="orderInfo.deliveryWay != 4">
+            <p>2.确认收发货信息</p>
+            <div class="container-item-content deliver-goods-address">
+              <div class="title">
+                <div class="title-list">
+                  <i class="take-in-icon"></i>
+                  <span>收货信息</span>
+                </div>
+                <div class="blue pointer" @click="changeReceivedInfo">修改收货信息</div>
+              </div>
+              <div class="content">
+                <div class="item">
+                  <div class="label">收货人</div>
+                  <div class="value">{{orderInfo.receivedName}}</div>
+                </div>
+                <div class="item">
+                  <div class="label">联系电话</div>
+                  <div class="value">{{orderInfo.receivedPhone}}</div>
+                </div>
+                <div class="item">
+                  <div class="label">收货信息</div>
+                  <div class="value">{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="container-item-content deliver-goods-address">
+              <div class="title">
+                <div class="title-list">
+                  <i class="deliver-icon"></i>
+                  <span>发货信息</span>
+                </div>
+                <div class="blue pointer" @click="changeSendInfo">修改发货信息</div>
+              </div>
+              <div class="content">
+                <div class="item">
+                  <div class="label">发货人</div>
+                  <div class="value">{{orderInfo.sendName}}</div>
+                </div>
+                <div class="item">
+                  <div class="label">联系电话</div>
+                  <div class="value">{{orderInfo.sendPhone}}</div>
+                </div>
+                <div class="item">
+                  <div class="label">发货信息</div>
+                  <div class="value">{{orderInfo.sendAddress}} {{orderInfo.sendDetail}}</div>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template v-else>
+            <p>2.确认自提信息</p>
+            <div class="container-item-content deliver-goods-address self-reference">
+              <div class="title">
+                <div class="title-list">
+                  <span>提货信息</span>
+                </div>
+              </div>
+              <div class="content">
+                <div class="item">
+                  <div class="label">提货人</div>
+                  <div class="value">{{orderInfo.receivedName}} {{orderInfo.receivedPhone}}</div>
+                </div>
+                <div class="item">
+                  <div class="label">自提点信息</div>
+                  <div class="value">{{orderInfo.pickUpName}} {{orderInfo.sendAddress}} {{orderInfo.sendDetail}}</div>
+                </div>
+                <div class="item">
+                  <div class="label">预约提货时间</div>
+                  <div class="value">{{(orderInfo.deliveryDate ? orderInfo.deliveryDate.split(' ')[0] : '') + ' ' + orderInfo.deliveryTime}}</div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+        <div class="container-item">
+          <p>3.填写物流信息</p>
+          <!-- 配送方式为普通快递 -->
+          <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 1">
+            <el-form
+              :model="ruleForm"
+              :rules="rules"
+              ref="ruleForm"
+              label-width="100px"
+              class="demo-ruleForm"
+            >
+              <el-form-item label="配送方式">
+                <span>普通快递</span>
+              </el-form-item>
+              <el-form-item label="快递公司" prop="expressCompanyCode" :class="{'is-disabled': !express}">
+                <el-select filterable @change="checkExpress" v-model="ruleForm.expressCompanyCode" placeholder="请选择">
+                  <el-option
+                    :label="item.expressCompany"
+                    :value="item.expressCompanyCode"
+                    v-for="(item, index) in expressCompanyList"
+                    :key="index"
+                  ></el-option>
+                </el-select>
+                <el-input v-if="ruleForm.expressCompanyCode == 'other'" v-model="ruleForm.other" placeholder="请输入快递公司名称"></el-input>
+              </el-form-item>
+              <el-form-item label="快递单号" prop="expressNos" :class="{'is-disabled': express != null}">
+                <el-input :disabled="express != null" :placeholder="express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" v-model="ruleForm.expressNos" maxlength="20"></el-input>
+              </el-form-item>
+              <el-form-item label="物流备注" prop="sendRemark">
+                <el-input
+                  style="width: 623px;"
+                  type="textarea"
+                  :rows="2"
+                  maxlength="100"
+                  placeholder="非必填，请输入，不超过100个字符"
+                  v-model="ruleForm.sendRemark"
+                ></el-input>
+              </el-form-item>
+            </el-form>
           </div>
-          <div class="content">
-            <el-table
-              :row-key="getRowKeys"
-              :class="{isIE: isIE, disabledCheckAll: orderInfo.deliveryWay != 4}"
-              ref="table"
-              :data="tableData"
-              style="width: 100%"
-              @selection-change="handleSelectionChange"
-              :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
-             >
-              <el-table-column 
-                type="selection" 
-                width="51"
-                :selectable="selectable"
-                :reserve-selection="true"
-              ></el-table-column>
-              <el-table-column label="序号" width="180">
-                <template slot-scope="scope">
-                  <span>{{scope.$index + 1}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="商品" width="380">
-                <template slot-scope="scope">
-                  <div class="goods-detail">
-                    <div class="goods-detail-item">
-                      <img width="70" :src="scope.row.goodsImage" alt />
-                    </div>
-                    <div class="goods-detail-item">
-                      <p class="ellipsis">{{scope.row.goodsName}}</p>
-                      <p>{{scope.row.goodsSpecs | goodsSpecsFilter}}</p>
-                    </div>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column prop="goodsCount" label="应发数量">
-                <template slot-scope="scope">{{scope.row.goodsCount - scope.row.cacheSendCount}}</template>
-              </el-table-column>
-              <!-- <el-table-column
-                                prop="realityNumber"
-                                label="可发货数量">
-              </el-table-column>-->
-              <el-table-column prop="sendCount" label="本次发货数量">
-                <template slot-scope="scope">
-                  <el-input
-                    :class="{'send-input': scope.row.errorMessage}"
-                    :disabled="orderInfo.deliveryWay == 4 || scope.row.goodsCount - scope.row.cacheSendCount == 0"
-                    type="number"
-                    step="1"
-                    :max="scope.row.goodsCount - scope.row.cacheSendCount"
-                    min="1"
-                    @input="inputHandler(scope.$index)"
-                    v-model="scope.row.sendCount"
-                  ></el-input>
-                  <p v-if="scope.row.showError" class="error-message">{{scope.row.errorMessage}}</p>
-                </template>
-              </el-table-column>
-            </el-table>
+          <!-- 配送方式为商家配送 -->
+          <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 2">
+            <el-form
+              :model="ruleFormStore"
+              :rules="rulesStore"
+              ref="ruleFormStore"
+              label-width="100px"
+              class="demo-ruleForm"
+            >
+              <el-form-item label="配送方式">
+                <span>商家配送</span>
+              </el-form-item>
+              <el-form-item label="配送时间">
+                <span>{{orderInfo.deliveryDate | formatDateRemoveZero}} {{orderInfo.deliveryTime}}</span>
+              </el-form-item>
+              <el-form-item label="配送员" prop="distributorValue">
+                <el-select v-model="ruleFormStore.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" ref="searchSelect" :filter-method="dataFilter" @visible-change="visibleChange" @focus="selectFocus" @blur="selectBlur" @change="selectChange">
+                  <el-option
+                    v-for="item in distributorList"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.name">
+                  </el-option>
+                </el-select>
+                <div class="pointer" v-show="distributorSet" style="display: inline-block; margin-left: 20px; margin-right: 10px;vertical-align:middle;">
+                    <span class="shuaxin-fenlei" @click="getDistributorList">刷新<i></i></span>
+                </div>
+                <div class="prompt" style="display:inline-block;" v-show="isDistributorShow && distributorSet">
+                  <span>您尚未创建配送员信息，去</span><span class="set-btn blue pointer font12" @click="gotoSubaccountManage">创建子账号</span><span>绑定配送员角色。</span>
+                </div>
+              </el-form-item>
+              <el-form-item label="联系方式" prop="phone">
+                <el-input placeholder="请输入配送员手机号码" v-model="ruleFormStore.phone"></el-input>
+              </el-form-item>
+              <el-form-item label="物流备注" prop="sendRemark">
+                <el-input
+                  style="width: 623px;"
+                  type="textarea"
+                  :rows="2"
+                  maxlength="100"
+                  placeholder="非必填，请输入，不超过100个字符"
+                  v-model="ruleFormStore.sendRemark"
+                ></el-input>
+              </el-form-item>
+            </el-form>
+          </div>
+          <!-- 配送方式 上门自提 -->
+          <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 4">
+            <el-form
+              :model="ruleForm"
+              :rules="rules"
+              ref="ruleForm"
+              label-width="100px"
+              class="demo-ruleForm"
+            >
+              <el-form-item label="配送方式">
+                <span>上门自提</span>
+              </el-form-item>
+              <el-form-item label="备注" prop="desc">
+                <el-input type="textarea" v-model="ruleForm.sendRemark" placeholder="非必填，请输入，不超过100个字符" maxlength="100"></el-input>
+              </el-form-item>
+            </el-form>
           </div>
         </div>
-      </div>
-      <div class="container-item">
-        <template v-if="orderInfo.deliveryWay != 4">
-          <p>2.确认收发货信息</p>
-          <div class="container-item-content deliver-goods-address">
-            <div class="title">
-              <div class="title-list">
-                <i class="take-in-icon"></i>
-                <span>收货信息</span>
-              </div>
-              <div class="blue pointer" @click="changeReceivedInfo">修改收货信息</div>
-            </div>
-            <div class="content">
-              <div class="item">
-                <div class="label">收货人</div>
-                <div class="value">{{orderInfo.receivedName}}</div>
-              </div>
-              <div class="item">
-                <div class="label">联系电话</div>
-                <div class="value">{{orderInfo.receivedPhone}}</div>
-              </div>
-              <div class="item">
-                <div class="label">收货信息</div>
-                <div class="value">{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}</div>
-              </div>
-            </div>
-          </div>
-          <div class="container-item-content deliver-goods-address">
-            <div class="title">
-              <div class="title-list">
-                <i class="deliver-icon"></i>
-                <span>发货信息</span>
-              </div>
-              <div class="blue pointer" @click="changeSendInfo">修改发货信息</div>
-            </div>
-            <div class="content">
-              <div class="item">
-                <div class="label">发货人</div>
-                <div class="value">{{orderInfo.sendName}}</div>
-              </div>
-              <div class="item">
-                <div class="label">联系电话</div>
-                <div class="value">{{orderInfo.sendPhone}}</div>
-              </div>
-              <div class="item">
-                <div class="label">发货信息</div>
-                <div class="value">{{orderInfo.sendAddress}} {{orderInfo.sendDetail}}</div>
-              </div>
-            </div>
-          </div>
-        </template>
-        <template v-else>
-          <p>2.确认自提信息</p>
-          <div class="container-item-content deliver-goods-address self-reference">
-            <div class="title">
-              <div class="title-list">
-                <span>提货信息</span>
-              </div>
-            </div>
-            <div class="content">
-              <div class="item">
-                <div class="label">提货人</div>
-                <div class="value">{{orderInfo.receivedName}} {{orderInfo.receivedPhone}}</div>
-              </div>
-              <div class="item">
-                <div class="label">自提点信息</div>
-                <div class="value">{{orderInfo.pickUpName}} {{orderInfo.sendAddress}} {{orderInfo.sendDetail}}</div>
-              </div>
-              <div class="item">
-                <div class="label">预约提货时间</div>
-                <div class="value">{{(orderInfo.deliveryDate ? orderInfo.deliveryDate.split(' ')[0] : '') + ' ' + orderInfo.deliveryTime}}</div>
-              </div>
-            </div>
-          </div>
-        </template>
-      </div>
-      <div class="container-item">
-        <p>3.填写物流信息</p>
-        <!-- 配送方式为普通快递 -->
-        <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 1">
-          <el-form
-            :model="ruleForm"
-            :rules="rules"
-            ref="ruleForm"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <el-form-item label="配送方式">
-              <span>普通快递</span>
-            </el-form-item>
-            <el-form-item label="快递公司" prop="expressCompanyCode" :class="{'is-disabled': !express}">
-              <el-select filterable @change="checkExpress" v-model="ruleForm.expressCompanyCode" placeholder="请选择">
-                <el-option
-                  :label="item.expressCompany"
-                  :value="item.expressCompanyCode"
-                  v-for="(item, index) in expressCompanyList"
-                  :key="index"
-                ></el-option>
-              </el-select>
-              <el-input v-if="ruleForm.expressCompanyCode == 'other'" v-model="ruleForm.other" placeholder="请输入快递公司名称"></el-input>
-            </el-form-item>
-            <el-form-item label="快递单号" prop="expressNos" :class="{'is-disabled': express != null}">
-              <el-input :disabled="express != null" :placeholder="express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" v-model="ruleForm.expressNos" maxlength="20"></el-input>
-            </el-form-item>
-            <el-form-item label="物流备注" prop="sendRemark">
-              <el-input
-                style="width: 623px;"
-                type="textarea"
-                :rows="2"
-                maxlength="100"
-                placeholder="非必填，请输入，不超过100个字符"
-                v-model="ruleForm.sendRemark"
-              ></el-input>
-            </el-form-item>
-          </el-form>
+        <div class="footer">
+          <el-button v-if="orderInfo.deliveryWay == 1 || orderInfo.deliveryWay == 4" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
+          <el-button v-if="orderInfo.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">发 货</el-button>
         </div>
-        <!-- 配送方式为商家配送 -->
-        <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 2">
-          <el-form
-            :model="ruleFormStore"
-            :rules="rulesStore"
-            ref="ruleFormStore"
-            label-width="100px"
-            class="demo-ruleForm"
-           >
-            <el-form-item label="配送方式">
-              <span>商家配送</span>
-            </el-form-item>
-            <el-form-item label="配送时间">
-              <span>{{orderInfo.deliveryDate | formatDateRemoveZero}} {{orderInfo.deliveryTime}}</span>
-            </el-form-item>
-            <el-form-item label="配送员" prop="distributorValue">
-              <el-select v-model="ruleFormStore.distributorValue" no-data-text="无匹配数据" value-key="id" filterable placeholder="请输入或选择" ref="searchSelect" :filter-method="dataFilter" @visible-change="visibleChange" @focus="selectFocus" @blur="selectBlur" @change="selectChange">
-                <el-option
-                  v-for="item in distributorList"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.name">
-                </el-option>
-              </el-select>
-              <div class="pointer" v-show="distributorSet" style="display: inline-block; margin-left: 20px; margin-right: 10px;vertical-align:middle;">
-                  <span class="shuaxin-fenlei" @click="getDistributorList">刷新<i></i></span>
-              </div>
-              <div class="prompt" style="display:inline-block;" v-show="isDistributorShow && distributorSet">
-                <span>您尚未创建配送员信息，去</span><span class="set-btn blue pointer font12" @click="gotoSubaccountManage">创建子账号</span><span>绑定配送员角色。</span>
-              </div>
-            </el-form-item>
-            <el-form-item label="联系方式" prop="phone">
-              <el-input placeholder="请输入配送员手机号码" v-model="ruleFormStore.phone"></el-input>
-            </el-form-item>
-            <el-form-item label="物流备注" prop="sendRemark">
-              <el-input
-                style="width: 623px;"
-                type="textarea"
-                :rows="2"
-                maxlength="100"
-                placeholder="非必填，请输入，不超过100个字符"
-                v-model="ruleFormStore.sendRemark"
-              ></el-input>
-            </el-form-item>
-          </el-form>
-        </div>
-        <!-- 配送方式 上门自提 -->
-        <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 4">
-          <el-form
-            :model="ruleForm"
-            :rules="rules"
-            ref="ruleForm"
-            label-width="100px"
-            class="demo-ruleForm"
-           >
-            <el-form-item label="配送方式">
-              <span>上门自提</span>
-            </el-form-item>
-            <el-form-item label="备注" prop="desc">
-              <el-input type="textarea" v-model="ruleForm.sendRemark" placeholder="非必填，请输入，不超过100个字符" maxlength="100"></el-input>
-            </el-form-item>
-          </el-form>
-        </div>
-      </div>
-      <div class="footer">
-        <el-button v-if="orderInfo.deliveryWay == 1 || orderInfo.deliveryWay == 4" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
-        <el-button v-if="orderInfo.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">发 货</el-button>
       </div>
     </div>
     <component
@@ -794,7 +796,7 @@ export default {
       //   }
       // }
      
-      this.$refs[formName].validate(async (valid) => {
+      this.$refs[formName][0].validate(async (valid) => {
         if (valid) {
           let params;
 
@@ -825,34 +827,34 @@ export default {
           this.sending = true
           let obj = {
                 orderId: this.$route.query.orderId || this.$route.query.id || this.$route.query.ids, // 订单id
-                memberInfoId: this.orderInfo.memberInfoId,
-                orderCode: this.orderInfo.orderCode,
+                memberInfoId: this.list[0].memberInfoId,
+                orderCode: this.list[0].orderCode,
                 orderItems: curItem.map(val => ({
                   id: val.id,
                   sendCount: val.sendCount
                 })), // 发货的商品列表
-                id: this.orderInfo.id,
-                memberSn: this.orderInfo.memberSn,
-                receivedName: this.orderInfo.receivedName,
-                receivedPhone: this.orderInfo.receivedPhone,
-                receivedProvinceCode: this.orderInfo.receivedProvinceCode,
-                receivedProvinceName: this.orderInfo.receivedProvinceName,
-                receivedCityCode: this.orderInfo.receivedCityCode,
-                receivedCityName: this.orderInfo.receivedCityName,
-                receivedAreaCode: this.orderInfo.receivedAreaCode,
-                receivedAreaName: this.orderInfo.receivedAreaName,
-                receiveAddress: this.orderInfo.receiveAddress,
-                sendAddress: this.orderInfo.sendAddress,
-                receivedDetail: this.orderInfo.receivedDetail,
-                sendName: this.orderInfo.sendName, // 发货人名称
-                sendPhone: this.orderInfo.sendPhone, // 发货人手机号
-                sendProvinceCode: this.orderInfo.sendProvinceCode, // 发货省cdoe
-                sendProvinceName: this.orderInfo.sendProvinceName, // 发货省名称
-                sendCityCode: this.orderInfo.sendCityCode, // 发货城市code
-                sendCityName: this.orderInfo.sendCityName, // 发货城市名称
-                sendAreaCode: this.orderInfo.sendAreaCode, // 发货区县code
-                sendAreaName: this.orderInfo.sendAreaName, // 发货区县名称
-                sendDetail: this.orderInfo.sendDetail // 发货人详细地址
+                id: this.list[0].id,
+                memberSn: this.list[0].memberSn,
+                receivedName: this.list[0].receivedName,
+                receivedPhone: this.list[0].receivedPhone,
+                receivedProvinceCode: this.list[0].receivedProvinceCode,
+                receivedProvinceName: this.list[0].receivedProvinceName,
+                receivedCityCode: this.list[0].receivedCityCode,
+                receivedCityName: this.list[0].receivedCityName,
+                receivedAreaCode: this.list[0].receivedAreaCode,
+                receivedAreaName: this.list[0].receivedAreaName,
+                receiveAddress: this.list[0].receiveAddress,
+                sendAddress: this.list[0].sendAddress,
+                receivedDetail: this.list[0].receivedDetail,
+                sendName: this.list[0].sendName, // 发货人名称
+                sendPhone: this.list[0].sendPhone, // 发货人手机号
+                sendProvinceCode: this.list[0].sendProvinceCode, // 发货省cdoe
+                sendProvinceName: this.list[0].sendProvinceName, // 发货省名称
+                sendCityCode: this.list[0].sendCityCode, // 发货城市code
+                sendCityName: this.list[0].sendCityName, // 发货城市名称
+                sendAreaCode: this.list[0].sendAreaCode, // 发货区县code
+                sendAreaName: this.list[0].sendAreaName, // 发货区县名称
+                sendDetail: this.list[0].sendDetail // 发货人详细地址
               };
 
           
@@ -1009,6 +1011,7 @@ export default {
             })
             res[0].pickUpName = ''
             this._list = JSON.parse(JSON.stringify(res))
+            this.list = res
             this.tableData = res[0].orderItemList;
             this.tableData.forEach(row => {
               this.$refs.table.toggleRowSelection(row);
