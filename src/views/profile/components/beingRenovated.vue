@@ -299,7 +299,8 @@ export default {
       return new Promise((resolve, reject) => {
         this._apis.goodsOperate.getEffTemplateList(reqParams).then((response) => {
           this.totalPage = Math.ceil(response.total / this.form.pageSize);
-          this.templateList = this.templateList.concat(response.list);
+          // this.templateList = this.templateList.concat(response.list);
+          this.templateList = response.list
           this.imgNow = 0;
           this.preload(this.templateList, 'photoDetailsUrl');
           resolve(response)
@@ -384,26 +385,10 @@ export default {
     next() {
       if (this.form.pageNo < this.totalPage) {
         this.form.pageNo =  this.form.pageNo + 1
-        this.getEffTemplateList().then(() => {
-          if (this.currPage < this.totalPage ) {
-            this.currPage++
-          } else {
-            this.currPage = 0
-          }
-          this.swiper.update()
-          // this.swiper.slideTo(this.currPage, 1000, false)
-          this.swiper.slideNext()
-        })
       } else {
-          
-        if (this.currPage < this.totalPage ) {
-          this.currPage++
-        } else {
-          this.currPage = 0
-        }
-        // this.swiper.slideTo(this.currPage, 1000, false)
-        this.swiper.slideNext()
+        this.form.pageNo =  1
       }
+      this.getEffTemplateList()
     }
   }
 }
