@@ -3,7 +3,7 @@
   <DialogBase :visible.sync="visible" width="816px" :title="'选择优惠套装'" @submit="submit">
     <div class="select_dialog">
       <div class="head-wrapper">
-        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" :inline="true">
+        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" :inline="true">
           <el-form-item label="优惠套装状态" prop="status">
             <el-select label="优惠套装状态" v-model="ruleForm.status" placeholder="请选择优惠套装状态">
               <el-option label="全部" :value="''"></el-option>
