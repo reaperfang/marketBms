@@ -229,8 +229,8 @@ export default {
         }
         .el-tabs__item{
             width:200px;
-            height: 34px;
-            line-height: 34px;
+            height: 34px !important;
+            line-height: 34px !important;
             background-color: #FFFFFFFF;
             color: #655EFFFF;
             font-size: 14px;
@@ -240,7 +240,7 @@ export default {
         }
         .is-active{
             background-color:#655EFFFF;
-            color:#FFFFFFFF;
+            color:#FFFFFFFF !important;
         }
     }
 }
