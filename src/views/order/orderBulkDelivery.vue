@@ -900,13 +900,21 @@ export default {
         this._list = JSON.parse(JSON.stringify(this.list)) 
 
         Promise.all(_arr).then((values) => {
-          values.forEach((item, index) => {
+          // values.forEach((item, index) => {
+          //   this._list[index].sizeList = item
+          //   if(item && item.length) {
+          //     this._list.splice(index, 1)
+          //   }
+          // })
+
+          for(let index=values.length-1; index>=0; index--) {
+            let item = values[index]
+
             this._list[index].sizeList = item
             if(item && item.length) {
               this._list.splice(index, 1)
             }
-          })
-
+          }
           this._list = this._list.filter(val => val.express != null)
 
           if(this.list[0].deliveryWay == 1 && this._list.length) {
