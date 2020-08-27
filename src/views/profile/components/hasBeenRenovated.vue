@@ -1,7 +1,7 @@
 <template>
    <div class="hasBeenRenovated">
      <h2>您已设置店铺装修，请您预览店铺：</h2>
-     <ul>
+     <ul v-loading="isLoading" element-loading-background="rgba(255,255,255,1)">
        <li v-if="isHasBindGzh" class="gzh">
          <p>微信公众号商城</p>
          <div class="img" :class="{ 'no-bind': !isBindGzh, 'no-release': isBindGzh && !isReleaseGZ }">
@@ -37,6 +37,7 @@ export default {
 
   data () {
     return {
+      isLoading: true,
       businessChannel: null, // 
       qrCode: null,
       smallQRcode: '',
@@ -81,12 +82,15 @@ export default {
   watch: {},
 
   created() {
-    this.getShopInfo()
-    this.getwxBindStatus() // 是否绑定
-    this.getQrcode()
-    this.getSmallQRcode()
-    this.getIsReleaseWX()
-    this.getIsReleaseGZ()
+    const p1 = this.getShopInfo()
+    const p2 = this.getwxBindStatus() // 是否绑定
+    const p3 = this.getQrcode()
+    const p4 = this.getSmallQRcode()
+    const p5 = this.getIsReleaseWX()
+    const p6 = this.getIsReleaseGZ()
+    Promise.all([p1, p2, p3, p4, p5, p6]).finally(() => {
+      this.isLoading = false
+    })
   },
 
   mounted() {},
@@ -94,22 +98,24 @@ export default {
   methods: {
     //判断公众号是否设置商城首页
     getIsReleaseGZ(){
-      this._apis.shop
+      return this._apis.shop
         .getHomePage({pageTag:0}).then(response => {
           this.isReleaseGZ = response ? true : false
         })
         .catch(error => {
           console.error(error);
+          this.$message({ message: error, type: 'error' });
         });
     },
     //判断小程序是否发布
     getIsReleaseWX(){
-      this._apis.profile
+      return this._apis.profile
         .getSmallRelease({id:this.cid}).then(response => {
           this.isReleaseWX = response.status === 0 ? true :  false
         })
         .catch(error => {
           console.error(error);
+          this.$message({ message: error, type: 'error' });
         });
     },
     //获取二维码
@@ -117,7 +123,7 @@ export default {
       if (this.shareUrl) {
       // url: 'https:' + this.shareUrl.split(':')[1].replace("&","[^]"),
       const pageLink = 'https:' + this.shareUrl.split(':')[1].replace("&","[^]")
-      this._apis.shop
+      return this._apis.shop
         .getQrcode({
           url: pageLink,
           width: "80",
@@ -129,12 +135,13 @@ export default {
         })
         .catch(error => {
           console.error(error);
+          this.$message({ message: error, type: 'error' });
         });
       }
     },
     getwxBindStatus() {
       const id = this.cid
-      this._apis.profile.getwxBindStatus({ id }).then(response => {
+      return this._apis.profile.getwxBindStatus({ id }).then(response => {
         console.log('getwxBindStatus',response)
         this.isBindGzh = response && response.bindWechatAccount === 1 || false
         this.isBindXcx = response && response.bindWechatApplet === 1 || false
@@ -145,7 +152,7 @@ export default {
     },
     getSmallQRcode() {
       const id = this.cid
-      this._apis.profile.getSmallQRcode({ id }).then(response => {
+      return this._apis.profile.getSmallQRcode({ id }).then(response => {
         // console.log('getSmallQRcode',response)
         this.smallQRcode = response ? `data:image/png;base64,${response}` : ''
       }).catch((err) => {
@@ -155,14 +162,14 @@ export default {
     },
     getShopInfo() {
       let id = this.cid;
-      this._apis.set
+      return this._apis.set
         .getShopInfo({ id: id })
         .then(response => {
          console.log('----response--', response)
          this.businessChannel = response && response.businessChannel
         })
         .catch(error => {
-          console.log(error)
+         this.$message({ message: error, type: 'error' });
           // this.$message.error('查询失败');
         });
     },
@@ -182,7 +189,7 @@ export default {
           resolve(response)
         }).catch(error =>{
           reject(error)
-          console.log('updateShopInfo:error', error)
+          this.$message({ message: error, type: 'error' });
           // this.$message.error('保存失败');
         })
       })
