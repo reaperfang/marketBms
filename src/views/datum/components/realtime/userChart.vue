@@ -22,6 +22,12 @@ export default {
   methods: {
     // 数据显示控制
     con(){
+      this.flow = {
+        xAxis:this.n.xAxis,
+        yAxis1:this.n.yAxis1 && this.n.yAxis1.map(item => { return (item*1).toFixed(1)}),
+        yAxis2:this.n.yAxis2 && this.n.yAxis2.map(item => { return (item*1).toFixed(1)}),
+        yAxis3:this.n.yAxis3 && this.n.yAxis3.map(item => { return (item*1).toFixed(1)}),
+      }
       this.option = {
         tooltip: {
           trigger: "axis",
@@ -45,8 +51,12 @@ export default {
         xAxis: {
           type: "category",
           boundaryGap: false,
-          // data: this.flow['xAxis']
-          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+          axisLabel:{
+            showMaxLabel:true,
+            // interval:0,
+          },
+          data: this.flow['xAxis']
+          // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
         },
         //Y轴
         yAxis: {
@@ -64,7 +74,7 @@ export default {
         },
          series: [{
                     name: '用户总数',
-                    data: [820, 932, 901, 934, 1290, 1330, 1320],
+                    data: this.flow['yAxis1'],
                     type: 'line',
                     hoverAnimation:false,
                     symbol:'circle',
@@ -77,7 +87,7 @@ export default {
                 },
                 {
                     name: '新增用户',
-                    data: [20, 71, 123, 934, 1545, 456, 178],
+                    data: this.flow['yAxis2'],
                     type: 'line',
                     hoverAnimation:false,
                     symbol:'circle',
@@ -90,7 +100,7 @@ export default {
                 },
                 {
                     name: '新增会员',
-                    data: [620, 711, 823, 934, 1445, 1456, 1178],
+                    data: this.flow['yAxis3'],
                     type: 'line',
                     hoverAnimation:false,
                     symbol:'circle',
@@ -102,11 +112,7 @@ export default {
                     },
                 }],
       };
-      this.flow = {
-        xAxis:this.n.xAxis,
-        yAxis1:this.n.series[0] && this.n.series[0].data.map(item => { return (item*1).toFixed(1)}),
-        yAxis2:this.n.series[1] && this.n.series[1].data.map(item => { return (item*1).toFixed(1)}),
-      }
+      
       this.makeOption(this.flow);
       this.option.xAxis.data = this.flow.xAxis;
       this.oChart.setOption(this.option, true);

@@ -6,7 +6,7 @@
     <div class="p_container pb12">
        <div class="p_title clearfix">
            <h2>数据总览</h2>
-           <span class="refresh"><img src="@/assets/images/realtime/refresh.png" alt=""></span>
+           <span @click="getdataView()" class="refresh"><img src="@/assets/images/realtime/refresh.png" alt=""></span>
           <div class="fr fr_channel">
             <!-- <el-button type="primary">实时战况</el-button> -->
           </div>
@@ -20,78 +20,78 @@
                 </el-tooltip>
             </div>
             <div class="clearfix pt">
-                <strong class="fl">8,233,000</strong>
-                <span class="fl">昨日全天：<span>860</span></span>
+                <strong class="fl">{{dataRt.paid_order_am_rt}}</strong>
+                <span class="fl">昨日全天：<span>{{dataRt.paid_order_am_rd}}</span></span>
             </div>
             <screeningChart 
     :title="'测试图表'" 
     ref="dtChart"
-    :dataChart="dataChart" height="300px" >
+    :dataChart="dataChart1" height="300px" >
     </screeningChart>
         </div>
         <div class="card-content">
             <div class="card-item">
                 <div class="item-top">
                     <p>支付金额（元）</p>
-                    <span> <strong>8,233,000</strong> </span>
+                    <span> <strong>{{dataRt.paid_order_am_rt}}</strong> </span>
                 </div>
-                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-if="idData">昨日全天：<span >{{dataRt.paid_order_am_rd}}</span></p>
                 <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>支付订单数（单）</p>
-                    <span> <strong>50</strong> <el-button type="text" @click="_routeTo('query')">查看</el-button> </span>
+                    <span> <strong>{{dataRt.paid_order_cq_rt}}</strong> <el-button type="text" @click="_routeTo('query')">查看</el-button> </span>
                 </div>
-                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-if="idData">昨日全天：<span >{{dataRt.paid_order_cq_rd}}</span></p>
                 <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>支付人数（人）</p>
-                    <span> <strong>8,233,000</strong> </span>
+                    <span> <strong>{{dataRt.paid_order_nu_rt}}</strong> </span>
                 </div>
-                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-if="idData">昨日全天：<span >{{dataRt.paid_order_nu_rd}}</span></p>
                 <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>退款金额（元）</p>
-                    <span> <strong>8,233,000</strong></span>
+                    <span> <strong>{{dataRt.refund_am_rt}}</strong></span>
                 </div>
-                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-if="idData">昨日全天：<span >{{dataRt.refund_am}}</span></p>
                 <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>退款订单数（单）</p>
-                    <span> <strong>50</strong> <el-button type="text" @click="_routeTo('afterSalesManagement')">查看</el-button> </span>
+                    <span> <strong>{{dataRt.refund_cq_rt}}</strong> <el-button type="text" @click="_routeTo('afterSalesManagement')">查看</el-button> </span>
                 </div>
-                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-if="idData">昨日全天：<span >{{dataRt.refund_cq}}</span></p>
                 <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>客单价（元）</p>
-                    <span> <strong>5033</strong>  </span>
+                    <span> <strong>{{dataRt.atv_rt}}</strong>  </span>
                 </div>
-                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-if="idData">昨日全天：<span >{{dataRt.atv_rd}}</span></p>
                 <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>访客数量（次）</p>
-                    <span> <strong>50</strong> </span>
+                    <span> <strong>{{dataRt.uv_rt}}</strong> </span>
                 </div>
-                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-if="idData">昨日全天：<span >{{dataRt.uv}}</span></p>
                 <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>浏览数量（次）</p>
-                    <span> <strong>50</strong> </span>
+                    <span> <strong>{{dataRt.pv_rt}}</strong> </span>
                 </div>
-                <p v-if="idData">昨日全天：<span >860</span></p>
+                <p v-if="idData">昨日全天：<span >{{dataRt.pv}}</span></p>
                 <p v-else>昨日全天：更新中~</p>
             </div>
         </div>
@@ -203,7 +203,7 @@
                     </div>
                 </div>
                 <div class="chartbox">
-                    <userChart :title="'测试图表'" ref="dtChart" :dataChart="dataChart" height="300px" ></userChart>
+                    <userChart :title="'测试图表'" ref="dtChart" :dataChart="dataChart2" height="300px" ></userChart>
                 </div>
             </div>
         </el-aside>
@@ -342,7 +342,6 @@
 </template>
 <script>
 import {GetDateStr} from "@/utils/validate.js"
-import {dataView} from "@/api/realSurvey"
 import serchRt from "./components/realtime/serchRt";//季度
 import pfChart from "./components/pfChart";
 import screeningChart from "./components/realtime/screeningChart";
@@ -360,6 +359,9 @@ export default {
         startTime: "",
         endTime:"",
         nearDay: 7, 
+        dataRt:{},//右侧 类别数据
+        dataChart1: {},//数据总览
+        dataChart2: {},//用户概览
         dataChart: {},
         type:1,
         seachTime:'',
@@ -370,36 +372,11 @@ export default {
   },
   created() {
     this.init()
-    this.dataChart={
-        xAxis:['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-        series:[{
-                    name: '招商银行',
-                    data: [820, 932, 901, 934, 1290, 1330, 1320],
-                    type: 'line',
-                    symbol:'circle',
-                    symbolSize: 8,   //设定实心点的大小
-                    color:['red'],
-                    itemStyle:{  
-                        normal:{  
-                        color:'red',  
-                        borderColor:'#fff',  //拐点边框颜色  
-                        }  
-                    },
-                },
-                {
-                    name: '浦发银行',
-                    data: [620, 711, 823, 934, 1445, 1456, 1178],
-                    type: 'line',
-                    itemStyle: {
-                        //则线图每个点的样式
-                        borderWidth: 2,
-                    },
-                }]
-    }
   }, 
   methods: {
     init(){
-      this.getFlowAnalysis()
+      this.getdataView()
+      this.getuserView()
     },
 
     //浏览量/访问量
@@ -417,8 +394,32 @@ export default {
       });
     },
     getdataView(){//数据总览数据
-      this._apis.realSurvey.dataView().then(response => {
-        this.dataChart1 = response
+      this._apis.realSurvey.dataView({}).then(response => {
+          console.log(response)
+        this.dataRt = response  
+        this.dataChart1 = {
+            xAxis:response.x,
+            data_rt:response.data_rt,
+            data_rd:response.data_rd,//昨日
+        }
+      }).catch(error => {
+        this.$message.error(error);
+      });
+    },
+    getuserView(){//用户概览数据
+        var query={
+            channelType:this.userType,
+            units:this.seachTime.units,
+            date:this.seachTime.date,
+        }
+      this._apis.realSurvey.userView(query).then(response => {
+          console.log(response)
+        this.dataChart2 = {
+            xAxis:response.x,
+            yAxis1:response.c_uv_sh_channel,//总数
+            yAxis2:response.new_c_uv,//新增用户
+            yAxis3:response.new_cmember,//新增会员
+        }
       }).catch(error => {
         this.$message.error(error);
       });
@@ -429,7 +430,7 @@ export default {
     },
     //用户  全部 or  小程序  or  公众号
     alluserType() {// userType
-      
+      this.getuserView()
     },
     all() { //渠道  visitSourceType
       
@@ -441,6 +442,7 @@ export default {
     getUserVal(val){//用户概览 组件传值
         console.log(val)
         this.seachTime=val
+        this.getuserView()
     },
   },
 };

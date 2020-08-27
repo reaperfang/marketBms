@@ -22,6 +22,13 @@ export default {
   methods: {
     // 数据显示控制
     con(){
+      this.flow = {
+        xAxis:this.n.xAxis,
+        // yAxis1:this.n.data_rt && this.n.data_rt.map(item => { return (item*1).toFixed(1)}),
+        // yAxis2:this.n.data_rd && this.n.data_rd.map(item => { return (item*1).toFixed(1)}),
+        yAxis1:this.n.data_rt,
+        yAxis2:this.n.data_rd,
+      }
       this.option = {
         tooltip: {
           trigger: "axis",
@@ -45,8 +52,11 @@ export default {
         xAxis: {
           type: "category",
           boundaryGap: false,
-          // data: this.flow['xAxis']
-          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+          axisLabel:{
+            showMaxLabel:true,
+          },
+          data: this.flow['xAxis']
+          // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
         },
         //Y轴
         yAxis: {
@@ -64,7 +74,7 @@ export default {
         },
          series: [{
                     name: '今日',
-                    data: [820, 932, 901, 934, 1290, 1330, 1320],
+                    data: this.flow.yAxis1,
                     type: 'line',
                     hoverAnimation:false,
                     symbol:'circle',
@@ -77,7 +87,7 @@ export default {
                 },
                 {
                     name: '昨日',
-                    data: [620, 711, 823, 934, 1445, 1456, 1178],
+                    data: this.flow.yAxis2,
                     type: 'line',
                     hoverAnimation:false,
                     symbol:'circle',
@@ -90,11 +100,6 @@ export default {
                     },
                 }],
       };
-      this.flow = {
-        xAxis:this.n.xAxis,
-        yAxis1:this.n.series[0] && this.n.series[0].data.map(item => { return (item*1).toFixed(1)}),
-        yAxis2:this.n.series[1] && this.n.series[1].data.map(item => { return (item*1).toFixed(1)}),
-      }
       this.makeOption(this.flow);
       this.option.xAxis.data = this.flow.xAxis;
       this.oChart.setOption(this.option, true);

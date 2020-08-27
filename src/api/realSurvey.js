@@ -5,7 +5,7 @@ export function dataView(data) {
   return request({
     target:'RTOV-DATA-OVERVIEW-PROCESSOR',
     method: 'post',
-    apiType: 'realSurvey',
+    apiType: 'data',
     data
   })
 }
@@ -14,7 +14,7 @@ export function transactionView(data) {
   return request({
     target:'RTOV-TRANSACTION-KANBAN-PROCESSOR',
     method: 'post',
-    apiType: 'realSurvey',
+    apiType: 'data',
     data
   })
 }
@@ -23,7 +23,7 @@ export function tradeDistribution(data) {
     return request({
       target:'RTOV-TRANSACTION-DISTRIBUTION-PROCESSOR',
       method: 'post',
-      apiType: 'realSurvey',
+      apiType: 'data',
       data
     })
   }
@@ -33,7 +33,7 @@ export function userView(data) {
     return request({
       target:'RTOV-USER-OVERVIEW-PROCESSOR',
       method: 'post',
-      apiType: 'realSurvey',
+      apiType: 'data',
       data
     })
   }  
@@ -42,7 +42,7 @@ export function channelView(data) {
     return request({
       target:'RTOV-CHANNEL-TRANSFOR-PROCESSOR',
       method: 'post',
-      apiType: 'realSurvey',
+      apiType: 'data',
       data
     })
 }
@@ -52,7 +52,7 @@ export function goodsView(data) {
     return request({
       target:'RTOV-GOOD-KANBAN-PROCESSOR',
       method: 'post',
-      apiType: 'realSurvey',
+      apiType: 'data',
       data
     })
 }
