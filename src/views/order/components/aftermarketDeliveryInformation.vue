@@ -111,12 +111,12 @@
                         <p>
                             <span>收货信息</span>
                             <span>{{orderAfterSaleSendInfo.receivedName}} / {{orderAfterSaleSendInfo.receivedPhone}}</span>
-                            <span>{{orderAfterSaleSendInfo.receivedProvinceName}} {{orderAfterSaleSendInfo.receivedCityName}} {{orderAfterSaleSendInfo.receivedAreaName}} {{orderAfterSaleSendInfo.receivedDetail}} </span>
+                            <span>{{orderAfterSaleSendInfo.receiveAddress}} {{orderAfterSaleSendInfo.receivedDetail}} </span>
                         </p>
                         <p>
                             <span>发货信息</span>
                             <span>{{orderAfterSaleSendInfo.sendName}} / {{orderAfterSaleSendInfo.sendPhone}}</span>
-                            <span>{{orderAfterSaleSendInfo.sendProvinceName}} {{orderAfterSaleSendInfo.sendCityName}} {{orderAfterSaleSendInfo.sendAreaName}} {{orderAfterSaleSendInfo.sendDetail}} </span>
+                            <span>{{orderAfterSaleSendInfo.sendAddress}} {{orderAfterSaleSendInfo.sendDetail}} </span>
                         </p>
                     </div>
                     <el-table
