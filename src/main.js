@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 import '@/directives/index.js'  //导入指令
+import '@/assets/theme/index.css'
 import '@/styles/index.scss' // 导入全局scss
 import '@/system/permission' // 权限控制
 import utils from '@/utils'; //导入全局工具箱
@@ -51,7 +52,6 @@ import Cookies from 'js-cookie'
 
 //注册elementUI库
 import Element from 'element-ui'
-import '@/assets/theme/index.css'
 Vue.use(Element, {
   size: Cookies.get('size') || 'small', // set element-ui default size
 })
