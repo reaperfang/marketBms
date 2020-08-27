@@ -10,12 +10,12 @@
       <div class="b_c_content">
         <p class="b_c_description">绑定微信小程序和公众号，推广您的店铺。</p>
         <div>
-          <el-tag effect="plain" size="medium" class="b_c_btn" @click="linkTo({text:'绑定微信公众号'})"> 授权微信公众号 </el-tag>
-          <el-tag effect="plain" size="medium" class="b_c_btn" @click="linkTo({text:'绑定微信小程序'})"> 授权微信小程序 </el-tag>
+          <el-button type="primary" plain @click="linkTo({text:'授权微信公众号'})"> 授权微信公众号 </el-button>
+          <el-button type="primary" plain @click="linkTo({text:'授权微信小程序'})"> 授权微信小程序 </el-button>
         </div>
         <div>
-          <el-tag type="info" effect="dark" size="medium"> 公众号授权成功 </el-tag>
-          <el-tag type="info" effect="dark" size="medium"> 小程序授权成功 </el-tag>
+          <el-button type="info" plain disabled> 公众号授权成功 </el-button>
+          <el-button type="info" plain disabled> 小程序授权成功 </el-button>
         </div>
       </div>
 
@@ -51,23 +51,23 @@
       /** 获取店铺微信绑定状态 */
       getBindStatus() {
         console.log('this.cid', this.cid);
-        this._apis.set.getShopPayInfo({ id: this.cid }).then(response =>{
-          console.log('getShopPayInfo', response)
-          this.bindWechatAccount = response.bindWechatAccount
-          this.bindWechatApplet = response.bindWechatApplet
-        }).catch(error =>{
+        this._apis.profile.getwxBindStatus({ id: this.cid }).then(response => {
+          console.log('getBindStatus', response);
+          this.bindWechatAccount = response.bindWechatAccount;
+          this.bindWechatApplet = response.bindWechatApplet;
+        }).catch(error => {
           this.$message.warning(error);
         })
       },
 
       //常用功能跳转 
       linkTo(item){
-        if(item.text == '绑定微信公众号'){
-          this.$router.push({path:'/apply',query:{paths:'/application/channelapp/publicnum',applyId:'3'}})
-          this.SETCURRENT(8)
-        }else if(item.text == '绑定微信小程序'){
-          this.$router.push({path:'/apply',query:{paths:'/application/channelapp/smallapp',applyId:'3'}})
-          this.SETCURRENT(8)
+        if(item.text == '授权微信公众号'){
+          let routeUrl = this.$router.resolve({path: '/apply', query: {paths: '/application/channelapp/publicnum', applyId: '3'}});
+          window.open(routeUrl.href, '_blank');
+        }else if(item.text == '授权微信小程序'){
+          let routeUrl = this.$router.resolve({path: '/apply', query: {paths: '/application/channelapp/smallapp', applyId: '3'}});
+          window.open(routeUrl.href, '_blank');
         }else{
           this.$router.push({path:item.url})
         }
@@ -110,10 +110,6 @@
 
   .b_c_description {
     margin-bottom: 20px;
-  }
-
-  .b_c_btn {
-    cursor: pointer;
   }
 
   .i_base_btns {
