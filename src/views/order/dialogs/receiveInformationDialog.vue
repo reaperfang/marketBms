@@ -29,7 +29,7 @@
           <el-input
             type="textarea"
             :rows="2"
-            placeholder="请输入补充地址信息，非必填项"
+            placeholder="请输入补充地址信息，必填项"
             maxlength="100"
             v-model="ruleForm.sendDetail"
           ></el-input>
@@ -75,7 +75,7 @@
           <el-input
             type="textarea"
             :rows="2"
-            placeholder="请输入补充地址信息，非必填项"
+            placeholder="请输入补充地址信息，必填项"
             maxlength="100"
             v-model="ruleForm.receivedDetail"
           ></el-input>
@@ -195,6 +195,12 @@ export default {
         // ],
         address: [
           { required: true, message: "请选择收货地址", trigger: "blur" }
+        ],
+        sendDetail: [
+          { required: true, message: "请输入补充地址信息", trigger: "blur" }
+        ],
+        receivedDetail: [
+          { required: true, message: "请输入补充地址信息", trigger: "blur" }
         ],
 
         sendName: [{ validator: sendNameValidator, trigger: "blur" }],
