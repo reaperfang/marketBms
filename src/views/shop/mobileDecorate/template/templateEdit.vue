@@ -72,9 +72,9 @@ export default {
         showWidget: true,
         showProp: true,
         dragable: true,
-        widgetCalcHeight: 66, //控件区扣减高度
-        renderCalcHeight: 66+10+24,  //渲染区扣减高度
-        propCalcHeight: 66 //属性区扣减高度
+        widgetCalcHeight: 60, //控件区扣减高度
+        renderCalcHeight: 60+10,  //渲染区扣减高度
+        propCalcHeight: 60 //属性区扣减高度
       },
       decorateData: null,
       pageList: [],  //页面列表
