@@ -10,12 +10,10 @@
       <div class="b_c_content">
         <p class="b_c_description">绑定微信小程序和公众号，推广您的店铺。</p>
         <div>
-          <el-button type="primary" plain @click="linkTo({text:'授权微信公众号'})"> 授权微信公众号 </el-button>
-          <el-button type="primary" plain @click="linkTo({text:'授权微信小程序'})"> 授权微信小程序 </el-button>
-        </div>
-        <div>
-          <el-button type="info" plain disabled> 公众号授权成功 </el-button>
-          <el-button type="info" plain disabled> 小程序授权成功 </el-button>
+          <el-button type="primary" plain v-if="bindWechatAccount == 0" @click="linkToOfficialAccounts"> 授权微信公众号 </el-button>
+          <el-button type="info" plain disabled v-else> 公众号授权成功 </el-button>
+          <el-button type="primary" plain v-if="bindWechatApplet == 0" @click="linkToMiniProgram"> 授权微信小程序 </el-button>
+          <el-button type="info" plain disabled v-else> 小程序授权成功 </el-button>
         </div>
       </div>
 
@@ -34,8 +32,8 @@
     name: "intelligent_base_channel",
     data() {
       return {
-        bindWechatAccount: '',  // 是否绑定公众号 0:未绑定 1:已绑定
-        bindWechatApplet: '',  // 是否绑定小程序0:未绑定 1:已绑定
+        bindWechatAccount: 1,  // 是否绑定公众号 0:未绑定 1:已绑定
+        bindWechatApplet: 0,  // 是否绑定小程序0:未绑定 1:已绑定
       }
     },
     computed:{
@@ -56,21 +54,21 @@
           this.bindWechatAccount = response.bindWechatAccount;
           this.bindWechatApplet = response.bindWechatApplet;
         }).catch(error => {
-          this.$message.warning(error);
+          // this.$message.warning(error);
+          console.warn('api catch error:', error)
         })
       },
 
-      //常用功能跳转 
-      linkTo(item){
-        if(item.text == '授权微信公众号'){
-          let routeUrl = this.$router.resolve({path: '/apply', query: {paths: '/application/channelapp/publicnum', applyId: '3'}});
-          window.open(routeUrl.href, '_blank');
-        }else if(item.text == '授权微信小程序'){
-          let routeUrl = this.$router.resolve({path: '/apply', query: {paths: '/application/channelapp/smallapp', applyId: '3'}});
-          window.open(routeUrl.href, '_blank');
-        }else{
-          this.$router.push({path:item.url})
-        }
+      /** 授权微信公众号 */
+      linkToOfficialAccounts() {
+        let routeUrl = this.$router.resolve({path: '/apply', query: {paths: '/application/channelapp/publicnum', applyId: '3'}});
+        window.open(routeUrl.href, '_blank');
+      },
+
+      /** 授权微信小程序 */
+      linkToMiniProgram() {
+        let routeUrl = this.$router.resolve({path: '/apply', query: {paths: '/application/channelapp/smallapp', applyId: '3'}});
+        window.open(routeUrl.href, '_blank');
       },
 
       /**
