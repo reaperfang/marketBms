@@ -4,7 +4,8 @@
 			<el-col :span="12">
 				<vitem
 					:title="'用户渠道分别'"
-					:chartData="chartData"
+					:chartData="userData.chartData"
+					:total="userData.total"
 					:icon="'0'"
 				></vitem>
 			</el-col>
@@ -48,6 +49,9 @@ export default {
 	watch: {
 		"dashboard.member"(val) {
 			this.setMember(val);
+    },
+    	"dashboard.user"(val) {
+			this.setUser(val);
 		}
 	},
 	props: {
@@ -73,7 +77,8 @@ export default {
 			},
 			mobile: { progress: 75, barColor: "#06C9DD", city: "绑定手机号" },
 
-			memberData: {}
+      memberData: {},
+      userData:{}
 		};
 	},
 	computed: {
@@ -90,13 +95,20 @@ export default {
 	beforeDestroy() {},
 	destroyed: function() {},
 	methods: {
-		...mapActions(["memberlist"]),
+		...mapActions(["memberlist","userlist"]),
 		init() {
 			this._apis.dashboard.member({ cid: this.cid }).then(res => {
-				console.log("member", res);
 				this.memberlist(res);
 				//this.hobbylist(res);
 			});
+
+			this._apis.dashboard
+				.userdistributed({ cid: this.cid })
+				.then(res => {
+					console.log("userdistributed", res);
+					this.userlist(res);
+					//this.hobbylist(res);
+				});
 		},
 		setMember(val) {
 			let result = {
@@ -110,6 +122,20 @@ export default {
 			this.memberData = {
 				chartData: result,
 				total: val.member
+			};
+    },
+    	setUser(val) {
+			let result = {
+				columns: ["类别", "用户数量"],
+				rows: [
+					{ 类别: "公众号", 用户数量: val.c_uv_channel_gzh },
+					{ 类别: "小程序", 用户数量: val.c_uv_channel_xcx }
+				]
+			};
+
+			this.userData = {
+				chartData: result,
+				total: val.c_uv
 			};
 		}
 	}

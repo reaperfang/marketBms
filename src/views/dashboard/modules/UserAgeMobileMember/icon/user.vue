@@ -4,7 +4,7 @@
 			<span>总用户</span>
 		</div>
 		<div class="row end">
-			<span>5156556</span>
+			<span>{{total}}人</span>
 		</div>
 	</div>
 </template>
@@ -23,7 +23,7 @@ export default {
 	// 		default: false
 	// 	}
 	// },
-	props: ["title"],
+	props: ["title","total"],
 	components: {},
 	data: function() {
 		return {};

@@ -1,9 +1,10 @@
-import Cookies from "js-cookie";
+
 
 const dashboard = {
 	state: {
 		hobby:[],
-		member:{}
+		member:{},
+		user:{}
 	},
 	mutations: {
 		HOBBY_LIST: (state, data) => {
@@ -11,6 +12,9 @@ const dashboard = {
 		},
 		MEMBER_LIST: (state, data) => {
 			state.member = data;
+		},
+		USER_LIST: (state, data) => {
+			state.user = data;
 		}
 	},
 	actions: {
@@ -19,6 +23,9 @@ const dashboard = {
 		},
 		memberlist({ commit },data) {
 			commit("MEMBER_LIST",data);
+		},
+		userlist({ commit },data) {
+			commit("USER_LIST",data);
 		}
 	}
 };
