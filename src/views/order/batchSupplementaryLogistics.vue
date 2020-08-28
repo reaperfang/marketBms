@@ -712,7 +712,7 @@ export default {
           this._apis.order.orderSendGoods(params).then((res) => {
               this.$message.success('批量补填物流成功');
               this.sending = false
-              this.$router.push('/order/query')
+              this.$router.push('/order/deliveryManagement')
           }).catch(error => {
               this.$message.error(error);
               this.sending = false
