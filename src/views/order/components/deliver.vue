@@ -68,6 +68,7 @@
                     min="1"
                     @input="inputHandler(scope.$index)"
                     v-model="scope.row.sendCount"
+                    @change="deliverNumberChange(scope.row.id, scope.row.sendCount)"
                   ></el-input>
                   <p v-if="scope.row.showError" class="error-message">{{scope.row.errorMessage}}</p>
                 </template>
@@ -734,7 +735,7 @@ export default {
        if( this.multipleSelection.some(val => val.id== item.id))
         curItem.push(item)
       })
-      curItem = this.multipleSelection.filter(val => val.sendCount)
+      curItem = this.multipleSelection.filter(val => Number(val.sendCount))
       if (!curItem.length) {
         this.confirm({
           title: "提示",
@@ -743,7 +744,7 @@ export default {
         });
         return;
       }
-      if(this.multipleSelection.every(val => val.sendCount == 0)) {
+      if(this.multipleSelection.every(val => Number(val.sendCount) == 0)) {
         this.confirm({
           title: "提示",
           icon: true,
@@ -752,7 +753,7 @@ export default {
         return;
       }
 
-      if (curItem.some(val => !val.sendCount)) {        
+      if (curItem.some(val => !Number(val.sendCount))) {        
         // this.confirm({
         //   title: "提示",
         //   icon: true,
@@ -769,7 +770,7 @@ export default {
         return;
       }
 
-      if (curItem.some(val => +val.sendCount > val.goodsCount)) {
+      if (curItem.some(val => +Number(val.sendCount) > Number(val.goodsCount))) {
         this.confirm({
           title: "提示",
           icon: true,
@@ -777,7 +778,7 @@ export default {
         });
         return;
       }
-      if (curItem.some(val => +val.sendCount <= 0 || !reg.test(val.sendCount))) {
+      if (curItem.some(val => +Number(val.sendCount) <= 0 || !reg.test(Number(val.sendCount)))) {
         this.confirm({
           title: "提示",
           icon: true,
@@ -1143,7 +1144,18 @@ export default {
     },
     getRowKeys(row){
   		return row.id;
-  	}
+    },
+    
+    //本次发货数量发生变更
+    deliverNumberChange(id, value) {
+      const temp = [...this.multipleSelection];
+      for(let item of this.multipleSelection) {
+        if(item.id === id) {
+          item['sendCount'] = value;
+        }
+      }
+      this.multipleSelection = temp;
+    }
   },
   components: {
     ReceiveInformationDialog,
