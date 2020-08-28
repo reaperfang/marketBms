@@ -4,8 +4,8 @@
      <p class="prompt-txt">为了早日线上营业，请您完成以下必要操作</p>
      <img class="prompt-bg" src="@/assets/images/profile/b_shop_guide.png">
      <div class="prompt-btn">
-       <el-button size="small" class="btn cancel" @click="goPage">先体验</el-button>
-       <el-button size="small" type="primary" class="btn confirm" @click="goStep">我已准备好</el-button>
+       <el-button size="small" class="btn guidePrompt-cancel" @click="goPage">先体验</el-button>
+       <el-button size="small" type="primary" class="btn guidePrompt-confirm" @click="goStep">我已准备好</el-button>
      </div>
    </div>
   </div>
@@ -133,12 +133,13 @@ export default {
         font-size:12px;
         font-weight:400;
       }
-      .cancel {
+      .guidePrompt-cancel {
         color:rgba(101,94,255,1);
         margin-right: 45px;
       }
-      .confirm {
+      .guidePrompt-confirm {
         color:rgba(255,255,255,1);
+        padding: 9px 15px;
       }
     }
   }

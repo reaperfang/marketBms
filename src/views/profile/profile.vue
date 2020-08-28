@@ -149,21 +149,23 @@
           <div class="main">
             <div>
               <p class="title3">微信小程序商城</p>
-              <div v-loading="isGetWXstatus">
-                <div v-if="!isReleaseWX && !isEmpowerWX && wxQrcode">
+              <div style="position:relative;">
+                <div class="el-loading-mask profile-wxsc-loading"><div class="el-loading-spinner"><svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg><!----></div></div>
+                
+                <div v-if="!isReleaseWX && !isEmpowerWX && wxQrcode" class="profile-wxsc-item">
                   <img  class="erweima" :src="wxQrcode" alt/>
                   <p class="opt">
                     <el-button @click="downs(wxQrcode,'微信小程序商城二维码')">下载</el-button>
                   </p>
                 </div>
-                <div v-if="!isReleaseWX && isEmpowerWX">
+                <div v-if="isEmpowerWX && isEmpowerWX === 'true'"  class="profile-wxsc-item">
                   <img  :src="require('@/assets/images/profile/no_empower.png')" class="no_isEmpower" alt/>
                   <p class="title4">您当前还未授权小程序</p>
                   <p class="opt">
                     <el-button @click="linkTo({text:'绑定微信小程序'})">立即授权</el-button>
                   </p>
                 </div>
-                <div v-if="isReleaseWX">
+                <div v-if="!isEmpowerWX && isReleaseWX"  class="profile-wxsc-item">
                   <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="no_release" alt/>
                   <p class="title4">您当前还未发布小程序</p>
                   <p class="opt">
@@ -174,22 +176,24 @@
             </div>
             <div>
               <p class="title3">微信公众号商城</p>
-              <div v-loading="isGetGZstatus">
-                <div v-if="!isReleaseGZ && !isEmpowerGZ && gzQrcode">
+              <div style="position:relative;">
+                <div class="el-loading-mask profile-wxsc-loading"><div class="el-loading-spinner"><svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg><!----></div></div>
+
+                <div v-if="!isReleaseGZ && !isEmpowerGZ && gzQrcode"  class="profile-wxsc-item">
                   <img  class="erweima" :src="gzQrcode" alt>
                   <p class="opt">
                     <el-button @click="downs(gzQrcode,'微信公众号商城二维码')">下载</el-button>
                     <el-button v-clipboard:copy="gzLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</el-button>
                   </p>
                 </div>
-                <div v-if="!isReleaseGZ && isEmpowerGZ">
+                <div v-if="isEmpowerGZ && isEmpowerGZ === 'true'"  class="profile-wxsc-item">
                   <img  :src="require('@/assets/images/profile/no_empower.png')" class="no_isEmpower" alt/>
                   <p class="title4">您当前还未授权公众号</p>
                   <p class="opt">
                     <el-button @click="linkTo({text:'绑定微信公众号'})">立即授权</el-button>
                   </p>
                 </div>
-                <div v-if="isReleaseGZ">
+                <div v-if="!isEmpowerGZ && isReleaseGZ"  class="profile-wxsc-item">
                   <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="no_release" alt/>
                   <p class="title4">您当前还未设置商城首页</p>
                   <p class="opt">
@@ -321,6 +325,14 @@ export default {
 
   watch:{
     cid(newValue,oldValue){
+      console.log('????')
+      this.isEmpowerWX = true;
+      this.isEmpowerGZ = true;
+      this.isReleaseWX = true;
+      this.isReleaseGZ = true;
+
+      this.isGetWXstatus = true;
+      this.isGetGZstatus = true;
       return newValue;
     }
   },
@@ -540,8 +552,8 @@ export default {
     isEmpower(){
       this._apis.profile
         .getwxBindStatus({id:this.cid}).then(response => {
-          this.isEmpowerWX = response.bindWechatApplet ? false : true
-          this.isEmpowerGZ = response.bindWechatAccount ? false : true
+          this.isEmpowerWX = response.bindWechatApplet ? false : 'true'
+          this.isEmpowerGZ = response.bindWechatAccount ? false : 'true'
         })
         .catch(error => {
           console.error(error);
@@ -961,6 +973,17 @@ export default {
 .ml15{
   margin-left:15px;
 }
+.profile-wxsc-loading {
+  z-index: 1;
+  height: 120px;
+}
+.profile-wxsc-item {
+  z-index: 2;
+  position: relative;
+  background: #fff;
+}
+
+
 </style>
 
 
