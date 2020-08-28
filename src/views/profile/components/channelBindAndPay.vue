@@ -1,7 +1,6 @@
 <template>
    <div class="channelBindAndPay" v-if="isInit">
     <steps class="steps" :step="step"></steps>
-<<<<<<< Updated upstream
     <template v-if="isInitCompleted">
       <h2>请绑定您的经营渠道</h2>
       <ul>
@@ -26,31 +25,6 @@
               <p class="prompt2">请您先进行【渠道绑定】操作后再进行【开启支付】操作</p>
           </div>
         </li>
-=======
-      <h2>请绑定您的经营渠道</h2>
-      <ul>
-       <li>
-         <p><i :class="[isAuthGzhOrXcx ? 'icon-success' : 'el-icon-error']"></i><span>渠道绑定：</span></p>
-         <p class="prompt">绑定微信小程序和公众号，推广您的店铺</p>
-         <div class="btn-area">
-           <div class="gzh" v-if="isHasBindGzh">
-             <el-button class="btn-opeate" :disabled="isBindGzh" @click="goGzh">授权微信公众号</el-button>
-             <p class="success" v-if="isBindGzh">公众号授权成功</p>
-           </div>
-           <div class="xcx" v-if="isHasBindXcx">
-            <el-button class="btn-opeate" :disabled="isBindXcx" @click="goXcx">授权微信小程序</el-button>
-             <p class="success" v-if="isBindXcx">小程序授权成功</p>
-           </div>
-         </div>
-       </li>
-       <li class="pay">
-         <p><i :class="[isOpenPay ? 'icon-success' : 'el-icon-error']"></i><span>支付开通：</span></p>
-         <div class="btn-area">
-            <el-button class="btn-opeate" :disabled="!isAuthGzhOrXcx" @click="setPayInfo">开启支付</el-button>
-            <p class="prompt2">请您先进行【渠道绑定】操作后再进行【开启支付】操作</p>
-         </div>
-       </li>
->>>>>>> Stashed changes
       </ul>
       <div class="btn">
         <el-button class="prev" @click="goPrev">上一步</el-button>
