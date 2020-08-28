@@ -12,6 +12,7 @@ import shop from './modules/shop'
 import client from './modules/client'
 import getters from './getters'
 import api from '@/api';
+import dashboard from "./modules/dashboard";
 
 Vue.use(Vuex)
 
@@ -26,7 +27,8 @@ const store = new Vuex.Store({
     decorate,
     data,
     shop,
-    client
+    client,
+    dashboard
   },
   getters
 });

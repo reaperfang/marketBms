@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions, mapState } from "vuex";
 import gridtitle from "../../components/title/index";
 import vcap from "../../components/v-chart/cap/index";
 
@@ -29,28 +30,31 @@ export default {
 	components: { gridtitle, vcap },
 	data: function() {
 		return {
-      // cid:JSON.parse(localStorage.getItem('shopInfos')).id,
-      // boddy:[]
-    };
+			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			boddy: []
+		};
 	},
 	computed: {
 		//...mapState([""])
 	},
 	mounted() {
+    this.init()
   },
-	beforeCreate() {
-  },
-	created() {
-
-  },
+	beforeCreate() {},
+	created() {},
 	beforeMount() {},
 	beforeUpdate() {},
 	updated() {},
 	beforeDestroy() {},
 	destroyed: function() {},
 	methods: {
-		//...mapActions([""]),
-
+		...mapActions(["hobbylist"]),
+		init() {
+			this._apis.dashboard.statistics({ cid: this.cid }).then(res => {
+				//console.log("res",res);
+				this.hobbylist(res);
+			});
+		}
 	}
 };
 </script>

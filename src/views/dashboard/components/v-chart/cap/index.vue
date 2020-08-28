@@ -5,16 +5,23 @@
 </template>
 
 <script>
+import { mapGetters, mapActions, mapState } from "vuex";
 import echarts from "echarts";
 export default {
-	props: ["boddy"],
+	// props: ["boddy"],
 	name: "TEMPLATE",
+	watch: {
+		"dashboard.hobby"(val) {
+			this.showChart(val);
+		}
+	},
+	computed: {
+		...mapState(["dashboard"])
+	},
 	data() {
 		return {
 			chartData: "71.23",
 			chart: "",
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
-			boddy: []
 		};
 	},
 	created() {
@@ -22,26 +29,11 @@ export default {
 	},
 	mounted() {
 		//this.showChart();
-		this.init();
 		window.addEventListener("resize", ev => {
-			this.$dt.start({
-				type: "debounce",
-				time: 100,
-				immediate: true,
-				success: () => {
-					console.log("cap chart size changed!");
-					this.chart.resize();
-				}
-			});
+				this.chart.resize();
 		});
 	},
 	methods: {
-		init() {
-			this._apis.dashboard.statistics({ cid: this.cid }).then(res => {
-				//console.log("res",res);
-				this.showChart(res);
-			});
-		},
 		showChart(data) {
 			this.chart = echarts.init(this.$refs.chartContent);
 
