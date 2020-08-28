@@ -316,7 +316,7 @@ export default {
         },
         computeWidth() {
             if(this.tableData.some(item => item.status == 4 || (item.status == 3 && item.isFillUp))) {
-                return '130'
+                return '118'
             } else {
                 return '100'
             }

@@ -365,7 +365,7 @@ export default {
                 // 通过
                 if(this.multipleSelection.some(val => val.type == 2)) {
                     this.currentDialog = 'ExchangeGoodsDialog'
-                    this.currentData = {id: this.multipleSelection.map(val => val.id).join(',')}
+                    this.currentData = {id: this.multipleSelection.map(val => val.id).join(','), type: 2}
                     this.dialogVisible = true
                     return
                 } else {
