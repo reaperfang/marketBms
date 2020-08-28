@@ -1,5 +1,5 @@
 <template>
-   <div class="channelBindAndPay" v-if="isInit">
+   <div class="channelBindAndPay">
     <steps class="steps" :step="step"></steps>
     <template v-if="isInitCompleted">
       <h2>请绑定您的经营渠道</h2>
@@ -186,22 +186,6 @@ export default {
       });
       let routeData = this.$router.resolve({ path: '/set/wxSet' });
       window.open(routeData.href, '_blank');
-    },
-    ApiGetShopInfo() {
-      let id = this.cid;
-      return new Promise(() => {
-        
-      })
-      this._apis.set
-        .getShopInfo({ id: id })
-        .then(response => {
-          
-        })
-        .catch(error => {
-          console.log(error)
-          this.$message.error(error || '查询失败');
-
-        });
     },
     getShopInfo() {
       let id = this.cid;
