@@ -1,16 +1,7 @@
 <template>
-  <div class="icon-agesex">
-    <div class="start">
-      <img src="../../../../../assets/images/dashboard/person/men.png" alt="" />
-      <img
-        src="../../../../../assets/images/dashboard/person/women.png"
-        alt=""
-      />
-    </div>
-    <div class="end">
-      <span>45%</span>
-      <span>45%</span>
-    </div>
+  <div class="icon-pie">
+    <p class="p-end">{{ city }}</p>
+    <p class="p-start">{{ progress }}%</p>
   </div>
 </template>
 
@@ -22,13 +13,7 @@ export default {
     // flowData(val) {
     // }
   },
-  // props: {
-  // 	data: {
-  // 		type: Object,
-  // 		default: false
-  // 	}
-  // },
-  props: ["title"],
+  props: ["progress", "city"],
   components: {},
   data: function() {
     return {};
@@ -51,7 +36,7 @@ export default {
 </script>
 
 <style lang="scss">
-.icon-agesex {
+.icon-pie {
   position: absolute;
   margin: auto;
   top: 0;
@@ -61,19 +46,19 @@ export default {
   height: 70px;
   width: 100px;
   text-align: center;
-  img {
-    height: 45px;
-    margin: 0 5px;
+  .p-start {
+    font-size: 28px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 1);
+    line-height: 40px;
   }
 
-  .end {
-    span {
-      font-size: 12px;
-      font-weight: 400;
-      color: #ffffff;
-      line-height: 17px;
-      margin: 0 5px;
-    }
+  .p-end {
+    font-size: 14px;
+    font-weight: 400;
+    color: #ffffff;
+    line-height: 20px;
+    margin-bottom: 3px;
   }
 }
 </style>

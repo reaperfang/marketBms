@@ -50,7 +50,7 @@ import useragemobilemember from "./modules/UserAgeMobileMember/index";
 //今日交易金额 用户交易分别
 import todayuserdeal from "./modules/TodayUserDeal/index";
 
-// 支付 商城交易分布
+// 支付 商城交易分布 商城成交来源TOP3
 import paymalldeal from "./modules/PayMallDeal/index";
 //实时交易用户
 import realtimeuser from "./modules/RealtimeUser/index";
@@ -125,7 +125,7 @@ export default {
   }
 
   .row-4 {
-    height:350px;
+    height: 350px;
 
     .el-col {
       height: 100%;
