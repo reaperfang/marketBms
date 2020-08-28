@@ -175,6 +175,14 @@ export default {
         callback();
       }
     };
+    const validateAddressDetail = (rule, value, callback) => {
+      let reg = /\S+/
+      if (!reg.test(value)) {
+        return callback(new Error("必填项"));
+      } else {
+        callback();
+      }
+    };
     return {
       isLoading: false,
       isMapChoose: false,
@@ -231,7 +239,8 @@ export default {
           { required: true, message: "联系地址不能为空，请输入后点击搜索地图，在地图上选择准确位置", trigger: "blur" }
         ],
         addressDetail: [
-          { required: true, message: "必填项", trigger: "blur" }
+          { required: true, message: "必填项", trigger: "blur" },
+          { validator: validateAddressDetail, trigger: "blur" }
         ]
       },
       weeks: [
