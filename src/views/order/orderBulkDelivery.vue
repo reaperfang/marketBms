@@ -920,6 +920,17 @@ export default {
           }
           this._list = this._list.filter(val => val.express != null && !val.express.specificationSize && val.sizeList && val.sizeList.length)
 
+          var __result = [];
+          var __obj = {};
+            for(var i =0; i<this._list.length; i++){
+               if(!__obj[this._list[i].expressCompanyCodes]){
+                  __result.push(this._list[i]);
+                  __obj[this._list[i].expressCompanyCodes] = true;
+              }
+            }
+
+          this._list = __result
+
           if(this.list[0].deliveryWay == 1 && this._list.length) {
             this.currentData = {
               list: this._list,

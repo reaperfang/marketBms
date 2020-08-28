@@ -71,7 +71,8 @@ export default {
             let _params = JSON.parse(JSON.stringify(this.params))
 
             _params.sendInfoDtoList.forEach((val, index) => {
-                val.specificationSize = this.data.list[index].specificationSize
+                //val.specificationSize = this.data.list[index].specificationSize
+                val.specificationSize = this.data.list.find(item => item.expressCompanyCodes == val.expressCompanyCodes).specificationSize
             })
             this.data.list.forEach((item, index) => {
                 if(!item.specificationSize) {
