@@ -3,7 +3,7 @@
   <div>
     <el-table
       :data="hotData"
-      style="width: 100%"
+      style="width: 100%;"
       :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
       >
@@ -90,5 +90,8 @@ export default {
                 }
             }
         }
+/deep/ .el-table--small td, .el-table--small th{
+  padding:8px 12px;
+}
 
 </style>

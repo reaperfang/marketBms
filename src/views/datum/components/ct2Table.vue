@@ -123,5 +123,7 @@ export default {
                 }
             }
         }
-
+/deep/ .el-table--small td, .el-table--small th{
+  padding:8px 12px;
+}
 </style>
