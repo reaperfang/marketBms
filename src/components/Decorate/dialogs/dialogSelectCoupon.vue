@@ -4,6 +4,9 @@
     <div class="select_dialog">
       <div class="head-wrapper">
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" :inline="true">
+          <el-form-item label="优惠券名称" prop="name">
+            <el-input v-model="ruleForm.name" placeholder="请输入优惠券名称" clearable></el-input>
+          </el-form-item>
           <el-form-item label="优惠券状态" prop="status">
             <el-select label="优惠券状态" v-model="ruleForm.status" placeholder="请选择优惠券状态">
               <el-option label="全部" :value="''"></el-option>
@@ -11,9 +14,6 @@
               <el-option label="生效中" :value="1"></el-option>
               <!-- <el-option label="已失效" :value="2"></el-option> -->
             </el-select>
-          </el-form-item>
-          <el-form-item label="优惠券名称" prop="name">
-            <el-input v-model="ruleForm.name" placeholder="请输入优惠券名称" clearable></el-input>
           </el-form-item>
           <el-form-item label="" prop="name">
             <el-button type="primary" @click="search">查 询</el-button>

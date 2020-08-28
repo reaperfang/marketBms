@@ -41,7 +41,7 @@
         :dialogVisible.sync="dialogVisible2"
         @dialogDataSelected="dialogDataSelected"
         :categoryId="currentCategory.id"
-        :categoryName="currentCategory.categoryName"
+        :categoryName="currentCategory.name"
         :goodsEcho.sync="echoList"
       ></component>
     </div>
@@ -64,8 +64,8 @@ export default {
       loading: true,
       defaultProps: {
         //tree组件配置
-        children: "childrenList",
-        label: "categoryName"
+        children: 'childrenCatalogs',
+        label: 'name'
       },
       categoryData: [], //转化以后的分类树形数据
       flatArr: [],
@@ -89,19 +89,33 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.goods
-        .fetchCategoryList(this.ruleForm)
+        .fetchTreeCategoryList(this.ruleForm)
         .then(response => {
-          let data = this.restoreData(response);
-          this.responseData = data;
-          let arr = this.transTreeData(data, 0);
-          this.categoryData = arr;
-          this.flatArr = this.flatTreeArray(JSON.parse(JSON.stringify(arr)));
+          //let data = this.restoreData(response);
+          //this.responseData = data;
+          //let arr = this.transTreeData(data, 0);
+          this.filterEnableData(response);
+          this.restoreData(response);
+          this.categoryData = response;
+          this.responseData = response;
+          //this.flatArr = this.flatTreeArray(JSON.parse(JSON.stringify(arr)));
           this.loading = false;
         })
         .catch(error => {
           console.error(error);
           this.loading = false;
         });
+    },
+
+    //过滤掉禁用的数据
+    filterEnableData(data) {
+      data.forEach((item, index) => {
+        if(item.enable === 0){
+          data.splice(index, 1);
+        }else if(item.childrenCatalogs){
+          this.filterEnableData(item.childrenCatalogs)
+        }
+      })
     },
 
     //拉取点击选中的分类下的商品
@@ -190,7 +204,7 @@ export default {
         <div class="treeRow">
           <span class="td first">
            <img class="td img" src={data.image}/>
-           {data.categoryName}
+           {data.name}
            </span>
           <span class="td state">{(this.seletedGroupGoodsLengths ? this.seletedGroupGoodsLengths[data.id] : data.goods.length) || 0}</span>
           <span class="td operate">
@@ -229,13 +243,10 @@ export default {
       //   return;
       // }
       /* 重置树形数据，把选中的商品回显到列表中 */
-      for (let item of this.responseData) {
-        if (this.currentCategory.id === item.id) {
-          item["goods"] = items.map(function(item){return item.id});
-          this.seletedGroupGoodsLengths[item.id] = items.length;
-        }
-      }
-      this.categoryData = this.transTreeData(this.responseData, 0);
+
+      this.restoreList(this.responseData, items);
+
+      this.categoryData = [...this.responseData];
 
       //把选中的数据收集起来发给父组件
       this.resultData[this.currentCategory.id] = {
@@ -245,15 +256,27 @@ export default {
       this.currentDialog = "";
     },
 
+    restoreList(response, items) {
+      response.forEach((item, index) => {
+        
+        if (this.currentCategory.id === item.id) {
+          item["goods"] = items.map(function(item){return item.id});
+          this.seletedGroupGoodsLengths[item.id] = items.length;
+        }
+        if(item.childrenCatalogs){
+          this.restoreList(item.childrenCatalogs, items)
+        }
+      })
+    },
+
     /* 恢复选中的商品数据 */
     restoreData(response) {
       if(!this.seletedGroupInfo) {  //没有数据的分类不添加
         return;
       }
-      /* 重置树形数据，把选中的商品回显到列表中 */
-      for(let k in this.seletedGroupInfo) {
-        // this.seletedGroupGoodsLengths[k] = this.seletedGroupInfo[k].length;
-        for (let item of response) {
+
+      response.forEach((item, index) => {
+        for(let k in this.seletedGroupInfo) {
           if (item.id === k) {
             item["goods"] = this.seletedGroupInfo[k].goods;
             //把选中的数据收集起来发给父组件
@@ -263,8 +286,11 @@ export default {
             };
           }
         }
-      }
-      return response;
+        if(item.childrenCatalogs){
+          this.restoreData(item.childrenCatalogs)
+        }
+      })
+
     }
   }
 };

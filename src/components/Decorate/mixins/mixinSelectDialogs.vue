@@ -51,6 +51,9 @@ export default {
     }
   },
   created() {
+    if(!this.goodsList){
+      return;
+    }
     this.goodsList.forEach((row, index) => {
       this.$nextTick(() => {
         this.$refs.multipleTable.toggleRowSelection(row, true);
