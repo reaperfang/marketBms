@@ -2,7 +2,8 @@
   <div class="base_wxpay">
     <div class="b_w_wrap">
       <p>请您先进行【渠道绑定】操作后再进行【开启支付】操作</p>
-      <el-button type="primary" plain @click="linkToWxPay"> 开启支付 </el-button>
+      <el-button type="primary" plain v-if="wechatPay == 0" @click="linkToWxPay"> 开启支付 </el-button>
+      <el-button type="primary" plain disabled v-else> 已开启支付 </el-button>
     </div>
     <div class="i_base_btns">
       <el-button @click="$emit('base-step', 'base', 1)"> 上一步 </el-button>
