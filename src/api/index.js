@@ -18,6 +18,8 @@ import * as templatePay from "./templatePay"; //模板支付
 import * as map from "./map";
 import * as realSurvey from "./realSurvey" //实时概况
 
+import * as dashboard from "./dashboard" // 数据大屏
+
 
 export default {
 	demo,
@@ -38,5 +40,6 @@ export default {
 	industry,
 	templatePay,
 	map,
-	realSurvey
+	realSurvey,
+	dashboard
 };
