@@ -310,7 +310,6 @@ export default {
     submit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-
         if(this.submitFlag == false){
             this.$message.error("请在地图上标记位置!");
             return false;
@@ -415,6 +414,7 @@ export default {
               orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id)
             })
           }
+          params.tencentCode = this.$refs.mapSearch.pois[0].ad_info.adcode
           this._apis.order
             .updateReceiveAndSend(params)
             .then(res => {

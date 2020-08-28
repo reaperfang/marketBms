@@ -90,7 +90,7 @@ export default {
                 })
             } else {
                 this.$emit('submit', {status: 1})
-                this.visible = false
+                //this.visible = false
             }
             
         }

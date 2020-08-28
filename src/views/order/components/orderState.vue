@@ -546,11 +546,11 @@ export default {
         closeReaosnFilter(orderInfo) {
             let code = orderInfo.closeReason
             let closeRemark = orderInfo.closeRemark
-            switch(+code) {
+            switch(+ code) {
                 case 0:
                     return '原因: 超时取消'
                 case 1:
-                    return `原因: ${closeRemark}`
+                    return `原因: ${closeRemark==''?'其他':closeRemark}`
                 case 2:
                     return '原因: 商户关闭'
                 case 3:

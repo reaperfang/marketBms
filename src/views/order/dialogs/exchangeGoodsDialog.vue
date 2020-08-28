@@ -33,8 +33,12 @@ export default {
             // })
             let params = {
                 ids: this.data.id.split(','),
-                orderAfterSaleStatus: this.exchangeConfirmation == "0"?2:1
+                orderAfterSaleStatus: this.exchangeConfirmation == "0"?2:1,
+                exchangeConfirmation: this.exchangeConfirmation
             }
+            // if(this.data.type == 2) {
+            //     params.exchangeConfirmation = this.exchangeConfirmation
+            // }
             this._apis.order.orderAfterSaleUpdateStatus(params).then((res) => {
                 //     this._apis.order.orderAfterSaleConfirmExchange({id: this.data.id, orderAfterSaleStatus: this.exchangeConfirmation == "0"?2:1, exchangeConfirmation: this.exchangeConfirmation}).then((res) => {
                 //     this.$parent.getList && this.$parent.getList();

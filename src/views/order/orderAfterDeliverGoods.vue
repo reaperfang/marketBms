@@ -626,6 +626,11 @@ export default {
                         obj.expressNos = this.ruleForm.expressNos; // 快递单号
                         obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
                         obj.remark = this.ruleForm.remark; // 发货备注
+                        if(this.orderInfo.deliveryWay == 1) {
+                            if(this.express && this.express.specificationSize) {
+                            obj.specificationSize = this.express.specificationSize
+                            }
+                        }
                       }else if(formName == 'ruleFormStore'){ //如果是商家配送
                         obj.deliveryWay = 2;
                         obj.distributorName = this.distributorName; //配送员名字
@@ -705,7 +710,7 @@ export default {
                 }, 0)
                 this.orderAfterSaleSendInfo = res[0].orderAfterSaleSendInfo
                 if(!this.orderAfterSaleSendInfo.sendAddress) {
-                    if(this.orderAfterSaleSendInfo.deliveryWay == 1 || this.orderAfterSaleSendInfo.deliveryWay == 2) {
+                    if(this.orderAfterSaleSendInfo.deliveryWay == 1 || this.orderAfterSaleSendInfo.deliveryWay == 2 || this.orderAfterSaleSendInfo.deliveryWay == 4) {
                         this.fetchOrderAddress();
                     }
                 }

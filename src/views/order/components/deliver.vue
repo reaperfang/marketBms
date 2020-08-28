@@ -19,7 +19,7 @@
           <div class="content">
             <el-table
               :row-key="getRowKeys"
-              :class="{isIE: isIE, disabledCheckAll: orderInfo.deliveryWay != 4}"
+              :class="{isIE: isIE, disabledCheckAll: orderInfo.deliveryWay != 4,'disabled-table': checkboxAllTableMark}"
               ref="table"
               :data="tableData"
               style="width: 100%"
@@ -370,7 +370,8 @@ export default {
       _ids: [],
       params: {},
       _list: [],
-      shopAddressInfo: null
+      shopAddressInfo: null,
+      checkboxAllTableMark:false
     };
   },
   created() {
@@ -601,9 +602,11 @@ export default {
     },
     selectable(row, index) {
       if(this.orderInfo.deliveryWay == 4 || (row.goodsCount - row.cacheSendCount == 0)) {
+        this.checkboxAllTableMark = true
         return false
       }
-      return true
+       this.checkboxAllTableMark = false
+       return true
     },
     checkExpress() {
       let expressName
@@ -865,6 +868,11 @@ export default {
               obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
               obj.remark = this.ruleForm.remark; // 发货备注
               obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
+              if(this.orderInfo.deliveryWay == 1) {
+                if(this.express && this.express.specificationSize) {
+                  obj.specificationSize = this.express.specificationSize
+                }
+              }
             } else {
               //上门自提
               obj.deliveryWay = 4;
@@ -1315,6 +1323,28 @@ export default {
 }
 .deliver-goods .deliver-goods-address.self-reference .content .item .label {
     width: 84px;
+}
+.disabled-table {
+  /deep/ thead {
+    /deep/ .el-checkbox__inner {
+      background-color: #F2F6FC;
+      border-color: #DCDFE6;
+    }
+    /deep/ th:first-child /deep/.cell::after {
+      z-index: 1;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      content: "";
+      left: 0;
+      top: 0;
+      background: rgba(0, 0, 0, 0);
+      cursor: not-allowed;
+    }
+    /deep/.el-checkbox__inner::after{
+      border-color: #B6B5C9;
+    }
+  }
 }
 </style>
 
