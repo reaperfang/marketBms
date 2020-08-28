@@ -1131,6 +1131,9 @@ export default {
           res.forEach(item => {
             if(!item.sendAddress) {
               if(item.deliveryWay == 1 || item.deliveryWay == 2) {
+                if(!_address){
+                  return;
+                }
                 item.sendName = _address.name;
                 item.sendPhone = _address.mobile;
                 item.sendProvinceCode = _address.provinceCode;
