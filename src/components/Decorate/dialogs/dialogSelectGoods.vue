@@ -126,7 +126,7 @@ export default {
       goodsClassifyList: [],
       currentClassifyId: [],
       categoryData: [],
-      seletedClassify: this.categoryId || null,
+      seletedClassify: this.categoryId || '',
       normalizer(node) {
         return {
           label: node.name,
