@@ -27,7 +27,7 @@
               </div>
               <div class="col">
                 <div class="row align-center row-margin">
-                  <div class="col" style="width: 186px;">{{list[0] && list[0].deliveryWay != 4 ? '收货信息' : '提货信息'}}</div>
+                  <div class="col" style="width: 220px;">{{list[0] && list[0].deliveryWay != 4 ? '收货信息' : '提货信息'}}</div>
                   <div class="col" style="width: 281px; text-align: center;">{{list[0] && list[0].deliveryWay != 4 ? '物流信息' : '提货时间'}}</div>
                 </div>
               </div>
@@ -70,7 +70,7 @@
               </div>
               <div class="col">
                 <div class="row row-margin">
-                  <div class="col message-box" style="width: 186px;">
+                  <div class="col message-box" style="width: 220px;">
                     <template v-if="list[0] && list[0].deliveryWay != 4">
                       <div>收货人: {{item.receivedName}}</div>
                       <div>联系电话: {{item.receivedPhone}}</div>
