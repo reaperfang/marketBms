@@ -651,6 +651,9 @@ export default {
                       obj.expressCompanys = expressCompanys;
                       obj.expressNos = item.expressNos;
                       obj.expressCompanyCodes = item.expressCompanyCodes;
+                      if(item.express && item.express.specificationSize) {
+                        obj.specificationSize = item.express.specificationSize
+                      }
                     }
                     //如果是商家配送，则添加配送员信息
                     if(item.deliveryWay == 2){
@@ -858,7 +861,7 @@ export default {
           //     this.$message.error(error);
           //   });
           res.forEach(item => {
-            if(!res.sendAddress) {
+            if(!item.sendAddress) {
               if(item.deliveryWay == 1 || item.deliveryWay == 2) {
                 item.sendName = _address.name;
                 item.sendPhone = _address.mobile;

@@ -203,7 +203,7 @@ export default {
           let orderStatus = orderDetail.orderInfo.orderStatus;
           if(orderStatus ==6){
             return '【用户签收】'
-          }else if(orderStatus == 3|| orderStatus ==4 || orderStatus == 5){
+          }else if(orderStatus == 3|| orderStatus ==4 || orderStatus ==5){
             return '【商户发货】'
           }else{
             return ''
