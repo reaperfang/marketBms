@@ -414,7 +414,11 @@ export default {
               orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id)
             })
           }
+          try {
           params.tencentCode = this.$refs.mapSearch.pois[0].ad_info.adcode
+          } catch(e) {
+            console.error(e)
+          }
           this._apis.order
             .updateReceiveAndSend(params)
             .then(res => {
