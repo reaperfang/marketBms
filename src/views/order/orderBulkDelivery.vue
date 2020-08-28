@@ -635,10 +635,10 @@ export default {
     sendGoodsHandler() {
       try {
         let params;
-        console.log(this.list
-            .reduce((total, val) => {
-              return total.concat(val.orderItemList);
-            }, []).filter(val => val.checked))
+        // console.log(this.list
+        //     .reduce((total, val) => {
+        //       return total.concat(val.orderItemList);
+        //     }, []).filter(val => val.checked))
         if (
           !this.list
             .reduce((total, val) => {
@@ -1131,8 +1131,8 @@ export default {
           res.forEach(item => {
             if(!item.sendAddress) {
               if(item.deliveryWay == 1 || item.deliveryWay == 2) {
-                if(!_address){
-                  return;
+                if(!_address) {
+                  return
                 }
                 item.sendName = _address.name;
                 item.sendPhone = _address.mobile;
