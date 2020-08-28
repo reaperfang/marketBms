@@ -125,7 +125,11 @@ export default {
         if (/^\s+$/.test(this.ruleForm.receivedName)) {
           callback(new Error("收货人姓名不能为空白字符"));
         } else {
-          callback();
+          if(this.ruleForm.receivedName.length > 50) {
+            callback(new Error("收货人姓名不能超过50个字符"));
+          }else {
+            callback();
+          }
         }
       }
     };
