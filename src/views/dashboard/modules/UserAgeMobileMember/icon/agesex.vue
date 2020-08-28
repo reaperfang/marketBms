@@ -8,8 +8,8 @@
       />
     </div>
     <div class="end">
-      <span>45%</span>
-      <span>45%</span>
+      <span>{{sexData.female}}%</span>
+      <span>{{sexData.gender}}%</span>
     </div>
   </div>
 </template>
@@ -28,7 +28,7 @@ export default {
   // 		default: false
   // 	}
   // },
-  props: ["title"],
+  props: ["title","sexData"],
   components: {},
   data: function() {
     return {};

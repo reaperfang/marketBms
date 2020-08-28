@@ -22,7 +22,8 @@
 			<el-col :span="12">
 				<vitem
 					:title="'性别年龄分布'"
-					:chartData="chartData"
+					:chartData="sexageData.ageData"
+					:sexData="sexageData.sexData"
 					:icon="'2'"
 				></vitem>
 			</el-col>
@@ -49,9 +50,12 @@ export default {
 	watch: {
 		"dashboard.member"(val) {
 			this.setMember(val);
-    },
-    	"dashboard.user"(val) {
+		},
+		"dashboard.user"(val) {
 			this.setUser(val);
+		},
+		"dashboard.sexage"(val) {
+			this.setSexage(val);
 		}
 	},
 	props: {
@@ -77,8 +81,9 @@ export default {
 			},
 			mobile: { progress: 75, barColor: "#06C9DD", city: "绑定手机号" },
 
-      memberData: {},
-      userData:{}
+			memberData: {},
+			userData: {},
+			sexageData: {}
 		};
 	},
 	computed: {
@@ -95,7 +100,7 @@ export default {
 	beforeDestroy() {},
 	destroyed: function() {},
 	methods: {
-		...mapActions(["memberlist","userlist"]),
+		...mapActions(["memberlist", "userlist", "sexagelist"]),
 		init() {
 			this._apis.dashboard.member({ cid: this.cid }).then(res => {
 				this.memberlist(res);
@@ -105,10 +110,15 @@ export default {
 			this._apis.dashboard
 				.userdistributed({ cid: this.cid })
 				.then(res => {
-					console.log("userdistributed", res);
+					//console.log("userdistributed", res);
 					this.userlist(res);
 					//this.hobbylist(res);
 				});
+			this._apis.dashboard.sexage({ cid: this.cid }).then(res => {
+				//console.log("sexage", res);
+
+				this.sexagelist(res);
+			});
 		},
 		setMember(val) {
 			let result = {
@@ -123,8 +133,8 @@ export default {
 				chartData: result,
 				total: val.member
 			};
-    },
-    	setUser(val) {
+		},
+		setUser(val) {
 			let result = {
 				columns: ["类别", "用户数量"],
 				rows: [
@@ -136,6 +146,25 @@ export default {
 			this.userData = {
 				chartData: result,
 				total: val.c_uv
+			};
+		},
+		setSexage(val) {
+			let result = {
+				columns: ["类别", "数量"],
+				rows: [
+					{ 类别: "未知", 数量: val.c_uv_age_0 },
+					{ 类别: "< 25", 数量: val.c_uv_age_25 },
+					{ 类别: "25-50", 数量: val.c_uv_age_25_50 },
+					{ 类别: "50 < ", 数量: val.c_uv_age_50 }
+				]
+			};
+
+			this.sexageData = {
+				ageData: result,
+				sexData: {
+					female: val.c_uv_sex_female,
+					gender: val.c_uv_sex_gender
+				}
 			};
 		}
 	}
