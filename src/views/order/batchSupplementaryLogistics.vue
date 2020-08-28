@@ -712,7 +712,7 @@ export default {
           this._apis.order.orderSendGoods(params).then((res) => {
               this.$message.success('批量补填物流成功');
               this.sending = false
-              this.$router.push('/order/query')
+              this.$router.push('/order/deliveryManagement')
           }).catch(error => {
               this.$message.error(error);
               this.sending = false
@@ -863,9 +863,6 @@ export default {
           res.forEach(item => {
             if(!item.sendAddress) {
               if(item.deliveryWay == 1 || item.deliveryWay == 2) {
-                if(!_address){
-                  return;
-                }
                 item.sendName = _address.name;
                 item.sendPhone = _address.mobile;
                 item.sendProvinceCode = _address.provinceCode;
