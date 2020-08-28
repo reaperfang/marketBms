@@ -32,6 +32,7 @@
             <el-table-column
                 type="index"
                 label="排行"
+                width="80"
                 align="left">
             </el-table-column>
             <el-table-column
@@ -158,6 +159,9 @@ export default {
 }
 .p_container .input_wrap{
     vertical-align: middle;
+}
+/deep/ .el-table--small td, /deep/.el-table--small th{
+  padding:8px 10px;
 }
 </style>
 

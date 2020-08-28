@@ -417,6 +417,9 @@ margin-right: 10px;
 width: 84px;
 }
 }
+/deep/ .el-table--small td, /deep/.el-table--small th{
+  padding:8px 10px;
+}
 </style>
 
 

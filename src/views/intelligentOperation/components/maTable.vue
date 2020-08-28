@@ -10,6 +10,7 @@
       <el-table-column
         type="index"
         label="排序"
+        width="80"
         align="left">
       </el-table-column>
       <el-table-column
@@ -45,7 +46,7 @@
       </el-table-column>
       <el-table-column
         label="(会员)入会时间"
-        width="150"
+        width="170"
       align="center">
         <template slot-scope="scope">
           <span v-if="scope.row.joinTime">
@@ -65,6 +66,7 @@
       </el-table-column>
       <el-table-column
         label="最后交易时间"
+        width="170"
       align="right">
         <template slot-scope="scope" style="width:171px;">
           <span>{{Number(scope.row.lastTradeTime) | formatDate('yyyy-MM-dd hh:mm:ss')}}</span>
@@ -144,5 +146,8 @@ export default {
   text-align:center; 
   width:80%;
   display:inline-block
+}
+/deep/ .el-table--small td, /deep/.el-table--small th{
+  padding:8px 10px;
 }
 </style>

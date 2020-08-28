@@ -10,6 +10,7 @@
       <el-table-column
         type="index"
         label="排序"
+        width="80"
         align="left">
       </el-table-column>
       <el-table-column
@@ -140,5 +141,8 @@ export default {
                 }
             }
         }
+        /deep/ .el-table--small td, /deep/.el-table--small th{
+  padding:8px 10px;
+}
 
 </style>
