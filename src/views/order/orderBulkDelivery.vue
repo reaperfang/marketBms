@@ -594,7 +594,7 @@ export default {
         })
         .catch(error => {
           this.visible = false;
-          this.$message.error(error);
+          this.$message.error(error.message);
         });
 
         this.list.splice(index, 1, Object.assign({}, this.list[index], {
