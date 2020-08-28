@@ -1,7 +1,7 @@
 <template>
 	<div class="icon-member">
 		<div class="row start">会员</div>
-		<div class="row end">5156556</div>
+		<div class="row end">{{total}}人</div>
 	</div>
 </template>
 
@@ -19,7 +19,7 @@ export default {
 	// 		default: false
 	// 	}
 	// },
-	props:["title"],
+	props:["title","total"],
 	components: {},
 	data: function() {
 		return {};

@@ -6,7 +6,7 @@
 			</el-col>
 		</el-row>
 		<el-row class="item-content"> 
-            <vring :chartData="chartData" :title="title":icon="icon"></vring>
+            <vring :chartData="chartData" :title="title":icon="icon" :total="total"></vring>
 			<!-- <component :is="isIcon" :data="{key:title,value:'8445566'}"></component> -->
         </el-row>
 	</div>
@@ -23,7 +23,7 @@ export default {
 		// flowData(val) {
 		// }
 	},
-	props: ["title","chartData","icon"],
+	props: ["title","chartData","icon","total"],
 	components: { gridtitle ,vring},
 	data: function() {
 		return {

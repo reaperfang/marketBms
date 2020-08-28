@@ -9,7 +9,7 @@
       :legend-visible="false"
     ></ve-ring>
 
-    <component :is="setIcon(icon)" :title="title"></component>
+    <component :is="setIcon(icon)" :title="title" :total="total"></component>
   </div>
 </template>
 
@@ -25,7 +25,7 @@ import iconmobile from "../../../modules/UserAgeMobileMember/icon/mobile";
 import iconagesex from "../../../modules/UserAgeMobileMember/icon/agesex";
 export default {
   // props: ["chartData", "chartSettings", "chartExtend"],
-  props: ["chartData", "title", "icon"],
+  props: ["chartData", "title", "icon","total"],
   mixins: [list],
   data() {
     return {
