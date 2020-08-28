@@ -419,7 +419,11 @@ export default {
             })
           }
           try {
-          params.tencentCode = this.$refs.mapSearch.pois[0].ad_info.adcode
+            if(this.$refs.mapSearch.poi) {
+              params.tencentCode = this.$refs.mapSearch.poi.ad_info.adcode
+            } else {
+              params.tencentCode = this.$refs.mapSearch.pois[0].ad_info.adcode
+            }
           } catch(e) {
             console.error(e)
           }
