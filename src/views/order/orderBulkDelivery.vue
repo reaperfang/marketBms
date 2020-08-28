@@ -5,11 +5,11 @@
       <section>
         <div class="title">1. 选择您要进行发货的商品并填写物流信息</div>
         <div class="checkbox-box">
-          <i @click="allcheckHandler" class="checkbox" :class="{checked: allchecked, disabledChecked: list[0].deliveryWay == 4}"></i>商品清单
+          <i @click="allcheckHandler" class="checkbox" :class="{checked: allchecked, disabledChecked: list[0] && list[0].deliveryWay == 4}"></i>商品清单
         </div>
         <div class="goods-item" v-for="(item, index) in list" :key="index">
           <div class="item-title">
-            <span v-if="list[0].deliveryWay != 4">商品清单</span>
+            <span v-if="list[0] && list[0].deliveryWay != 4">商品清单</span>
             <span>订单编号 {{item.orderCode}}</span>
             <i v-if="list.length > 1" @click="deleteOrder(index)" class="el-icon-delete"></i>
           </div>
@@ -18,7 +18,7 @@
               <div class="col table-title-left" style="width: 590px; margin-right: 40px;">
                 <div class="row align-center row-margin">
                   <div class="col">
-                    <i @click="changeAll(item)" class="checkbox" :class="{checked: item.checked, disabledChecked: list[0].deliveryWay == 4}"></i>
+                    <i @click="changeAll(item)" class="checkbox" :class="{checked: item.checked, disabledChecked: list[0] && list[0].deliveryWay == 4}"></i>
                   </div>
                   <div class="col table-title-left-goods" style="width: 310px;">商品</div>
                   <div class="col table-title-left-yingfa" style="width: 60px;">应发数量</div>
@@ -27,8 +27,8 @@
               </div>
               <div class="col">
                 <div class="row align-center row-margin">
-                  <div class="col" style="width: 186px;">{{list[0].deliveryWay != 4 ? '收货信息' : '提货信息'}}</div>
-                  <div class="col" style="width: 281px; text-align: center;">{{list[0].deliveryWay != 4 ? '物流信息' : '提货时间'}}</div>
+                  <div class="col" style="width: 186px;">{{list[0] && list[0].deliveryWay != 4 ? '收货信息' : '提货信息'}}</div>
+                  <div class="col" style="width: 281px; text-align: center;">{{list[0] && list[0].deliveryWay != 4 ? '物流信息' : '提货时间'}}</div>
                 </div>
               </div>
             </div>
@@ -40,7 +40,7 @@
                   :key="i"
                 >
                   <div class="col">
-                    <i @click="select(index, i)" class="checkbox" :class="{checked: goods.checked, disabledChecked: list[0].deliveryWay == 4}"></i>
+                    <i @click="select(index, i)" class="checkbox" :class="{checked: goods.checked, disabledChecked: list[0] && list[0].deliveryWay == 4}"></i>
                   </div>
                   <div class="col goodsItem-left" style="width: 310px;">
                     <div class="row align-center">
@@ -71,7 +71,7 @@
               <div class="col">
                 <div class="row row-margin">
                   <div class="col message-box" style="width: 186px;">
-                    <template v-if="list[0].deliveryWay != 4">
+                    <template v-if="list[0] && list[0].deliveryWay != 4">
                       <div>收货人: {{item.receivedName}}</div>
                       <div>联系电话: {{item.receivedPhone}}</div>
                       <div class="message-box-address">
@@ -89,7 +89,7 @@
                     </template>
                   </div>
                   <div class="col">
-                    <template v-if="list[0].deliveryWay != 4">
+                    <template v-if="list[0] && list[0].deliveryWay != 4">
                       <el-form :model="item" label-width="70px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
                         <el-form-item label="快递公司" prop="expressCompanys">
                           <el-select filterable @change="checkExpress(index)" v-model="item.expressCompanyCodes" placeholder="请选择">
@@ -914,11 +914,11 @@ export default {
             let item = values[index]
 
             this._list[index].sizeList = item
-            if(item && item.length) {
-              this._list.splice(index, 1)
-            }
+            // if(item && item.length) {
+            //   this._list.splice(index, 1)
+            // }
           }
-          this._list = this._list.filter(val => val.express != null)
+          this._list = this._list.filter(val => val.express != null && !val.express.specificationSize && val.sizeList && val.sizeList.length)
 
           if(this.list[0].deliveryWay == 1 && this._list.length) {
             this.currentData = {
