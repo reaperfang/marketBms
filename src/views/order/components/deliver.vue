@@ -865,6 +865,11 @@ export default {
               obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
               obj.remark = this.ruleForm.remark; // 发货备注
               obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
+              if(this.orderInfo.deliveryWay == 1) {
+                if(this.express && this.express.specificationSize) {
+                  obj.specificationSize = this.express.specificationSize
+                }
+              }
             } else {
               //上门自提
               obj.deliveryWay = 4;

@@ -599,6 +599,11 @@ export default {
                       obj.expressCompanys = expressCompanys;
                       obj.expressNos = item.orderAfterSaleSendInfo.expressNos;
                       obj.expressCompanyCodes = item.orderAfterSaleSendInfo.expressCompanyCodes;
+                      if(item.orderAfterSaleSendInfo.deliveryWay == 1) {
+                        if(item.express && item.express.specificationSize) {
+                          obj.specificationSize = item.express.specificationSize
+                        }
+                      }
                     }
                     //如果是商家配送，则添加配送员信息
                     if(item.orderAfterSaleSendInfo.deliveryWay == 2){

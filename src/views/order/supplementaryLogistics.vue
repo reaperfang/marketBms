@@ -624,6 +624,11 @@ export default {
                         obj.expressNos = this.ruleForm.expressNos; // 快递单号
                         obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
                         obj.remark = this.ruleForm.remark; // 发货备注
+                        if(this.orderInfo.deliveryWay == 1) {
+                            if(this.express && this.express.specificationSize) {
+                            obj.specificationSize = this.express.specificationSize
+                            }
+                        }
                       }else if(formName == 'ruleFormStore'){ //如果是商家配送
                         obj.deliveryWay = 2;
                         obj.distributorName = this.distributorName; //配送员名字
