@@ -15,6 +15,7 @@
                 style="width:150px"
                 :multiple="false"
                 :options="categoryData"
+                :normalizer="normalizer"
                 placeholder="请选择分类"
                 v-model="seletedClassify"></treeselect>
             </el-form-item>
@@ -92,7 +93,13 @@ export default {
       tableData: [],
       currentClassifyId: [],
       categoryData: [],
-      seletedClassify: null
+      seletedClassify: null,
+      normalizer(node) {
+        return {
+          label: node.name,
+          children: node.childrenCatalogs,
+        }
+      },
     };
   },
   created() {
@@ -116,18 +123,30 @@ export default {
     },
     /* 获取分类列表 */
     getGoodsClassifyList() {
-      this._apis.goods.fetchCategoryList({
+      this._apis.goods.fetchTreeCategoryList({
         enable: '1'
       }).then((response)=>{
-        this.responseData = response;
-        let arr = this.transTreeData(response, 0)
-        this.categoryData = arr
-        this.flatArr = this.flatTreeArray(JSON.parse(JSON.stringify(arr)))
+        this.filterEnableData(response);
+        this.categoryData = response;
         this.loading = false;
       }).catch((error)=>{
         console.error(error);
         this.loading = false;
       });
+    },
+
+    //过滤掉禁用的数据
+    filterEnableData(data) {
+      data.forEach((item, index) => {
+        if(item.enable === 0){
+          data.splice(index, 1);
+        }else if(item.childrenCatalogs){
+          this.filterEnableData(item.childrenCatalogs)
+        }
+        if(!item.childrenCatalogs || item.childrenCatalogs.length == 0){
+          delete item.childrenCatalogs;
+        }
+      })
     },
 
     //根据ids拉取数据
