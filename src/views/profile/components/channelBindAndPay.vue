@@ -1,9 +1,9 @@
 <template>
-   <div class="channelBindAndPay">
+   <div class="channelBindAndPay" v-loading="!isInitCompleted" element-loading-background="rgba(255,255,255,1)">
     <steps class="steps" :step="step"></steps>
-    <template v-if="isInitCompleted">
+    
       <h2>请绑定您的经营渠道</h2>
-      <ul>
+      <ul  >
         <li>
           <p><i :class="[isAuthGzhOrXcx ? 'icon-success' : 'el-icon-error']"></i><span>渠道绑定：</span></p>
           <p class="prompt">绑定微信小程序和公众号，推广您的店铺</p>
@@ -30,7 +30,7 @@
         <el-button class="prev" @click="goPrev">上一步</el-button>
         <el-button class="next" type="primary" :loading="loading" @click="submit()" :disabled="!isOpenPay">下一步</el-button>
       </div>
-    </template>
+    
    </div>
 </template>
 
