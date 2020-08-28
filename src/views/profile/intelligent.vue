@@ -11,7 +11,7 @@
     </el-steps>
 
     <!--  step_1  选择行业-->
-    <step-industry v-show="stepStatus === 1" @update-step="updateStep"></step-industry>
+    <step-industry v-show="stepStatus === 1" @update-step="updateStep" @update-industry-id="updateIndustryId"></step-industry>
 
     <!--  step_2  预览模板-->
     <step-preview v-if="stepStatus === 2" @update-step="updateStep" :industryId="industryId"></step-preview>
@@ -35,12 +35,25 @@
     data() {
       return {
         isShowGuide: false,  // 是否是显示引导（首次进入）
-        stepStatus: 4, // 进行到了第几步
+        stepStatus: 1, // 进行到了第几步
         stepArray: ['industry', 'preview', 'enable', 'base'],
         industryId: 0
       }
     },
+    created() {
+      // 获取助用户上次操作的步骤和数据状态
+      this.fetchIntelligentStatus();
+    },
     methods: {
+      /** 获取助用户上次操作的步骤和数据状态 */
+      async fetchIntelligentStatus() {
+        try {
+          // const result = this._apis.profile.getIntelligentProgress();
+        }catch (err) {
+          console.log(err.message)
+        }
+      },
+
       /** 关闭引导 */
       hideGuide() {
         this.isShowGuide = false;
@@ -49,7 +62,12 @@
       /** 更新 步骤 */
       updateStep(stepNumber) {
         this.stepStatus = stepNumber
-      }
+      },
+
+      /** 更新所选行业ID */
+      updateIndustryId(id) {
+        this.industryId = id;
+      },
     },
 
   }
@@ -63,6 +81,9 @@
 
     .bottom_buttons {
       text-align: center;
+      .el-button--small {
+        font-size: 14px;
+      }
     }
   }
 </style>

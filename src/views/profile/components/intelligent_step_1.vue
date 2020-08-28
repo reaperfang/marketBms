@@ -2,12 +2,12 @@
   <section class="intelligent_industry">
     <div class="i_industries" v-if="industries.length > 0">
       <el-radio-group v-for="(item, key) in industries" :key="key" :value="industryAct" @change="changeIndustry(item)">
-        <el-radio :label="item" border>{{ item }}</el-radio>
+        <el-radio :label="item.id" border>{{ item.name }}</el-radio>
       </el-radio-group>
     </div>
     <div class="i_industries_none" v-else>暂无数据</div>
 
-    <el-button type="primary" @click.native="$emit('update-step', 2)" :disabled="industries.length == 0"> 下一步，预览模板 </el-button>
+    <el-button type="primary" @click.native="toPreviewTemplate" :disabled="industries.length == 0"> 下一步，预览模板 </el-button>
   </section>
 </template>
 
@@ -26,16 +26,27 @@
     methods: {
       /** 获取行业 */
       getIndustry() {
-        this.industries = ['行业1', '行业2', '行业3'];
-        this.industryAct = this.industries[0];
+        this.industries = [{name:'行业1', id: 101},{name:'行业2', id: 102},{name:'行业3', id: 103}];
+        this.industryAct = this.industries[0].id;
         console.log('industries', this.industries);
       },
 
       /** 选择行业 */
-      changeIndustry(item) {
-        this.industryAct = item;
+      changeIndustry({id}) {
+        this.industryAct = id;
         console.log('industryAct', this.industryAct);
       },
+
+      /** 进行下一步 */
+      toPreviewTemplate() {
+        if(this.industryAct === '') {
+          this.$message.error('请选择行业')
+        }
+        else {
+          this.$emit('update-industry-id', this.industryAct);
+          this.$emit('update-step', 2)
+        }
+      }
     },
   }
 </script>
