@@ -713,6 +713,9 @@ export default {
                     if(this.orderAfterSaleSendInfo.deliveryWay == 1 || this.orderAfterSaleSendInfo.deliveryWay == 2) {
                         this.fetchOrderAddress();
                     }
+                    if(this.orderAfterSaleSendInfo.deliveryWay == 4) {
+                        
+                    }
                 }
                 // if(this.orderAfterSaleSendInfo.deliveryWay == 1) {
                 //     this.fetchOrderAddress();

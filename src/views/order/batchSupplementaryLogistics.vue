@@ -686,11 +686,11 @@ export default {
                 let item = values[index]
 
                 this._list[index].sizeList = item
-                if(item && item.length) {
-                  this._list.splice(index, 1)
-                }
+                // if(item && item.length) {
+                //   this._list.splice(index, 1)
+                // }
               }
-              this._list = this._list.filter(val => val.express != null)
+              this._list = this._list.filter(val => val.express != null && !val.express.specificationSize && val.sizeList && val.sizeList.length)
 
               if(this.list[0].deliveryWay == 1 && this._list.length) {
                 this.currentData = {
