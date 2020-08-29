@@ -29,7 +29,7 @@
           </div>
           <div class="header-righter">
             <div class="header-righter-item">{{item.expressNo | goodsStatus(orderDetail)}}</div>
-            <div class="header-righter-item">发货人：{{item.sendName}}</div>
+            <div class="header-righter-item">发货人：{{item.sendProductName}}</div>
             <div class="header-righter-item">{{item.goodsList && item.goodsList[0] && item.goodsList[0].createTime && item.goodsList && item.goodsList[0] && item.goodsList[0].createTime}}</div>
             <div @click="showContent(index)">
               <i v-if="item.showContent" class="el-icon-caret-top pointer"></i>
@@ -300,8 +300,8 @@ export default {
                 shipperName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].expressCompany || '',
                 showContent: true,
                 sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
-                // sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendName || '',
-                sendName:this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5) && this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5).createUserName||'',
+                sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendName || '',
+                sendProductName:this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5) && this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5).createUserName||'',
                 id: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].orderId || '',
                 createTime: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].createTime || '',
                 deliveryWay: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].deliveryWay || '',
