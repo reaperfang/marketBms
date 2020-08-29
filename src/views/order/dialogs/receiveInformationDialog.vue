@@ -114,7 +114,11 @@ export default {
         if (/^\s+$/.test(this.ruleForm.sendName)) {
           callback(new Error("发货人姓名不能为空白字符"));
         } else {
-          callback();
+          if(this.ruleForm.sendName.length > 50) {
+            callback(new Error("发货人姓名不能超过50个字符"));
+          }else {
+            callback();
+          }
         }
       }
     };
@@ -430,7 +434,7 @@ export default {
           this._apis.order
             .updateReceiveAndSend(params)
             .then(res => {
-              this.$emit('getDetail', this.multipleSelection)
+              this.$emit('getDetail', this.multipleSelection, JSON.parse(JSON.stringify(this.list)))
               this.$emit("submit");
               this.visible = false;
               this.$message.success("修改成功！");
@@ -496,6 +500,9 @@ export default {
       default: () => []
     },
     multipleSelection: {
+
+    },
+    list: {
 
     }
   },
