@@ -81,6 +81,14 @@ import DialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/
 
 export default {
     data() {
+        var sortValidator = (rule, value, callback) => {
+            console.log(this.basicForm.sort)
+            if(!/^\d{1,6}$/.test(this.basicForm.sort)) {
+                callback(new Error('请输入正确的格式'));
+            } else {
+                callback();
+            }
+        };
         return {
             parentId:' ',
             showFooter: false,
@@ -108,7 +116,7 @@ export default {
                     { required: true, message: '请选择状态', trigger: 'blur' },
                 ],
                 sort: [
-                    { required: true, message: '请输入分类排序', trigger: 'blur' },
+                    { validator: sortValidator, trigger: 'blur' },
                 ],
                 image: [
                     { required: true, message: '请上传分类图片', trigger: 'blur' },
