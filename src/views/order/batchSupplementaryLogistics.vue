@@ -888,9 +888,28 @@ export default {
           //     this.visible = false;
           //     this.$message.error(error);
           //   });
-          res.forEach(item => {
+
+          // 如果一个订单与发货数据，就付给其他没有的订单
+          let _orderItem = res.find(val => val.sendAddress)
+
+          res.forEach((item, index) => {
             if(!item.sendAddress) {
               if(item.deliveryWay == 1 || item.deliveryWay == 2) {
+                if(_orderItem) {
+                  item.sendName = _orderItem.sendName;
+                  item.sendPhone = _orderItem.sendPhone;
+                  item.sendProvinceCode = _orderItem.sendProvinceCode;
+                  item.sendProvinceName = _orderItem.sendProvinceName;
+                  item.sendCityCode = _orderItem.sendCityCode;
+                  item.sendCityName = _orderItem.sendCityName;
+                  item.sendAreaCode = _orderItem.sendAreaCode;
+                  item.sendAreaName = _orderItem.sendAreaName;
+                  item.sendAddress = _orderItem.sendAddress;
+                  item.sendDetail = _orderItem.sendDetail;
+                  item.sendLatitude = _orderItem.sendLatitude;
+                  item.sendLongitude = _orderItem.sendLongitude
+                }
+
                 if(!_address){
                   return;
                 }
