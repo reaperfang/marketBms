@@ -194,8 +194,8 @@ export default {
     };
   },
   created() {
-    this.getDetail();
     this.getExpressCompanyList()
+    this.getDetail();
     this.checkSet()
   },
   computed: {
@@ -762,13 +762,13 @@ export default {
             this.sendGoods = 'send'
             this.dialogVisible = true
         },
-    getDetail() {
+    getDetail(selection, list) {
       this._apis.order
         .orderAfterSaleDetail({
           orderAfterSaleIds: this.$route.query.ids.split(",").map(val => val)
         })
         .then(res => {
-          res.forEach(val => {
+          res.forEach((val, index) => {
             val.express = null
             val.checked = true;
             val.other = "";
@@ -790,6 +790,18 @@ export default {
             val.showErrorPhone = false;
             val.errorMessagePhone = '';
 
+            // 回显选中的快递公司
+            if(list && list.length) {
+              val.orderAfterSaleSendInfo.expressCompanyCodes = list[index].orderAfterSaleSendInfo.expressCompanyCodes
+
+              let expressName = this.expressCompanyList.find(item => item.expressCompanyCode == val.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
+
+              this._apis.order
+                .checkExpress({expressName})
+                .then(res => {
+                  val.orderAfterSaleSendInfo.express = res
+                })
+            }
           })
 
 
