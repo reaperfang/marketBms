@@ -8,10 +8,10 @@
     </el-steps>
 
     <!--  绑定渠道  -->
-    <channel v-if="baseStatus === 1" @base-step="baseStep"></channel>
+    <channel v-show="baseStatus === 1" @base-step="baseStep"></channel>
 
     <!--  微信支付设置  -->
-    <wx v-if="baseStatus === 2" @base-step="baseStep"></wx>
+    <wx v-show="baseStatus === 2" @base-step="baseStep"></wx>
 
     <!--  店铺信息  -->
     <shop v-show="baseStatus === 3" @base-step="baseStep"></shop>

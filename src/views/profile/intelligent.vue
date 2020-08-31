@@ -3,7 +3,7 @@
     <guide v-if="isShowGuide" @hide-guide="hideGuide"></guide>
 
     <!--  step_progress  -->
-    <el-steps :active="stepStatus" finish-status="success" simple>
+    <el-steps :active="stepStatus" simple>
       <el-step title="选择行业" icon="el-icon-edit"></el-step>
       <el-step title="预览模板" icon="el-icon-upload"></el-step>
       <el-step title="启用模板" icon="el-icon-picture"></el-step>
@@ -11,16 +11,16 @@
     </el-steps>
 
     <!--  step_1  选择行业-->
-    <step-industry v-show="stepStatus === 1" @update-step="updateStep" @update-industry-id="updateIndustryId"></step-industry>
+    <step-industry v-show="stepStatus === 1" v-if="stepStatus <=2" :industryId="industryId" @update-step="updateStep" @update-industry-id="updateIndustryId"></step-industry>
 
     <!--  step_2  预览模板-->
     <step-preview v-if="stepStatus === 2" @update-step="updateStep" :industryId="industryId"></step-preview>
 
     <!--  step_3  启用模板-->
-    <stepEnable v-if="stepStatus === 3" @update-step="updateStep"></stepEnable>
+    <step-enable v-if="stepStatus === 3" @update-step="updateStep"></step-enable>
 
     <!--  step_4  基础建设-->
-    <stepBase v-if="stepStatus === 4" @update-step="updateStep"></stepBase>
+    <step-base v-if="stepStatus === 4" @update-step="updateStep"></step-base>
   </div>
 </template>
 <script>
@@ -35,9 +35,9 @@
     data() {
       return {
         isShowGuide: false,  // 是否是显示引导（首次进入）
-        stepStatus: 1, // 进行到了第几步
+        stepStatus: 2, // 进行到了第几步
         stepArray: ['industry', 'preview', 'enable', 'base'],
-        industryId: 0
+        industryId: null
       }
     },
     created() {
@@ -49,6 +49,9 @@
       async fetchIntelligentStatus() {
         try {
           // const result = this._apis.profile.getIntelligentProgress();
+          setTimeout(() => {
+            this.industryId = 102;
+          }, 3000)
         }catch (err) {
           console.log(err.message)
         }

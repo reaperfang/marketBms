@@ -7,17 +7,22 @@
     </div>
     <div class="i_industries_none" v-else>暂无数据</div>
 
-    <el-button type="primary" @click.native="toPreviewTemplate" :disabled="industries.length == 0"> 下一步，预览模板 </el-button>
+    <div class="bottom_buttons">
+      <el-button type="primary" @click.native="toPreviewTemplate" :disabled="industries.length == 0"> 下一步，预览模板 </el-button>
+    </div>
   </section>
 </template>
 
 <script>
   export default {
     name: "intelligent_industry",
+    props: {
+      industryId: { default: null } // 选中的行业
+    },
     data() {
       return {
         industries: [],  // 行业信息
-        industryAct: '', // 选中的行业
+        industryAct: null,
       }
     },
     created() {
@@ -27,14 +32,14 @@
       /** 获取行业 */
       getIndustry() {
         this.industries = [{name:'行业1', id: 101},{name:'行业2', id: 102},{name:'行业3', id: 103}];
-        this.industryAct = this.industries[0].id;
-        console.log('industries', this.industries);
+        this.industryAct = this.industryId === null ? this.industries[0].id : this.industryId;
+        // console.log('industries', this.industries);
       },
 
       /** 选择行业 */
       changeIndustry({id}) {
         this.industryAct = id;
-        console.log('industryAct', this.industryAct);
+        console.log('industryAct:   ', this.industryAct);
       },
 
       /** 进行下一步 */
