@@ -877,7 +877,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .bulk-delivery {
-  min-width: 1000px;
+  min-width: 1346px;
   background-color: #fff;
   padding: 20px;
   color: #333;
