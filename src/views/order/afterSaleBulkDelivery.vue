@@ -69,7 +69,7 @@
                   </div>
                   <div class="col">
                     <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 4">
-                        <el-form-item label="快递公司" prop="expressCompanyCodes">
+                        <el-form-item label="快递公司" prop="expressCompanyCodes" class="expressCompanys">
                             <el-select @change="checkExpress(index)" v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
                             </el-select>
@@ -80,7 +80,7 @@
                           placeholder="请输入快递公司名称"
                         ></el-input>
                         </el-form-item>
-                        <el-form-item label="快递单号" prop="expressNos">
+                        <el-form-item label="快递单号" prop="expressNos" class="expressNos">
                             <el-input :disabled="item.express != null" v-model="item.orderAfterSaleSendInfo.expressNos" :placeholder="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" :title="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" @input="ExpressNosInput(index)"></el-input>
                         </el-form-item>
                     </el-form>
@@ -1079,5 +1079,8 @@ export default {
   height: 20px;
   background: url(../../assets/images/order/checkbox-checked.png)
     no-repeat;
+}
+/deep/ .expressCompanys .el-input, /deep/ .expressNos .el-input {
+  width: 232px;
 }
 </style>
