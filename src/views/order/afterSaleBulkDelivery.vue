@@ -1081,6 +1081,6 @@ export default {
     no-repeat;
 }
 /deep/ .expressCompanys .el-input, /deep/ .expressNos .el-input {
-  width: 232px;
+  width: 236px;
 }
 </style>

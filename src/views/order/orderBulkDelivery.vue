@@ -1244,7 +1244,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .bulk-delivery {
-  min-width: 1290px;
+  min-width: 1306px;
   background-color: #fff;
   padding: 20px;
   color: #333333;
@@ -1459,6 +1459,6 @@ export default {
   }
 }
 /deep/ .expressCompanys .el-input, /deep/ .expressNos .el-input {
-  width: 232px;
+  width: 236px;
 }
 </style>
