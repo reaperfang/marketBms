@@ -68,7 +68,7 @@
                   </div>
                   <div class="col">
                     <el-form :model="item" label-width="70px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
-                        <el-form-item label="快递公司" prop="expressCompanys">
+                        <el-form-item label="快递公司" prop="expressCompanys" class="expressCompanys">
                             <el-select filterable @change="checkExpress(index)" v-model="item.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
                             </el-select>
@@ -82,9 +82,9 @@
                         ></el-input>
                         <p v-if="item.expressCompanyCodes == 'other' && item.showErrorOther" class="error-message">{{item.errorMessageOther}}</p>
                         </el-form-item>
-                        <el-form-item label="快递单号" prop="expressNos">
+                        <el-form-item label="快递单号" prop="expressNos" class="expressNos">
                             <el-input :disabled="item.express != null" v-model="item.expressNos" @input="ExpressNosInput(index)" maxlength="20" :placeholder="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'"></el-input>
-                            <p v-if="item.express && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
+                            <p v-if="item.express == null && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
                         </el-form-item>
                     </el-form>
                     <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 2">
@@ -483,10 +483,23 @@ export default {
               if(index != 0) {
                 val.expressCompanyCodes = expressCompanyCodes
                 val.express = express
+                val.expressNos = ''
               }
             })
 
             this.list = list
+          }
+
+          if(res) {
+            this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              expressNos: '',
+              express: res
+            }))
+          } else {
+            this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              showErrorExpressCompany: false,
+              errorMessageExpressCompany: ''
+            }))
           }
         })
         .catch(error => {
@@ -494,10 +507,10 @@ export default {
           this.$message.error(error);
         });
 
-        this.list.splice(index, 1, Object.assign({}, this.list[index], {
-          showErrorExpressCompany: false,
-          errorMessageExpressCompany: ''
-        }))
+        // this.list.splice(index, 1, Object.assign({}, this.list[index], {
+        //   showErrorExpressCompany: false,
+        //   errorMessageExpressCompany: ''
+        // }))
     },
     printingElectronicForm() {
       this.$router.push('/order/printingElectronicForm?ids=' + this.list.map(val => val.id).join(',') + '&type=batchSupplementaryLogistics')
@@ -945,7 +958,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .bulk-delivery {
-  min-width: 1153px;
+  min-width: 1290px;
   color: #333333;
   background-color: #fff;
   padding: 20px;
@@ -1114,5 +1127,8 @@ export default {
 .el-icon-delete {
   float: right;
   cursor: pointer;
+}
+/deep/ .expressCompanys .el-input, /deep/ .expressNos .el-input {
+  width: 236px;
 }
 </style>

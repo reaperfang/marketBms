@@ -54,6 +54,11 @@ export default {
         },
         cancelHandler() {
             this.visible = false
+            this.data.list.forEach((item, index) => {
+                this.data.list.splice(index, 1, Object.assign({}, this.data.list[index], {
+                    specificationSize: ''
+                }))
+            })
             this.$emit('cancel')
         },
         specificationSizeChange(value, index) {

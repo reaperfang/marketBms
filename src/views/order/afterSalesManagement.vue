@@ -122,7 +122,7 @@
             </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
-        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :title="title" @reject="rejectHandler" @confirm="confirmHandler" :data="currentData" :expressNo="expressNo" :expressCompanys="expressCompanys"></component>
+        <component ref="sunComponent" v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :title="title" @reject="rejectHandler" @confirm="confirmHandler" :data="currentData" :expressNo="expressNo" :expressCompanys="expressCompanys"></component>
     </div>
 </template>
 <script>
@@ -373,6 +373,7 @@ export default {
                         console.log(res)
                         this.getList()
                         this.$message.success('审核成功！');
+                        this.$refs['sunComponent'].visible = false
                     }).catch(error => {
                         this.$message.error(error);
                     })

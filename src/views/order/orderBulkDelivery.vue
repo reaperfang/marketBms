@@ -91,7 +91,7 @@
                   <div class="col">
                     <template v-if="list[0] && list[0].deliveryWay != 4">
                       <el-form :model="item" label-width="70px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
-                        <el-form-item label="快递公司" prop="expressCompanys">
+                        <el-form-item label="快递公司" prop="expressCompanys" class="expressCompanys">
                           <el-select filterable @change="checkExpress(index)" v-model="item.expressCompanyCodes" placeholder="请选择">
                             <el-option
                               :label="item.expressCompany"
@@ -111,9 +111,9 @@
                           ></el-input>
                           <p v-if="item.expressCompanyCodes == 'other' && item.showErrorOther" class="error-message">{{item.errorMessageOther}}</p>
                         </el-form-item>
-                        <el-form-item label="快递单号" prop="expressNos">
+                        <el-form-item label="快递单号" prop="expressNos" class="expressNos">
                           <el-input maxlength="20" :disabled="item.express != null" v-model="item.expressNos" :placeholder="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" :title="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" @input="ExpressNosInput(index)"></el-input>
-                          <p v-if="item.express && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
+                          <p v-if="item.express == null && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
                         </el-form-item>
                       </el-form>
                       <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 2">
@@ -585,10 +585,23 @@ export default {
               if(index != 0) {
                 val.expressCompanyCodes = expressCompanyCodes
                 val.express = express
+                val.expressNos = ''
               }
             })
 
             this.list = list
+          }
+
+          if(res) {
+            this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              expressNos: '',
+              express: res
+            }))
+          } else {
+            this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              showErrorExpressCompany: false,
+              errorMessageExpressCompany: ''
+            }))
           }
         })
         .catch(error => {
@@ -596,10 +609,10 @@ export default {
           this.$message.error(error.message);
         });
 
-        this.list.splice(index, 1, Object.assign({}, this.list[index], {
-          showErrorExpressCompany: false,
-          errorMessageExpressCompany: ''
-        }))
+        // this.list.splice(index, 1, Object.assign({}, this.list[index], {
+        //   showErrorExpressCompany: false,
+        //   errorMessageExpressCompany: ''
+        // }))
     },
     deleteOrder(index) {
       this.list.splice(index, 1);
@@ -730,6 +743,10 @@ export default {
             //如果不是选中的，则不用验证
             if(!goods.checked){
               return;
+            }
+            if((goods.goodsCount -goods.cacheSendCount) == goods.sendCount) {
+              //如果应发数量是0则不用验证
+              return
             }
             if(!goods.sendCount) {
               isWrong = true
@@ -1227,7 +1244,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .bulk-delivery {
-  min-width: 1000px;
+  min-width: 1306px;
   background-color: #fff;
   padding: 20px;
   color: #333333;
@@ -1440,5 +1457,8 @@ export default {
       padding-right: 2px;
     }
   }
+}
+/deep/ .expressCompanys .el-input, /deep/ .expressNos .el-input {
+  width: 236px;
 }
 </style>
