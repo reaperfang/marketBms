@@ -5,7 +5,8 @@ const dashboard = {
 		hobby:[],
 		member:{},
 		user:{},
-		sexage:{}
+		sexage:{},
+	    phone:{}
 	},
 	mutations: {
 		HOBBY_LIST: (state, data) => {
@@ -19,6 +20,9 @@ const dashboard = {
 		},
 		SEXAGE_LIST: (state, data) => {
 			state.sexage = data;
+		},
+		SETPHONE_LIST:(state,data)=>{
+			state.phone=data;
 		}
 	},
 	actions: {
@@ -33,6 +37,9 @@ const dashboard = {
 		},
 		sexagelist({ commit },data) {
 			commit("SEXAGE_LIST",data);
+		},
+		phonelist({ commit },data) {
+			commit("SETPHONE_LIST",data);
 		}
 	}
 };

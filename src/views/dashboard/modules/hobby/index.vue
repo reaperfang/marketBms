@@ -49,11 +49,18 @@ export default {
 	destroyed: function() {},
 	methods: {
 		...mapActions(["hobbylist"]),
-		init() {
-			this._apis.dashboard.statistics({ cid: this.cid }).then(res => {
-				//console.log("res",res);
-				this.hobbylist(res);
-			});
+		async init() {
+			// this._apis.dashboard.statistics({ cid: this.cid }).then(res => {
+			// 	//console.log("res",res);
+			// 	this.hobbylist(res);
+			// });
+
+			let parames = { cid: this.cid };
+
+			let resstatistics = await this._apis.dashboard.statistics(parames);
+			this.hobbylist(resstatistics);
+
+			console.log("resstatistics",resstatistics);
 		}
 	}
 };

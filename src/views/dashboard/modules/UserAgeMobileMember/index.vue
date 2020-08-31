@@ -28,12 +28,11 @@
 				></vitem>
 			</el-col>
 			<el-col :span="12">
-				<!-- <vitem :title="'绑定手机号'" :chartData="chartData" :icon="'3'"></vitem> -->
 				<pchart
 					:title="'绑定手机号'"
-					:progress="mobile.progress"
-					:city="mobile.city"
-					:barColor="mobile.barColor"
+					:progress="phoneData.progress"
+					:city="phoneData.city"
+					:barColor="phoneData.barColor"
 				></pchart>
 			</el-col>
 		</el-row>
@@ -56,6 +55,9 @@ export default {
 		},
 		"dashboard.sexage"(val) {
 			this.setSexage(val);
+		},
+		"dashboard.phone"(val) {
+			this.setPhone(val);
 		}
 	},
 	props: {
@@ -83,7 +85,8 @@ export default {
 
 			memberData: {},
 			userData: {},
-			sexageData: {}
+			sexageData: {},
+			phoneData:{}
 		};
 	},
 	computed: {
@@ -100,25 +103,22 @@ export default {
 	beforeDestroy() {},
 	destroyed: function() {},
 	methods: {
-		...mapActions(["memberlist", "userlist", "sexagelist"]),
-		init() {
-			this._apis.dashboard.member({ cid: this.cid }).then(res => {
-				this.memberlist(res);
-				//this.hobbylist(res);
-			});
+		...mapActions(["memberlist", "userlist", "sexagelist","phonelist"]),
+		async init() {
+			let parames = { cid: this.cid };
 
-			this._apis.dashboard
-				.userdistributed({ cid: this.cid })
-				.then(res => {
-					//console.log("userdistributed", res);
-					this.userlist(res);
-					//this.hobbylist(res);
-				});
-			this._apis.dashboard.sexage({ cid: this.cid }).then(res => {
-				//console.log("sexage", res);
+			let resMember = await this._apis.dashboard.member(parames);
+			this.memberlist(resMember);
+			let resUserDis = await this._apis.dashboard.userdistributed(
+				parames
+			);
+			this.userlist(resUserDis);
+			let resSexAage = await this._apis.dashboard.sexage(parames);
+			this.sexagelist(resSexAage);
 
-				this.sexagelist(res);
-			});
+			
+			let resPhone = await this._apis.dashboard.statistics(parames);
+			this.phonelist(resPhone);
 		},
 		setMember(val) {
 			let result = {
@@ -166,6 +166,19 @@ export default {
 					gender: val.c_uv_sex_gender
 				}
 			};
+		},
+		setPhone(val){
+			//mobile: { progress: 75, barColor: "#06C9DD", city: "绑定手机号" },
+
+			let result=parseFloat(val.c_uv_share_phone)*100;
+
+			console.log("result",result);
+
+			this.phoneData= {  ...this.mobile,progress: result };
+
+			console.log('this.mobile',this.mobile);
+			console.log("this.phoneData",this.phoneData);
+
 		}
 	}
 };

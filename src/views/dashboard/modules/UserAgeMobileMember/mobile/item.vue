@@ -22,10 +22,12 @@ import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
   watch: {
-    // flowData(val) {
-    // }
+    progress(val) {
+      this.item={...this.item,progress:val}
+    }
   },
-  props: ["title", "chartData", "icon"],
+  // props: ["progress", "city", "barColor","title"],
+  props: ["title","progress"],
   components: { gridtitle, pchart },
   data: function() {
     return {
