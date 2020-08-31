@@ -344,11 +344,13 @@ export default {
                 showContent: true,
                 sendRemark:item.datas[0]&&item.datas[0].sendRemark||'',
                 sendName:JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address).sendName || '',
-                sendProductName:this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5) && this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5).createUserName||'',
+                sendProductName:this.orderDetail.orderInfo.sendType==2
+                    ?(this.orderDetail.orderOperationRecordList.find(item=>item.operationType==4) && this.orderDetail.orderOperationRecordList.find(item=>item.operationType==4).createUserName||'')
+                    :(this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5) && this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5).createUserName||''),
                 id:item.datas[0]&&item.datas[0].orderId || '',
                 createTime: item.datas[0]&&item.datas[0]&&item.datas[0].createTime || '',
                 deliveryWay: item.datas[0]&&item.datas[0].deliveryWay || '',
-                deliveryName:item.datas[0]&&item.datas[0].deliveryName || '',
+                deliveryName:item.datas[0]&&item.datas[0].distributorName || '',
                 phone: item.datas[0]&&item.datas[0].distributorPhone || '',
                 receiveAddress:JSON.parse(item.datas[0].address)&& JSON.parse(item.datas[0].address).receiveAddress || '',
                 receivedDetail: JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address).receivedDetail || '',
