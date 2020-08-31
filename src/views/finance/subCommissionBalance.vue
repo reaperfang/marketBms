@@ -6,7 +6,7 @@
         <el-form-item label="交易流水号">
           <el-input v-model="ruleForm.tradeDetailSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
-        <el-form-item> 
+        <el-form-item>
           <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
             <el-option
               v-for="item in commissionClerkStatus"
@@ -270,7 +270,7 @@ export default {
       }else if(val && val.order == 'descending'){
         this.ruleForm.sort = 'desc'
       }else{
-        return 
+        return
       }
       this.fetch()
     },
@@ -310,7 +310,7 @@ export default {
   }
 }
 .table{
-  width: 100%; 
+  width: 100%;
   margin-top:20px;
 }
 </style>
