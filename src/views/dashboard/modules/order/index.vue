@@ -7,9 +7,11 @@
 		</el-row>
 		<el-row class="item-content">
 			<vfunnel
-				:chartData="chartData"
+				:chartData="lineargroup"
 				:chartSettings="chartSettings"
 				:chartExtend="chartExtend"
+
+				ref="vfunnel"
 			></vfunnel>
 		</el-row>
 	</div>
@@ -22,7 +24,13 @@ import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
 	watch: {
-		"dashboard.order"(val) {}
+		"dashboard.order"(val) {
+			this.lineargroup=val
+
+			console.log("this.lineargroup",this.lineargroup);
+			
+			this.$refs.vfunnel.showChart(this.lineargroup);
+		}
 	},
 	props: {
 		// data: {
@@ -49,7 +57,8 @@ export default {
 				// 	position: "inside"
 				// }
 			},
-			chartExtend: {}
+			chartExtend: {},
+			lineargroup:[]
 		};
 	},
 	computed: {
@@ -70,7 +79,32 @@ export default {
 		async init() {
 			let parames = { cid: this.cid };
 			let res = await this._apis.dashboard.order(parames);
-		    console.log("order res",res);
+
+			var chart = [
+				{
+					value: res.order_c_uv_7dco,// 转换率
+					name: "下单转换率",// 转换率名称
+					oriname: "访问人数",
+					number: res.uv_7d
+					// color: ["rgba(255,198,82,0.6)", "rgba(255,198,82,0)"]
+				},
+				{
+					value: res.paid_c_order_7dco,
+					name: "下单支付转化率",
+					oriname: "下单人数",
+					number: res.order_c_uv_7d
+					// color: ["rgba(255,110,115,0.5)", "rgba(255,110,115,0)"]
+				},
+				{
+					value: res.paid_c_uv_7dco,
+					name: "支付转化率",
+					oriname: "支付人数",
+					number: res.paid_order_number_7d
+					//  color: ["rgba(134,131,230,0.4)", "rgba(134,131,230,0)"]
+				}
+			];
+			this.orderlist(chart);
+			console.log("order res", res);
 		}
 	}
 };

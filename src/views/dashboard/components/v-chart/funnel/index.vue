@@ -11,16 +11,14 @@
 <script>
 import echarts from "echarts";
 export default {
-	props: ["barColor", "progress", "city"],
+	props: ["barColor", "progress", "city","chartData"],
 	name: "TEMPLATE",
 	data() {
 		return {
-			chartData: "71.23",
-			chart: ""
 		};
 	},
 	mounted() {
-		this.showChart();
+		this.showChart(this.chartData);
 
 		window.addEventListener("resize", ev => {
 			//   this.$dt.start({
@@ -36,7 +34,7 @@ export default {
 		});
 	},
 	methods: {
-		showChart() {
+		showChart(lineargroup) {
 			this.chart = echarts.init(this.$refs.chartContentPie);
 
 			var colors = [
@@ -48,43 +46,30 @@ export default {
 				"#9692ff"
 			];
 
-			var lineargroup = [
-				// {
-				// 	value: 100,
-				// 	name: "目标",
-				// 	oriname: "意向",
-				// 	number: 98756
-				// 	//color: ["rgba(29,211,137,0.8)", "rgba(29,211,137,0)"]
-				// },
-				// {
-				// 	value: 80,
-				// 	name: "方案率",
-				// 	oriname: "方案",
-				// 	number: 88756
-				// 	// color: ["rgba(102,142,255,0.7)", "rgba(102,142,255,0)"]
-				// },
-				{
-					value: 60,
-					name: "商務率",
-					oriname: "商務",
-					number: 78756
-					// color: ["rgba(255,198,82,0.6)", "rgba(255,198,82,0)"]
-				},
-				{
-					value: 40,
-					name: "成交率",
-					oriname: "即將成交",
-					number: 68756
-					// color: ["rgba(255,110,115,0.5)", "rgba(255,110,115,0)"]
-				},
-				{
-					value: 20,
-					name: "贏單率",
-					oriname: "贏單",
-					number: 58756
-					//  color: ["rgba(134,131,230,0.4)", "rgba(134,131,230,0)"]
-				}
-			];
+			// var lineargroup = [
+			// 	{
+			// 		value: 60,// 转换率
+			// 		name: "商務率",// 转换率名称
+			// 		oriname: "商務",
+			// 		number: 78756
+			// 		// color: ["rgba(255,198,82,0.6)", "rgba(255,198,82,0)"]
+			// 	},
+			// 	{
+			// 		value: 40,
+			// 		name: "成交率",
+			// 		oriname: "即將成交",
+			// 		number: 68756
+			// 		// color: ["rgba(255,110,115,0.5)", "rgba(255,110,115,0)"]
+			// 	},
+			// 	{
+			// 		value: 20,
+			// 		name: "贏單率",
+			// 		oriname: "贏單",
+			// 		number: 58756
+			// 		//  color: ["rgba(134,131,230,0.4)", "rgba(134,131,230,0)"]
+			// 	}
+			// ];
+
 
 			var data1 = [];
 			var data2 = [];
@@ -118,8 +103,6 @@ export default {
 				data2.push(obj2);
 			}
 
-			console.log("data1", data1);
-			console.log("data2", data2);
 			var option = {
 				color: colors,
 				series: [
@@ -148,7 +131,7 @@ export default {
 						data: data1
 					},
 					{
-						top:30,
+						top: 30,
 						type: "funnel",
 						height: "250",
 						gap: -1,
@@ -158,7 +141,7 @@ export default {
 						z: 2,
 						label: {
 							normal: {
-								color: "#333",
+								color: "#FFFFFF",
 								position: "right",
 								formatter: function(d) {
 									var ins =
@@ -172,13 +155,13 @@ export default {
 								rich: {
 									aa: {
 										align: "center",
-										color: "#666",
+										color: "#FFFFFF",
 										fontSize: "12",
 										lineHeight: "30"
 									},
 									bb: {
 										align: "center",
-										color: "#333",
+										color: "#FFFFFF",
 										fontSize: "22"
 									}
 								}
