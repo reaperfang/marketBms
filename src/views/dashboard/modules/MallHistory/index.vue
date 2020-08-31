@@ -10,10 +10,18 @@
 		</el-row>
 		<el-row class="item-content">
 			<el-col :span="12" class="v-el-col">
-			<vline :chartData="chartData" :chartSettings="chartSettings" :chartExtend="chartExtend"></vline>
+				<vline
+					:chartData="left"
+					:chartSettings="chartSettings"
+					:chartExtend="chartExtend"
+				></vline>
 			</el-col>
 			<el-col :span="12" class="v-el-col">
-				<vline :chartData="chartData" :chartSettings="chartSettings" :chartExtend="chartExtend"></vline>
+				<vline
+					:chartData="right"
+					:chartSettings="chartSettings"
+					:chartExtend="chartExtend"
+				></vline>
 			</el-col>
 		</el-row>
 	</div>
@@ -26,8 +34,10 @@ import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
 	watch: {
-		// flowData(val) {
-		// }
+		"dashboard.paymail"(val) {
+			this.setLeftData(val.left);
+			this.setRightData(val.right);
+		}
 	},
 	props: {
 		// data: {
@@ -38,6 +48,7 @@ export default {
 	components: { vline, gridtitle },
 	data: function() {
 		return {
+			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
 			chartData: {
 				columns: ["日期", "访问人数"],
 				rows: [
@@ -78,13 +89,17 @@ export default {
 						show: false
 					}
 				}
-			}
+			},
+			left: {},
+			right: {}
 		};
 	},
 	computed: {
-		//...mapState([""])
+		...mapState(["dashboard"])
 	},
-	mounted() {},
+	mounted() {
+		this.init();
+	},
 	beforeCreate() {},
 	created() {},
 	beforeMount() {},
@@ -93,7 +108,60 @@ export default {
 	beforeDestroy() {},
 	destroyed: function() {},
 	methods: {
-		//...mapActions([""]),
+		...mapActions(["paymaillist"]),
+		async init() {
+			let parames = { cid: this.cid };
+			let left = await this._apis.dashboard.payamount(parames);
+			let right = await this._apis.dashboard.mail(parames);
+			this.paymaillist({ left: left });
+			this.paymaillist({ right: right });
+		},
+		setLeftData(val) {
+			let result = {
+				columns: ["日期", "金额"]
+			};
+
+			this.left = {
+				...result,
+				rows: this.setRowsleft(val)
+			};
+		},
+		setRowsleft(val) {
+			let rows = [];
+			let y = val.paid_order_am_td_7d;
+			let x = val.x;
+			for (var j = 0; j < y.length; j++) {
+				rows.push({
+					日期: x[j],
+					金额: y[j]
+				});
+			}
+
+			return rows;
+		},
+		setRightData(val) {
+			let result = {
+				columns: ["日期", "访客"]
+			};
+
+			this.right = {
+				...result,
+				rows: this.setRowsright(val)
+			};
+		},
+		setRowsright(val) {
+			let rows = [];
+			let y = val.pv_7d;
+			let x = val.x;
+			for (var j = 0; j < y.length; j++) {
+				rows.push({
+					日期: x[j],
+					访客: y[j]
+				});
+			}
+
+			return rows;
+		}
 	}
 };
 </script>

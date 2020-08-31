@@ -49,7 +49,7 @@ import { mapGetters, mapActions, mapState } from "vuex";
 export default {
 	watch: {
 		"dashboard.top3"(val) {
-      this.setPieData(val);
+			this.setPieData(val);
 		}
 	},
 	props: {
@@ -90,22 +90,17 @@ export default {
 			let parames = { cid: this.cid };
 
 			let resTop = await this._apis.dashboard.top3(parames);
-      console.log("resTop", resTop);
-      this.toplist(resTop.top3);
-
-		
-    },
-    setPieData(val){
-        console.log(' setPieData(val){',val);
-      	this.chartData = val.map(res => {
+			this.toplist(resTop.top3);
+		},
+		setPieData(val) {
+			this.chartData = val.map(res => {
 				return {
-					progress: parseFloat(res.place_order_am_s)*100,
+					progress: parseFloat(res.place_order_am_s) * 100,
 					barColor: "RGBA(255, 0, 139, 1)",
 					city: res.area_name
 				};
 			});
-
-    }
+		}
 	}
 };
 </script>
