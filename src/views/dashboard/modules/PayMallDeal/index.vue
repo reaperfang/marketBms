@@ -66,13 +66,16 @@ export default {
         { progress: 75, barColor: "RGBA(255, 0, 139, 1)", city: "北京" },
         { progress: 70, barColor: "RGBA(255, 92, 49, 1)", city: "上海" },
         { progress: 95, barColor: "RGBA(245, 159, 0, 1)", city: "深圳" },
-      ]
+      ],
+      	cid: JSON.parse(localStorage.getItem("shopInfos")).id,
     };
   },
   computed: {
     //...mapState([""])
   },
-  mounted() {},
+  mounted() {
+    this.init();
+  },
   beforeCreate() {},
   created() {},
   beforeMount() {},
@@ -82,6 +85,12 @@ export default {
   destroyed: function() {},
   methods: {
     //...mapActions([""]),
+    async init(){
+			let parames = { cid: this.cid };
+
+      let resTop = await this._apis.dashboard.top3(parames);
+      console.log("resTop",resTop);
+    }
   },
 };
 </script>

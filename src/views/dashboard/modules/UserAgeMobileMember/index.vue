@@ -116,6 +116,8 @@ export default {
 			let resSexAage = await this._apis.dashboard.sexage(parames);
 			this.sexagelist(resSexAage);
 
+			console.log("resSexAage",resSexAage);
+
 			
 			let resPhone = await this._apis.dashboard.statistics(parames);
 			this.phonelist(resPhone);
@@ -162,10 +164,12 @@ export default {
 			this.sexageData = {
 				ageData: result,
 				sexData: {
-					female: val.c_uv_sex_female,
+					female: val.c_uv_sex_female,//c_uv_sex_female
 					gender: val.c_uv_sex_gender
 				}
 			};
+
+		   console.log("sexageData",this.sexageData);
 		},
 		setPhone(val){
 			let result=parseFloat(val.c_uv_share_phone)*100;

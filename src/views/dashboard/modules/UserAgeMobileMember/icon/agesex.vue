@@ -8,8 +8,8 @@
       />
     </div>
     <div class="end">
-      <span>{{sexData.female}}%</span>
-      <span>{{sexData.gender}}%</span>
+      <span>{{sexData&&sexData.female}}%</span>
+      <span>{{sexData&&sexData.gender}}%</span>
     </div>
   </div>
 </template>

@@ -21,14 +21,7 @@ export default {
     this.showChart();
 
     window.addEventListener("resize", (ev) => {
-      this.$dt.start({
-        type: "debounce",
-        immediate: true,
-        time: 100,
-        success: () => {
-          this.chart.resize();
-        },
-      });
+       this.chart.resize();
     });
   },
   methods: {
