@@ -33,12 +33,12 @@ export default {
           trigger: "axis",
         },
         legend: {  
-            x:'right',      //可设定图例在左、右、居中
-            y:'top',
-            data: ['用户总数','新增用户', '新增会员'],
-            icon: "circle",
-            itemWidth:8,
-          }, 
+          x:'right',      //可设定图例在左、右、居中
+          y:'top',
+          data: ['用户总数','新增用户', '新增会员'],
+          icon: "circle",
+          itemWidth:8,
+        }, 
         color:['#0077FF','#2FC25B','#FF8615'], 
         grid: {
           top:'11%',
@@ -47,8 +47,7 @@ export default {
           bottom: "3%",
           containLabel: true
         },
-        //X轴
-        xAxis: {
+        xAxis: {//X轴
           type: "category",
           boundaryGap: false,
           axisLabel:{
@@ -56,10 +55,8 @@ export default {
             // interval:0,
           },
           data: this.flow['xAxis']
-          // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
         },
-        //Y轴
-        yAxis: {
+        yAxis: {//Y轴
           type: "value",
           minInterval: 1,
           axisLine:{       //y轴
@@ -72,51 +69,49 @@ export default {
             show:true, //隐藏或显示
           },
         },
-         series: [{
-                    name: '用户总数',
-                    data: this.flow['yAxis1'],
-                    type: 'line',
-                    hoverAnimation:false,
-                    symbol:'circle',
-                    symbolSize: 8,   //设定实心点的大小
-                    itemStyle:{  
-                        normal:{  
-                        borderColor:'#fff',  //拐点边框颜色  
-                        }  
-                    },
-                },
-                {
-                    name: '新增用户',
-                    data: this.flow['yAxis2'],
-                    type: 'line',
-                    hoverAnimation:false,
-                    symbol:'circle',
-                    symbolSize: 8,   //设定实心点的大小
-                    itemStyle:{  
-                        normal:{  
-                        borderColor:'#fff',  //拐点边框颜色  
-                        }  
-                    },
-                },
-                {
-                    name: '新增会员',
-                    data: this.flow['yAxis3'],
-                    type: 'line',
-                    hoverAnimation:false,
-                    symbol:'circle',
-                    symbolSize: 8,   //设定实心点的大小
-                    itemStyle:{  
-                        normal:{  
-                        borderColor:'#fff',  //拐点边框颜色  
-                        }  
-                    },
-                }],
+        series: [{
+          name: '用户总数',
+          data: this.flow['yAxis1'],
+          type: 'line',
+          hoverAnimation:false,
+          symbol:'circle',
+          symbolSize: 8,   //设定实心点的大小
+          itemStyle:{  
+            normal:{  
+              borderColor:'#fff',  //拐点边框颜色  
+            }  
+          },
+        },
+        {
+          name: '新增用户',
+          data: this.flow['yAxis2'],
+          type: 'line',
+          hoverAnimation:false,
+          symbol:'circle',
+          symbolSize: 8,   //设定实心点的大小
+          itemStyle:{  
+            normal:{  
+              borderColor:'#fff',  //拐点边框颜色  
+            }  
+          },
+        },
+        {
+          name: '新增会员',
+          data: this.flow['yAxis3'],
+          type: 'line',
+          hoverAnimation:false,
+          symbol:'circle',
+          symbolSize: 8,   //设定实心点的大小
+          itemStyle:{  
+            normal:{  
+              borderColor:'#fff',  //拐点边框颜色  
+            }  
+          },
+        }],
       };
-      
       this.makeOption(this.flow);
       this.option.xAxis.data = this.flow.xAxis;
       this.oChart.setOption(this.option, true);
-
     },
     //设置图表数据项
     makeOption(data) {

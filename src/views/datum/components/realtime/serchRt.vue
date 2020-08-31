@@ -1,12 +1,12 @@
 <template>
 <div class="fr clearfix" style="position:relative;">
                         <el-select class="dayselect" v-model="value" placeholder="请选择" @change="value2=''">
-                            <el-option label="日" value="1"></el-option>
-                            <el-option label="周" value="2"></el-option>
-                            <el-option label="月" value="3"></el-option>
-                            <el-option label="季度" value="4"></el-option>
+                            <el-option label="日" value="0"></el-option>
+                            <el-option label="周" value="1"></el-option>
+                            <el-option label="月" value="2"></el-option>
+                            <el-option label="季度" value="3"></el-option>
                         </el-select>
-                        <el-date-picker class="dayinput" v-if="value==1"
+                        <el-date-picker class="dayinput" v-if="value==0"
                         v-model="value2" @change="getData"
                         align="right"
                         type="date"
@@ -15,19 +15,19 @@
                         value-format='timestamp'
                         :picker-options="pickerOptions">
                         </el-date-picker>
-                        <el-date-picker class="dayinput" v-if="value==2"
+                        <el-date-picker class="dayinput" v-if="value==1"
                         v-model="value2" @change="getData"
                         type="week"
                         format="yyyy 第 WW 周"
                         placeholder="选择周" :picker-options="pickerWeek">
                         </el-date-picker>
-                        <el-date-picker class="dayinput" v-if="value==3"
+                        <el-date-picker class="dayinput" v-if="value==2"
                         v-model="value2" @change="getData"
                         type="month"
                         format="yyyy-MM"
                         placeholder="选择月" :picker-options="pickerMonth">
                         </el-date-picker>
-                        <quarter class="fl" v-if="value==4" @change="getquar" />
+                        <quarter class="fl" v-if="value==3" @change="getquar" />
                     </div>
 </template>
 <script>
@@ -55,7 +55,7 @@ export default {
             },
         },
         value2: '',
-        value:'1',
+        value:'0',
         getquarter:''
     }
   },
