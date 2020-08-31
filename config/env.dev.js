@@ -10,7 +10,7 @@ module.exports = {
   ZX_HELP: '"//test-www.300.cn"',//链接
 
 
-  /* ...其他配置(开发环境配置表特殊，有热更新和本地服务，走自己单独的一套)  */
+  /* ...其他配置(开发环境配置表特殊，有热更新和本地服务，走自己单独的一套) */
 
   // Paths
   assetsSubDirectory: 'static',
