@@ -8,7 +8,8 @@ const dashboard = {
 		sexage:{},
 		phone:{},
 		top3:[],
-		transation:{}
+		transation:{},
+		mailvistor:{}
 	},
 	mutations: {
 		HOBBY_LIST: (state, data) => {
@@ -28,6 +29,9 @@ const dashboard = {
 		},
 		SETTOP_LIST:(state,data)=>{
 			state.top3=data;
+		},
+		MAILVISTOR_LIST:(state,data)=>{
+			state.mailvistor=data;
 		},
 		SETTRA_LIST:(state,data)=>{
 			state.transation={
@@ -57,6 +61,9 @@ const dashboard = {
 		},
 		trasationlist({ commit },data) {
 			commit("SETTRA_LIST",data);
+		},
+		maivistorlist({ commit },data) {
+			commit("MAILVISTOR_LIST",data);
 		}
 	}
 };

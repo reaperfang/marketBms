@@ -72,11 +72,11 @@ export default {
 				// 	]
 			},
 			left: {
-				columns: ["日期", "访问用户"],
+				columns: ["日期", "金额"],
 				rows: []
 			},
 			right: {
-				columns: ["日期", "访问用户"],
+				columns: ["日期", "客单价"],
 				rows: []
 			}
 		};
@@ -125,14 +125,13 @@ export default {
 			for (var j = 0; j < y.length; j++) {
 				result.push({
 					日期: x[j],
-					访问用户: y[j]
+					金额: y[j]
 				});
 			}
 
 			return result;
 		},
 		setRowsright(val) {
-			console.log("setRowsright(val) {", val);
 			let result = [];
 			let y = val.atv_td_7d;
 			let x = val.x;
@@ -140,7 +139,7 @@ export default {
 			for (var j = 0; j < y.length; j++) {
 				result.push({
 					日期: x[j],
-					访问用户: parseFloat(y[j])
+					客单价: parseFloat(y[j])
 				});
 			}
 
