@@ -8,7 +8,7 @@ const dashboard = {
 		sexage:{},
 		phone:{},
 		top3:[],
-		transation:[]
+		transation:{}
 	},
 	mutations: {
 		HOBBY_LIST: (state, data) => {
@@ -30,7 +30,10 @@ const dashboard = {
 			state.top3=data;
 		},
 		SETTRA_LIST:(state,data)=>{
-			state.transation=data;
+			state.transation={
+				...state.transation,
+				...data
+			};
 		}
 	},
 	actions: {

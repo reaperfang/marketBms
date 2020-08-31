@@ -13,7 +13,7 @@
 				<vhistogram :chartData="left"></vhistogram>
 			</el-col>
 			<el-col :span="12" class="v-el-col">
-				<vhistogram :chartData="left"></vhistogram>
+				<vhistogram :chartData="right"></vhistogram>
 			</el-col>
 		</el-row>
 	</div>
@@ -28,6 +28,7 @@ export default {
 	watch: {
 		"dashboard.transation"(val) {
 			this.setChartDataleft(val.left);
+			this.setChartDataright(val.right);
 		}
 	},
 	props: {
@@ -98,18 +99,23 @@ export default {
 		async init() {
 			let parames = { cid: this.cid };
 
-			let res = await this._apis.dashboard.totalamount(parames);
-			this.trasationlist({ left: res });
-
-			console.log("totalamount res", res);
+			let left = await this._apis.dashboard.totalamount(parames);
+			this.trasationlist({ left: left });
+			let right = await this._apis.dashboard.price(parames);
+			this.trasationlist({ right: right });
 		},
 		setChartDataleft(val) {
 			this.left = {
 				...this.left,
 				rows: this.setRowsleft(val)
 			};
+		},
+		setChartDataright(val) {
 
-			console.log('this.left ',this.left );
+			this.right = {
+				...this.right,
+				rows: this.setRowsright(val)
+			};
 		},
 		setRowsleft(val) {
 			let result = [];
@@ -120,6 +126,21 @@ export default {
 				result.push({
 					日期: x[j],
 					访问用户: y[j]
+				});
+			}
+
+			return result;
+		},
+		setRowsright(val) {
+			console.log("setRowsright(val) {", val);
+			let result = [];
+			let y = val.atv_td_7d;
+			let x = val.x;
+
+			for (var j = 0; j < y.length; j++) {
+				result.push({
+					日期: x[j],
+					访问用户: parseFloat(y[j])
 				});
 			}
 
