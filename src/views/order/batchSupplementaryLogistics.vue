@@ -84,7 +84,7 @@
                         </el-form-item>
                         <el-form-item label="快递单号" prop="expressNos" class="expressNos">
                             <el-input :disabled="item.express != null" v-model="item.expressNos" @input="ExpressNosInput(index)" maxlength="20" :placeholder="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'"></el-input>
-                            <p v-if="item.express && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
+                            <p v-if="item.express == null && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
                         </el-form-item>
                     </el-form>
                     <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 2">
@@ -488,16 +488,28 @@ export default {
 
             this.list = list
           }
+
+          if(res) {
+            this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              expressNos: '',
+              express: res
+            }))
+          } else {
+            this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              showErrorExpressCompany: false,
+              errorMessageExpressCompany: ''
+            }))
+          }
         })
         .catch(error => {
           this.visible = false;
           this.$message.error(error);
         });
 
-        this.list.splice(index, 1, Object.assign({}, this.list[index], {
-          showErrorExpressCompany: false,
-          errorMessageExpressCompany: ''
-        }))
+        // this.list.splice(index, 1, Object.assign({}, this.list[index], {
+        //   showErrorExpressCompany: false,
+        //   errorMessageExpressCompany: ''
+        // }))
     },
     printingElectronicForm() {
       this.$router.push('/order/printingElectronicForm?ids=' + this.list.map(val => val.id).join(',') + '&type=batchSupplementaryLogistics')

@@ -434,7 +434,11 @@ export default {
           this._apis.order
             .updateReceiveAndSend(params)
             .then(res => {
-              this.$emit('getDetail', this.multipleSelection, JSON.parse(JSON.stringify(this.list)))
+              if(this.list) {
+                this.$emit('getDetail', this.multipleSelection, JSON.parse(JSON.stringify(this.list)))
+              } else {
+                this.$emit('getDetail', this.multipleSelection)
+              }
               this.$emit("submit");
               this.visible = false;
               this.$message.success("修改成功！");
