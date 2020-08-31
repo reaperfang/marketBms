@@ -744,6 +744,10 @@ export default {
             if(!goods.checked){
               return;
             }
+            if((goods.goodsCount -goods.cacheSendCount) == goods.sendCount) {
+              //如果应发数量是0则不用验证
+              return
+            }
             if(!goods.sendCount) {
               isWrong = true
               goods.showError = true
