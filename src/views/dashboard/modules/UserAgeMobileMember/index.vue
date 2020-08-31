@@ -168,17 +168,8 @@ export default {
 			};
 		},
 		setPhone(val){
-			//mobile: { progress: 75, barColor: "#06C9DD", city: "绑定手机号" },
-
 			let result=parseFloat(val.c_uv_share_phone)*100;
-
-			console.log("result",result);
-
 			this.phoneData= {  ...this.mobile,progress: result };
-
-			console.log('this.mobile',this.mobile);
-			console.log("this.phoneData",this.phoneData);
-
 		}
 	}
 };
