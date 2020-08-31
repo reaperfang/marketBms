@@ -25,7 +25,7 @@
             </div>
             <screeningChart 
     :title="'测试图表'" 
-    ref="dtChart"
+    ref="screeningChart"
     :dataChart="dataChart1" height="300px" >
     </screeningChart>
         </div>
@@ -170,7 +170,7 @@
                         </div>
                     </div>
                 </div>
-                <tradeChart :title="'测试图表'" ref="dtChart" :dataChart="dataChart3" :activetype="activetype" height="420px" ></tradeChart>
+                <tradeChart :title="'测试图表'" ref="tradeChart" :dataChart="dataChart3" :activetype="activetype" height="420px" ></tradeChart>
             </div>
         </el-aside>
         <el-main class="p_rtsiade" style="padding:0">
@@ -212,14 +212,14 @@
                     <div class="fr clearfix">
                         <serchRt class="fr ml12" @change="getUserVal" />
                         <el-radio-group class="fr radioBox" v-model="userType" @change="alluserType">
-                            <el-radio-button class="btn_bor" label="0" v-permission="['数据', '客流分析', '全部']">全部</el-radio-button>
-                            <el-radio-button class="btn_bor" label="1" v-permission="['数据', '客流分析', '小程序']">小程序</el-radio-button>
-                            <el-radio-button class="btn_bor" label="2" v-permission="['数据', '客流分析', '公众号']">公众号</el-radio-button>
+                            <el-radio-button class="btn_bor" label="0" >全部</el-radio-button>
+                            <el-radio-button class="btn_bor" label="1" >小程序</el-radio-button>
+                            <el-radio-button class="btn_bor" label="2" >公众号</el-radio-button>
                         </el-radio-group>
                     </div>
                 </div>
                 <div class="chartbox">
-                    <userChart :title="'测试图表'" ref="dtChart" :dataChart="dataChart2" height="300px" ></userChart>
+                    <userChart :title="'测试图表'" ref="userChart" :dataChart="dataChart2" height="300px" ></userChart>
                 </div>
             </div>
         </el-aside>
@@ -233,14 +233,14 @@
                     </el-tooltip>
                     <div class="fr clearfix">
                         <el-radio-group class="fr radioBox" v-model="visitSourceType" @change="all">
-                            <el-radio-button class="btn_bor" label="1" v-permission="['数据', '客流分析', '小程序']">小程序</el-radio-button>
-                            <el-radio-button class="btn_bor" label="2" v-permission="['数据', '客流分析', '公众号']">公众号</el-radio-button>
+                            <el-radio-button class="btn_bor" label="1" >小程序</el-radio-button>
+                            <el-radio-button class="btn_bor" label="2" >公众号</el-radio-button>
                         </el-radio-group>
                     </div>
                 </div>
                 </div>
                 <div class="chartbox">
-                    <pieChart :title="'测试图表'" ref="pieChart" height="280px"></pieChart>
+                    <pieChart :title="'测试图表'" ref="pieChart" :dataChart="dataChart" height="280px"></pieChart>
                 </div>
             </div>
         </el-main>
@@ -258,30 +258,14 @@
                     <div class="pro_tle tle1">支付商品TOP</div>
                     <ul>
                         <li><span>排名</span><span>商品</span><span>支付金额</span></li>
-                        <li>
-                            <span><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
-                        </li>
-                        <li>
-                            <span><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
-                        </li>
-                        <li>
-                            <span><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
-                        </li>
-                        <li>
-                            <span><span>04</span></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
-                        </li>
-                        <li>
-                            <span><span>05</span></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
+                        <li v-for="(item,index) in goodsList.payProducttop5" :key="index">
+                            <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
+                            <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
+                            <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
+                            <span v-if="index==3">04</span>
+                            <span v-if="index==4">05</span>
+                            <span><img class="fl" :src="item.goods_image" alt=""><p>{{item.goods_name}}</p></span>
+                            <span><p>{{item.paid_order_am_pr}}</p></span>
                         </li>
                     </ul>
                 </div>
@@ -290,31 +274,15 @@
                 <div class="pro_item">
                     <div class="pro_tle tle2">销量商品TOP</div>
                     <ul>
-                        <li><span>排名</span><span>商品</span><span>支付金额</span></li>
-                        <li>
-                            <span><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
-                        </li>
-                        <li>
-                            <span><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
-                        </li>
-                        <li>
-                            <span><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
-                        </li>
-                        <li>
-                            <span><span>04</span></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
-                        </li>
-                        <li>
-                            <span><span>05</span></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
+                        <li><span>排名</span><span>商品</span><span>销量</span></li>
+                        <li v-for="(item,index) in goodsList.saleProducttop5" :key="index">
+                            <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
+                            <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
+                            <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
+                            <span v-if="index==3">04</span>
+                            <span v-if="index==4">05</span>
+                            <span><img class="fl" :src="item.goods_image" alt=""><p>{{item.goods_name}}</p></span>
+                            <span><p>{{item.product_nu}}</p></span>
                         </li>
                     </ul>
                 </div>
@@ -323,31 +291,15 @@
                 <div class="pro_item nonerb">
                     <div class="pro_tle tle3">浏览商品TOP</div>
                     <ul>
-                        <li><span>排名</span><span>商品</span><span>支付金额</span></li>
-                        <li>
-                            <span><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
-                        </li>
-                        <li>
-                            <span><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
-                        </li>
-                        <li>
-                            <span><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
-                        </li>
-                        <li>
-                            <span><span>04</span></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
-                        </li>
-                        <li>
-                            <span><span>05</span></span>
-                            <span><img class="fl" src="@/assets/images/realtime/hoverTips.png" alt=""><p>商品名称商品商品名称商品</p></span>
-                            <span><p>866.23</p></span>
+                        <li><span>排名</span><span>商品</span><span>浏览数</span></li>
+                        <li v-for="(item,index) in goodsList.browseProducttop5" :key="index">
+                            <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
+                            <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
+                            <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
+                            <span v-if="index==3">04</span>
+                            <span v-if="index==4">05</span>
+                            <span><img class="fl" :src="item.goods_image" alt=""><p>{{item.goods_name}}</p></span>
+                            <span><p>{{item.pv_pr}}</p></span>
                         </li>
                     </ul>
                 </div>
@@ -385,17 +337,24 @@ export default {
         dataChart2: {},//用户概览
         dataChart3: {},//交易看板
         dataChart4: {},//交易分布
-        dataChart: {},
+        dataChart: [],//渠道转化
         type:1,
-        seachTimetrad:{},
-        seachTime:'',
+        seachTimetrad:{
+            units:0,
+            date:''
+        },
+        seachTime:{
+            units:0,
+            date:''
+        },
         userType:0, //1 小程序 2 公众号  ， 用户
+        channeData:{},
         visitSourceType: 1, //1 小程序 2 公众号  ， 渠道转化
         idData:false,//数据是否计算 成功 
+        goodsList:[]
     };
   },
   created() {
-      this.seachTimetrad.units=0
     this.init()
   }, 
   methods: {
@@ -404,6 +363,8 @@ export default {
       this.getuserView()
       this.gettransactionView()
       this.gettradeDistribution()
+      this.getchannelView()
+      this.getgoodsView()
     },
 
     getdataView(){//数据总览数据
@@ -476,19 +437,54 @@ export default {
     alluserType() {// userType
       this.getuserView()
     },
+    getchannelView(){//渠道转化数据
+      this._apis.realSurvey.channelView({}).then(response => {
+        this.channeData = response  
+        this.dataChart.push({value:this.channeData.nomember_xcx, name:'非会员'})
+        this.dataChart.push({value:this.channeData.member_xcx, name:'会员'})
+        console.log(this.dataChart)
+      }).catch(error => {
+        this.$message.error(error);
+      });
+    },
     all() { //渠道  visitSourceType
-      
+    var thisdata=[]
+      if(this.visitSourceType==1){
+            thisdata.push({value:this.channeData.nomember_xcx, name:'非会员'})
+            thisdata.push({value:this.channeData.member_xcx, name:'会员'})
+        }else if(this.visitSourceType==2){
+            thisdata.push({value:this.channeData.nomember_gzh, name:'非会员'})
+            thisdata.push({value:this.channeData.member_gzh, name:'会员'})
+        }
     },
     getVal(val){//交易看板 组件传值
-        console.log(val)
+        val.date=this.getDayTime(val.date)
         this.seachTimetrad=val
         this.activetype=0
         this.gettransactionView()
     },
     getUserVal(val){//用户概览 组件传值
-        console.log(val)
+        val.date=this.getDayTime(val.date)
         this.seachTime=val
         this.getuserView()
+    },
+    getDayTime(val){ //把2020-08-16 00:00:00格式的时间戳 转为 2020-08-16格式的
+        let date = new Date(val);
+        let y = date.getFullYear();
+        let MM = date.getMonth() + 1;
+        MM = MM < 10 ? ('0' + MM) : MM;
+        let d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var day=y + '-' + MM + '-' + d
+        // console.log(day)
+        return new Date(day).getTime()
+    },
+    getgoodsView(){//商品看板数据
+      this._apis.realSurvey.goodsView({}).then(response => {
+        this.goodsList = response  
+      }).catch(error => {
+        this.$message.error(error);
+      });
     },
   },
 };

@@ -68,11 +68,11 @@ export default {
       },
     getData(){
         var lastday=''
-        if(this.value==2){//选中周的 周日 日期 时间戳 到秒
-            lastday=this.value2.getTime()+(8.64e7*6)
+        if(this.value==1){//选中周的 周日 日期 时间戳 到秒
+            lastday=this.value2.getTime()+(8.64e7*5)
             // console.log(lastday)
             // console.log((new Date('2020-08-16 00:00:00')).getTime())
-        }else if(this.value==3){//选中月的最后一天时间戳 到秒
+        }else if(this.value==2){//选中月的最后一天时间戳 到秒
             var nowMonth = this.value2.getMonth(); //当前月 
             var nowYear = this.value2.getFullYear(); //当前年 
             //本月的开始时间
@@ -80,9 +80,9 @@ export default {
             //本月的结束时间
             var monthEndDate = new Date(nowYear, nowMonth+1, 0);
             // var timeStar=Date.parse(monthStartDate)/1000;//s
-            var timeEnd=Date.parse(monthEndDate);//s
+            var timeEnd=Date.parse(monthEndDate);
             lastday=timeEnd
-        }else if(this.value==1){
+        }else if(this.value==0){
             lastday=this.value2
         }
         this.$emit("change",{units:this.value,date:lastday})

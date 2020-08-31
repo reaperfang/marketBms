@@ -28,7 +28,6 @@ export default {
         xAxis:this.n.xAxis,
         yAxis1:this.n.yAxis1 && this.n.yAxis1.map(item => { return (item*1).toFixed(1)}),
       }
-      console.log(this.flow['xAxis'])
       this.option = {
         tooltip: {
           trigger: "axis",

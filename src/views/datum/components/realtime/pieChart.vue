@@ -5,21 +5,22 @@ import chartBase from "@/components/ChartBase";
 export default {
   name: "pieChart",
   extends: chartBase,
+  props: ['dataChart'],
   data() {
     return {
       flow:[],
-      opinionData:[
-          {value:335, name:'非会员'},
-          {value:310, name:'会员'},
-        ]
     };
   },
   created() {
   },
+  watch:{
+    dataChart(newValue,oldValue){
+      this.n = newValue
+      this.con(this.n)
+    }
+  },
   methods: {
     con(n){
-      console.log(n)
-      console.log(this.flow)
       this.flow = n;
       this.makeOption(n);
       this.oChart.setOption(this.option, true);
@@ -75,7 +76,7 @@ export default {
               // }
             }
           },
-          data: this.opinionData,
+          data: data,
         }]
       };
     }
