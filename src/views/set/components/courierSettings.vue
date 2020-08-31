@@ -5,13 +5,13 @@
         <el-switch v-model="form.isOpen" @change="handleIsOpen"></el-switch>
         <span class="promit"><span>{{ getSwitchTxt }}</span>启用后，买家下单可以选择快递发货，由你安排快递送货上门</span>
       </el-form-item> -->
-      <el-form-item class="isTrace" label="开启物流轨迹查询" prop="isTrace">
+      <!-- <el-form-item class="isTrace" label="开启物流轨迹查询" prop="isTrace">
         <el-radio-group v-model="form.isTrace">
           <el-radio :label="1" class="pr50">是</el-radio>
           <el-radio :label="0">否</el-radio>
         </el-radio-group>
-      </el-form-item>
-      <p class="explain" v-if="form.isTrace == 1">说明：本系统电子面单和物流轨迹查询服务是与第三方快递鸟合作，开启服务需注册</p>
+      </el-form-item> -->
+      <p class="explain" v-if="form.isTrace == 1">说明：本系统电子面单服务是与第三方快递鸟合作的，使用电子面单需注册快递鸟，若未注册快递鸟，将无法使用电子面单在线发货</p>
       <el-form-item class="idKey" label-width="255px" label="请注册快递鸟并输入用户ID和API key" prop="kdBusinessId" v-if="form.isTrace == 1">
         <el-input placeholder="请输入用户ID" v-model="form.kdBusinessId" style="width:302px; height:34px;"></el-input>
       </el-form-item>
@@ -170,7 +170,8 @@ export default {
       let id = this.cid
       let data = {
           id,
-          isTrace: this.form.isTrace,
+          // isTrace: this.form.isTrace,
+          isTrace: 1,
           apiKey: this.form.apiKey,
           kdBusinessId: this.form.kdBusinessId
       }
@@ -185,7 +186,8 @@ export default {
     getShopLogistics(){
       let id = this.cid
       this._apis.set.getShopLogistics({cid:id}).then(response =>{
-        this.form.isTrace = response.isTrace,
+        // this.form.isTrace = response.isTrace,
+        this.form.isTrace = 1
         this.form.apiKey = response.apiKey,
         this.form.kdBusinessId = response.kdBusinessId
       }).catch(error =>{
