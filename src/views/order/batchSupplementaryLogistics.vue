@@ -483,6 +483,7 @@ export default {
               if(index != 0) {
                 val.expressCompanyCodes = expressCompanyCodes
                 val.express = express
+                val.expressNos = ''
               }
             })
 
