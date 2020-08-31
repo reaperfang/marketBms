@@ -90,7 +90,7 @@
           label="交易流水号"
           :render-header="renderTradeDetailSn"
           align="left"
-          width="200px"
+          width="220px"
           >
           <template slot-scope="scope">
             <span style="padding-left:10px;">{{scope.row.tradeDetailSn}}</span>
