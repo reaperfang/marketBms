@@ -27,7 +27,7 @@
               </div>
               <div class="col">
                 <div class="row align-center row-margin">
-                  <div class="col" style="width: 186px;">{{list[0] && list[0].deliveryWay != 4 ? '收货信息' : '提货信息'}}</div>
+                  <div class="col" style="width: 220px;">{{list[0] && list[0].deliveryWay != 4 ? '收货信息' : '提货信息'}}</div>
                   <div class="col" style="width: 281px; text-align: center;">{{list[0] && list[0].deliveryWay != 4 ? '物流信息' : '提货时间'}}</div>
                 </div>
               </div>
@@ -70,7 +70,7 @@
               </div>
               <div class="col">
                 <div class="row row-margin">
-                  <div class="col message-box" style="width: 186px;">
+                  <div class="col message-box" style="width: 220px;">
                     <template v-if="list[0] && list[0].deliveryWay != 4">
                       <div>收货人: {{item.receivedName}}</div>
                       <div>联系电话: {{item.receivedPhone}}</div>
@@ -230,9 +230,8 @@ export default {
     };
   },
   created() {
-    
-    this.getDetail();
     this.getExpressCompanyList();
+    this.getDetail();
     this.checkSet()
   },
   computed: {
@@ -635,10 +634,10 @@ export default {
     sendGoodsHandler() {
       try {
         let params;
-        console.log(this.list
-            .reduce((total, val) => {
-              return total.concat(val.orderItemList);
-            }, []).filter(val => val.checked))
+        // console.log(this.list
+        //     .reduce((total, val) => {
+        //       return total.concat(val.orderItemList);
+        //     }, []).filter(val => val.checked))
         if (
           !this.list
             .reduce((total, val) => {
@@ -920,14 +919,16 @@ export default {
           }
           this._list = this._list.filter(val => val.express != null && !val.express.specificationSize && val.sizeList && val.sizeList.length)
 
-          // var __result = [];
-          // var __obj = {};
-          // for(var i =0; i<arr.length; i++){
-          //     if(!__obj[arr[i].key]){
-          //       __result.push(arr[i]);
-          //       obj[arr[i].key] = true;
-          //     }
-          // }
+          var __result = [];
+          var __obj = {};
+            for(var i =0; i<this._list.length; i++){
+               if(!__obj[this._list[i].expressCompanyCodes]){
+                  __result.push(this._list[i]);
+                  __obj[this._list[i].expressCompanyCodes] = true;
+              }
+            }
+
+          this._list = __result
 
           if(this.list[0].deliveryWay == 1 && this._list.length) {
             this.currentData = {
@@ -1051,7 +1052,7 @@ export default {
       this.sendGoods = "send";
       this.dialogVisible = true;
     },
-    getDetail() {
+    getDetail(selection, list) {
       this._apis.order
         .orderSendDetail({
           ids: this.$route.query.ids.split(",").map(val => +val)
@@ -1061,7 +1062,8 @@ export default {
           
           this.shopAddressInfo = res.shopAddressInfo
           res = res.sendInfoListData
-          res.forEach(val => {
+
+          res.forEach((val, index) => {
             val.express = null
             val.other = "";
             val.checked = true;
@@ -1090,6 +1092,19 @@ export default {
             val.showErrorPhone = false;
             val.errorMessagePhone = '';
             val.pickUpName = '';
+
+            // 回显选中的快递公司
+            if(list && list.length) {
+              val.expressCompanyCodes = list[index].expressCompanyCodes
+
+              let expressName = this.expressCompanyList.find(item => item.expressCompanyCode == val.expressCompanyCodes).expressCompany
+
+              this._apis.order
+                .checkExpress({expressName})
+                .then(res => {
+                  val.express = res
+                })
+            }
 
             if(val.deliveryWay == 4) {
               this._apis.order
@@ -1137,9 +1152,31 @@ export default {
           //     this.visible = false;
           //     this.$message.error(error);
           //   });
+
+          // 如果一个订单与发货数据，就付给其他没有的订单
+          let _orderItem = res.find(val => val.sendAddress)
+          
           res.forEach(item => {
             if(!item.sendAddress) {
               if(item.deliveryWay == 1 || item.deliveryWay == 2) {
+                if(_orderItem) {
+                  item.sendName = _orderItem.sendName;
+                  item.sendPhone = _orderItem.sendPhone;
+                  item.sendProvinceCode = _orderItem.sendProvinceCode;
+                  item.sendProvinceName = _orderItem.sendProvinceName;
+                  item.sendCityCode = _orderItem.sendCityCode;
+                  item.sendCityName = _orderItem.sendCityName;
+                  item.sendAreaCode = _orderItem.sendAreaCode;
+                  item.sendAreaName = _orderItem.sendAreaName;
+                  item.sendAddress = _orderItem.sendAddress;
+                  item.sendDetail = _orderItem.sendDetail;
+                  item.sendLatitude = _orderItem.sendLatitude;
+                  item.sendLongitude = _orderItem.sendLongitude
+                }
+
+                if(!_address) {
+                  return
+                }
                 item.sendName = _address.name;
                 item.sendPhone = _address.mobile;
                 item.sendProvinceCode = _address.provinceCode;

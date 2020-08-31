@@ -200,8 +200,8 @@ export default {
     };
   },
   created() {
-    this.getDetail();
     this.getExpressCompanyList()
+    this.getDetail();
     this.checkSet()
   },
   computed: {
@@ -692,6 +692,17 @@ export default {
               }
               this._list = this._list.filter(val => val.express != null && !val.express.specificationSize && val.sizeList && val.sizeList.length)
 
+              var __result = [];
+              var __obj = {};
+                for(var i =0; i<this._list.length; i++){
+                   if(!__obj[this._list[i].expressCompanyCodes]){
+                      __result.push(this._list[i]);
+                      __obj[this._list[i].expressCompanyCodes] = true;
+                  }
+                }
+
+              this._list = __result
+
               if(this.list[0].deliveryWay == 1 && this._list.length) {
                 this.currentData = {
                   list: this._list,
@@ -712,7 +723,7 @@ export default {
           this._apis.order.orderSendGoods(params).then((res) => {
               this.$message.success('批量补填物流成功');
               this.sending = false
-              this.$router.push('/order/query')
+              this.$router.push('/order/deliveryManagement')
           }).catch(error => {
               this.$message.error(error);
               this.sending = false
@@ -785,7 +796,7 @@ export default {
             this.sendGoods = 'send'
             this.dialogVisible = true
         },
-    getDetail() {
+    getDetail(selection, list) {
       this._apis.order
         .orderSendDetail({
           ids: this.$route.query.ids.split(",").map(val => +val)
@@ -796,7 +807,7 @@ export default {
           
           this.shopAddressInfo = res.shopAddressInfo
           res = res.sendInfoListData
-          res.forEach(val => {
+          res.forEach((val, index) => {
             val.express = null
             val.other = "";
             val.checked = false;
@@ -822,6 +833,23 @@ export default {
             val.errorMessageDistributorName = '请输入或选择配送员';
             val.showErrorPhone = false;
             val.errorMessagePhone = '';
+
+            try {
+              // 回显选中的快递公司
+              if(list && list.length) {
+                val.expressCompanyCodes = list[index].expressCompanyCodes
+
+                let expressName = this.expressCompanyList.find(item => item.expressCompanyCode == val.expressCompanyCodes).expressCompany
+
+                this._apis.order
+                  .checkExpress({expressName})
+                  .then(res => {
+                    val.express = res
+                  })
+              }
+            } catch(e) {
+              
+            }
           });
           res.forEach(val => {
             val.orderItemList.forEach(item => {
@@ -860,9 +888,31 @@ export default {
           //     this.visible = false;
           //     this.$message.error(error);
           //   });
-          res.forEach(item => {
+
+          // 如果一个订单与发货数据，就付给其他没有的订单
+          let _orderItem = res.find(val => val.sendAddress)
+
+          res.forEach((item, index) => {
             if(!item.sendAddress) {
               if(item.deliveryWay == 1 || item.deliveryWay == 2) {
+                if(_orderItem) {
+                  item.sendName = _orderItem.sendName;
+                  item.sendPhone = _orderItem.sendPhone;
+                  item.sendProvinceCode = _orderItem.sendProvinceCode;
+                  item.sendProvinceName = _orderItem.sendProvinceName;
+                  item.sendCityCode = _orderItem.sendCityCode;
+                  item.sendCityName = _orderItem.sendCityName;
+                  item.sendAreaCode = _orderItem.sendAreaCode;
+                  item.sendAreaName = _orderItem.sendAreaName;
+                  item.sendAddress = _orderItem.sendAddress;
+                  item.sendDetail = _orderItem.sendDetail;
+                  item.sendLatitude = _orderItem.sendLatitude;
+                  item.sendLongitude = _orderItem.sendLongitude
+                }
+
+                if(!_address){
+                  return;
+                }
                 item.sendName = _address.name;
                 item.sendPhone = _address.mobile;
                 item.sendProvinceCode = _address.provinceCode;

@@ -114,7 +114,11 @@ export default {
         if (/^\s+$/.test(this.ruleForm.sendName)) {
           callback(new Error("发货人姓名不能为空白字符"));
         } else {
-          callback();
+          if(this.ruleForm.sendName.length > 50) {
+            callback(new Error("发货人姓名不能超过50个字符"));
+          }else {
+            callback();
+          }
         }
       }
     };
@@ -125,7 +129,11 @@ export default {
         if (/^\s+$/.test(this.ruleForm.receivedName)) {
           callback(new Error("收货人姓名不能为空白字符"));
         } else {
-          callback();
+          if(this.ruleForm.receivedName.length > 50) {
+            callback(new Error("收货人姓名不能超过50个字符"));
+          }else {
+            callback();
+          }
         }
       }
     };
@@ -415,14 +423,18 @@ export default {
             })
           }
           try {
-          params.tencentCode = this.$refs.mapSearch.pois[0].ad_info.adcode
+            if(this.$refs.mapSearch.poi) {
+              params.tencentCode = this.$refs.mapSearch.poi.ad_info.adcode
+            } else {
+              params.tencentCode = this.$refs.mapSearch.pois[0].ad_info.adcode
+            }
           } catch(e) {
             console.error(e)
           }
           this._apis.order
             .updateReceiveAndSend(params)
             .then(res => {
-              this.$emit('getDetail', this.multipleSelection)
+              this.$emit('getDetail', this.multipleSelection, JSON.parse(JSON.stringify(this.list)))
               this.$emit("submit");
               this.visible = false;
               this.$message.success("修改成功！");
@@ -488,6 +500,9 @@ export default {
       default: () => []
     },
     multipleSelection: {
+
+    },
+    list: {
 
     }
   },

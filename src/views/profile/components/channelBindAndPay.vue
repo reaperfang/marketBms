@@ -1,10 +1,10 @@
 <template>
-   <div class="channelBindAndPay" v-loading="!isInitCompleted" element-loading-background="rgba(255,255,255,1)">
+   <div class="channelBindAndPay">
     <steps class="steps" :step="step"></steps>
     
       <h2>请绑定您的经营渠道</h2>
-      <ul  >
-        <li>
+      <ul style="height: 287px;" v-loading="!isInitCompleted" element-loading-background="rgba(255,255,255,1)" >
+        <li v-if="isInitCompleted">
           <p><i :class="[isAuthGzhOrXcx ? 'icon-success' : 'el-icon-error']"></i><span>渠道绑定：</span></p>
           <p class="prompt">绑定微信小程序和公众号，推广您的店铺</p>
           <div class="btn-area">
@@ -18,7 +18,7 @@
             </div>
           </div>
         </li>
-        <li class="pay">
+        <li v-if="isInitCompleted" class="pay">
           <p><i :class="[isOpenPay ? 'icon-success' : 'el-icon-error']"></i><span>支付开通：</span></p>
           <div class="btn-area">
               <el-button class="btn-opeate" :disabled="!isAuthGzhOrXcx" @click="setPayInfo">开启支付</el-button>

@@ -194,8 +194,8 @@ export default {
     };
   },
   created() {
-    this.getDetail();
     this.getExpressCompanyList()
+    this.getDetail();
     this.checkSet()
   },
   computed: {
@@ -642,6 +642,17 @@ export default {
               }
               this._list = this._list.filter(val => val.express != null && !val.express.specificationSize && val.sizeList && val.sizeList.length)
 
+              var __result = [];
+              var __obj = {};
+                for(var i =0; i<this._list.length; i++){
+                   if(!__obj[this._list[i].expressCompanyCodes]){
+                      __result.push(this._list[i]);
+                      __obj[this._list[i].expressCompanyCodes] = true;
+                  }
+                }
+
+              this._list = __result
+
               if(this.list[0].deliveryWay == 1 && this._list.length) {
                 this.currentData = {
                   list: this._list,
@@ -751,13 +762,13 @@ export default {
             this.sendGoods = 'send'
             this.dialogVisible = true
         },
-    getDetail() {
+    getDetail(selection, list) {
       this._apis.order
         .orderAfterSaleDetail({
           orderAfterSaleIds: this.$route.query.ids.split(",").map(val => val)
         })
         .then(res => {
-          res.forEach(val => {
+          res.forEach((val, index) => {
             val.express = null
             val.checked = true;
             val.other = "";
@@ -779,6 +790,18 @@ export default {
             val.showErrorPhone = false;
             val.errorMessagePhone = '';
 
+            // 回显选中的快递公司
+            if(list && list.length) {
+              val.orderAfterSaleSendInfo.expressCompanyCodes = list[index].orderAfterSaleSendInfo.expressCompanyCodes
+
+              let expressName = this.expressCompanyList.find(item => item.expressCompanyCode == val.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
+
+              this._apis.order
+                .checkExpress({expressName})
+                .then(res => {
+                  val.orderAfterSaleSendInfo.express = res
+                })
+            }
           })
 
 

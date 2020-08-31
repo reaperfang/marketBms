@@ -93,7 +93,7 @@ export default {
       tableData: [],
       currentClassifyId: [],
       categoryData: [],
-      seletedClassify: null,
+      seletedClassify: '',
       normalizer(node) {
         return {
           label: node.name,
@@ -127,6 +127,10 @@ export default {
         enable: '1'
       }).then((response)=>{
         this.filterEnableData(response);
+        response = [{
+          "id": "",
+          "name": "全部",
+        }, ...response];
         this.categoryData = response;
         this.loading = false;
       }).catch((error)=>{
