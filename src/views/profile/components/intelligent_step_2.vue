@@ -40,14 +40,29 @@
       :close-on-press-escape="false"
       center
     >
-      <h3>店铺数据配置中，请您耐心等待...</h3>
+      <h3 class="configure-title">店铺数据配置中，请您耐心等待...</h3>
 
-      <p>模板内的微页面及店铺展示数据配置失败</p>
 
-      <p>模板内的商品及商品分类数据配置失败</p>
+      <ul class="configure-text-list">
+        <li class="configure-text">
+          <p class="text-base" :class="{'show': configureProgress >= 10}">模板内的基础信息数据配置失败 </p>
+          <i class="el-icon-error"></i>
+        </li>
+        <li>
+          <p class="configure-text text-goods" :class="{'show': configureProgress >= 20}">模板内的商品及商品分类数据配置失败</p>
+          <i class="el-icon-error"></i>
+        </li>
+        <li>
+          <p class="configure-text text-page" :class="{'show': configureProgress >= 30}">模板内的微页面及店铺展示数据配置失败</p>
+          <i class="el-icon-error"></i>
+        </li>
+        <li>
+          <p class="configure-text text-shop" :class="{'show': configureProgress >= 40}">店铺数据配置失败</p>
+          <i class="el-icon-error"></i>
+        </li>
+      </ul>
 
-      <p>店铺数据配置失败</p>
-
+      <!--   有一项失败了就显示   -->
       <div slot="footer" v-show="isConfigureFail">
         <el-button type="primary" @click="againConfigure"> 再次加载</el-button>
       </div>
@@ -83,6 +98,7 @@
         isConfigureLoading: false, // 是否在配置中
         isConfigureFail: false, // 是否已经配置过 且配置失败了
         timerConfigure: null, // 定时任务，查询配置进度
+        configureProgress: 0, // 查询配置进度 0 - 100?
       }
     },
     computed: {
@@ -91,48 +107,59 @@
       }
     },
     mounted() {
-      console.log('%c' + this.industryId, 'color:tomato');
+      console.log('%c industryId === null  ? ' + this.industryId !== null, 'color:tomato');
       this.settingSwiper();
-      this.fetchListData();
+      if(this.industryId !== null) this.fetchListData();
+
     },
     methods: {
       /** 加载模板数据 */
       async fetchListData() {
         try {
           this.isLoading = true;
-          const params = {};
-          // const data = await this._apis.profile.getIntelligentPreViewTemplate(params)
-          this.listData = [
+          const params = {industryId: this.industryId};
+          console.log(params.toString());
+          // const resultData = await this._apis.profile.getIntelligentPreViewTemplate(params)
+          const resultData = [
             {
               name: '家具专区',
               previewPic: '',
               qrCodePic: '',
-              isShowCode: false,
               id: 101,
             },
             {
               name: '美味零食',
               previewPic: '',
               qrCodePic: '',
-              isShowCode: false,
               id: 102,
             }
-          ]
+          ];
+          const _this = this;
+          setTimeout(function () {
+
+            _this.listData = resultData.map(item => {
+              return Object.assign({isShowCode: false}, item)
+            });
+            console.log(_this.listData);
+            _this.isLoading = false;
+
+          }, 2000)
+
         } catch (err) {
           console.error('加载模板数据出错', err.message)
         } finally {
           console.log('执行完毕');
-          this.isLoading = false;
+          // this.isLoading = false;
         }
       },
 
       /** 上一张模板 */
       prev() {
-        this.swiper.slidePrev()
+        this.swiper.slidePrev();
       },
       /** 下一张模板 */
       next() {
-        this.swiper.slideNext()
+        this.swiper.slideNext();
       },
 
       /** 确认启用模板 对话框 */
@@ -150,19 +177,25 @@
           confirmText: "确认，启用模板",
           cancelText: "我再想想"
         }).then(() => {
-          this.isShowConfigureBox = true;
-          // this._apis.profile.intelligentEnableTemplate(data).then(()=> {})
 
+          // this._apis.profile.intelligentEnableTemplate(data).then(()=> {})
+          this.isShowConfigureBox = true;
+          this.timer();
         }).catch(() => {
         });
       },
 
       /** 查询配置进度 */
       timer() {
+        const _this = this;
         this.timerConfigure = setInterval(function () {
           // this._apis.profile.intelligentConfigurationStatus()
-
-        }, 1500)
+          _this.configureProgress += 10;
+          if (_this.configureProgress >= 40) {
+            clearInterval(_this.timerConfigure);
+            // _this.$emit('update-step', 3)
+          }
+        }, 1000);
       },
 
       /** 再次加载 */
@@ -191,6 +224,11 @@
         this.selectTemplateId = id;
       },
 
+    },
+    watch: {
+      'industryId'(newValue, oldValue){
+        if(newValue !== null) this.fetchListData();
+      }
     }
   }
 </script>
@@ -258,6 +296,17 @@
       .el-button {
         flex: 1;
         margin-left: 0;
+      }
+    }
+
+    .configure-text {
+      line-height: 1.5em;
+      opacity: 0.5;
+      transition: opacity 1s;
+
+      &.show {
+        opacity: 1;
+
       }
     }
   }
