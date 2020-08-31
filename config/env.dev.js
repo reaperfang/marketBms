@@ -9,13 +9,6 @@ module.exports = {
   ZX_API: '"/zx_server"',
   ZX_HELP: '"//test-www.300.cn"',//链接
 
-	/*NODE_ENV: '"test3"',
-	DATA_API: '"//test3-omo.aiyouyi.cn"',
-	SALE_API: '"//test3-omo.aiyouyi.cn/mkt-api"',
-	UPLOAD_SERVER: '"//test3-omo.aiyouyi.cn"',
-	ZX_API: '"//test3-omo.aiyouyi.cn/cms-api"',
-	ZX_HELP: '"//test-www.300.cn"',*/
-
 
   /* ...其他配置(开发环境配置表特殊，有热更新和本地服务，走自己单独的一套) */
 
