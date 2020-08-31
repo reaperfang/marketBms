@@ -10,11 +10,11 @@
 		</el-row>
 		<el-row class="item-content">
 			<el-col :span="12" class="v-el-col">
-				<vhistogram></vhistogram>
+				<vhistogram :chartData="left"></vhistogram>
 			</el-col>
 			<el-col :span="12" class="v-el-col">
-					<vhistogram></vhistogram>
-				 </el-col>
+				<vhistogram :chartData="left"></vhistogram>
+			</el-col>
 		</el-row>
 	</div>
 </template>
@@ -26,8 +26,9 @@ import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
 	watch: {
-		// flowData(val) {
-		// }
+		"dashboard.transation"(val) {
+			this.setChartDataleft(val.left);
+		}
 	},
 	props: {
 		// data: {
@@ -37,12 +38,54 @@ export default {
 	},
 	components: { gridtitle, vhistogram },
 	data: function() {
-		return {};
+		return {
+			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			chartData: {
+				columns: ["日期", "访问用户"],
+				rows: []
+				// 	rows: [
+				// 		{
+				// 			日期: "1/1",
+				// 			访问用户: 1393
+				// 		},
+				// 		{
+				// 			日期: "1/2",
+				// 			访问用户: 3530
+				// 		},
+				// 		{
+				// 			日期: "1/3",
+				// 			访问用户: 2923
+				// 		},
+				// 		{
+				// 			日期: "1/4",
+				// 			访问用户: 1723
+				// 		},
+				// 		{
+				// 			日期: "1/5",
+				// 			访问用户: 3792
+				// 		},
+				// 		{
+				// 			日期: "1/6",
+				// 			访问用户: 4593
+				// 		}
+				// 	]
+			},
+			left: {
+				columns: ["日期", "访问用户"],
+				rows: []
+			},
+			right: {
+				columns: ["日期", "访问用户"],
+				rows: []
+			}
+		};
 	},
 	computed: {
-		//...mapState([""])
+		...mapState(["dashboard"])
 	},
-	mounted() {},
+	mounted() {
+		this.init();
+	},
 	beforeCreate() {},
 	created() {},
 	beforeMount() {},
@@ -51,7 +94,37 @@ export default {
 	beforeDestroy() {},
 	destroyed: function() {},
 	methods: {
-		//...mapActions([""]),
+		...mapActions(["trasationlist"]),
+		async init() {
+			let parames = { cid: this.cid };
+
+			let res = await this._apis.dashboard.totalamount(parames);
+			this.trasationlist({ left: res });
+
+			console.log("totalamount res", res);
+		},
+		setChartDataleft(val) {
+			this.left = {
+				...this.left,
+				rows: this.setRowsleft(val)
+			};
+
+			console.log('this.left ',this.left );
+		},
+		setRowsleft(val) {
+			let result = [];
+			let y = val.order_cquantity_price;
+			let x = val.x;
+
+			for (var j = 0; j < y.length; j++) {
+				result.push({
+					日期: x[j],
+					访问用户: y[j]
+				});
+			}
+
+			return result;
+		}
 	}
 };
 </script>
