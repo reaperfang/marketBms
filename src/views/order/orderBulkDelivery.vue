@@ -920,6 +920,15 @@ export default {
           }
           this._list = this._list.filter(val => val.express != null && !val.express.specificationSize && val.sizeList && val.sizeList.length)
 
+          // var __result = [];
+          // var __obj = {};
+          // for(var i =0; i<arr.length; i++){
+          //     if(!__obj[arr[i].key]){
+          //       __result.push(arr[i]);
+          //       obj[arr[i].key] = true;
+          //     }
+          // }
+
           if(this.list[0].deliveryWay == 1 && this._list.length) {
             this.currentData = {
               list: this._list,

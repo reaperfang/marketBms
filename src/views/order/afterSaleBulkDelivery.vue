@@ -815,7 +815,7 @@ export default {
           //   });
           res.forEach(item => {
             if(!item.orderAfterSaleSendInfo.sendAddress) {
-              if(item.orderAfterSaleSendInfo && (item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 2)) {
+              if(item.orderAfterSaleSendInfo && (item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 2 || item.orderAfterSaleSendInfo.deliveryWay == 4)) {
                 this._apis.order
                 .getShopAddress({ cid: this.cid })
                 .then(res => {
