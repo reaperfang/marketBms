@@ -64,7 +64,7 @@ export default {
         //   },
         // },
         tooltip: {
-          show: true,
+          show: false,
         },
         color: ["#1A273D"],
         legend: {
@@ -74,7 +74,7 @@ export default {
 
         series: [
           {
-            name: "Line 1",
+            name: this.city,
             type: "pie",
             clockWise: true,
             //radius: ['55', '65'],//设置圆环的半径
