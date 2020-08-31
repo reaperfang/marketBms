@@ -166,7 +166,7 @@
         </section>
         <section class="form-section spec-form-section">
             <h2>销售信息<span v-if="editor && ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品销售信息</span></h2>
-            
+
             <el-form-item label="规格信息" prop="goodsInfos">
 
             </el-form-item>
@@ -1196,13 +1196,13 @@ export default {
                 let arr = this.ruleForm.images && this.ruleForm.images.split(',') || []
 
                 let resultArr = upData(arr, index)
-                
+
                 this.ruleForm.images = resultArr.join(',')
             } else {
                 let arr = this.ruleForm.images && this.ruleForm.images.split(',') || []
 
                 let resultArr = downData(arr, index)
-                
+
                 this.ruleForm.images = resultArr.join(',')
             }
         },
@@ -1837,7 +1837,7 @@ export default {
                 }
                 //如果商家配送未开启则提示去设置
                 if(name == 'delivery' && res.isOpenMerchantDeliver == 0){
-                    this.isDeliverySet = false; 
+                    this.isDeliverySet = false;
                 }
             })
             .catch(error => {});
@@ -2258,7 +2258,7 @@ export default {
                 if(val.image_rowspan && val.image_rowspan > 1) {
                     if(!val.image && !val.image_hide) {
                         let _arr = arr.slice(index, index + val.image_rowspan)
-                        
+
                         if(_arr && _arr.length) {
                             let imageArr = _arr.filter(val => val.image)
 
@@ -2292,7 +2292,7 @@ export default {
                         let flag = []
 
                         let timer = setInterval(() => {
-                        
+
                             if(this.$refs.fenleiCascader.dropDownVisible) {
                                 this.$refs.fenleiCascader.toggleDropDownVisible(false)
                                 this._globalEvent.$emit('addGoodsEvent', false);
@@ -2425,7 +2425,7 @@ export default {
                         if(!this.shippingTemplates.find(val => val.id == this.ruleForm.freightTemplateId)) {
                             this.ruleForm.freightTemplateId = ""
                         }
-                        
+
 
                         this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
                         this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
@@ -2631,6 +2631,14 @@ export default {
                             });
                             return
                         }
+							if (this.ruleForm.goodsInfos[i].costPrice > 10000000) {
+								this.$message.closeAll()
+								this.$message({
+									message: '当前成本价最大限制为10000000，请您重新输入',
+									type: 'warning'
+								});
+								return
+							}
                         if(/\./.test(this.ruleForm.goodsInfos[i].costPrice) && this.ruleForm.goodsInfos[i].costPrice.split(".")[1].length > 2) {
                             this.$message({
                                 message: '只支持小数点后两位',
@@ -2652,6 +2660,14 @@ export default {
                             });
                             return
                         }
+							if (this.ruleForm.goodsInfos[i].salePrice > 10000000) {
+								this.$message.closeAll()
+								this.$message({
+									message: '当前售卖价最大限制为10000000，请您重新输入',
+									type: 'warning'
+								});
+								return
+							}
                         if(/\./.test(this.ruleForm.goodsInfos[i].salePrice) && this.ruleForm.goodsInfos[i].salePrice.split(".")[1].length > 2) {
                             this.$message({
                                 message: '只支持小数点后两位',
@@ -3331,9 +3347,9 @@ export default {
                     document.querySelector('.productCatalogInfoId .el-form-item__label').click()
                 }
 
-                
-                
-                
+
+
+
             }
         })
     },

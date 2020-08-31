@@ -70,7 +70,8 @@ export default {
       if (this.$refs.chart) {
         this.eChart = this.$refs.chart;
         this.oChart = this.engine.init(this.eChart, null, {renderer: 'svg'});
-        _self.oChart.on("mouseover", function (params){//设置鼠标移入指定省份颜色不变的效果
+        //地图鼠标悬浮效果失效
+        _self.oChart.on("mouseover", function (params){//地图设置鼠标移入指定省份颜色不变的效果
             if(params.data.value != undefined){
                 _self.oChart.dispatchAction({
                     type: 'downplay'
