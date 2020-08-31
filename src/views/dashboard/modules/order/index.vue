@@ -22,8 +22,7 @@ import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
 	watch: {
-		// flowData(val) {
-		// }
+		"dashboard.order"(val) {}
 	},
 	props: {
 		// data: {
@@ -34,6 +33,7 @@ export default {
 	components: { vfunnel, gridtitle },
 	data: function() {
 		return {
+			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
 			chartData: {
 				columns: ["状态", "数值"],
 				rows: [
@@ -53,9 +53,11 @@ export default {
 		};
 	},
 	computed: {
-		//...mapState([""])
+		...mapState(["dashboard"])
 	},
-	mounted() {},
+	mounted() {
+		this.init();
+	},
 	beforeCreate() {},
 	created() {},
 	beforeMount() {},
@@ -64,7 +66,12 @@ export default {
 	beforeDestroy() {},
 	destroyed: function() {},
 	methods: {
-		//...mapActions([""]),
+		...mapActions(["orderlist"]),
+		async init() {
+			let parames = { cid: this.cid };
+			let res = await this._apis.dashboard.order(parames);
+		    console.log("order res",res);
+		}
 	}
 };
 </script>

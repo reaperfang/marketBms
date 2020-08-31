@@ -10,7 +10,8 @@ const dashboard = {
 		top3:[],
 		transation:{},
 		mailvistor:{},
-		paymail:{}
+		paymail:{},
+		order:{}
 	},
 	mutations: {
 		HOBBY_LIST: (state, data) => {
@@ -45,7 +46,10 @@ const dashboard = {
 				...state.paymail,
 				...data
 			};
-		}
+		},
+		ORDER_LIST:(state,data)=>{
+			state.order=data;
+		},
 	},
 	actions: {
 		hobbylist({ commit },data) {
@@ -74,6 +78,9 @@ const dashboard = {
 		},
 		paymaillist({ commit },data) {
 			commit("PAYMAIL_LIST",data);
+		},
+		orderlist({ commit },data) {
+			commit("ORDER_LIST",data);
 		}
 	}
 };

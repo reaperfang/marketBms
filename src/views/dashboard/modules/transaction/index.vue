@@ -132,6 +132,10 @@ export default {
 			return result;
 		},
 		setRowsright(val) {
+			console.log('setRowsright(val) {',val);
+			if(!val){
+				return;
+			}
 			let result = [];
 			let y = val.atv_td_7d;
 			let x = val.x;
