@@ -10,34 +10,28 @@
     <el-row class="p_i_content">
       <el-col :span="24">
         <el-button type="primary" class="to_intelligent" @click.native="toIntelligent">立即体验</el-button>
-        <el-steps space="30%" :active="2" finish-status="finish">
+        <el-steps space="30%" :active="stepStatus" finish-status="finish">
           <el-step title="选择所属行业"></el-step>
           <el-step title="预览行业模板"></el-step>
-          <el-step title="启用行业模板"></el-step>
+          <el-step title="启用行业模板">
+            <template slot="description" >
+              <el-popover
+                placement="top-start"
+                width="208"
+                trigger="hover"
+                offset="10"
+                popper-class="pop_box">
+                <div class="pop_content">您的行业模板数据配置失败、模板未启用成功，请您点击“立即体验”再次配置模板数据</div>
+                <img src="../../../assets/images/profile/intelligent_tip.png" class="pop_icon" :class="{'show': intelligentTip}" slot="reference" alt="提示" />
+              </el-popover>
+            </template>
+          </el-step>
           <el-step title="店铺基础信息建设"></el-step>
         </el-steps>
       </el-col>
     </el-row>
     <!-- <router-link to="/profile/intelligent" class="to_intelligent">立即体验</router-link> -->
     <!-- <router-link :to="{name: 'intelligent', query: {isShowGuide: isFirst, stepStatus: stepStatus}}" class="to_intelligent">立即体验</router-link> -->
-    
-    <!-- <div class="p_i_steps">
-      <ul>
-        <li :class="{'success': stepStatus >= 1}">①选择所属行业</li>
-        <li :class="{'success': stepStatus >= 2}">②预览行业模板</li>
-        <li class="step_industry" :class="{'success': stepStatus >= 3}">③启用行业模板
-          <el-popover
-          placement="top-start"
-          title=""
-          width="500"
-          trigger="hover"
-          content="您的行业模板数据配置失败、模板未启用成功，请您点击“立即体验”再次配置模板数据">
-          <i class="el-icon-info" slot="reference"></i>
-        </el-popover>
-        </li>
-        <li :class="{'success': stepStatus >= 4}">④店铺基础信息建设</li>
-      </ul>
-    </div> -->
 
   </div>
 </template>
@@ -49,26 +43,25 @@ export default {
       return {
         isFirst: false, // 是否首次
         stepStatus: 1, // 进行到了第几步
+        intelligentTip: false,  // 是否有第三步提示
       }
     },
     created() {
       this.getIntelligent();
     },
     methods:{
-      /** 智能开店 */
+      /** 获取智能开店信息 */
       getIntelligent() {
-
         // test
         this.isFirst = true;
-        this.stepStatus = 3;
-
+        this.stepStatus = 2;
+        this.intelligentTip = true;
       },
 
       /** 智能开店体验引导 */
       toIntelligent() {
         this.$router.push({ path: '/profile/intelligent' });
         // this._routeTo('intelligent', {isShowGuide: this.isFirst, stepStatus: this.stepStatus});
-        
       },
 
     }
@@ -97,7 +90,7 @@ export default {
     }
 
     .p_i_content {
-      margin-top: 15px;
+      margin-top: 10px;
     }
   }
   
@@ -117,6 +110,7 @@ export default {
   /deep/ .el-step__main .el-step__title {
     font-size: 12px;
     line-height: 12px;
+    position: relative;
   }
 
   /deep/ .el-step__head .el-step__icon.is-text {
@@ -163,30 +157,30 @@ export default {
   }
 
   /deep/ .el-step__main .el-step__description {
-    display: none;
+    position: relative;
   }
 
-  /* .p_i_steps {
+  .pop_icon {
+    position: absolute;
+    top: -16px;
+    left: 67px;
+    width: 15px;
+    height: 15px;
+    display: none;
 
-    li {
-      display: inline-block;
+    &.show {
+      display: block;
     }
+  }
 
-    li.success {
-      color: #655EFF;
+  .pop_box {
+    margin-bottom: 3px;
+    padding: 10px 12px;
+
+    .pop_content {
+      font-size: 12px;
+      line-height: 17px;
     }
+  }
 
-    li.step_industry {
-      position: relative;
-    }
-
-    /deep/ .el-icon-info{
-      position: absolute;
-      top: -15px;
-      right: -5px;
-      font-size: 18px;
-      color: red;
-    }
-
-  } */
 </style>
