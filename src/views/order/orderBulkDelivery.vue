@@ -744,7 +744,7 @@ export default {
             if(!goods.checked){
               return;
             }
-            if((goods.goodsCount -goods.cacheSendCount) == goods.sendCount) {
+            if((goods.goodsCount -goods.cacheSendCount) == 0) {
               //如果应发数量是0则不用验证
               return
             }
@@ -858,7 +858,7 @@ export default {
               orderId: item.orderId,
               memberInfoId: item.memberInfoId,
               orderCode: item.orderCode,
-              orderItems: item.orderItemList.filter(val => val.checked),
+              orderItems: item.orderItemList.filter(val => val.checked).filter(val => (val.goodsCount - val.cacheSendCount) != 0),
               id: item.id,
               memberSn: item.memberSn,
               receivedName: item.receivedName,
@@ -1443,6 +1443,9 @@ export default {
   text-align: center;
 }
 .message-box {
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
   >div {
     margin-bottom: 10px;
     &:last-child {
@@ -1460,5 +1463,8 @@ export default {
 }
 /deep/ .expressCompanys .el-input, /deep/ .expressNos .el-input {
   width: 236px;
+}
+/deep/ .el-form-item.expressNos {
+  margin-bottom: 0;
 }
 </style>
