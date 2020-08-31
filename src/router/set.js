@@ -118,7 +118,7 @@ export default [
                 path: 'createAccount',
                 component: () => import('@/views/set/createAccount'),
                 name: 'createAccount',
-                meta: { title: '默认页面', noCache: true, tabTitle: '权限管理', navType:3 },
+                meta: { title: '新建子账号', noCache: true, tabTitle: '权限管理', navType:4 },
                 hidden: true
             },
             {
@@ -131,7 +131,7 @@ export default [
                 path: 'createRole',
                 component: () => import('@/views/set/createRole'),
                 name: 'createRole',
-                meta: { title: '默认页面', noCache: true, tabTitle: '权限管理', navType:3  },
+                meta: { title: '新建角色', noCache: true, tabTitle: '权限管理', navType:4  },
                 hidden: true
             },
             // {
@@ -162,6 +162,12 @@ export default [
                 meta: { title: '新建', noCache: true, tabTitle: '配送设置' ,navType:4},
             },
             {
+                path: 'selfLift',
+                component: () => import('@/views/set/selfLift'),
+                name: 'selfLift',
+                meta: { title: '上门自提', noCache: true, tabTitle: '配送设置' ,navType:2},
+            },
+            {
                 path: 'addSelfLift',
                 component: () => import('@/views/set/addSelfLift'),
                 name: 'addSelfLift',
@@ -174,12 +180,6 @@ export default [
                 name: 'editSelfLift',
                 hidden: true,
                 meta: { title: '编辑', noCache: true, tabTitle: '配送设置' ,navType:5},
-            },
-            {
-                path: 'selfLift',
-                component: () => import('@/views/set/selfLift'),
-                name: 'selfLift',
-                meta: { title: '上门自提', noCache: true, tabTitle: '配送设置' ,navType:2},
             },
             {
                  path: 'authorize',
