@@ -63,7 +63,7 @@
         if (this.baseStatus === 1) {
           // 返回启用模板
           this.$emit('update-step', 3);
-        } else if (this.baseStatus === 2) {
+        } else {
           this.baseStatus = this.baseStatus - 1;
         }
       },
