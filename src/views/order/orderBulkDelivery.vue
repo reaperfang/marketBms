@@ -40,7 +40,7 @@
                   :key="i"
                 >
                   <div class="col">
-                    <i @click="select(index, i)" class="checkbox" :class="{checked: goods.checked, disabledChecked: list[0] && list[0].deliveryWay == 4}"></i>
+                    <i @click="select(index, i)" class="checkbox" :class="{checked: goods.checked, disabledChecked: list[0] && list[0].deliveryWay == 4 || goods.goodsCount - goods.cacheSendCount == 0}"></i>
                   </div>
                   <div class="col goodsItem-left" style="width: 310px;">
                     <div class="row align-center">
@@ -56,7 +56,7 @@
                   <div class="col send-count" style="width: 60px;">{{goods.goodsCount -goods.cacheSendCount}}</div>
                   <div class="col" style="width: 100px;">
                     <el-input
-                      :disabled="item.deliveryWay == 4"
+                      :disabled="item.deliveryWay == 4 || goods.goodsCount - goods.cacheSendCount == 0"
                       type="number"
                       min="1"
                       @input="inputHandler(index, i)"
@@ -273,7 +273,9 @@ export default {
       _list.forEach(val => {
         val.checked = this.allchecked;
         val.orderItemList.forEach(goods => {
-          goods.checked = this.allchecked;
+          if(goods.goodsCount - goods.cacheSendCount != 0) {
+            goods.checked = this.allchecked;
+          }
         });
       });
 
@@ -523,6 +525,10 @@ export default {
     inputHandler(index, i) {
       let reg = /^[1-9]\d*$/
 
+      if(!this.list[index].orderItemList[i].checked) {
+        return
+      }
+
       if(this.list[index].orderItemList[i] == '') {
         this.list[index].orderItemList.splice(i, 1, Object.assign({}, this.list[index].orderItemList[i], {
           errorMessage:  '请输入本次发货数量',
@@ -586,6 +592,8 @@ export default {
                 val.expressCompanyCodes = expressCompanyCodes
                 val.express = express
                 val.expressNos = ''
+                val.showErrorExpressCompany = false
+                val.errorMessageExpressCompany = ''
               }
             })
 
@@ -595,12 +603,14 @@ export default {
           if(res) {
             this.list.splice(index, 1, Object.assign({}, this.list[index], {
               expressNos: '',
-              express: res
+              express: res,
+              showErrorExpressCompany: false,
+              errorMessageExpressCompany: ''
             }))
           } else {
             this.list.splice(index, 1, Object.assign({}, this.list[index], {
               showErrorExpressCompany: false,
-              errorMessageExpressCompany: ''
+              errorMessageExpressCompany: '',
             }))
           }
         })
@@ -625,11 +635,15 @@ export default {
 
       if (item.checked) {
         item.orderItemList.forEach(val => {
-          val.checked = true;
+          if(val.goodsCount - val.cacheSendCount != 0) {
+            val.checked = true;
+          }
         });
       } else {
         item.orderItemList.forEach(val => {
-          val.checked = false;
+          if(val.goodsCount - val.cacheSendCount != 0) {
+            val.checked = false;
+          }
         });
       }
 
@@ -744,7 +758,7 @@ export default {
             if(!goods.checked){
               return;
             }
-            if((goods.goodsCount -goods.cacheSendCount) == goods.sendCount) {
+            if((goods.goodsCount -goods.cacheSendCount) == 0) {
               //如果应发数量是0则不用验证
               return
             }
@@ -858,7 +872,7 @@ export default {
               orderId: item.orderId,
               memberInfoId: item.memberInfoId,
               orderCode: item.orderCode,
-              orderItems: item.orderItemList.filter(val => val.checked),
+              orderItems: item.orderItemList.filter(val => val.checked).filter(val => (val.goodsCount - val.cacheSendCount) != 0),
               id: item.id,
               memberSn: item.memberSn,
               receivedName: item.receivedName,
@@ -1004,7 +1018,7 @@ export default {
         });
     },
     select(index, i) {
-      if(this.list[0].deliveryWay == 4) {
+      if(this.list[0].deliveryWay == 4 || this.list[index].orderItemList[i].goodsCount - this.list[index].orderItemList[i].cacheSendCount == 0) {
         return
       }
       try {
@@ -1026,7 +1040,7 @@ export default {
 
         let _arr = _list.reduce((pre, cur) => pre.concat(cur.orderItemList), [])
         
-        if(_arr.every(val => val.checked)) {
+        if(_arr.filter(val => val.deliveryWay !=4 && (val.goodsCount - val.cacheSendCount != 0)).every(val => val.checked)) {
           this.allchecked = true
         } else {
           this.allchecked = false
@@ -1443,6 +1457,9 @@ export default {
   text-align: center;
 }
 .message-box {
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
   >div {
     margin-bottom: 10px;
     &:last-child {
@@ -1460,5 +1477,8 @@ export default {
 }
 /deep/ .expressCompanys .el-input, /deep/ .expressNos .el-input {
   width: 236px;
+}
+/deep/ .el-form-item.expressNos {
+  margin-bottom: 0;
 }
 </style>

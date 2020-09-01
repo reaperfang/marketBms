@@ -18,7 +18,7 @@
             <el-button type="primary" @click="reset">重置</el-button>
           </el-form>
         </div>
-        <el-button type="primary" @click="_routeTo('createRole')">新建角色</el-button>
+        <el-button type="primary"  v-permission="['设置', '角色管理', '默认页面', '新建角色']" @click="_routeTo('createRole')">新建角色</el-button>
       </div>
       <div class="bottom_part">
         <el-table

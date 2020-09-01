@@ -11,8 +11,8 @@
       v-loading="loading"
       @sort-change="changeSort"
     >
-      <el-table-column type="selection" :reserve-selection="true"></el-table-column>
-      <el-table-column prop="memberSn" label="用户ID"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" fixed="left"></el-table-column>
+      <el-table-column prop="memberSn" label="用户ID" fixed="left"></el-table-column>
       <el-table-column label="用户信息" :width="163">
         <template slot-scope="scope">
           <div class="clearfix icon_cont">
@@ -23,7 +23,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="phone" label="手机号" :width="150"></el-table-column>
-      <el-table-column label="身份" :width="130">
+      <el-table-column label="身份">
         <template slot-scope="scope">
           <div class="clearfix iden_cont">
             <span class="fl">{{scope.row?scope.row.memberType:""}}</span>
@@ -40,18 +40,18 @@
         </template>
       </el-table-column>
       <el-table-column prop="score" label="积分" sortable="custom"></el-table-column>
-      <el-table-column label="累计消费金额" sortable="custom" prop="totalDealMoney">
+      <el-table-column label="累计消费金额" sortable="custom" prop="totalDealMoney" :width="150">
         <template slot-scope="scope">
           ¥{{scope.row.totalDealMoney || 0.00}}
         </template>
       </el-table-column>
-      <el-table-column prop="dealTimes" label="购买次数" sortable="custom"></el-table-column>
-      <el-table-column label="客单价（元）" prop="perUnitPrice" sortable="custom">
+      <el-table-column prop="dealTimes" label="购买次数" sortable="custom" :width="150"></el-table-column>
+      <el-table-column label="客单价（元）" prop="perUnitPrice" sortable="custom" :width="150">
         <template slot-scope="scope">
           ¥{{scope.row.perUnitPrice || 0.00}}
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200">
+      <el-table-column label="操作" width="200" fixed="right">
         <template slot-scope="scope">
           <div class="btns clearfix">
             <span class="s1" @click="_routeTo('clientInfo',{id: scope.row.id})" v-permission="['用户', '全部用户', '默认页面', '查看详情']">详情</span>

@@ -67,7 +67,7 @@
                             {{orderAfterSale.memberName}}
                         </div>
                     </div>
-                    <div v-if="orderAfterSale.type == 1 || orderAfterSale.type == 2" class="row">
+                    <!-- <div v-if="orderAfterSale.type == 1 || orderAfterSale.type == 2" class="row">
                         <div class="col list-lefter">
                             用户收货信息
                         </div>
@@ -84,7 +84,7 @@
                             <p>{{orderSendInfo.sendName}} {{orderSendInfo.sendPhone}}</p>
                             <p>{{orderSendInfo.sendAddress}} {{orderSendInfo.sendDetail}}</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </section>

@@ -22,7 +22,7 @@
           </el-form>
         </div>
         <div class="create">
-          <el-button type="primary" @click="_routeTo('createAccount')">新建子账号</el-button>
+          <el-button type="primary" v-permission="['设置', '子账号管理' ,'默认页面', '新建子账号']" @click="_routeTo('createAccount')">新建子账号</el-button>
         </div>
       </div>
       <div class="bottom_part">

@@ -167,6 +167,10 @@ export default {
   &:nth-child(5) {
     text-align: left;
   }
+  &:nth-child(8) {
+    text-align: left;
+    padding-left: 39px;
+  }
 }
 /deep/ .cell{
             .btns{
