@@ -5,9 +5,8 @@
         <img src="../../../assets/images/profile/i_industry_act.png"  alt="" />
         <span>{{ item.name }}</span>
       </div>
-
     </div>
-    <div class="i_industries_none" v-else>暂无数据</div>
+    <div class="i_industries_none" v-else>暂无数据...</div>
 
     <div class="bottom_buttons">
       <el-button type="primary" @click.native="toPreviewTemplate" :disabled="industries.length == 0"> 下一步，预览模板 </el-button>
@@ -76,8 +75,14 @@
       text-align: center;
       width: 236px;
       height: 126px;
-      background: url('../../../assets/images/profile/i_industry.png') no-repeat;
       font-weight: 600;
+      background: url('../../../assets/images/profile/i_industry.png') no-repeat;
+      background-size: contain;
+
+      &:hover, &.act {
+        background: url('../../../assets/images/profile/i_industry_on.png') no-repeat;
+        background-size: contain;
+      }
 
       span {
         line-height: 126px;
@@ -90,12 +95,10 @@
         display: none;
       }
 
-      &:hover, &.act {
-        background: url('../../../assets/images/profile/i_industry_on.png') no-repeat;
-      }
-
       &.act img {
         display: inline-block;
+        width: 30px;
+        height: 30px;
         vertical-align: middle;
         line-height: 126px;
         margin-top: -9px;
@@ -107,27 +110,11 @@
   
   .i_industries_none {
     height: 300px;
+    text-align: center;
   }
 
   .bottom_buttons {
     margin-bottom: 30px;
   }
-  
-  /* /deep/ .el-radio.is-bordered {
-    border: none;
-    background: #655EFF;
-    color: #fff;
-  }
-
-  /deep/ .el-radio__input .el-radio__inner {
-    opacity: 0;
-    outline: none;
-    position: absolute;
-    z-index: -1;
-  }
-
-  /deep/ .el-radio__label {
-    padding-left: 5px;
-  } */
 
 </style>
