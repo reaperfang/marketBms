@@ -543,7 +543,7 @@ export default {
             }
         }
         .item-storew{
-            width: 105px !important;
+            width: 108px !important;
         }
         .icon-store{
             display: inline-block;

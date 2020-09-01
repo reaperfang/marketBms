@@ -426,6 +426,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .search {
+   /deep/ .el-form-item{
+    margin-bottom:0px;
+   }
     /deep/ .el-form-item__label {
         padding-right: 8px;
     }
@@ -451,6 +454,9 @@ export default {
         color: #45444c;
       }
     }
+  }
+  .search{
+    padding-bottom:0px;
   }
 }
 /deep/ .el-input {
@@ -502,7 +508,7 @@ export default {
   font-weight: normal!important;
 }
 .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 </style>
 
