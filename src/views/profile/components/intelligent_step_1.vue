@@ -32,7 +32,7 @@
     methods: {
       /** 获取行业 */
       getIndustry() {
-        this.industries = [{name:'行业1', id: 101},{name:'行业2', id: 102},{name:'行业3', id: 103}];
+        this.industries = [{name:'肉禽蛋品', id: 101},{name:'新鲜水果', id: 102},{name:'酒水饮料', id: 103}];
         this.industryAct = this.industryId === null ? this.industries[0].id : this.industryId;
         // console.log('industries', this.industries);
       },
@@ -78,6 +78,7 @@
       font-weight: 600;
       background: url('../../../assets/images/profile/i_industry.png') no-repeat;
       background-size: contain;
+      cursor: pointer;
 
       &:hover, &.act {
         background: url('../../../assets/images/profile/i_industry_on.png') no-repeat;
