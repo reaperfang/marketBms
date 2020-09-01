@@ -128,12 +128,12 @@ export function statistics(data) {
 }
 
 //  用户交易分布
-// export function userhobby(data) {
-// 	return request({
-// 		target: "BDSC-USER-TS-DISTRIBUTION-PROCESSOR",
-// 		method: "post",
-// 		apiType: "data",
-// 		data
-// 	});
-// }
+export function realTimeUser(data) {
+	return request({
+		target: "RTOV-TRANSACTION-DISTRIBUTION-PROCESSOR",
+		method: "post",
+		apiType: "data",
+		data
+	});
+}
 

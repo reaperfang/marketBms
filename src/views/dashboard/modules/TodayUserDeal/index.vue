@@ -30,7 +30,7 @@
 		</el-row>
 
 		<el-row class="grid-map">
-			<chinamap></chinamap>
+			<chinamap :mapData="mapData"></chinamap>
 		</el-row>
 	</div>
 </template>
@@ -43,8 +43,9 @@ import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
 	watch: {
-		// flowData(val) {
-		// }
+		"dashboard.chinamap"(val) {
+			this.mapData=val
+		}
 	},
 	props: {
 		// data: {
@@ -52,17 +53,21 @@ export default {
 		//   default: false
 		// }
 	},
-	components: { gridtitle,chinamap ,countTo},
+	components: { gridtitle, chinamap, countTo },
 	data: function() {
 		return {
-            	startVal: 0,
-			endVal: 1000000
-        };
+			startVal: 0,
+			endVal: 1000000,
+			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+            mapData:[]
+		};
 	},
 	computed: {
-		//...mapState([""])
+		...mapState(["dashboard"])
 	},
-	mounted() {},
+	mounted() {
+		this.init();
+	},
 	beforeCreate() {},
 	created() {},
 	beforeMount() {},
@@ -71,7 +76,14 @@ export default {
 	beforeDestroy() {},
 	destroyed: function() {},
 	methods: {
-		//...mapActions([""]),
+		...mapActions(["maplist"]),
+		async init() {
+			console.log("//////////////////");
+			let parames = { cid: this.cid};
+
+			let res = await this._apis.dashboard.realTimeUser(parames);
+            this.maplist(res.areaOrderNumList);
+		}
 	}
 };
 </script>

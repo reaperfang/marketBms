@@ -13,7 +13,10 @@ const dashboard = {
 		paymail:{},
 		order:{},
 		amount:{},
-        realtimeuser:{}
+		realtimeuser:{},
+		chinamap:{
+
+		}
 	},
 	mutations: {
 		HOBBY_LIST: (state, data) => {
@@ -57,6 +60,9 @@ const dashboard = {
 		},
 		REALTIMEUSER_LIST: (state, data) => {
 			state.realtimeuser = data;
+		},
+		MAP_LIST: (state, data) => {
+			state.chinamap = data;
 		}
 	},
 	actions: {
@@ -95,6 +101,9 @@ const dashboard = {
 		},
 		realtimeuserlist({ commit },data) {
 			commit("REALTIMEUSER_LIST",data);
+		},
+		maplist({ commit },data) {
+			commit("MAP_LIST",data);
 		}
 	}
 };
