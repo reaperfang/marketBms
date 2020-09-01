@@ -25,10 +25,7 @@ import { mapGetters, mapActions, mapState } from "vuex";
 export default {
 	watch: {
 		"dashboard.order"(val) {
-			this.lineargroup=val
-
-			console.log("this.lineargroup",this.lineargroup);
-			
+			this.lineargroup=val			
 			this.$refs.vfunnel.showChart(this.lineargroup);
 		}
 	},

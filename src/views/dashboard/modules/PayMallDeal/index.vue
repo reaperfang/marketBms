@@ -2,7 +2,7 @@
 	<div class="grid-content  flex-column">
 		<el-row type="flex" justify="space-between" class="item-start">
 			<el-col :span="24">
-				<vpay></vpay>
+				<vpay :payData="payData"></vpay>
 			</el-col>
 		</el-row>
 		<el-row class="item-end">
@@ -50,6 +50,9 @@ export default {
 	watch: {
 		"dashboard.top3"(val) {
 			this.setPieData(val);
+		},
+		"dashboard.amount"(val) {
+			this.setPayData(val);
 		}
 	},
 	props: {
@@ -68,7 +71,8 @@ export default {
 				// { progress: 70, barColor: "RGBA(255, 92, 49, 1)", city: "上海" },
 				// { progress: 95, barColor: "RGBA(245, 159, 0, 1)", city: "深圳" },
 			],
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id
+			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			payData: {}
 		};
 	},
 	computed: {
@@ -85,12 +89,15 @@ export default {
 	beforeDestroy() {},
 	destroyed: function() {},
 	methods: {
-		...mapActions(["toplist"]),
+		...mapActions(["toplist", "amoountlist"]),
 		async init() {
 			let parames = { cid: this.cid };
 
 			let resTop = await this._apis.dashboard.top3(parames);
 			this.toplist(resTop.top3);
+
+			let resPay = await this._apis.dashboard.realtimedealamount(parames);
+			this.amoountlist(resPay);
 		},
 		setPieData(val) {
 			this.chartData = val.map(res => {
@@ -100,6 +107,24 @@ export default {
 					city: res.area_name
 				};
 			});
+		},
+		setPayData(val) {
+			this.payData = [
+				{
+					children: [
+						{ title: "支付人数", content: val.paid_order_nu_rt },
+						{ title: "支付金额", content: val.paid_order_am_rt },
+						{ title: "客单价", content: val.atv_rt }
+					]
+				},
+				{
+					children: [
+						{ title: "支付订单数", content: val.paid_order_cq_rt },
+						{ title: "退款金额", content: val.refund_am_rt },
+						{ title: "退款订单数", content: val.refund_cq_rt }
+					]
+				}
+			];
 		}
 	}
 };

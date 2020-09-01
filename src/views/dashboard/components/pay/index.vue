@@ -17,31 +17,26 @@ export default {
     // flowData(val) {
     // }
   },
-  props: {
-    // data: {
-    //   type: Object,
-    //   default: false
-    // }
-  },
+  props: ["payData"],
   components: { vitem },
   data: function() {
     return {
-      payData: [
-        {
-          children: [
-            { title: "支付人数", content: "8789" },
-            { title: "支付金额", content: "5545" },
-            { title: "客单价", content: "54556" },
-          ],
-        },
-        {
-          children: [
-            { title: "支付订单数", content: "455" },
-            { title: "退款金额", content: "45411" },
-            { title: "退款订单数", content: "844" },
-          ],
-        },
-      ],
+      // payData: [
+      //   {
+      //     children: [
+      //       { title: "支付人数", content: "8789" },
+      //       { title: "支付金额", content: "5545" },
+      //       { title: "客单价", content: "54556" },
+      //     ],
+      //   },
+      //   {
+      //     children: [
+      //       { title: "支付订单数", content: "455" },
+      //       { title: "退款金额", content: "45411" },
+      //       { title: "退款订单数", content: "844" },
+      //     ],
+      //   },
+      // ],
     };
   },
   computed: {
