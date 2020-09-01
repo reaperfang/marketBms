@@ -1,7 +1,7 @@
 <template>
 	<div class="icon-member">
 		<div class="row start">会员</div>
-		<div class="row end">{{total}}人</div>
+		<div class="row end">{{ total }}人</div>
 	</div>
 </template>
 
@@ -19,7 +19,7 @@ export default {
 	// 		default: false
 	// 	}
 	// },
-	props:["title","total"],
+	props: ["title", "total"],
 	components: {},
 	data: function() {
 		return {};
@@ -49,27 +49,28 @@ export default {
 	left: 0;
 	bottom: 0;
 	right: 0;
-	height: 70px;
+	// height: 70px;
+	height: 55px;
 	width: 100px;
-  .start,
-  .end {
-    display: flex;
-    justify-content: center;
-  }
+	.start,
+	.end {
+		display: flex;
+		justify-content: center;
+	}
 
-  .start {
-    font-size: 12px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 1);
-  }
+	.start {
+		font-size: 12px;
+		font-weight: 400;
+		color: rgba(255, 255, 255, 1);
+	}
 
-  .end {
-    font-size: 24px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 1);
-    line-height: 33px;
-    margin-top: 10px;
-  }
+	.end {
+		font-size: 24px;
+		font-weight: 600;
+		color: rgba(255, 255, 255, 1);
+		line-height: 33px;
+		margin-top: 10px;
+	}
 
 	// background: yellow;
 }
