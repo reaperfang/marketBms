@@ -38,6 +38,7 @@
 					start-placeholder="开始时间"
 					end-placeholder="结束时间"
 					value-format="yyyy-MM-dd HH:mm:ss"
+          @focus="utils.globalTimeDisabledFocus"
 					:picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
 					@change="changeTime"
 				></el-date-picker>
