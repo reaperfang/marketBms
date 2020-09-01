@@ -48,6 +48,15 @@ export default {
             }
         }
     },
+    created() {
+        this.data.list.forEach((item, index) => {
+            if(item.sizeList && (item.sizeList.length == 1)) {
+                this.data.list.splice(index, 1, Object.assign({}, this.data.list[index], {
+                    specificationSize: item.sizeList[0].templateSize
+                }))
+            }
+        })
+    },
     methods: {
         close() {
             this.$emit('cancel')
