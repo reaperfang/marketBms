@@ -1109,6 +1109,9 @@ export default {
   text-align: center;
 }
 .message-box {
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
   >div {
     margin-bottom: 10px;
     &:last-child {
@@ -1130,5 +1133,8 @@ export default {
 }
 /deep/ .expressCompanys .el-input, /deep/ .expressNos .el-input {
   width: 236px;
+}
+/deep/ .el-form-item.expressNos {
+  margin-bottom: 0;
 }
 </style>
