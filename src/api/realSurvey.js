@@ -56,4 +56,14 @@ export function goodsView(data) {
       data
     })
 }
+
+//  实时概况--移动商城数据是否完成准备接口
+export function dataReady(data) {
+    return request({
+      target:'RTOV-DATA-READY-FINISHFLAG-PROCESSOR',
+      method: 'post',
+      apiType: 'data',
+      data
+    })
+}
   
