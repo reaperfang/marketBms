@@ -159,7 +159,6 @@
         </section>
         <section class="form-section spec-form-section">
             <h2>销售信息<span v-if="editor && ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品销售信息</span></h2>
-<<<<<<< HEAD
             
             <!-- <el-form-item label="规格信息" prop="goodsInfos">
                
@@ -210,12 +209,6 @@
              </div>
             </template>
             <template v-if="specRadio===1" >
-=======
-
-            <el-form-item label="规格信息" prop="goodsInfos">
-
-            </el-form-item>
->>>>>>> release
             <div class="goods-infos">
                 <!-- <el-button :disabled="!ruleForm.productCategoryInfoId" v-if="!editor" class="border-button selection-specification" @click="selectSpecificationsCurrentDialog = 'SelectSpecifications'; currentDialog = ''; currentData = specsList; selectSpecificationsDialogVisible = true">选择规格</el-button> -->
                 <div v-if="!editor" v-show="!(ruleForm.isSyncProduct == 1 && authHide)">
