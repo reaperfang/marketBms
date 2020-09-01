@@ -37,12 +37,18 @@
         label="自提点名称"
         align="left"
         width="130">
+        <template slot-scope="scope">
+          <div class="pickUpName" :title="scope.row.pickUpName">{{scope.row.pickUpName}}</div>
+        </template>
       </el-table-column>
       <el-table-column
         prop='name'
         label="联系人"
         align="left"
         width="118">
+         <template slot-scope="scope">
+          <div class="name" :title="scope.row.name">{{scope.row.name}}</div>
+        </template>
       </el-table-column>
       <el-table-column
         prop="mobile"
@@ -549,6 +555,12 @@ export default {
     }
     /deep/ .pickUpId {
       padding-left: 10px;
+    }
+    .pickUpName, .name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
     }
     &::before {
       height: 0;
