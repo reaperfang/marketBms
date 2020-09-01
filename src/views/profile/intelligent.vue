@@ -3,15 +3,16 @@
     <guide v-if="isShowGuide" @hide-guide="hideGuide"></guide>
 
     <!--  step_progress  -->
-    <el-steps :active="stepStatus" simple>
-      <el-step title="选择行业" icon="el-icon-edit"></el-step>
-      <el-step title="预览模板" icon="el-icon-upload"></el-step>
-      <el-step title="启用模板" icon="el-icon-picture"></el-step>
-      <el-step title="基础建设" icon="el-icon-picture"></el-step>
-    </el-steps>
+    <ul class="steps">
+      <li class="step-item step-start"><span class="step-text">选择经营行业</span></li>
+      <li class="step-item step-middle"><span class="step-text">预览模板</span></li>
+      <li class="step-item step-middle"><span class="step-text">启用模板</span></li>
+      <li class="step-item step-end"><span class="step-text">基础建设</span></li>
+    </ul>
 
     <!--  step_1  选择行业-->
-    <step-industry v-show="stepStatus === 1" v-if="stepStatus <=2" :industryId="industryId" @update-step="updateStep" @update-industry-id="updateIndustryId"></step-industry>
+    <step-industry v-show="stepStatus === 1" v-if="stepStatus <=2" :industryId="industryId" @update-step="updateStep"
+                   @update-industry-id="updateIndustryId"></step-industry>
 
     <!--  step_2  预览模板-->
     <step-preview v-if="stepStatus === 2" @update-step="updateStep" :industryId="industryId"></step-preview>
@@ -29,9 +30,10 @@
   import stepPreview from './components/intelligent_step_2'
   import stepEnable from './components/intelligent_step_3'
   import stepBase from './components/intelligent_step_4'
+
   export default {
     name: 'intelligent-shop',
-    components: { guide, stepIndustry, stepPreview, stepEnable, stepBase },
+    components: {guide, stepIndustry, stepPreview, stepEnable, stepBase},
     data() {
       return {
         isShowGuide: false,  // 是否是显示引导（首次进入）
@@ -52,7 +54,7 @@
           setTimeout(() => {
             this.industryId = 102;
           }, 3000)
-        }catch (err) {
+        } catch (err) {
           console.log(err.message)
         }
       },
@@ -82,8 +84,39 @@
     min-height: 100%;
     background-color: #fff;
 
+    .steps {
+      position: relative;
+
+      .step-item {
+        width: 227px;
+        height: 51px;
+        font-size: 16px;
+        line-height: 52px;
+        text-align: center;
+        color: #fff;
+      }
+
+      .step-start {
+        background: url("../../assets/images/profile/intelligent_step_start.png") no-repeat right center;
+        background-size: cover;
+      }
+
+      .step-middle {
+        background: url("../../assets/images/profile/intelligent_step_start.png") no-repeat right center;
+        background-size: cover;
+        &.selected {
+
+        }
+      }
+
+      .step-end {
+
+      }
+    }
+
     .bottom_buttons {
       text-align: center;
+
       .el-button--small {
         font-size: 14px;
       }
