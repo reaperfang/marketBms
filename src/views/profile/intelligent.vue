@@ -2,17 +2,24 @@
   <div id="intelligent_shop">
     <guide v-if="isShowGuide" @hide-guide="hideGuide"></guide>
 
+    <h2 class="title"> 智能开店 </h2>
+
     <!--  step_progress  -->
     <ul class="steps">
-      <li class="step-item step-start"><span class="step-text">选择经营行业</span></li>
-      <li class="step-item step-middle"><span class="step-text">预览模板</span></li>
-      <li class="step-item step-middle"><span class="step-text">启用模板</span></li>
-      <li class="step-item step-end"><span class="step-text">基础建设</span></li>
+      <li class="step-item step-start" :class="{'selected': stepStatus >= 1}"><span class="step-text">选择经营行业</span></li>
+      <li class="step-item step-middle" :class="{'selected': stepStatus >= 2}"><span class="step-text">预览模板</span></li>
+      <li class="step-item step-middle" :class="{'selected': stepStatus >= 3}"><span class="step-text">启用模板</span></li>
+      <li class="step-item step-end" :class="{'selected': stepStatus >= 4}"><span class="step-text">基础建设</span></li>
     </ul>
 
     <!--  step_1  选择行业-->
-    <step-industry v-show="stepStatus === 1" v-if="stepStatus <=2" :industryId="industryId" @update-step="updateStep"
-                   @update-industry-id="updateIndustryId"></step-industry>
+    <step-industry
+      v-show="stepStatus === 1"
+      v-if="stepStatus <=2"
+      :industryId="industryId"
+      @update-step="updateStep"
+      @update-industry-id="updateIndustryId"
+    ></step-industry>
 
     <!--  step_2  预览模板-->
     <step-preview v-if="stepStatus === 2" @update-step="updateStep" :industryId="industryId"></step-preview>
@@ -81,11 +88,38 @@
 <style lang="scss">
   #intelligent_shop {
     position: relative;
+    padding: 20px;
     min-height: 100%;
     background-color: #fff;
 
+    .title {
+      position: relative;
+      padding-left: 13px;
+      margin-bottom: 30px;
+      font-size: 18px;
+      font-weight: 600;
+      color: $titleColor;
+      line-height: 25px;
+
+
+      &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 3px;
+        left: 0;
+        width: 3px;
+        height: 19px;
+        background-color: $globalMainColor;
+      }
+    }
+
     .steps {
       position: relative;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      user-select: none;
 
       .step-item {
         width: 227px;
@@ -93,7 +127,16 @@
         font-size: 16px;
         line-height: 52px;
         text-align: center;
-        color: #fff;
+        color: $contentColor;
+        font-weight: 400;
+
+        &.selected {
+          color: #fff;
+        }
+      }
+
+      .step-middle, .step-end {
+        margin-left: -13px;
       }
 
       .step-start {
@@ -102,15 +145,19 @@
       }
 
       .step-middle {
-        background: url("../../assets/images/profile/intelligent_step_start.png") no-repeat right center;
+        background: url("../../assets/images/profile/intelligent_step_middle.png") no-repeat right center;
         background-size: cover;
         &.selected {
-
+          background-image: url("../../assets/images/profile/intelligent_step_middle_selected.png");
         }
       }
 
       .step-end {
-
+        background: url("../../assets/images/profile/intelligent_step_end.png") no-repeat right center;
+        background-size: cover;
+        &.selected {
+          background-image: url("../../assets/images/profile/intelligent_step_middle_selected.png");
+        }
       }
     }
 
