@@ -159,6 +159,7 @@
         </section>
         <section class="form-section spec-form-section">
             <h2>销售信息<span v-if="editor && ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品销售信息</span></h2>
+<<<<<<< HEAD
             
             <!-- <el-form-item label="规格信息" prop="goodsInfos">
                
@@ -209,6 +210,12 @@
              </div>
             </template>
             <template v-if="specRadio===1" >
+=======
+
+            <el-form-item label="规格信息" prop="goodsInfos">
+
+            </el-form-item>
+>>>>>>> release
             <div class="goods-infos">
                 <!-- <el-button :disabled="!ruleForm.productCategoryInfoId" v-if="!editor" class="border-button selection-specification" @click="selectSpecificationsCurrentDialog = 'SelectSpecifications'; currentDialog = ''; currentData = specsList; selectSpecificationsDialogVisible = true">选择规格</el-button> -->
                 <div v-if="!editor" v-show="!(ruleForm.isSyncProduct == 1 && authHide)">
@@ -1279,13 +1286,13 @@ export default {
                 let arr = this.ruleForm.images && this.ruleForm.images.split(',') || []
 
                 let resultArr = upData(arr, index)
-                
+
                 this.ruleForm.images = resultArr.join(',')
             } else {
                 let arr = this.ruleForm.images && this.ruleForm.images.split(',') || []
 
                 let resultArr = downData(arr, index)
-                
+
                 this.ruleForm.images = resultArr.join(',')
             }
         },
@@ -1926,7 +1933,7 @@ export default {
                 }
                 //如果商家配送未开启则提示去设置
                 if(name == 'delivery' && res.isOpenMerchantDeliver == 0){
-                    this.isDeliverySet = false; 
+                    this.isDeliverySet = false;
                 }
                 //如果上门自提未开启则提示去设置
                 if(name == 'selfLift' && res.isOpenSelfLift == 0){
@@ -2366,7 +2373,7 @@ export default {
                 if(val.image_rowspan && val.image_rowspan > 1) {
                     if(!val.image && !val.image_hide) {
                         let _arr = arr.slice(index, index + val.image_rowspan)
-                        
+
                         if(_arr && _arr.length) {
                             let imageArr = _arr.filter(val => val.image)
 
@@ -2404,7 +2411,7 @@ export default {
                         let flag = []
 
                         let timer = setInterval(() => {
-                        
+
                             if(this.$refs.fenleiCascader.dropDownVisible) {
                                 this.$refs.fenleiCascader.toggleDropDownVisible(false)
                                 this._globalEvent.$emit('addGoodsEvent', false);
@@ -2542,7 +2549,7 @@ export default {
                         if(!this.shippingTemplates.find(val => val.id == this.ruleForm.freightTemplateId)) {
                             this.ruleForm.freightTemplateId = ""
                         }
-                        
+
 
                         this.ruleForm.isShowSaleCount = this.ruleForm.isShowSaleCount == 1 ? true : false
                         this.ruleForm.isShowStock = this.ruleForm.isShowStock == 1 ? true : false
@@ -3262,9 +3269,9 @@ export default {
                     document.querySelector('.productCatalogInfoId .el-form-item__label').click()
                 }
 
-                
-                
-                
+
+
+
             }
         })
     },

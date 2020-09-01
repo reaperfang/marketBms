@@ -159,7 +159,7 @@ export default [
                 component: () => import('@/views/set/newElectronicFaceSheet'),
                 name: 'newElectronicFaceSheet',
                 hidden: true,
-                meta: { title: '新建', noCache: true, tabTitle: '配送设置' ,navType:4},
+                meta: { title: '新建', noCache: true, tabTitle: '配送设置' ,navType:5},
             },
             {
                 path: 'selfLift',
