@@ -6,20 +6,26 @@
 			</el-col>
 		</el-row>
 		<el-row class="item-content">
-			<vtable></vtable>
+			<vtable :tableData="tableData"></vtable>
 		</el-row>
 	</div>
 </template>
 
 <script>
 import gridtitle from "../..//components/title/index";
-import vtable from "./table"
+import vtable from "./table";
 import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
 	watch: {
-		// flowData(val) {
-		// }
+		"dashboard.realtimeuser"(val) {
+			this.tableData=val.map((item,index)=>{
+				return{
+					...item,
+					id:index+1
+				}
+			});
+		}
 	},
 	props: {
 		// data: {
@@ -27,37 +33,19 @@ export default {
 		//   default: false
 		// }
 	},
-	components: { gridtitle,vtable },
+	components: { gridtitle, vtable },
 	data: function() {
 		return {
-			tableData: [
-				{
-					date: "2016-05-02",
-					name: "王小虎",
-					address: "上海路 1518 弄"
-				},
-				{
-					date: "2016-05-04",
-					name: "王小虎",
-					address: "上海市路 1517 弄"
-				},
-				{
-					date: "2016-05-01",
-					name: "王小虎",
-					address: "上海市"
-				},
-				{
-					date: "2016-05-03",
-					name: "王小虎",
-					address: "上海市普江路 1516 弄"
-				}
-			]
+			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			tableData:[]
 		};
 	},
 	computed: {
-		//...mapState([""])
+		...mapState(["dashboard"])
 	},
-	mounted() {},
+	mounted() {
+		this.init();
+	},
 	beforeCreate() {},
 	created() {},
 	beforeMount() {},
@@ -66,7 +54,13 @@ export default {
 	beforeDestroy() {},
 	destroyed: function() {},
 	methods: {
-		//...mapActions([""]),
+		...mapActions(["realtimeuserlist"]),
+		async init() {
+			let parames = { cid: this.cid };
+
+			let res = await this._apis.dashboard.realdealuser(parames);
+			this.realtimeuserlist(res);
+		}
 	}
 };
 </script>

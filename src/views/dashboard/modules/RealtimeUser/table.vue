@@ -2,10 +2,11 @@
   <div class="realtime-user">
     <el-table :data="tableData">
       <el-table-column prop="id" label="ID" width="50"> </el-table-column>
-      <el-table-column prop="date" label="日期" width="130"> </el-table-column>
-      <el-table-column prop="name" label="姓名" width="130"> </el-table-column>
-      <el-table-column prop="address" label="地址" width="200">
+      <el-table-column prop="c_uv_name_rt" label="姓名" width="130"> </el-table-column>
+      <el-table-column prop="pd_rt" label="商品" width="200">
+           
       </el-table-column>
+         <el-table-column prop="op_rt" label="操作" width="130"> </el-table-column>
     </el-table>
   </div>
 </template>
@@ -18,65 +19,60 @@ export default {
     // flowData(val) {
     // }
   },
-  props: {
-    // data: {
-    //   type: Object,
-    //   default: false
-    // }
-  },
+  props:["tableData"],
   components: {},
   data: function() {
     return {
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎1",
-          address: "上海路 1518 弄",
-          id: 1,
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎2",
-          address: "上海市路 1517 弄",
-          id: 2,
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎3",
-          address: "上海市",
-          id: 3,
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎4",
-          address: "上海市普江路 1516 弄",
-          id: 4,
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎5",
-          address: "上海路 1518 弄",
-          id: 5,
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎6",
-          address: "上海市路 1517 弄",
-          id: 6,
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎7",
-          address: "上海市",
-          id: 7,
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎8",
-          address: "上海市普江路 1516 弄",
-          id: 8,
-        },
-      ],
+      // tableData: [
+      //   {
+      //     date: "2016-05-02",
+      //     name: "王小虎1",
+      //     address: "上海路 1518 弄",
+      //     id: 1,
+      //   },
+      //   {
+      //     date: "2016-05-04",
+      //     name: "王小虎2",
+      //     address: "上海市路 1517 弄",
+      //     id: 2,
+      //   },
+      //   {
+      //     date: "2016-05-01",
+      //     name: "王小虎3",
+      //     address: "上海市",
+      //     id: 3,
+      //   },
+      //   {
+      //     date: "2016-05-03",
+      //     name: "王小虎4",
+      //     address: "上海市普江路 1516 弄",
+      //     id: 4,
+      //   },
+      //   {
+      //     date: "2016-05-02",
+      //     name: "王小虎5",
+      //     address: "上海路 1518 弄",
+      //     id: 5,
+      //   },
+      //   {
+      //     date: "2016-05-04",
+      //     name: "王小虎6",
+      //     address: "上海市路 1517 弄",
+      //     id: 6,
+      //   },
+      //   {
+      //     date: "2016-05-01",
+      //     name: "王小虎7",
+      //     address: "上海市",
+      //     id: 7,
+      //   },
+      //   {
+      //     date: "2016-05-03",
+      //     name: "王小虎8",
+      //     address: "上海市普江路 1516 弄",
+      //     id: 8,
+      //   },
+      // ],
     };
   },
   computed: {

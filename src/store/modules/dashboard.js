@@ -12,7 +12,8 @@ const dashboard = {
 		mailvistor:{},
 		paymail:{},
 		order:{},
-		amount:{}
+		amount:{},
+        realtimeuser:{}
 	},
 	mutations: {
 		HOBBY_LIST: (state, data) => {
@@ -54,6 +55,9 @@ const dashboard = {
 		AMOUNT_LIST: (state, data) => {
 			state.amount = data;
 		},
+		REALTIMEUSER_LIST: (state, data) => {
+			state.realtimeuser = data;
+		}
 	},
 	actions: {
 		hobbylist({ commit },data) {
@@ -88,6 +92,9 @@ const dashboard = {
 		},
 		amoountlist({ commit },data) {
 			commit("AMOUNT_LIST",data);
+		},
+		realtimeuserlist({ commit },data) {
+			commit("REALTIMEUSER_LIST",data);
 		}
 	}
 };
