@@ -9,7 +9,7 @@
     <div class="i_industries_none" v-else>暂无数据...</div>
 
     <div class="bottom_buttons">
-      <el-button type="primary" @click.native="toPreviewTemplate" :disabled="industries.length == 0"> 下一步，预览模板 </el-button>
+      <el-button type="primary" size="medium" @click.native="toPreviewTemplate" :disabled="industries.length == 0"> 下一步，预览模板 </el-button>
     </div>
   </section>
 </template>

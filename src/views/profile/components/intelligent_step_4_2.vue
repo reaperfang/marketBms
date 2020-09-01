@@ -1,11 +1,11 @@
 <template>
   <div class="base_wxpay">
     <div class="b_w_wrap">
-      <el-button type="primary" plain v-if="wechatPay == 0" @click="linkToWxPay"> 开启支付 </el-button>
-      <el-button type="primary" plain disabled v-else> 已开启支付 </el-button>
+      <span class="b_w_set" v-if="wechatPay === 0" @click="linkToWxPay"> 开启支付 </span>
+      <span class="b_w_on" v-else> 已开启支付 </span>
       <p class="b_w_title">按照系统要求设置您店铺的支付信息</p>
     </div>
-    
+
   </div>
 </template>
 
@@ -14,7 +14,7 @@
     name: "intelligent_base_wx",
     data() {
       return {
-        wechatPay: '',  // 是否开启微信支付 0:否 1:是
+        wechatPay: 0,  // 是否开启微信支付 0:否 1:是
       }
     },
     computed:{
@@ -61,7 +61,38 @@
     background: #FBFBFC;
   }
 
+  .b_w_set {
+    display: inline-block;
+    width: 80px;
+    height: 30px;
+    border-radius: 4px;
+    border: 1px solid #655EFF;
+    font-size: 14px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #655EFF;
+    line-height: 28px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .b_w_on {
+    display: inline-block;
+    width: 94px;
+    height: 30px;
+    border-radius: 4px;
+    opacity: 0.5;
+    border: 1px solid #DADAE3;
+    font-size: 14px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #44434B;
+    line-height: 28px;
+    text-align: center;
+  }
+
   .b_w_title {
     margin-top: 10px;
   }
+  
 </style>

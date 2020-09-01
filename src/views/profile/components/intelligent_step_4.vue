@@ -4,14 +4,15 @@
     <div class="i_base_wrap">
       <div class="i_base_side">
         <ul class="i_base_step">
+          <!-- 公众号或小城绑定任一即为通过 -->
           <li :class="{'i_base_act': baseStatus === 1, 'i_base_suc': (bindWechatAccount === 1) || (bindWechatApplet === 1)}">
             <div class="title">绑定渠道</div>
-            <div class="number">1</div>
+            <div class="number"><span>1</span><i class="el-icon-check"></i></div>
             <div class="line"></div>
           </li>
           <li :class="{'i_base_act': baseStatus === 2, 'i_base_suc': wechatPay === 1}">
             <div class="title">微信支付设置</div>
-            <div class="number">2</div>
+            <div class="number"><span>2</span><i class="el-icon-check"></i></div>
             <div class="line"></div>
           </li>
           <li :class="{'i_base_act': baseStatus === 3, 'i_base_suc': isCompleted === 1}">
@@ -34,8 +35,8 @@
     </div>
 
     <div class="i_base_btns">
-      <el-button @click="backBaseStep()"> 上一步 </el-button>
-      <el-button type="primary" @click="nextBaseStep()"> 稍后，下一步 </el-button>
+      <el-button size="medium" plain @click="backBaseStep()"> 上一步 </el-button>
+      <el-button size="medium" type="primary" @click="nextBaseStep()"> 稍后，下一步 </el-button>
     </div>
 
   </section>
@@ -51,7 +52,7 @@
     data() {
       return {
         baseStatus: 1, // 基础信息进行到了第几步
-        bindWechatAccount: 0,  // 是否绑定公众号 0:未绑定 1:已绑定
+        bindWechatAccount: 1,  // 是否绑定公众号 0:未绑定 1:已绑定
         bindWechatApplet: 0,  // 是否绑定小程序0:未绑定 1:已绑定
         wechatPay: 1,  // 是否开启微信支付 0:否 1:是
         isCompleted: 0, // 是否完成 0:否 1:是
@@ -136,6 +137,14 @@
         text-align: center;
         font-size: 15px;
         color: #92929B;
+
+        span {
+          display: inline;
+        }
+
+        .el-icon-check {
+          display: none;
+        }
       }
 
       .line {
@@ -183,8 +192,17 @@
         .number {
           background: #655EFF;
           border: 1px solid #fff;
+
+          span {
+            display: inline;
+          }
+
+          .el-icon-check {
+            display: none;
+          }
         }
       }
+      
     }
 
     .i_base_suc {
@@ -198,13 +216,26 @@
         background: #6CD521;
         border: 1px solid #FBFBFC;
         color: #fff;
+
+        span {
+          display: none;
+        }
+
+        .el-icon-check {
+          display: inline;
+        }
       }
+
     }
 
   }
 
   .i_base_btns {
     text-align: center;
+
+    button:first-of-type {
+      margin-right: 10px;
+    }
   }
 
 </style>
