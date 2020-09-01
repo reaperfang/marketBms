@@ -549,6 +549,11 @@ export default {
     padding-top: 20px;
     /deep/ th.is-leaf {
       border:0;
+      .cell {
+        font-size: 14px;
+        font-weight: 500;
+        color: #44434B;
+      }
     }
     /deep/ th>.cell {
       line-height: 30px;
