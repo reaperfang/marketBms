@@ -130,15 +130,30 @@ export default {
       localStorage.setItem('siderBarCurrent', index)
       this.jumpTo(index)
     },
+    getNoHideChildPath(children = []) {
+      let path = children && children.length > 0 ? children[0].path : ''
+      let index = 0;
+      const len = children.length
+      while(index < len) {
+        const isObject = Object.prototype.toString.call(children[index])==='[object Object]';
+        const child = isObject ? children[index] : null
+        if (child && (!child.hasOwnProperty('hidden') || !child.hidden)) {
+          path = child.path
+          return path
+        }
+        index++
+      }
+      return path
+    },
     jumpTo(index) {
       let current = localStorage.getItem('siderBarCurrent') || '0'
       let currentBar = this.permission_routers_tree[current]
 
       let basePath = currentBar.path
       let children = currentBar.children
-
+      console.log('children',children)
       if(children && children.length) {
-        let _path = children[0].path
+        let _path = this.getNoHideChildPath(children)
 
         this.$router.push({path: this.resolvePath(basePath, _path)})
       }
