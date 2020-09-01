@@ -25,7 +25,18 @@
                   {{ item.address }}
                 </el-radio>
               </div>
-              <div class="name">{{ item.name }}</div>
+              <div class="name" :title="item.name">
+                {{ item.name }}
+                <!-- <el-popover
+                  placement="bottom"
+                  title=""
+                  width="200"
+                  trigger="hover"
+                  :content="item.name">
+                  <el-button class="name-btn" slot="reference">{{ item.name }}</el-button>
+                </el-popover> -->
+                
+              </div>
               <div class="mobile">{{ item.mobile }}</div>
             </li>
           </ul>
@@ -40,34 +51,6 @@
         <el-button @click="visible = false">取 消</el-button>
     </span>
 </el-dialog>
-  <!-- <DialogBase :visible.sync="visible" width="750px" :title="'请选择想创建自提点'" @submit="submit">
-    <div class="dialogChooseAddress">
-      <dl>
-        <dt>
-          <div class="address">
-            地址
-          </div>
-          <div class="name">联系人</div>
-          <div class="mobile">联系电话</div>
-        </dt>
-        <dd style="overflow:auto">
-          <ul v-infinite-scroll="load" :infinite-scroll-disabled="isCompleted" >
-            <li v-for="(item, key) in list" :key="key">
-              <div class="address">
-                <el-radio v-model="currAddress" :label="+item.id">
-                  {{ item.address }}
-                </el-radio>
-              </div>
-              <div class="name">{{ item.name }}</div>
-              <div class="mobile">{{ item.mobile }}</div>
-            </li>
-          </ul>
-          <p class="prompt" v-if="loading">加载中。。。</p>
-          <p class="prompt" v-if="isCompleted">已经到底了</p>
-        </dd>
-      </dl>
-    </div>
-  </DialogBase> -->
 </template>
 
 <script>
@@ -179,6 +162,20 @@ export default {
     dt {
       display: flex;
     }
+    dd {
+      &::-webkit-scrollbar {
+      width: 6px;
+      height: 8px;
+      }
+      &::-webkit-scrollbar-thumb {
+          border-radius: 10px !important;
+          background: #D2D2DC !important;
+      }
+      &::-webkit-scrollbar-track {
+          border-radius: 0 !important;
+          background: #D2D2DC !important;
+      }
+    }
     dd, dt {
       ul li {
         display: flex;
@@ -209,6 +206,19 @@ export default {
         width: 120px;
         padding: 15px;
         text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
+        // &-btn {
+        //   width: 100%;
+        //   border: 0;
+        //   padding: 0;
+        //   font-size:14px;
+        //   overflow: hidden;
+        //   text-overflow: ellipsis;
+        //   white-space: nowrap;
+        // }
       }
       .mobile {
         width: 200px;
