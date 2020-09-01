@@ -24,7 +24,7 @@
             show-word-limit
           ></el-input>
         </el-form-item>
-        <el-form-item label="地址类型" prop="type">
+        <el-form-item label="地址类型" prop="type" class="is-required">
           <el-checkbox-group v-model="ruleForm.type">
             <div class="address-group">
               <el-checkbox class="address-item" :disabled="isDisabled" :label="1" name="type">发货地址</el-checkbox>

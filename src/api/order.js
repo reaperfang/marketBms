@@ -734,6 +734,16 @@ export function getShopAddress(data) {
   })
 }
 
+//地址库默认发货地址查询
+export function getShopSendAddress(data) {
+  return request({
+    target: 'SHOP-ADDRESS-DEFAULT-SENDER-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+
 //更新电子面单
 export function editorExpressSize(data) {
   return request({

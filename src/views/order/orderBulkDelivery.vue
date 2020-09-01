@@ -525,6 +525,10 @@ export default {
     inputHandler(index, i) {
       let reg = /^[1-9]\d*$/
 
+      if(!this.list[index].orderItemList[i].checked) {
+        return
+      }
+
       if(this.list[index].orderItemList[i] == '') {
         this.list[index].orderItemList.splice(i, 1, Object.assign({}, this.list[index].orderItemList[i], {
           errorMessage:  '请输入本次发货数量',
@@ -588,6 +592,8 @@ export default {
                 val.expressCompanyCodes = expressCompanyCodes
                 val.express = express
                 val.expressNos = ''
+                val.showErrorExpressCompany = false
+                val.errorMessageExpressCompany = ''
               }
             })
 

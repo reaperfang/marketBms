@@ -908,7 +908,6 @@ export default {
       left: 50px;
       min-width: 200px;
       max-width: 500px;
-      border: 1px solid #98c4f1;
       -webkit-box-shadow: 4px 3px 10px rgba(0, 0, 0, 0.2);
       box-shadow: 4px 3px 10px rgba(0, 0, 0, 0.2);
       padding: 8px 8px 6px;

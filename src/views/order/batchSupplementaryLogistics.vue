@@ -484,6 +484,8 @@ export default {
                 val.expressCompanyCodes = expressCompanyCodes
                 val.express = express
                 val.expressNos = ''
+                val.showErrorExpressCompany = false
+                val.errorMessageExpressCompany = ''
               }
             })
 
