@@ -8,17 +8,27 @@
 				<div class="grid-title-end">
 					<span>
 						同比昨日
-						<span>增长20%</span>
+						<span>增长{{ persent }}%</span>
 					</span>
 				</div>
 			</el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24">
+				<!-- <countTo
+					:prefix="''"
+					:suffix=""
+					:startVal="startVal"
+					:endVal="endVal"
+					:duration="7000"
+					ref="countTo"
+				></countTo> -->
+
 				<countTo
 					:startVal="startVal"
 					:endVal="endVal"
 					:duration="7000"
+					ref="countTo"
 				></countTo>
 			</el-col>
 		</el-row>
@@ -45,6 +55,13 @@ export default {
 	watch: {
 		"dashboard.chinamap"(val) {
 			this.$refs.chart.showChart(this.initMapData(this.mapData, val));
+		},
+		"dashboard.amount"(val) {
+			console.log('"dashboard.amount"(val) {', val);
+			this.persent = parseFloat(val.place_order_amount_rgrt) * 100;
+			this.endVal = parseFloat(val.place_order_amount_rt) * 100;
+
+			this.$refs.countTo.start();
 		}
 	},
 	props: {
@@ -57,7 +74,8 @@ export default {
 	data: function() {
 		return {
 			startVal: 0,
-			endVal: 1000000,
+			endVal: 0,
+			persent: "",
 			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
 			//mapData: [],
 			mapData: [

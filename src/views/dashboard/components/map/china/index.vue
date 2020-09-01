@@ -323,7 +323,7 @@ export default {
 				option.series[0].data = [convertData(data)[j]];
 				this.chart.setOption(option);
 				j++;
-			}, 500);
+			}, 1000);
 		},
 
 		prepareChartMap(mapName) {

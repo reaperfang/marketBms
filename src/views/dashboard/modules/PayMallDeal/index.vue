@@ -65,7 +65,7 @@ export default {
 	data: function() {
 		return {
 			startVal: 0,
-			endVal: 1000000,
+			endVal: 0,
 			chartData: [
 				// { progress: 75, barColor: "RGBA(255, 0, 139, 1)", city: "北京" },
 				// { progress: 70, barColor: "RGBA(255, 92, 49, 1)", city: "上海" },
@@ -80,6 +80,10 @@ export default {
 	},
 	mounted() {
 		this.init();
+		var IntervalId = window.setInterval(() => {
+			console.log("var IntervalId = window.setInterval(() => {");
+			this.init();
+		}, 10000);
 	},
 	beforeCreate() {},
 	created() {},
