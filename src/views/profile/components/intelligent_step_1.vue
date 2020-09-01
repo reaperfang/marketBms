@@ -1,9 +1,11 @@
 <template>
   <section class="intelligent_industry">
     <div class="i_industries" v-if="industries.length > 0">
-      <el-radio-group v-for="(item, key) in industries" :key="key" :value="industryAct" @change="changeIndustry(item)">
-        <el-radio :label="item.id" border>{{ item.name }}</el-radio>
-      </el-radio-group>
+      <div class="i_industry" :class="{'act': industryAct === item.id}" v-for="(item, key) in industries" :key="key" @click="changeIndustry(item)">
+        <img src="../../../assets/images/profile/i_industry_act.png"  alt="" />
+        <span>{{ item.name }}</span>
+      </div>
+
     </div>
     <div class="i_industries_none" v-else>暂无数据</div>
 
@@ -61,8 +63,60 @@
     padding: 20px;
   }
 
-  .i_industries, .i_industries_none {
+  .i_industries {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-between;
+    margin: 110px auto 200px;
+    width: 800px;
+
+    .i_industry {
+      flex: 0 0 236px;
+      text-align: center;
+      width: 236px;
+      height: 126px;
+      background: url('../../../assets/images/profile/i_industry.png') no-repeat;
+      font-weight: 600;
+
+      span {
+        line-height: 126px;
+        color: #fff;
+        font-size: 24px;
+        display: inline-block;
+      }
+
+      img {
+        display: none;
+      }
+
+      &:hover, &.act {
+        background: url('../../../assets/images/profile/i_industry_on.png') no-repeat;
+      }
+
+      &.act img {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 126px;
+        margin-top: -9px;
+        margin-right: 8px;
+      }
+
+    }
+  }
+  
+  .i_industries_none {
     height: 300px;
+  }
+
+  .bottom_buttons {
+    margin-bottom: 30px;
+  }
+  
+  /* /deep/ .el-radio.is-bordered {
+    border: none;
+    background: #655EFF;
+    color: #fff;
   }
 
   /deep/ .el-radio__input .el-radio__inner {
@@ -74,6 +128,6 @@
 
   /deep/ .el-radio__label {
     padding-left: 5px;
-  }
+  } */
 
 </style>
