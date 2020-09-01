@@ -164,3 +164,35 @@ export default {
 	}
 };
 </script>
+<style lang="scss" scoped>
+.animate {
+	padding-left: 20px;
+	font-size: 12px;
+	color: #000;
+	display: inline-block;
+	white-space: nowrap;
+	animation: 10s wordsLoop linear infinite normal;
+}
+
+@keyframes wordsLoop {
+	0% {
+		transform: translateX(50px);
+		-webkit-transform: translateX(50px);
+	}
+	100% {
+		transform: translateX(-100%);
+		-webkit-transform: translateX(-100%);
+	}
+}
+
+@-webkit-keyframes wordsLoop {
+	0% {
+		transform: translateX(50px);
+		-webkit-transform: translateX(50px);
+	}
+	100% {
+		transform: translateX(-100%);
+		-webkit-transform: translateX(-100%);
+	}
+}
+</style>
