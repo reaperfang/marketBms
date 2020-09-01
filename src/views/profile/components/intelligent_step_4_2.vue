@@ -1,14 +1,11 @@
 <template>
   <div class="base_wxpay">
     <div class="b_w_wrap">
-      <p>按照系统要求设置您店铺的支付信息</p>
       <el-button type="primary" plain v-if="wechatPay == 0" @click="linkToWxPay"> 开启支付 </el-button>
       <el-button type="primary" plain disabled v-else> 已开启支付 </el-button>
+      <p class="b_w_title">按照系统要求设置您店铺的支付信息</p>
     </div>
-    <div class="i_base_btns">
-      <el-button @click="$emit('base-step', 'base', 1)"> 上一步 </el-button>
-      <el-button type="primary" @click="$emit('base-step', 'base', 3)"> 稍后，下一步 </el-button>
-    </div>
+    
   </div>
 </template>
 
@@ -54,13 +51,17 @@
 </script>
 
 <style lang="scss" scope>
-  .b_w_wrap {
-    min-height: 300px;
-    padding: 20px;
+  .base_wxpay {
+    position: relative;
   }
-  .i_base_btns {
-    width: 830px;
-    margin-top: 20px;
-    text-align: center;
+
+  .b_w_wrap {
+    min-height: 400px;
+    padding: 80px 20px 20px;
+    background: #FBFBFC;
+  }
+
+  .b_w_title {
+    margin-top: 10px;
   }
 </style>
