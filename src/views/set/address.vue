@@ -51,6 +51,7 @@
         <el-table-column
           label="操作"
           align="center"
+          fixed="right"
           width="150">
           <template slot-scope="scope">
             <div class="opeater">
