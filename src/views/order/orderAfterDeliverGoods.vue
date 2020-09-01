@@ -474,7 +474,7 @@ export default {
     //       this.$message.error(error);
     //     });
         this._apis.order
-        .getShopAddress({ cid: this.cid })
+        .getShopSendAddress({ cid: this.cid })
         .then(res => {
           this.shopAddressInfo = res
           if(res) {
