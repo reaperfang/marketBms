@@ -11,11 +11,10 @@
 <script>
 import echarts from "echarts";
 export default {
-	props: ["barColor", "progress", "city","chartData"],
+	props: ["barColor", "progress", "city", "chartData"],
 	name: "TEMPLATE",
 	data() {
-		return {
-		};
+		return {};
 	},
 	mounted() {
 		this.showChart(this.chartData);
@@ -70,7 +69,6 @@ export default {
 			// 	}
 			// ];
 
-
 			var data1 = [];
 			var data2 = [];
 
@@ -109,7 +107,7 @@ export default {
 					{
 						top: 30,
 						type: "funnel",
-						height: "250",
+						height: "150",
 						gap: 0,
 						minSize: 150,
 						left: "20%",
@@ -133,7 +131,7 @@ export default {
 					{
 						top: 30,
 						type: "funnel",
-						height: "250",
+						height: "150",
 						gap: -1,
 						minSize: 150,
 						left: "20%",
@@ -162,7 +160,7 @@ export default {
 									bb: {
 										align: "center",
 										color: "#FFFFFF",
-										fontSize: "22"
+										fontSize: "15"
 									}
 								}
 							}
