@@ -198,7 +198,8 @@ export default {
             checkedAll: false,
             isIndeterminate: false,
             expressCompanys: '',
-            expressNo: ''
+            expressNo: '',
+            updateStatusDisabled: false
         }
     },
     created() {
@@ -403,28 +404,33 @@ export default {
             })
         },
         updateStatus(row) {
-            let _orderAfterSaleStatus
+            if(!this.updateStatusDisabled) {
+                this.updateStatusDisabled = true
 
-            if(row.type == 3) {
-                _orderAfterSaleStatus = 2
-            } else {
-                _orderAfterSaleStatus = 1
-            }
-            if(row.type == 2) {
-                let _row = JSON.parse(JSON.stringify(row))
+                let _orderAfterSaleStatus
 
-                this.currentDialog = 'ExchangeGoodsDialog'
-                this.currentData = _row;
-                this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
-                this.dialogVisible = true
-                return
+                if(row.type == 3) {
+                    _orderAfterSaleStatus = 2
+                } else {
+                    _orderAfterSaleStatus = 1
+                }
+                if(row.type == 2) {
+                    let _row = JSON.parse(JSON.stringify(row))
+
+                    this.currentDialog = 'ExchangeGoodsDialog'
+                    this.currentData = _row;
+                    this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
+                    this.dialogVisible = true
+                    return
+                }
+                this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
+                    this.getList();
+                    this.$message.success('审核成功！');
+                    this.updateStatusDisabled = true
+                }).catch(error => {
+                    this.$message.error(error);
+                })
             }
-            this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
-                this.getList();
-                this.$message.success('审核成功！');
-            }).catch(error => {
-                this.$message.error(error);
-            })
         },
         // 换货确认
         confirmHandler(value) {

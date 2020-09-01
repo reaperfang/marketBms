@@ -183,6 +183,7 @@ export default {
       .font_size3 {
         font-size: 10px;
         transform: scale(0.83);
+        transform-origin: left;
       }
     }
   }

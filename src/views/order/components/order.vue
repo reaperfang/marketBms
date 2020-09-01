@@ -543,7 +543,7 @@ export default {
             }
         }
         .item-storew{
-            width: 105px !important;
+            width: 108px !important;
         }
         .icon-store{
             display: inline-block;
@@ -591,6 +591,7 @@ export default {
             width: 20px;
             height: 20px;
             background: url(../../../assets/images/order/auto.png) no-repeat;
+            background-size: 100% 100%;
             position: relative;
             margin-right: 15px;
         }
