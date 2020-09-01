@@ -601,6 +601,8 @@ export default {
                 case "costPrice":
                      if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
                         callback(new Error('请输入正确的数字')); 
+                     }else if(+this.singleSpec[rule.field]> 10000000){
+                        callback(new Error('当前成本价最大限制为10000000，请您重新输入'));   
                      }else{
                         callback();
                      }
@@ -3326,7 +3328,7 @@ $blue: #655EFF;
 }
 
 /deep/.el-form-item--small .el-form-item__error{
-    // left:76px;   
+    padding-left:15px;   
 }
 
 .add-goods {
