@@ -94,7 +94,7 @@
                 <el-table-column
                     prop="orderCode"
                     label="订单编号"
-                    width="250"
+                    width="220"
                     :class-name="haveAuto ? 'orderCode haveAuto' : 'orderCode'">
                     <template slot-scope="scope">
                         <el-tooltip v-if="scope.row.isAutoSend" content="自动发货" placement="bottom" effect="dark">
@@ -110,12 +110,12 @@
                 <el-table-column
                     prop="memberName"
                     label="用户昵称"
-                    width="120">
+                    width="105">
                 </el-table-column>
                 <el-table-column
                     prop="deliveryWay"
                     label="配送方式"
-                    width="120">
+                    width="105">
                     <template slot-scope="scope">
                         <div>
                             <span class="icon-store" v-if="scope.row.deliveryWay == 2"></span>
@@ -140,11 +140,13 @@
                 </el-table-column>
                 <el-table-column
                     prop="receivedPhone"
-                    label="收货人电话">
+                    label="收货人电话"
+                    width="110">
                 </el-table-column>
                 <el-table-column
                     prop="status"
-                    label="状态">
+                    label="状态"
+                    >
                     <template slot-scope="scope">
                         <span>{{scope.row.status | statusFilter}}</span>
                     </template>
@@ -152,7 +154,7 @@
                 <el-table-column
                     prop="sendTime"
                     label="最新发货时间"
-                    width="170">
+                    width="160">
                     <template slot-scope="scope">
                         <div>
                             <template v-if="scope.row.isAutoSend && (scope.row.status == 3) && scope.row.isFillUp">
