@@ -10,7 +10,8 @@
       >
       <el-table-column
         prop="importTime"
-        label="导入时间">
+        label="导入时间"
+        :width="200">
       </el-table-column>
       <el-table-column
         prop="channerlName"
@@ -35,7 +36,7 @@
         label="操作人"
       >
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" :width="200">
         <template slot-scope="scope">
             <div class="btns clearfix">
                 <span @click="addTag(scope.row)" :class="scope.row.successNum == 0?'gray':''">添加标签</span>
