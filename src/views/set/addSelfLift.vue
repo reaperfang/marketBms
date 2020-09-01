@@ -29,7 +29,7 @@
           <el-input
             type="textarea"
             :rows="5"
-            placeholder="请填写详细地址信息，非必填项"
+            placeholder="请填写详细地址信息"
             v-model="ruleForm.addressDetail"
             style="width:360px;" 
             maxlength="50"
