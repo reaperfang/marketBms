@@ -1,11 +1,8 @@
 <template>
   <div class="base_wxpay">
-    <div class="b_w_wrap">
-      <span class="b_w_set" v-if="wechatPay === 0" @click="linkToWxPay"> 开启支付 </span>
-      <span class="b_w_on" v-else> 已开启支付 </span>
-      <p class="b_w_title">按照系统要求设置您店铺的支付信息</p>
-    </div>
-
+    <span class="b_w_set" v-if="wechatPay === 0" @click="linkToWxPay"> 开启支付 </span>
+    <span class="b_w_on" v-else> 已开启支付 </span>
+    <p class="b_w_title">按照系统要求设置您店铺的支付信息</p>
   </div>
 </template>
 
@@ -53,9 +50,6 @@
 <style lang="scss" scope>
   .base_wxpay {
     position: relative;
-  }
-
-  .b_w_wrap {
     min-height: 400px;
     padding: 80px 20px 20px;
     background: #FBFBFC;

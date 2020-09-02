@@ -1,19 +1,24 @@
 <template>
   <div class="base_channel">
-    <div class="b_c_wrap">
-      <p class="b_c_title">请绑定您的经营渠道：</p>
-      <p class="b_c_description">绑定微信小程序和公众号，推广您的店铺。</p>
+    <p class="b_c_title">请绑定您的经营渠道：</p>
+    <p class="b_c_description">绑定微信小程序和公众号，推广您的店铺。</p>
 
-      <div class="b_c_content">
+    <ul>
+      <li class="b_c_item">
+        <img src="../../../assets/images/profile/i_w_pub.png" class="i_w_ico" alt="授权微信公众号" />
         <div>
-          <el-button type="primary" plain v-if="bindWechatAccount == 0" @click="linkToOfficialAccounts"> 授权微信公众号 </el-button>
-          <el-button type="info" plain disabled v-else> 公众号授权成功 </el-button>
-          <el-button type="primary" plain v-if="bindWechatApplet == 0" @click="linkToMiniProgram"> 授权微信小程序 </el-button>
-          <el-button type="info" plain disabled v-else> 小程序授权成功 </el-button>
+          <el-button plain v-if="bindWechatAccount == 0" @click="linkToOfficialAccounts"> 授权微信公众号 </el-button>
+          <el-button plain disabled v-else> 公众号授权成功 </el-button>
         </div>
-      </div>
-    </div>
-
+      </li>
+      <li class="b_c_item">
+        <img src="../../../assets/images/profile/i_w_app.png" class="i_w_ico" alt="授权微信小程序" />
+        <div>
+          <el-button plain v-if="bindWechatApplet == 0" @click="linkToMiniProgram"> 授权微信小程序 </el-button>
+          <el-button plain disabled v-else> 小程序授权成功 </el-button>
+        </div>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -67,28 +72,38 @@
 
 <style lang="scss" scope>
   .base_channel {
-    color: #44434B;
-  }
-
-  .b_c_wrap {
-    min-height: 400px;
+    color: #44434B;min-height: 400px;
     padding: 20px;
     background: #FBFBFC;
-
-    .b_c_title {
-      margin: 62px 0 10px;
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    .b_c_description {
-      margin-bottom: 30px;
-      font-size: 14px;
-      font-weight: 400;
-    }
   }
 
-  .b_c_content {
-    
+  .b_c_title {
+    margin: 62px 0 10px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .b_c_description {
+    margin-bottom: 30px;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .b_c_item {
+    display: inline-block;
+    text-align: center;
+    width: 214px;
+    height: 170px;
+    background: rgba(218, 218, 227, 0.2);
+
+    &:first-of-type {
+      margin-right: 16px;
+    }
+  }
+  
+  .i_w_ico {
+    width: 50px;
+    height: 50px;
+    margin: 40px auto 17px;
   }
 </style>

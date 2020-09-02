@@ -7,12 +7,12 @@
           <!-- 公众号或小城绑定任一即为通过 -->
           <li :class="{'i_base_act': baseStatus === 1, 'i_base_suc': (bindWechatAccount === 1) || (bindWechatApplet === 1)}">
             <div class="title">绑定渠道</div>
-            <div class="number"><span>1</span><i class="el-icon-check"></i></div>
+            <div class="number"><span>1</span><img src="../../../assets/images/profile/i_base_success.png" class="el-icon-check" alt="" /></div>
             <div class="line"></div>
           </li>
           <li :class="{'i_base_act': baseStatus === 2, 'i_base_suc': wechatPay === 1}">
             <div class="title">微信支付设置</div>
-            <div class="number"><span>2</span><i class="el-icon-check"></i></div>
+            <div class="number"><span>2</span><img src="../../../assets/images/profile/i_base_success.png" class="el-icon-check" alt="" /></div>
             <div class="line"></div>
           </li>
           <li :class="{'i_base_act': baseStatus === 3, 'i_base_suc': isCompleted === 1}">
@@ -144,6 +144,9 @@
 
         .el-icon-check {
           display: none;
+          width: 17px;
+          height: 13px;
+          margin-top: 8px;
         }
       }
 
