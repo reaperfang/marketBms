@@ -120,14 +120,13 @@ export default {
 			let parames = { cid: this.cid };
 
 			let res = await this._apis.dashboard.vistor(parames);
-			this.maivistorlist(res);
+			this.maivistorlist(JSON.parse(res));
 		},
 		setChartData(val) {
 			this.chartData = {
 				...this.chartData,
 				rows: this.getRows(val)
-      };
-      
+			};
 		},
 		getRows(val) {
 			let result = [];

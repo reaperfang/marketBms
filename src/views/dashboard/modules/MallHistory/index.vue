@@ -113,8 +113,8 @@ export default {
 			let parames = { cid: this.cid };
 			let left = await this._apis.dashboard.payamount(parames);
 			let right = await this._apis.dashboard.mail(parames);
-			this.paymaillist({ left: left });
-			this.paymaillist({ right: right });
+			this.paymaillist({ left: JSON.parse(left) });
+			this.paymaillist({ right: JSON.parse(right) });
 		},
 		setLeftData(val) {
 			let result = {

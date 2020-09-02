@@ -86,7 +86,7 @@ export default {
 			memberData: {},
 			userData: {},
 			sexageData: {},
-			phoneData:{}
+			phoneData: {}
 		};
 	},
 	computed: {
@@ -103,24 +103,21 @@ export default {
 	beforeDestroy() {},
 	destroyed: function() {},
 	methods: {
-		...mapActions(["memberlist", "userlist", "sexagelist","phonelist"]),
+		...mapActions(["memberlist", "userlist", "sexagelist", "phonelist"]),
 		async init() {
 			let parames = { cid: this.cid };
 
 			let resMember = await this._apis.dashboard.member(parames);
-			this.memberlist(resMember);
+			this.memberlist(JSON.parse(resMember));
 			let resUserDis = await this._apis.dashboard.userdistributed(
 				parames
 			);
-			this.userlist(resUserDis);
+			this.userlist(JSON.parse(resUserDis));
 			let resSexAage = await this._apis.dashboard.sexage(parames);
-			this.sexagelist(resSexAage);
+			this.sexagelist(JSON.parse(resSexAage));
 
-			console.log("resSexAage",resSexAage);
-
-			
 			let resPhone = await this._apis.dashboard.statistics(parames);
-			this.phonelist(resPhone);
+			this.phonelist(JSON.parse(resPhone));
 		},
 		setMember(val) {
 			let result = {
@@ -164,16 +161,16 @@ export default {
 			this.sexageData = {
 				ageData: result,
 				sexData: {
-					female: val.c_uv_sex_female,//c_uv_sex_female
+					female: val.c_uv_sex_female, //c_uv_sex_female
 					gender: val.c_uv_sex_gender
 				}
 			};
 
-		   console.log("sexageData",this.sexageData);
+			console.log("sexageData", this.sexageData);
 		},
-		setPhone(val){
-			let result=parseFloat(val.c_uv_share_phone)*100;
-			this.phoneData= {  ...this.mobile,progress: result };
+		setPhone(val) {
+			let result = parseFloat(val.c_uv_share_phone) * 100;
+			this.phoneData = { ...this.mobile, progress: result };
 		}
 	}
 };

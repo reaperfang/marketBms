@@ -38,8 +38,8 @@ export default {
 		//...mapState([""])
 	},
 	mounted() {
-    this.init()
-  },
+		this.init();
+	},
 	beforeCreate() {},
 	created() {},
 	beforeMount() {},
@@ -50,17 +50,9 @@ export default {
 	methods: {
 		...mapActions(["hobbylist"]),
 		async init() {
-			// this._apis.dashboard.statistics({ cid: this.cid }).then(res => {
-			// 	//console.log("res",res);
-			// 	this.hobbylist(res);
-			// });
-
 			let parames = { cid: this.cid };
-
 			let resstatistics = await this._apis.dashboard.statistics(parames);
-			this.hobbylist(resstatistics);
-
-			console.log("resstatistics",resstatistics);
+			this.hobbylist(JSON.parse(resstatistics));
 		}
 	}
 };

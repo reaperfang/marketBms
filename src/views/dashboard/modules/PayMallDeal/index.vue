@@ -98,15 +98,15 @@ export default {
 			let parames = { cid: this.cid };
 
 			let resTop = await this._apis.dashboard.top3(parames);
-			this.toplist(resTop.top3);
+			this.toplist(JSON.parse(resTop).top3);
 
 			let resPay = await this._apis.dashboard.realtimedealamount(parames);
-			this.amoountlist(resPay);
+			this.amoountlist(JSON.parse(resPay));
 		},
 		setPieData(val) {
 			this.chartData = val.map(res => {
 				return {
-					progress: parseFloat(res.place_order_am_s) * 100,
+					progress: res.place_order_am_s.toFixed(2) * 100,
 					barColor: "RGBA(255, 0, 139, 1)",
 					city: res.area_name
 				};

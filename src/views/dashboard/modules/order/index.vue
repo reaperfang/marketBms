@@ -10,7 +10,6 @@
 				:chartData="lineargroup"
 				:chartSettings="chartSettings"
 				:chartExtend="chartExtend"
-
 				ref="vfunnel"
 			></vfunnel>
 		</el-row>
@@ -25,7 +24,7 @@ import { mapGetters, mapActions, mapState } from "vuex";
 export default {
 	watch: {
 		"dashboard.order"(val) {
-			this.lineargroup=val			
+			this.lineargroup = val;
 			this.$refs.vfunnel.showChart(this.lineargroup);
 		}
 	},
@@ -55,7 +54,7 @@ export default {
 				// }
 			},
 			chartExtend: {},
-			lineargroup:[]
+			lineargroup: []
 		};
 	},
 	computed: {
@@ -75,12 +74,13 @@ export default {
 		...mapActions(["orderlist"]),
 		async init() {
 			let parames = { cid: this.cid };
-			let res = await this._apis.dashboard.order(parames);
+			let data = await this._apis.dashboard.order(parames);
+			let res = JSON.parse(data);
 
 			var chart = [
 				{
-					value: res.order_c_uv_7dco,// 转换率
-					name: "下单转换率",// 转换率名称
+					value: res.order_c_uv_7dco, // 转换率
+					name: "下单转换率", // 转换率名称
 					oriname: "访问人数",
 					number: res.uv_7d
 					// color: ["rgba(255,198,82,0.6)", "rgba(255,198,82,0)"]
@@ -101,7 +101,6 @@ export default {
 				}
 			];
 			this.orderlist(chart);
-			console.log("order res", res);
 		}
 	}
 };

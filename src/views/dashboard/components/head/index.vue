@@ -111,8 +111,6 @@ export default {
 				": " +
 				new Date().getSeconds();
 		}, 1000);
-
-		this.fullscreen();
 	},
 	beforeCreate() {
 		if (this.timer) {
@@ -128,6 +126,7 @@ export default {
 	methods: {
 		//...mapActions([""]),
 		fullscreen() {
+			alert("fullscreen");
 			let element = document.documentElement;
 			// 判断是否已经是全屏
 			// 如果是全屏，退出

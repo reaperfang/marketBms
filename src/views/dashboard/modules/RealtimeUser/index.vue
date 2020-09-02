@@ -19,11 +19,11 @@ import { mapGetters, mapActions, mapState } from "vuex";
 export default {
 	watch: {
 		"dashboard.realtimeuser"(val) {
-			this.tableData=val.map((item,index)=>{
-				return{
+			this.tableData = val.map((item, index) => {
+				return {
 					...item,
-					id:index+1
-				}
+					id: index + 1
+				};
 			});
 		}
 	},
@@ -37,7 +37,7 @@ export default {
 	data: function() {
 		return {
 			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
-			tableData:[]
+			tableData: []
 		};
 	},
 	computed: {
@@ -59,7 +59,7 @@ export default {
 			let parames = { cid: this.cid };
 
 			let res = await this._apis.dashboard.realdealuser(parames);
-			this.realtimeuserlist(res);
+			this.realtimeuserlist(JSON.parse(res));
 		}
 	}
 };

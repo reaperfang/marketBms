@@ -100,9 +100,9 @@ export default {
 			let parames = { cid: this.cid };
 
 			let left = await this._apis.dashboard.totalamount(parames);
-			this.trasationlist({ left: left });
+			this.trasationlist({ left: JSON.parse(left) });
 			let right = await this._apis.dashboard.price(parames);
-			this.trasationlist({ right: right });
+			this.trasationlist({ right: JSON.parse(right) });
 		},
 		setChartDataleft(val) {
 			this.left = {
@@ -111,7 +111,6 @@ export default {
 			};
 		},
 		setChartDataright(val) {
-
 			this.right = {
 				...this.right,
 				rows: this.setRowsright(val)
@@ -132,8 +131,8 @@ export default {
 			return result;
 		},
 		setRowsright(val) {
-			console.log('setRowsright(val) {',val);
-			if(!val){
+			console.log("setRowsright(val) {", val);
+			if (!val) {
 				return;
 			}
 			let result = [];

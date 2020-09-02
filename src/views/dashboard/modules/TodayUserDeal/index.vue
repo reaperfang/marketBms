@@ -15,15 +15,6 @@
 		</el-row>
 		<el-row>
 			<el-col :span="24">
-				<!-- <countTo
-					:prefix="''"
-					:suffix=""
-					:startVal="startVal"
-					:endVal="endVal"
-					:duration="7000"
-					ref="countTo"
-				></countTo> -->
-
 				<countTo
 					:startVal="startVal"
 					:endVal="endVal"
@@ -58,7 +49,7 @@ export default {
 		},
 		"dashboard.amount"(val) {
 			console.log('"dashboard.amount"(val) {', val);
-			this.persent = parseFloat(val.place_order_amount_rgrt) * 100;
+			this.persent = val.place_order_amount_rgrt.toFixed(2) * 100;
 			this.endVal = parseFloat(val.place_order_amount_rt) * 100;
 
 			this.$refs.countTo.start();
@@ -134,7 +125,7 @@ export default {
 		async init() {
 			let parames = { cid: this.cid };
 			let res = await this._apis.dashboard.realTimeUser(parames);
-			this.maplist(res.areaOrderNumList);
+			this.maplist(JSON.parse(res).areaOrderNumList);
 		},
 
 		initMapData(oldData, newData) {
