@@ -602,8 +602,8 @@ export default {
       this._apis.shop
         .getQrcode({
           url: this.gzLink,
-          width: "80",
-          height: "80"
+          width: "120",
+          height: "120"
         })
         .then(response => {
           this.gzQrcode = `data:image/png;base64,${response}`;
@@ -780,14 +780,14 @@ export default {
               font-size: 14px;
               color: #161617;
               font-weight:500;
-              line-height: 70px;
+              line-height: 50px;
             }
             .title4{
               font-size: 12px;
               color: #92929B;
             }
             .erweima{
-              width: 100px;
+              width: 120px;
               height: auto;
             }
             .no_isEmpower{
@@ -799,7 +799,7 @@ export default {
               height: 86px;
             }
             .opt{
-              margin-top: 20px;
+              margin-top: 10px;
               button{
                 color: #655EFF;
                 border: 1px solid #655EFF;

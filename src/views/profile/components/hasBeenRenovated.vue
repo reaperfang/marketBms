@@ -126,8 +126,8 @@ export default {
       return this._apis.shop
         .getQrcode({
           url: pageLink,
-          width: "80",
-          height: "80"
+          width: "120",
+          height: "120"
         })
         .then(response => {
           console.log('getQrcode',response)
@@ -255,8 +255,8 @@ export default {
       }
       >.img {
         box-sizing: content-box;
-        width: 150px;
-        height: 150px;
+        width: 120px;
+        height: auto;
         padding: 21px 0 27px 0;
         margin: 0 auto;
         img {
