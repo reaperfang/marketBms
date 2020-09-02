@@ -295,8 +295,9 @@ export default {
         let expressCompany = this.expressCompanyList.find(val => val.expressCode == expressCompanyCode).expressName
 
         this.ruleForm.expressCompany = expressCompany
+        const req = this.getReqData(this.ruleForm)
         this._apis.order
-        .editorElectronicFaceSheet(this.ruleForm)
+        .editorElectronicFaceSheet(req)
         .then(res => {
           this.$message.success('编辑成功！');
           this.$router.push({path:'/set/ordinaryExpress', query: { currentTab: 'electronicFaceSheet' }});
@@ -306,13 +307,26 @@ export default {
           this.$message.error(error);
         });
       },
+      getReqData(ruleForm) {
+        const data = JSON.parse(JSON.stringify(ruleForm))
+        if (!this.isShowPwa) {
+          data.expressCompanyAccount = ''
+          data.expressCompanyPassword = ''
+        }
+        if (data.payType != 3 && data.payType != 4) {
+          data.monthCode = ''
+        }
+        console.log('data',data)
+        return data
+      },
       add() {
         let expressCompanyCode = this.ruleForm.expressCompanyCode
         let expressCompany = this.expressCompanyList.find(val => val.expressCode == expressCompanyCode).expressName
 
         this.ruleForm.expressCompany = expressCompany
+        const req = this.getReqData(this.ruleForm)
         this._apis.order
-        .addElectronicFaceSheet(this.ruleForm)
+        .addElectronicFaceSheet(req)
         .then(res => {
           this.$message.success('添加成功！');
            this.$router.push({path:'/set/ordinaryExpress', query: { currentTab: 'electronicFaceSheet' }});
