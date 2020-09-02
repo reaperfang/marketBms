@@ -62,7 +62,6 @@
     border-radius: 4px;
     border: 1px solid $globalMainColor;
     font-size: 14px;
-    font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: $globalMainColor;
     line-height: 28px;
@@ -78,7 +77,6 @@
     opacity: 0.5;
     border: 1px solid #DADAE3;
     font-size: 14px;
-    font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: $contentColor;
     line-height: 28px;

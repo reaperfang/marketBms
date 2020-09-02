@@ -7,15 +7,15 @@
       <li class="b_c_item">
         <img src="../../../assets/images/profile/i_w_pub.png" class="i_w_ico" alt="授权微信公众号" />
         <div>
-          <el-button plain v-if="bindWechatAccount == 0" @click="linkToOfficialAccounts"> 授权微信公众号 </el-button>
-          <el-button plain disabled v-else> 公众号授权成功 </el-button>
+          <span class="b_c_set" v-if="bindWechatAccount === 0" @click="linkToOfficialAccounts"> 授权微信公众号 </span>
+          <span class="b_c_on" v-else> 公众号授权成功 </span>
         </div>
       </li>
       <li class="b_c_item">
         <img src="../../../assets/images/profile/i_w_app.png" class="i_w_ico" alt="授权微信小程序" />
         <div>
-          <el-button plain v-if="bindWechatApplet == 0" @click="linkToMiniProgram"> 授权微信小程序 </el-button>
-          <el-button plain disabled v-else> 小程序授权成功 </el-button>
+          <span class="b_c_set" v-if="bindWechatApplet === 0" @click="linkToMiniProgram"> 授权微信小程序 </span>
+          <span class="b_c_on" v-else> 小程序授权成功 </span>
         </div>
       </li>
     </ul>
@@ -106,5 +106,33 @@
     width: 50px;
     height: 50px;
     margin: 40px auto 17px;
+  }
+
+  .b_c_set {
+    display: inline-block;
+    width: 108px;
+    height: 30px;
+    border-radius: 4px;
+    border: 1px solid #92929B;
+    font-size: 12px;
+    font-weight: 400;
+    color: #92929B;
+    line-height: 28px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .b_c_on {
+    display: inline-block;
+    width: 108px;
+    height: 30px;
+    border-radius: 4px;
+    opacity: 0.5;
+    border: 1px solid #DADAE3;
+    font-size: 12px;
+    font-weight: 400;
+    color: $contentColor;
+    line-height: 28px;
+    text-align: center;
   }
 </style>

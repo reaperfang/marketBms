@@ -35,8 +35,8 @@
     </div>
 
     <div class="i_base_btns">
-      <el-button size="medium" plain @click="backBaseStep()"> 上一步 </el-button>
-      <el-button size="medium" type="primary" @click="nextBaseStep()">
+      <el-button plain @click="backBaseStep()"> 上一步 </el-button>
+      <el-button type="primary" @click="nextBaseStep()">
         <template v-if="baseStatus === 3"> 完  成 </template>
         <template v-else>稍后，下一步</template>
       </el-button>
@@ -247,6 +247,10 @@
 
     button:first-of-type {
       margin-right: 10px;
+    }
+
+    .el-button--small {
+      font-size: 14px;
     }
   }
 
