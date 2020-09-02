@@ -87,7 +87,7 @@
                   <el-input-number  size="large" :disabled="$route.query.mode == 'look'" style="width: 160px"  v-model="scope.row.renew" controls-position="right" :min="0" ></el-input-number>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" align="center">
+              <el-table-column label="操作" align="center" fixed="right">
                 <template slot-scope="scope">
                   <span @click="deleteRow(scope.$index)" v-if="scope.$index != 0 && $route.query.mode != 'look'" class="blue">删除</span>
                 </template>
@@ -543,8 +543,8 @@ export default {
         /deep/ th>.cell {
           line-height: 30px;
         }
-        &::before {
-          height: 0;
+        .blue {
+          cursor: pointer;
         }
         .more {
 

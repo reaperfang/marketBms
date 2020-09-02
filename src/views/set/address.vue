@@ -463,9 +463,6 @@ export default {
       /deep/ th>.cell {
         line-height: 30px;
       }
-      &::before {
-        height: 0;
-      }
       .opeater {
         display: flex;
         line-height:20px;

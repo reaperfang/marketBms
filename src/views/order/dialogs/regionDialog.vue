@@ -45,6 +45,9 @@
           </div>
         </template>
       </div>
+      <div style="padding-top: 23px;padding-bottom: 11px;">
+        <el-checkbox @change="checkedAllChange" :indeterminate="isAllIndeterminate" v-model="checkedAll">全选</el-checkbox>
+      </div>
       <div>
         已选中：
         <el-tag
@@ -56,7 +59,7 @@
         >{{ item.name }}</el-tag>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-checkbox @change="checkedAllChange" :indeterminate="isAllIndeterminate" v-model="checkedAll">全选</el-checkbox>
+        <!-- <el-checkbox @change="checkedAllChange" :indeterminate="isAllIndeterminate" v-model="checkedAll">全选</el-checkbox> -->
         <el-button type="primary" @click="submit" :loading="loading">确 定</el-button>
         <el-button @click="visible = false">取 消</el-button>
       </div>
