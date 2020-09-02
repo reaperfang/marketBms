@@ -167,7 +167,7 @@ export default {
 
 <style lang="scss">
 .head {
-	height: 84px;
+	height: 80px;
 	.row-1 {
 		background: url("../../../../assets/images/dashboard/head/bg/default.png")
 			no-repeat;
