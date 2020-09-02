@@ -75,7 +75,7 @@
           console.log('%c valid', 'color: deepskyblue');
           // if(!valid) return;
         }catch (e) {
-          this.$message.error(e.msg || '出错了，请稍后再试~');
+          this.$message.error('请正确填写表单');
           return
         }
         try {
