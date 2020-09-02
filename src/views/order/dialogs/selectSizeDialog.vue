@@ -15,10 +15,10 @@
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="电子面单规格尺寸：" prop="specificationSize">
-                                <el-select v-model="item.specificationSize" placeholder="请选择" @change="specificationSizeChange(item.specificationSize, index)">
+                                <el-select :class="{error: item.showError}" v-model="item.specificationSize" placeholder="请选择" @change="specificationSizeChange(item.specificationSize, index)">
                                     <el-option v-for="(item, index) in item.sizeList" :key="index" :label="item.sizeSpecs" :value="item.templateSize"></el-option>
                                 </el-select>
-                                <p style="color: #FD4C2B;" v-if="item.showError">请选择</p>
+                                <p style="color: #FD4C2B;" v-if="item.showError">必填项</p>
                             </el-form-item>
                         </div>
                     </el-form>
@@ -206,6 +206,10 @@ export default {
     .content-box::-webkit-scrollbar {
         width: 8px;
         height: 8px;
+    }
+    /deep/ .el-select.error .el-input__inner {
+        border: 1px solid #FD4C2B;
+        border-radius: 4px;
     }
 </style>
 
