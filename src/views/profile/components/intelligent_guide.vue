@@ -58,7 +58,7 @@
     margin-top: 28px;
     font-size: 18px;
     font-weight: 600;
-    color: #161617;
+    color: $titleColor;
   }
   
   .i_guide {
@@ -87,14 +87,14 @@
 
       &:first-of-type {
         font-size: 18px;
-        color: #FFFFFF;
+        color: #fff;
         line-height: 30px;
         margin-left: 11px;
       }
 
       &:last-of-type {
         font-size: 14px;
-        color: #161617;
+        color: $titleColor;
         height: 18px;
         line-height: 100%;
         vertical-align: middle;
@@ -109,19 +109,19 @@
 
     &.i_g_1 {
       background: url('../../../assets/images/profile/g_01.png') no-repeat;
-    background-size: contain;
+      background-size: contain;
     }
     &.i_g_2 {
       background: url('../../../assets/images/profile/g_02.png') no-repeat;
-    background-size: contain;
+      background-size: contain;
     }
     &.i_g_3 {
       background: url('../../../assets/images/profile/g_03.png') no-repeat;
-    background-size: contain;
+      background-size: contain;
     }
     &.i_g_4 {
       background: url('../../../assets/images/profile/g_04.png') no-repeat;
-    background-size: contain;
+      background-size: contain;
     }
 
     p {
@@ -130,7 +130,7 @@
       &:first-of-type {
         font-size: 20px;
         font-weight: 600;
-        color: #44434B;
+        color: $contentColor;
         line-height: 28px;
         padding-top: 25px;
         margin-bottom: 8px;
@@ -139,7 +139,7 @@
       &:last-of-type {
         font-size: 15px;
         font-weight: 600;
-        color: #655EFF;
+        color: $globalMainColor;
         line-height: 21px;
       }
     }

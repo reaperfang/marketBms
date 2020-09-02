@@ -60,11 +60,10 @@
     width: 80px;
     height: 30px;
     border-radius: 4px;
-    border: 1px solid #655EFF;
+    border: 1px solid $globalMainColor;
     font-size: 14px;
-    font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
-    color: #655EFF;
+    color: $globalMainColor;
     line-height: 28px;
     text-align: center;
     cursor: pointer;
@@ -78,9 +77,8 @@
     opacity: 0.5;
     border: 1px solid #DADAE3;
     font-size: 14px;
-    font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
-    color: #44434B;
+    color: $contentColor;
     line-height: 28px;
     text-align: center;
   }

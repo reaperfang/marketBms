@@ -35,8 +35,8 @@
     </div>
 
     <div class="i_base_btns">
-      <el-button size="medium" plain @click="backBaseStep()"> 上一步 </el-button>
-      <el-button size="medium" type="primary" @click="nextBaseStep()">
+      <el-button plain @click="backBaseStep()"> 上一步 </el-button>
+      <el-button type="primary" @click="nextBaseStep()">
         <template v-if="baseStatus === 3"> 完  成 </template>
         <template v-else>稍后，下一步</template>
       </el-button>
@@ -125,7 +125,7 @@
       flex-basis: 28px;
       margin-bottom: 36px;
       font-size: 16px;
-      color: #44434B;
+      color: $contentColor;
 
       .i_b_title {
         width: 8em;
@@ -141,11 +141,11 @@
         height: 28px;
         line-height: 28px;
         background: #FBFBFC;
-        border: 1px solid #B6B5C8;
+        border: 1px solid $borderColor;
         border-radius: 50%;
         text-align: center;
         font-size: 15px;
-        color: #92929B;
+        color: $grayColor;
 
         span {
           display: inline;
@@ -165,12 +165,12 @@
         top: 28px;
         width: 1px;
         height: 36px;
-        background: #B6B5C8;
+        background: $borderColor;
       }
     }
 
     .i_base_act {
-      color: #655EFF;
+      color: $globalMainColor;
 
       .i_b_title {
         font-weight: 500;
@@ -178,7 +178,7 @@
 
       .i_b_number {
         position: relative;
-        background: #655EFF;
+        background: $globalMainColor;
         border: 1px solid #fff;
         box-shadow: #fff 0px 0px 0px 1px;
         color: #fff;
@@ -199,10 +199,10 @@
       }
 
       &.i_base_suc {
-        color: #655EFF;
+        color: $globalMainColor;
 
         .i_b_number {
-          background: #655EFF;
+          background: $globalMainColor;
           border: 1px solid #fff;
 
           span {
@@ -218,14 +218,14 @@
     }
 
     .i_base_suc {
-      color: #6CD521;
+      color: $successBorderColor;
 
       .i_b_title {
         font-weight: 500;
       }
 
       .i_b_number {
-        background: #6CD521;
+        background: $successBorderColor;
         border: 1px solid #FBFBFC;
         color: #fff;
 
@@ -247,6 +247,10 @@
 
     button:first-of-type {
       margin-right: 10px;
+    }
+
+    .el-button--small {
+      font-size: 14px;
     }
   }
 
