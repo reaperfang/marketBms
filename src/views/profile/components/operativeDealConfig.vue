@@ -221,6 +221,10 @@ export default {
         line-height:20px;
         display: flex;
         align-items: center;
+        span {
+          padding-left:11px;
+          font-weight:500;
+        }
         i {
           display:inline-block;
           width: 20px;
