@@ -200,7 +200,7 @@ export default {
   margin-left:10px;
   .shopItem{
     width:220px;
-    height:121px;
+    height:130px;
     background:rgba(255,255,255,1);
     border-radius:3px;
     border:1px solid rgba(218,218,227,1);
@@ -250,6 +250,9 @@ export default {
       .expire{
         background: rgba(146,146,155,0.5);;
       }
+    }
+    p:nth-of-type(3){
+      margin-top:10px;
     }
     p:nth-of-type(3),p:nth-of-type(4){
       font-size: 12px;

@@ -268,7 +268,7 @@ export default {
       }
       &.gzh, &.xcx {
         >.no-bind {
-          background: url('~@/assets/images/profile/no_empower.png') no-repeat center;
+          background: url('~@/assets/images/profile/no_empower.jpg') no-repeat center;
         }
       }
       &.gzh {
