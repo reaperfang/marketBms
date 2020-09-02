@@ -239,6 +239,9 @@ export default {
   width: 100%;
   background: #fff;
   padding:20px;
+  /deep/ th.is-leaf {
+    border:0;
+  }
   .top_part{
     display: flex;
     justify-content: space-between;

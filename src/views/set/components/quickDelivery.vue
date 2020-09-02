@@ -279,6 +279,9 @@ export default {
     }
 }
 .quick-delivery {
+  /deep/ th.is-leaf {
+    border:0;
+  }
   .head {
     background-color: #fff;
     padding: 20px 20px 2px 20px;

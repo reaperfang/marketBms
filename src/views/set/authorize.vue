@@ -283,6 +283,9 @@ export default {
     background-color: #fff;
     padding: 23px 34px;
     margin-bottom: 20px;
+    /deep/ th.is-leaf {
+      border:0;
+    }
     h2 {
       font-size:14px;
       font-weight:500;

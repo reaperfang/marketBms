@@ -64,12 +64,12 @@
           v-loading="loading"
           :data="tableData"
           style="width: 100%"
-          :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+          :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '500'}"
         >
           <el-table-column prop="name" label="电子面单名称" width="180"></el-table-column>
           <el-table-column prop="expressCompany" label="快递公司" width="180"></el-table-column>
           <el-table-column prop="updateTime" sortable label="编辑时间"></el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <div class="operate-box">
                 <span v-permission="['设置', '普通快递', '电子面单', '查看']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode + '&detail=' + true)">查看</span>
@@ -216,6 +216,9 @@ export default {
 }
 .table-box .table {
     margin-left: 0;
+    /deep/ th.is-leaf {
+      border:0;
+    }
 }
 .content-header {
   display: flex;

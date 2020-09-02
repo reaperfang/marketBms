@@ -230,6 +230,9 @@ export default {
   }
   .bottom_part{
     margin-top:10px;
+    /deep/ th.is-leaf {
+      border:0;
+    }
   }
 }
 </style>
