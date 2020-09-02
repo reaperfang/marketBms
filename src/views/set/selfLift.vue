@@ -81,6 +81,7 @@
       <el-table-column
         label="操作"
         align="center"
+        fixed="right"
         width="150">
         <template slot-scope="scope">
           <div class="opeater">
@@ -546,7 +547,7 @@ export default {
     
   }
   .table {
-    padding-top: 20px;
+    margin-top: 20px;
     /deep/ th.is-leaf {
       border:0;
       .cell {
@@ -566,9 +567,6 @@ export default {
       text-overflow: ellipsis;
       white-space: nowrap;
       cursor: pointer;
-    }
-    &::before {
-      height: 0;
     }
     .opeater {
       display: flex;
