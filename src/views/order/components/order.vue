@@ -60,11 +60,11 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="item" style="width: 120px; margin-right: 16px;">
+                    <div class="item" style="width: 87px; margin-right: 65px; text-align: right;">
                         <!-- <p class="pay-amount">实收：¥{{order.actualMoney}}</p>
                         <p class="payment-mode">{{order.channelName}}支付</p> -->
                         <!-- <p>¥{{order | yingshowFilter}}</p> -->
-                        <p>¥{{order.receivableMoney}}</p>
+                        <p style="margin-left: 0;">¥{{order.receivableMoney}}</p>
                         <!-- <p>{{order.channelName}}支付</p> -->
                     </div>
                     <div class="item" style="width: 120px; margin-right: 75px;">
