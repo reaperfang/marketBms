@@ -3,13 +3,13 @@
 		<el-row class="row-1">
 			<el-col>
 				<el-row>
-					<el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4">
+					<el-col :xs="5" :sm="5" :md="5" :lg="5" :xl="5">
 						<div class="left">
 							<img
 								src="../../../../assets/images/dashboard/head/left/default.png"
 								alt
 							/>
-							<span>店 铺 名 称</span>
+							<span>{{ shopName }}</span>
 							<img
 								src="../../../../assets/images/dashboard/head/time/default.png"
 								alt
@@ -19,11 +19,11 @@
 						</div>
 					</el-col>
 					<el-col
-						:xs="12"
-						:sm="14"
-						:md="14"
-						:lg="14"
-						:xl="16"
+						:xs="11"
+						:sm="13"
+						:md="13"
+						:lg="13"
+						:xl="15"
 						class="content"
 					>
 						<div>交 易 数 据 大 屏</div>
@@ -36,14 +36,18 @@
 						:xl="4"
 						class="right"
 					>
-						<div class="refresh">
+						<div class="refresh" @click="refresh">
 							<img
 								src="../../../../assets/images/dashboard/head/right/refresh/default.png"
 								alt
 							/>
 							<span>刷 新</span>
 						</div>
-						<div class="fullscreen" @click="fullscreen">
+						<div
+							class="fullscreen"
+							@click="fullscreen"
+							ref="fullscreen"
+						>
 							<img
 								src="../../../../assets/images/dashboard/head/right/fullscreen/default.png"
 								alt
@@ -75,6 +79,7 @@ export default {
 	components: {},
 	data: function() {
 		return {
+			shopName: JSON.parse(localStorage.getItem("shopInfos")).shopName,
 			timer: "", //定义一个定时器的变量
 			currentTime: new Date() // 获取当前时间
 		};
@@ -126,7 +131,6 @@ export default {
 	methods: {
 		//...mapActions([""]),
 		fullscreen() {
-			alert("fullscreen");
 			let element = document.documentElement;
 			// 判断是否已经是全屏
 			// 如果是全屏，退出
@@ -153,6 +157,9 @@ export default {
 					element.msRequestFullscreen();
 				}
 			}
+		},
+		refresh() {
+			window.location.reload();
 		}
 	}
 };
