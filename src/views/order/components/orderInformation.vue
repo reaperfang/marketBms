@@ -251,7 +251,7 @@
                     label="商品状态"
                     class-name="goods-status">
                     <template slot-scope="scope">
-                        <template v-if="scope.row.afterSaleStatus || scope.row.afterSaleStatus === 0">
+                        <template v-if="scope.row.afterSaleStatus && scope.row.afterSaleStatus != 0">
                             <router-link :to="{ path: '/order/afterSalesDetails', query: { id: scope.row.orderAfterSaleId }}">{{scope.row | orderStatusFilter}}</router-link>
                         </template>
                         <template v-else>
