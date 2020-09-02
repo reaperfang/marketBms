@@ -135,7 +135,7 @@
           prop="wechatTradeSn"
           label="第三方流水号"
           align="center"
-          width="220px;">
+          width="250px;">
         </el-table-column>
         <el-table-column
           prop="amount"
