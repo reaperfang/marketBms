@@ -91,6 +91,7 @@
           :render-header="renderTradeDetailSn"
           align="left"
           width="220px"
+          fixed
           >
           <template slot-scope="scope">
             <span style="padding-left:10px;">{{scope.row.tradeDetailSn}}</span>
@@ -109,7 +110,8 @@
           prop="businessType"
           label="业务类型"
           :render-header="renderBusinessType"
-          align="center">
+          align="center"
+          width="150px">
           <template slot-scope="scope">
             {{rebusinessTypes[scope.row.businessType] ? rebusinessTypes[scope.row.businessType].label : ''}}
           </template>
@@ -132,12 +134,14 @@
         <el-table-column
           prop="wechatTradeSn"
           label="第三方流水号"
-          align="center">
+          align="center"
+          width="220px;">
         </el-table-column>
         <el-table-column
           prop="amount"
           label="交易金额（元）"
-          align="right">
+          align="right"
+          width="140px;">
         </el-table-column>
         <el-table-column
           prop="isInvoice"
@@ -153,6 +157,7 @@
           sortable="custom"
           align="center"
           width="200px"
+          fixed="right"
           >
         </el-table-column>
       </el-table>

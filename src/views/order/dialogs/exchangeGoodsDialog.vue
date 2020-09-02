@@ -19,42 +19,29 @@ export default {
     data() {
         return {
             showFooter: false,
-            exchangeConfirmation: 1
+            exchangeConfirmation: 1,
+            updateStatusDisabled: false
         }
     },
     methods: {
         submit() {
-            // this._apis.order.orderAfterSaleConfirmExchange({id: this.data.id, exchangeConfirmation: this.exchangeConfirmation }).then((res) => {
-            //     this.$message.success('换货确认成功');
-            //     this.visible = false
-            // }).catch(error => {
-            //     this.$message.error(error);
-            //     this.visible = false
-            // })
-            let params = {
-                ids: this.data.id.split(','),
-                orderAfterSaleStatus: this.exchangeConfirmation == "0"?2:1,
-                exchangeConfirmation: this.exchangeConfirmation
+            if(!this.updateStatusDisabled) {
+                this.updateStatusDisabled = true
+
+                let params = {
+                    ids: this.data.id.split(','),
+                    orderAfterSaleStatus: this.exchangeConfirmation == "0"?2:1,
+                    exchangeConfirmation: this.exchangeConfirmation
+                }
+                this._apis.order.orderAfterSaleUpdateStatus(params).then((res) => {
+                    this.$parent.getList && this.$parent.getList();
+                    this.$parent.getDetail && this.$parent.getDetail();
+                    this.$message.success('审核成功！');
+                    this.visible = false;
+                }).catch(error => {
+                    this.$message.error(error);
+                })
             }
-            // if(this.data.type == 2) {
-            //     params.exchangeConfirmation = this.exchangeConfirmation
-            // }
-            this._apis.order.orderAfterSaleUpdateStatus(params).then((res) => {
-                //     this._apis.order.orderAfterSaleConfirmExchange({id: this.data.id, orderAfterSaleStatus: this.exchangeConfirmation == "0"?2:1, exchangeConfirmation: this.exchangeConfirmation}).then((res) => {
-                //     this.$parent.getList && this.$parent.getList();
-                //     this.$parent.getDetail && this.$parent.getDetail();
-                //     this.$message.success('审核成功！');
-                //     this.visible = false;
-                // }).catch(error => {
-                //     this.$message.error(error);
-                // })
-                this.$parent.getList && this.$parent.getList();
-                this.$parent.getDetail && this.$parent.getDetail();
-                this.$message.success('审核成功！');
-                this.visible = false;
-            }).catch(error => {
-                this.$message.error(error);
-            })
         }
     },
     mounted() {
