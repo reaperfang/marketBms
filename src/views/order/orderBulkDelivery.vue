@@ -659,6 +659,8 @@ export default {
     // 电子面单 orderId
     // 配送单 id
     sendGoodsHandler() {
+      let reg = /^[1-9]\d*$/
+
       try {
         let params;
         // console.log(this.list
@@ -742,6 +744,35 @@ export default {
         //   this.confirm({ title: "提示", icon: true, text: "快递单号不能为空" });
         //   return;
         // }
+        for(let i=0; i<this.list.length; i++) {
+          let orderItem = this.list[i].orderItemList
+
+          for(let j=0; j<orderItem.length; j++) {
+            if(orderItem[j].checked) {
+              if(orderItem[j].sendCount == '') {
+                this.list[i].orderItemList.splice(j, 1, Object.assign({}, this.list[i].orderItemList[j], {
+                  errorMessage:  '请输入本次发货数量',
+                  showError: true
+                }))
+                return
+              }
+              if(orderItem[j].sendCount > (orderItem[j].goodsCount - orderItem[j].cacheSendCount)) {
+                this.list[i].orderItemList.splice(j, 1, Object.assign({}, this.list[i].orderItemList[j], {
+                  errorMessage:  '本次发货数量不能大于应发数量',
+                  showError: true
+                }))
+                return
+              }
+              if(!reg.test(orderItem[j].sendCount)) {
+                this.list[i].orderItemList.splice(j, 1, Object.assign({}, this.list[i].orderItemList[j], {
+                  errorMessage:  '请输入正确的格式',
+                  showError: true
+                }))
+                return
+              }
+            }
+          }
+        }
          let isWrong = false
         //let _list = JSON.parse(JSON.stringify(this.list.filter(val => val.checked)))
         let _list = [];
