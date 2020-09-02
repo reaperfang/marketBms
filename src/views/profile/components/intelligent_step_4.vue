@@ -125,7 +125,7 @@
       flex-basis: 28px;
       margin-bottom: 36px;
       font-size: 16px;
-      color: #44434B;
+      color: $contentColor;
 
       .i_b_title {
         width: 8em;
@@ -141,11 +141,11 @@
         height: 28px;
         line-height: 28px;
         background: #FBFBFC;
-        border: 1px solid #B6B5C8;
+        border: 1px solid $borderColor;
         border-radius: 50%;
         text-align: center;
         font-size: 15px;
-        color: #92929B;
+        color: $grayColor;
 
         span {
           display: inline;
@@ -165,7 +165,7 @@
         top: 28px;
         width: 1px;
         height: 36px;
-        background: #B6B5C8;
+        background: $borderColor;
       }
     }
 
@@ -218,14 +218,14 @@
     }
 
     .i_base_suc {
-      color: #6CD521;
+      color: $successBorderColor;
 
       .i_b_title {
         font-weight: 500;
       }
 
       .i_b_number {
-        background: #6CD521;
+        background: $successBorderColor;
         border: 1px solid #FBFBFC;
         color: #fff;
 

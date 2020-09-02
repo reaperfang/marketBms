@@ -80,7 +80,7 @@
     font-size: 14px;
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
-    color: #44434B;
+    color: $contentColor;
     line-height: 28px;
     text-align: center;
   }

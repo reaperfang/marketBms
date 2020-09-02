@@ -72,7 +72,8 @@
 
 <style lang="scss" scope>
   .base_channel {
-    color: #44434B;min-height: 400px;
+    color: $contentColor;
+    min-height: 400px;
     padding: 20px;
     background: #FBFBFC;
   }

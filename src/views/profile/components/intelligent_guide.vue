@@ -58,7 +58,7 @@
     margin-top: 28px;
     font-size: 18px;
     font-weight: 600;
-    color: #161617;
+    color: $titleColor;
   }
   
   .i_guide {
@@ -87,14 +87,14 @@
 
       &:first-of-type {
         font-size: 18px;
-        color: #FFFFFF;
+        color: #fff;
         line-height: 30px;
         margin-left: 11px;
       }
 
       &:last-of-type {
         font-size: 14px;
-        color: #161617;
+        color: $titleColor;
         height: 18px;
         line-height: 100%;
         vertical-align: middle;
@@ -130,7 +130,7 @@
       &:first-of-type {
         font-size: 20px;
         font-weight: 600;
-        color: #44434B;
+        color: $contentColor;
         line-height: 28px;
         padding-top: 25px;
         margin-bottom: 8px;
