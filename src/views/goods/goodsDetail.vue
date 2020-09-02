@@ -1230,7 +1230,8 @@ export default {
             if(data&&data.child){
                 this.leimuMessage = false;
                 this.ruleForm.productCategoryInfoId=data.child.id;
-                this.goodCategoryNames = data.name + ' / '+data.child.name;  
+                this.goodCategoryNames = data.name + ' / '+data.child.name; 
+                this.getSpecsList(this.ruleForm.productCategoryInfoId);
             }
         },
         statusChange() {
