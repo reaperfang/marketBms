@@ -24,19 +24,22 @@
 
       <div class="i_base_box">
         <!--  绑定渠道  -->
-        <channel v-show="baseStatus === 1" @base-step="baseStep"></channel>
+        <channel v-show="baseStatus === 1"></channel>
 
         <!--  微信支付设置  -->
-        <wx v-show="baseStatus === 2" @base-step="baseStep"></wx>
+        <wx v-show="baseStatus === 2"></wx>
 
         <!--  店铺信息  -->
-        <shop v-show="baseStatus === 3" @base-step="baseStep"></shop>
+        <shop v-show="baseStatus === 3" ref="BaseShopInfoView"></shop>
       </div>
     </div>
 
     <div class="i_base_btns">
       <el-button size="medium" plain @click="backBaseStep()"> 上一步 </el-button>
-      <el-button size="medium" type="primary" @click="nextBaseStep()"> 稍后，下一步 </el-button>
+      <el-button size="medium" type="primary" @click="nextBaseStep()">
+        <template v-if="baseStatus === 3"> 完  成 </template>
+        <template v-else>稍后，下一步</template>
+      </el-button>
     </div>
 
   </section>
@@ -71,7 +74,13 @@
 
       /** 下一步 */
       nextBaseStep() {
-        this.baseStatus = this.baseStatus + 1;
+        if(this.baseStatus === 3) {
+          this.$refs.BaseShopInfoView.completed();
+        } else {
+          this.baseStatus = this.baseStatus + 1;
+        }
+
+
       },
 
     }
@@ -96,7 +105,7 @@
       min-height: 400px;
       background: #FBFBFC;
     }
-    
+
     .i_base_box {
       width: 594px;
       min-height: 400px;
@@ -205,7 +214,7 @@
           }
         }
       }
-      
+
     }
 
     .i_base_suc {

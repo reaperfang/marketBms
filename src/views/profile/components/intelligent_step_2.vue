@@ -8,17 +8,28 @@
         <template v-for="item in listData">
           <swiper-slide ref="mySwiperSlide" :key="item.id">
 
+            <p class="template_name"> {{item.name}} </p>
+
             <div class="view" :class="{'selected': item.id === selectTemplateId}">
               <span class="badge"></span>
-              <img class="image" :src="item.previewPic" alt="图片丢失了">
-              <p class="template_name"> {{item.name}} </p>
-
-              <div class="preview">
+              <div class="view_scroll">
+                <img class="image" :src="item.previewPic" alt="图片丢失了">
+                <img class="gray_bottom" src="../../../assets/images/profile/intelligent_preview_bottom.png" alt="~~">
+              </div>
+              <div class="view_preview" v-show="item.isShowCode">
                 <p class="hint text">使用手机扫描下方二维码 <br> 预览完整模版</p>
                 <img class="qr_code" :src="item.qrCode" alt="二维码"/>
-                <div class="buttons">
-                  <el-button type="primary" @click="selectedId(item.id)"> 选择该模板 </el-button>
-                </div>
+              </div>
+
+              <div class="view_buttons">
+                <span class="view_button" :class="{'selected': item.isShowCode}" @click="item.isShowCode = !item.isShowCode">
+                  <template v-if="item.isShowCode"> 取消预览 </template>
+                  <template v-else>手机预览</template>
+                </span>
+                <span class="view_button" :class="{'selected': item.id === selectTemplateId}" @click="selectedId(item.id)">
+                  <template v-if="item.id === selectTemplateId"> 取消选择 </template>
+                  <template v-else>选  择</template>
+                </span>
               </div>
             </div>
 
@@ -155,14 +166,14 @@
               id: 101,
             },
             {
-              name: '美味零食美味零食美味零食美味零食',
-              previewPic: '',
+              name: '美味零食美味零食美味零食美味零食美味零食',
+              previewPic: 'https://img.zcool.cn/community/011bfe5f222f46a80120a821f7944a.jpg@1280w_1l_0o_100sh.jpg',
               qrCodePic: '',
               id: 102,
             },
             {
               name: '美味零食',
-              previewPic: '',
+              previewPic: 'https://img.zcool.cn/community/0148085f4c81ee11013f1a649fdc55.jpg@1280w_1l_2o_100sh.jpg',
               qrCodePic: '',
               id: 103,
             },
@@ -181,8 +192,11 @@
           ];
           const _this = this;
           setTimeout(function () {
-
-            _this.listData = resultData;
+            _this.listData = resultData.map(item => {
+              item.isShowCode = false;
+              return item;
+            })
+            // _this.listData = resultData;
             _this.isLoading = false;
             // _this.$refs.mySwiper.$swiper.update();
 
@@ -208,7 +222,7 @@
       /** 启用模板 对话框 */
       confirmEnable() {
         if (this.selectTemplateId === null) {
-          this.$message.warning('请先选择一个模版');
+          this.$message.error('请先选择一个模版');
           return;
         }
         if (this.isConfigureFail) return; // 加载失败了，只能点击 '再次加载'
@@ -258,7 +272,7 @@
 
       /** 展示二维码 */
       selectedId(id) {
-        this.selectTemplateId = id;
+        this.selectTemplateId = this.selectTemplateId === id ? null : id;
       },
 
     },
@@ -278,7 +292,7 @@
 
     .template_list {
       position: relative;
-      height: 446px;
+      height: 465px;
       width: 100%;
       padding: 0 10px;
       margin-bottom: 30px;
@@ -291,8 +305,8 @@
     }
 
     .preview_swiper {
-      height: 446px;
-      padding: 8px 0;
+      height: 465px;
+      padding: 0 0 8px 0;
     }
 
     .swiper-slide {
@@ -327,20 +341,26 @@
       }
     }
 
-    .view {
+    .template_name {
+      height: 20px;
+      font-size: 14px;
+      color: $contentColor;
+      line-height: 20px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 14px;
+    }
+
+    /deep/ .view {
       position: relative;
-      height: 100%;
-      padding: 10px;
+      height: 408px;
+      padding: 8px 8px 0 8px;
       background: #FFF;
       box-shadow: 0 2px 10px 0 rgba(68, 67, 75, 0.2);
       box-sizing: border-box;
       text-align: center;
-
-      &:hover {
-        .preview {
-          display: block;
-        }
-      }
+      border: 2px solid #fff;
 
       &.selected {
         border: 2px solid $globalMainColor;
@@ -360,67 +380,109 @@
         background-image: url("../../../assets/images/profile/intelligent_template_selected.png");
         background-size: cover;
         opacity: 0;
+        z-index: 7;
       }
 
-      .image {
-        width: 100%;
-        margin-bottom: 13px;
-        vertical-align: top;
-        text-align: center;
+      .view_scroll {
+        position: relative;
+        height: 340px;
+        padding-right: 3px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        /*background-color: rgba(125, 169, 255, 0.1);*/
+        &::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: #D0D6E4;
+          background-clip: padding-box;
+          min-height: 28px;
+          border-radius: 7px;
+        }
+
+        .image {
+          width: 100%;
+          margin-bottom: 13px;
+          vertical-align: top;
+          text-align: center;
+        }
+
+        .gray_bottom {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          width: 100%;
+          height: 21px;
+        }
+
       }
 
-      .template_name {
-        font-size: 14px;
-        color: $contentColor;
-        line-height: 20px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        height: 20px;
-      }
-
-      .preview {
-        display: none;
+      .view_preview {
         position: absolute;
         top: 0;
         left: 0;
-        bottom: 0;
+        bottom: 56px;
         right: 0;
         width: 100%;
-        height: 100%;
+        /*height: 100%;*/
+        /*border-bottom: 58px solid #fff;*/
         background-color: rgba(0, 0, 0, .5);
-      }
+        z-index: 5;
 
-      .hint {
-        margin-bottom: 20px;
-        font-size: 14px;
-        font-weight: 500;
-        color: #FFF;
-        line-height: 20px;
-      }
+        .qr_code {
+          margin-bottom: 40px;
+          width: 130px;
+          height: 130px;
+          padding: 10px;
+          background-color: #fff;
+        }
 
-      .qr_code {
-        width: 120px;
-        height: 130px;
-        margin-bottom: 40px;
-        padding: 10px;
-        background-color: #fff;
-      }
-
-      .buttons {
-        display: flex;
-        justify-content: center;
-
-        .el-button{
-          position: relative;
-          z-index: 6;
+        .hint {
+          margin-top: 78px;
+          margin-bottom: 20px;
           font-size: 14px;
+          font-weight: 500;
           color: #FFF;
+          line-height: 20px;
         }
       }
+
+      .view_buttons {
+        display: flex;
+        justify-content: center;
+        position: relative;
+        z-index: 6;
+        padding-top: 15px;
+        background-color: #FFF;
+
+        .view_button{
+          width: 95px;
+          height: 28px;
+          border-radius: 14px;
+          border: 1px solid #D0D6E4;
+          font-size: 14px;
+          color: $contentColor;
+          line-height: 28px;
+          box-sizing: border-box;
+          cursor: pointer;
+
+          & + .view_button {
+            margin-left: 15px;
+          }
+
+          &.selected {
+            color: $globalMainColor;
+            border-color: $globalMainColor;
+          }
+        }
+      }
+
+
     }
 
-    .confirm_enable_dialog {
+    /deep/ .confirm_enable_dialog {
 
       .el-dialog__body {
         padding: 0;

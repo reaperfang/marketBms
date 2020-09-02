@@ -44,7 +44,7 @@
     data() {
       return {
         isShowGuide: false,  // 是否是显示引导（首次进入）
-        stepStatus: 2, // 进行到了第几步
+        stepStatus: 4, // 进行到了第几步
         stepArray: ['industry', 'preview', 'enable', 'base'],
         industryId: null
       }
@@ -156,7 +156,7 @@
         background: url("../../assets/images/profile/intelligent_step_end.png") no-repeat right center;
         background-size: cover;
         &.selected {
-          background-image: url("../../assets/images/profile/intelligent_step_middle_selected.png");
+          background-image: url("../../assets/images/profile/intelligent_step_end_selected.png");
         }
       }
     }
