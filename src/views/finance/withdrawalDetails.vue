@@ -122,10 +122,25 @@
         label="操作"
         align="center">
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small" v-permission="['财务', '提现明细', '默认页面', '查看']">查看</el-button> 
+            <el-button 
+              @click="handleClick(scope.row)"  
+              type="text" size="small" 
+              v-permission="['财务', '提现明细', '默认页面', '查看']"
+              class="fsize"
+            >
+              查看
+            </el-button> 
             <span v-if="scope.row.status == 0">
               <span class="c_line">|</span>
-              <el-button type="text" size="small" @click="examine(scope.row)" v-permission="['财务', '提现明细', '默认页面', '审核']" >审核</el-button>
+              <el-button 
+                type="text" 
+                size="small" 
+                @click="examine(scope.row)" 
+                v-permission="['财务', '提现明细', '默认页面', '审核']"
+                class="fsize"
+              >
+                审核
+              </el-button>
             </span>
             <span v-else class="placeholders"></span>
           </template>
@@ -499,6 +514,10 @@ export default {
 /deep/ .el-table-column--selection .cell {
     padding-left: 20px;
     padding-right: 10px;
+}
+
+.fsize{
+  font-size: 14px;
 }
   
 </style>

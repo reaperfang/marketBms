@@ -10,7 +10,7 @@
         :data="dataList"
         class="table"
         style="width: 100%"
-        :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '400'}"
+        :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '500'}"
         >
         <el-table-column
           prop="address"
