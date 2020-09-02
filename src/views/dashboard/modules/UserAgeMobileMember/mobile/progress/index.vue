@@ -12,7 +12,7 @@ import icon from "./icon";
 export default {
 	watch: {
 		progress(val) {
-		this.showChart();
+			this.showChart();
 		}
 	},
 	props: ["barColor", "progress", "city"],
@@ -27,7 +27,7 @@ export default {
 		this.showChart();
 
 		window.addEventListener("resize", ev => {
-			this.chartContentPie.resize();
+			this.chart.resize();
 		});
 	},
 	methods: {
