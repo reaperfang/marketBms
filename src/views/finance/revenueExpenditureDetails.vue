@@ -90,7 +90,7 @@
           label="交易流水号"
           :render-header="renderTradeDetailSn"
           align="left"
-          width="220px"
+          width="210px"
           fixed
           >
           <template slot-scope="scope">
@@ -101,7 +101,8 @@
           prop="tradeType"
           label="收支类型"
           :render-header="renderTradeTypen"
-          align="center">
+          align="center"
+          width="90px">
           <template slot-scope="scope">
             {{scope.row.tradeType ? '支出' : '收入' }}
           </template>
@@ -142,6 +143,9 @@
           label="交易金额（元）"
           align="right"
           width="140px;">
+          <template slot-scope="scope">
+            <span style="padding-right:10px;">{{scope.amount}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="isInvoice"
@@ -462,5 +466,8 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
+}
+/deep/.el-table--small td{
+  padding:16px 0;
 }
 </style>

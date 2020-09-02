@@ -159,7 +159,7 @@
                   </p>
                 </div>
                 <div v-if="isEmpowerWX && isEmpowerWX === 'true'"  class="profile-wxsc-item">
-                  <img  :src="require('@/assets/images/profile/no_empower.png')" class="no_isEmpower" alt/>
+                  <img  :src="require('@/assets/images/profile/no_empower.jpg')" class="no_isEmpower" alt/>
                   <p class="title4">您当前还未授权小程序</p>
                   <p class="opt">
                     <el-button @click="linkTo({text:'绑定微信小程序'})">立即授权</el-button>
@@ -187,7 +187,7 @@
                   </p>
                 </div>
                 <div v-if="isEmpowerGZ && isEmpowerGZ === 'true'"  class="profile-wxsc-item">
-                  <img  :src="require('@/assets/images/profile/no_empower.png')" class="no_isEmpower" alt/>
+                  <img  :src="require('@/assets/images/profile/no_empower.jpg')" class="no_isEmpower" alt/>
                   <p class="title4">您当前还未授权公众号</p>
                   <p class="opt">
                     <el-button @click="linkTo({text:'绑定微信公众号'})">立即授权</el-button>
@@ -787,16 +787,16 @@ export default {
               color: #92929B;
             }
             .erweima{
-              width: 150px;
+              width: 100px;
               height: auto;
             }
             .no_isEmpower{
               width: auto;
-              height: 136px;
+              height: 86px;
             }
             .no_release{
               width: auto;
-              height: 136px;
+              height: 86px;
             }
             .opt{
               margin-top: 20px;

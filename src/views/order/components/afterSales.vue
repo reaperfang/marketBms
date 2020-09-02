@@ -545,6 +545,9 @@ export default {
             text-overflow: clip;
          }
      }
+     /deep/ .el-table--small td, /deep/  .el-table--small th {
+        padding: 16px 0;
+    }
 </style>
 
 
