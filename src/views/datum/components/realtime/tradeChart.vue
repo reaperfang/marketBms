@@ -5,11 +5,11 @@ export default {
   name: "durationChart",
   extends: chartBase,
   computed:{},
-  props: ['dataChart','activetype'],
+  props: ['dataChart','checkList'],
   data() {
     return {
       flow:{},
-      n:{}
+      n:{},
     };
   },
   created() { },
@@ -18,15 +18,38 @@ export default {
       this.n = newValue
       this.con()
     },
+    checkList(newValue,oldValue){
+      this.checkList = newValue
+      this.con()
+    },
   },
   methods: {
     // 数据显示控制
     con(){
       var color=['#FF8615','#0077FF','#2FC25B','#655EFF']
       var name=['支付金额','支付订单数', '支付人数','客单价']
-      this.flow = {
+      var series=[]
+      this.checkList.forEach((item,index)=>{
+        if(item){
+          series.push({
+              name: name[index],
+              data: this.n.data[index],
+              type: 'line',
+              hoverAnimation:false,
+              symbol:'circle',
+              symbolSize: 8,   //设定实心点的大小
+              color:color[index],
+              itemStyle:{  
+                normal:{  
+                borderColor:'#fff',  //拐点边框颜色  
+              }  
+            },
+            })
+        }
+      })
+      this.flow = { 
         xAxis:this.n.xAxis,
-        yAxis1:this.n.yAxis1 && this.n.yAxis1.map(item => { return (item*1).toFixed(1)}),
+        // yAxis1:this.n.data[0] && this.n.data[0].map(item => { return (item*1).toFixed(1)}),
       }
       this.option = {
         tooltip: {
@@ -69,20 +92,7 @@ export default {
             show:true, //隐藏或显示
           },
         },
-        series: [{
-          name: name[this.activetype],
-          data: this.flow['yAxis1'],
-          type: 'line',
-          hoverAnimation:false,
-          symbol:'circle',
-          symbolSize: 8,   //设定实心点的大小
-          color:color[this.activetype],
-          itemStyle:{  
-              normal:{  
-              borderColor:'#fff',  //拐点边框颜色  
-            }  
-          },
-        }],
+        series:series,
       };
       this.makeOption(this.flow);
       this.option.xAxis.data = this.flow.xAxis;

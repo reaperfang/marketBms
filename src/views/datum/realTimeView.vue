@@ -9,7 +9,7 @@
     <div class="p_container pb12">
        <div class="p_title clearfix">
            <h2>数据总览</h2>
-           <span @click="getdataView()" class="refresh"><img src="@/assets/images/realtime/refresh.png" alt=""></span>
+           <span @click="refreshData()" class="refresh"><img src="@/assets/images/realtime/refresh.png" alt=""></span>
           <div class="fr fr_channel">
             <!-- <el-button type="primary">实时战况</el-button> -->
           </div>
@@ -111,49 +111,53 @@
                     </div>
                 </div>
                 <div class="choose-type clearfix">
-                    <div class="choose_item" :class="{'active':activetype==0}">
+                    <div class="choose_item" :class="checkList[0]?'active':''">
                         <div class="choosetop">
                             <p>支付金额（元）<span class="chooseBut" @click="chooseType(0)"></span></p>
                             <span> <strong>{{dataType.paid_order_am}}</strong> </span>
                         </div>
                         <div class="choosebot">
-                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span :class="dataType.paid_order_am_rg_pct>0?'up':'down'">
+                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_am_rg_pct!='-9999'" :class="dataType.paid_order_am_rg_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_am_rg_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_am_rg_pct*100).toFixed(2)}}%</span></p>
-                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span :class="dataType.paid_order_am_up_pct>0?'up':'down'">
+                                {{Math.abs(dataType.paid_order_am_rg_pct*100).toFixed(2)}}%</span><span v-else>--</span></p>
+                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.paid_order_am_up_pct!='-9999'" :class="dataType.paid_order_am_up_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_am_up_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_am_up_pct*100).toFixed(2)}}%</span></p>
+                                {{Math.abs(dataType.paid_order_am_up_pct*100).toFixed(2)}}%</span><span v-else>--</span></p>
                         </div>
                     </div>
-                    <div class="choose_item" :class="{'active':activetype==1}">
+                    <div class="choose_item" :class="checkList[1]?'active':''">
                         <div class="choosetop">
                             <p>支付订单数（单）<span class="chooseBut" @click="chooseType(1)"></span></p>
                             <span> <strong>{{dataType.paid_order_cq}}</strong> </span>
                         </div>
                         <div class="choosebot">
-                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span :class="dataType.paid_order_cq_rg_pct>0?'up':'down'">
+                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_cq_rg_pct!='-9999'" :class="dataType.paid_order_cq_rg_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_cq_rg_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_cq_rg_pct*100).toFixed(2)}}%</span></p>
-                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span :class="dataType.paid_order_cq_up_pct>0?'up':'down'">
+                                {{Math.abs(dataType.paid_order_cq_rg_pct*100).toFixed(2)}}%</span>
+                                <span v-else>--</span>
+                                </p>
+                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.paid_order_cq_up_pct!='-9999'" :class="dataType.paid_order_cq_up_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_cq_up_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_cq_up_pct*100).toFixed(2)}}%</span></p>
+                                {{Math.abs(dataType.paid_order_cq_up_pct*100).toFixed(2)}}%</span>
+                                <span v-else>--</span>
+                                </p>
                         </div>
                     </div>
-                    <div class="choose_item" :class="{'active':activetype==2}">
+                    <div class="choose_item" :class="checkList[2]?'active':''">
                         <div class="choosetop">
-                            <p>支付人数（人）<span class="chooseBut" @click="chooseType(4)*100"></span></p>
+                            <p>支付人数（人）<span class="chooseBut" @click="chooseType(2)"></span></p>
                             <span> <strong>{{dataType.paid_order_nu}}</strong> </span>
                         </div>
                         <div class="choosebot">
-                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span :class="dataType.paid_order_nu_rg_pct>0?'up':'down'">
+                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_nu_rg_pct!='-9999'" :class="dataType.paid_order_nu_rg_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_nu_rg_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_nu_rg_pct*100).toFixed(2)}}%</span></p>
-                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span :class="dataType.paid_order_nu_up_pct>0?'up':'down'">
+                                {{Math.abs(dataType.paid_order_nu_rg_pct*100).toFixed(2)}}%</span><span v-else>--</span></p>
+                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.paid_order_nu_up_pct!='-9999'" :class="dataType.paid_order_nu_up_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_nu_up_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_nu_up_pct*100).toFixed(2)}}%</span></p>
+                                {{Math.abs(dataType.paid_order_nu_up_pct*100).toFixed(2)}}%</span><span v-else>--</span></p>
                         </div>
                     </div>
-                    <div class="choose_item" :class="{'active':activetype==3}">
+                    <div class="choose_item" :class="checkList[3]?'active':''">
                         <div class="choosetop">
                             <p class="clearfix"> <span class="fl">客单价（元）</span> 
                                 <el-tooltip class="item" effect="dark" content="统计时间内，用户平均消费金额" placement="top-start">
@@ -164,16 +168,16 @@
                             <span> <strong>{{dataType.atv}}</strong> </span>
                         </div>
                         <div class="choosebot">
-                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span :class="dataType.atv_rg_pct>0?'up':'down'">
+                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.atv_rg_pct!='-9999'" :class="dataType.atv_rg_pct>0?'up':'down'">
                                 <img :src="dataType.atv_rg_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.atv_rg_pct*100).toFixed(2)}}%</span></p>
-                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span :class="dataType.atv_up_pct>0?'up':'down'">
+                                {{Math.abs(dataType.atv_rg_pct*100).toFixed(2)}}%</span><span v-else>--</span></p>
+                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.atv_up_pct!='-9999'" :class="dataType.atv_up_pct>0?'up':'down'">
                                 <img :src="dataType.atv_up_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.atv_up_pct*100).toFixed(2)}}%</span></p>
+                                {{Math.abs(dataType.atv_up_pct*100).toFixed(2)}}%</span><span v-else>--</span></p>
                         </div>
                     </div>
                 </div>
-                <tradeChart :title="'测试图表'" ref="tradeChart" :dataChart="dataChart3" :activetype="activetype" height="420px" ></tradeChart>
+                <tradeChart :title="'测试图表'" ref="tradeChart" :dataChart="dataChart3" :checkList="checkList" height="420px" ></tradeChart>
             </div>
         </el-aside>
         <el-main class="p_rtsiade" style="padding:0">
@@ -341,6 +345,7 @@ export default {
         imgdown:require('@/assets/images/realtime/imgdown.png'),
         unitsList:['日','周','月','季度'],
         unitsbt:['周','去年','去年','去年'],
+        checkList:[true,false,false,false],
         activetype: 0,
         dataType:{},
         startTime: "",
@@ -371,6 +376,7 @@ export default {
     };
   },
   created() {
+      localStorage.setItem("refreshTime",'')
     this.init()
   }, 
   methods: {
@@ -423,25 +429,46 @@ export default {
         this.$message.error(error);
       });
     },
+    refreshData(){//刷新数据总览数据
+        var oldTime=localStorage.getItem("refreshTime")
+        var newTime=new Date().getTime();
+        localStorage.setItem("refreshTime",newTime)
+        var s=(newTime-oldTime)/1000
+        console.log(s)
+        if(s>=600){
+            this.getdataView()
+        }else{
+            this.$message({
+                message: '刷新频繁，请10分钟后再进行刷新!',
+                type: 'warning'
+            });
+        }
+        
+    },
     gettransactionView(){//交易看板数据
     // this.seachTimetrad.invokeType='mzw'
     // this.seachTimetrad.units=1
     // this.seachTimetrad.date='2021-02-03'
       this._apis.realSurvey.transactionView(this.seachTimetrad).then(response => {
         this.dataType = JSON.parse(response)
-        console.log(this.dataType)
+        // console.log(this.dataType)
+        var allData=[]
+        allData.push(this.dataType.pay_amounts)
+        allData.push(this.dataType.pay_order_nums)
+        allData.push(this.dataType.pay_people_nums)
+        allData.push(this.dataType.per_customer_transactions)
         this.dataChart3 = {
             xAxis:JSON.parse(response).x,
-            yAxis1:JSON.parse(response).pay_amounts,
+            data:allData,
         }
       }).catch(error => {
         this.$message.error(error);
       });
     },
     gettradeDistribution(){//交易分布数据
-      this._apis.realSurvey.tradeDistribution({}).then(response => {
+    var query={invokeType:'mzw'}
+      this._apis.realSurvey.tradeDistribution(query).then(response => {
         this.dataChart4 = JSON.parse(response)  
-        console.log(this.dataChart4)
       }).catch(error => {
         this.$message.error(error);
       });
@@ -465,21 +492,7 @@ export default {
     },
     
     chooseType(type){//交易看板选择金额类型
-        this.activetype=type
-        var thisdata=[]
-        if(this.activetype==0){
-            thisdata=this.dataType.pay_amounts
-        }else if(this.activetype==1){
-            thisdata=this.dataType.pay_order_nums
-        }else if(this.activetype==2){
-            thisdata=this.dataType.pay_people_nums
-        }else if(this.activetype==3){
-            thisdata=this.dataType.per_customer_transactions
-        }
-        this.dataChart3 = {
-            xAxis:this.dataType.x,
-            yAxis1:thisdata,
-        }
+        this.$set(this.checkList,type,!this.checkList[type])
     },
     //用户  全部 or  小程序  or  公众号
     alluserType() {// userType
