@@ -6,18 +6,18 @@
         <ul class="i_base_step">
           <!-- 公众号或小城绑定任一即为通过 -->
           <li :class="{'i_base_act': baseStatus === 1, 'i_base_suc': (bindWechatAccount === 1) || (bindWechatApplet === 1)}">
-            <div class="title">绑定渠道</div>
-            <div class="number"><span>1</span><img src="../../../assets/images/profile/i_base_success.png" class="el-icon-check" alt="" /></div>
-            <div class="line"></div>
+            <div class="i_b_title">绑定渠道</div>
+            <div class="i_b_number"><span>1</span><img src="../../../assets/images/profile/i_base_success.png" class="el-icon-check" alt="" /></div>
+            <div class="i_b_line"></div>
           </li>
           <li :class="{'i_base_act': baseStatus === 2, 'i_base_suc': wechatPay === 1}">
-            <div class="title">微信支付设置</div>
-            <div class="number"><span>2</span><img src="../../../assets/images/profile/i_base_success.png" class="el-icon-check" alt="" /></div>
-            <div class="line"></div>
+            <div class="i_b_title">微信支付设置</div>
+            <div class="i_b_number"><span>2</span><img src="../../../assets/images/profile/i_base_success.png" class="el-icon-check" alt="" /></div>
+            <div class="i_b_line"></div>
           </li>
           <li :class="{'i_base_act': baseStatus === 3, 'i_base_suc': isCompleted === 1}">
-            <div class="title">店铺基础信息建设</div>
-            <div class="number">3</div>
+            <div class="i_b_title">店铺基础信息建设</div>
+            <div class="i_b_number">3</div>
           </li>
         </ul>
       </div>
@@ -118,7 +118,7 @@
       font-size: 16px;
       color: #44434B;
 
-      .title {
+      .i_b_title {
         width: 8em;
         text-align: right;
         height: 28px;
@@ -127,7 +127,7 @@
         font-weight: 400;
       }
 
-      .number {
+      .i_b_number {
         width: 28px;
         height: 28px;
         line-height: 28px;
@@ -150,7 +150,7 @@
         }
       }
 
-      .line {
+      .i_b_line {
         position: absolute;
         right: 13px;
         top: 28px;
@@ -163,11 +163,11 @@
     .i_base_act {
       color: #655EFF;
 
-      .title {
+      .i_b_title {
         font-weight: 500;
       }
 
-      .number {
+      .i_b_number {
         position: relative;
         background: #655EFF;
         border: 1px solid #fff;
@@ -192,7 +192,7 @@
       &.i_base_suc {
         color: #655EFF;
 
-        .number {
+        .i_b_number {
           background: #655EFF;
           border: 1px solid #fff;
 
@@ -211,11 +211,11 @@
     .i_base_suc {
       color: #6CD521;
 
-      .title {
+      .i_b_title {
         font-weight: 500;
       }
 
-      .number {
+      .i_b_number {
         background: #6CD521;
         border: 1px solid #FBFBFC;
         color: #fff;
