@@ -308,5 +308,8 @@ export default {
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
 }
+/deep/.el-table--small td{
+  padding:16px 0;
+}
 </style>
 

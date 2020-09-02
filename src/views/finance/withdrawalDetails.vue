@@ -515,6 +515,9 @@ export default {
     padding-left: 20px;
     padding-right: 10px;
 }
+/deep/.el-table--small td{
+  padding:16px 0;
+}
 
 .fsize{
   font-size: 14px;
