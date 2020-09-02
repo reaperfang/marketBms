@@ -18,7 +18,7 @@
                                 <el-select v-model="item.specificationSize" placeholder="请选择" @change="specificationSizeChange(item.specificationSize, index)">
                                     <el-option v-for="(item, index) in item.sizeList" :key="index" :label="item.sizeSpecs" :value="item.templateSize"></el-option>
                                 </el-select>
-                                <p v-if="item.showError">请选择</p>
+                                <p style="color: #FD4C2B;" v-if="item.showError">请选择</p>
                             </el-form-item>
                         </div>
                     </el-form>
