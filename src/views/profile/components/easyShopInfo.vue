@@ -16,7 +16,7 @@
           <img :src="form.logo" class="logo_img" />
           <canvas ref="canvas1" width="80px" height="80px" v-show="false"></canvas>
           <div class="btn">
-            <el-button @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'" class="uploadImg" size="mini" type="primary">更新图片</el-button>
+            <el-button @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'" class="uploadImg" size="mini" type="primary">更换图片</el-button>
           </div>
         </div>
         <div
@@ -430,8 +430,8 @@ export default {
     height: 534px;
     background: url('~@/assets/images/set/shop-set.jpg') no-repeat;
     background-size: 100% 100%;
-    right: 60px;
-    top: 0;
+    left: 600px;
+    top: 20px;
     z-index: 3;
     .top {
       position: absolute;

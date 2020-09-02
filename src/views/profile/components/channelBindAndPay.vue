@@ -264,6 +264,7 @@ export default {
         }
         span {
           padding-left: 11px;
+          font-weight:500;
         }
         &.prompt {
           padding-top: 17px;

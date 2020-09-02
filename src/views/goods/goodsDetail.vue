@@ -2617,9 +2617,9 @@ export default {
         },
         // 获取商品规格列表
         getSpecsList() {
-            let productCategoryInfoId = this.ruleForm.productCategoryInfoId
-            let rootId = this.getRootId(productCategoryInfoId)
-            this._apis.goodsOperate.fetchSpecsList({productCategoryId: rootId, enable: 1}).then(res => {
+            // let productCategoryInfoId = this.ruleForm.productCategoryInfoId
+            // let rootId = this.getRootId(productCategoryInfoId)
+            this._apis.goodsOperate.fetchSpecsList({productCategoryId: this.ruleForm.productCategoryInfoId, enable: 1}).then(res => {
                 console.log(res)
                 res.forEach(val => {
                     val.level = '1'

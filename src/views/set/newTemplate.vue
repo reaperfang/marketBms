@@ -532,13 +532,13 @@ export default {
       margin: 0 20px;
       border-top: 1px dashed rgba(211, 211, 211, 1);
       .table {
-        border: 1px solid #D0D6E4;
+        border: 1px solid #DADAE3;
         border-bottom: 0;
         /deep/ th.is-leaf {
           border:0;
         }
         /deep/ td {
-          border-bottom: 1px solid #D0D6E4;
+          border-bottom: 1px solid #DADAE3;
         }
         /deep/ th>.cell {
           line-height: 30px;
