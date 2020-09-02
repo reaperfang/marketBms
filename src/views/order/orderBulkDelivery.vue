@@ -749,6 +749,9 @@ export default {
 
           for(let j=0; j<orderItem.length; j++) {
             if(orderItem[j].checked) {
+              if(orderItem[j].goodsCount - orderItem[j].cacheSendCount == 0) {
+                return
+              }
               if(orderItem[j].sendCount == '') {
                 this.list[i].orderItemList.splice(j, 1, Object.assign({}, this.list[i].orderItemList[j], {
                   errorMessage:  '请输入本次发货数量',
