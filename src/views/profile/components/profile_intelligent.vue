@@ -123,14 +123,14 @@ export default {
   /deep/ .el-step .el-step__head.is-finish .el-step__icon {
     box-shadow: none;
     background-color: #fff;
-    color: #655eff;
-    border: 1px solid #655eff;
+    color: $globalMainColor;
+    border: 1px solid $globalMainColor;
   }
 
   /deep/ .el-step .el-step__head.is-process .el-step__icon {
-    background-color: #655eff;
+    background-color: $globalMainColor;
     color: #fff;
-    border: 1px solid #655eff;
+    border: 1px solid $globalMainColor;
   }
 
   /deep/ .el-step .el-step__head.is-wait .el-step__icon {

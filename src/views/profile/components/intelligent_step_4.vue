@@ -170,7 +170,7 @@
     }
 
     .i_base_act {
-      color: #655EFF;
+      color: $globalMainColor;
 
       .i_b_title {
         font-weight: 500;
@@ -178,7 +178,7 @@
 
       .i_b_number {
         position: relative;
-        background: #655EFF;
+        background: $globalMainColor;
         border: 1px solid #fff;
         box-shadow: #fff 0px 0px 0px 1px;
         color: #fff;
@@ -199,10 +199,10 @@
       }
 
       &.i_base_suc {
-        color: #655EFF;
+        color: $globalMainColor;
 
         .i_b_number {
-          background: #655EFF;
+          background: $globalMainColor;
           border: 1px solid #fff;
 
           span {

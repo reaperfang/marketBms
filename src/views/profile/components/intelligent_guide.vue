@@ -109,19 +109,19 @@
 
     &.i_g_1 {
       background: url('../../../assets/images/profile/g_01.png') no-repeat;
-    background-size: contain;
+      background-size: contain;
     }
     &.i_g_2 {
       background: url('../../../assets/images/profile/g_02.png') no-repeat;
-    background-size: contain;
+      background-size: contain;
     }
     &.i_g_3 {
       background: url('../../../assets/images/profile/g_03.png') no-repeat;
-    background-size: contain;
+      background-size: contain;
     }
     &.i_g_4 {
       background: url('../../../assets/images/profile/g_04.png') no-repeat;
-    background-size: contain;
+      background-size: contain;
     }
 
     p {
@@ -139,7 +139,7 @@
       &:last-of-type {
         font-size: 15px;
         font-weight: 600;
-        color: #655EFF;
+        color: $globalMainColor;
         line-height: 21px;
       }
     }
