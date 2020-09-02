@@ -180,7 +180,6 @@ export default {
           },
           expressCompanyList: [],
           expressElectronicSizeList: [],
-          expressCompanyList: [],
           postagePaymentList: [
             {
               label: '请选择',
@@ -364,6 +363,7 @@ export default {
           this.ruleForm = Object.assign({}, res)
         })
         .catch(error => {
+          console.log('error',error)
           this.visible = false;
           this.$message.error(error);
         });
