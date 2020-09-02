@@ -505,7 +505,6 @@ export default {
 .after-sales {
     .search {
         background-color: #fff;
-        margin: 0 20px;
         .form-inline {
             padding: 20px;
         }
@@ -525,7 +524,6 @@ export default {
     .content {
         background-color: #fff;
         padding: 20px;
-        margin: 0 20px;
         padding-top: 23px;
         p {
             font-size: 16px;

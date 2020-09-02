@@ -94,7 +94,7 @@
                 <el-table-column
                     prop="orderCode"
                     label="订单编号"
-                    width="220"
+                    width="228"
                     :class-name="haveAuto ? 'orderCode haveAuto' : 'orderCode'">
                     <template slot-scope="scope">
                         <el-tooltip v-if="scope.row.isAutoSend" content="自动发货" placement="bottom" effect="dark">
