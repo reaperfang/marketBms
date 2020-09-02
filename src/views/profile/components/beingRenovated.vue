@@ -483,6 +483,9 @@ export default {
             border:1px solid rgba(62,180,136,1);
             font-size:14px;
             color:rgba(62,180,136,1);
+            &:hover {
+              background-color:#EBF7F3;
+            }
           }
         }
       }
