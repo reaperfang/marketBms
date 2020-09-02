@@ -2,7 +2,9 @@
   <section class="intelligent_industry">
     <div class="i_industries" v-if="industries.length > 0">
       <div class="i_industry" :class="{'act': industryAct === item.id}" v-for="(item, key) in industries" :key="key" @click="changeIndustry(item)">
-        <img src="../../../assets/images/profile/i_industry_act.png"  alt="" />
+        <transition name="el-fade-in">
+          <img v-show="industryAct === item.id" src="../../../assets/images/profile/i_industry_act.png"  alt="" />
+        </transition>
         <span>{{ item.name }}</span>
       </div>
     </div>
