@@ -77,7 +77,7 @@
           :data="tableData"
           style="width: 100%"
           empty-text="暂无数据"
-          :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+         :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '500'}"
         >
           <el-table-column prop="name" label="模板名称" width="180"></el-table-column>
           <el-table-column prop="calculationWay" label="计费方式" width="180">
@@ -87,7 +87,7 @@
           </el-table-column>
           <el-table-column prop="productCount" label="应用商品数量"></el-table-column>
           <el-table-column prop="updateTime" sortable label="编辑时间"></el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <div class="operate-box">
                 <span

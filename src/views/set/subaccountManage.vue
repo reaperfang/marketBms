@@ -31,7 +31,7 @@
         v-loading="loading"
         :data="dataList"
         style="width: 100%"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+        :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '500'}"
         @selection-change="handleSelectionChange"
         >
         <el-table-column
@@ -64,7 +64,7 @@
           sortable>
         </el-table-column> -->
         <el-table-column
-        label="操作">
+        label="操作" fixed="right">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
             <el-button @click="deleteAccount(scope.row.id)" type="text" size="small" style="color:#FD4C2B">删除</el-button>
