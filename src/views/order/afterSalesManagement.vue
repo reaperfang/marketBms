@@ -122,7 +122,7 @@
             </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
-        <component ref="sunComponent" v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :title="title" @reject="rejectHandler" @confirm="confirmHandler" :data="currentData" :expressNo="expressNo" :expressCompanys="expressCompanys"></component>
+        <component ref="sunComponent" v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :title="title" @reject="rejectHandler" @confirm="confirmHandler" :data="currentData" :expressNo="expressNo" :expressCompanys="expressCompanys" :updateStatusDisabled.sync="updateStatusDisabled"></component>
     </div>
 </template>
 <script>
