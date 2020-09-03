@@ -549,6 +549,7 @@ export default {
                 expressCompanyCodes: this.ruleForm.expressCompanyCode,
                 express: res
             }))
+
             })
             .catch(error => {
             this.visible = false;
@@ -751,9 +752,14 @@ export default {
             this._apis.order.orderAfterSaleDetail({orderAfterSaleIds: [this.$route.query.ids || this.$route.query.id]}).then((res) => {
                 this._list = JSON.parse(JSON.stringify(res))
                 this.itemList = res[0].itemList
+                this.$nextTick(() => {
+                    this.itemList.forEach((row, index) => {
+                        this.$refs.table.toggleRowSelection(this.itemList[index]);
+                    })
+                })
                 setTimeout(() => {
-                    this.$refs.table.clearSelection();
                     if(selectArr) {
+                        this.$refs.table.clearSelection();
                         selectArr.forEach((row, index) => {
                             this.$refs.table.toggleRowSelection(this.itemList[index]);
                         });
@@ -909,6 +915,13 @@ export default {
     color: #444a51;
     text-decoration: underline;
 }
-
+/deep/ .el-form-item.is-disabled {
+  .el-form-item__error {
+    display: none;
+  }
+  .el-input__inner {
+    border: 1px solid #DCDFE6;
+  }
+}
 </style>
 

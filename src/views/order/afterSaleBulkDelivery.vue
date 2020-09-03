@@ -146,6 +146,7 @@
       </div>
     </div>
     <component 
+      v-if="dialogVisible" 
       :is="currentDialog" 
       :dialogVisible.sync="dialogVisible" 
       :data="currentData" 
@@ -469,6 +470,39 @@ export default {
           this.list.splice(index, 1, Object.assign({}, this.list[index], {
             express: res
           }))
+
+          // 批量填充
+          if(index == 0) {
+            let list = JSON.parse(JSON.stringify(this.list))
+            let expressCompanyCodes = list[0].orderAfterSaleSendInfo.expressCompanyCodes
+            let express = list[0].express
+
+            list.forEach((val, index) => {
+              if(index != 0) {
+                val.orderAfterSaleSendInfo.expressCompanyCodes = expressCompanyCodes
+                val.express = express
+                val.expressNos = ''
+                val.showErrorExpressCompany = false
+                val.errorMessageExpressCompany = ''
+              }
+            })
+
+            this.list = list
+          }
+
+          if(res) {
+            this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              expressNos: '',
+              express: res,
+              showErrorExpressCompany: false,
+              errorMessageExpressCompany: ''
+            }))
+          } else {
+            this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              showErrorExpressCompany: false,
+              errorMessageExpressCompany: '',
+            }))
+          }
         })
         .catch(error => {
           this.visible = false;
@@ -619,7 +653,7 @@ export default {
             let _arr = []
 
             this.list.forEach(item => {
-              let pro = this._apis.order.getExpressSpec({ companyCode: item.expressCompanyCodes, cid: this.cid })
+              let pro = this._apis.order.getExpressSpec({ companyCode: item.orderAfterSaleSendInfo.expressCompanyCodes, cid: this.cid })
 
               _arr.push(pro)
             })
@@ -645,15 +679,15 @@ export default {
               var __result = [];
               var __obj = {};
                 for(var i =0; i<this._list.length; i++){
-                   if(!__obj[this._list[i].expressCompanyCodes]){
+                   if(!__obj[this._list[i].orderAfterSaleSendInfo.expressCompanyCodes]){
                       __result.push(this._list[i]);
-                      __obj[this._list[i].expressCompanyCodes] = true;
+                      __obj[this._list[i].orderAfterSaleSendInfo.expressCompanyCodes] = true;
                   }
                 }
 
               this._list = __result
 
-              if(this.list[0].deliveryWay == 1 && this._list.length) {
+              if(this._list.length) {
                 this.currentData = {
                   list: this._list,
                   expressCompanyList: this.expressCompanyList,
