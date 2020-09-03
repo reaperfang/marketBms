@@ -214,7 +214,7 @@ class Ajax {
             config.baseURL = `${process.env.DATA_API}/api-payment-web/payment/api.do`;
             break;
           case 'uploadImage':  //图片上传
-            config.baseURL = `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`;
+            config.baseURL = `${process.env.DATA_API}/web-file/file-server/api_file_remote_upload.do`;
             break;
           case 'commission': //分销模块
             config.baseURL = `${process.env.DATA_API}/api-commission-web/commission/api.do`;

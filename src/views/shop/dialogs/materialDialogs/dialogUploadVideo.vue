@@ -81,7 +81,7 @@ export default {
   data() {
     let self = this
     return {
-      uploadUrl:`${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
+      uploadUrl:`${process.env.DATA_API}/web-file/file-server/api_file_remote_upload.do`,
       form:{
         imageUrl:'',
         name:'',

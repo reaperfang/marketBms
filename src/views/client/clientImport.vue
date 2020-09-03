@@ -90,7 +90,7 @@ export default {
     name: 'clientImport',
     data() {
         return {
-            uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
+            uploadUrl: `${process.env.DATA_API}/web-file/file-server/api_file_remote_upload.do`,
             ruleForm: {
                 channelId:"",
                 memberType: "1"
@@ -123,7 +123,7 @@ export default {
             this.channelId2 = "";
         }, 
         handleDownload() {
-            window.location.href = `${process.env.UPLOAD_SERVER}/web-file/0/excel/2e9d1/客户.xlsx`;
+            window.location.href = `${process.env.DATA_API}/web-file/0/excel/2e9d1/客户.xlsx`;
         },
         refreshPage() {
             this.getChannels();

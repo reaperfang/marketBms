@@ -71,7 +71,7 @@ export default {
     components: { cdTable, lkTable, dialogSelectImageMaterial },
     data() {
         return {
-            uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
+            uploadUrl: `${process.env.DATA_API}/web-file/file-server/api_file_remote_upload.do`,
             imgUrl:"",
             imgId: "",
             activeName: 'first',
