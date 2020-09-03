@@ -397,7 +397,7 @@ export default {
 </script>
 <style lang="scss" scoped>
     /deep/ .el-tree-node__content {
-        padding: 14px 0;
+        padding: 16px 0;
     }
     .search {
         /deep/ .el-form-item__label {
@@ -438,9 +438,9 @@ export default {
 }
 .goodsCategory .el-tree-node__content{
 	border-bottom:1px solid #eee;
-	height:auto
+	height:auto;
 }
-.th .td:first-child{padding-left:10px;}
+.th .td:first-child{padding-left:20px;}
 .treeRow{
 	overflow:hidden;
 	width:100%
@@ -458,12 +458,13 @@ export default {
 .treeRow .td .thumbImg{width:30px; height:30px; border:1px solid #efefef; display: block; overflow: hidden; margin-top: 2px}
 .treeRow .td .thumbImg img{width: 100%}
 .treeRow .td.short{width: 10%}
-.treeRow .td:nth-child(2){position:absolute; left:35%}
-.treeRow .td:nth-child(3){position:absolute; left:75%; min-width:200px}
+.treeRow .td:nth-child(2){position:absolute; left:50%}
+.treeRow .td:nth-child(3){position:absolute; left:85%; min-width:200px}
 /deep/ .el-tree-node__expand-icon:before {
     content: "\e7a0";
     color: #655EFF;
     font-size: 14px;
+    padding-left:20px;
 }
 /deep/ .expanded.el-tree-node__expand-icon:before {
     content: "\e7a2";
