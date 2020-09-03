@@ -468,6 +468,7 @@ export default {
     gettradeDistribution(){//交易分布数据
     var query={invokeType:'mzw'}
       this._apis.realSurvey.tradeDistribution(query).then(response => {
+          console.log(JSON.parse(response))
         this.dataChart4 = JSON.parse(response)  
       }).catch(error => {
         this.$message.error(error);

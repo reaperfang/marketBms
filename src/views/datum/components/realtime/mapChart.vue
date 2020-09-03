@@ -117,7 +117,7 @@ export default {
               {start: 2001, end: 3000},
               {start: 1001, end: 2000,},
               {start: 1, end: 1000,},
-              {end: 0}
+              {start: 0,end: 0}
           ],
           color: ['#0077FF', '#4FA0FF','#72BAFF', '#AFD5FF', '#DDEFFF']
         },
