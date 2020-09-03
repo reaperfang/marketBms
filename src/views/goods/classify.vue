@@ -477,7 +477,6 @@ export default {
 }
 /deep/ .el-tree-node__expand-icon.expanded {
     transform: rotate(0deg);
-    padding-left:20px !important;
 }
 }
 .operate {
