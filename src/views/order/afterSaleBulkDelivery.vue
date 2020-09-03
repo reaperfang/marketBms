@@ -679,9 +679,9 @@ export default {
               var __result = [];
               var __obj = {};
                 for(var i =0; i<this._list.length; i++){
-                   if(!__obj[this._list[i].expressCompanyCodes]){
+                   if(!__obj[this._list[i].orderAfterSaleSendInfo.expressCompanyCodes]){
                       __result.push(this._list[i]);
-                      __obj[this._list[i].expressCompanyCodes] = true;
+                      __obj[this._list[i].orderAfterSaleSendInfo.expressCompanyCodes] = true;
                   }
                 }
 
