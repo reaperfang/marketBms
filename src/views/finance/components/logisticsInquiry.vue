@@ -34,6 +34,7 @@
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
+      <div style="color:red;">说明：物流查询已上线，最新物流查询费用详见应用工具中的<a @click="$router.push({path:'/apply',query:{paths:'/application/toolapp/logisticstool',applyId:'2'}})" style="text-decoration: underline;">物流查询</a>。</div>
     </div>
     <div class="under_part">
       <div class="total">
@@ -144,6 +145,7 @@ export default {
     },
     init(){
       let query = {
+        version:0,
         queryType:1,
         relationSn:'',
         expressSn:'',
