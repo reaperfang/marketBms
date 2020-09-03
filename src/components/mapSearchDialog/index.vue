@@ -71,7 +71,6 @@ import mapSearch from '@/components/mapSearch'
     },
     methods: {
       handleOpen() {
-        if(this.sendAddress === '') this.sendAddress = '天安门';
         this.centerDialogVisible = true
         // this.$nextTick(()=> {
         // console.log('------',this.$refs.shopInfoMap)

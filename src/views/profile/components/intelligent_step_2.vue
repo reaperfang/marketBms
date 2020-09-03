@@ -1,7 +1,7 @@
 <template>
   <section class="intelligent_preview" v-loading="isLoading">
     <div class="template_list" ref="templateList">
-      <div class="list_null" v-if="isLoading">
+      <div class="list_null" v-if="listData.length <= 0">
         暂无数据...
       </div>
       <template v-else>
@@ -12,7 +12,7 @@
               <div class="view" :class="{'selected': item.id === selectTemplateId}">
                 <span class="badge"></span>
                 <div class="view_scroll">
-                  <img class="image" :src="item.previewPic" alt="图片丢失了">
+                  <img class="image" :src="item.pictureUrl" alt="图片丢失了">
                   <img class="gray_bottom" src="../../../assets/images/profile/intelligent_preview_bottom.png" alt="~~">
                 </div>
 
@@ -202,57 +202,49 @@
       async fetchListData() {
         try {
           this.isLoading = true;
-          const params = {industryId: this.industryId};
-          // const resultData = await this._apis.profile.getIntelligentPreViewTemplate(params)
-          const resultData = [
-            {
-              name: '家具专区',
-              previewPic: '',
-              qrCodePic: '',
-              id: 101,
-            },
-            {
-              name: '美味零食美味零食美味零食美味零食美味零食',
-              previewPic: 'https://img.zcool.cn/community/011bfe5f222f46a80120a821f7944a.jpg@1280w_1l_0o_100sh.jpg',
-              qrCodePic: '',
-              id: 102,
-            },
-            {
-              name: '美味零食',
-              previewPic: 'https://img.zcool.cn/community/0148085f4c81ee11013f1a649fdc55.jpg@1280w_1l_2o_100sh.jpg',
-              qrCodePic: '',
-              id: 103,
-            },
-            {
-              name: '美味零食',
-              previewPic: '',
-              qrCodePic: '',
-              id: 104,
-            },
-            {
-              name: '美味零食',
-              previewPic: '',
-              qrCodePic: '',
-              id: 105,
-            }
-          ];
-          const _this = this;
-          setTimeout(function () {
-            _this.listData = resultData.map(item => {
-              item.isShowCode = false;
-              return item;
-            })
-            // _this.listData = resultData;
-            _this.isLoading = false;
-            // _this.$refs.mySwiper.$swiper.update();
-
-          }, 2000)
-
+          const params = {industryId: 1};
+          const resultData = await this._apis.profile.getIntelligentPreViewTemplate(params);
+          // const resultData = [
+          //   {
+          //     name: '家具专区',
+          //     previewPic: '',
+          //     qrCodePic: '',
+          //     id: 101,
+          //   },
+          //   {
+          //     name: '美味零食美味零食美味零食美味零食美味零食',
+          //     previewPic: 'https://img.zcool.cn/community/011bfe5f222f46a80120a821f7944a.jpg@1280w_1l_0o_100sh.jpg',
+          //     qrCodePic: '',
+          //     id: 102,
+          //   },
+          //   {
+          //     name: '美味零食',
+          //     previewPic: 'https://img.zcool.cn/community/0148085f4c81ee11013f1a649fdc55.jpg@1280w_1l_2o_100sh.jpg',
+          //     qrCodePic: '',
+          //     id: 103,
+          //   },
+          //   {
+          //     name: '美味零食',
+          //     previewPic: '',
+          //     qrCodePic: '',
+          //     id: 104,
+          //   },
+          //   {
+          //     name: '美味零食',
+          //     previewPic: '',
+          //     qrCodePic: '',
+          //     id: 105,
+          //   }
+          // ];
+          this.listData = resultData.map(item => {
+            item.isShowCode = false;
+            return item;
+          });
         } catch (err) {
           console.error('加载模板数据出错', err.message)
         } finally {
           console.log('执行完毕');
-          // this.isLoading = false;
+          this.isLoading = false;
         }
       },
 

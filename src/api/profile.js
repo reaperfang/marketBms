@@ -42,7 +42,7 @@ export function getIntelligentProgress(data) {
 // 获取行业列表
 export function getIntelligentIndustry(data) {
   return request({
-    target: '',
+    target: 'PUBLIC-SMART-STORE-INDUSTRY-LIST-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data
@@ -59,10 +59,10 @@ export function getIntelligentEnableStatus(data) {
   })
 }
 
-// 获取预览步骤的模板列表
+// 获取预览步骤的店铺模板列表
 export function getIntelligentPreViewTemplate(data) {
   return request({
-    target: '',
+    target: 'PUBLIC-SMART-STORE-TEMPLATE-FIND-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data
