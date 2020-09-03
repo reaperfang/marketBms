@@ -207,6 +207,9 @@ export default {
     text-align: left;
   }
 }
+/deep/ .el-table--small td, .el-table--small th{
+  padding: 16px 0;
+}
 .edit_span{
     color: #655EFF;
     cursor: pointer;

@@ -247,10 +247,11 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
-
+      let checkedCount = val.length;
       if(this.list.length == this.multipleSelection.length) {
           this.checkedAll = true
       }
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.list.length;
     },
     moreManageHandler() {
       this.showTableCheck = true;
