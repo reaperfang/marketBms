@@ -85,10 +85,18 @@ export default {
         submit() {
             let _params = JSON.parse(JSON.stringify(this.params))
 
-            _params.sendInfoDtoList.forEach((val, index) => {
-                //val.specificationSize = this.data.list[index].specificationSize
-                val.specificationSize = this.data.list.find(item => item.expressCompanyCodes == val.expressCompanyCodes).specificationSize
-            })
+            
+            if(_params.sendInfoDtoList) {
+                _params.sendInfoDtoList.forEach((val, index) => {
+                    //val.specificationSize = this.data.list[index].specificationSize
+                    val.specificationSize = this.data.list.find(item => item.expressCompanyCodes == val.expressCompanyCodes).specificationSize
+                })
+            } else if(_params.orderAfterSaleSendInfoDtoList) {
+                _params.orderAfterSaleSendInfoDtoList.forEach((val, index) => {
+                    //val.specificationSize = this.data.list[index].specificationSize
+                    val.specificationSize = this.data.list.find(item => item.expressCompanyCodes == val.expressCompanyCodes).specificationSize
+                })
+            }
             this.data.list.forEach((item, index) => {
                 if(!item.specificationSize) {
                     this.$set(this.data.list, index, Object.assign({}, this.data.list[index], {
