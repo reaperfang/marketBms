@@ -144,7 +144,7 @@
           align="right"
           width="140px;">
           <template slot-scope="scope">
-            <span style="padding-right:10px;">{{scope.amount}}</span>
+            <span style="padding-right:10px;">{{scope.row.amount}}</span>
           </template>
         </el-table-column>
         <el-table-column

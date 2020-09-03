@@ -15,10 +15,10 @@
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="电子面单规格尺寸：" prop="specificationSize">
-                                <el-select v-model="item.specificationSize" placeholder="请选择" @change="specificationSizeChange(item.specificationSize, index)">
+                                <el-select :class="{error: item.showError}" v-model="item.specificationSize" placeholder="请选择" @change="specificationSizeChange(item.specificationSize, index)">
                                     <el-option v-for="(item, index) in item.sizeList" :key="index" :label="item.sizeSpecs" :value="item.templateSize"></el-option>
                                 </el-select>
-                                <p v-if="item.showError">请选择</p>
+                                <p style="color: #FD4C2B;" v-if="item.showError">必填项</p>
                             </el-form-item>
                         </div>
                     </el-form>
@@ -65,7 +65,8 @@ export default {
             this.visible = false
             this.data.list.forEach((item, index) => {
                 this.data.list.splice(index, 1, Object.assign({}, this.data.list[index], {
-                    specificationSize: ''
+                    specificationSize: '',
+                    showError: false
                 }))
             })
             this.$emit('cancel')
@@ -84,10 +85,18 @@ export default {
         submit() {
             let _params = JSON.parse(JSON.stringify(this.params))
 
-            _params.sendInfoDtoList.forEach((val, index) => {
-                //val.specificationSize = this.data.list[index].specificationSize
-                val.specificationSize = this.data.list.find(item => item.expressCompanyCodes == val.expressCompanyCodes).specificationSize
-            })
+            
+            if(_params.sendInfoDtoList) {
+                _params.sendInfoDtoList.forEach((val, index) => {
+                    //val.specificationSize = this.data.list[index].specificationSize
+                    val.specificationSize = this.data.list.find(item => item.expressCompanyCodes == val.expressCompanyCodes).specificationSize
+                })
+            } else if(_params.orderAfterSaleSendInfoDtoList) {
+                _params.orderAfterSaleSendInfoDtoList.forEach((val, index) => {
+                    //val.specificationSize = this.data.list[index].specificationSize
+                    val.specificationSize = this.data.list.find(item => item.expressCompanyCodes == val.expressCompanyCodes).specificationSize
+                })
+            }
             this.data.list.forEach((item, index) => {
                 if(!item.specificationSize) {
                     this.$set(this.data.list, index, Object.assign({}, this.data.list[index], {
@@ -206,6 +215,10 @@ export default {
     .content-box::-webkit-scrollbar {
         width: 8px;
         height: 8px;
+    }
+    /deep/ .el-select.error .el-input__inner {
+        border: 1px solid #FD4C2B;
+        border-radius: 4px;
     }
 </style>
 

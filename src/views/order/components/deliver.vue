@@ -166,7 +166,7 @@
             <el-form-item label="配送方式">
               <span>普通快递</span>
             </el-form-item>
-            <el-form-item label="快递公司" prop="expressCompanyCode" :class="{'is-disabled': !express}">
+            <el-form-item label="快递公司" prop="expressCompanyCode" :class="{'is-disabled': express != null}">
               <el-select filterable @change="checkExpress" v-model="ruleForm.expressCompanyCode" placeholder="请选择">
                 <el-option
                   :label="item.expressCompany"

@@ -10,10 +10,12 @@
           </li>
           <li class="desc">
             <span>{{ item.name }}</span>
-            <i class="mini_program"></i>
-            <i class="wechat"></i>
           </li>
           <li class="btn">
+            <div class="icon">
+              <i class="mini_program"></i>
+              <i class="wechat"></i>
+            </div>
             <el-button class="preview" @click="preview(item)">预览</el-button>
           </li>
         </ul>
@@ -360,6 +362,7 @@ export default {
             this.confirm({
               title: '提示',
               showCancelButton: false,
+              customClass: 'goods-custom',
               icon: true,
               text: `您已选择${this.currentTemplate.name}模板，为了保证商城的完整性， 需要您对当前模板进行信息编辑。`,
               confirmText: '去设置'
@@ -421,7 +424,7 @@ export default {
         border:2px solid rgba(101,94,255,1);
       }
       ul {
-        padding: 15px 8px 12px 8px;
+        padding: 15px 15px 16px 15px;
       }
       li {
         &.img {
@@ -437,38 +440,52 @@ export default {
           padding-top: 5px;
           display: flex;
           span {
-            width:84px;
+            width:100%;
             height:20px;
             font-size:14px;
             color:rgba(68,67,75,1);
             line-height:20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
-          i {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            margin-right: 10px;
-            &.mini_program {
-              background: url('~@/assets/images/shop/xiaochengxu.png') no-repeat 0 0;
-              background-size: 100% 100%;
-            }
-
-            &.wechat {
-              background: url('~@/assets/images/shop/weixin.png') no-repeat 0 0;
-              background-size: 100% 100%;
-            }
-          }
-
         }
         &.btn {
           padding-top: 14px;
-          text-align: right;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          .icon {
+            flex: 1;
+            i {
+              display: inline-block;
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              margin-right: 10px;
+              &.mini_program {
+                background: url('~@/assets/images/shop/xiaochengxu.png') no-repeat 0 0;
+                background-size: 100% 100%;
+              }
+
+              &.wechat {
+                background: url('~@/assets/images/shop/weixin.png') no-repeat 0 0;
+                background-size: 100% 100%;
+              }
+            }
+          }
           .preview {
             width:71px;
+            height: 28px;
+            line-height: 28px;
+            padding:0;
             border-radius:4px;
             border:1px solid rgba(62,180,136,1);
             font-size:14px;
             color:rgba(62,180,136,1);
+            &:hover {
+              background-color:#EBF7F3;
+            }
           }
         }
       }
