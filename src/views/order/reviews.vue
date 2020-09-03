@@ -96,7 +96,7 @@
                     <el-table-column
                         prop="orderCode"
                         label="订单编号"
-                        width="182">
+                        width="200">
                     </el-table-column>
                     <el-table-column
                         prop="memberName"
