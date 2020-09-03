@@ -739,10 +739,10 @@ export default {
                 // }
               }
               this._list = this._list.filter(val => val.express != null && !val.express.specificationSize && val.sizeList && val.sizeList.length)
-
+              console.log(this.list)
               var __result = [];
               var __obj = {};
-                for(var i =0; i<this._list.length; i++){
+                for(let i =0,l=this._list.length; i<l; i++){
                    if(!__obj[this._list[i].orderAfterSaleSendInfo.expressCompanyCodes]){
                       __result.push(this._list[i]);
                       __obj[this._list[i].orderAfterSaleSendInfo.expressCompanyCodes] = true;
