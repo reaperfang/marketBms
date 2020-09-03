@@ -38,8 +38,14 @@ export default {
                     this.$parent.getDetail && this.$parent.getDetail();
                     this.$message.success('审核成功！');
                     this.visible = false;
+
+                    this.updateStatusDisabled = false
+                    this.$emit('update:updateStatusDisabled', false)
                 }).catch(error => {
                     this.$message.error(error);
+
+                    this.updateStatusDisabled = false
+                    this.$emit('update:updateStatusDisabled', false)
                 })
             }
         },
