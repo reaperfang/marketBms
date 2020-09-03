@@ -32,6 +32,7 @@
         }
         this._apis.shop.getShopInfo(query).then(response => {
           this.wechatPay = response.wechatPay;
+          this.$emit('wxpay-status', this.wechatPay);
         }).catch(error => {
           this.$message.warning(error);
         })
@@ -67,6 +68,7 @@
     line-height: 28px;
     text-align: center;
     cursor: pointer;
+    user-select: none;
   }
 
   .b_w_on {
@@ -81,6 +83,8 @@
     color: $contentColor;
     line-height: 28px;
     text-align: center;
+    cursor: default;
+    user-select: none;
   }
 
   .b_w_title {

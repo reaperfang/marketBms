@@ -90,6 +90,7 @@
         color: #fff;
         line-height: 30px;
         margin-left: 11px;
+        user-select: none;
       }
 
       &:last-of-type {
@@ -106,6 +107,7 @@
   .i_g_item {
     width: 220px;
     height: 325px;
+    user-select: none;
 
     &.i_g_1 {
       background: url('../../../assets/images/profile/g_01.png') no-repeat;

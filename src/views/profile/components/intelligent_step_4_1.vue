@@ -44,14 +44,15 @@
       /** 获取店铺微信绑定状态 */
       getBindStatus() {
         console.log('this.cid', this.cid);
-        this._apis.profile.getwxBindStatus({ id: this.cid }).then(response => {
+        /* this._apis.profile.getwxBindStatus({ id: this.cid }).then(response => {
           console.log('getBindStatus', response);
           this.bindWechatAccount = response.bindWechatAccount;
           this.bindWechatApplet = response.bindWechatApplet;
         }).catch(error => {
           // this.$message.warning(error);
           console.warn('api catch error:', error)
-        })
+        }) */
+        this.$emit('wechat-status', {bindWechatAccount: 1, bindWechatApplet: 0});
       },
 
       /** 授权微信公众号 */
@@ -96,6 +97,7 @@
     width: 214px;
     height: 170px;
     background: rgba(218, 218, 227, 0.2);
+    user-select: none;
 
     &:first-of-type {
       margin-right: 16px;
@@ -134,5 +136,6 @@
     color: $contentColor;
     line-height: 28px;
     text-align: center;
+    cursor: default;
   }
 </style>

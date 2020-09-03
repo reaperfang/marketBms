@@ -84,6 +84,7 @@
       background: url('../../../assets/images/profile/i_industry.png') no-repeat;
       background-size: contain;
       cursor: pointer;
+      user-select: none;
 
       &:hover, &.act {
         background: url('../../../assets/images/profile/i_industry_on.png') no-repeat;

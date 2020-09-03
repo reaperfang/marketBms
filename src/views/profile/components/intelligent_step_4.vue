@@ -24,10 +24,10 @@
 
       <div class="i_base_box">
         <!--  绑定渠道  -->
-        <channel v-show="baseStatus === 1"></channel>
+        <channel v-show="baseStatus === 1" @wechat-status="wechatStatus"></channel>
 
         <!--  微信支付设置  -->
-        <wx v-show="baseStatus === 2"></wx>
+        <wx v-show="baseStatus === 2" @wxpay-status="wechatPayStatus"></wx>
 
         <!--  店铺信息  -->
         <shop v-show="baseStatus === 3" ref="BaseShopInfoView"></shop>
@@ -55,20 +55,33 @@
     data() {
       return {
         baseStatus: 1, // 基础信息进行到了第几步
-        bindWechatAccount: 1,  // 是否绑定公众号 0:未绑定 1:已绑定
-        bindWechatApplet: 0,  // 是否绑定小程序0:未绑定 1:已绑定
-        wechatPay: 1,  // 是否开启微信支付 0:否 1:是
+        bindWechatAccount: '',  // 是否绑定公众号 0:未绑定 1:已绑定
+        bindWechatApplet: '',  // 是否绑定小程序0:未绑定 1:已绑定
+        wechatPay: '',  // 是否开启微信支付 0:否 1:是
         isCompleted: 0, // 是否完成 0:否 1:是
       }
     },
     methods:{
+      /** 微信绑定状态 */
+      wechatStatus(data) {
+        console.log('wechatStatus: ', data);
+        this.bindWechatAccount = data.bindWechatAccount;
+        this.bindWechatApplet = data.bindWechatApplet;
+      },
+
+      /** 微信支付状态 */
+      wechatPayStatus(data) {
+        console.log('payStatus: ', data);
+        this.wechatPay = data;
+      },
+
       /** 上一步 */
       backBaseStep() {
         if (this.baseStatus === 1) {
           // 返回启用模板
           this.$emit('update-step', 3);
         } else {
-          this.baseStatus = this.baseStatus - 1;
+          this.baseStatus -= 1;
         }
       },
 
@@ -77,9 +90,8 @@
         if(this.baseStatus === 3) {
           this.$refs.BaseShopInfoView.completed();
         } else {
-          this.baseStatus = this.baseStatus + 1;
+          this.baseStatus += 1;
         }
-
 
       },
 
@@ -118,6 +130,7 @@
     align-items: center;
     // justify-content: center;
     margin-top: 80px;
+    user-select: none;
 
     li {
       display: flex;

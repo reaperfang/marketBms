@@ -166,6 +166,7 @@ export default {
     left: 67px;
     width: 15px;
     height: 15px;
+    user-select: none;
     display: none;
 
     &.show {
