@@ -200,6 +200,11 @@
             :sendGoods="sendGoods" 
             :title="title" 
             :ajax="ajax" 
+            :orderSendGoodsHander="orderSendGoodsHander"
+            :params="params"
+            :list="_list"
+            @cancel="cancel"
+            :express="express"
             @getDetail="getOrderDetail"
             :multipleSelection="JSON.parse(JSON.stringify(multipleSelection))">
         </component>
@@ -207,6 +212,7 @@
 </template>
 <script>
 import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDialog'
+import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
 
 import { validatePhone } from "@/utils/validate.js"
 
@@ -291,7 +297,9 @@ export default {
             isDistributorShow: false, //尚未创建配送员信息提示控制
             distributorSet: false,
             ajax: true,
-            shopAddressInfo: null
+            shopAddressInfo: null,
+            params: {},
+            _list: [],
         }
     },
     created() {
@@ -313,6 +321,9 @@ export default {
     }
     },
     methods: {
+        cancel() {
+            this.sending = false
+        },
         //检测是否有配置子帐号的权限
         checkSet(){
             const setConfig = asyncRouterMap.filter(item => item.name === 'set');
@@ -533,6 +544,12 @@ export default {
                 { required: false, message: "请输入快递单号", trigger: "blur" }
               ]);
             }
+
+            this._list.splice(0, 1, Object.assign({}, this._list[0], {
+                expressCompanyCodes: this.ruleForm.expressCompanyCode,
+                express: res
+            }))
+
             })
             .catch(error => {
             this.visible = false;
@@ -581,7 +598,7 @@ export default {
             //     }
             // }
 
-            this.$refs[formName].validate((valid) => {
+            this.$refs[formName].validate(async (valid) => {
                 if (valid) {
 
                     //如果是普通快递
@@ -621,14 +638,27 @@ export default {
                             };
                     //如果是普通快递
                     if(formName == 'ruleForm'){
-                        obj.deliveryWay = 1;
-                        obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
-                        obj.expressNos = this.ruleForm.expressNos; // 快递单号
-                        obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
-                        obj.remark = this.ruleForm.remark; // 发货备注
-                        if(this.express && this.express.specificationSize) {
-                            obj.specificationSize = this.express.specificationSize
+                        if(this.orderAfterSaleSendInfo.deliveryWay != 4) {
+                            if(this.orderAfterSaleSendInfo.deliveryWay == 1) {
+                                obj.deliveryWay = 1;
+                                obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
+                                obj.expressNos = this.ruleForm.expressNos; // 快递单号
+                                obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
+                                obj.remark = this.ruleForm.remark; // 发货备注
+                                if(this.express && this.express.specificationSize) {
+                                    obj.specificationSize = this.express.specificationSize
+                                }
                             }
+                        } else {
+                            obj.deliveryWay = 4;
+                            obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
+                            obj.expressNos = this.ruleForm.expressNos; // 快递单号
+                            obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
+                            obj.remark = this.ruleForm.remark; // 发货备注
+                            if(this.express && this.express.specificationSize) {
+                                obj.specificationSize = this.express.specificationSize
+                            }
+                        }
                       }else if(formName == 'ruleFormStore'){ //如果是商家配送
                         obj.deliveryWay = 2;
                         obj.distributorName = this.distributorName; //配送员名字
@@ -641,26 +671,49 @@ export default {
                             obj
                         ],
                     }
-                    this._apis.order.orderAfterSaleSend(params).then((res) => {
-                        this.$message.success('发货成功');
-                        this.sending = false
-                        this.$router.push({
-                            path: '/order/deliverGoodsSuccess',
-                            query: {
-                                id: this.$route.query.ids || this.$route.query.id,
-                                type: 'orderAfterDeliverGoods',
-                                print: this.express + ''
+                    this.params = params
+                    if(this.express != null && !this.express.specificationSize) {
+                        try {
+                        let res = await this._apis.order.getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
+
+                        if(res && res.length) {
+                            this._list[0].sizeList = res
+                            this.currentData = {
+                                list: this._list,
+                                expressCompanyList: this.expressCompanyList
                             }
-                        })
-                    }).catch(error => {
-                        this.$message.error(error);
-                        this.sending = false
-                    })
+                            this.currentDialog = 'SelectSizeDialog'
+                            this.title = '提示'
+                            this.dialogVisible = true
+                        }
+                        } catch(e) {
+                            this.$message.error(error);
+                        }
+                    } else {
+                        this.orderSendGoodsHander(params)
+                    }
                 } else {
                     console.log('error submit!!');
                     return false;
                 }
             });
+        },
+        orderSendGoodsHander(params) {
+            this._apis.order.orderAfterSaleSend(params).then((res) => {
+                this.$message.success('发货成功');
+                this.sending = false
+                this.$router.push({
+                    path: '/order/deliverGoodsSuccess',
+                    query: {
+                        id: this.$route.query.ids || this.$route.query.id,
+                        type: 'orderAfterDeliverGoods',
+                        print: this.express + ''
+                    }
+                })
+            }).catch(error => {
+                this.$message.error(error);
+                this.sending = false
+            })
         },
         changeReceivedInfo() {
             this.currentDialog = 'ReceiveInformationDialog'
@@ -697,10 +750,16 @@ export default {
         },
         getOrderDetail(selectArr) {
             this._apis.order.orderAfterSaleDetail({orderAfterSaleIds: [this.$route.query.ids || this.$route.query.id]}).then((res) => {
+                this._list = JSON.parse(JSON.stringify(res))
                 this.itemList = res[0].itemList
+                this.$nextTick(() => {
+                    this.itemList.forEach((row, index) => {
+                        this.$refs.table.toggleRowSelection(this.itemList[index]);
+                    })
+                })
                 setTimeout(() => {
-                    this.$refs.table.clearSelection();
                     if(selectArr) {
+                        this.$refs.table.clearSelection();
                         selectArr.forEach((row, index) => {
                             this.$refs.table.toggleRowSelection(this.itemList[index]);
                         });
@@ -730,7 +789,8 @@ export default {
         }
     },
     components: {
-        ReceiveInformationDialog
+        ReceiveInformationDialog,
+        SelectSizeDialog
     }
 }
 </script>
@@ -855,6 +915,13 @@ export default {
     color: #444a51;
     text-decoration: underline;
 }
-
+/deep/ .el-form-item.is-disabled {
+  .el-form-item__error {
+    display: none;
+  }
+  .el-input__inner {
+    border: 1px solid #DCDFE6;
+  }
+}
 </style>
 

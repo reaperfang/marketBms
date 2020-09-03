@@ -182,6 +182,7 @@
       </div>
     </div>
     <component
+      v-if="dialogVisible" 
       :is="currentDialog"
       :dialogVisible.sync="dialogVisible"
       :data="currentData"
@@ -773,6 +774,11 @@ export default {
                 }))
                 return
               }
+            } else {
+              this.list[i].orderItemList.splice(j, 1, Object.assign({}, this.list[i].orderItemList[j], {
+                errorMessage:  '',
+                showError: false
+              }))
             }
           }
         }
@@ -906,7 +912,7 @@ export default {
               orderId: item.orderId,
               memberInfoId: item.memberInfoId,
               orderCode: item.orderCode,
-              orderItems: item.orderItemList.filter(val => val.checked).filter(val => (val.goodsCount - val.cacheSendCount) != 0),
+              orderItems: JSON.parse(JSON.stringify(item.orderItemList)).filter(val => val.checked).filter(val => (val.goodsCount - val.cacheSendCount) != 0),
               id: item.id,
               memberSn: item.memberSn,
               receivedName: item.receivedName,

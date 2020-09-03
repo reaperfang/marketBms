@@ -34,20 +34,23 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="name" label="标签名称" width="180"></el-table-column>
-      <el-table-column prop="productCount" label="绑定商品数量" width="180"></el-table-column>
-      <el-table-column label="状态">
+      <el-table-column prop="name" label="标签名称" width="300"></el-table-column>
+      <el-table-column prop="productCount" label="绑定商品数量" width="150" align="right" header-align="right"></el-table-column>
+      <el-table-column label="状态" width="250" align="center" header-align="center">
         <template slot-scope="scope">
           <span>{{scope.row.enable | enableFilter}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" fixed="right">
-        <template slot-scope="scope">
+      <el-table-column label="操作" fixed="right" align="center" header-align="center
+      ">
+        <template slot-scope="scope" >
+          <div class="operate-box">
           <span v-permission="['商品', '商品标签', '默认页面', '修改']" class="operate-span blue pointer" @click="change(scope.row)">修改</span>
           <span v-permission="['商品', '商品标签', '默认页面', '显示/隐藏']" class="operate-span blue pointer" @click="hide(scope.row)">
             {{scope.row.enable | operateEnable}}
           </span>
           <span v-permission="['商品', '商品标签', '默认页面', '删除']" class="operate-span deleteColor pointer" @click="deleteTag(scope.row)">删除</span>
+        </div>
         </template>
       </el-table-column>
     </el-table>
@@ -313,6 +316,9 @@ export default {
         }
     }
 }
+/deep/ .el-table--small td,.el-table--small th{
+      padding:16px 0;
+}
 .border-button {
         border:1px solid rgba(218,218,227,1)!important;
         color: #44434B!important;
@@ -336,7 +342,13 @@ export default {
   }
 }
 .operate-span {
-  margin-right: 40px;
+  border-right:1px solid #dadae3;
+  padding-right:5px;
+  margin-right: 10px;
+}
+.operate-box span:last-child{
+  border-right:none;
+  padding-right:0px;
 }
 .form-inline {
   margin-top: 23px;
