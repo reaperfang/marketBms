@@ -126,7 +126,7 @@ export default {
                     id: item.express ? item.express.id : '',
                     cid: item.express ? item.express.cid : '',
                     specificationSize: item.specificationSize,
-                    expressCompanyCode: item.expressCompanyCodes,
+                    expressCompanyCode: item.orderAfterSaleSendInfo.expressCompanyCodes,
                     name
                 })
                 .then(res => {
