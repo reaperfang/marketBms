@@ -549,6 +549,7 @@ export default {
                 expressCompanyCodes: this.ruleForm.expressCompanyCode,
                 express: res
             }))
+
             })
             .catch(error => {
             this.visible = false;
@@ -909,6 +910,13 @@ export default {
     color: #444a51;
     text-decoration: underline;
 }
-
+/deep/ .el-form-item.is-disabled {
+  .el-form-item__error {
+    display: none;
+  }
+  .el-input__inner {
+    border: 1px solid #DCDFE6;
+  }
+}
 </style>
 
