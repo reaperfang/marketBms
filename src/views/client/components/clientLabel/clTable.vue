@@ -208,6 +208,9 @@ export default {
     text-align: left;
   }
 }
+/deep/ .el-table--small td, .el-table--small th{
+  padding: 16px 0;
+}
 .marL20 {
   margin-left: 20px;
 }

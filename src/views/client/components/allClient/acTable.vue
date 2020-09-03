@@ -12,7 +12,7 @@
       @sort-change="changeSort"
     >
       <el-table-column type="selection" :reserve-selection="true" fixed="left"></el-table-column>
-      <el-table-column prop="memberSn" label="用户ID" fixed="left"></el-table-column>
+      <el-table-column prop="memberSn" label="用户ID" fixed="left" :width="110"></el-table-column>
       <el-table-column label="用户信息" :width="163">
         <template slot-scope="scope">
           <div class="clearfix icon_cont">
