@@ -73,15 +73,18 @@
                             <el-select @change="checkExpress(index)" v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
                             </el-select>
+                            <p v-if="item.showErrorExpressCompany" class="error-message">{{item.errorMessageExpressCompany}}</p>
                             <el-input
                           style="margin-top: 5px;"
                           v-if="item.orderAfterSaleSendInfo.expressCompanyCodes == 'other'"
                           v-model="item.other"
                           placeholder="请输入快递公司名称"
                         ></el-input>
+                        <p v-if="item.expressCompanyCodes == 'other' && item.showErrorOther" class="error-message">{{item.errorMessageOther}}</p>
                         </el-form-item>
                         <el-form-item label="快递单号" prop="expressNos" class="expressNos">
                             <el-input :disabled="item.express != null" v-model="item.orderAfterSaleSendInfo.expressNos" :placeholder="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" :title="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" @input="ExpressNosInput(index)"></el-input>
+                            <p v-if="item.express == null && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
                         </el-form-item>
                     </el-form>
                     <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 2">
@@ -556,8 +559,11 @@ export default {
                 }
               }
 
+
+
               let isWrong = false;
 
+              let _list = [];
               this.list.forEach((item, index) => {
                 //如果是商家配送，则验证配送员信息
                   if(item.orderAfterSaleSendInfo.deliveryWay == 2){
@@ -575,8 +581,66 @@ export default {
                       item.errorMessagePhone = '请输入正确的手机号码'
                     }
                   }
+
+                  let orderItemList = item.itemList
+                  //如果当前子级中没有选中的
+                  let itemChecked = orderItemList.filter(val => val.checked)
+                  if(itemChecked.length == 0){
+                    return;
+                  }
+                  _list.push(item);
+                  orderItemList.forEach(goods => {
+                    //如果不是选中的，则不用验证
+                    if(!goods.checked){
+                      return;
+                    }
+                    // if(!goods.sendCount) {
+                    //   isWrong = true
+                    //   goods.showError = true
+                    //   goods.errorMessage = '请输入本次发货数量'
+                    // }
+                    // if(+goods.sendCount > +goods.goodsCount) {
+                    //   isWrong = true
+                    //   goods.showError = true
+                    //   goods.errorMessage = '本次发货数量不能大于应发数量'
+                    // }
+                  })
+                  
+
+                  //如果是普通快递，则验证快递公司与快递单号
+                  if(item.orderAfterSaleSendInfo.deliveryWay){
+                    if(item.orderAfterSaleSendInfo.expressCompanyCodes == 'other') {
+                      if(!item.other) {
+                        isWrong = true
+                        item.showErrorOther = true
+                        item.errorMessageOther = '请输入快递公司名称'
+                      } else {
+                        if(!item.expressNos) {
+                          isWrong = true
+                          item.showErrorExpressNos = true
+                          item.errorMessageExpressNos = '请输入快递单号'
+                        }
+                      }
+                    } else {
+                      if(!item.orderAfterSaleSendInfo.expressCompanyCodes) {
+                        isWrong = true
+                        item.showErrorExpressCompany = true
+                        item.errorMessageExpressCompany = '请选择快递公司'
+                      } else {
+                        if((item.express == null) && !item.expressNos) {
+                          isWrong = true
+                          item.showErrorExpressNos = true
+                          item.errorMessageExpressNos = '请输入快递单号'
+                        }
+                      }
+                    }
+                  }
+
+                  
  
               })
+            
+            this.list = _list
             if(isWrong) {
               this.$nextTick(() => {
                 document.querySelector('.error-message').scrollIntoView()
@@ -813,6 +877,8 @@ export default {
               val.itemList.forEach(goods => {
                   goods.checked = true
                   goods.sendCount = "";
+                  goods.showError = false
+                  goods.errorMessage = ''
               })
 
             val.distributorValue = '';
@@ -823,6 +889,13 @@ export default {
             val.errorMessageDistributorName = '请输入或选择配送员';
             val.showErrorPhone = false;
             val.errorMessagePhone = '';
+
+            val.showErrorExpressCompany = false
+            val.errorMessageExpressCompany = ''
+            val.showErrorExpressNos = false
+            val.errorMessageExpressNos = ''
+            val.showErrorOther = false
+            val.errorMessageOther = ''
 
             // 回显选中的快递公司
             if(list && list.length) {
