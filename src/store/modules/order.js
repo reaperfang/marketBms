@@ -1,6 +1,5 @@
 const order = {
   state: {
-    anotherAuthEnable: 0,
     expressCompanyList: []
   },
 

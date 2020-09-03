@@ -101,7 +101,7 @@ export default {
             } else if(_params.orderAfterSaleSendInfoDtoList) {
                 _params.orderAfterSaleSendInfoDtoList.forEach((val, index) => {
                     //val.specificationSize = this.data.list[index].specificationSize
-                    val.specificationSize = this.data.list.find(item => item.expressCompanyCodes == val.expressCompanyCodes).specificationSize
+                    val.specificationSize = this.data.list.find(item => item.orderAfterSaleSendInfo.expressCompanyCodes == val.expressCompanyCodes).specificationSize
                 })
             }
             this.data.list.forEach((item, index) => {
@@ -119,7 +119,7 @@ export default {
                 return
             }
             this.data.list.forEach((item, index) => {
-                let name = this.data.expressCompanyList.find(val => val.expressCompanyCode == item.expressCompanyCodes).expressCompany
+                let name = this.data.expressCompanyList.find(val => val.expressCompanyCode == item.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
 
                 this._apis.order
                 .editorExpressSize({
