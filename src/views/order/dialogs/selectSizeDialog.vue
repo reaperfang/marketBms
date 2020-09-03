@@ -10,9 +10,16 @@
                     <el-form ref="ruleForm" label-width="150px" class="demo-ruleForm">
                         <div v-for="(item, index) in data.list" :key="index">
                             <el-form-item label="已选快递公司：">
-                                <el-select disabled v-model="item.expressCompanyCodes" placeholder="请选择">
-                                    <el-option v-for="(item, index) in data.expressCompanyList" :key="index" :label="item.expressCompany" :value="item.expressCompanyCode"></el-option>
-                                </el-select>
+                                <template v-if="item.expressCompanyCodes">
+                                    <el-select disabled v-model="item.expressCompanyCodes" placeholder="请选择">
+                                        <el-option v-for="(item, index) in data.expressCompanyList" :key="index" :label="item.expressCompany" :value="item.expressCompanyCode"></el-option>
+                                    </el-select>
+                                </template>
+                                <template v-else-if="item.orderAfterSaleSendInfo.expressCompanyCodes">
+                                    <el-select disabled v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
+                                        <el-option v-for="(item, index) in data.expressCompanyList" :key="index" :label="item.expressCompany" :value="item.expressCompanyCode"></el-option>
+                                    </el-select>
+                                </template>
                             </el-form-item>
                             <el-form-item label="电子面单规格尺寸：" prop="specificationSize">
                                 <el-select :class="{error: item.showError}" v-model="item.specificationSize" placeholder="请选择" @change="specificationSizeChange(item.specificationSize, index)">

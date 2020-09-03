@@ -182,6 +182,7 @@
       </div>
     </div>
     <component
+      v-if="dialogVisible" 
       :is="currentDialog"
       :dialogVisible.sync="dialogVisible"
       :data="currentData"
