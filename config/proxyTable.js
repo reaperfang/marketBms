@@ -6,7 +6,7 @@ module.exports = {
     
     /* 电商服务 */
     '/data-server/**': {
-      target: 'http://test4-omo.aiyouyi.cn',
+      target: 'https://test4-omo.aiyouyi.cn',
       changeOrigin: true,
       pathRewrite: {
         '^/data-server': ''

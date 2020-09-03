@@ -5,7 +5,6 @@ module.exports = {
   NODE_ENV: '"dev"',
   DATA_API: '"/data-server"',
   SALE_API: '"/sale_server"', 
-  UPLOAD_SERVER: '"/upload_server"', 
   ZX_API: '"/zx_server"', //300官网api
   ZX_HELP: '"//test-www.300.cn"', //300官网链接
 
