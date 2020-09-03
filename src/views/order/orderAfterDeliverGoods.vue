@@ -752,9 +752,14 @@ export default {
             this._apis.order.orderAfterSaleDetail({orderAfterSaleIds: [this.$route.query.ids || this.$route.query.id]}).then((res) => {
                 this._list = JSON.parse(JSON.stringify(res))
                 this.itemList = res[0].itemList
+                this.$nextTick(() => {
+                    this.itemList.forEach((row, index) => {
+                        this.$refs.table.toggleRowSelection(this.itemList[index]);
+                    })
+                })
                 setTimeout(() => {
-                    this.$refs.table.clearSelection();
                     if(selectArr) {
+                        this.$refs.table.clearSelection();
                         selectArr.forEach((row, index) => {
                             this.$refs.table.toggleRowSelection(this.itemList[index]);
                         });
