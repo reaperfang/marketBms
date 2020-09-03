@@ -35,7 +35,6 @@
       /** 获取行业 */
       getIndustry() {
         this.industries = [{name:'肉禽蛋品', id: 101},{name:'新鲜水果', id: 102},{name:'酒水饮料', id: 103}];
-        this.industryAct = this.industryId === null ? this.industries[0].id : this.industryId;
         // console.log('industries', this.industries);
       },
 
@@ -56,6 +55,11 @@
         }
       }
     },
+    watch: {
+      'industryId'(newValue, oldValue){
+        if(newValue !== null) this.industryAct = newValue;
+      }
+    }
   }
 </script>
 
@@ -67,7 +71,6 @@
   .i_industries {
     display: flex;
     align-items: center;
-    justify-content: center;
     justify-content: space-between;
     margin: 110px auto 200px;
     width: 800px;
@@ -110,7 +113,7 @@
 
     }
   }
-  
+
   .i_industries_none {
     height: 300px;
     text-align: center;

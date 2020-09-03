@@ -2,11 +2,11 @@
   <section class="intelligent_preview" v-loading="isLoading">
     <div class="template_list" ref="templateList">
       <div class="list_null" v-if="isLoading">
-        数据模板加载中。。。
+        暂无数据...
       </div>
       <template v-else>
         <template v-if="!useSwiper">
-          <ul class="template_ul" >
+          <ul class="template_ul">
             <li class="template_li" v-for="item in listData" :key="item.id">
               <p class="template_name"> {{item.name}} </p>
               <div class="view" :class="{'selected': item.id === selectTemplateId}">
@@ -15,17 +15,22 @@
                   <img class="image" :src="item.previewPic" alt="图片丢失了">
                   <img class="gray_bottom" src="../../../assets/images/profile/intelligent_preview_bottom.png" alt="~~">
                 </div>
-                <div class="view_preview" v-show="item.isShowCode">
-                  <p class="hint text">使用手机扫描下方二维码 <br> 预览完整模版</p>
-                  <img class="qr_code" :src="item.qrCode" alt="二维码"/>
-                </div>
+
+                <transition name="el-fade-in">
+                  <div class="view_preview" v-show="item.isShowCode">
+                    <p class="hint text">使用手机扫描下方二维码 <br> 预览完整模版</p>
+                    <img class="qr_code" :src="item.qrCode" alt="二维码"/>
+                  </div>
+                </transition>
 
                 <div class="view_buttons">
-                <span class="view_button" :class="{'selected': item.isShowCode}" @click="item.isShowCode = !item.isShowCode">
+                <span class="view_button" :class="{'selected': item.isShowCode}"
+                      @click="item.isShowCode = !item.isShowCode">
                   <template v-if="item.isShowCode"> 取消预览 </template>
                   <template v-else>手机预览</template>
                 </span>
-                  <span class="view_button" :class="{'selected': item.id === selectTemplateId}" @click="selectedId(item.id)">
+                  <span class="view_button" :class="{'selected': item.id === selectTemplateId}"
+                        @click="selectedId(item.id)">
                   <template v-if="item.id === selectTemplateId"> 取消选择 </template>
                   <template v-else>选  择</template>
                 </span>
@@ -35,7 +40,8 @@
           </ul>
         </template>
         <template v-else>
-          <swiper v-if="listData.length > 0" class="preview_swiper swiper-no-swiping" ref="mySwiper" :options="swiperOptions">
+          <swiper v-if="listData.length > 0" class="preview_swiper swiper-no-swiping" ref="mySwiper"
+                  :options="swiperOptions">
             <template v-for="item in listData">
               <swiper-slide ref="mySwiperSlide" :key="item.id">
 
@@ -45,22 +51,28 @@
                   <span class="badge"></span>
                   <div class="view_scroll">
                     <img class="image" :src="item.previewPic" alt="图片丢失了">
-                    <img class="gray_bottom" src="../../../assets/images/profile/intelligent_preview_bottom.png" alt="~~">
-                  </div>
-                  <div class="view_preview" v-show="item.isShowCode">
-                    <p class="hint text">使用手机扫描下方二维码 <br> 预览完整模版</p>
-                    <img class="qr_code" :src="item.qrCode" alt="二维码"/>
+                    <img class="gray_bottom" src="../../../assets/images/profile/intelligent_preview_bottom.png"
+                         alt="~~">
                   </div>
 
+                  <transition name="el-fade-in">
+                    <div class="view_preview" v-show="item.isShowCode">
+                      <p class="hint text">使用手机扫描下方二维码 <br> 预览完整模版</p>
+                      <img class="qr_code" :src="item.qrCode" alt="二维码"/>
+                    </div>
+                  </transition>
+
                   <div class="view_buttons">
-                <span class="view_button" :class="{'selected': item.isShowCode}" @click="item.isShowCode = !item.isShowCode">
-                  <template v-if="item.isShowCode"> 取消预览 </template>
-                  <template v-else>手机预览</template>
-                </span>
-                    <span class="view_button" :class="{'selected': item.id === selectTemplateId}" @click="selectedId(item.id)">
-                  <template v-if="item.id === selectTemplateId"> 取消选择 </template>
-                  <template v-else>选  择</template>
-                </span>
+                    <span class="view_button" :class="{'selected': item.isShowCode}"
+                      @click="item.isShowCode = !item.isShowCode">
+                      <template v-if="item.isShowCode"> 取消预览 </template>
+                      <template v-else>手机预览</template>
+                    </span>
+                    <span class="view_button" :class="{'selected': item.id === selectTemplateId}"
+                          @click="selectedId(item.id)">
+                      <template v-if="item.id === selectTemplateId"> 取消选择 </template>
+                      <template v-else>选  择</template>
+                    </span>
                   </div>
                 </div>
 
@@ -94,7 +106,7 @@
       </div>
 
       <div slot="footer">
-        <el-button @click="isShowConfirmBox = false"> 我再想想 </el-button>
+        <el-button @click="isShowConfirmBox = false"> 我再想想</el-button>
         <el-button type="primary" @click="enableConfigure">确认，启用模板</el-button>
       </div>
 
@@ -182,7 +194,7 @@
       this.$nextTick(() => {
         this.settingSwiper()
       })
-      if(this.industryId !== null) this.fetchListData();
+      if (this.industryId !== null) this.fetchListData();
 
     },
     methods: {
@@ -303,8 +315,8 @@
 
     },
     watch: {
-      'industryId'(newValue, oldValue){
-        if(newValue !== null) this.fetchListData();
+      'industryId'(newValue, oldValue) {
+        if (newValue !== null) this.fetchListData();
       }
     }
   }
@@ -355,12 +367,14 @@
       opacity: 0;
       display: none;
     }
+
     .swiper-button-prev {
       left: 0;
       width: 48px;
       height: 48px;
       background-image: url("../../../assets/images/profile/intelligent_arrow_left.png");
       background-size: cover;
+
       &:hover {
         background-image: url("../../../assets/images/profile/intelligent_arrow_left_hover.png");
       }
@@ -372,6 +386,7 @@
       height: 48px;
       background-image: url("../../../assets/images/profile/intelligent_arrow_right.png");
       background-size: cover;
+
       &:hover {
         background-image: url("../../../assets/images/profile/intelligent_arrow_right_hover.png");
       }
@@ -397,6 +412,7 @@
       box-sizing: border-box;
       text-align: center;
       border: 2px solid #fff;
+      transition: border 0.5s;
 
       &.selected {
         border: 2px solid $globalMainColor;
@@ -417,6 +433,7 @@
         background-size: cover;
         opacity: 0;
         z-index: 7;
+        transition: opacity 0.5s;
       }
 
       .view_scroll {
@@ -493,7 +510,7 @@
         padding-top: 15px;
         background-color: #FFF;
 
-        .view_button{
+        .view_button {
           width: 95px;
           height: 28px;
           border-radius: 14px;
@@ -524,7 +541,7 @@
         padding: 0;
       }
 
-      .el-dialog__close{
+      .el-dialog__close {
         font-weight: bold;
       }
 

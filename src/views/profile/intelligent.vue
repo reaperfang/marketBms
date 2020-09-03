@@ -44,7 +44,7 @@
     data() {
       return {
         isShowGuide: false,  // 是否是显示引导（首次进入）
-        stepStatus: 2, // 进行到了第几步
+        stepStatus: 1, // 进行到了第几步
         stepArray: ['industry', 'preview', 'enable', 'base'],
         industryId: null
       }
