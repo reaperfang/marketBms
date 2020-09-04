@@ -119,14 +119,20 @@ export default {
                 return
             }
             this.data.list.forEach((item, index) => {
-                let name = this.data.expressCompanyList.find(val => val.expressCompanyCode == item.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
+                let name
+
+                if(item.orderAfterSaleSendInfo) {
+                    name = this.data.expressCompanyList.find(val => val.expressCompanyCode == item.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
+                } else {
+                    name = this.data.expressCompanyList.find(val => val.expressCompanyCode == item.expressCompanyCodes).expressCompany
+                }
 
                 this._apis.order
                 .editorExpressSize({
                     id: item.express ? item.express.id : '',
                     cid: item.express ? item.express.cid : '',
                     specificationSize: item.specificationSize,
-                    expressCompanyCode: item.orderAfterSaleSendInfo.expressCompanyCodes,
+                    expressCompanyCode: item.orderAfterSaleSendInfo ? item.orderAfterSaleSendInfo.expressCompanyCodes : item.expressCompanyCodes,
                     name
                 })
                 .then(res => {
