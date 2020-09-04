@@ -66,6 +66,12 @@ export default {
     },
     methods: {
         close() {
+            this.data.list.forEach((item, index) => {
+                this.data.list.splice(index, 1, Object.assign({}, this.data.list[index], {
+                    specificationSize: '',
+                    showError: false
+                }))
+            })
             this.$emit('cancel')
         },
         cancelHandler() {
@@ -95,13 +101,23 @@ export default {
             
             if(_params.sendInfoDtoList) {
                 _params.sendInfoDtoList.forEach((val, index) => {
-                    //val.specificationSize = this.data.list[index].specificationSize
-                    val.specificationSize = this.data.list.find(item => item.expressCompanyCodes == val.expressCompanyCodes).specificationSize
+                    let listItem = this.data.list.find(item => item.expressCompanyCodes == val.expressCompanyCodes)
+
+                    if(listItem && listItem.specificationSize) {
+                        val.specificationSize = listItem.specificationSize
+                    } else {
+                        val.specificationSize = ''
+                    }
                 })
             } else if(_params.orderAfterSaleSendInfoDtoList) {
                 _params.orderAfterSaleSendInfoDtoList.forEach((val, index) => {
-                    //val.specificationSize = this.data.list[index].specificationSize
-                    val.specificationSize = this.data.list.find(item => item.orderAfterSaleSendInfo.expressCompanyCodes == val.expressCompanyCodes).specificationSize
+                    let listItem = this.data.list.find(item => item.orderAfterSaleSendInfo.expressCompanyCodes == val.expressCompanyCodes)
+
+                    if(listItem && listItem.specificationSize) {
+                        val.specificationSize = listItem.specificationSize
+                    } else {
+                        val.specificationSize = ''
+                    }
                 })
             }
             this.data.list.forEach((item, index) => {
@@ -119,14 +135,20 @@ export default {
                 return
             }
             this.data.list.forEach((item, index) => {
-                let name = this.data.expressCompanyList.find(val => val.expressCompanyCode == item.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
+                let name
+
+                if(item.orderAfterSaleSendInfo) {
+                    name = this.data.expressCompanyList.find(val => val.expressCompanyCode == item.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
+                } else {
+                    name = this.data.expressCompanyList.find(val => val.expressCompanyCode == item.expressCompanyCodes).expressCompany
+                }
 
                 this._apis.order
                 .editorExpressSize({
                     id: item.express ? item.express.id : '',
                     cid: item.express ? item.express.cid : '',
                     specificationSize: item.specificationSize,
-                    expressCompanyCode: item.orderAfterSaleSendInfo.expressCompanyCodes,
+                    expressCompanyCode: item.orderAfterSaleSendInfo ? item.orderAfterSaleSendInfo.expressCompanyCodes : item.expressCompanyCodes,
                     name
                 })
                 .then(res => {
@@ -210,7 +232,7 @@ export default {
        }
    }
    /deep/ .el-input {
-       width: 360px;
+       width: 360px!important;
    }
    /deep/ .el-dialog__body {
        padding: 40px 40px 35px 40px;
