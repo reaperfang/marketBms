@@ -63,6 +63,13 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="a_line">
+      <el-checkbox v-model="checkAll" @change="handleChange" style="margin-right: 20px">全选</el-checkbox>
+      <!-- <el-button type="primary" @click="batchDelete">批量删除</el-button> -->
+      <el-button class="border_btn border-button" @click="batchAddTag" v-permission="['用户', '全部用户', '默认页面', '打标签']">打标签</el-button>
+      <el-button class="border_btn border-button" @click="batchAddBlack" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
+      <el-button class="border_btn border-button" @click="batchRemoveBlack" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">取消黑名单</el-button>
+    </div>
     <div class="page_styles">
       <el-pagination
         @size-change="handleSizeChange"
@@ -73,13 +80,6 @@
         :total="total*1"
         layout="total, sizes, prev, pager, next, jumper"
       ></el-pagination>
-    </div>
-    <div class="a_line">
-      <el-checkbox v-model="checkAll" @change="handleChange" style="margin-right: 20px">全选</el-checkbox>
-      <!-- <el-button type="primary" @click="batchDelete">批量删除</el-button> -->
-      <el-button class="border_btn border-button" @click="batchAddTag" v-permission="['用户', '全部用户', '默认页面', '打标签']">打标签</el-button>
-      <el-button class="border_btn border-button" @click="batchAddBlack" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
-      <el-button class="border_btn border-button" @click="batchRemoveBlack" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">取消黑名单</el-button>
     </div>
     <component
       :is="currentDialog"
@@ -366,6 +366,9 @@ export default {
         padding-left: 20px;
         padding-right: 10px;
     }
+/deep/ .el-checkbox__label{
+  padding-left: 6px;
+}
 .acTable_container{
   position: relative;
   margin-top: 60px;
@@ -376,10 +379,11 @@ export default {
   }
 }
 .a_line {
-  padding-left: 14px;
+  margin: 20px 0 40px 22px;
 }
 .page_styles{
   text-align: center;
+  margin-bottom: 30px;
 }
 .icon_cont{
   width: 163px;

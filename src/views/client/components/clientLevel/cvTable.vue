@@ -48,7 +48,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
             <span class="edit_span" @click="handleOpen(scope.row)" v-if="scope.row.enableShow == true && scope.row.name" v-permission="['用户', '会员等级', '默认页面', '查看']">启用</span>
-            <span class="edit_span" style="color:#FD4C2B" @click="handleClose(scope.row)" v-if="scope.row.disableShow == true" v-permission="['用户', '会员等级', '默认页面', '查看']">禁用</span>
+            <span class="edit_span" style="color:#FD4C2B; padding-right: 5px; border-right: 1px solid #dadae3;" @click="handleClose(scope.row)" v-if="scope.row.disableShow == true" v-permission="['用户', '会员等级', '默认页面', '查看']">禁用</span>
             <span class="edit_span" @click="edit(scope.row)" v-if="scope.row.name" v-permission="['用户', '会员等级', '默认页面', '查看']">编辑</span>
             <span class="edit_span" @click="handleConfig(scope.row)" v-if="!scope.row.name" :style="{color:scope.row.isGray?'#eee':'#655EFF'}" v-permission="['用户', '会员等级', '默认页面', '待配置']">待配置</span>
         </template>
@@ -201,10 +201,17 @@ export default {
             text-align: left;
             padding-left: 20px;
         }
+        &:nth-child(6) {
+            text-align: left;
+        }
     }
 /deep/ .el-table td{
   &:nth-child(6) {
     text-align: left;
+  }
+  &:nth-child(8) {
+    text-align: left;
+    padding-left: 39px;
   }
 }
 /deep/ .el-table--small td, .el-table--small th{
@@ -213,7 +220,6 @@ export default {
 .edit_span{
     color: #655EFF;
     cursor: pointer;
-    margin-right: 10px;
     .edit_i{
         display: inline-block;
         width: 14px;
