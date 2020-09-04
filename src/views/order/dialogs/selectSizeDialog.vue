@@ -95,13 +95,23 @@ export default {
             
             if(_params.sendInfoDtoList) {
                 _params.sendInfoDtoList.forEach((val, index) => {
-                    //val.specificationSize = this.data.list[index].specificationSize
-                    val.specificationSize = this.data.list.find(item => item.expressCompanyCodes == val.expressCompanyCodes).specificationSize
+                    let listItem = this.data.list.find(item => item.expressCompanyCodes == val.expressCompanyCodes)
+
+                    if(listItem && listItem.specificationSize) {
+                        val.specificationSize = listItem.specificationSize
+                    } else {
+                        val.specificationSize = ''
+                    }
                 })
             } else if(_params.orderAfterSaleSendInfoDtoList) {
                 _params.orderAfterSaleSendInfoDtoList.forEach((val, index) => {
-                    //val.specificationSize = this.data.list[index].specificationSize
-                    val.specificationSize = this.data.list.find(item => item.orderAfterSaleSendInfo.expressCompanyCodes == val.expressCompanyCodes).specificationSize
+                    let listItem = this.data.list.find(item => item.orderAfterSaleSendInfo.expressCompanyCodes == val.expressCompanyCodes)
+
+                    if(listItem && listItem.specificationSize) {
+                        val.specificationSize = listItem.specificationSize
+                    } else {
+                        val.specificationSize = ''
+                    }
                 })
             }
             this.data.list.forEach((item, index) => {
