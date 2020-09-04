@@ -34,6 +34,11 @@
     methods: {
       /** 获取行业 */
       getIndustry() {
+        /* this._apis.profile.getIntelligentIndustry({}).then((response)=>{
+          this.industries = response
+        }).catch((error)=>{
+          this.$message.error(error);
+        }) */
         this.industries = [{name:'肉禽蛋品', id: 101},{name:'新鲜水果', id: 102},{name:'酒水饮料', id: 103}];
         // console.log('industries', this.industries);
       },
