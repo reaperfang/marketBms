@@ -265,6 +265,8 @@
         }
         if (this.isConfigureFail) return; // 加载失败了，只能点击 '再次加载'
 
+        // 通知父组件 更新所选店铺id
+        this.$emit("update-template-id", this.selectTemplateId);
         this.isShowConfirmBox = true;
       },
 
@@ -278,12 +280,20 @@
       timer() {
         const _this = this;
         this.timerConfigure = setInterval(function () {
-          // this._apis.profile.intelligentConfigurationStatus()
-          _this.configureProgress += 10;
-          if (_this.configureProgress >= 40) {
-            clearInterval(_this.timerConfigure);
-            // _this.$emit('update-step', 3)
-          }
+          this._apis.profile.intelligentConfigurationStatus().then(res => {
+            if(res instanceof Array && res.length > 0) {
+              _this.configureProgress += 10;
+            }
+          }).catch(err => {
+            console.error("查询配置进度err:" + err)
+          }).finally(() => {
+            if (_this.configureProgress >= 50) {
+              clearInterval(_this.timerConfigure);
+
+              // 通知父组件 更新到一步
+              _this.$emit('update-step', 3)
+            }
+          });
         }, 1000);
       },
 

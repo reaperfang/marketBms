@@ -22,7 +22,13 @@
     ></step-industry>
 
     <!--  step_2  预览模板-->
-    <step-preview v-if="stepStatus === 2" @update-step="updateStep" :industryId="industryId"></step-preview>
+    <step-preview
+      v-if="stepStatus === 2"
+      @update-step="updateStep"
+      @update-template-id="updateTemplateId"
+      :industryId="industryId"
+
+    ></step-preview>
 
     <!--  step_3  启用模板-->
     <step-enable v-if="stepStatus === 3" @update-step="updateStep"></step-enable>
@@ -44,9 +50,10 @@
     data() {
       return {
         isShowGuide: false,  // 是否是显示引导（首次进入）
-        stepStatus: 1, // 进行到了第几步
-        stepArray: ['industry', 'preview', 'enable', 'base'],
-        industryId: null
+        stepStatus: null, // 进行到了第几步
+        stepArray: ['industry', 'preview', 'enable', 'base'], //
+        industryId: null,
+        templateId: null
       }
     },
     created() {
@@ -57,12 +64,18 @@
       /** 获取助用户上次操作的步骤和数据状态 */
       async fetchIntelligentStatus() {
         try {
-          // const result = this._apis.profile.getIntelligentProgress();
-          setTimeout(() => {
-            this.industryId = 102;
-          }, 3000)
+          const result = await this._apis.profile.getIntelligentProgress();
+          // setTimeout(() => {
+          //   this.industryId = 102;
+          // }, 3000)
+          console.log(result);
+          if(result) {
+            this.stepStatus = result.currentStep;
+            this.industryId = result.chooseIndustryId;
+            this.chooseTemplateId = result.chooseTemplateId;
+          }
         } catch (err) {
-          console.log(err.message)
+          console.error(err)
         }
       },
 
@@ -73,12 +86,26 @@
 
       /** 更新 步骤 */
       updateStep(stepNumber) {
-        this.stepStatus = stepNumber
+        const paramsList = [
+          {chooseIndustryId: this.industryId},
+          {chooseTemplateId: this.templateId},
+          {},
+          {}
+        ];
+        this._apis.profile.intelligentUpdateStep(paramsList[stepNumber-1]).then(res => {
+          if (res) this.stepStatus = stepNumber
+        });
+
       },
 
       /** 更新所选行业ID */
       updateIndustryId(id) {
         this.industryId = id;
+      },
+
+      /** 更新所选店铺模板ID */
+      updateTemplateId(id) {
+        this.templateId = id;
       },
     },
 

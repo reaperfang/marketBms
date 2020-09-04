@@ -82,7 +82,7 @@ export function intelligentEnableTemplate(data) {
 // 数据配置实时查询进度的接口
 export function intelligentConfigurationStatus(data) {
   return ({
-    target: '',
+    target: 'DECORATION_STORE_SYNCHRO_RECORD_FIND_PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data
