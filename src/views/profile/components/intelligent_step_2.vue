@@ -124,24 +124,36 @@
     >
       <h3 class="configure-title">店铺数据配置中，请您耐心等待...</h3>
 
-      <ul class="configure-text-list">
-        <li class="configure-text" :class="{'show': configureProgress >= 10}">
-          <p class="text-base">模板内的基础信息数据配置失败 </p>
+      <ul class="configure-text-list" style="height: 164px;">
+        <template v-for="item in configureTextArray">
+          <li class="configure-text show">
+            <p class="text-base">{{item.text}}数据配置{{item.status === 1 ? "成功" : "失败"}}</p>
+            <i class="el-icon-success" v-if="item.status === 1"></i>
+            <i class="el-icon-error" v-else></i>
+          </li>
+        </template>
+        <li class="configure-text" :class="{'show': configureProgress >= 2}">
+          <p class="text-goods">数据配置</p>
           <i class="el-icon-error"></i>
           <i class="el-icon-success"></i>
         </li>
-        <li class="configure-text" :class="{'show': configureProgress >= 20}">
-          <p class="text-goods">模板内的商品及商品分类数据配置失败</p>
+        <li class="configure-text" :class="{'show': configureProgress >= 2}">
+          <p class="text-goods">数据配置</p>
           <i class="el-icon-error"></i>
           <i class="el-icon-success"></i>
         </li>
-        <li class="configure-text" :class="{'show': configureProgress >= 30}">
-          <p class="text-page">模板内的微页面及店铺展示数据配置失败</p>
+        <li class="configure-text" :class="{'show': configureProgress >= 3}">
+          <p class="text-page">数据配置</p>
           <i class="el-icon-error"></i>
           <i class="el-icon-success"></i>
         </li>
-        <li class="configure-text" :class="{'show': configureProgress >= 40}">
-          <p class="text-shop">店铺数据配置失败</p>
+        <li class="configure-text" :class="{'show': configureProgress >= 4}">
+          <p class="text-shop">数据配置</p>
+          <i class="el-icon-error"></i>
+          <i class="el-icon-success"></i>
+        </li>
+        <li class="configure-text" :class="{'show': configureProgress >= 5}">
+          <p class="text-shop">数据配置</p>
           <i class="el-icon-error"></i>
           <i class="el-icon-success"></i>
         </li>
@@ -186,6 +198,8 @@
         isConfigureFail: false, // 是否已经配置过 且配置失败了
         timerConfigure: null, // 定时任务，查询配置进度
         configureProgress: 0, // 查询配置进度 0 - 100?
+        configureTextArray: [], // 配置进度 文字以及成功状态
+        dataTypeText: ["","运费模板", "商品", "商品分类", "创意设计", "微信公众号底部"]
       }
     },
     mounted() {
@@ -282,12 +296,21 @@
         this.timerConfigure = setInterval(function () {
           this._apis.profile.intelligentConfigurationStatus().then(res => {
             if(res instanceof Array && res.length > 0) {
-              _this.configureProgress += 10;
+
+              res.forEach(item => {
+                if(item.status !== 0) {
+                  _this.configureTextArray.push({
+                    text: _this.dataTypeText[item.dataType],
+                    status: item.status
+                  })
+                }
+              })
+
             }
           }).catch(err => {
             console.error("查询配置进度err:" + err)
           }).finally(() => {
-            if (_this.configureProgress >= 50) {
+            if (_this.configureProgress >= 5) {
               clearInterval(_this.timerConfigure);
 
               // 通知父组件 更新到一步
