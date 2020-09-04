@@ -232,7 +232,7 @@ export default {
        }
    }
    /deep/ .el-input {
-       width: 360px;
+       width: 360px!important;
    }
    /deep/ .el-dialog__body {
        padding: 40px 40px 35px 40px;
