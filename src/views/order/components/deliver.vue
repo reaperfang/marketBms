@@ -856,6 +856,8 @@ export default {
                 this.currentDialog = 'SelectSizeDialog'
                 this.title = '提示'
                 this.dialogVisible = true
+              } else {
+                this.orderSendGoodsHander(params)
               }
             } catch(e) {
               this.$message.error(error);
@@ -1048,6 +1050,17 @@ export default {
         }
       }
       this.multipleSelection = temp;
+    }
+  },
+  props: {
+    data: {
+      type: Object,
+      default: function() {
+        return {
+          deliveryWay: 1,
+          list: [],
+        }
+      }
     }
   },
   components: {
