@@ -50,7 +50,7 @@ export default {
 		"dashboard.amount"(val) {
 			console.log('"dashboard.amount"(val) {', val);
 			this.persent = val.place_order_amount_rgrt.toFixed(2) * 100;
-			this.endVal = parseFloat(val.place_order_amount_rt) * 100;
+			this.endVal = parseFloat(val.place_order_amount_rt);
 
 			this.$refs.countTo.start();
 		}
