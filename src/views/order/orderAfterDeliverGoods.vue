@@ -685,6 +685,8 @@ export default {
                             this.currentDialog = 'SelectSizeDialog'
                             this.title = '提示'
                             this.dialogVisible = true
+                        } else {
+                            this.orderSendGoodsHander(params)
                         }
                         } catch(e) {
                             this.$message.error(error);

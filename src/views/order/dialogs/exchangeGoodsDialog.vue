@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="换货确认" width="500px" :showFooter="showFooter">
+    <DialogBase :visible.sync="visible" @submit="submit" title="换货确认" width="500px" :showFooter="showFooter" @close="close">
         <div class="container">
             <p>是否需要用户退回商品：</p>
             <el-radio v-model="exchangeConfirmation" :label="1">需要退货</el-radio>
@@ -38,10 +38,20 @@ export default {
                     this.$parent.getDetail && this.$parent.getDetail();
                     this.$message.success('审核成功！');
                     this.visible = false;
+
+                    this.updateStatusDisabled = false
+                    this.$emit('update:updateStatusDisabled', false)
                 }).catch(error => {
                     this.$message.error(error);
+
+                    this.updateStatusDisabled = false
+                    this.$emit('update:updateStatusDisabled', false)
                 })
             }
+        },
+        close() {
+            this.updateStatusDisabled = false
+            this.$emit('update:updateStatusDisabled', false)
         }
     },
     mounted() {
