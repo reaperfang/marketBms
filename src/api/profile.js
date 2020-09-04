@@ -35,7 +35,7 @@ export function getIntelligentProgress(data) {
   return request({
     target: 'DECORATION_SMART_STORE_OPEN_STEPS_FIND_PROCESSOR',
     method: 'post',
-    apiType: 'manager',
+    apiType: 'decorate',
     data
   })
 }
@@ -44,7 +44,7 @@ export function getIntelligentIndustry(data) {
   return request({
     target: 'PUBLIC-SMART-STORE-INDUSTRY-LIST-PROCESSOR',
     method: 'post',
-    apiType: 'manager',
+    apiType: 'goodsOperate',
     data
   })
 }
