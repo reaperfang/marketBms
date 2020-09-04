@@ -1,7 +1,9 @@
 <template>
   <div class="base_shop">
-    <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-      <el-form-item label="商户名称:" prop="shopName">
+    <h2 class="sub_title">店铺基础信息建设</h2>
+
+    <el-form ref="form" :model="form" :rules="rules">
+      <el-form-item label="1、店铺名称:" prop="shopName">
         <el-input v-model.trim="form.shopName" style="width:283px;"></el-input>
         <p class="shopInfo-show">
           用于展示给消费者的品牌形象
@@ -13,20 +15,20 @@
         <div class="center">{{form.shopName}}</div>
       </div>
 
-      <el-form-item label="设置您的个性化短信群发签名/模板:" label-width="275px">
+      <el-form-item label="2、设置您的个性化短信群发签名/模板:">
         <el-button class="button-link"  @click="linkToMessage"> 短信群发 </el-button>
       </el-form-item>
 
-      <el-form-item label="预览并生效您的公众号首页菜单栏:" label-width="275px">
+      <el-form-item label="3、预览并生效您的公众号首页菜单栏:">
         <el-button class="button-link" @click="linkToGZH"> 公众号菜单管理 </el-button>
       </el-form-item>
 
-      <el-form-item label="客服电话:" prop="phone">
+      <el-form-item label="4、客服电话:" prop="phone">
         <el-input v-model="form.phone" placeholder="请输入手机号，不填区号" style="width:283px;"></el-input>
       </el-form-item>
 
-      <el-form-item label="联系地址:" prop="sendAddress">
-        <el-input v-model="form.sendAddress" style="width:283px;" placeholder="请输入并点击搜索图标确定联系地址" />
+      <el-form-item label="5、联系地址:" prop="sendAddress">
+        <el-input v-model="form.sendAddress" style="width:283px;" placeholder="请输入和点击搜索图标确定联系地址" />
         <dialog-map-search @getMapClickPoi="getMapClickPoi" :sendAddress="form.sendAddress"></dialog-map-search>
 
       </el-form-item>
@@ -121,6 +123,12 @@
 </script>
 
 <style lang="scss" scoped>
+  .sub_title {
+    font-size: 16px;
+    color: $contentColor;
+    margin-bottom:  20px;
+  }
+
   .shopInfo-show {
     font-size: 12px;
     color: $grayColor;
