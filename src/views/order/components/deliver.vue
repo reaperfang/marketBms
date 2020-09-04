@@ -53,10 +53,6 @@
               <el-table-column prop="goodsCount" label="应发数量">
                 <template slot-scope="scope">{{scope.row.goodsCount - scope.row.cacheSendCount}}</template>
               </el-table-column>
-              <!-- <el-table-column
-                                prop="realityNumber"
-                                label="可发货数量">
-              </el-table-column>-->
               <el-table-column prop="sendCount" label="本次发货数量">
                 <template slot-scope="scope">
                   <el-input
@@ -651,24 +647,6 @@ export default {
         });
     },
     fetchOrderAddress(address) {
-      // this._apis.order
-      //   .fetchOrderAddress({ id: this.cid, cid: this.cid })
-      //   .then(res => {
-      //     this.orderInfo.sendName = res.senderName;
-      //     this.orderInfo.sendPhone = res.senderPhone;
-      //     this.orderInfo.sendProvinceCode = res.provinceCode;
-      //     this.orderInfo.sendProvinceName = res.province;
-      //     this.orderInfo.sendCityCode = res.cityCode;
-      //     this.orderInfo.sendCityName = res.city;
-      //     this.orderInfo.sendAreaCode = res.areaCode;
-      //     this.orderInfo.sendAreaName = res.area;
-      //     this.orderInfo.sendAddress = res.sendAddress;
-      //     this.orderInfo.sendDetail = res.address;
-      //   })
-      //   .catch(error => {
-      //     this.visible = false;
-      //     this.$message.error(error);
-      //   });
       this.orderInfo.sendName = address.name;
       this.orderInfo.sendPhone = address.mobile;
       this.orderInfo.sendProvinceCode = address.provinceCode;
@@ -724,10 +702,6 @@ export default {
     // 电子面单 orderId
     // 配送单 id
     sendGoodsHandler(formName) {
-      // this.getExpressSpec()
-      // this.currentDialog = 'SelectSizeDialog'
-      // this.dialogVisible = true
-      // return
       let reg = /^[1-9]\d*$/
       // 已选的商品数据
       var curItem=[]
@@ -754,11 +728,6 @@ export default {
       }
 
       if (curItem.some(val => !Number(val.sendCount))) {        
-        // this.confirm({
-        //   title: "提示",
-        //   icon: true,
-        //   text: "请填写发货商品数量"
-        // });
         try {
           document.querySelector('.send-input').scrollIntoView()
           let scrollTop = document.querySelector('.content-main').scrollTop
@@ -786,31 +755,10 @@ export default {
         });
         return;
       }
-
-      // if(this.orderInfo.deliveryWay == 1) {
-      //   if(!this.shopAddressInfo) {
-      //     this.confirm({
-      //       title: "提示",
-      //       icon: true,
-      //       text: "发货信息不能为空"
-      //     });
-      //     return;
-      //   }
-      // }
      
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           let params;
-
-          //this.getExpressSpec()
-          // this.currentDialog = 'SelectSizeDialog'
-          // this.dialogVisible = true
-          // return
-          
-          // if(!this.ruleForm.expressCompanyCode) {
-          //     this.confirm({title: '提示', icon: true, text: '请选择快递公司'})
-          //     return
-          // }
 
           //如果是普通快递
           if(formName == 'ruleForm'){
@@ -927,11 +875,6 @@ export default {
         .then(res => {
           this.$message.success('发货成功');
           this.sending = false
-          // this.$router.push(
-          //   "/order/deliverGoodsSuccess?id=" +
-          //     res.success[0].expressParameter.orderSendInfo.id +
-          //     "&type=deliverGoods"
-          // );
           this.$router.push({
             path: '/order/deliverGoodsSuccess',
             query: {
@@ -963,16 +906,6 @@ export default {
     },
     onSubmit(value) {
       this.orderInfo = Object.assign({}, this.orderInfo, value);
-      // if(this.sendGoods == 'send') {
-      //   this.orderInfo = Object.assign({}, this.orderInfo, {
-      //     sendName: value.sendName,
-      //     sendPhone: value.sendPhone,
-      //     sendAddress: value.address,
-      //     sendDetail: value.sendDetail
-      //   })
-      // } else {
-        
-      // }
     },
     _orderDetail(selectArr) {
       let id = this.$route.query.id || this.$route.query.ids;
@@ -1052,12 +985,6 @@ export default {
               }
             }
 
-            // if(this.orderInfo.deliveryWay == 1) {
-            //   this.fetchOrderAddress(_address);
-            // } else if(this.orderInfo.deliveryWay == 4) {
-            //   this.fetchPickInfo(this.orderInfo.pickId)
-            // }
-
             //如果是商家配送，则需要请求拿到配送员列表
             if(this.orderInfo.deliveryWay == 2){
               this.getDistributorList();
@@ -1079,40 +1006,6 @@ export default {
     },
     getDetail(selectArr) {
       this._orderDetail(selectArr);
-        // try {
-        //   let ids = this.$route.query.ids || this.$route.query.id;
-        //   let orderType = this.$route.query.orderType
-        //   let sendType = this.$route.query.sendType
-
-        //   let res = await this._apis.order.orderSendDetail({ ids: ids.split(',').map(val => +val) })
-
-        //   if(res) {
-        //     res.forEach(item => {
-        //       if(sendType == 'more') {
-        //         item.express = true
-        //         item.other = "";
-        //         item.checked = false;
-        //         item.expressNos = "";
-        //         item.expressCompanyCodes = "";
-        //       }
-        //       item.orderItemList.forEach(orderItem => {
-        //         orderItem.cacheSendCount = orderItem.sendCount;
-        //         orderItem.sendCount = orderItem.goodsCount - orderItem.sendCount;
-        //         orderItem.showError = false
-        //         orderItem.errorMessage = ''
-        //         if(sendType == 'more') {
-        //           orderItem.checked = false;
-        //           orderItem.cacheSendCount = +orderItem.sendCount
-        //           orderItem.sendCount = orderItem.goodsCount - orderItem.cacheSendCount;
-        //         }
-        //       });
-        //     })
-
-        //     this.fetchAddress(res)
-        //   }
-        // } catch(error) {
-
-        // }
     },
     async fetchAddress(list) {
         try {
