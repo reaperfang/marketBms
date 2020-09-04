@@ -17,7 +17,7 @@
           </li>
           <li :class="{'i_base_act': baseStatus === 3, 'i_base_suc': isCompleted === 1}">
             <div class="i_b_title">店铺基础信息建设</div>
-            <div class="i_b_number">3</div>
+            <div class="i_b_number"><span>3</span></div>
           </li>
         </ul>
       </div>
@@ -121,6 +121,8 @@
     .i_base_box {
       width: 594px;
       min-height: 400px;
+      background: #FBFBFC;
+      padding: 80px 20px 20px;
     }
   }
 
@@ -144,15 +146,17 @@
         width: 8em;
         text-align: right;
         height: 28px;
-        line-height: 30px;
+        line-height: 0;
+        padding-top: 14px;
         margin-right: 20px;
         font-weight: 400;
       }
 
       .i_b_number {
+        position: relative;
         width: 28px;
         height: 28px;
-        line-height: 28px;
+        line-height: 0;
         background: #FBFBFC;
         border: 1px solid $borderColor;
         border-radius: 50%;
@@ -161,7 +165,8 @@
         color: $grayColor;
 
         span {
-          display: inline;
+          display: inline-block;
+          margin-top: 13px;
         }
 
         .el-icon-check {
@@ -192,17 +197,34 @@
       .i_b_number {
         position: relative;
         background: $globalMainColor;
-        border: 1px solid #fff;
-        box-shadow: #fff 0px 0px 0px 1px;
+        border: none;
         color: #fff;
         z-index: 2;
+
+        &::after {
+          content: '';
+          display: block;
+          position: absolute;
+          left: -2px;
+          top: -2px;
+          width: 32px;
+          height: 32px;
+          border: 2px solid #fff;
+          border-radius: 50%;
+          box-sizing: border-box;
+        }
+
+        span {
+          display: inline-block;
+          margin-top: 14px;
+        }
       }
 
       &::after {
         content:'';
         display: block;
         position: absolute;
-        right: -12px;
+        right: -14px;
         top: 3px;
         width: 16px;
         height: 22px;
@@ -216,10 +238,11 @@
 
         .i_b_number {
           background: $globalMainColor;
-          border: 1px solid #fff;
+          border: none;
 
           span {
-            display: inline;
+            display: inline-block;
+            margin-top: 14px;
           }
 
           .el-icon-check {
@@ -239,7 +262,7 @@
 
       .i_b_number {
         background: $successBorderColor;
-        border: 1px solid #FBFBFC;
+        border: none;
         color: #fff;
 
         span {

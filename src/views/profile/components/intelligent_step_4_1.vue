@@ -74,13 +74,10 @@
 <style lang="scss" scope>
   .base_channel {
     color: $contentColor;
-    min-height: 400px;
-    padding: 20px;
-    background: #FBFBFC;
   }
 
   .b_c_title {
-    margin: 62px 0 10px;
+    margin: 4px 0 10px;
     font-size: 16px;
     font-weight: 500;
   }

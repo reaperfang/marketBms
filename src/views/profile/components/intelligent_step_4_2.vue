@@ -51,9 +51,6 @@
 <style lang="scss" scope>
   .base_wxpay {
     position: relative;
-    min-height: 400px;
-    padding: 80px 20px 20px;
-    background: #FBFBFC;
   }
 
   .b_w_set {
