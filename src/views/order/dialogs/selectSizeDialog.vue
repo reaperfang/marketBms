@@ -111,7 +111,7 @@ export default {
                 })
             } else if(_params.orderAfterSaleSendInfoDtoList) {
                 _params.orderAfterSaleSendInfoDtoList.forEach((val, index) => {
-                    let listItem = this.data.list.find(item => item.orderAfterSaleSendInfo.expressCompanyCodes == val.expressCompanyCodes)
+                    let listItem = this.data.list.find(item => item.express.expressCompanyCodes == val.expressCompanyCodes)
 
                     if(listItem && listItem.specificationSize) {
                         val.specificationSize = listItem.specificationSize
@@ -138,7 +138,7 @@ export default {
                 let name
 
                 if(item.orderAfterSaleSendInfo) {
-                    name = this.data.expressCompanyList.find(val => val.expressCompanyCode == item.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
+                    name = this.data.expressCompanyList.find(val => val.expressCompanyCode == item.express.expressCompanyCode).expressCompany
                 } else {
                     name = this.data.expressCompanyList.find(val => val.expressCompanyCode == item.expressCompanyCodes).expressCompany
                 }
@@ -148,7 +148,7 @@ export default {
                     id: item.express ? item.express.id : '',
                     cid: item.express ? item.express.cid : '',
                     specificationSize: item.specificationSize,
-                    expressCompanyCode: item.orderAfterSaleSendInfo ? item.orderAfterSaleSendInfo.expressCompanyCodes : item.expressCompanyCodes,
+                    expressCompanyCode: item.orderAfterSaleSendInfo ? item.express.expressCompanyCode : item.expressCompanyCodes,
                     name
                 })
                 .then(res => {
