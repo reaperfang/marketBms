@@ -195,5 +195,7 @@ export default {
     padding-right: 75px;
   }
 }
-
+.page_styles{
+  margin: 40px 0 34px 0;
+}
 </style>

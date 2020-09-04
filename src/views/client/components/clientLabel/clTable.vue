@@ -38,6 +38,10 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="a_line">
+      <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
+      <el-button @click="batchDelete" class="marL20 border-button">批量删除</el-button>
+    </div>
     <div class="page_styles">
       <el-pagination
         @size-change="handleSizeChange"
@@ -48,10 +52,6 @@
         :total="total*1"
         layout="total, sizes, prev, pager, next, jumper"
       ></el-pagination>
-    </div>
-    <div class="a_line">
-      <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
-      <el-button @click="batchDelete" class="marL20 border-button">批量删除</el-button>
     </div>
   </div>
 </template>
@@ -219,6 +219,10 @@ export default {
   cursor: pointer;
 }
 .a_line {
-  padding-left: 17px;
+  margin: 20px 0 40px 16px;
+}
+.page_styles{
+  text-align: center;
+  margin-bottom: 30px;
 }
 </style>
