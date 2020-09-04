@@ -33,7 +33,7 @@ export function getProductNews(data) {
 // 获取智能开店的进度步骤以及总首次登录状态
 export function getIntelligentProgress(data) {
   return request({
-    target: '',
+    target: 'DECORATION_SMART_STORE_OPEN_STEPS_FIND_PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data
@@ -112,7 +112,7 @@ export function intelligentSaveBase(data) {
 // 保存当前步骤状态
 export function intelligentUpdateStep (data) {
   return request({
-    target: '',
+    target: 'DECORATION_SMART_STORE_OPEN_STEPS_UPDATE_PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data
