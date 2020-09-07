@@ -8,14 +8,16 @@
         <img src="../../../assets/images/profile/i_w_pub.png" class="i_w_ico" alt="授权微信公众号" />
         <div>
           <span class="b_c_set" v-if="bindWechatAccount === 0" @click="linkToOfficialAccounts"> 授权微信公众号 </span>
-          <span class="b_c_on" v-else> 公众号授权成功 </span>
+          <span class="b_c_on" v-else-if="bindWechatAccount === 1"> 公众号授权成功 </span>
+          <span class="b_c_on" v-else><i class="el-icon-loading"></i></span>
         </div>
       </li>
       <li class="b_c_item">
         <img src="../../../assets/images/profile/i_w_app.png" class="i_w_ico" alt="授权微信小程序" />
         <div>
           <span class="b_c_set" v-if="bindWechatApplet === 0" @click="linkToMiniProgram"> 授权微信小程序 </span>
-          <span class="b_c_on" v-else> 小程序授权成功 </span>
+          <span class="b_c_on" v-else-if="bindWechatApplet === 1"> 小程序授权成功 </span>
+          <span class="b_c_on" v-else><i class="el-icon-loading"></i></span>
         </div>
       </li>
     </ul>
@@ -27,8 +29,8 @@
     name: "intelligent_base_channel",
     data() {
       return {
-        bindWechatAccount: 1,  // 是否绑定公众号 0:未绑定 1:已绑定
-        bindWechatApplet: 0,  // 是否绑定小程序0:未绑定 1:已绑定
+        bindWechatAccount: null,  // 是否绑定公众号 0:未绑定 1:已绑定
+        bindWechatApplet: null,  // 是否绑定小程序 0:未绑定 1:已绑定
       }
     },
     computed:{
@@ -43,16 +45,14 @@
     methods:{
       /** 获取店铺微信绑定状态 */
       getBindStatus() {
-        console.log('this.cid', this.cid);
-        /* this._apis.profile.getwxBindStatus({ id: this.cid }).then(response => {
-          console.log('getBindStatus', response);
+        this._apis.profile.getwxBindStatus({ id: this.cid }).then(response => {
+          console.log('获取店铺微信绑定状态: ', response);
           this.bindWechatAccount = response.bindWechatAccount;
           this.bindWechatApplet = response.bindWechatApplet;
+          this.$emit('wechat-status', {bindWechatAccount: this.bindWechatAccount, bindWechatApplet: this.bindWechatApplet});
         }).catch(error => {
-          // this.$message.warning(error);
-          console.warn('api catch error:', error)
-        }) */
-        this.$emit('wechat-status', {bindWechatAccount: 1, bindWechatApplet: 0});
+          this.$message.warning(error);
+        })
       },
 
       /** 授权微信公众号 */

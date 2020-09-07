@@ -1,7 +1,8 @@
 <template>
   <div class="base_wxpay">
     <span class="b_w_set" v-if="wechatPay === 0" @click="linkToWxPay"> 开启支付 </span>
-    <span class="b_w_on" v-else> 已开启支付 </span>
+    <span class="b_w_on" v-else-if="wechatPay === 1"> 已开启支付 </span>
+    <span class="b_w_on" v-else><i class="el-icon-loading"></i></span>
     <p class="b_w_title">按照系统要求设置您店铺的支付信息</p>
   </div>
 </template>
@@ -11,7 +12,7 @@
     name: "intelligent_base_wx",
     data() {
       return {
-        wechatPay: 0,  // 是否开启微信支付 0:否 1:是
+        wechatPay: null,  // 是否开启微信支付 0:否 1:是
       }
     },
     computed:{

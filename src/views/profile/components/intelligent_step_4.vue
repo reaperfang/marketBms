@@ -54,24 +54,22 @@
     components: { channel, wx, shop },
     data() {
       return {
-        baseStatus: 1, // 基础信息进行到了第几步
-        bindWechatAccount: '',  // 是否绑定公众号 0:未绑定 1:已绑定
-        bindWechatApplet: '',  // 是否绑定小程序0:未绑定 1:已绑定
-        wechatPay: '',  // 是否开启微信支付 0:否 1:是
+        baseStatus: 1, // 基础信息进行到了第几步 默认第1步
+        bindWechatAccount: null,  // 是否绑定公众号 0:未绑定 1:已绑定
+        bindWechatApplet: null,  // 是否绑定小程序 0:未绑定 1:已绑定
+        wechatPay: null,  // 是否开启微信支付 0:否 1:是
         isCompleted: 0, // 是否完成 0:否 1:是
       }
     },
     methods:{
       /** 微信绑定状态 */
       wechatStatus(data) {
-        console.log('wechatStatus: ', data);
         this.bindWechatAccount = data.bindWechatAccount;
         this.bindWechatApplet = data.bindWechatApplet;
       },
 
       /** 微信支付状态 */
       wechatPayStatus(data) {
-        console.log('payStatus: ', data);
         this.wechatPay = data;
       },
 
