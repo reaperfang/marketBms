@@ -1,5 +1,5 @@
 <template>
-  <section class="intelligent_industry">
+  <section class="intelligent_industry" v-loading="isLoading">
     <div class="i_industries" v-if="industries.length > 0">
       <div class="i_industry" :class="{'act': industryAct === item.id}" v-for="(item, key) in industries" :key="key" @click="changeIndustry(item)">
         <transition name="el-fade-in">
@@ -26,6 +26,7 @@
       return {
         industries: [],  // 行业信息
         industryAct: null,
+        isLoading: false,
       }
     },
     created() {
@@ -34,28 +35,29 @@
     methods: {
       /** 获取行业 */
       getIndustry() {
-        /* this._apis.profile.getIntelligentIndustry({}).then((response)=>{
+        this.isLoading = true;
+        this._apis.profile.getIntelligentIndustry({}).then((response)=>{
           this.industries = response
         }).catch((error)=>{
           this.$message.error(error);
-        }) */
-        this.industries = [{name:'肉禽蛋品', id: 101},{name:'新鲜水果', id: 102},{name:'酒水饮料', id: 103}];
+        }).finally(() => {this.isLoading = false})
+        // this.industries = [{name:'肉禽蛋品', id: 1},{name:'新鲜水果', id: 2},{name:'酒水饮料', id: 3}];
         // console.log('industries', this.industries);
       },
 
       /** 选择行业 */
       changeIndustry({id}) {
         this.industryAct = id;
+        this.$emit('update-industry-id', this.industryAct);
         console.log('industryAct:   ', this.industryAct);
       },
 
       /** 进行下一步 */
       toPreviewTemplate() {
-        if(this.industryAct === '') {
+        if(this.industryAct == null) {
           this.$message.error('请选择行业')
         }
         else {
-          this.$emit('update-industry-id', this.industryAct);
           this.$emit('update-step', 2)
         }
       }

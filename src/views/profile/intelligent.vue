@@ -70,7 +70,7 @@
           // }, 3000)
           console.log(result);
           if(result) {
-            this.stepStatus = result.currentStep;
+            this.stepStatus = result.currentStep ? result.currentStep + 1 : 1;
             this.industryId = result.chooseIndustryId;
             this.chooseTemplateId = result.chooseTemplateId;
           }
@@ -86,13 +86,8 @@
 
       /** 更新 步骤 */
       updateStep(stepNumber) {
-        const paramsList = [
-          {chooseIndustryId: this.industryId},
-          {chooseTemplateId: this.templateId},
-          {},
-          {}
-        ];
-        this._apis.profile.intelligentUpdateStep(paramsList[stepNumber-1]).then(res => {
+        const paramsList = [{chooseIndustryId: this.industryId}, {chooseTemplateId: this.templateId}, {}, {}];
+        this._apis.profile.intelligentUpdateStep(paramsList[stepNumber-2]).then(res => {
           if (res) this.stepStatus = stepNumber
         });
 

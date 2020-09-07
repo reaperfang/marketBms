@@ -64,7 +64,7 @@ export function getIntelligentPreViewTemplate(data) {
   return request({
     target: 'PUBLIC-SMART-STORE-TEMPLATE-FIND-PROCESSOR',
     method: 'post',
-    apiType: 'manager',
+    apiType: 'goodsOperate',
     data
   })
 }
@@ -84,7 +84,7 @@ export function intelligentConfigurationStatus(data) {
   return ({
     target: 'DECORATION_STORE_SYNCHRO_RECORD_FIND_PROCESSOR',
     method: 'post',
-    apiType: 'manager',
+    apiType: 'decorate',
     data
   })
 }
@@ -114,7 +114,7 @@ export function intelligentUpdateStep (data) {
   return request({
     target: 'DECORATION_SMART_STORE_OPEN_STEPS_UPDATE_PROCESSOR',
     method: 'post',
-    apiType: 'manager',
+    apiType: 'decorate',
     data
   })
 }
