@@ -343,3 +343,22 @@ export function getSelfLiftList(data) {
     data
   })
 }
+
+/*  达达-商户获取余额 */
+export function getBalance(data) {
+  return request({
+    target: 'DADA-BALANCE-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+/*  达达-商户充值 */
+export function getRecharge(data) {
+  return request({
+    target: 'DADA-RECHARGE-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}

@@ -182,6 +182,19 @@ export default [
                 meta: { title: '编辑', noCache: true, tabTitle: '配送设置' ,navType:5},
             },
             {
+                path: 'recharge',
+                component: () => import('@/views/set/recharge'),
+                name: 'recharge',
+                hidden: true,
+                meta: { title: '充值', noCache: true, tabTitle: '配送设置' , navType: 4 }
+            },{
+                path: 'rechargeRecord',
+                component: () => import('@/views/set/rechargeRecord'),
+                name: 'rechargeRecord',
+                hidden: false,
+                meta: { title: '充值记录', noCache: true, tabTitle: '配送设置' , navType: 4 }
+                },
+            {
                  path: 'authorize',
                  component: () => import('@/views/set/authorize'),
                  name: 'authorize',
