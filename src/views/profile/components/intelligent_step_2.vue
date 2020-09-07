@@ -176,6 +176,7 @@
     name: "intelligent_preview",
     components: {Swiper, SwiperSlide},
     props: {
+      currentStep: null,
       industryId: null, // 行业id, 用于请求行业模板
     },
     data() {

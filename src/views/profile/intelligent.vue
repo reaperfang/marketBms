@@ -27,7 +27,7 @@
       @update-step="updateStep"
       @update-template-id="updateTemplateId"
       :industryId="industryId"
-
+      :currentStep="stepStatus"
     ></step-preview>
 
     <!--  step_3  启用模板-->
@@ -65,12 +65,9 @@
       async fetchIntelligentStatus() {
         try {
           const result = await this._apis.profile.getIntelligentProgress();
-          // setTimeout(() => {
-          //   this.industryId = 102;
-          // }, 3000)
           console.log(result);
           if(result) {
-            this.stepStatus = result.currentStep ? result.currentStep + 1 : 1;
+            this.stepStatus = result.currentStep ? result.status === 1 ? result.currentStep + 1 : result.currentStep : 1;
             this.industryId = result.chooseIndustryId;
             this.chooseTemplateId = result.chooseTemplateId;
           }

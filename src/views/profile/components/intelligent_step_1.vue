@@ -11,7 +11,7 @@
     <div class="i_industries_none" v-else>暂无数据...</div>
 
     <div class="bottom_buttons">
-      <el-button type="primary" size="medium" @click.native="toPreviewTemplate" :disabled="industries.length == 0"> 下一步，预览模板 </el-button>
+      <el-button type="primary" v-loading="nextIsLoading" size="medium" @click.native="toPreviewTemplate" :disabled="industries.length == 0"> 下一步，预览模板 </el-button>
     </div>
   </section>
 </template>
@@ -27,6 +27,7 @@
         industries: [],  // 行业信息
         industryAct: null,
         isLoading: false,
+        nextIsLoading: false
       }
     },
     created() {
@@ -58,9 +59,12 @@
           this.$message.error('请选择行业')
         }
         else {
+          // reselect
+          this.nextIsLoading = true;
           this._apis.profile.intelligentUpdateStep({chooseIndustryId: this.industryId})
             .then(() => { this.$emit("update-step", 2) })
-            .catch(error => { this.$message.error(error + "请稍后再试") });
+            .catch(error => { this.$message.error(error + "请稍后再试") })
+            .finally(()=>{this.nextIsLoading = false;})
         }
       }
     },
