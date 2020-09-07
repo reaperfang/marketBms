@@ -5,6 +5,7 @@
             <el-option label="全部" value></el-option>
             <el-option :label="isAfterSales ? '快递退货' : '普通快递'" :value="1"></el-option>
             <el-option :label="isAfterSales ? '商家自取' : '商家配送'" :value="2"></el-option>
+            <el-option :label="isAfterSales ? '快递退货' : '第三方配送'" :value="3"></el-option>
             <el-option :label="isAfterSales ? '快递退货' : '上门自提'" :value="4"></el-option>
           </el-select>
         </el-form-item>
