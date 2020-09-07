@@ -82,7 +82,8 @@
         <el-table-column
           prop="changeAmount"
           label="变动金额（元）"
-          align="right">
+          align="right"
+          width="120px">
           <template slot-scope="scope">
             {{scope.row.changeAmount > 0 ? '+'+scope.row.changeAmount : scope.row.changeAmount}}
           </template>
@@ -90,13 +91,14 @@
         <el-table-column
           prop="surplusAmount"
           label="剩余金额（元）"
-          align="right">
+          align="right"
+          width="120px">
         </el-table-column>
         <el-table-column
           prop="tradeTime"
           label="交易时间"
           sortable = "custom"
-          align="center"
+          align="right"
           width="200px">
         </el-table-column>
       </el-table>

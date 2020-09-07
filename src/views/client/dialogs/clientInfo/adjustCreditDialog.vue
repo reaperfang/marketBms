@@ -126,7 +126,7 @@ export default {
       }else{
         this.showError = false;
       }
-      if(Number(this.adjustmentScore) > 100000000) {
+      if(Number(this.adjustmentScore) >= 100000000) {
         this.$message({
           message: '增加积分不能超过1亿',
           type: 'warning'

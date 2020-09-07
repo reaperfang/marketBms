@@ -73,7 +73,7 @@
           prop="createTime"
           label="查询时间"
           sortable = "custom"
-          align="center"
+          align="right"
           width="200px">
         </el-table-column>
       </el-table>

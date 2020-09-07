@@ -284,8 +284,10 @@ import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
 import { validatePhone } from "@/utils/validate.js"
 
 import { asyncRouterMap } from '@/router'
+//import { deliveryWay1 } from '../mixins/orderMixin'
 
 export default {
+  //mixins: [deliveryWay1],
   data() {
     var expressCompanyCodeValidator = (rule, value, callback) => {
           if(this.ruleForm.expressCompanyCode != 'other') {
@@ -421,6 +423,32 @@ export default {
             return false
         }
     },
+    // orderInfo: {
+    //   get() {
+    //     if(this.data.list && this.data.list.length) {
+    //       return this.data.list[0]
+    //     }
+    //     return {}
+    //   },
+    //   set(val) {
+    //     return val
+    //   }
+    // },
+    // tableData: {
+    //   get() {
+    //     if(this.data.list && this.data.list[0] && this.data.list[0].orderItems) {
+    //       return this.data.list[0].orderItems.map(item => ({
+    //         ...item,
+    //         showError: false,
+    //         errorMessage: ''
+    //       }))
+    //     }
+    //     return []
+    //   },
+    //   set(val) {
+    //     return val
+    //   }
+    // }
   },
   methods: {
     cancel() {
