@@ -21,16 +21,14 @@ export default {
 	data() {
 		return {
 			chartData: "71.23",
-			chart: "",
+			chart: ""
 		};
 	},
-	created() {
-		console.log("this.hobby", this.hobby);
-	},
+	created() {},
 	mounted() {
 		//this.showChart();
 		window.addEventListener("resize", ev => {
-				this.chart.resize();
+			this.chart.resize();
 		});
 	},
 	methods: {

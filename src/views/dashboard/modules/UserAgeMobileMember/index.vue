@@ -165,8 +165,6 @@ export default {
 					gender: val.c_uv_sex_gender
 				}
 			};
-
-			console.log("sexageData", this.sexageData);
 		},
 		setPhone(val) {
 			let result = parseFloat(val.c_uv_share_phone) * 100;

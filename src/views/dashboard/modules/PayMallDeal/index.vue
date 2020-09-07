@@ -81,7 +81,6 @@ export default {
 	mounted() {
 		this.init();
 		var IntervalId = window.setInterval(() => {
-			console.log("var IntervalId = window.setInterval(() => {");
 			this.init();
 		}, 10000);
 	},
