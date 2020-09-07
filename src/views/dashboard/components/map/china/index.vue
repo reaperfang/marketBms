@@ -205,24 +205,46 @@ export default {
 					//calculable: true,
 
 					seriesIndex: [1],
+					// pieces: [
+					// 	{ min: 1001, label: "> 1001 ", color: "#003C87" },
+					// 	{
+					// 		min: 501,
+					// 		max: 1000,
+					// 		label: "501 - 1000 ",
+					// 		color: "#003C87"
+					// 	},
+					// 	{
+					// 		min: 101,
+					// 		max: 500,
+					// 		label: "101 - 500 ",
+					// 		color: "#0373FF"
+					// 	},
+					// 	{
+					// 		min: 1,
+					// 		max: 45,
+					// 		label: "1 - 45 ",
+					// 		color: "#5EC6F9"
+					// 	},
+					// 	{ min: -10, max: 0, label: "未下单 ", color: "#86FEFC" }
+					// ]
 					pieces: [
-						{ min: 1001, label: "> 1001 ", color: "#003C87" },
+						{ min: 3000, label: "> 3000 ", color: "#003C87" },
 						{
-							min: 501,
-							max: 1000,
-							label: "501 - 1000 ",
+							min: 2001,
+							max: 3000,
+							label: "2001 - 3000 ",
 							color: "#003C87"
 						},
 						{
-							min: 101,
-							max: 500,
-							label: "101 - 500 ",
+							min: 1001,
+							max: 2000,
+							label: "1001 - 2000 ",
 							color: "#0373FF"
 						},
 						{
 							min: 1,
-							max: 45,
-							label: "1 - 45 ",
+							max: 1000,
+							label: "1 - 1000 ",
 							color: "#5EC6F9"
 						},
 						{ min: -10, max: 0, label: "未下单 ", color: "#86FEFC" }

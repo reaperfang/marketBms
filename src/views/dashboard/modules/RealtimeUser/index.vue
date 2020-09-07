@@ -45,6 +45,9 @@ export default {
 	},
 	mounted() {
 		this.init();
+		var IntervalId = window.setInterval(() => {
+			this.init();
+		}, 10000);
 	},
 	beforeCreate() {},
 	created() {},
