@@ -56,6 +56,7 @@
         prop="scoreTradeCount"
         label="积分消耗次数（总）"
         align="right"
+        width="200px"
       >
       </el-table-column>
     </el-table>
