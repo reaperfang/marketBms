@@ -23,3 +23,17 @@ export const search = {
     Pagination,
   }
 }
+
+export const deliveryWay1 = {
+  data() {
+    return {
+      
+    }
+  },
+  methods: {
+    
+  },
+  components: {
+    
+  }
+}
