@@ -792,11 +792,11 @@ export default {
             }
             .no_isEmpower{
               width: auto;
-              height: 86px;
+              height: 106px;
             }
             .no_release{
               width: auto;
-              height: 86px;
+              height: 106px;
             }
             .opt{
               margin-top: 10px;
