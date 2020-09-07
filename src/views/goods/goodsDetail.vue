@@ -464,19 +464,19 @@
                     <div class='checkbox-item' >
                         <el-checkbox :label="4" @change="((val)=>{deliveryWayChange(val, '4')})" style="margin-right:30px;">上门自提</el-checkbox>
                         <div> 
-                            <span class="prompt" v-show="!isSelfLiftSet" >“上门自提”需在设置-配送设置中开启后生效，去设置</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span>
+                            <span class="prompt" v-show="!isSelfLiftSet" >“上门自提”需在设置-配送设置中开启后生效，</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span>
                         </div>
                     </div>
                     <div class='checkbox-item'>
                         <el-checkbox :label="2" @change="((val)=>{deliveryWayChange(val, '2')})" >同城配送</el-checkbox>
                         <div>
-                        <span class="prompt" style="margin-left:30px;" v-show="!isDeliverySet">“同城配送”需在设置-配送设置中开启后生效，去设置</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
+                        <span class="prompt" style="margin-left:30px;" v-show="!isDeliverySet">“同城配送”需在设置-配送设置中开启后生效，</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
                         </div>
                     </div>
                 </el-checkbox-group>
                 <div>
                     <div style="display:none;width:296px;margin-left:24px;" v-show="!isDeliverySet || !isExpressSet">
-                        <span class="prompt" v-show="!isExpressSet">“普通快递”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isExpressSet" @click="gotoExpressSet">去设置</span>
+                        <span class="prompt" v-show="!isExpressSet">“普通快递”需在店铺设置开启后生效，</span><span class="set-btn blue pointer font12" v-show="!isExpressSet" @click="gotoExpressSet">去设置</span>
                     </div>
                     <!-- <span class="prompt" v-show="!isSelfLiftSet" style="margin-left:60px;">“上门自提”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span> -->
                     <!-- <span class="prompt" v-show="!isDeliverySet">“同城配送”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span> -->
