@@ -16,7 +16,8 @@ export default {
 	data() {
 		return {
 			chartData: "71.23",
-			chart: ""
+			chart: "",
+			interval: ""
 		};
 	},
 	mounted() {
@@ -338,14 +339,28 @@ export default {
 			this.chart.clear();
 			this.chart.setOption(option);
 
+			if (this.interval) {
+				this.clearInterval();
+			}
+
 			var j = 0;
-			var IntervalId = window.setInterval(() => {
+
+			this.interval = this.setInterval(() => {
 				if (j == 30) j = 0;
 				// topCity数组就是top的这个5个城市.
 				option.series[0].data = [convertData(data)[j]];
 				this.chart.setOption(option);
 				j++;
 			}, 1000);
+
+			// var j = 0;
+			// var IntervalId = window.setInterval(() => {
+			// 	if (j == 30) j = 0;
+			// 	// topCity数组就是top的这个5个城市.
+			// 	option.series[0].data = [convertData(data)[j]];
+			// 	this.chart.setOption(option);
+			// 	j++;
+			// }, 1000);
 		},
 
 		prepareChartMap(mapName) {
@@ -374,6 +389,14 @@ export default {
 				}
 			}
 			return res;
+		},
+		setInterval(callback, time) {
+			return window.setInterval(() => {
+				callback();
+			}, time);
+		},
+		clearInterval() {
+			window.clearInterval(this.interval);
 		}
 	},
 	components: {}
