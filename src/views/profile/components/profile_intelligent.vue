@@ -10,7 +10,7 @@
     <el-row class="p_i_content">
       <el-col :span="24">
         <el-button type="primary" class="to_intelligent" @click.native="toIntelligent">立即体验</el-button>
-        <el-steps space="30%" :active="stepStatus" finish-status="finish">
+        <el-steps space="30%" :active="currentStep" finish-status="finish">
           <el-step title="选择所属行业"></el-step>
           <el-step title="预览行业模板"></el-step>
           <el-step title="启用行业模板">
@@ -22,7 +22,7 @@
                 offset="10"
                 popper-class="pop_box">
                 <div class="pop_content">您的行业模板数据配置失败、模板未启用成功，请您点击“立即体验”再次配置模板数据</div>
-                <img src="../../../assets/images/profile/i_tip.png" class="pop_icon" :class="{'show': intelligentTip}" slot="reference" alt="提示" />
+                <img src="../../../assets/images/profile/i_tip.png" class="pop_icon" :class="{'show': stepStatus === 0}" slot="reference" alt="提示" />
               </el-popover>
             </template>
           </el-step>
@@ -41,9 +41,8 @@ export default {
     name: 'profile_intelligent',
     data() {
       return {
-        isFirst: false, // 是否首次
-        stepStatus: 1, // 进行到了第几步
-        intelligentTip: false,  // 是否有第三步提示
+        currentStep: null, // 当前步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
+        stepStatus: null, // 步骤状态 0 未完成 1 已完成
       }
     },
     created() {
@@ -51,11 +50,17 @@ export default {
     },
     methods:{
       /** 获取智能开店信息 */
-      getIntelligent() {
-        // test
-        this.isFirst = true;
-        this.stepStatus = 2;
-        this.intelligentTip = true;
+      async getIntelligent() {
+        try {
+          const result = await this._apis.profile.getIntelligentProgress();
+          console.log('获取智能开店信息: ', result);
+          if(result) {
+            this.currentStep = result.currentStep ? result.currentStep + 1 : 1;
+            this.stepStatus = result.status;
+          }
+        } catch (err) {
+          console.error(err)
+        }
       },
 
       /** 智能开店体验引导 */

@@ -30,6 +30,12 @@
         nextIsLoading: false
       }
     },
+    computed:{
+      cid(){
+        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'));
+        return shopInfo.id;
+      }
+    },
     created() {
       this.getIndustry();
     },
@@ -61,7 +67,13 @@
         else {
           // reselect
           this.nextIsLoading = true;
-          this._apis.profile.intelligentUpdateStep({chooseIndustryId: this.industryId})
+          let query = {
+            cid: this.cid,
+            chooseIndustryId: this.industryId,  // 选择行业id
+            /* chooseTemplateId: 1, // 选择模板id
+            reselect: 0,  // 重新选择 0 否 1 是 */
+          };
+          this._apis.profile.intelligentUpdateStep(query)
             .then(() => { this.$emit("update-step", 2) })
             .catch(error => { this.$message.error(error + "请稍后再试") })
             .finally(()=>{this.nextIsLoading = false;})
