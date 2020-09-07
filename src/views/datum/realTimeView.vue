@@ -114,7 +114,7 @@
                     <div class="choose_item" :class="checkList[0]?'active':''">
                         <div class="choosetop">
                             <p>支付金额（元）<span class="chooseBut" @click="chooseType(0)"></span></p>
-                            <span> <strong>{{dataType.paid_order_am}}</strong> </span>
+                            <span> <strong>{{dataType.paid_order_am.toFixed(2)}}</strong> </span>
                         </div>
                         <div class="choosebot">
                             <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_am_rg_pct!='-9999'" :class="dataType.paid_order_am_rg_pct>0?'up':'down'">
@@ -128,7 +128,7 @@
                     <div class="choose_item" :class="checkList[1]?'active':''">
                         <div class="choosetop">
                             <p>支付订单数（单）<span class="chooseBut" @click="chooseType(1)"></span></p>
-                            <span> <strong>{{dataType.paid_order_cq}}</strong> </span>
+                            <span> <strong>{{dataType.paid_order_cq.toFixed(2)}}</strong> </span>
                         </div>
                         <div class="choosebot">
                             <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_cq_rg_pct!='-9999'" :class="dataType.paid_order_cq_rg_pct>0?'up':'down'">
@@ -146,7 +146,7 @@
                     <div class="choose_item" :class="checkList[2]?'active':''">
                         <div class="choosetop">
                             <p>支付人数（人）<span class="chooseBut" @click="chooseType(2)"></span></p>
-                            <span> <strong>{{dataType.paid_order_nu}}</strong> </span>
+                            <span> <strong>{{dataType.paid_order_nu.toFixed(2)}}</strong> </span>
                         </div>
                         <div class="choosebot">
                             <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_nu_rg_pct!='-9999'" :class="dataType.paid_order_nu_rg_pct>0?'up':'down'">
@@ -165,7 +165,7 @@
                                 </el-tooltip>
                                 <span class="chooseBut" @click="chooseType(3)"></span>
                             </p>
-                            <span> <strong>{{dataType.atv}}</strong> </span>
+                            <span> <strong>{{dataType.atv.toFixed(2)}}</strong> </span>
                         </div>
                         <div class="choosebot">
                             <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.atv_rg_pct!='-9999'" :class="dataType.atv_rg_pct>0?'up':'down'">
@@ -466,13 +466,14 @@ export default {
       });
     },
     gettradeDistribution(){//交易分布数据
-    var query={invokeType:'mzw'}
-      this._apis.realSurvey.tradeDistribution(query).then(response => {
-          console.log(JSON.parse(response))
-        this.dataChart4 = JSON.parse(response)  
-      }).catch(error => {
-        this.$message.error(error);
-      });
+        var query={}
+        query={invokeType:'mzw'}
+        this._apis.realSurvey.tradeDistribution(query).then(response => {
+            console.log(JSON.parse(response))
+            this.dataChart4 = JSON.parse(response)  
+        }).catch(error => {
+            this.$message.error(error);
+        });
     },
     getuserView(){//用户概览数据
         var query={
