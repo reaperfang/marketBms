@@ -186,7 +186,7 @@
             </el-table>
             <div v-show="!loading" class="footer">
                 <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
-                <el-button v-permission="['订单', '发货管理', '订单发货', '批量导入发货']" class="border-button" @click="$router.push('/order/batchImportAndDelivery')">批量导入发货</el-button>
+                <el-button v-permission="['订单', '发货管理', '订单发货', '批量导入发货']" class="border-button" @click="importAndDelivery">批量导入发货</el-button>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量发货']" class="border-button" @click="batchSendGoods">批量发货</el-button>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印配送订单']" class="border-button" @click="batchPrintDistributionSlip">批量打印配送单</el-button>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印电子面单']" class="border-button" @click="batchPrintElectronicForm">批量打印电子面单</el-button>
@@ -325,6 +325,23 @@ export default {
         }
     },
     methods: {
+        importAndDelivery() {
+            // this._apis.order
+            // .getShopSendAddress({ cid: this.cid })
+            // .then(res => {
+            //     if(!res) {
+            //         this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '去设置', text: '您未完成发货地址设置，请到地址库设置发货地址。'}).then(() => {
+            //             this.$router.push('/set/address')
+            //         })
+            //     } else {
+            //         this.$router.push('/order/batchImportAndDelivery')
+            //     }
+            // })
+            // .catch(error => {
+            //     this.$message.error(error);
+            // });
+            this.$router.push('/order/batchImportAndDelivery')
+        },
         verificationHandler(row) {
             this.currentData = row.orderId
             this.currentDialog = 'VerificationDialog'
