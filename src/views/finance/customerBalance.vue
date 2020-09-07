@@ -98,7 +98,7 @@
           prop="tradeTime"
           label="交易时间"
           sortable = "custom"
-          align="center"
+          align="right"
           width="200px">
         </el-table-column>
       </el-table>
