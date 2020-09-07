@@ -248,7 +248,7 @@
 import mapRadius from './components/mapRadius'
 import { debounce } from '@/utils/base.js'
 import order from '@/system/constant/order.js'
-let isCompleted
+// let isCompleted
 let isHasOtherWay
 export default {
   components: {
@@ -417,6 +417,9 @@ export default {
   },
 
   computed: {
+    isCompleted() {
+      return this.addressId && this.ruleForm.price
+    },
     btnTxt() {
       return this.address ? '修改': '新建'
     },
@@ -482,11 +485,14 @@ export default {
     // 获取发货地址
     getDeliveryAddress() {
       this._apis.set.getAddressDefaultSender().then((response) => {
-        this.address = `${response.address} ${response.addressDetail}`
-        this.ruleForm.lng = response.longitude
-        this.ruleForm.lat = response.latitude
-        this.addressId = response.id
+        if (response) {
+          this.address = `${response.address} ${response.addressDetail}`
+          this.ruleForm.lng = response.longitude
+          this.ruleForm.lat = response.latitude
+          this.addressId = response.id
+        }
       }).catch((err) => {
+        console.log('err',err)
         this.$message.error(err || '数据获取失败')
       })
     },
@@ -745,10 +751,10 @@ export default {
       }
     },
     open() {
-      console.log('isCompleted',isCompleted)
+      console.log('isCompleted',this.isCompleted)
       // const isCompleted = Math.random() * 10  > 5 ? true : false // mock data
       // 是否完成配置
-      if (!isCompleted) {
+      if (!this.isCompleted) {
         this.confirm({
           title: "提示",
           icon: true,
@@ -976,7 +982,7 @@ export default {
     getOrderDeliverInfo() {
       const cid = this.cid
       this._apis.set.getOrderDeliverInfo({ cid }).then(res => {
-        isCompleted = res.deliverStartingPrice
+        // isCompleted = res.deliverStartingPrice
         this.ruleForm.price = res.deliverStartingPrice || null // 起送价
         this.ruleForm.basicFreight = res.deliverBasicFreight || null // 基础运费
         this.ruleForm.isOpenLadderFreight = res.isOpenLadderFreight || 0 // 是否启用阶梯运费 0-否 1-是

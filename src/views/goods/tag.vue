@@ -320,6 +320,9 @@ export default {
 /deep/ .el-table--small td,.el-table--small th{
       padding:16px 0;
 }
+/deep/ .el-table-column--selection .cell{
+    padding-left:20px;
+}
 .border-button {
         border:1px solid rgba(218,218,227,1)!important;
         color: #44434B!important;

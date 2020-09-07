@@ -232,7 +232,7 @@ export default {
     ExpressNosInput(index) {
       let item = this.list[index]
 
-      if(!item.expressCompanyCodes) {
+      if(!item.orderAfterSaleSendInfo.expressCompanyCodes) {
         this.list.splice(index, 1, Object.assign({}, this.list[index], {
           showErrorExpressCompany: true,
           errorMessageExpressCompany: '请选择快递公司'
@@ -244,7 +244,7 @@ export default {
             }))
         }, 500)
       } else {
-        if(!this.list[index].expressNos) {
+        if(!this.list[index].orderAfterSaleSendInfo.expressNos) {
           this.list.splice(index, 1, Object.assign({}, this.list[index], {
             showErrorExpressNos: true,
             errorMessageExpressNos: '请输入快递单号'
@@ -484,7 +484,7 @@ export default {
               if(index != 0) {
                 val.orderAfterSaleSendInfo.expressCompanyCodes = expressCompanyCodes
                 val.express = express
-                val.expressNos = ''
+                val.orderAfterSaleSendInfo.expressNos = ''
                 val.showErrorExpressCompany = false
                 val.errorMessageExpressCompany = ''
               }
@@ -495,7 +495,9 @@ export default {
 
           if(res) {
             this.list.splice(index, 1, Object.assign({}, this.list[index], {
-              expressNos: '',
+              orderAfterSaleSendInfo: Object.assign({}, this.list[index].orderAfterSaleSendInfo, {
+                expressNos: ''
+              }),
               express: res,
               showErrorExpressCompany: false,
               errorMessageExpressCompany: ''
