@@ -180,19 +180,32 @@ export default {
             text-align: left;
             padding-left: 20px;
         }
+        &:nth-child(1) {
+            text-align: left;
+            padding-left: 20px;
+        }
+        &:nth-child(3) {
+            text-align: right;
+        }
+        &:nth-child(4) {
+            text-align: right;
+        }
+        &:nth-child(5) {
+            text-align: right;
+        }
     }
 /deep/ .el-table td{
   &:nth-child(3) {
     text-align: right;
-    padding-right: 75px;
+    
   }
   &:nth-child(4) {
     text-align: right;
-    padding-right: 75px;
+    
   }
   &:nth-child(5) {
     text-align: right;
-    padding-right: 75px;
+    
   }
 }
 .page_styles{
