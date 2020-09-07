@@ -125,38 +125,38 @@
       <h3 class="configure-title">店铺数据配置中，请您耐心等待...</h3>
 
       <ul class="configure-text-list" style="height: 164px;">
-        <template v-for="item in configureTextArray">
-          <li class="configure-text show">
-            <p class="text-base">{{item.text}}数据配置{{item.status === 1 ? "成功" : "失败"}}</p>
-            <i class="el-icon-success" v-if="item.status === 1"></i>
-            <i class="el-icon-error" v-else></i>
-          </li>
+        <template v-for="(item, index) in configureTextArray">
+            <li class="configure-text show">
+              <p class="text-base">{{item.text}}数据配置{{item.status === 1 ? "成功" : "失败"}}</p>
+              <i class="el-icon-success" v-if="item.status === 1"></i>
+              <i class="el-icon-error" v-else></i>
+            </li>
         </template>
-        <li class="configure-text" :class="{'show': configureProgress >= 2}">
-          <p class="text-goods">数据配置</p>
-          <i class="el-icon-error"></i>
-          <i class="el-icon-success"></i>
+        <!--<li class="configure-text" :class="{'show': configureTextArray.length >= 1}">
+          <p class="text-goods">模版内的{{configureTextArray[0].text}}数据配置{{configureTextArray[0].status === 1 ? "成功" : "失败"}}</p>
+          <i class="el-icon-success" v-if="item.status === 1"></i>
+          <i class="el-icon-error" v-else></i>
         </li>
-        <li class="configure-text" :class="{'show': configureProgress >= 2}">
-          <p class="text-goods">数据配置</p>
-          <i class="el-icon-error"></i>
-          <i class="el-icon-success"></i>
+        <li class="configure-text" :class="{'show': configureTextArray.length >= 2}">
+          <p class="text-goods">模版内的{{configureTextArray[1].text}}数据配置{{configureTextArray[1].status === 1 ? "成功" : "失败"}}</p>
+          <i class="el-icon-success" v-if="configureTextArray[1].status === 1"></i>
+          <i class="el-icon-error" v-else></i>
         </li>
-        <li class="configure-text" :class="{'show': configureProgress >= 3}">
-          <p class="text-page">数据配置</p>
-          <i class="el-icon-error"></i>
-          <i class="el-icon-success"></i>
+        <li class="configure-text" :class="{'show': configureTextArray.length >= 3}">
+          <p class="text-goods">模版内的{{configureTextArray[2].text}}数据配置{{configureTextArray[2].status === 1 ? "成功" : "失败"}}</p>
+          <i class="el-icon-success" v-if="configureTextArray[2].status === 1"></i>
+          <i class="el-icon-error" v-else></i>
         </li>
-        <li class="configure-text" :class="{'show': configureProgress >= 4}">
-          <p class="text-shop">数据配置</p>
-          <i class="el-icon-error"></i>
-          <i class="el-icon-success"></i>
+        <li class="configure-text" :class="{'show': configureTextArray.length >= 4}">
+          <p class="text-goods">模版内的{{configureTextArray[3].text}}数据配置{{configureTextArray[3].status === 1 ? "成功" : "失败"}}</p>
+          <i class="el-icon-success" v-if="configureTextArray[3].status === 1"></i>
+          <i class="el-icon-error" v-else></i>
         </li>
-        <li class="configure-text" :class="{'show': configureProgress >= 5}">
-          <p class="text-shop">数据配置</p>
-          <i class="el-icon-error"></i>
-          <i class="el-icon-success"></i>
-        </li>
+        <li class="configure-text" :class="{'show': configureTextArray.length === 5}">
+          <p class="text-goods">模版内的{{configureTextArray[4].text}}数据配置{{configureTextArray[4].status === 1 ? "成功" : "失败"}}</p>
+          <i class="el-icon-success" v-if="configureTextArray[4].status === 1"></i>
+          <i class="el-icon-error" v-else></i>
+        </li>-->
       </ul>
 
       <!--   有一项失败了就显示   -->
@@ -197,9 +197,16 @@
         isConfigureLoading: false, // 是否在配置中
         isConfigureFail: false, // 是否已经配置过 且配置失败了
         timerConfigure: null, // 定时任务，查询配置进度
-        configureProgress: 0, // 查询配置进度 0 - 100?
+        configureProgress: 0, // 查询配置进度 0 - 5?
         configureTextArray: [], // 配置进度 文字以及成功状态
-        dataTypeText: ["","运费模板", "商品", "商品分类", "创意设计", "微信公众号底部"]
+        dataTypeText: ["","运费模板", "商品", "商品分类", "创意设计", "微信公众号底部数据"],
+        resArray: [
+          {text: "Uncle Ming1",status: 1, id: "1"},
+          {text: "Uncle Ming2",status: 0, id: "2"},
+          {text: "Uncle Ming3",status: 0, id: "3"},
+          {text: "Uncle Ming4",status: 2, id: "4"},
+          {text: "Uncle Ming5",status: 1, id: "5"},
+          ]
       }
     },
     mounted() {
@@ -251,13 +258,18 @@
           //   }
           // ];
           this.listData = resultData.map(item => {
-            item.isShowCode = false;
-            return item;
+            return {
+              id: item.id,
+              isShowCode: false,
+              name: item.name,
+              pictureUrl: item.pictureUrl,
+              qrCodePic: ''
+            };
           });
         } catch (err) {
           console.error('加载模板数据出错', err.message)
         } finally {
-          console.log('执行完毕');
+          console.log('加载模板: 执行完毕');
           this.isLoading = false;
         }
       },
@@ -285,39 +297,71 @@
       },
 
       /** 确认启用 */
-      enableConfigure() {
-        this.isShowConfigureBox = true;
-        this.timer();
+      async enableConfigure() {
+        try {
+          // const result = await this._apis.profile.intelligentUpdateStep({chooseTemplateId: this.selectTemplateId});
+
+          this.isShowConfigureBox = true;
+          this.timer();
+        }catch (e) {
+          this.$message.error("网络错误，请稍后再试")
+        }
+
       },
 
       /** 查询配置进度 */
       timer() {
         const _this = this;
         this.timerConfigure = setInterval(function () {
-          this._apis.profile.intelligentConfigurationStatus().then(res => {
-            if(res instanceof Array && res.length > 0) {
 
-              res.forEach(item => {
-                if(item.status !== 0) {
-                  _this.configureTextArray.push({
-                    text: _this.dataTypeText[item.dataType],
-                    status: item.status
-                  })
-                }
-              })
+          _this._apis.profile.intelligentConfigurationStatus({})
+            .then(res => {
+              if (res && res.length > 0) {
+                _this.configureProgress = 0;
+                res.forEach(item => {
+                  const hasItem = _this.configureTextArray.find(cItem => cItem.id === item.id);
 
-            }
-          }).catch(err => {
-            console.error("查询配置进度err:" + err)
-          }).finally(() => {
-            if (_this.configureProgress >= 5) {
-              clearInterval(_this.timerConfigure);
+                  if (item.status !== 0 && !hasItem) {
+                    let t_temp = {};
+                    t_temp.text = _this.dataTypeText[item.dataType];
+                    t_temp.status = item.status;
+                    if (item.status === 1) {
+                      _this.configureProgress += 1;
+                    }
+                    _this.configureTextArray.push(t_temp)
+                  }
+                })
+              }
+              if (_this.configureTextArray.length >= 5) {
+                clearInterval(_this.timerConfigure);
+                _this.configureProgress >= 5 && (_this.isConfigureFail = true);
+                // 通知父组件 更新到下一步的视图
+                // _this.$emit('update-step', 3)
+              }
 
-              // 通知父组件 更新到一步
-              _this.$emit('update-step', 3)
-            }
+            }).catch(err => {
+            console.error("查询配置进度err:" + err);
+
+            clearInterval(_this.timerConfigure);
           });
-        }, 1000);
+          // ================================
+          // _this.resArray.forEach(item => {
+          //   const hasItem = _this.configureTextArray.find(cItem => cItem.id === item.id);
+          //   if (item.status !== 0 && !hasItem) {
+          //     _this.configureTextArray.push(item)
+          //   };
+          // });
+          // _this.resArray[1].status = 2;
+          // _this.resArray[2].status = 1;
+          // _this.configureProgress += 1;
+          // if (_this.configureTextArray.length >= 5) {
+          //   clearInterval(_this.timerConfigure);
+          //   _this.configureProgress >= 5 && (_this.isConfigureFail = true);
+          //   // 通知父组件 更新到下一步的视图
+          //   // _this.$emit('update-step', 3)
+          // }
+
+        }, 1500);
       },
 
       /** 再次加载 */
@@ -634,16 +678,14 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 16px;
-        opacity: 0.1;
         transition: opacity 1s;
         font-size: 14px;
         font-weight: 400;
         color: #44434B;
         line-height: 20px;
 
-
         &.show {
-          opacity: 1;
+          animation: upShow 0.5s;
         }
       }
     }
@@ -659,4 +701,14 @@
     }
   }
 
+  @keyframes upShow {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 </style>

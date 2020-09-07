@@ -84,13 +84,9 @@
         this.isShowGuide = false;
       },
 
-      /** 更新 步骤 */
+      /** 更新 步骤视图 */
       updateStep(stepNumber) {
-        const paramsList = [{chooseIndustryId: this.industryId}, {chooseTemplateId: this.templateId}, {}, {}];
-        this._apis.profile.intelligentUpdateStep(paramsList[stepNumber-2]).then(res => {
-          if (res) this.stepStatus = stepNumber
-        });
-
+        this.stepStatus = stepNumber;
       },
 
       /** 更新所选行业ID */

@@ -58,7 +58,9 @@
           this.$message.error('请选择行业')
         }
         else {
-          this.$emit('update-step', 2)
+          this._apis.profile.intelligentUpdateStep({chooseIndustryId: this.industryId})
+            .then(() => { this.$emit("update-step", 2) })
+            .catch(error => { this.$message.error(error + "请稍后再试") });
         }
       }
     },

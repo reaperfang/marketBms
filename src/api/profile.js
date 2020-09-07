@@ -81,7 +81,7 @@ export function intelligentEnableTemplate(data) {
 
 // 数据配置实时查询进度的接口
 export function intelligentConfigurationStatus(data) {
-  return ({
+  return request({
     target: 'DECORATION_STORE_SYNCHRO_RECORD_FIND_PROCESSOR',
     method: 'post',
     apiType: 'decorate',
@@ -110,7 +110,7 @@ export function intelligentSaveBase(data) {
 }
 
 // 保存当前步骤状态
-export function intelligentUpdateStep (data) {
+export function intelligentUpdateStep (data = {}) {
   return request({
     target: 'DECORATION_SMART_STORE_OPEN_STEPS_UPDATE_PROCESSOR',
     method: 'post',
