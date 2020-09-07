@@ -295,6 +295,9 @@ export default {
       font-weight:400;
       color:rgba(101,94,255,1);
     }
+    .next {
+      width: 68px;
+    }
   }
 }
 </style>
