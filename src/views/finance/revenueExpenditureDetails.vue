@@ -93,9 +93,6 @@
           width="210px"
           fixed
           >
-          <template slot-scope="scope">
-            <span style="padding-left:10px;">{{scope.row.tradeDetailSn}}</span>
-          </template>
         </el-table-column>
         <el-table-column
           prop="tradeType"
@@ -159,7 +156,7 @@
           prop="tradeTime"
           label="交易时间"
           sortable="custom"
-          align="center"
+          align="right"
           width="200px"
           fixed="right"
           >
@@ -467,7 +464,10 @@ export default {
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
 }
-/deep/.el-table--small td{
-  padding:16px 0;
+/deep/ .el-table--small td{
+  padding:16px 10px;
+}
+/deep/.el-table--small th{
+  padding:16px 0px;
 }
 </style>
