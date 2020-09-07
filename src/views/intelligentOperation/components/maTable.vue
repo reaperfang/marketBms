@@ -11,16 +11,19 @@
         type="index"
         label="排序"
         width="80"
-        align="left">
+        align="left"
+        fixed>
       </el-table-column>
       <el-table-column
         prop="id"
         label="用户ID"
-        align="center">
+        align="center"
+        width="150px">
       </el-table-column>
       <el-table-column
         label="用户类型"
-        align="center">
+        align="center"
+        width="150px">
         <template slot-scope="scope">
           <span style="line-height:60px; display:inline-block">{{{0:'非会员',1:'新会员',2:'老会员'}[scope.row.memberType]}}</span>
         </template>
@@ -28,7 +31,8 @@
       <el-table-column
         prop="phone"
         label="手机号码"
-      align="center">
+      align="center"
+      width="150px">
         <template slot-scope="scope">
             <span v-if="!scope.row.phone" class="txtCenter"> - </span>
             <span v-else>{{scope.row.phone}}</span>
@@ -57,17 +61,20 @@
       <el-table-column
         prop="tradeCount"
         label="交易(总)次数"
-      align="center">
+        align="center"
+        width="150px">
       </el-table-column>
       <el-table-column
         prop="orderPaymentCount"
         label="订单(总)金额"
-      align="center">
+        align="center"
+        width="150px">
       </el-table-column>
       <el-table-column
         label="最后交易时间"
-        width="170"
-      align="right">
+        width="200"
+      align="right"
+      fixed="right">
         <template slot-scope="scope" style="width:171px;">
           <span>{{Number(scope.row.lastTradeTime) | formatDate('yyyy-MM-dd hh:mm:ss')}}</span>
         </template>

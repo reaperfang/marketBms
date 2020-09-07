@@ -83,7 +83,7 @@
           prop="sendTime"
           label="发送时间"
           sortable = "custom"
-          align="center">
+          align="right">
         </el-table-column>
       </el-table>
       <div class="page_styles">

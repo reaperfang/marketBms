@@ -1175,6 +1175,11 @@ export default {
                 .then(res => {
                   val.express = res
                 })
+
+              // 回显快递单号
+              if(list[index].expressNos) {
+                val.expressNos = list[index].expressNos
+              }
             }
 
             if(val.deliveryWay == 4) {
