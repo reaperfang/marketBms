@@ -72,7 +72,7 @@
                         <p>{{order.receivedPhone}}</p>
                     </div>
                     <div class="item" :class="{'item-storew': storeMark, 'item-indent': storeMark && order.deliveryWay == 1}">
-                        <span class="icon-store" v-if="storeMark  && order.deliveryWay == 2"></span><span class="icon-store-text">{{order.deliveryWay | deliveryWayFilter}}</span>
+                        <span class="icon-store" v-if="storeMark  && order.deliveryWay == 2"></span><span class="icon-store-text">{{order | deliveryWayFilter}}</span>
                         <div class="store-time" v-if="storeMark && order.deliveryWay == 2">
                             <p>{{order.deliveryDate | formatDateRemoveZero}}</p>
                             <p>{{order.deliveryTime}}</p>
@@ -165,7 +165,11 @@ export default {
                              item.deliveryWayIcon = "商配"
                             break;
                         case 3:
-                            item.deliveryWayIcon = "三方"
+                            if(item.orderStatus==5||item.orderStatus==6){
+                                item.deliveryWayIcon = "达达"
+                            }else{
+                                item.deliveryWayIcon = "三方"
+                            }
                             break;
                         case 4:
                             item.deliveryWayIcon = "自提"
@@ -199,12 +203,18 @@ export default {
                 //wyyfx删除     return '分销订单'
             }
         },
-        deliveryWayFilter(code) {
-            switch(code) {
+        deliveryWayFilter(order) {
+            switch(order.deliveryWay) {
                 case 1:
                     return '普通快递'
                 case 2:
                     return '商家配送'
+                case 3:
+                    if(order.orderStatus==5||order.orderStatus == 6){
+                        return '第三方配送-达达'
+                    }else{
+                        return '第三方配送'
+                    }
                 case 4:
                     return '上门自提'
             }

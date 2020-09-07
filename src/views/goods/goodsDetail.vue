@@ -1928,7 +1928,7 @@ export default {
                     this.isExpressSet = false;
                 }
                 //如果商家配送未开启则提示去设置
-                if(name == 'delivery' && res.isOpenMerchantDeliver == 0){
+                if(name == 'delivery' && (res.isOpenMerchantDeliver == 0 && res.isOpenTh3Deliver == 0)){
                     this.isDeliverySet = false;
                 }
                 //如果上门自提未开启则提示去设置
