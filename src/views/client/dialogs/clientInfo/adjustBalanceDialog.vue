@@ -80,10 +80,10 @@ export default {
         });
         return;
       }
-      if(Number(this.adjustmentBalance) > 100000000) {
+      if(Number(this.adjustmentBalance) >= 100000000) {
         this.btnLoading = false;
         this.$message({
-          message: '增加余额不能超过1亿',
+          message: '调整余额不能超过1亿',
           type: 'warning'
         });
         return;

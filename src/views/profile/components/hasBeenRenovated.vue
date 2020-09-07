@@ -256,7 +256,7 @@ export default {
       >.img {
         box-sizing: content-box;
         width: 120px;
-        height: auto;
+        min-height: 120px;
         padding: 21px 0 27px 0;
         margin: 0 auto;
         img {
