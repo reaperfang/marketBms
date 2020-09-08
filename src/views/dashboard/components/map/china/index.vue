@@ -280,20 +280,20 @@ export default {
 						coordinateSystem: "geo",
 						//data: convertData(data.slice(0,5)),
 						data: [],
-						symbolSize: 25,
-						label: {
-							normal: {
-								formatter: "{b}",
-								//position: 'right',
-								color: "#000000",
-								textStyle: {
-									fontSize: "10", //字体大小
-									fontWeight: "bolder" //字体加粗
-								},
+						symbolSize: 17,
+						// label: {
+						// 	normal: {
+						// 		formatter: "{b}",
+						// 		//position: 'right',
+						// 		color: "#000000",
+						// 		textStyle: {
+						// 			fontSize: "10", //字体大小
+						// 			fontWeight: "bolder" //字体加粗
+						// 		},
 
-								show: true
-							}
-						},
+						// 		show: true
+						// 	}
+						// },
 						itemStyle: {
 							normal: {
 								color: "#FFFF00",
