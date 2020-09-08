@@ -53,7 +53,7 @@
         <el-table-column
           prop="tradeDetailSn"
           label="交易流水号"
-          width="200px"
+          width="210px"
           fixed>
         </el-table-column>
         <el-table-column
