@@ -699,7 +699,7 @@ export default {
                       obj.expressCompanys = expressCompanys;
                       obj.expressNos = item.orderAfterSaleSendInfo.expressNos;
                       obj.expressCompanyCodes = item.orderAfterSaleSendInfo.expressCompanyCodes;
-                      if(item.orderAfterSaleSendInfo.deliveryWay == 1) {
+                      if(item.orderAfterSaleSendInfo.deliveryWay) {
                         if(item.express && item.express.specificationSize) {
                           obj.specificationSize = item.express.specificationSize
                         }

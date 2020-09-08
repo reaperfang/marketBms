@@ -657,7 +657,7 @@ export default {
                                 }
                             }
                         } else {
-                            obj.deliveryWay = 4;
+                            obj.deliveryWay = 1;
                             obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
                             obj.expressNos = this.ruleForm.expressNos; // 快递单号
                             obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
