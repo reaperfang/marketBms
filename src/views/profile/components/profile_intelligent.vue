@@ -1,5 +1,5 @@
 <template>
-  <section v-loading="isLoading" v-if="stepStatus < 4">
+  <section v-loading="isLoading" v-if="currentStep < 4">
     <div class="profile_intelligent">
       <p class="p_i_title">
         智能开店：
@@ -23,7 +23,7 @@
                   offset="10"
                   popper-class="pop_box">
                   <div class="pop_content">您的行业模板数据配置失败、模板未启用成功，请您点击“立即体验”再次配置模板数据</div>
-                  <img src="../../../assets/images/profile/i_tip.png" class="pop_icon" :class="{'show': stepStatus === 0}" slot="reference" alt="提示" />
+                  <img src="../../../assets/images/profile/i_tip.png" class="pop_icon" :class="{'show': (currentStep === 3) && (stepStatus === 0)}" slot="reference" alt="提示" />
                 </el-popover>
               </template>
             </el-step>
