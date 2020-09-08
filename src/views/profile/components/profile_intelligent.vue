@@ -1,39 +1,41 @@
 <template>
-  <div class="profile_intelligent" v-if="stepStatus < 4">
-    <p class="p_i_title">
-      智能开店：
-      <span>
-        让做生意变得更简单
-      </span>
-    </p>
+  <section v-loading="isLoading" v-if="stepStatus < 4">
+    <div class="profile_intelligent">
+      <p class="p_i_title">
+        智能开店：
+        <span>
+          让做生意变得更简单
+        </span>
+      </p>
 
-    <el-row class="p_i_content">
-      <el-col :span="24">
-        <el-button type="primary" class="to_intelligent" @click.native="toIntelligent">立即体验</el-button>
-        <el-steps space="30%" :active="currentStep" finish-status="finish">
-          <el-step title="选择所属行业"></el-step>
-          <el-step title="预览行业模板"></el-step>
-          <el-step title="启用行业模板">
-            <template slot="description" >
-              <el-popover
-                placement="top-start"
-                width="208"
-                trigger="hover"
-                offset="10"
-                popper-class="pop_box">
-                <div class="pop_content">您的行业模板数据配置失败、模板未启用成功，请您点击“立即体验”再次配置模板数据</div>
-                <img src="../../../assets/images/profile/i_tip.png" class="pop_icon" :class="{'show': stepStatus === 0}" slot="reference" alt="提示" />
-              </el-popover>
-            </template>
-          </el-step>
-          <el-step title="店铺基础信息建设"></el-step>
-        </el-steps>
-      </el-col>
-    </el-row>
-    <!-- <router-link to="/profile/intelligent" class="to_intelligent">立即体验</router-link> -->
-    <!-- <router-link :to="{name: 'intelligent', query: {isShowGuide: isFirst, stepStatus: stepStatus}}" class="to_intelligent">立即体验</router-link> -->
+      <el-row class="p_i_content">
+        <el-col :span="24">
+          <el-button type="primary" class="to_intelligent" @click.native="toIntelligent">立即体验</el-button>
+          <el-steps space="30%" :active="currentStep" finish-status="finish">
+            <el-step title="选择所属行业"></el-step>
+            <el-step title="预览行业模板"></el-step>
+            <el-step title="启用行业模板">
+              <template slot="description" >
+                <el-popover
+                  placement="top-start"
+                  width="208"
+                  trigger="hover"
+                  offset="10"
+                  popper-class="pop_box">
+                  <div class="pop_content">您的行业模板数据配置失败、模板未启用成功，请您点击“立即体验”再次配置模板数据</div>
+                  <img src="../../../assets/images/profile/i_tip.png" class="pop_icon" :class="{'show': stepStatus === 0}" slot="reference" alt="提示" />
+                </el-popover>
+              </template>
+            </el-step>
+            <el-step title="店铺基础信息建设"></el-step>
+          </el-steps>
+        </el-col>
+      </el-row>
+      <!-- <router-link to="/profile/intelligent" class="to_intelligent">立即体验</router-link> -->
+      <!-- <router-link :to="{name: 'intelligent', query: {isShowGuide: isFirst, stepStatus: stepStatus}}" class="to_intelligent">立即体验</router-link> -->
 
-  </div>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -41,6 +43,7 @@ export default {
     name: 'profile_intelligent',
     data() {
       return {
+        isLoading: false,
         currentStep: null, // 当前步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
         stepStatus: null, // 步骤状态 0 未完成 1 已完成
       }
@@ -52,14 +55,17 @@ export default {
       /** 获取智能开店信息 */
       async getIntelligent() {
         try {
+          this.isLoading = true;
           const result = await this._apis.profile.getIntelligentProgress();
           console.log('获取智能开店信息: ', result);
           if(result) {
             this.currentStep = result.currentStep ? result.currentStep + 1 : 1;
             this.stepStatus = result.status;
+            this.isLoading = false;
           }
         } catch (err) {
-          console.error(err)
+          console.error(err);
+          this.isLoading = false;
         }
       },
 
