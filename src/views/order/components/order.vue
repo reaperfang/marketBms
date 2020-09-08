@@ -48,7 +48,7 @@
                                                 <img width="66" :src="goods.goodsImage" alt="">
                                             </div>
                                             <div class="col">
-                                                <p :title="goods.goodsName" class="ellipsis" style="width: 297px;">{{goods.goodsName}}</p>
+                                                <p :title="goods.goodsName" class="ellipsis" style="width: 210px;">{{goods.goodsName}}</p>
                                                 <p class="goods-specs">{{goods.goodsSpecs | goodsSpecsFilter}}</p>
                                             </div>
                                         </div>
@@ -523,6 +523,7 @@ export default {
                                 .goods-specs {
                                     color: #9FA29F;
                                     margin-top: 6px;
+                                    width:200px;
                                 }
                                 &:last-child {
                                     border: none;
