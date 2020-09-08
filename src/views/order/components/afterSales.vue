@@ -420,6 +420,7 @@ export default {
         }
         .form-inline {
             padding: 20px;
+            padding-bottom: 0;
         }
         .buttons {
             display: flex;
@@ -437,7 +438,7 @@ export default {
     .content {
         background-color: #fff;
         padding: 20px;
-        margin: 0 20px;
+        //margin: 0 20px;
         padding-top: 0;
         p {
             font-size: 16px;
@@ -547,6 +548,9 @@ export default {
      }
      /deep/ .el-table--small td, /deep/  .el-table--small th {
         padding: 16px 0;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-bottom: 20px;
     }
 </style>
 
