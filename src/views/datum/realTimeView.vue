@@ -23,8 +23,8 @@
                 </el-tooltip>
             </div>
             <div class="clearfix pt">
-                <strong class="fl">{{dataRt.paid_order_am_rt}}</strong>
-                <span class="fl">昨日全天：<span>{{dataRt.paid_order_am_rd}}</span></span>
+                <strong class="fl">{{dataRt.paid_order_am_rt | tofix2}}</strong>
+                <span class="fl">昨日全天：<span>{{dataRt.paid_order_am_td | tofix2}}</span></span>
             </div>
             <screeningChart 
     :title="'测试图表'" 
@@ -36,9 +36,9 @@
             <div class="card-item">
                 <div class="item-top">
                     <p>支付金额（元）</p>
-                    <span> <strong>{{dataRt.paid_order_am_rt}}</strong> </span>
+                    <span> <strong>{{dataRt.paid_order_am_rt | tofix2}}</strong> </span>
                 </div>
-                <p v-if="idData">昨日全天：<span >{{dataRt.paid_order_am_rd}}</span></p>
+                <p v-if="idData">昨日全天：<span >{{dataRt.paid_order_am_td | tofix2}}</span></p>
                 <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
@@ -46,7 +46,7 @@
                     <p>支付订单数（单）</p>
                     <span> <strong>{{dataRt.paid_order_cq_rt}}</strong> <el-button type="text" @click="_routeTo('query')">查看</el-button> </span>
                 </div>
-                <p v-if="idData">昨日全天：<span >{{dataRt.paid_order_cq_rd}}</span></p>
+                <p v-if="idData">昨日全天：<span >{{dataRt.paid_order_cq_td}}</span></p>
                 <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
@@ -54,15 +54,15 @@
                     <p>支付人数（人）</p>
                     <span> <strong>{{dataRt.paid_order_nu_rt}}</strong> </span>
                 </div>
-                <p v-if="idData">昨日全天：<span >{{dataRt.paid_order_nu_rd}}</span></p>
+                <p v-if="idData">昨日全天：<span >{{dataRt.paid_order_nu_td}}</span></p>
                 <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
                 <div class="item-top">
                     <p>退款金额（元）</p>
-                    <span> <strong>{{dataRt.refund_am_rt}}</strong></span>
+                    <span> <strong>{{dataRt.refund_am_rt | tofix2}}</strong></span>
                 </div>
-                <p v-if="idData">昨日全天：<span >{{dataRt.refund_am}}</span></p>
+                <p v-if="idData">昨日全天：<span >{{dataRt.refund_am | tofix2}}</span></p>
                 <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
@@ -76,9 +76,9 @@
             <div class="card-item">
                 <div class="item-top">
                     <p>客单价（元）</p>
-                    <span> <strong>{{dataRt.atv_rt}}</strong>  </span>
+                    <span> <strong>{{dataRt.atv_rt | tofix2}}</strong>  </span>
                 </div>
-                <p v-if="idData">昨日全天：<span >{{dataRt.atv_rd}}</span></p>
+                <p v-if="idData">昨日全天：<span >{{dataRt.atv_td | tofix2}}</span></p>
                 <p v-else>昨日全天：更新中~</p>
             </div>
             <div class="card-item">
@@ -114,7 +114,7 @@
                     <div class="choose_item" :class="checkList[0]?'active':''">
                         <div class="choosetop">
                             <p>支付金额（元）<span class="chooseBut" @click="chooseType(0)"></span></p>
-                            <span> <strong>{{dataType.paid_order_am.toFixed(2)}}</strong> </span>
+                            <span> <strong>{{dataType.paid_order_am | tofix2}}</strong> </span>
                         </div>
                         <div class="choosebot">
                             <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_am_rg_pct!='-9999'" :class="dataType.paid_order_am_rg_pct>0?'up':'down'">
@@ -128,7 +128,7 @@
                     <div class="choose_item" :class="checkList[1]?'active':''">
                         <div class="choosetop">
                             <p>支付订单数（单）<span class="chooseBut" @click="chooseType(1)"></span></p>
-                            <span> <strong>{{dataType.paid_order_cq.toFixed(2)}}</strong> </span>
+                            <span> <strong>{{dataType.paid_order_cq}}</strong> </span>
                         </div>
                         <div class="choosebot">
                             <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_cq_rg_pct!='-9999'" :class="dataType.paid_order_cq_rg_pct>0?'up':'down'">
@@ -146,7 +146,7 @@
                     <div class="choose_item" :class="checkList[2]?'active':''">
                         <div class="choosetop">
                             <p>支付人数（人）<span class="chooseBut" @click="chooseType(2)"></span></p>
-                            <span> <strong>{{dataType.paid_order_nu.toFixed(2)}}</strong> </span>
+                            <span> <strong>{{dataType.paid_order_nu}}</strong> </span>
                         </div>
                         <div class="choosebot">
                             <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_nu_rg_pct!='-9999'" :class="dataType.paid_order_nu_rg_pct>0?'up':'down'">
@@ -165,7 +165,7 @@
                                 </el-tooltip>
                                 <span class="chooseBut" @click="chooseType(3)"></span>
                             </p>
-                            <span> <strong>{{dataType.atv.toFixed(2)}}</strong> </span>
+                            <span> <strong>{{dataType.atv | tofix2}}</strong> </span>
                         </div>
                         <div class="choosebot">
                             <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.atv_rg_pct!='-9999'" :class="dataType.atv_rg_pct>0?'up':'down'">
@@ -338,6 +338,15 @@ import userChart from "./components/realtime/userChart";
 export default {
   name: "realTimeView",
   components: { pfChart,screeningChart,mapChart,pieChart,tradeChart,userChart,serchRt },
+  filters: {
+    tofix2: function(value) {
+      if(typeof(value)=='undefined'){
+          return value
+      }else{
+          return Number(value.toFixed(2))
+      }
+    },
+  },
   data() {
     const _self = this;
     return {
@@ -373,6 +382,9 @@ export default {
         showData:false,
         seconds:3,
         goodsList:[],
+        query:{
+            invokeType:'mzw'
+        }
     };
   },
   created() {
@@ -391,7 +403,7 @@ export default {
     },
 
     getdataReady(){//移动商城数据是否完成准备接口
-      this._apis.realSurvey.dataReady({}).then(response => {
+      this._apis.realSurvey.dataReady(this.query).then(response => {
           var oldTime=new Date(JSON.parse(response).date).getTime();
           var oldDatetime=new Date(new Date(oldTime).getFullYear(),new Date(oldTime).getMonth(),new Date(oldTime).getDate())
           console.log(new Date(oldDatetime).toDateString())
@@ -418,13 +430,14 @@ export default {
       }, 1000);
     },
     getdataView(){//数据总览数据
-      this._apis.realSurvey.dataView({}).then(response => {
+      this._apis.realSurvey.dataView(this.query).then(response => {
         this.dataRt = JSON.parse(response)  
         this.dataChart1 = {
             xAxis:JSON.parse(response).x,
             data_rt:JSON.parse(response).data_rt,
             data_rd:JSON.parse(response).data_rd,//昨日
         }
+        console.log(this.dataChart1)
       }).catch(error => {
         this.$message.error(error);
       });
@@ -446,10 +459,9 @@ export default {
         
     },
     gettransactionView(){//交易看板数据
-    // this.seachTimetrad.invokeType='mzw'
-    // this.seachTimetrad.units=1
-    // this.seachTimetrad.date='2021-02-03'
-      this._apis.realSurvey.transactionView(this.seachTimetrad).then(response => {
+    this.query.units=this.seachTimetrad.units
+    this.query.date=this.seachTimetrad.date
+      this._apis.realSurvey.transactionView(this.query).then(response => {
         this.dataType = JSON.parse(response)
         // console.log(this.dataType)
         var allData=[]
@@ -466,9 +478,7 @@ export default {
       });
     },
     gettradeDistribution(){//交易分布数据
-        var query={}
-        query={invokeType:'mzw'}
-        this._apis.realSurvey.tradeDistribution(query).then(response => {
+        this._apis.realSurvey.tradeDistribution(this.query).then(response => {
             console.log(JSON.parse(response))
             this.dataChart4 = JSON.parse(response)  
         }).catch(error => {
@@ -476,21 +486,19 @@ export default {
         });
     },
     getuserView(){//用户概览数据
-        var query={
-            channelType:this.userType,
-            units:this.seachTime.units,
-            date:this.seachTime.date,
-        }
-      this._apis.realSurvey.userView(query).then(response => {
-        this.dataChart2 = {
-            xAxis:JSON.parse(response).x,
-            yAxis1:JSON.parse(response).c_uv_sh_channel,//总数
-            yAxis2:JSON.parse(response).new_c_uv,//新增用户
-            yAxis3:JSON.parse(response).new_cmember,//新增会员
-        }
-      }).catch(error => {
-        this.$message.error(error);
-      });
+        this.query.channelType=this.userType,
+        this.query.units=this.seachTime.units,
+        this.query.date=this.seachTime.date,
+        this._apis.realSurvey.userView(this.query).then(response => {
+            this.dataChart2 = {
+                xAxis:JSON.parse(response).x,
+                yAxis1:JSON.parse(response).c_uv_sh_channel,//总数
+                yAxis2:JSON.parse(response).new_c_uv,//新增用户
+                yAxis3:JSON.parse(response).new_cmember,//新增会员
+            }
+        }).catch(error => {
+            this.$message.error(error);
+        });
     },
     
     chooseType(type){//交易看板选择金额类型
@@ -498,27 +506,27 @@ export default {
     },
     //用户  全部 or  小程序  or  公众号
     alluserType() {// userType
-      this.getuserView()
+        this.getuserView()
     },
     getchannelView(){//渠道转化数据
-      this._apis.realSurvey.channelView({}).then(response => {
-        this.channeData = JSON.parse(response)  
-        this.dataChart.push({value:this.channeData.nomember_xcx, name:'非会员'})
-        this.dataChart.push({value:this.channeData.member_xcx, name:'会员'})
-        console.log(this.dataChart)
-      }).catch(error => {
-        this.$message.error(error);
-      });
+        this._apis.realSurvey.channelView(this.query).then(response => {
+            this.channeData = JSON.parse(response)  
+            this.dataChart.push({value:this.channeData.nomember_xcx, name:'非会员'})
+            this.dataChart.push({value:this.channeData.member_xcx, name:'会员'})
+        }).catch(error => {
+            this.$message.error(error);
+        });
     },
     all() { //渠道  visitSourceType
-    var thisdata=[]
-      if(this.visitSourceType==1){
+        var thisdata=[]
+        if(this.visitSourceType==1){
             thisdata.push({value:this.channeData.nomember_xcx, name:'非会员'})
             thisdata.push({value:this.channeData.member_xcx, name:'会员'})
         }else if(this.visitSourceType==2){
             thisdata.push({value:this.channeData.nomember_gzh, name:'非会员'})
             thisdata.push({value:this.channeData.member_gzh, name:'会员'})
         }
+        this.dataChart=thisdata
     },
     getVal(val){//交易看板 组件传值
         val.date=this.getDayTime(val.date)
@@ -544,7 +552,7 @@ export default {
         return day
     },
     getgoodsView(){//商品看板数据
-      this._apis.realSurvey.goodsView({}).then(response => {
+      this._apis.realSurvey.goodsView(this.query).then(response => {
         this.goodsList = JSON.parse(response)  
       }).catch(error => {
         this.$message.error(error);

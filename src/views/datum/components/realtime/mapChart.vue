@@ -104,7 +104,7 @@ export default {
                 show:false,
                 borderWidth: 1,
                 borderColor: '#0077FF',
-                areaColor: "#ffefd5",
+                areaColor: "#63C2FF",
             }
           },
           data: this.mapData
