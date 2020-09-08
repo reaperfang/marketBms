@@ -2,54 +2,8 @@
 	<!-- <span>
       {{displayValue}}
     </span> -->
-	<!-- <div class="item">
+	<div class="item">
 		<span> {{ displayValue }}</span>
-	</div> -->
-
-	<div class="item-amount">
-		<div class="box">
-			<div class="box-item">
-				<div class="number-item">0</div>
-			</div>
-			<div class="box-item">
-				<div class="number-item">0</div>
-			</div>
-			<div class="box-item" style="width:10px">
-				<span class="semicolon">,</span>
-			</div>
-			<div class="box-item">
-				<div class="number-item">0</div>
-			</div>
-			<div class="box-item">
-				<div class="number-item">0</div>
-			</div>
-			<div class="box-item">
-				<div class="number-item">0</div>
-			</div>
-			<div class="box-item" style="width:10px">
-				<span class="semicolon">,</span>
-			</div>
-			<div class="box-item">
-				<div class="number-item">0</div>
-			</div>
-			<div class="box-item">
-				<div class="number-item">0</div>
-			</div>
-			<div class="box-item">
-				<div class="number-item">0</div>
-			</div>
-			<div class="box-item" style="width:10px">
-				<span class="point">.</span>
-			</div>
-
-			<div class="box-item">
-				<div class="number-item">0</div>
-			</div>
-
-			<div class="box-item">
-				<div class="number-item">0</div>
-			</div>
-		</div>
 	</div>
 </template>
 <script>
@@ -131,8 +85,7 @@ export default {
 			startTime: null,
 			timestamp: null,
 			remaining: null,
-			rAF: null,
-			itemData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+			rAF: null
 		};
 	},
 	computed: {
@@ -288,55 +241,11 @@ export default {
 		-ms-text-fill-color: transparent;
 		-webkit-text-fill-color: transparent;
 
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=rgba(218, 255, 253, 1), endColorstr=rgba(20, 225, 252, 1),GradientType=0 );
+		// filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=rgba(218, 255, 253, 1), endColorstr=rgba(20, 225, 252, 1),GradientType=0 );
 
-		.gradient {
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#ffffff',GradientType=0 );
-		}
-	}
-}
-
-.item-amount {
-	height: 97px;
-	.box {
-		height: 100%;
-		margin: 0 20px;
-		display: flex;
-		justify-content: space-around;
-		.box-item {
-			width: 52px;
-			height: 100%;
-			display: flex;
-			align-items: flex-end;
-
-			.number-item {
-				height: 80%;
-				width: 52px;
-				background: rgba(71, 225, 255, 0.02);
-				box-shadow: 0px 1px 20px 0px rgba(71, 225, 255, 0.1);
-				//margin-left: 10px;
-
-				font-size: 68px;
-				font-weight: normal;
-				color: #ffffff;
-				background: linear-gradient(180deg, #dafffd 0%, #14e1fc 100%);
-				-webkit-background-clip: text;
-				-webkit-text-fill-color: transparent;
-
-				text-align: center;
-			}
-		}
-
-		.point {
-			width: 7px;
-			height: 7px;
-			background: linear-gradient(180deg, #dafffd 0%, #14e1fc 100%);
-			border-radius: 50%;
-		}
-
-		.semicolon {
-			background: linear-gradient(180deg, #dafffd 0%, #14e1fc 100%);
-		}
+		// .gradient{
+		// filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#ffffff',GradientType=0 );
+		// }
 	}
 }
 </style>
