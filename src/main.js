@@ -43,6 +43,8 @@ Vue.prototype._apis = api;
 //挂载自定义确认弹窗(作者：chenbaochao)，文件位于utils里面的confirm.js
 Vue.prototype.confirm = utils.confirm.default;  
 
+Vue.prototype.invokeType={invokeType:'mzw'};
+
 
 /****************************** 第三方库或者插件 ******************************/
 

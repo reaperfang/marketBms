@@ -59,7 +59,7 @@ export default {
 	methods: {
 		...mapActions(["realtimeuserlist"]),
 		async init() {
-			let parames = { cid: this.cid };
+			let parames = { ...this.invokeType,cid: this.cid };
 
 			let res = await this._apis.dashboard.realdealuser(parames);
 			this.realtimeuserlist(JSON.parse(res));

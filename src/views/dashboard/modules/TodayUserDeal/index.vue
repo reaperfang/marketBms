@@ -125,7 +125,7 @@ export default {
 	methods: {
 		...mapActions(["maplist"]),
 		async init() {
-			let parames = { cid: this.cid };
+			let parames = { ...this.invokeType,cid: this.cid };
 			let res = await this._apis.dashboard.realTimeUser(parames);
 			this.maplist(JSON.parse(res).areaOrderNumList);
 		},

@@ -94,7 +94,7 @@ export default {
 	methods: {
 		...mapActions(["toplist", "amoountlist"]),
 		async init() {
-			let parames = { cid: this.cid };
+			let parames = { ...this.invokeType,cid: this.cid };
 
 			let resTop = await this._apis.dashboard.top3(parames);
 			this.toplist(JSON.parse(resTop).top3);

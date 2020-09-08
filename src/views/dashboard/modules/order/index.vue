@@ -73,7 +73,7 @@ export default {
 	methods: {
 		...mapActions(["orderlist"]),
 		async init() {
-			let parames = { cid: this.cid };
+			let parames = {...this.invokeType, cid: this.cid };
 			let data = await this._apis.dashboard.order(parames);
 			let res = JSON.parse(data);
 

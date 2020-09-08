@@ -97,7 +97,7 @@ export default {
 	methods: {
 		...mapActions(["trasationlist"]),
 		async init() {
-			let parames = { cid: this.cid };
+			let parames = { ...this.invokeType,cid: this.cid };
 
 			let left = await this._apis.dashboard.totalamount(parames);
 			this.trasationlist({ left: JSON.parse(left) });

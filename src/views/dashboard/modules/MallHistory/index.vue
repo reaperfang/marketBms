@@ -110,7 +110,7 @@ export default {
 	methods: {
 		...mapActions(["paymaillist"]),
 		async init() {
-			let parames = { cid: this.cid };
+			let parames = { ...this.invokeType, cid: this.cid };
 			let left = await this._apis.dashboard.payamount(parames);
 			let right = await this._apis.dashboard.mail(parames);
 			this.paymaillist({ left: JSON.parse(left) });

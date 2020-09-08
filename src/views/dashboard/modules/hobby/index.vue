@@ -50,7 +50,7 @@ export default {
 	methods: {
 		...mapActions(["hobbylist"]),
 		async init() {
-			let parames = { cid: this.cid };
+			let parames = { ...this.invokeType, cid: this.cid };
 			let resstatistics = await this._apis.dashboard.statistics(parames);
 			this.hobbylist(JSON.parse(resstatistics));
 		}

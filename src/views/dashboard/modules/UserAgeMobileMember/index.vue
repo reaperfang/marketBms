@@ -105,7 +105,7 @@ export default {
 	methods: {
 		...mapActions(["memberlist", "userlist", "sexagelist", "phonelist"]),
 		async init() {
-			let parames = { cid: this.cid };
+			let parames = {...this.invokeType,cid: this.cid };
 
 			let resMember = await this._apis.dashboard.member(parames);
 			this.memberlist(JSON.parse(resMember));
