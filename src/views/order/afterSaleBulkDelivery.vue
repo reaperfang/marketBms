@@ -617,7 +617,7 @@ export default {
                         item.showErrorOther = true
                         item.errorMessageOther = '请输入快递公司名称'
                       } else {
-                        if(!item.expressNos) {
+                        if(!item.orderAfterSaleSendInfo.expressNos) {
                           isWrong = true
                           item.showErrorExpressNos = true
                           item.errorMessageExpressNos = '请输入快递单号'
@@ -629,7 +629,7 @@ export default {
                         item.showErrorExpressCompany = true
                         item.errorMessageExpressCompany = '请选择快递公司'
                       } else {
-                        if((item.express == null) && !item.expressNos) {
+                        if((item.express == null) && !item.orderAfterSaleSendInfo.expressNos) {
                           isWrong = true
                           item.showErrorExpressNos = true
                           item.errorMessageExpressNos = '请输入快递单号'
