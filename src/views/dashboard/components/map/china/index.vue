@@ -1,7 +1,7 @@
 <template>
 	<div class="panel-content">
 		<div
-			style="display:inline-block;width:100%;height:100%;"
+			style="display:inline-block;width:100%;height:100%;padding-bottom:25px;"
 			ref="chartContentPietest"
 		></div>
 	</div>
@@ -198,8 +198,8 @@ export default {
 					},
 					min: 1,
 					max: 3000,
-					right: 26,
-					bottom: 50,
+					right: 10,
+					bottom: 25,
 					showLabel: !0,
 					//text: ['高', '低'], // 文本，默认为数值文本
 
@@ -306,7 +306,8 @@ export default {
 						type: "map",
 						map: mapName,
 						geoIndex: 0,
-						aspectScale: 0.75, //长宽比
+						// aspectScale: 0.75, //长宽比
+						aspectScale: 0.5, //长宽比
 						showLegendSymbol: true, // 存在legend时显示
 						label: {
 							normal: {
