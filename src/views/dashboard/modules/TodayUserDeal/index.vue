@@ -48,7 +48,7 @@ export default {
 			this.$refs.chart.showChart(this.initMapData(this.mapData, val));
 		},
 		"dashboard.amount"(val) {
-			this.persent = val.place_order_amount_rgrt.toFixed(2) * 100;
+			this.persent = parseFloat(val.place_order_amount_rgrt).toFixed(2) * 100;
 			this.endVal = parseFloat(val.place_order_amount_rt);
 
 			this.$refs.countTo.start();
