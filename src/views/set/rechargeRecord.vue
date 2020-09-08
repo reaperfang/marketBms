@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="recharge recharge-pt0">
+		<div class="recharge recharge-top">
 			<!-- 充值记录 -->
 			<h1 class="top">充值</h1>
 			<div class="rechangeBox clearfix">
@@ -8,7 +8,7 @@
 					<div class="price-title">账户余额（元）</div>
 					<div class="price-info">
 						<span class="price">{{price}}</span>
-						<span class="price-tip">账户余额不足，不能发单，无法使用达达配送</span>
+						<span class="price-tip" v-if="!price && price !== null">账户余额不足，不能发单，无法使用达达配送</span>
 					</div>
 				</div>
 				<div class="fr recharge-btn">
@@ -39,19 +39,37 @@
 				label="充值时间">
 				</el-table-column>
 			</el-table>
+			<div class="pagination" v-if="dataList.length">
+				<el-pagination
+				:background="true"
+				@size-change="handleSizeChange"
+				@current-change="handleCurrentChange"
+				:current-page="Number(startIndex) || 1"
+				:page-sizes="[5, 10, 20, 50, 100, 200, 500]"
+				:page-size="pageSize*1"
+				:total="total*1"
+				layout="sizes, prev, pager, next, jumper"
+				>
+				</el-pagination>
+			</div>
 		</div>
 	</div>
 </template>
 <script>
+	import tableBase from '@/components/TableBase';
 	export default {
+		name: 'rechargeRecord',
+		extends: tableBase,
 		data() {
 			return {
-				price: 100,
-				dataList: []
-			};
+				price: null,
+				dataList: [],
+				loading:true,
+			}
 		},
 		created() {
 			this.getBalancRecord()
+			this.fetch();
 		},
 		methods: {
 			onRecharge() {
@@ -76,8 +94,8 @@
 					});
 			},
 			//获取充值记录列表
-			getRechargeRecordList(){
-				let query = Object.assign({cid:this.cid},this.form)
+			fetch(){
+				let query = Object.assign({cid:2},this.ruleForm)
 				this._apis.set.getRoleList(query).then(response =>{
 					this.dataList = response.list
 					this.total = response.total
@@ -147,12 +165,16 @@
 			}
 		}
 	}
-	.recharge-pt0 {
+	.recharge-top {
 		padding-top: 0;
+		padding-bottom: 0;
 	}
 	.recharge-con {
 		margin-top: 20px;
 		padding-bottom: 35px;
+	}
+	/deep/ .el-table--small td, /deep/.el-table--small th{
+		padding:8px 10px;
 	}
 
 </style>

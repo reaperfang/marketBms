@@ -1,132 +1,158 @@
 <template>
-  <div class="shopExpress shopInfoBox">
-    <!-- 充值 -->
-    <h1 class="top">请输入充值金额</h1>
-    <div class="store_box">
-      <el-form
-        ref="ruleForm"
-        :rules="rules"
-        label-position="left"
-        :model="ruleForm"
-        label-width="90px"
-        class="formBox"
-      >
-        <el-form-item label="充值对象：">
-          <!-- <label>取货地址：</label> -->
-          {{ address }}
-        </el-form-item>
-        <el-form-item label="充值金额：" prop="price">
-          <el-input
-            v-model.number="ruleForm.price"
-            style="width: 131px;"
-            placeholder="请输入充值金额"
-            @input="handleChange"
-          ></el-input>&nbsp;&nbsp;
-          <span>元</span>
-        </el-form-item>
-        <el-button
-          type="primary"
-          size="small"
-          @click="getRechargeNum"
-          style="marginLeft:90px;marginTop:20px"
-        >下一步</el-button>
-      </el-form>
-    </div>
-  </div>
+	<div class="recharge">
+		<!-- 充值 -->
+		<h1 class="top">请输入充值金额</h1>
+    <div class="tip">说明：充值金额将直接充入您在达达快送的账户中，您可以登录达达开放平台（<a href="https://newopen.imdada.cn" target="_blank" ref="nofollow">https://newopen.imdada.cn</a>）-管理中心-商户中心-运费服务-运费账户中查看，开发票请联系达达客服申请。</div>
+		<div class="store_box">
+			<el-form ref="ruleForm" :rules="rules" label-position="left" :model="ruleForm" label-width="73px"
+				class="formBox">
+				<el-form-item label="充值对象：">
+					{{ address }}
+				</el-form-item>
+				<el-form-item label="充值金额：" prop="price">
+          <numberInput style="width: 193px;" v-model="ruleForm.price" :max="99999999" placeholder="请输入充值金额"></numberInput><span> 元</span>
+				</el-form-item>
+				<el-button class="recharge-btn" type="primary" size="small" @click="getRechargeNum">
+					下一步</el-button>
+			</el-form>
+		</div>
+	</div>
 </template>
 <script>
-export default {
-  name:"recharge",
-  data() {
-    return {
-      address: "达疆网络科技(上海)有限公司（新达达）",
-      ruleForm: {
-        price: null
-      },
-      rules: {
-        price: [{ type: "number", min: 1, message: "必须为整数" }]
-      }
-    };
-  },
-  mounted() {
-    //this.getRechargeNum()
-  },
-  methods: {
-    handleChange() {
-      console.log(11);
-      if (String(this.ruleForm.price).length > 8) {
-        this.ruleForm.price = 99999999;
-      }
+  import numberInput from '@/components/NumberInput';
+	export default {
+    name: "recharge",
+    components: {
+      numberInput
     },
-    //充值
-    getRechargeNum() {
-      if(this.ruleForm.price==null){
-          this.$message.error("请输入充值金额");
-          return false
-      }
-      let param = {
-        sourceId: this.$route.params.sourceId,
-        rechargeMoney: this.ruleForm.price,
-        category: "PC"
+		data() {
+      var validatePrice = (rule, value, callback) => {
+        if (value === '' || value === 0) {
+          callback(new Error('请输入有效的金额值，充值金额不能为0，小数点前不能超过8位数字，小数点后不能超过2位数字。'));
+        } else {
+          callback();
+        }
       };
-      this._apis.set
-        .getRecharge(param)
-        .then(response => {
-          let url = response.payUrl;
-          if (url) {
-            window.open(url);
-          }
+			return {
+				address: "达疆网络科技(上海)有限公司（新达达）",
+				ruleForm: {
+					price: ''
+				},
+				rules: {
+					price: [
+            {validator: validatePrice, trigger: 'blur'}
+          ]
+				}
+			};
+		},
+		mounted() {
 
-          console.log("response", response);
+		},
+		methods: {
+			//充值
+			getRechargeNum() {
+        this.$refs['ruleForm'].validate( valid => {
+          if(valid) {
+            let param = {
+              sourceId: this.$route.params.sourceId,
+              rechargeMoney: this.ruleForm.price,
+              category: "PC"
+            };
+            this._apis.set
+              .getRecharge(param)
+              .then(response => {
+                let url = response.payUrl;
+                if (url) {
+                  window.open(url);
+                }
+              })
+              .catch(error => {
+                this.loading = false;
+                
+              });
+          }
         })
-        .catch(error => {
-          this.loading = false;
-        });
-    }
-  }
-};
+			}
+		}
+	};
+
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.shopInfoBox {
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  padding: 20px;
-  .top {
-    font-size: 16px;
-    color: #3d434a;
-    padding: 15px 0;
-    border-bottom: 1px solid #cacfcb;
-  }
-  .formBox {
-    margin: 30px 0 0 30px;
-  }
-}
-.store_box {
-  h1 {
-    color: #3d434a;
-    font-size: 14px;
-    margin-bottom: 20px;
-  }
-  .info {
-    background: #f2f2f2;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    p {
-      font-size: 14px;
-      font-weight: 400;
-      color: #666666;
+	.recharge {
+    position: relative;
+		width: 100%;
+		height: 100%;
+    min-height: 300px;
+		background: #fff;
+		padding: 0 20px 35px 20px;
+		border-radius: 4px;
+
+		.top {
+			height: 52px;
+			line-height: 52px;
+			font-size: 16px;
+			color: #3d434a;
+			border-bottom: 1px solid #D9DEE9;
+		}
+    .tip {
+      padding: 12px 20px;
+      margin-top: 10px;
       line-height: 24px;
+      font-size: 12px;
+      color: #44434B;
+      background: rgba(253, 147, 43, 0.08);
+      a {
+        color: #44434B;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
     }
-  }
-}
-.proText {
-  font-size: 14px;
-  color: #44434b !important;
-}
+
+		.formBox {
+			margin: 25px 0 0 20px;
+		}
+    .recharge-btn {
+      position: absolute;
+      left: 50%;
+      bottom: 35px;
+      width: 88px;
+      margin-left: -44px;
+    }
+	}
+
+	.store_box {
+		h1 {
+			color: #3d434a;
+			font-size: 14px;
+			margin-bottom: 20px;
+		}
+    /deep/ .el-form-item__label {
+      padding-right: 0;
+    }
+
+		.info {
+			background: #f2f2f2;
+			padding: 20px;
+			margin-bottom: 20px;
+			border-radius: 10px;
+			display: flex;
+			flex-flow: row nowrap;
+			justify-content: space-between;
+
+			p {
+				font-size: 14px;
+				font-weight: 400;
+				color: #666666;
+				line-height: 24px;
+			}
+		}
+	}
+
+	.proText {
+		font-size: 14px;
+		color: #44434b !important;
+	}
+
 </style>
