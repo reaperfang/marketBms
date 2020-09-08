@@ -9,44 +9,57 @@
 	<div class="item-amount">
 		<div class="box">
 			<div class="box-item">
+				<div class="box-item-start">千万</div>
+				<div class="number-item">0</div>
+			</div>
+
+			<div class="box-item">
+				<div class="box-item-start">百万</div>
+				<div class="number-item">0</div>
+			</div>
+			<div class="box-item" style="width:5px">
+				<span class="semicolon">,</span>
+			</div>
+
+			<div class="box-item">
+				<div class="box-item-start">十万</div>
+				<div class="number-item">0</div>
+			</div>
+
+			<div class="box-item">
+				<div class="box-item-start">万元</div>
 				<div class="number-item">0</div>
 			</div>
 			<div class="box-item">
+				<div class="box-item-start"></div>
 				<div class="number-item">0</div>
 			</div>
-			<div class="box-item" style="width:10px">
+			<div class="box-item" style="width:5px">
 				<span class="semicolon">,</span>
 			</div>
 			<div class="box-item">
+				<div class="box-item-start"></div>
 				<div class="number-item">0</div>
 			</div>
 			<div class="box-item">
+				<div class="box-item-start"></div>
 				<div class="number-item">0</div>
 			</div>
 			<div class="box-item">
+				<div class="box-item-start"></div>
 				<div class="number-item">0</div>
 			</div>
-			<div class="box-item" style="width:10px">
-				<span class="semicolon">,</span>
-			</div>
-			<div class="box-item">
-				<div class="number-item">0</div>
-			</div>
-			<div class="box-item">
-				<div class="number-item">0</div>
-			</div>
-			<div class="box-item">
-				<div class="number-item">0</div>
-			</div>
-			<div class="box-item" style="width:10px">
+			<div class="box-item" style="width:5px">
 				<span class="point">.</span>
 			</div>
 
 			<div class="box-item">
+				<div class="box-item-start"></div>
 				<div class="number-item">0</div>
 			</div>
 
 			<div class="box-item">
+				<div class="box-item-start"></div>
 				<div class="number-item">0</div>
 			</div>
 		</div>
@@ -303,14 +316,25 @@ export default {
 		margin: 0 20px;
 		display: flex;
 		justify-content: space-around;
+
 		.box-item {
 			width: 52px;
 			height: 100%;
-			display: flex;
-			align-items: flex-end;
+			// display: flex;
+			// align-items: flex-end;
+
+			.box-item-start {
+				font-size: 12px;
+				font-weight: 500;
+				color: #ffffff;
+				height: 25%;
+				text-align: center;
+				padding: 8px 0 0 0;
+			}
 
 			.number-item {
-				height: 80%;
+				justify-self: end;
+				height: 75%;
 				width: 52px;
 				background: rgba(71, 225, 255, 0.02);
 				box-shadow: 0px 1px 20px 0px rgba(71, 225, 255, 0.1);
@@ -335,6 +359,9 @@ export default {
 		}
 
 		.semicolon {
+			// width: 10px;
+			height: 10px;
+			justify-self: end;
 			background: linear-gradient(180deg, #dafffd 0%, #14e1fc 100%);
 		}
 	}
