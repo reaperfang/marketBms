@@ -48,7 +48,10 @@ export default {
 			this.$refs.chart.showChart(this.initMapData(this.mapData, val));
 		},
 		"dashboard.amount"(val) {
-			this.persent = parseFloat(val.place_order_amount_rgrt).toFixed(2) * 100;
+			this.persent =
+				val.place_order_amount_rgrt == "-9999"
+					? 0
+					: parseFloat(val.place_order_amount_rgrt).toFixed(2) * 100;
 			this.endVal = parseFloat(val.place_order_amount_rt);
 
 			this.$refs.countTo.start();
@@ -125,7 +128,7 @@ export default {
 	methods: {
 		...mapActions(["maplist"]),
 		async init() {
-			let parames = { ...this.invokeType,cid: this.cid };
+			let parames = { ...this.invokeType, cid: this.cid };
 			let res = await this._apis.dashboard.realTimeUser(parames);
 			this.maplist(JSON.parse(res).areaOrderNumList);
 		},

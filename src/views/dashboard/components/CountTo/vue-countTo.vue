@@ -1,21 +1,14 @@
 <template>
-	<!-- <span>
-      {{displayValue}}
-    </span> -->
-	<!-- <div class="item">
-		<span> {{ displayValue }}</span>
-	</div> -->
-
 	<div class="item-amount">
 		<div class="box">
 			<div class="box-item">
 				<div class="box-item-start">千万</div>
-				<div class="number-item">0</div>
+				<div class="number-item">{{ eight }}</div>
 			</div>
 
 			<div class="box-item">
 				<div class="box-item-start">百万</div>
-				<div class="number-item">0</div>
+				<div class="number-item">{{ seven }}</div>
 			</div>
 			<div class="box-item flex-end" style="width:5px">
 				<span class="semicolon">,</span>
@@ -23,31 +16,31 @@
 
 			<div class="box-item">
 				<div class="box-item-start">十万</div>
-				<div class="number-item">0</div>
+				<div class="number-item">{{ six }}</div>
 			</div>
 
 			<div class="box-item">
 				<div class="box-item-start">万元</div>
-				<div class="number-item">0</div>
+				<div class="number-item">{{ five }}</div>
 			</div>
 			<div class="box-item">
 				<div class="box-item-start"></div>
-				<div class="number-item">0</div>
+				<div class="number-item">{{ four }}</div>
 			</div>
 			<div class="box-item flex-end" style="width:5px">
 				<span class="semicolon">,</span>
 			</div>
 			<div class="box-item">
 				<div class="box-item-start"></div>
-				<div class="number-item">0</div>
+				<div class="number-item">{{ third }}</div>
 			</div>
 			<div class="box-item">
 				<div class="box-item-start"></div>
-				<div class="number-item">0</div>
+				<div class="number-item">{{ sec }}</div>
 			</div>
 			<div class="box-item">
 				<div class="box-item-start"></div>
-				<div class="number-item">0</div>
+				<div class="number-item">{{ first }}</div>
 			</div>
 			<div class="box-item flex-end" style="width:5px">
 				<span class="point">.</span>
@@ -145,7 +138,15 @@ export default {
 			timestamp: null,
 			remaining: null,
 			rAF: null,
-			itemData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+			itemData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+			first: 0,
+			sec: 0,
+			third: 0,
+			four: 0,
+			five: 0,
+			six: 0,
+			seven: 0,
+			eight: 0
 		};
 	},
 	computed: {
@@ -159,10 +160,12 @@ export default {
 				this.start();
 			}
 		},
-		endVal() {
+		endVal(val) {
+			console.log("endVal() {", val);
 			if (this.autoplay) {
 				this.start();
 			}
+			this.modifyTotal(val);
 		}
 	},
 	mounted() {
@@ -270,6 +273,46 @@ export default {
 				}
 			}
 			return this.prefix + x1 + x2 + this.suffix;
+		},
+		modifyTotal(val) {
+			let resutlt = this.reverse(val.toString()); //charAt
+
+			console.log(resutlt.charAt(0));
+			console.log(resutlt.charAt(1));
+			console.log(resutlt.charAt(2));
+			console.log(resutlt.charAt(3));
+			console.log(resutlt.charAt(4));
+
+			if (resutlt.charAt(0)) {
+				this.first = resutlt.charAt(0);
+			}
+			if (resutlt.charAt(1)) {
+				this.sec = resutlt.charAt(1);
+			}
+			if (resutlt.charAt(2)) {
+				this.third = resutlt.charAt(2);
+			}
+			if (resutlt.charAt(3)) {
+				this.four = resutlt.charAt(3);
+			}
+			if (resutlt.charAt(4)) {
+				this.five = resutlt.charAt(4);
+			}
+			if (resutlt.charAt(5)) {
+				this.six = resutlt.charAt(5);
+			}
+			if (resutlt.charAt(6)) {
+				this.seven = resutlt.charAt(6);
+			}
+			if (resutlt.charAt(7)) {
+				this.eight = resutlt.charAt(7);
+			}
+		},
+		reverse(str) {
+			return str
+				.split("")
+				.reverse()
+				.join("");
 		}
 	},
 	destroyed() {
@@ -279,36 +322,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.item {
-	height: 95px;
-	background: rgba(71, 225, 255, 0.02);
-	box-shadow: 0px 1px 20px 0px rgba(71, 225, 255, 0.1);
-	text-align: center;
-
-	span {
-		font-size: 68px;
-		font-weight: normal;
-		color: rgba(255, 255, 255, 1);
-		background: linear-gradient(
-			180deg,
-			rgba(218, 255, 253, 1) 0%,
-			rgba(20, 225, 252, 1) 100%
-		);
-
-		background-clip: text;
-		-ms-background-clip: text;
-		-webkit-background-clip: text;
-		-ms-text-fill-color: transparent;
-		-webkit-text-fill-color: transparent;
-
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=rgba(218, 255, 253, 1), endColorstr=rgba(20, 225, 252, 1),GradientType=0 );
-
-		.gradient {
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#ffffff',GradientType=0 );
-		}
-	}
-}
-
 .item-amount {
 	height: 97px;
 	.box {
