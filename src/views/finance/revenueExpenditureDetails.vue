@@ -90,7 +90,7 @@
           label="交易流水号"
           :render-header="renderTradeDetailSn"
           align="left"
-          width="210px"
+          width="220px"
           fixed
           >
         </el-table-column>
@@ -119,12 +119,13 @@
           label="关联单据编号"
           :render-header="renderRelationSn"
           align="center"
-          width="200px">
+          width="220px">
         </el-table-column>
         <el-table-column
           prop="payWay"
           label="支付方式"
-          align="center">
+          align="center"
+          width="100px">
           <template slot-scope="scope">
             {{payTypes[scope.row.payWay+1].label}}
           </template>
@@ -133,7 +134,7 @@
           prop="wechatTradeSn"
           label="第三方流水号"
           align="center"
-          width="250px;">
+          width="280px;">
         </el-table-column>
         <el-table-column
           prop="amount"
@@ -156,7 +157,7 @@
           prop="tradeTime"
           label="交易时间"
           sortable="custom"
-          align="right"
+          align="center"
           width="200px"
           fixed="right"
           >
@@ -468,6 +469,6 @@ export default {
   padding:16px 10px;
 }
 /deep/.el-table--small th{
-  padding:16px 0px;
+  padding:0px;
 }
 </style>

@@ -235,6 +235,6 @@ export default {
   padding:16px 10px;
 }
 /deep/.el-table--small th{
-  padding:16px 0px 16px 10px;
+  padding:8px 0px 8px 10px;
 }
 </style>
