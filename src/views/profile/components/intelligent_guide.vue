@@ -52,6 +52,8 @@
 <style lang="scss" scope>
   .intelligent_guide {
     text-align: center;
+    min-width: 976px;
+    background: #fff;
   }
 
   .i_g_title {
