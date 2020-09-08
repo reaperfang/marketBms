@@ -17,7 +17,7 @@
 				<div class="box-item-start">百万</div>
 				<div class="number-item">0</div>
 			</div>
-			<div class="box-item" style="width:5px">
+			<div class="box-item flex-end" style="width:5px">
 				<span class="semicolon">,</span>
 			</div>
 
@@ -34,7 +34,7 @@
 				<div class="box-item-start"></div>
 				<div class="number-item">0</div>
 			</div>
-			<div class="box-item" style="width:5px">
+			<div class="box-item flex-end" style="width:5px">
 				<span class="semicolon">,</span>
 			</div>
 			<div class="box-item">
@@ -49,7 +49,7 @@
 				<div class="box-item-start"></div>
 				<div class="number-item">0</div>
 			</div>
-			<div class="box-item" style="width:5px">
+			<div class="box-item flex-end" style="width:5px">
 				<span class="point">.</span>
 			</div>
 
@@ -316,6 +316,11 @@ export default {
 		margin: 0 20px;
 		display: flex;
 		justify-content: space-around;
+
+		.flex-end {
+			display: flex;
+			align-items: flex-end;
+		}
 
 		.box-item {
 			width: 52px;
