@@ -610,6 +610,8 @@ export default {
             }))
           } else {
             this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              expressNos: '',
+              express: res,
               showErrorExpressCompany: false,
               errorMessageExpressCompany: '',
             }))
