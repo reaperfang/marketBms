@@ -15,10 +15,11 @@
     <!--  step_1  选择行业-->
     <step-industry
       v-show="stepStatus === 1"
-      v-if="stepStatus <=2"
+      v-if="stepStatus <= 2"
       :industryId="industryId"
       @update-step="updateStep"
       @update-industry-id="updateIndustryId"
+      :reselect="isReselect"
     ></step-industry>
 
     <!--  step_2  预览模板-->
@@ -50,7 +51,8 @@
     data() {
       return {
         isShowGuide: false,  // 是否是显示引导（首次进入）
-        stepStatus: null, // 进行到了第几步
+        isReselect: 0,   // 是否重新选择行业, 0 否 1 是
+        stepStatus: null,    // 进行到了第几步
         stepArray: ['industry', 'preview', 'enable', 'base'], //
         industryId: null,
         templateId: null
@@ -67,7 +69,8 @@
           const result = await this._apis.profile.getIntelligentProgress();
           console.log(result);
           if(result) {
-            this.stepStatus = result.currentStep ? result.status === 1 ? result.currentStep + 1 : result.currentStep : 1;
+            // this.stepStatus = result.currentStep ? result.status === 1 ? result.currentStep + 1 : result.currentStep : 1;
+            this.stepStatus = 4
             this.industryId = result.chooseIndustryId;
             this.chooseTemplateId = result.chooseTemplateId;
           }
@@ -83,6 +86,7 @@
 
       /** 更新 步骤视图 */
       updateStep(stepNumber) {
+        if(stepNumber === 1) this.updateReselect();
         this.stepStatus = stepNumber;
       },
 
@@ -95,6 +99,11 @@
       updateTemplateId(id) {
         this.templateId = id;
       },
+
+      /** 更新 "重新选择行业flag" */
+      updateReselect() {
+        this.isReselect = 1
+      }
     },
 
   }

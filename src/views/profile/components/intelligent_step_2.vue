@@ -19,7 +19,7 @@
                 <transition name="el-fade-in">
                   <div class="view_preview" v-show="item.isShowCode">
                     <p class="hint text">使用手机扫描下方二维码 <br> 预览完整模版</p>
-                    <img class="qr_code" :src="item.qrCode" alt="二维码"/>
+                    <img class="qr_code" :src="item.qrCodePic" alt="二维码"/>
                   </div>
                 </transition>
 
@@ -86,7 +86,7 @@
     </div>
 
     <div class="bottom_buttons">
-      <el-button @click="$emit('update-step', 1)"> 上一步</el-button>
+      <el-button @click="prevStep"> 上一步</el-button>
       <el-button type="primary" @click="confirmEnable"> 启用模板</el-button>
     </div>
 
@@ -201,18 +201,9 @@
         configureProgress: 0, // 查询配置进度 0 - 5?
         configureTextArray: [], // 配置进度 文字以及成功状态
         dataTypeText: ["","运费模板", "商品", "商品分类", "创意设计", "微信公众号底部数据"],
-        resArray: [
-          {text: "Uncle Ming1",status: 1, id: "1"},
-          {text: "Uncle Ming2",status: 0, id: "2"},
-          {text: "Uncle Ming3",status: 0, id: "3"},
-          {text: "Uncle Ming4",status: 2, id: "4"},
-          {text: "Uncle Ming5",status: 1, id: "5"},
-          ]
       }
     },
     mounted() {
-      console.log('industryId === null  ? %c' + this.industryId !== null, 'color:tomato');
-      // this.settingSwiper();
       this.$nextTick(() => {
         this.settingSwiper()
       })
@@ -224,40 +215,8 @@
       async fetchListData() {
         try {
           this.isLoading = true;
-          const params = {industryId: 1};
+          const params = {industryId: this.industryId};
           const resultData = await this._apis.profile.getIntelligentPreViewTemplate(params);
-          // const resultData = [
-          //   {
-          //     name: '家具专区',
-          //     previewPic: '',
-          //     qrCodePic: '',
-          //     id: 101,
-          //   },
-          //   {
-          //     name: '美味零食美味零食美味零食美味零食美味零食',
-          //     previewPic: 'https://img.zcool.cn/community/011bfe5f222f46a80120a821f7944a.jpg@1280w_1l_0o_100sh.jpg',
-          //     qrCodePic: '',
-          //     id: 102,
-          //   },
-          //   {
-          //     name: '美味零食',
-          //     previewPic: 'https://img.zcool.cn/community/0148085f4c81ee11013f1a649fdc55.jpg@1280w_1l_2o_100sh.jpg',
-          //     qrCodePic: '',
-          //     id: 103,
-          //   },
-          //   {
-          //     name: '美味零食',
-          //     previewPic: '',
-          //     qrCodePic: '',
-          //     id: 104,
-          //   },
-          //   {
-          //     name: '美味零食',
-          //     previewPic: '',
-          //     qrCodePic: '',
-          //     id: 105,
-          //   }
-          // ];
           this.listData = resultData.map(item => {
             return {
               id: item.id,
@@ -300,7 +259,7 @@
       /** 确认启用 */
       async enableConfigure() {
         try {
-          // const result = await this._apis.profile.intelligentUpdateStep({chooseTemplateId: this.selectTemplateId});
+          const result = await this._apis.profile.intelligentUpdateStep({chooseTemplateId: this.selectTemplateId});
 
           this.isShowConfigureBox = true;
           this.timer();
@@ -382,6 +341,13 @@
       selectedId(id) {
         this.selectTemplateId = this.selectTemplateId === id ? null : id;
       },
+
+      /** 上一步 */
+      prevStep() {
+        if(this.isConfigureFail) return;
+        this.$emit('update-step', 1)
+      },
+
 
     },
     watch: {

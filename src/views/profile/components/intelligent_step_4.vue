@@ -30,13 +30,13 @@
         <wx v-show="baseStatus === 2" @wxpay-status="wechatPayStatus"></wx>
 
         <!--  店铺信息  -->
-        <shop v-show="baseStatus === 3" ref="BaseShopInfoView"></shop>
+        <shop v-show="baseStatus === 3" ref="BaseShopInfoView" @update-completed-loading="updateCompletedLoading"></shop>
       </div>
     </div>
 
     <div class="i_base_btns">
       <el-button plain @click="backBaseStep()"> 上一步 </el-button>
-      <el-button type="primary" @click="nextBaseStep()">
+      <el-button type="primary" @click="nextBaseStep()" v-loading="completedIsLoading">
         <template v-if="baseStatus === 3"> 完  成 </template>
         <template v-else>稍后，下一步</template>
       </el-button>
@@ -54,22 +54,25 @@
     components: { channel, wx, shop },
     data() {
       return {
-        baseStatus: 1, // 基础信息进行到了第几步 默认第1步
-        bindWechatAccount: null,  // 是否绑定公众号 0:未绑定 1:已绑定
-        bindWechatApplet: null,  // 是否绑定小程序 0:未绑定 1:已绑定
-        wechatPay: null,  // 是否开启微信支付 0:否 1:是
+        baseStatus: 1, // 基础信息进行到了第几步
+        bindWechatAccount: '',  // 是否绑定公众号 0:未绑定 1:已绑定
+        bindWechatApplet: '',  // 是否绑定小程序0:未绑定 1:已绑定
+        wechatPay: '',  // 是否开启微信支付 0:否 1:是
         isCompleted: 0, // 是否完成 0:否 1:是
+        completedIsLoading: false,
       }
     },
     methods:{
       /** 微信绑定状态 */
       wechatStatus(data) {
+        console.log('wechatStatus: ', data);
         this.bindWechatAccount = data.bindWechatAccount;
         this.bindWechatApplet = data.bindWechatApplet;
       },
 
       /** 微信支付状态 */
       wechatPayStatus(data) {
+        console.log('payStatus: ', data);
         this.wechatPay = data;
       },
 
@@ -85,7 +88,7 @@
 
       /** 下一步 */
       nextBaseStep() {
-        if(this.baseStatus === 3) {
+        if(this.baseStatus === 3 && !this.completedIsLoading) {
           this.$refs.BaseShopInfoView.completed();
         } else {
           this.baseStatus += 1;
@@ -93,6 +96,10 @@
 
       },
 
+      /** 更新按钮loading的状态 */
+      updateCompletedLoading(flag) {
+        this.completedIsLoading = flag
+      },
     }
   }
 </script>

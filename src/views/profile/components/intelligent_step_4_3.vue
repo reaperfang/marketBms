@@ -7,10 +7,12 @@
         <el-input v-model.trim="form.shopName" style="width:283px;"></el-input>
         <p class="shopInfo-show">
           用于展示给消费者的品牌形象
-          <span @mouseover="showShopPreview = true" @mouseout="showShopPreview = false">查看样例</span>
+          <span @mouseover="showShopPreview = true">查看样例</span>
         </p>
       </el-form-item>
       <div class="preview_shop_pic" v-show="showShopPreview">
+        <img class="bg_pic" src="" alt="">
+        <span class="close" @click="showShopPreview = false"></span>
         <div class="top">{{form.shopName}}</div>
         <div class="center">{{form.shopName}}</div>
       </div>
@@ -28,7 +30,7 @@
       </el-form-item>
 
       <el-form-item label="5、联系地址:" prop="sendAddress">
-        <el-input v-model="form.sendAddress" style="width:283px;" placeholder="请输入和点击搜索图标确定联系地址" />
+        <el-input v-model="form.sendAddress" @change="handleChangeAddress" style="width:283px;" placeholder="请输入和点击搜索图标确定联系地址" />
         <dialog-map-search @getMapClickPoi="getMapClickPoi" :sendAddress="form.sendAddress"></dialog-map-search>
 
       </el-form-item>
@@ -44,6 +46,7 @@
 
 <script>
   import DialogMapSearch from '@/components/mapSearchDialog'
+
   export default {
     name: "intelligent_base_shop",
     components: { DialogMapSearch },
@@ -57,6 +60,7 @@
           lng: '',
           sendAddress: ''
         },
+        isMapChoose: false,  // 是否打开了地图获取了经纬度
         rules: {
           shopName: { min: 1, max: 10, message: "长度在 1 到 10 个字符", trigger: "blur" },
           phone: { validator: (rule, value, callback) => {
@@ -69,6 +73,15 @@
         showShopPreview: false, // 右侧预览店铺名图片
       }
     },
+    computed: {
+      shopInfo() {
+        return localStorage.getItem("shopInfos") ? JSON.parse(localStorage.getItem("shopInfos")) : null
+      },
+    },
+    created() {
+      this.getShopInfo();
+      console.log(shopInfo);
+    },
     methods: {
       /** 完成 */
       async completed() {
@@ -76,17 +89,30 @@
           const valid = await this.$refs.form.validate();
           console.log(valid);
           console.log('%c valid', 'color: deepskyblue');
-          // if(!valid) return;
-        }catch (e) {
+        } catch (e) {
           this.$message.error('请正确填写表单');
           return
         }
         try {
-          // const res = this._apis.profile.xxx
-          console.log('%c 999666999666', 'color: tomato')
-        }catch (e) {
-          this.$message.error(e.msg || '出错了，请稍后再试~');
+          this.$emit("update-completed-loading", true);
+          const params = {
+            id: this.shopInfo.id,
+            shopName: this.form.shopName,
+            phone: this.form.phone,
+            provinceCode:this.form.addressCode[0],
+            cityCode:this.form.addressCode[1],
+            areaCode:this.form.addressCode[2],
+            sendAddress: this.form.sendAddress,
+            latitude: this.form.lat,
+            longitude: this.form.lng,
+          };
+          const result = await this._apis.set.updateShopInfo(params);
+        } catch (e) {
+          this.$message.error(e || '出错了，请稍后再试~');
           console.error(e)
+        } finally {
+          console.log("update-shopInfo: finally");
+          this.$emit("update-completed-loading", false);
         }
       },
 
@@ -102,7 +128,7 @@
         window.open(routeData.href, '_blank');
       },
 
-      /**  */
+      /**  地图  */
       getMapClickPoi(poi) {
         console.log('poi----getMapClickPoi', poi);
         if (!poi) return false;
@@ -116,7 +142,41 @@
         this.$nextTick(() => {
           this.$refs.form.validateField('sendAddress')
         })
-      }
+      },
+
+      /** get店铺信息 */
+      getShopInfo() {
+        let id = this.cid;
+        this._apis.set.getShopInfo({ id })
+          .then(response => {
+            this.form.shopName = response.shopName || '';
+            this.form.phone = response.phone || '';
+            this.form.sendAddress = response.sendAddress || '';
+
+            if (response.provinceCode) {
+              let arr = [];
+              arr.push(response.provinceCode);
+              arr.push(response.cityCode);
+              arr.push(response.areaCode);
+              this.form.addressCode = arr;
+            }
+            // 解决省市区名称第二次保存时，没有点选地图的重新获取地址时，省市区名称丢失问题
+            this.province = response.province || this.province;
+            this.city = response.city || this.city;
+            this.area = response.area || this.area;
+            // 经纬度
+            this.form.lat = response.latitude;
+            this.form.lng = response.longitude
+          })
+          .catch(error => {
+            this.$message.error('查询失败');
+          });
+      },
+
+      /** 需要重新地图选点 */
+      handleChangeAddress() {
+        this.isMapChoose = false
+      },
 
     }
   }
@@ -145,16 +205,17 @@
     .preview_shop_pic {
       position: absolute;
       width: 300px;
-      height: 534px;
-      background: url(../../../assets/images/set/shop-set.jpg) no-repeat;
-      background-size: 100% 100%;
       left: 418px;
       top: 0;
       z-index: 3;
+      .bg_pic {
+        width: 100%;
+        z-index: 1;
+      }
       .top {
         position: absolute;
         left: 50%;
-        top: 25px;
+        top: 61px;
         font-size: 16px;
         color: #000000;
         transform: translateX(-50%);
@@ -163,10 +224,19 @@
       .center {
         position: absolute;
         left: 69px;
-        top: 148px;
+        top: 177px;
         font-size: 16px;
         color: #fff;
         font-weight: 600;
+      }
+      .close {
+        position: absolute;
+        right: 20px;
+        top: 15px;
+        display: block;
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
       }
     }
 

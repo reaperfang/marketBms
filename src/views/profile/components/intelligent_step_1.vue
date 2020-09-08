@@ -20,7 +20,7 @@
   export default {
     name: "intelligent_industry",
     props: {
-      industryId: { default: null } // 选中的行业
+      industryId: { default: null }, // 选中的行业
     },
     data() {
       return {
@@ -30,14 +30,9 @@
         nextIsLoading: false
       }
     },
-    computed:{
-      cid(){
-        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'));
-        return shopInfo.id;
-      }
-    },
     created() {
       this.getIndustry();
+      if(this.industryId) this.industryAct = this.industryId;
     },
     methods: {
       /** 获取行业 */
@@ -65,15 +60,8 @@
           this.$message.error('请选择行业')
         }
         else {
-          // reselect
           this.nextIsLoading = true;
-          let query = {
-            cid: this.cid,
-            chooseIndustryId: this.industryId,  // 选择行业id
-            /* chooseTemplateId: 1, // 选择模板id
-            reselect: 0,  // 重新选择 0 否 1 是 */
-          };
-          this._apis.profile.intelligentUpdateStep(query)
+          this._apis.profile.intelligentUpdateStep({chooseIndustryId: this.industryId})
             .then(() => { this.$emit("update-step", 2) })
             .catch(error => { this.$message.error(error + "请稍后再试") })
             .finally(()=>{this.nextIsLoading = false;})
