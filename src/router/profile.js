@@ -46,6 +46,13 @@ export default [
         name: 'intelligent',
         hidden: false,
         meta: {title: '智能开店', noCache: true, tabTitle: '概况', navType: 2}
+      },
+      {
+        path: 'intelligentGuide',
+        component: () => import('@/views/profile/intelligentGuide'),
+        name: 'intelligentGuide',
+        hidden: false,
+        meta: {title: '智能开店引导', noCache: true, tabTitle: '概况', navType: 2}
       }
     ]
 	}
