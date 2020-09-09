@@ -1,10 +1,10 @@
 <template>
-   <!-- <div> -->
+   <div style="height: 100%;background:#fff;" v-loading="isLoading" element-loading-background="rgba(255,255,255,1)" >
       <!-- <guide-prompt v-if="isGuidePrompt"></guide-prompt> -->
       <!-- <scope v-if="step === 1" :step="step"></scope> -->
 
       <component v-if="step" :is="currentComponent" @getStep="setStep" :step="step"></component>
-   <!-- </div> -->
+   </div>
 </template>
 
 <script>
@@ -40,7 +40,8 @@ export default {
   data () {
     return {
       step: null,
-      currentComponent: null
+      currentComponent: null,
+      isLoading: true
     }
   },
 
@@ -75,6 +76,9 @@ export default {
         
       }).catch((err) => {
         console.log(err)
+        this.$message.error(err)
+      }).finally(() => {
+        this.isLoading = false
       })
     },
     init() {

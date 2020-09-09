@@ -74,13 +74,13 @@
             <el-form-item v-if="ruleForm.payType == 3 || ruleForm.payType == 4" label="邮费月结号" prop="monthCode">
               <el-input style="width: 330px;" v-model="ruleForm.monthCode" placeholder="请输入，不超过20个字符"></el-input>
             </el-form-item>
-            <el-form-item label="规格尺寸" prop="specificationSize" v-if="isHasSkuSize">
+            <el-form-item label="规格尺寸" class="is-required" prop="specificationSize" v-if="isHasSkuSize">
               <el-select style="width: 330px;" v-model="ruleForm.specificationSize" @visible-change="handleOpenVisible" placeholder="请选择">
                 <el-option
                   v-for="item in expressElectronicSizeList"
-                  :key="item.templateSize"
-                  :label="item.sizeSpecs"
-                  :value="item.templateSize">
+                  :key="item.sizeSpecsTemplateSize"
+                  :label="item.sizeSpecsTemplateSize"
+                  :value="item.sizeSpecsTemplateSize">
                   </el-option>
               </el-select>
               <p class="error" v-if="!isChooseExpressCompany">请先选定快递公司</p>
@@ -247,13 +247,27 @@ export default {
           this.isChooseExpressCompany = false
         }
       },
+      formateElectronicSize(res) {
+        const map = res.map((item) => {
+          item.sizeSpecsTemplateSize = `${item.sizeSpecs} ${item.templateSize}`
+          return item
+        })
+        return map
+      },
       getExpressElectronicSize(companyCode) {
+        this.expressElectronicSizeList = []
         this._apis.order
         .getExpressSpec({ companyCode })
         .then(res => {
           if (res && res.length > 0) {
             this.isHasSkuSize = true
-            this.expressElectronicSizeList = res
+            this.expressElectronicSizeList = this.formateElectronicSize(res)
+            if (this.$route.query.id) {
+              const obj = this.expressElectronicSizeList.find(item => {
+                return item.templateSize === this.ruleForm.specificationSize
+              })
+              if (obj) this.ruleForm.specificationSize = `${obj.sizeSpecs} ${obj.templateSize}`
+            } 
           } else {
             this.isHasSkuSize = false
             this.expressElectronicSizeList = []
@@ -315,6 +329,8 @@ export default {
         if (data.payType != 3 && data.payType != 4) {
           data.monthCode = ''
         }
+        let arr = data.specificationSize.split(' ')
+        data.specificationSize = arr[arr.length - 1]
         console.log('data',data)
         return data
       },
@@ -354,13 +370,13 @@ export default {
         .getElectronicFaceSheetDetail({expressCompanyCode: this.$route.query.expressCompanyCode})
         .then(res => {
           console.log(res)
-          this.getExpressElectronicSize(res.expressCompanyCode)
           if (res.expressCompanyAccount) {
             this.isShowPwa = true
           } else {
             this.isShowPwa = false
           }
           this.ruleForm = Object.assign({}, res)
+          this.getExpressElectronicSize(res.expressCompanyCode)
         })
         .catch(error => {
           console.log('error',error)
