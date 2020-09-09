@@ -905,11 +905,16 @@ export default {
 
               let expressName = this.expressCompanyList.find(item => item.expressCompanyCode == val.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
 
-              this._apis.order
-                .checkExpress({expressName})
-                .then(res => {
-                  val.orderAfterSaleSendInfo.express = res
-                })
+              // this._apis.order
+              //   .checkExpress({expressName})
+              //   .then(res => {
+              //     val.express = res
+              //   })
+              val.express = list[index].express
+              // 回显快递单号
+              if(list[index].expressNos) {
+                val.orderAfterSaleSendInfo.expressNos = list[index].orderAfterSaleSendInfo.expressNos
+              }
             }
           })
 

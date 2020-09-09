@@ -866,6 +866,13 @@ export default {
               
             }
           });
+          if(list && list.length) {
+            for(let i=res.length-1; i>=0; i--) {
+              if(!list.find(item => item.id == res[i].id)) {
+                res.splice(i, 1)
+              }
+            }
+          }
           res.forEach(val => {
             val.orderItemList.forEach(item => {
               item.cacheSendCount = item.sendCount
