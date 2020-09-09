@@ -856,15 +856,17 @@ export default {
             try {
               // 回显选中的快递公司
               if(list && list.length) {
-                val.expressCompanyCodes = list[index].expressCompanyCodes
+                if(list[index].expressCompanyCodes) {
+                  val.expressCompanyCodes = list[index].expressCompanyCodes
 
-                let expressName = this.expressCompanyList.find(item => item.expressCompanyCode == val.expressCompanyCodes).expressCompany
+                  let expressName = this.expressCompanyList.find(item => item.expressCompanyCode == val.expressCompanyCodes).expressCompany
 
-                this._apis.order
-                  .checkExpress({expressName})
-                  .then(res => {
-                    val.express = res
-                  })
+                  this._apis.order
+                    .checkExpress({expressName})
+                    .then(res => {
+                      val.express = res
+                    })
+                }
               }
             } catch(e) {
               

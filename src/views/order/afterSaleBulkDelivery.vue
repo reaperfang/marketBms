@@ -901,9 +901,11 @@ export default {
 
             // 回显选中的快递公司
             if(list && list.length) {
-              val.orderAfterSaleSendInfo.expressCompanyCodes = list[index].orderAfterSaleSendInfo.expressCompanyCodes
+              if(list[index].orderAfterSaleSendInfo.expressCompanyCodes) {
+                val.orderAfterSaleSendInfo.expressCompanyCodes = list[index].orderAfterSaleSendInfo.expressCompanyCodes
 
-              let expressName = this.expressCompanyList.find(item => item.expressCompanyCode == val.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
+                let expressName = this.expressCompanyList.find(item => item.expressCompanyCode == val.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
+              }
 
               // this._apis.order
               //   .checkExpress({expressName})
