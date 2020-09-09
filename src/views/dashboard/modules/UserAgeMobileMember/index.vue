@@ -105,7 +105,7 @@ export default {
 	methods: {
 		...mapActions(["memberlist", "userlist", "sexagelist", "phonelist"]),
 		async init() {
-			let parames = {...this.invokeType,cid: this.cid };
+			let parames = { ...this.invokeType, cid: this.cid };
 
 			let resMember = await this._apis.dashboard.member(parames);
 			this.memberlist(JSON.parse(resMember));
@@ -167,8 +167,11 @@ export default {
 			};
 		},
 		setPhone(val) {
-			let result = parseFloat(val.c_uv_share_phone) * 100;
-			this.phoneData = { ...this.mobile, progress: result };
+			let result = val.c_uv_share_phone.toFixed(2);
+			this.phoneData = {
+				...this.mobile,
+				progress: parseInt(parseFloat(result) * 100)
+			};
 		}
 	}
 };
