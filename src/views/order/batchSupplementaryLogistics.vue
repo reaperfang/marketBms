@@ -451,6 +451,10 @@ export default {
             showErrorExpressNos: true,
             errorMessageExpressNos: '请输入快递单号'
           }))
+        }else{
+          this.list.splice(index, 1, Object.assign({}, this.list[index], {
+            showErrorExpressNos: false
+          }))
         }
       }
     },
