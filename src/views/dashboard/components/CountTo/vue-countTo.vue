@@ -48,12 +48,12 @@
 
 			<div class="box-item">
 				<div class="box-item-start"></div>
-				<div class="number-item">0</div>
+				<div class="number-item">{{ nine }}</div>
 			</div>
 
 			<div class="box-item">
 				<div class="box-item-start"></div>
-				<div class="number-item">0</div>
+				<div class="number-item">{{ last }}</div>
 			</div>
 		</div>
 	</div>
@@ -146,7 +146,9 @@ export default {
 			five: 0,
 			six: 0,
 			seven: 0,
-			eight: 0
+			eight: 0,
+			nine: 0,
+			last: 0
 		};
 	},
 	computed: {
@@ -161,11 +163,13 @@ export default {
 			}
 		},
 		endVal(val) {
-			console.log("endVal() {", val);
+			console.log("	endVal(val) {", val);
+			console.log("endVal() {", val.toString().split("."));
+			let result = val.toString().split(".");
 			if (this.autoplay) {
 				this.start();
 			}
-			this.modifyTotal(val);
+			this.modifyTotal(result[0], result[1]);
 		}
 	},
 	mounted() {
@@ -274,14 +278,8 @@ export default {
 			}
 			return this.prefix + x1 + x2 + this.suffix;
 		},
-		modifyTotal(val) {
+		modifyTotal(val, decimal) {
 			let resutlt = this.reverse(val.toString()); //charAt
-
-			console.log(resutlt.charAt(0));
-			console.log(resutlt.charAt(1));
-			console.log(resutlt.charAt(2));
-			console.log(resutlt.charAt(3));
-			console.log(resutlt.charAt(4));
 
 			if (resutlt.charAt(0)) {
 				this.first = resutlt.charAt(0);
@@ -306,6 +304,14 @@ export default {
 			}
 			if (resutlt.charAt(7)) {
 				this.eight = resutlt.charAt(7);
+			}
+
+			if (decimal.charAt(0)) {
+				this.nine = decimal.charAt(0);
+			}
+
+			if (decimal.charAt(1)) {
+				this.last = decimal.charAt(1);
 			}
 		},
 		reverse(str) {

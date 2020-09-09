@@ -51,7 +51,9 @@ export default {
 			this.persent =
 				val.place_order_amount_rgrt == "-9999"
 					? 0
-					: parseFloat(val.place_order_amount_rgrt).toFixed(2) * 100;
+					: parseInt(
+							parseFloat(val.place_order_amount_rgrt).toFixed(2)
+					  ) * 100;
 			this.endVal = parseFloat(val.place_order_amount_rt);
 
 			this.$refs.countTo.start();
