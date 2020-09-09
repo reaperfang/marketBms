@@ -429,11 +429,12 @@ export default {
       }
       li {
         &.img {
-          max-width: 100%;
-          height: 254px;
+          min-width: 225px;
+          height: 300px;
+          text-align: center;
           img {
-            width: 100%;
-            height: 100%;
+            width: 225px;
+            height: 300px;
             object-fit: cover;
           }
         }
