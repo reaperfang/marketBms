@@ -19,13 +19,13 @@
                 <transition name="el-fade-in">
                   <div class="view_preview" v-show="item.isShowCode">
                     <p class="hint text">使用手机扫描下方二维码 <br> 预览完整模版</p>
-                    <img class="qr_code" :src="item.qrCodePic" alt="二维码"/>
+                    <img class="qr_code" v-loading="item.isLoadingCode" :src="item.qrCodePic" alt="二维码"/>
                   </div>
                 </transition>
 
                 <div class="view_buttons">
                 <span class="view_button" :class="{'selected': item.isShowCode}"
-                      @click="item.isShowCode = !item.isShowCode">
+                      @click="showItemPreview(item)">
                   <template v-if="item.isShowCode"> 取消预览 </template>
                   <template v-else>手机预览</template>
                 </span>
@@ -58,13 +58,13 @@
                   <transition name="el-fade-in">
                     <div class="view_preview" v-show="item.isShowCode">
                       <p class="hint text">使用手机扫描下方二维码 <br> 预览完整模版</p>
-                      <img class="qr_code" :src="item.qrCode" alt="二维码"/>
+                      <img class="qr_code" v-loading="item.isLoadingCode" :src="item.qrCodePic" alt="二维码"/>
                     </div>
                   </transition>
 
                   <div class="view_buttons">
                     <span class="view_button" :class="{'selected': item.isShowCode}"
-                      @click="item.isShowCode = !item.isShowCode">
+                      @click="showItemPreview(item)">
                       <template v-if="item.isShowCode"> 取消预览 </template>
                       <template v-else>手机预览</template>
                     </span>
@@ -86,7 +86,7 @@
     </div>
 
     <div class="bottom_buttons">
-      <el-button @click="prevStep"> 上一步</el-button>
+      <el-button @click="prevStep" :loading="prevStepLoading"> 上一步</el-button>
       <el-button type="primary" @click="confirmEnable"> 启用模板</el-button>
     </div>
 
@@ -132,31 +132,6 @@
               <i class="el-icon-error" v-else></i>
             </li>
         </template>
-        <!--<li class="configure-text" :class="{'show': configureTextArray.length >= 1}">
-          <p class="text-goods">模版内的{{configureTextArray[0].text}}数据配置{{configureTextArray[0].status === 1 ? "成功" : "失败"}}</p>
-          <i class="el-icon-success" v-if="item.status === 1"></i>
-          <i class="el-icon-error" v-else></i>
-        </li>
-        <li class="configure-text" :class="{'show': configureTextArray.length >= 2}">
-          <p class="text-goods">模版内的{{configureTextArray[1].text}}数据配置{{configureTextArray[1].status === 1 ? "成功" : "失败"}}</p>
-          <i class="el-icon-success" v-if="configureTextArray[1].status === 1"></i>
-          <i class="el-icon-error" v-else></i>
-        </li>
-        <li class="configure-text" :class="{'show': configureTextArray.length >= 3}">
-          <p class="text-goods">模版内的{{configureTextArray[2].text}}数据配置{{configureTextArray[2].status === 1 ? "成功" : "失败"}}</p>
-          <i class="el-icon-success" v-if="configureTextArray[2].status === 1"></i>
-          <i class="el-icon-error" v-else></i>
-        </li>
-        <li class="configure-text" :class="{'show': configureTextArray.length >= 4}">
-          <p class="text-goods">模版内的{{configureTextArray[3].text}}数据配置{{configureTextArray[3].status === 1 ? "成功" : "失败"}}</p>
-          <i class="el-icon-success" v-if="configureTextArray[3].status === 1"></i>
-          <i class="el-icon-error" v-else></i>
-        </li>
-        <li class="configure-text" :class="{'show': configureTextArray.length === 5}">
-          <p class="text-goods">模版内的{{configureTextArray[4].text}}数据配置{{configureTextArray[4].status === 1 ? "成功" : "失败"}}</p>
-          <i class="el-icon-success" v-if="configureTextArray[4].status === 1"></i>
-          <i class="el-icon-error" v-else></i>
-        </li>-->
       </ul>
 
       <!--   有一项失败了就显示   -->
@@ -176,8 +151,10 @@
     name: "intelligent_preview",
     components: {Swiper, SwiperSlide},
     props: {
-      currentStep: null,
+      stepStatus: 0,    // 当前步骤的状态
+      stepCurrent: 0,    // 当前步骤的状态
       industryId: null, // 行业id, 用于请求行业模板
+      stepId: null,
     },
     data() {
       return {
@@ -191,6 +168,7 @@
         },
         listData: [],
         isLoading: false,
+        prevStepLoading: false, // 上一步loading
         useSwiper: true,  // 是否启用swiper
         selectTemplateId: null, // 当前选择的模板id
         isShowConfirmBox: false, // 是否显示确认dialog
@@ -206,9 +184,9 @@
     mounted() {
       this.$nextTick(() => {
         this.settingSwiper()
-      })
+      });
       if (this.industryId !== null) this.fetchListData();
-
+      if(this.stepStatus === 0 && this.stepCurrent === 3) { this.isConfigureFail = true }
     },
     methods: {
       /** 加载模板数据 */
@@ -219,7 +197,9 @@
           const resultData = await this._apis.profile.getIntelligentPreViewTemplate(params);
           this.listData = resultData.map(item => {
             return {
+              cid: item.cid,
               id: item.id,
+              isLoadingCode: false,
               isShowCode: false,
               name: item.name,
               pictureUrl: item.pictureUrl,
@@ -227,29 +207,19 @@
             };
           });
         } catch (err) {
-          console.error('加载模板数据出错', err.message)
+          console.error('加载模板数据出错', err)
         } finally {
-          console.log('加载模板: 执行完毕');
           this.isLoading = false;
         }
       },
 
-      /** 上一张模板 */
-      prev() {
-        this.$refs.mySwiper.$swiper.slidePrev();
-      },
-      /** 下一张模板 */
-      next() {
-        this.$refs.mySwiper.$swiper.slideNext();
-      },
-
       /** 启用模板 对话框 */
       confirmEnable() {
+        if (this.isConfigureFail) return; // 加载失败了，只能点击 '再次加载'
         if (this.selectTemplateId === null) {
           this.$message.error('请先选择一个模版');
           return;
         }
-        if (this.isConfigureFail) return; // 加载失败了，只能点击 '再次加载'
 
         // 通知父组件 更新所选店铺id
         this.$emit("update-template-id", this.selectTemplateId);
@@ -258,13 +228,19 @@
 
       /** 确认启用 */
       async enableConfigure() {
+        if (this.isConfigureFail) return;
         try {
-          const result = await this._apis.profile.intelligentUpdateStep({chooseTemplateId: this.selectTemplateId});
+          const params = {chooseTemplateId: this.selectTemplateId, changeStep: 3, status: 0, id: this.stepId};
+          const result = await this._apis.profile.intelligentUpdateStep(params);
+
+          // todo 调用 启用模板 接口
 
           this.isShowConfigureBox = true;
           this.timer();
         }catch (e) {
-          this.$message.error("网络错误，请稍后再试")
+          this.$message.error(e || "网络错误，请稍后再试")
+        } finally {
+          this.isShowConfirmBox = false;
         }
 
       },
@@ -282,45 +258,26 @@
                   const hasItem = _this.configureTextArray.find(cItem => cItem.id === item.id);
 
                   if (item.status !== 0 && !hasItem) {
-                    let t_temp = {};
-                    t_temp.text = _this.dataTypeText[item.dataType];
-                    t_temp.status = item.status;
-                    if (item.status === 1) {
-                      _this.configureProgress += 1;
-                    }
-                    _this.configureTextArray.push(t_temp)
+                    _this.configureTextArray.push({
+                      text: _this.dataTypeText[item.dataType],
+                      status: item.status
+                    });
+                    if (item.status === 1) _this.configureProgress += 1;
+
                   }
                 })
               }
               if (_this.configureTextArray.length >= 5) {
                 clearInterval(_this.timerConfigure);
-                _this.configureProgress >= 5 && (_this.isConfigureFail = true);
+                if(_this.configureProgress < 5) _this.isConfigureFail = true;
+                if (_this.configureProgress >= 5) _this.$emit('update-step', 3);
                 // 通知父组件 更新到下一步的视图
-                // _this.$emit('update-step', 3)
               }
-
             }).catch(err => {
-            console.error("查询配置进度err:" + err);
-
-            clearInterval(_this.timerConfigure);
+              this.$message.error(e || "网络错误，请稍后再试");
+              console.error("查询配置进度err:" + err);
+              clearInterval(_this.timerConfigure);
           });
-          // ================================
-          // _this.resArray.forEach(item => {
-          //   const hasItem = _this.configureTextArray.find(cItem => cItem.id === item.id);
-          //   if (item.status !== 0 && !hasItem) {
-          //     _this.configureTextArray.push(item)
-          //   };
-          // });
-          // _this.resArray[1].status = 2;
-          // _this.resArray[2].status = 1;
-          // _this.configureProgress += 1;
-          // if (_this.configureTextArray.length >= 5) {
-          //   clearInterval(_this.timerConfigure);
-          //   _this.configureProgress >= 5 && (_this.isConfigureFail = true);
-          //   // 通知父组件 更新到下一步的视图
-          //   // _this.$emit('update-step', 3)
-          // }
-
         }, 1500);
       },
 
@@ -328,6 +285,15 @@
       againConfigure() {
 
         // this._apis.profile.intelligentEnableTemplate()
+      },
+
+      /** 上一张模板 */
+      prev() {
+        this.$refs.mySwiper.$swiper.slidePrev();
+      },
+      /** 下一张模板 */
+      next() {
+        this.$refs.mySwiper.$swiper.slideNext();
       },
 
       /** 设置是否启用swiper */
@@ -343,11 +309,38 @@
       },
 
       /** 上一步 */
-      prevStep() {
+      async prevStep() {
         if(this.isConfigureFail) return;
-        this.$emit('update-step', 1)
+        try {
+          this.prevStepLoading = true;
+          const params = {changeStep: 1, status: 1, id: this.stepId};
+          const result = await this._apis.profile.intelligentUpdateStep(params);
+          this.$emit('update-step', 1)
+        }
+        catch (e) {
+          this.$message.error(e || "网络错误，请稍后再试")
+        }finally {
+          this.prevStepLoading = false;
+        }
       },
 
+      /** 展示店铺的小程序二维码 */
+      async showItemPreview(item) {
+        item.isShowCode = !item.isShowCode;
+        if(item.qrCodePic !== '') return; // 已经有二维码地址了
+
+        try{
+          item.isLoadingCode = true;
+          const qrCodePic = await this._apis.shop.getMiniAppQrcode({id: item.id, cid: item.cid});
+          if(qrCodePic) item.qrCodePic = qrCodePic;
+        }
+        catch (e) {
+          this.$message.error(e || "网络错误，请稍后再试")
+        }
+        finally {
+          item.isLoadingCode = false;
+        }
+      }
 
     },
     watch: {
@@ -522,14 +515,13 @@
 
         .qr_code {
           margin-bottom: 40px;
-          width: 130px;
-          height: 130px;
-          padding: 10px;
+          width: 150px;
+          padding: 3px;
           background-color: #fff;
         }
 
         .hint {
-          margin-top: 78px;
+          margin-top: 58px;
           margin-bottom: 20px;
           font-size: 14px;
           font-weight: 500;

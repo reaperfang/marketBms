@@ -11,7 +11,7 @@
         </p>
       </el-form-item>
       <div class="preview_shop_pic" v-show="showShopPreview">
-        <img class="bg_pic" src="" alt="">
+        <img class="bg_pic" src="../../../assets/images/shop-preview-name-example.png" alt="bgp">
         <span class="close" @click="showShopPreview = false"></span>
         <div class="top">{{form.shopName}}</div>
         <div class="center">{{form.shopName}}</div>
@@ -65,8 +65,8 @@
           shopName: { min: 1, max: 10, message: "长度在 1 到 10 个字符", trigger: "blur" },
           phone: { validator: (rule, value, callback) => {
               const mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
-              // const tel = /^\d{3,4}-?\d{7,9}$/;&& !tel.test(value)
-              if (value !== '' && !mobile.test(value)) return callback(new Error("请填写联系电话(座机格式'区号-座机号码')"));
+              const tel = /^\d{3,4}-?\d{7,9}$/;
+              if (value !== '' && !mobile.test(value) && !tel.test(value)) return callback(new Error("请填写联系电话(座机格式'区号-座机号码')"));
               else callback();
             }, trigger: "blur" }
         },
@@ -74,13 +74,12 @@
       }
     },
     computed: {
-      shopInfo() {
+      shopInfos() {
         return localStorage.getItem("shopInfos") ? JSON.parse(localStorage.getItem("shopInfos")) : null
       },
     },
     created() {
       this.getShopInfo();
-      console.log(shopInfo);
     },
     methods: {
       /** 完成 */
@@ -93,20 +92,24 @@
           this.$message.error('请正确填写表单');
           return
         }
+        if(!this.isMapChoose) return;
         try {
           this.$emit("update-completed-loading", true);
           const params = {
-            id: this.shopInfo.id,
+            id: this.shopInfos.id,
             shopName: this.form.shopName,
             phone: this.form.phone,
-            provinceCode:this.form.addressCode[0],
-            cityCode:this.form.addressCode[1],
-            areaCode:this.form.addressCode[2],
+            provinceCode: this.form.addressCode[0],
+            cityCode: this.form.addressCode[1],
+            areaCode: this.form.addressCode[2],
             sendAddress: this.form.sendAddress,
             latitude: this.form.lat,
             longitude: this.form.lng,
           };
-          const result = await this._apis.set.updateShopInfo(params);
+          const formResult = await this._apis.set.updateShopInfo(params);
+          // changeStep 更改步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
+          // status 状态 0 未完成 1 已完成
+          const stepResult = await this._apis.profile.intelligentUpdateStep({changeStep: 4, status: 1});
         } catch (e) {
           this.$message.error(e || '出错了，请稍后再试~');
           console.error(e)
@@ -146,6 +149,17 @@
 
       /** get店铺信息 */
       getShopInfo() {
+        if(!this.shopInfos) return;
+        this.form.shopName = this.shopInfos.shopName || '';
+        this.form.phone = this.shopInfos.phone || '';
+        this.form.sendAddress = this.shopInfos.sendAddress || '';
+        this.province = this.shopInfos.province || this.province;
+        this.city = this.shopInfos.city || this.city;
+        this.area = this.shopInfos.area || this.area;
+        this.form.addressCode = [ this.shopInfos.provinceCode, this.shopInfos.cityCode, this.shopInfos.areaCode ];
+        this.form.lat = this.shopInfos.latitude;
+        this.form.lng = this.shopInfos.longitude
+        /*
         let id = this.cid;
         this._apis.set.getShopInfo({ id })
           .then(response => {
@@ -171,6 +185,7 @@
           .catch(error => {
             this.$message.error('查询失败');
           });
+         */
       },
 
       /** 需要重新地图选点 */
@@ -215,7 +230,7 @@
       .top {
         position: absolute;
         left: 50%;
-        top: 61px;
+        top: 66px;
         font-size: 16px;
         color: #000000;
         transform: translateX(-50%);
@@ -224,7 +239,7 @@
       .center {
         position: absolute;
         left: 69px;
-        top: 177px;
+        top: 193px;
         font-size: 16px;
         color: #fff;
         font-weight: 600;

@@ -35,8 +35,8 @@
     </div>
 
     <div class="i_base_btns">
-      <el-button plain @click="backBaseStep()"> 上一步 </el-button>
-      <el-button type="primary" @click="nextBaseStep()" v-loading="completedIsLoading">
+      <el-button plain @click="backBaseStep()" :loading="prevStepLoading"> 上一步 </el-button>
+      <el-button type="primary" @click="nextBaseStep()" :loading="completedIsLoading">
         <template v-if="baseStatus === 3"> 完  成 </template>
         <template v-else>稍后，下一步</template>
       </el-button>
@@ -52,6 +52,9 @@
   export default {
     name: "intelligent_base",
     components: { channel, wx, shop },
+    props: {
+      stepId: null,
+    },
     data() {
       return {
         baseStatus: 1, // 基础信息进行到了第几步
@@ -60,6 +63,7 @@
         wechatPay: '',  // 是否开启微信支付 0:否 1:是
         isCompleted: 0, // 是否完成 0:否 1:是
         completedIsLoading: false,
+        prevStepLoading: false,
       }
     },
     methods:{
@@ -77,10 +81,18 @@
       },
 
       /** 上一步 */
-      backBaseStep() {
+      async backBaseStep() {
         if (this.baseStatus === 1) {
-          // 返回启用模板
-          this.$emit('update-step', 3);
+          // 返回启用模板成功页
+          try {
+            this.prevStepLoading = true;
+            const result = await this._apis.profile.intelligentUpdateStep({changeStep: 3, status: 1, id: this.stepId});
+            this.$emit('update-step', 3);
+          }catch (e) {
+            this.$message.error(e);
+          }finally {
+            this.prevStepLoading = false;
+          }
         } else {
           this.baseStatus -= 1;
         }

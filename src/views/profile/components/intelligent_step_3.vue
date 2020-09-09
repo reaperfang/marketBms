@@ -25,6 +25,14 @@
 <script>
   export default {
     name: "intelligent_enable",
+    props: {
+      stepId: null,
+    },
+    data() {
+      return {
+        nextStepLoading: false
+      }
+    },
     methods: {
       /**
        * 跳转到新的标签页面
@@ -41,10 +49,13 @@
       },
       async nextStep() {
        try {
-         const result = await this._apis.profile.intelligentUpdateStep();
+         this.nextStepLoading = true;
+         const result = await this._apis.profile.intelligentUpdateStep({changeStep: 4, status: 0, id: this.stepId});
          this.$emit('update-step', 4);
        }catch (e) {
-         this.$message.error(e);
+         this.$message.error(e || "网络错误，请稍后再试");
+       }finally {
+         this.nextStepLoading = false;
        }
       }
     }

@@ -1,45 +1,49 @@
 <template>
   <div id="intelligent_shop">
-    <guide v-if="isShowGuide" @hide-guide="hideGuide"></guide>
 
     <h2 class="title"> 智能开店 </h2>
 
     <!--  step_progress  -->
     <ul class="steps">
-      <li class="step-item step-start" :class="{'selected': stepStatus >= 1}"><span class="step-text">选择经营行业</span></li>
-      <li class="step-item step-middle" :class="{'selected': stepStatus >= 2}"><span class="step-text">预览模板</span></li>
-      <li class="step-item step-middle" :class="{'selected': stepStatus >= 3}"><span class="step-text">启用模板</span></li>
-      <li class="step-item step-end" :class="{'selected': stepStatus >= 4}"><span class="step-text">基础建设</span></li>
+      <li class="step-item step-start selected"><span class="step-text">选择经营行业</span></li>
+      <li class="step-item step-middle" :class="{'selected': stepCurrent >= 2}"><span class="step-text">预览模板</span></li>
+      <li class="step-item step-middle" :class="{'selected': stepCurrent >= 3}"><span class="step-text">启用模板</span></li>
+      <li class="step-item step-end" :class="{'selected': stepCurrent >= 4}"><span class="step-text">基础建设</span></li>
     </ul>
 
     <!--  step_1  选择行业-->
     <step-industry
-      v-show="stepStatus === 1"
-      v-if="stepStatus <= 2"
-      :industryId="industryId"
+      v-show="stepCurrent === 1"
+      v-if="stepCurrent <= 2"
+      :industry-id="industryId"
+      :step-id="stepId"
       @update-step="updateStep"
       @update-industry-id="updateIndustryId"
-      :reselect="isReselect"
     ></step-industry>
 
     <!--  step_2  预览模板-->
     <step-preview
-      v-if="stepStatus === 2"
+      v-if="stepCurrent === 2 || (stepStatus === 0 && stepCurrent === 3)"
       @update-step="updateStep"
       @update-template-id="updateTemplateId"
-      :industryId="industryId"
-      :currentStep="stepStatus"
+      :industry-id="industryId"
+      :current-step="stepCurrent"
+      :step-status="stepStatus"
+      :step-id="stepId"
     ></step-preview>
 
     <!--  step_3  启用模板-->
-    <step-enable v-if="stepStatus === 3" @update-step="updateStep"></step-enable>
+    <step-enable
+      v-if="stepCurrent === 3 && stepStatus === 1"
+      @update-step="updateStep"
+      :step-id="stepId"
+    ></step-enable>
 
     <!--  step_4  基础建设-->
-    <step-base v-if="stepStatus === 4" @update-step="updateStep"></step-base>
+    <step-base v-if="stepCurrent === 4" @update-step="updateStep" :step-id="stepId"></step-base>
   </div>
 </template>
 <script>
-  import guide from './components/intelligent_guide'
   import stepIndustry from './components/intelligent_step_1'
   import stepPreview from './components/intelligent_step_2'
   import stepEnable from './components/intelligent_step_3'
@@ -47,15 +51,15 @@
 
   export default {
     name: 'intelligent-shop',
-    components: {guide, stepIndustry, stepPreview, stepEnable, stepBase},
+    components: { stepIndustry, stepPreview, stepEnable, stepBase},
     data() {
       return {
-        isShowGuide: false,  // 是否是显示引导（首次进入）
-        isReselect: 0,   // 是否重新选择行业, 0 否 1 是
-        stepStatus: null,    // 进行到了第几步
+        stepCurrent: null,    // 进行到了第几步
+        stepId: null,
+        stepStatus: null,    // 状态0 进行中，1：已完成
         stepArray: ['industry', 'preview', 'enable', 'base'], //
         industryId: null,
-        templateId: null
+        templateId: null,
       }
     },
     created() {
@@ -70,7 +74,9 @@
           console.log(result);
           if(result) {
             // this.stepStatus = result.currentStep ? result.status === 1 ? result.currentStep + 1 : result.currentStep : 1;
-            this.stepStatus = 4
+            this.stepCurrent = result.currentStep;
+            this.stepStatus = result.status;
+            this.stepId = result.id;
             this.industryId = result.chooseIndustryId;
             this.chooseTemplateId = result.chooseTemplateId;
           }
@@ -79,15 +85,9 @@
         }
       },
 
-      /** 关闭引导 */
-      hideGuide() {
-        this.isShowGuide = false;
-      },
-
       /** 更新 步骤视图 */
       updateStep(stepNumber) {
-        if(stepNumber === 1) this.updateReselect();
-        this.stepStatus = stepNumber;
+        this.stepCurrent = stepNumber;
       },
 
       /** 更新所选行业ID */
@@ -98,11 +98,6 @@
       /** 更新所选店铺模板ID */
       updateTemplateId(id) {
         this.templateId = id;
-      },
-
-      /** 更新 "重新选择行业flag" */
-      updateReselect() {
-        this.isReselect = 1
       }
     },
 

@@ -11,7 +11,7 @@
     <div class="i_industries_none" v-else>暂无数据...</div>
 
     <div class="bottom_buttons">
-      <el-button type="primary" v-loading="nextIsLoading" size="medium" @click.native="toPreviewTemplate" :disabled="industries.length == 0"> 下一步，预览模板 </el-button>
+      <el-button type="primary" :loading="nextIsLoading" size="medium" @click.native="toPreviewTemplate" :disabled="industries.length == 0"> 下一步，预览模板 </el-button>
     </div>
   </section>
 </template>
@@ -21,6 +21,7 @@
     name: "intelligent_industry",
     props: {
       industryId: { default: null }, // 选中的行业
+      stepId: null
     },
     data() {
       return {
@@ -61,7 +62,7 @@
         }
         else {
           this.nextIsLoading = true;
-          this._apis.profile.intelligentUpdateStep({chooseIndustryId: this.industryId})
+          this._apis.profile.intelligentUpdateStep({chooseIndustryId: this.industryId, changeStep: 2, status: 0, id: this.stepId})
             .then(() => { this.$emit("update-step", 2) })
             .catch(error => { this.$message.error(error + "请稍后再试") })
             .finally(()=>{this.nextIsLoading = false;})
