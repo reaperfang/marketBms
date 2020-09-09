@@ -1,7 +1,7 @@
 <template>
   <div class="beingRenovated">
     <steps class="steps" :step="step"></steps>
-    <h2 class="clearfix">线上生意又进一步，完善下面的工作吧!<el-button v-if="templateList.length > 0" class="next" @click="next">不喜欢，换一组</el-button></h2>
+    <h2 class="clearfix">线上生意又进一步，完善下面的工作吧！<el-button v-if="templateList.length > 0" class="next" @click="next">不喜欢，换一组</el-button></h2>
     <swiper v-if="templateList.length > 0" ref="mySwiper" class="list" :options="swiperOption">
       <swiper-slide class="item" v-for="(item, key) of templateList" :key="key" :class="[isCurrentCheckedTemplate(item.id) ? 'active': '']">
         <ul @click="choose(item)">
@@ -65,10 +65,11 @@ export default {
       isDisabled: false,
       swiperOption: {
         allowSlidePrev : false,
+        allowTouchMove:false,
         slidesPerView: 5,
         spaceBetween: 20,
         slidesPerGroup: 5,
-        loop: true,
+        loop: false,
         loopedSlides: 5,
         loopFillGroupWithBlank: true,
         noSwiping : true,
