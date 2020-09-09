@@ -73,27 +73,51 @@ export default {
 	methods: {
 		...mapActions(["orderlist"]),
 		async init() {
-			let parames = {...this.invokeType, cid: this.cid };
+			let parames = { ...this.invokeType, cid: this.cid };
 			let data = await this._apis.dashboard.order(parames);
 			let res = JSON.parse(data);
 
+			// var chart = [
+			// 	{
+			// 		value: res.order_c_uv_7dco, // 转换率
+			// 		name: "下单转换率", // 转换率名称
+			// 		oriname: "访问人数",
+			// 		number: res.uv_7d
+			// 		// color: ["rgba(255,198,82,0.6)", "rgba(255,198,82,0)"]
+			// 	},
+			// 	{
+			// 		value: res.paid_c_order_7dco,
+			// 		name: "下单支付转化率",
+			// 		oriname: "下单人数",
+			// 		number: res.order_c_uv_7d
+			// 		// color: ["rgba(255,110,115,0.5)", "rgba(255,110,115,0)"]
+			// 	},
+			// 	{
+			// 		value: res.paid_c_uv_7dco,
+			// 		name: "支付转化率",
+			// 		oriname: "支付人数",
+			// 		number: res.paid_order_number_7d
+			// 		//  color: ["rgba(134,131,230,0.4)", "rgba(134,131,230,0)"]
+			// 	}
+			// ];
+
 			var chart = [
 				{
-					value: res.order_c_uv_7dco, // 转换率
+					value: res.uv_7d, // 转换率
 					name: "下单转换率", // 转换率名称
 					oriname: "访问人数",
 					number: res.uv_7d
 					// color: ["rgba(255,198,82,0.6)", "rgba(255,198,82,0)"]
 				},
 				{
-					value: res.paid_c_order_7dco,
+					value: res.order_c_uv_7d, //paid_c_order_7dco
 					name: "下单支付转化率",
 					oriname: "下单人数",
 					number: res.order_c_uv_7d
 					// color: ["rgba(255,110,115,0.5)", "rgba(255,110,115,0)"]
 				},
 				{
-					value: res.paid_c_uv_7dco,
+					value: res.paid_order_number_7d, //paid_c_uv_7dco
 					name: "支付转化率",
 					oriname: "支付人数",
 					number: res.paid_order_number_7d
