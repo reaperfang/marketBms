@@ -153,7 +153,7 @@
                     </div>
                     <i class="el-icon-warning-outline"></i>
                 </el-tooltip>
-                <el-input :disabled="!ruleForm.productCategoryInfoId || (ruleForm.productCategoryInfoId && (ruleForm.isSyncProduct == 1 && authHide))" v-model="ruleForm.goodsInfos[0].code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
+                <el-input :disabled="!ruleForm.productCategoryInfoId || (ruleForm.productCategoryInfoId && (ruleForm.isSyncProduct == 1 && authHide))" v-model="singleSpec.code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
             </el-form-item>
            
         </section>
@@ -186,7 +186,7 @@
                         </div>
                         <i class="el-icon-warning-outline sku-code"></i>
                     </el-tooltip>
-                <el-input :disabled="(!ruleForm.productCategoryInfoId || (editor && ruleForm.activity))" v-model="ruleForm.goodsInfos[0].code" minlength="6" maxlength="18" placeholder="请输入SKU编码"></el-input>
+                <el-input :disabled="(!ruleForm.productCategoryInfoId || (editor && ruleForm.activity))" v-model="singleSpec.code" minlength="6" maxlength="18" placeholder="请输入SKU编码"></el-input>
                 </el-form-item>
                 <el-form-item  label="成本价" prop="costPrice">
                     <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.costPrice" placeholder="请输入成本价"></el-input>
@@ -713,6 +713,7 @@ export default {
         return {
             specRadio:0,//商品规格信息，0:单一规格，1:多规格
             singleSpec:{
+                    code:"",
                     costPrice:"",
                     salePrice:"",
                     stock:"",
