@@ -101,9 +101,6 @@ export default {
 				data2.push(obj2);
 			}
 
-			console.log("data1", data1);
-			console.log("data2", data2);
-
 			var option = {
 				color: colors,
 				series: [

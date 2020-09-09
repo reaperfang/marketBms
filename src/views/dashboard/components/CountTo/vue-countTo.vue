@@ -163,8 +163,6 @@ export default {
 			}
 		},
 		endVal(val) {
-			console.log("	endVal(val) {", val);
-			console.log("endVal() {", val.toString().split("."));
 			let result = val.toString().split(".");
 			if (this.autoplay) {
 				this.start();

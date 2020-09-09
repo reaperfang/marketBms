@@ -344,12 +344,16 @@ export default {
 				this.clearInterval();
 			}
 
+			var seriesData = data.filter(item => {
+				return item.value > 0;
+			});
+
 			var j = 0;
 
 			this.interval = this.setInterval(() => {
-				if (j == 30) j = 0;
+				if (j == seriesData.length) j = 0;
 				// topCity数组就是top的这个5个城市.
-				option.series[0].data = [convertData(data)[j]];
+				option.series[0].data = [convertData(seriesData)[j]];
 				this.chart.setOption(option);
 				j++;
 			}, 1000);
