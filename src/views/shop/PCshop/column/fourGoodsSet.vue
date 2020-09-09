@@ -73,7 +73,7 @@
 
 <script>
 import utils from '@/utils';
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 import goodsGroup from '@/views/shop/dialogs/jumpLists/goodsGroup';
 import dialogSelectGoodsSKU from "@/views/shop/dialogs/decorateDialogs/dialogSelectGoodsSKU";
 import DialogBase from '@/components/DialogBase';

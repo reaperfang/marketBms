@@ -67,7 +67,7 @@
         v-loading="loading"
         :data="dataList"
         class="table"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
         :default-sort = "{prop: 'applyTime', order: 'descending'}"
         @sort-change="changeSort"
         @selection-change="handleSelectionChange"
@@ -80,22 +80,27 @@
         <el-table-column
           prop="cashoutSn"
           label="提现编号"
+          align="left"
           width="200px">
         </el-table-column>
          <el-table-column
           prop="nickName"
+          align="center"
           label="用户昵称">
         </el-table-column>
         <el-table-column
           prop="memberSn"
+          align="center"
           label="用户ID">
         </el-table-column>
         <el-table-column
           prop="amount"
+          align="right"
           label="提现金额（元）">
         </el-table-column>
         <el-table-column
           prop="status"
+          align="center"
           label="状态">
           <template slot-scope="scope">
             {{statusToLabel(scope.row.status)}}
@@ -103,18 +108,41 @@
         </el-table-column>
         <el-table-column
           prop="tradeDetailSn"
+          align="right"
           label="交易流水号">
         </el-table-column>
         <el-table-column
           prop="applyTime"
           label="申请时间"
+          align="center"
+          width="200px"
           sortable = "custom">
         </el-table-column>
         <el-table-column
-        label="操作">
+        label="操作"
+        align="center">
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small" v-permission="['财务', '提现明细', '默认页面', '查看']">查看</el-button>
-            <el-button type="text" size="small" v-if="scope.row.status == 0" @click="examine(scope.row)" v-permission="['财务', '提现明细', '默认页面', '审核']" >审核</el-button>
+            <el-button 
+              @click="handleClick(scope.row)"  
+              type="text" size="small" 
+              v-permission="['财务', '提现明细', '默认页面', '查看']"
+              class="fsize"
+            >
+              查看
+            </el-button> 
+            <span v-if="scope.row.status == 0">
+              <span class="c_line">|</span>
+              <el-button 
+                type="text" 
+                size="small" 
+                @click="examine(scope.row)" 
+                v-permission="['财务', '提现明细', '默认页面', '审核']"
+                class="fsize"
+              >
+                审核
+              </el-button>
+            </span>
+            <span v-else class="placeholders"></span>
           </template>
         </el-table-column>
       </el-table>
@@ -132,7 +160,8 @@
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
-          :total="total*1">
+          :total="total*1"
+          :background="background">
         </el-pagination>
       </div>
     </div>
@@ -192,6 +221,12 @@ export default {
       multipleSelection:[],
       loading:true
     }
+  },
+  props: {
+    background: {
+      type: Boolean,
+      default: true
+    },
   },
   watch: { },
   computed:{
@@ -458,6 +493,34 @@ export default {
       margin-right:8px;
     }
   }
+}
+
+.c_line{
+  margin: 0 5px;
+  color: #DADAE3;
+}
+
+.placeholders{
+  width: 45px;
+  display: inline-block;
+}
+
+/deep/.el-table .descending .sort-caret.descending{
+  border-top-color:#44434B;
+}
+/deep/.el-table .ascending .sort-caret.ascending{
+  border-bottom-color:#44434B;
+}
+/deep/ .el-table-column--selection .cell {
+    padding-left: 20px;
+    padding-right: 10px;
+}
+/deep/.el-table--small td{
+  padding:16px 0;
+}
+
+.fsize{
+  font-size: 14px;
 }
   
 </style>

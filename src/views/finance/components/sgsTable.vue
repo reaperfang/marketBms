@@ -42,8 +42,8 @@
       v-loading="loading"
       :data="dataList"
       style="width: 100%; margin-top:20px;"
-      :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-      :default-sort = "{prop: 'date', order: 'descending'}"
+      :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
+      :default-sort = "{prop: 'sendTime', order: 'descending'}"
       @sort-change="changeSort"
       >
         <el-table-column
@@ -52,25 +52,29 @@
         </el-table-column>
         <el-table-column
           prop="smsType"
-          label="消息类型">
+          label="消息类型"
+          align="center">
           <template slot-scope="scope">
             {{scope.row.smsType == 1 ? '营销短信' : '通知短信'}}
           </template>
         </el-table-column>
         <el-table-column
           prop="pageCount"
-          label="是否拆分">
+          label="是否拆分"
+          align="center">
           <template slot-scope="scope">
             {{scope.row.pageCount > 1 ? '是' : '否'}}
           </template>
         </el-table-column>
         <el-table-column
           prop="acceptSmsCountDisplay"
-          label="消息数量">
+          label="消息数量"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="acceptStatus"
-          label="状态">
+          label="状态"
+          align="center">
           <template slot-scope="scope">
             {{scope.row.acceptStatus == true ? '成功' : '失败'}}
           </template>
@@ -78,7 +82,8 @@
         <el-table-column
           prop="sendTime"
           label="发送时间"
-          sortable = "custom">
+          sortable = "custom"
+          align="center">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -90,7 +95,8 @@
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
-          :total="total*1">
+          :total="total*1"
+          :background="background">
         </el-pagination>
       </div>
     </div>
@@ -127,6 +133,12 @@ export default {
       currentData:{},
       dialogVisible:false,
     };
+  },
+  props: {
+    background: {
+      type: Boolean,
+      default: true
+    },
   },
   watch: {
     timeValue(){
@@ -241,6 +253,15 @@ export default {
       }
     }
   }
+}
+/deep/.el-table .descending .sort-caret.descending{
+  border-top-color:#44434B;
+}
+/deep/.el-table .ascending .sort-caret.ascending{
+  border-bottom-color:#44434B;
+}
+/deep/.el-table--small td{
+  padding:16px 0;
 }
 </style>
 

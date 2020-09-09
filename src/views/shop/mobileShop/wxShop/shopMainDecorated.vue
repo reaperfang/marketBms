@@ -2,6 +2,7 @@
   <div class="preview_wrapper">
     <!-- 装修编辑器 -->
     <Decorate 
+      v-calcHeight="197"
       ref="Decorate" 
       :decorateData="decorateData" 
       :config="config" 
@@ -13,7 +14,7 @@
       @dataLoadProgress="dataLoadProgress"
       @finished="finished"
     ></Decorate>
-    <div class="shop_info" v-calcHeight="200+10">
+    <div class="shop_info" v-calcHeight="197">
       <div class="shop_code">
         <h3>店铺微信预览</h3>
         <h4>使用微信扫描二维码，预览店铺效果</h4>
@@ -54,9 +55,9 @@
               width="170"
               trigger="click"
               content="">
-              <img v-if="showCode" :src="miniAppcode" alt="" style="width:150px;height:170px;">
+              <img v-if="showCode" :src="miniAppcode" alt="" style="width:150px;height:150px;">
               <span v-else>无分享地址</span>
-              <el-button slot="reference" @click="getMiniAppQrcode();showCode=true" type="primary" plain>
+              <el-button slot="reference" @click="getMiniAppQrcode();showCode=true" type="primary" plain :disabled="!miniProgramStatus.data || miniProgramStatus.data.current_status !== 'published'">
                 <el-tooltip class="item" effect="dark" content="小程序需通过微信审核后修改设置才将生效" placement="bottom-end">
                   <span>小程序 <i class="el-icon-question" style="font-size:12px;color:#000"></i></span>
                 </el-tooltip>
@@ -67,7 +68,7 @@
                 <span>小程序 <i class="el-icon-question" style="font-size:12px;color:#000"></i></span>
               </el-tooltip>
             </el-button> -->
-            <p :style="{color: getMiniAppColor(miniProgramStatus.data.current_status)}">{{miniProgramStatus.data.current_name || ''}}</p>  
+            <p v-if="miniProgramStatus.data" :style="{color: getMiniAppColor(miniProgramStatus.data.current_status)}">{{miniProgramStatus.data.current_name || ''}}</p>  
           </li>
         </ul>
       </div>
@@ -130,6 +131,10 @@ export default {
     },
     shopInfo() {
       return this.$store.getters.shopInfo || {};
+    },
+    cid() {
+      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      return shopInfo.id;
     }
   },
   created() {
@@ -219,16 +224,31 @@ export default {
       }
     },
 
-      /* 获取小程序码 */
-    getMiniAppQrcode() {
+    //   /* 获取小程序码 */
+    // getMiniAppQrcode() {
+    //   this.openMiniAppcodeLoading = true;
+    //   this._apis.shop.getMiniAppQrcode({id: '1'}).then((response)=>{
+    //     this.miniAppcode = response;
+    //     this.openMiniAppcodeLoading = false;
+    //   }).catch((error)=>{
+    //     this.openMiniAppcodeLoading = false;
+    //     this.$message({ message: error, type: 'error' });
+    //   });
+    // },
+
+    //获取小程序太阳码
+    getMiniAppQrcode(){
       this.openMiniAppcodeLoading = true;
-      this._apis.shop.getMiniAppQrcode({id: '1'}).then((response)=>{
-        this.miniAppcode = response;
-        this.openMiniAppcodeLoading = false;
-      }).catch((error)=>{
-        this.openMiniAppcodeLoading = false;
-        this.$message({ message: error, type: 'error' });
-      });
+      this._apis.profile
+        .getSmallQRcode({id:this.cid}).then(response => {
+          this.miniAppcode = `data:image/png;base64,${response}`;
+          this.openMiniAppcodeLoading = false;
+        })
+        .catch(error => {
+          console.error(error);
+          this.$message({ message: error, type: 'error' });
+          this.openMiniAppcodeLoading = false;
+        });
     },
 
     /* 控件面板初始化 */
@@ -278,9 +298,12 @@ export default {
     padding-top:20px;
     /deep/.module {
       &.view {
-        width: 374px;
+        width: 377px;
+        height: 100% !important;
+        border: 1px #D0D6E4 solid;
+        box-shadow: none !important;
         .phone-body {
-          height: 592px;
+          height: calc(100% - 64px) !important;
         }
       }
     }
@@ -298,12 +321,12 @@ export default {
         text-align:center;
       }
       .shop_code{
-        padding:30px;
+        padding:25px 30px 30px 30px;
         box-sizing: border-box;
         text-align:center;
-        // border:1px solid rgba(211,211,211,1);
-        // background:rgba(248,248,248,1);
         background:#fff;
+        border: 1px #D0D6E4 solid;
+        border-radius: 2px;
         h3{
           font-size:18px;
         }
@@ -325,12 +348,12 @@ export default {
       }
       .tools{
         margin-top:10px;
-        padding:30px;
+        padding:20px 20px 10px 20px;
         box-sizing: border-box;
         text-align:center;
-        // border:1px solid rgba(211,211,211,1);
-        // background:rgba(248,248,248,1);
         background: #fff;
+        border: 1px #D0D6E4 solid;
+        border-radius: 2px;
         h3{
           text-align:center;
           font-size:18px;

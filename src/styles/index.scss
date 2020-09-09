@@ -915,3 +915,39 @@ textarea:-ms-input-placeholder {
     background-image: url("http://xiumi.us/connect/ue/xiumi-connect-icon.png") !important;
     background-size: contain!important;
 }
+
+
+.scope-cascader-popper {
+  background-color: #fff;
+  background: rgba(255,255,255,1);
+  box-shadow: 0px 2px 12px 0px rgba(0,0,0,0.06);
+  border: 1px solid rgba(208,214,228,1);
+  .el-cascader-menu__wrap {
+    height: 290px;
+  }
+  .el-cascader-node {
+    width: 208px;
+    font-size:14px;
+    font-weight:400;
+    color:rgba(68,67,75,1);
+    .el-icon-arrow-right, .el-icon-check {
+      display: none;
+    }
+    &.in-active-path, &:hover, &.is-active {
+      background:rgba(246,247,250,1);
+      font-size:14px;
+      font-weight:400;
+      color:rgba(21,30,55,1);
+    }
+  }
+  
+}
+.el-tooltip__popper.goodSortTip.is-light {
+  border: 1px solid rgba(218,218,227,1);
+  box-shadow:0px 0px 4px 0px rgba(204,204,204,0.5);
+  font-size:12px;
+  color:rgba(68,67,75,1);
+}
+.el-tooltip__popper.goodSortTip.is-light[x-placement^=top] .popper__arrow {
+  border-top-color: rgba(218,218,227,1);
+}

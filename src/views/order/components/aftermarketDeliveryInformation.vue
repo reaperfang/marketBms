@@ -3,7 +3,7 @@
         <!-- 普通快递 -->
         <template v-if="orderAfterSale.deliveryWay == 1">
         <div v-if="orderAfterSale.returnExpressNo" class="delivery-information-header">
-            用户发货
+            用户退货
         </div>
         <div class="container">
             <div v-if="orderAfterSale.returnExpressNo" class="item" :class="{close: !showCustomerContent}">
@@ -26,28 +26,40 @@
                     </div>
                 </div>
                 <div v-if="showCustomerContent" class="content">
+                    <div class="message">
+                        <p>
+                            <span>收货信息</span>
+                            <span>{{orderSendReceivedAddress.receivedName}} {{orderSendReceivedAddress.receivedPhone && '/'}} {{orderSendReceivedAddress.receivedPhone}}</span>
+                            <span>{{orderSendReceivedAddress.receiveAddress}} {{orderSendReceivedAddress.receivedDetail}} </span>
+                        </p>
+                        <p>
+                            <span>发货信息</span>
+                            <span>{{orderSendReceivedAddress.sendName}} {{orderSendReceivedAddress.sendPhone && '/'}} {{orderSendReceivedAddress.sendPhone}}</span>
+                            <span>{{orderSendReceivedAddress.sendAddress}} {{orderSendReceivedAddress.sendDetail}} </span>
+                        </p>
+                    </div>
                     <el-table
                         :data="itemList"
-                        style="width: 100%">
+                        style="width: 100%"
+                        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
-                                    <div class="col">
+                                    <div class="col image-box">
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
                                         <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
-                                        <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
+                                        <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
                             </template>
                         </el-table-column>
                         <el-table-column
                             prop="goodsUnit"
-                            label="单位"
-                            width="180">
+                            label="单位">
                         </el-table-column>
                         <el-table-column
                             prop="afterSaleCount"
@@ -86,7 +98,7 @@
                     </div>
                     <div class="header-righter">
                         <div class="header-righter-item">{{orderAfterSale | businessFilter(orderAfterSaleSendInfo.expressNos)}}</div>
-                        <div class="header-righter-item">发货人：{{orderAfterSaleSendInfo.sendName}}</div>
+                        <div class="header-righter-item">发货人：{{tenantName}}</div>
                         <div class="header-righter-item">{{orderAfterSaleSendInfo.sendTime}}</div>
                         <div @click="showContent = !showContent">
                             <i v-if="showContent" class="el-icon-caret-top pointer"></i>
@@ -95,28 +107,40 @@
                     </div>
                 </div>
                 <div v-if="showContent" class="content">
+                    <div class="message">
+                        <p>
+                            <span>收货信息</span>
+                            <span>{{orderAfterSaleSendInfo.receivedName}} / {{orderAfterSaleSendInfo.receivedPhone}}</span>
+                            <span>{{orderAfterSaleSendInfo.receiveAddress}} {{orderAfterSaleSendInfo.receivedDetail}} </span>
+                        </p>
+                        <p>
+                            <span>发货信息</span>
+                            <span>{{orderAfterSaleSendInfo.sendName}} / {{orderAfterSaleSendInfo.sendPhone}}</span>
+                            <span>{{orderAfterSaleSendInfo.sendAddress}} {{orderAfterSaleSendInfo.sendDetail}} </span>
+                        </p>
+                    </div>
                     <el-table
                         :data="sendItemList"
-                        style="width: 100%">
+                        style="width: 100%"
+                        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between">
-                                    <div class="col">
+                                    <div class="col image-box">
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
                                         <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
-                                        <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
+                                        <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
                             </template>
                         </el-table-column>
                         <el-table-column
                             prop="goodsUnit"
-                            label="单位"
-                            width="180">
+                            label="单位">
                         </el-table-column>
                         <el-table-column
                             prop="sendCount"
@@ -163,26 +187,26 @@
                 <div v-if="showCustomerContent" class="content">
                     <el-table
                         :data="itemList"
-                        style="width: 100%">
+                        style="width: 100%"
+                        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
-                                    <div class="col">
+                                    <div class="col image-box">
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
                                         <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
-                                        <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
+                                        <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
                             </template>
                         </el-table-column>
                         <el-table-column
                             prop="goodsUnit"
-                            label="单位"
-                            width="180">
+                            label="单位">
                         </el-table-column>
                         <el-table-column
                             prop="afterSaleCount"
@@ -230,26 +254,26 @@
                 <div v-if="showContent" class="content">
                     <el-table
                         :data="sendItemList"
-                        style="width: 100%">
+                        style="width: 100%"
+                        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between">
-                                    <div class="col">
+                                    <div class="col image-box">
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
                                         <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
-                                        <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
+                                        <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
                             </template>
                         </el-table-column>
                         <el-table-column
                             prop="goodsUnit"
-                            label="单位"
-                            width="180">
+                            label="单位">
                         </el-table-column>
                         <el-table-column
                             prop="sendCount"
@@ -304,6 +328,7 @@ export default {
             expressCompanys: '',
             isTrace: 0,
             reject: false,
+            tenantName: ''
         }
     },
     filters: {
@@ -364,12 +389,28 @@ export default {
         cid() {
             let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
             return shopInfo.id;
+        },
+        orderSendReceivedAddress() {
+            return this.sendInfoMap && this.sendInfoMap.returnSendInfo && this.sendInfoMap.returnSendInfo[0] && this.sendInfoMap.returnSendInfo[0].orderSendReceivedAddress || {}
         }
     },
     created() {
         this.getIsTrace();
+        this.getShopInfo()
     },
     methods: {
+        getShopInfo() {
+            let id = this.cid;
+            this._apis.set
+                .getShopInfo({ id: id })
+                .then(response => {
+                    console.log(response)
+                    this.tenantName = response.tenantName
+                })
+                .catch(error => {
+                    this.$message.error('查询失败');
+                });
+            },
         showLogistics(expressNo, isComstomer, id) {
             this.expressNo = expressNo
             if(isComstomer) {
@@ -445,6 +486,9 @@ export default {
         orderAfterSaleSendInfo: {
             type: Object,
             default: {}
+        },
+        sendInfoMap: {
+
         }
     },
     components: {
@@ -474,11 +518,12 @@ export default {
                     }
                 }
                 .header {
-                    height: 60px;
-                    background-color: rgb(243, 244, 244);
+                    height: 50px;
+                    background-color: #F6F7FA;
+                    color: #44434B;
                     border-radius: 10px 10px 0 0;
                     padding: 0 20px;
-                    line-height: 60px;
+                    line-height: 50px;
                     display: flex;
                     justify-content: space-between;
                     .header-lefter {
@@ -519,6 +564,36 @@ export default {
                     }
                 }
             }
+        }
+    }
+    .message {
+        font-size:14px;
+        font-weight:400;
+        color:rgba(146,146,155,1);
+        padding-bottom: 12px;
+        padding-left: 40px;
+        p {
+            span {
+                &:nth-child(2) {
+                    margin-left: 30px;
+                    margin-right: 15px;
+                }
+            }
+            &:first-child {
+                margin-bottom: 10px;
+            }
+        }
+    }
+    .image-box {
+        margin-right: 10px;
+    }
+    .goods-specs {
+        color: #9FA29F;
+    }
+    /deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(1) {
+            text-align: left;
         }
     }
 </style>

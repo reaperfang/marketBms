@@ -243,3 +243,122 @@ export function updateOrderDeliverInfo(data) {
     data
   })
 }
+
+// 获取地址列表
+export function getAddressList(data) {
+  return request({
+    target: 'SHOP-ADDRESS-LIST-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 新增地址
+export function addAddress(data) {
+  return request({
+    target: 'SHOP-ADDRESS-ADD-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 编辑地址
+export function editAddressById(data) {
+  return request({
+    target: 'SHOP-ADDRESS-EDIT-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+//  地址库默认退货地址查询
+export function getAddressDefaultReturn(data) {
+  return request({
+    target: 'SHOP-ADDRESS-DEFAULT-RETURN-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+//  地址库默认发货地址查询
+export function getAddressDefaultSender(data) {
+  return request({
+    target: 'SHOP-ADDRESS-DEFAULT-SENDER-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 地址库详情查询
+export function getAddressDetail(data) {
+  return request({
+    target: 'SHOP-ADDRESS-DETAIL-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 删除地址库通过id
+export function delAddressById(data) {
+  return request({
+    target: 'SHOP-ADDRESS-DELETE-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 新建自提点
+export function addSelfLift(data) {
+  return request({
+    target: 'PICKUPINFO-ADD-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 编辑自提点
+export function editSelfLiftById(data) {
+  return request({
+    target: 'PICKUPINFO-UPDATE-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 通过id 获取自提点详情 
+export function getSelfLiftById(data) {
+  return request({
+    target: 'PICKUPINFO-FIND-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+// 获取自提点列表
+export function getSelfLiftList(data) {
+  return request({
+    target: 'PICKUPINFO-PAGE-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+
+/*  达达-商户获取余额 */
+export function getBalance(data) {
+  return request({
+    target: 'DADA-BALANCE-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+/*  达达-商户充值 */
+export function getRecharge(data) {
+  return request({
+    target: 'DADA-RECHARGE-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}

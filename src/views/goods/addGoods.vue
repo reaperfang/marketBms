@@ -74,7 +74,6 @@ export default {
         },
         getGoodsDetail() {
             let {id} = this.$route.query
-
             this._apis.goods.getGoodsDetail({id}).then(res => {
                 this.goodsDetail = res;
             }).catch(error => {

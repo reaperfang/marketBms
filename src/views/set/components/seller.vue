@@ -7,6 +7,7 @@
     <el-table
       v-loading="loading"
       :data="tableData"
+      class="table"
       border
       style="width: 100%;">
       <el-table-column
@@ -222,8 +223,9 @@ export default {
 .title{
   line-height: 26px;
   padding-bottom: 10px;
+  color:rgba(22,22,23,1);
   i{
-    color: red;
+    color: rgba(253, 76, 43, 1);
     font-style: normal;
   }
 }

@@ -32,20 +32,20 @@
         v-loading="loading"
         :data="dataList"
         class="table"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
         :default-sort = "{prop: 'accountDate', order: 'descending'}"
         @sort-change="changeSort"
         >
         <el-table-column
           prop="accountDate"
           label="日期"
-          align="center"
+          align="left"
           sortable = "custom">
         </el-table-column>
         <el-table-column
           prop="income"
           label="总收入（元）"
-          align="center">
+          align="right">
           <template slot-scope="scope">
             {{scope.row.income}}
           </template>
@@ -53,7 +53,7 @@
         <el-table-column
           prop="expend"
           label="总支出（元）"
-          align="center">
+          align="right">
           <template slot-scope="scope">
             {{scope.row.expend}}
           </template>
@@ -61,7 +61,7 @@
         <el-table-column
           prop="realIncome"
           label="实际收入（元）"
-          align="center">
+          align="right">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -73,10 +73,11 @@
           :page-sizes="[10, 20, 30, 40]"
           :page-size="pageSize*1"
           layout="sizes, prev, pager, next"
-          :total="total*1">
+          :total="total*1"
+          :background="background">
         </el-pagination>
       </div>
-		<exportTipDialog :data=currentData  :dialogVisible.sync="dialogVisible"></exportTipDialog>
+		<exportTipDialog :data="currentData" :dialogVisible.sync="dialogVisible"></exportTipDialog>
     </div>
   </div>
 </template>
@@ -104,6 +105,12 @@ export default {
       currentData:{},
       dialogVisible:false
     }
+  },
+  props: {
+    background: {
+      type: Boolean,
+      default: true
+    },
   },
   watch: { },
   created() { },
@@ -217,5 +224,14 @@ export default {
 .table{
   width: 100%; 
   margin-top:20px;
+}
+/deep/.el-table .descending .sort-caret.descending{
+  border-top-color:#44434B;
+}
+/deep/.el-table .ascending .sort-caret.ascending{
+  border-bottom-color:#44434B;
+}
+/deep/.el-table--small td{
+  padding:16px 0;
 }
 </style>

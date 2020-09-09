@@ -7,9 +7,10 @@
                 <el-option label="禁用" value="0"></el-option>
                 <el-option label="启用" value="1"></el-option>
             </el-select>
-            <el-button type="primary" class="marL30" @click="checkLevel">查 询</el-button>
+            <el-button type="primary" class="marL20" @click="checkLevel">查 询</el-button>
         </div>
-        <cvTable style="margin-top: 36px" :params="params"></cvTable>
+        <div style="color: #FD4C2B; font-size: 12px; margin: 30px 0 10px 0">请注意：会员等级被启用后，随意变更升级条件容易导致升级条件混乱，影响用户体验，请谨慎操作。</div>
+        <cvTable :params="params"></cvTable>
     </div>
 </template>
 <script>
@@ -45,8 +46,8 @@ export default {
     .marR10{
         margin-right: 10px;
     }
-    .marL30{
-        margin-left: 30px;
+    .marL20{
+        margin-left: 20px;
     }
 }
 </style>

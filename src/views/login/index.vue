@@ -61,6 +61,16 @@ import { removeToken } from '@/system/auth'
 import utils from '@/utils'
 export default {
   name: 'Login',
+  computed: {
+    isAdminUser(){
+      let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+      if(userInfo && userInfo.type == "admin") {
+        return true
+      }
+      return false
+    }
+  },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (validateUsername == null) {
@@ -165,8 +175,10 @@ export default {
 
     login() {
       this.loading = true
-      this.$store.dispatch('login', this.loginForm).then((response) => {
-        this.errorMsg = ''
+      let tempParams = {...this.loginForm};
+      // tempParams['password'] = this.utils.aesEncryption256('XYGQLEJQrAiUXzygqdiLOzDs4DIvPN48', this.loginForm.password, 'EhYKNoYmZ7rXa1aE');
+      this.$store.dispatch('login', tempParams).then((response) => {
+	this.errorMsg = ''
         this.loading = false
         this.autoLoginLoading = false
         this.shopList = []
@@ -183,7 +195,12 @@ export default {
           if(this.shopList.length == 1){//一个店铺时，无店铺列表弹窗
             this.$store.dispatch('setShopInfos',this.shopList[0]).then(() => {
               this.getShopAuthList()
-              this.$router.push({ path: '/profile/profile' })
+              this.$store.commit('setStoreGuide', this.shopList[0].storeGuide)
+              if (this.isAdminUser && this.shopList.length > 0 && this.shopList[0].storeGuide === -1) {
+                this.$router.push({ path: '/profile/guidePrompt' })
+              } else {
+                this.$router.push({ path: '/profile/profile' })
+              }
             }).catch(error => {
               this.$message.error(error);
             })
@@ -202,27 +219,11 @@ export default {
         window.eventHub.$emit('onGetShopAuthList')
       })
     },
-    // login(userName, password) {
-    //   this.loading = true
-    //   this.loginForm = Object.assign({}, this.loginForm, {userName, password})
-    //   this.$store.dispatch('login', this.loginForm).then(() => {
-    //     this.loading = false
-    //     this.$router.push({ path: '/profile/profile' })
-    //   }).catch(error => {
-        // this.$message.error(error);
-    //     this.loading = false
-    //   })
-    // },
-    // autoLogin() {
-    //   let userName = this.$route.query.name
-    //   let password = this.$route.query.password
-    //   if(userName!=undefined && password!=undefined) {
-    //     this.login('admin-lqx', '111111')
-    //   }
-    // },
+
     handleCloses(){
       this.dialogVisible = false
     },
+    
     handleClose(){
       this.showShopsDialog = false
       this.loginForm.userName = ''

@@ -29,7 +29,7 @@
         <el-form-item label="支付方式">
           <el-select v-model="ruleForm.payWay" style="width:210px;" placeholder="全部">
             <el-option
-              v-for="item in payTypes"
+              v-for="item in payTypeList"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -76,11 +76,12 @@
           <el-button class="border_btn"   @click='exportToExcel()' v-permission="['财务', '收支明细', '默认页面', '导出']">导出</el-button>
         </el-tooltip>
       </div>
+      <!-- background:'#D0D6E4', -->
       <el-table
         v-loading="loading"
         :data="dataList"
         class="table"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
         :default-sort = "{prop: 'tradeTime', order: 'descending'}"
         @sort-change="sortTable"
         >
@@ -88,12 +89,20 @@
           prop="tradeDetailSn"
           label="交易流水号"
           :render-header="renderTradeDetailSn"
+          align="left"
+          width="210px"
+          fixed
           >
+          <template slot-scope="scope">
+            <span style="padding-left:10px;">{{scope.row.tradeDetailSn}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="tradeType"
           label="收支类型"
-          :render-header="renderTradeTypen">
+          :render-header="renderTradeTypen"
+          align="center"
+          width="90px">
           <template slot-scope="scope">
             {{scope.row.tradeType ? '支出' : '收入' }}
           </template>
@@ -101,7 +110,9 @@
         <el-table-column
           prop="businessType"
           label="业务类型"
-          :render-header="renderBusinessType">
+          :render-header="renderBusinessType"
+          align="center"
+          width="150px">
           <template slot-scope="scope">
             {{rebusinessTypes[scope.row.businessType] ? rebusinessTypes[scope.row.businessType].label : ''}}
           </template>
@@ -109,26 +120,37 @@
         <el-table-column
           prop="relationSn"
           label="关联单据编号"
-          :render-header="renderRelationSn">
+          :render-header="renderRelationSn"
+          align="center"
+          width="200px">
         </el-table-column>
         <el-table-column
           prop="payWay"
-          label="支付方式">
+          label="支付方式"
+          align="center">
           <template slot-scope="scope">
             {{payTypes[scope.row.payWay+1].label}}
           </template>
         </el-table-column>
         <el-table-column
           prop="wechatTradeSn"
-          label="第三方流水号">
+          label="第三方流水号"
+          align="center"
+          width="250px;">
         </el-table-column>
         <el-table-column
           prop="amount"
-          label="交易金额（元）">
+          label="交易金额（元）"
+          align="right"
+          width="140px;">
+          <template slot-scope="scope">
+            <span style="padding-right:10px;">{{scope.row.amount}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="isInvoice"
-          label="开票">
+          label="开票"
+          align="center">
           <template slot-scope="scope">
             {{scope.row.isInvoice ? '是' : '否' }}
           </template>
@@ -136,7 +158,11 @@
         <el-table-column
           prop="tradeTime"
           label="交易时间"
-          sortable="custom">
+          sortable="custom"
+          align="center"
+          width="200px"
+          fixed="right"
+          >
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -148,7 +174,8 @@
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
-          :total="total*1">
+          :total="total*1"
+          :background="background">
         </el-pagination>
       </div>
       <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component> 
@@ -188,8 +215,14 @@ export default {
       dataList:[ ],
       total:0,
       loading:true,
-      types:[]
+      types:[],
     }
+  },
+  props: {
+    background: {
+      type: Boolean,
+      default: true
+    },
   },
   watch: {
 
@@ -203,6 +236,13 @@ export default {
     },
     payTypes(){
       return financeCons.payTypes;
+    },
+    payTypeList(){
+      let arr = []
+      financeCons.payTypes.map(item =>{
+        item.value !== 3 && arr.push(item)
+      })
+      return arr
     },
     tradeTypes(){
       return financeCons.tradeTypes;
@@ -421,7 +461,13 @@ export default {
   width: 100%; 
   margin-top:20px;
 }
-/deep/.el-table .cell{
-  text-align: center;
+/deep/.el-table .descending .sort-caret.descending{
+  border-top-color:#44434B;
+}
+/deep/.el-table .ascending .sort-caret.ascending{
+  border-bottom-color:#44434B;
+}
+/deep/.el-table--small td{
+  padding:16px 0;
 }
 </style>

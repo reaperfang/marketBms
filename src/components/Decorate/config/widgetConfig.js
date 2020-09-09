@@ -316,6 +316,17 @@ export default {
               needFakeData: false,
               noDelete: false,
               limit: null
+            },
+            {
+              type: 'location',
+              iconClass: 'location',
+              title: '位置信息',
+              hidden: false,
+              isBase: false,
+              describe: '',
+              needFakeData: false,
+              noDelete: false,
+              limit: 1
             }
           ]
         },

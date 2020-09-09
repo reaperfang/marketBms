@@ -4,10 +4,11 @@
             <p class="title">商品名称：{{data.name}}</p>
             <div class="content">
                 <div v-for="(item, index) in data.goodsInfos" class="item">
-                    <div class="item-title">{{index + 1}}：规格属性：{{item.specs | productSpecsFilter}}</div>
+                    <div class="item-title">{{data.goodsInfos.length>1?`${index +1}：`:''}}规格属性：{{item.specs | productSpecsFilter}}</div>
                     <div class="input-box">
                         <span class="stock-lable">售卖价：</span>
-                        <el-input max-length="11" type="number" :min="item.costPrice" :max="max" :disabled="item.activity" v-model="item.salePrice" placeholder="请输入价格"></el-input>
+                        <el-input @change="checkSaleprice(item)" max-length="11" type="number" :min="item.costPrice" :max="max" :disabled="item.activity" v-model="item.salePrice" placeholder="请输入价格" ></el-input>
+                        <div class="costPriceMsg" v-if="isShowMsg">售卖价不得低于成本价{{item.costPrice}}</div>
                         <p v-if="item.activity" class="message">该商品正在参加营销活动，活动结束/失效才可编辑售卖价</p>
                     </div>
                 </div>
@@ -30,24 +31,40 @@ export default {
             list: [{spec: '银色', stock: 1}, {spec: '银色', stock: 1}, {spec: '银色', stock: 1}],
             showFooter: false,
             max: 10000000,
-            oldData: null
+            oldData: null,
+            isShowMsg:false
         }
     },
     filters: {
         productSpecsFilter(val) {
-            let arr = Object.values(JSON.parse(val))
-            let str = arr.join('/')
-            
-            return str
+            if(val){
+                let arr = Object.values(JSON.parse(val))
+                let str = arr.join('/')
+                return str
+            }else{
+                return '默认规格'
+            }
         }
     },
     created() {
         this.oldData = JSON.parse(JSON.stringify(this.data.goodsInfos))
     },
     methods: {
+        checkSaleprice(data){
+            if(+data.costPrice>+data.salePrice){
+                this.isShowMsg=true;
+            }else{
+                this.isShowMsg=false;
+            }
+        },
         submit() {
+            if(this.data.goodsInfos.some(val => +val.salePrice < +val.costPrice)) {
+                this.isShowMsg=true;
+                return
+            }else{
+                this.isShowMsg=false;
+            }
             let newData = JSON.parse(JSON.stringify(this.data.goodsInfos))
-
             if(utils.equalsObj(this.oldData, newData)) {
                 this.visible = false
                 return
@@ -144,6 +161,12 @@ export default {
         overflow-y: auto;
         .title {
             padding-bottom: 20px;
+        }
+        .costPriceMsg{
+            margin-top:8px;
+            margin-left:70px;
+            font-size:12px;
+            color:rgba(253,76,43,1);
         }
     }
     .content-box::-webkit-scrollbar-thumb {

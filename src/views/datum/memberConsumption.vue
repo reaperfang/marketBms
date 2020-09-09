@@ -26,12 +26,14 @@
             </div>
             <el-table
             :data="list"
-            :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+            :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
             style="margin-top:30px;width: 100%" 
             >
             <el-table-column
                 type="index"
-                label="排行">
+                label="排行"
+                width="80"
+                align="left">
             </el-table-column>
             <el-table-column
                 prop="name"
@@ -49,16 +51,19 @@
             <el-table-column
                 prop="score"
                 label="积分（余额）"
+                align="right"
             >
             </el-table-column>
             <el-table-column
                 prop="totalTradeMoney"
                 label="消费金额（累计）"
+                align="right"
             >
             </el-table-column>
             <el-table-column
                 prop="orderCount"
                 label="订单数（累计）"
+                align="right"
             >
             </el-table-column>
             </el-table>
@@ -70,7 +75,8 @@
                     :page-sizes="[10, 20, 30, 40]"
                     :page-size="pageSize"
                     layout="sizes, prev, pager, next"
-                    :total="total">
+                    :total="total"
+                    :background="background">
                 </el-pagination>
             </div>
         </div>
@@ -93,6 +99,7 @@ export default {
     created(){
         this.getMemberConsumption()
     },
+    props:['background'],
     methods:{
         getMemberConsumption(){
             let data = {
@@ -152,6 +159,9 @@ export default {
 }
 .p_container .input_wrap{
     vertical-align: middle;
+}
+/deep/ .el-table--small td, /deep/.el-table--small th{
+  padding:8px 10px;
 }
 </style>
 

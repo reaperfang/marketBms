@@ -94,6 +94,8 @@ export default {
     updatePass(){
       let query = {
         id:this.userInfo.id,
+        // oldPassWord:this.utils.aesEncryption256('XYGQLEJQrAiUXzygqdiLOzDs4DIvPN48', this.form.oldPassWord, 'EhYKNoYmZ7rXa1aE'),
+        // password:this.utils.aesEncryption256('XYGQLEJQrAiUXzygqdiLOzDs4DIvPN48', this.form.password, 'EhYKNoYmZ7rXa1aE')
         oldPassWord:this.form.oldPassWord,
         password:this.form.password
       }

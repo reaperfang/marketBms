@@ -25,7 +25,7 @@ export const asyncRouterMap = [  //异步路由表
   ...intelligentOperation,
   ...finance,
   ...apply,
-  ...set,
+  ...set
 ]
 
 export const syncRouterMap = [ //同步路由表
@@ -65,7 +65,13 @@ export const syncRouterMap = [ //同步路由表
     path: '/401',
     component: () => import('@/components/errorPage/401'),
     hidden: true
-  }
+  },
+  {
+    path: 'simpleAddGoods',
+    component: () => import('@/views/goods/addGoods'),
+    name: 'simpleAddGoods'
+    // meta: { title: '新建商品', noCache: true, tabTitle: '商品管理' ,navType:2},
+  },
 ]
 
 const routerConfig = {

@@ -56,8 +56,8 @@
 
 <script>
 import mixinPropsBase from '../mixins/mixinPropsBase';
-import dialogSelectVideo from '@/views/shop/dialogs/dialogSelectVideo';
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectVideo from '@/components/dialogs/selectVideo/index';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 export default {
   name: 'propertyVideo',
   mixins: [mixinPropsBase],

@@ -89,11 +89,11 @@
                     <span class="message-span" v-if="item.showCostPriceError">{{item.costPriceErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @blur="specsChange(index, 'salePrice')" type="number" min="0" :disabled="item.editorDisabled || (editor && activity)" v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
+                    <el-input @blur="specsChange(index, 'salePrice')" type="number" min="0" :disabled="item.editorDisabled && (editor && activity)" v-model="item.salePrice" placeholder="请输入价格(元)"></el-input>
                     <span class="message-span" v-if="item.showSalePriceError">{{item.salePriceErrorMessage}}</span>
                 </td>
                 <td>
-                    <el-input @blur="specsChange(index, 'stock')" type="number" min="0" :disabled="item.editorDisabled || (editor && activity)" v-model="item.stock" placeholder="请输入库存"></el-input>
+                    <el-input @blur="specsChange(index, 'stock')" type="number" min="0" :disabled="item.editorDisabled && (editor && activity)" v-model="item.stock" placeholder="请输入库存"></el-input>
                     <span class="message-span" v-if="item.showStockError">{{item.stockErrorMessage}}</span>
                 </td>
                 <td>
@@ -137,7 +137,7 @@
     </div>
 </template>
 <script>
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index'
 
 export default {
     data() {
@@ -338,6 +338,11 @@ export default {
                         showCostPriceError: true,
                         costPriceErrorMessage: '请输入正确的数字'
                     }))
+                }else if(+this.list[index].costPrice > 10000000 ){
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showCostPriceError: true,
+                        costPriceErrorMessage: '当前成本价最大限制为10000000，请您重新输入'
+                    }))
                 } else {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showCostPriceError: false,
@@ -356,6 +361,16 @@ export default {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
                         showSalePriceError: true,
                         salePriceErrorMessage: '请输入正确的数字'
+                    }))
+                } else if(+this.list[index].salePrice > 10000000){
+                    this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showSalePriceError: true,
+                        salePriceErrorMessage: '当前售卖价最大限制为10000000，请您重新输入'
+                    }))
+                } else if(+this.list[index].costPrice > +this.list[index].salePrice){
+                        this.list.splice(index, 1, Object.assign({}, this.list[index], {
+                        showSalePriceError: true,
+                        salePriceErrorMessage: '售卖价不得低于成本价'
                     }))
                 } else {
                     this.list.splice(index, 1, Object.assign({}, this.list[index], {
@@ -780,7 +795,7 @@ export default {
         }
     }
     .message-span {
-        margin-left: 18px;
+        margin-left: 12px;
         margin-top: 2px;
         color:rgba(253,76,43,1);
         font-size: 12px;
