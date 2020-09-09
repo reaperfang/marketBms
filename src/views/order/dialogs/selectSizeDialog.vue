@@ -61,6 +61,10 @@ export default {
                 this.data.list.splice(index, 1, Object.assign({}, this.data.list[index], {
                     specificationSize: item.sizeList[0].templateSize
                 }))
+            } else {
+                this.data.list.splice(index, 1, Object.assign({}, this.data.list[index], {
+                    specificationSize: ''
+                }))
             }
         })
     },
