@@ -87,6 +87,9 @@
                 </div>
                 <div class="item righter">
                     <p>待收货</p>
+                    <div v-if="orderInfo.deliveryWay == 4">
+                       <el-button class="verifyBtn" @click="currentDialog = 'VerificationDialog'; currentData = orderInfo.id; dialogVisible = true">核销验证</el-button>
+                    </div>
                 </div>
             </template>
             <template v-else-if="orderState == 6">
