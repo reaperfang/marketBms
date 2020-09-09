@@ -71,7 +71,8 @@ export default {
 
       /** 智能开店体验引导 */
       toIntelligent() {
-        this.$router.push({ path: '/profile/intelligent' });
+        this.$router.push({ path: '/profile/intelligentGuide' });
+        // this.$router.push({ path: '/profile/intelligent' });
         // this._routeTo('intelligent', {isShowGuide: this.isFirst, stepStatus: this.stepStatus});
       },
 
