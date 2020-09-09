@@ -16,7 +16,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="" prop="name">
-            <el-button type="primary" @click="search">查 询</el-button>
+            <el-button type="primary" @click="search">搜 索</el-button>
             <el-button @click="refresh">刷 新</el-button>
           </el-form-item>
         </el-form>
