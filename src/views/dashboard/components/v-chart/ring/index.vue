@@ -65,7 +65,7 @@ export default {
 						},
 						borderWidth: 0,
 						borderRadius: 4,
-						padding: [0, -56],
+						padding: [0, -50],
 						height: 50,
 						fontSize: 13,
 						align: "center",
