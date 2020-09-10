@@ -738,7 +738,7 @@ export default {
                 this._list[index].sizeList = item.map(_item => ({
                   ..._item,
                   sizeSpecs: _item.sizeSpecs + ' ' + _item.templateSize,
-                  templateSize: `${item.sizeSpecs} ${item.templateSize}`
+                  templateSize: `${_item.sizeSpecs} ${_item.templateSize}`
                 }))
                 // if(item && item.length) {
                 //   this._list.splice(index, 1)
