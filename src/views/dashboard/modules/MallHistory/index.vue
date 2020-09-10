@@ -2,7 +2,7 @@
 	<div class="row-3-grid-content middle-grid-margin flex-column">
 		<el-row type="flex" justify="space-between" class="item-title">
 			<el-col :span="12">
-				<gridtitle :title="'支付金额(最近七天'"></gridtitle>
+				<gridtitle :title="'支付金额(最近七天)'"></gridtitle>
 			</el-col>
 			<el-col :span="12">
 				<gridtitle :title="'商城浏览(最近七天)'"></gridtitle>

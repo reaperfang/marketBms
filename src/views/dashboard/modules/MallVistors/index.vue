@@ -74,6 +74,7 @@ export default {
 			},
 			chartExtend: {
 				color: "rgba(71, 225, 255, 0.15)",
+				//color: "#47E1FF",
 				grid: {
 					top: "30px",
 					bottom: "7px"
@@ -99,6 +100,14 @@ export default {
 							color: "rgba(255,255,255,0.8)"
 						},
 						show: false
+					}
+				},
+				tooltip: {
+					formatter: function(params) {
+						let item = params[0],
+							list = item.data;
+						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${item.color}"></span>`;
+						return `${dotHtml}${list[0]} <br/>&nbsp&nbsp&nbsp访客人数: &nbsp${list[1]}人`;
 					}
 				}
 			}
