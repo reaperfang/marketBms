@@ -48,6 +48,7 @@
     background: #fff;
     height: 100%;
     min-height: 780px;
+    min-width: 860px;
     border-radius: 4px;
     text-align: center;
     padding-top: 60px;
@@ -84,6 +85,7 @@
       color: #fff;
       user-select: none;
       cursor: pointer;
+      transition: background 0.5s;
     }
 
     &.left {
@@ -117,6 +119,7 @@
       color: $grayColor;
       letter-spacing: 1px;
       cursor: pointer;
+      transition: color 0.2s;
 
       &:hover {
         color: $globalMainColor;
