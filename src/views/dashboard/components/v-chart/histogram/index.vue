@@ -47,6 +47,7 @@ export default {
 			// 	]
 			// },
 			chartExtend: {
+				color: ["#3FCEEF"],
 				grid: {
 					top: "30px",
 					bottom: "7px"
@@ -76,6 +77,19 @@ export default {
 							color: "rgba(255,255,255,0.8)"
 						},
 						show: false
+					}
+				},
+				tooltip: {
+					formatter: function(params) {
+						console.log(params);
+						let item = params[0],
+							list = item.data;
+						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${item.color}"></span>`;
+						return `${dotHtml}${item.name} <br/>&nbsp&nbsp&nbsp${
+							item.seriesName == "数量"
+								? "交易数量"
+								: "客单价金额"
+						}: &nbsp${item.value}`;
 					}
 				}
 			}

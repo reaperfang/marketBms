@@ -87,6 +87,7 @@ export default {
 				}
 			},
 			chartExtend: {
+				color: ["#026DFF", "#F59F00"],
 				tooltip: {
 					formatter: function(params) {
 						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.color}"></span>`;
