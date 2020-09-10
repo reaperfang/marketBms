@@ -647,7 +647,11 @@ export default {
                         let res = await this._apis.order.getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
 
                         if(res && res.length) {
-                            this._list[0].sizeList = res
+                            this._list[0].sizeList = res.map(item => ({
+                                ...item,
+                                sizeSpecs: item.sizeSpecs + ' ' + item.templateSize,
+                                templateSize: !item.templateSize ? 'emptyTemplateSize' : item.templateSize
+                            }))
                             this.currentData = {
                                 list: this._list,
                                 expressCompanyList: this.expressCompanyList

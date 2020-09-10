@@ -151,7 +151,7 @@ export default {
                 .editorExpressSize({
                     id: item.express ? item.express.id : '',
                     cid: item.express ? item.express.cid : '',
-                    specificationSize: item.specificationSize,
+                    specificationSize: item.specificationSize == 'emptyTemplateSize' ? '' : item.specificationSize,
                     expressCompanyCode: item.orderAfterSaleSendInfo ? item.express.expressCompanyCode : item.expressCompanyCodes,
                     name
                 })

@@ -704,7 +704,11 @@ export default {
               for(let index=values.length-1; index>=0; index--) {
                 let item = values[index]
 
-                this._list[index].sizeList = item
+                this._list[index].sizeList = item.map(_item => ({
+                  ..._item,
+                  sizeSpecs: _item.sizeSpecs + ' ' + _item.templateSize,
+                  templateSize: !_item.templateSize ? 'emptyTemplateSize' : _item.templateSize
+                }))
                 // if(item && item.length) {
                 //   this._list.splice(index, 1)
                 // }
