@@ -650,7 +650,7 @@ export default {
                             this._list[0].sizeList = res.map(item => ({
                                 ...item,
                                 sizeSpecs: item.sizeSpecs + ' ' + item.templateSize,
-                                templateSize: `{item.sizeSpecs} {item.templateSize}`
+                                templateSize: `${item.sizeSpecs} ${item.templateSize}`
                             }))
                             this.currentData = {
                                 list: this._list,
