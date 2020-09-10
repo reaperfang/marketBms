@@ -339,12 +339,23 @@ export default {
   name: "realTimeView",
   components: { pfChart,screeningChart,mapChart,pieChart,tradeChart,userChart,serchRt },
   filters: {
-    tofix2: function(value) {
-      if(typeof(value)=='undefined'){
-          return value
-      }else{
-          return Number(value.toFixed(2))
-      }
+    // tofix2: function(value) {
+    //   if(typeof(value)=='undefined'){
+    //       return value
+    //   }else{
+    //       console.log((0.106).toFixed(2))
+    //       return Number(value).toFixed(2)
+    //   }
+    // },
+    tofix2: function(num) {
+        var  dd=1;  
+        var  tempnum;  
+        for(var i=0;i<2;i++){
+            dd*=10;  
+        }  
+        tempnum = num*dd;
+        tempnum = Math.round(tempnum); 
+        return (tempnum/dd)
     },
   },
   data() {
@@ -406,9 +417,7 @@ export default {
       this._apis.realSurvey.dataReady(this.query).then(response => {
           var oldTime=new Date(JSON.parse(response).date).getTime();
           var oldDatetime=new Date(new Date(oldTime).getFullYear(),new Date(oldTime).getMonth(),new Date(oldTime).getDate())
-          console.log(new Date(oldDatetime).toDateString())
-          console.log(new Date().toDateString())
-          if(new Date(oldDatetime).toDateString() === new Date().toDateString()){
+          if(new Date(oldDatetime).toDateString() === new Date().toDateString()){//判断是不是同一天
               this.idData=true
           }else{
               this.idData=false
