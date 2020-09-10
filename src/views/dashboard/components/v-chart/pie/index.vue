@@ -68,7 +68,7 @@ export default {
 					show: true,
 					//formatter: "{data.name} <br/>{b}: {c} ({d}%)"
 					formatter: function(params) {
-						console.log("formatter: function (params) {", params);
+						//console.log("formatter: function (params) {", params);
 						return `TOP${params.data.top} ${params.data.name} <br/> 交易金额占比:${params.data.progress}%`;
 					}
 				},

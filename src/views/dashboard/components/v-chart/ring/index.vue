@@ -30,7 +30,7 @@ import iconmobile from "../../../modules/UserAgeMobileMember/icon/mobile";
 import iconagesex from "../../../modules/UserAgeMobileMember/icon/agesex";
 export default {
 	// props: ["chartData", "chartSettings", "chartExtend"],
-	props: ["chartData", "title", "icon", "total", "sexData", "chartExtend"],
+	props: ["chartData", "title", "icon", "total", "sexData"],
 	mixins: [list],
 	data() {
 		return {
@@ -72,6 +72,17 @@ export default {
 								color: "orange"
 							}
 						}
+					}
+				}
+			},
+			chartExtend: {
+				tooltip: {
+					formatter: function(params) {
+						console.log(
+							"绑定手机号 formatter: function (params) {",
+							params
+						);
+						return `${params.data.name} <br/>占比:${params.percent}%`;
 					}
 				}
 			}

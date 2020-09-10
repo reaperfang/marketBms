@@ -63,7 +63,7 @@ export default {
 				//   },
 				// },
 				tooltip: {
-					show: true
+					show: false
 				},
 				color: ["#1A273D"],
 				legend: {
