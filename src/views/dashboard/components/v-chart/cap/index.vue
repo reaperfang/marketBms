@@ -1,6 +1,25 @@
 <template>
 	<div class="panel-content-cap">
-		<div style="height: 100%;" ref="chartContent"></div>
+		<div class="chartContent">
+			<div class="circle-45">
+				<span>是否</span>
+			</div>
+			<div class="circle-65">
+				<span>零售</span>
+			</div>
+
+			<div class="circle-55">
+				<span>发生</span>
+			</div>
+
+			<div class="circle-90">
+				<span>豆腐丝豆</span>
+			</div>
+
+			<div class="circle-70">
+				<span>所发生</span>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -27,248 +46,110 @@ export default {
 	created() {},
 	mounted() {
 		//this.showChart();
-		window.addEventListener("resize", ev => {
-			this.chart.resize();
-		});
+		// window.addEventListener("resize", ev => {
+		// 	this.chart.resize();
+		// });
 	},
 	methods: {
 		showChart(data) {
-			this.chart = echarts.init(this.$refs.chartContent);
+			//let result = data.goods_type_name;
 
-			var plantCap = [
-				// {
-				//   name: "居住",
-				//   value: "Settlements",
-				// },
-				// {
-				//   name: "行政",
-				//   value: "administration",
-				// },
-				// {
-				//   name: "文化",
-				//   value: "Culture",
-				// },
-				// {
-				//   name: "医疗",
-				//   value: "hospital ",
-				// },
-				// {
-				//   name: "教育",
-				//   value: "education ",
-				// },
-				// {
-				//   name: "交通",
-				//   value: "hospital",
-				// },
-				// {
-				//   name: "产业",
-				//   value: "industry",
-				// },
-			];
-
-			plantCap = data.goods_type_name.map(val => {
-				return {
-					name: val.goods_type_name,
-					value: val.paid_order_am_cl
-				};
+			data.goods_type_name.forEach(item => {
+				console.log(item.goods_type_name);
+				console.log(
+					item.goods_type_name.match(/[\u4E00-\u9FA5]/g).length
+				);
 			});
-
-			var datalist = [
-				{
-					offset: [10, 50],
-					symbolSize: 60,
-					opacity: 0.95,
-					color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-						{
-							offset: 0,
-							color: "#29c0fb"
-						},
-						{
-							offset: 1,
-							color: "#2dc5b9"
-						}
-					])
-				},
-				{
-					offset: [38, 70],
-					symbolSize: 50,
-					opacity: 0.95,
-					color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-						{
-							offset: 0,
-							color: "#35d17e"
-						},
-						{
-							offset: 1,
-							color: "#49ddb2"
-						}
-					])
-				},
-				{
-					offset: [23, 43],
-					symbolSize: 70,
-					opacity: 0.95,
-					color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-						{
-							offset: 0,
-							color: "#e5d273"
-						},
-						{
-							offset: 1,
-							color: "#e4a37f"
-						}
-					])
-				},
-				{
-					offset: [44, 26],
-					symbolSize: 90,
-					opacity: 0.95,
-					color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-						{
-							offset: 0,
-							color: "#277aec"
-						},
-						{
-							offset: 1,
-							color: "#57c5ec"
-						}
-					])
-				},
-				{
-					offset: [80, 58],
-					symbolSize: 65,
-					opacity: 0.95,
-					color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-						{
-							offset: 0,
-							color: "#e54948"
-						},
-						{
-							offset: 1,
-							color: "#f08456"
-						}
-					])
-				},
-				{
-					offset: [76, 36],
-					symbolSize: 68,
-					opacity: 0.7,
-					color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-						{
-							offset: 0,
-							color: "#11c46e"
-						},
-						{
-							offset: 1,
-							color: "#f08456"
-						}
-					])
-				},
-				{
-					offset: [64, 75],
-					symbolSize: 65,
-					opacity: 0.68,
-					color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-						{
-							offset: 0,
-							color: "#ff4141"
-						},
-						{
-							offset: 1,
-							color: "#ff8989"
-						}
-					])
-				}
-			];
-			var datas = [];
-			for (var i = 0; i < plantCap.length; i++) {
-				var item = plantCap[i];
-				var itemToStyle = datalist[i];
-				datas.push({
-					name: item.name + "\n" + item.value,
-					value: itemToStyle.offset,
-					symbolSize: itemToStyle.symbolSize,
-					label: {
-						normal: {
-							textStyle: {
-								fontSize: 18,
-								fontWeight: 800,
-								lineHeight: 22
-							}
-						}
-					},
-					itemStyle: {
-						normal: {
-							color: itemToStyle.color,
-							opacity: itemToStyle.opacity
-						}
-					}
-				});
-			}
-			let option = {
-				backgroundColor: "#12468500",
-				grid: {
-					show: false,
-					top: 10,
-					bottom: 10
-				},
-				xAxis: [
-					{
-						gridIndex: 0,
-						type: "value",
-						show: false,
-						min: 0,
-						max: 100,
-						nameLocation: "middle",
-						nameGap: 5
-					}
-				],
-				yAxis: [
-					{
-						gridIndex: 0,
-						min: 0,
-						show: false,
-						max: 100,
-						nameLocation: "middle",
-						nameGap: 30
-					}
-				],
-				series: [
-					{
-						type: "effectScatter",
-						// symbol: 'circle',
-						// symbolSize: 120,
-
-						hoverAnimation: true,
-						label: {
-							normal: {
-								show: true,
-								formatter: "{b}",
-								color: "#fff",
-								textStyle: {
-									fontSize: "20"
-								}
-							}
-						},
-						itemStyle: {
-							normal: {
-								color: "#00acea"
-							}
-						},
-						data: datas
-					}
-				]
-			};
-			this.chart.clear();
-			this.chart.setOption(option);
 		}
 	},
 	components: {}
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .panel-content-cap {
 	height: 100%;
+
+	.chartContent {
+		height: 100%;
+		position: relative;
+
+		.circle-45 {
+			position: absolute;
+			top: 65px;
+			left: 120px;
+			border-radius: 50%;
+			width: 45px;
+			height: 45px;
+			background: rgba(255, 92, 49, 0.1);
+			box-shadow: 0px 0px 12px 0px #5f5eff inset;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.circle-65 {
+			position: absolute;
+			top: 35px;
+			left: 30px;
+			border-radius: 50%;
+			width: 65px;
+			height: 65px;
+			background: rgba(255, 92, 49, 0.1);
+			box-shadow: 0px 0px 12px 0px #ff5c31 inset;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.circle-55 {
+			position: absolute;
+			top: 35px;
+			right: 300px;
+			border-radius: 50%;
+			width: 55px;
+			height: 55px;
+			background: rgba(255, 92, 49, 0.1);
+			box-shadow: 0px 0px 12px 0px #f59f00 inset;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.circle-70 {
+			position: absolute;
+			top: 35px;
+			right: 200px;
+			border-radius: 50%;
+			width: 70px;
+			height: 70px;
+			background: rgba(255, 92, 49, 0.1);
+			box-shadow: 0px 0px 12px 0px #06c9dd inset;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.circle-90 {
+			position: absolute;
+			top: 35px;
+			right: 70px;
+			border-radius: 50%;
+			width: 90px;
+			height: 90px;
+			background: rgba(255, 92, 49, 0.1);
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		span {
+			font-size: 14px;
+			font-weight: 500;
+			color: #ffffff;
+			padding: 5px;
+		}
+	}
 }
 </style>
