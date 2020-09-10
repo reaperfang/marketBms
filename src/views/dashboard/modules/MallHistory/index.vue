@@ -64,6 +64,7 @@ export default {
 				// area: false
 			},
 			chartExtend: {
+				tooltip: "test",
 				color: "rgba(71, 225, 255, 0.15)",
 				grid: {
 					top: "30px",
@@ -90,6 +91,16 @@ export default {
 							color: "rgba(255,255,255,0.8)"
 						},
 						show: false
+					}
+				},
+				tooltip: {
+					formatter: function(params) {
+						let item = params[0],
+							list = item.data;
+						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${item.color}"></span>`;
+						return `${dotHtml}${list[0]} <br/>&nbsp&nbsp&nbsp${
+							item.seriesName == "金额" ? "支付金额" : "浏览次数"
+						}: &nbsp${list[1]}`;
 					}
 				}
 			},
