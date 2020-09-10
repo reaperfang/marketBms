@@ -90,7 +90,7 @@
           prop="createTime"
           label="操作时间"
           sortable = "custom"
-          align="center"
+          align="right"
           width="200px">
         </el-table-column>
       </el-table>
@@ -307,6 +307,10 @@ export default {
   border-bottom-color:#44434B;
 }
 /deep/.el-table--small td{
-  padding:16px 0;
+  padding:16px 10px;
 }
+/deep/.el-table--small th{
+  padding:0px 0px 0px 10px;
+}
+
 </style>

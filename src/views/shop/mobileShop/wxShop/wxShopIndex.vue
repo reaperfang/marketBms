@@ -78,6 +78,9 @@ export default {
   background: #fff;
   padding: 0 20px 20px 20px;
   border-radius: 4px;
+  /deep/ .phone-body {
+    height: calc(100% - 64px) !important;
+  }
 }
 .el-tabs{
   background: rgb(255, 255, 255);

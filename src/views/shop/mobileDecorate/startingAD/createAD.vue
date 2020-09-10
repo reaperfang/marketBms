@@ -267,6 +267,15 @@ export default {
 .upload_tips{
   color:rgba(211,211,211,1);
 }
+/deep/ .module.props {
+  &>form {
+    border: 0;
+  }
+  .block.button {
+    border: 0;
+  }
+}
+
 .module {
   &.view {
     .phone-body {

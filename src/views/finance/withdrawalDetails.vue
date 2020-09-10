@@ -96,7 +96,8 @@
         <el-table-column
           prop="amount"
           align="right"
-          label="提现金额（元）">
+          label="提现金额（元）"
+          width="120px">
         </el-table-column>
         <el-table-column
           prop="status"

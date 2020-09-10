@@ -206,8 +206,10 @@ import { validatePhone } from "@/utils/validate.js"
 
 import { asyncRouterMap } from '@/router'
 import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
+import { common, deliveryWay1 } from '@/views/order/mixins/orderMixin'
 
 export default {
+  mixins: [common, deliveryWay1],
   data() {
     return {
       list: [],
@@ -216,8 +218,6 @@ export default {
       currentData: "",
       sendGoods: "",
       title: "",
-      expressCompanyList: [],
-      sending: false,
       distributorList: [], //每个订单对应的筛选后的配送员列表
       distributorListFilter: [], //配送员列表
       distributorNameFirst: true, //配送员名字第一次输入标记
@@ -225,9 +225,6 @@ export default {
       distributorSet: false,
       allchecked: true,
       ajax: true,
-      _list: [],
-      params: {},
-      shopAddressInfo: null
     };
   },
   created() {
@@ -235,34 +232,7 @@ export default {
     this.getDetail();
     this.checkSet()
   },
-  computed: {
-    cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-      return shopInfo.id;
-    }
-  },
-  filters: {
-    goodsSpecsFilter(value) {
-      let _value;
-      if (!value) return "";
-      if (typeof value == "string") {
-        _value = JSON.parse(value);
-      }
-      let str = "";
-      for (let i in _value) {
-        if (_value.hasOwnProperty(i)) {
-          str += i + ":";
-          str += _value[i] + ",";
-        }
-      }
-
-      return str;
-    }
-  },
   methods: {
-    cancel() {
-      this.sending = false
-    },
     allcheckHandler() {
       if(this.list[0].deliveryWay == 4) {
         return
@@ -610,6 +580,8 @@ export default {
             }))
           } else {
             this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              expressNos: '',
+              express: res,
               showErrorExpressCompany: false,
               errorMessageExpressCompany: '',
             }))
@@ -983,12 +955,16 @@ export default {
           for(let index=values.length-1; index>=0; index--) {
             let item = values[index]
 
-            this._list[index].sizeList = item
+            this._list[index].sizeList = item.map(_item => ({
+              ..._item,
+              sizeSpecs: _item.sizeSpecs + ' ' + _item.templateSize,
+              templateSize: `${item.sizeSpecs} ${item.templateSize}`
+            }))
             // if(item && item.length) {
             //   this._list.splice(index, 1)
             // }
           }
-          this._list = this._list.filter(val => val.express != null && !val.express.specificationSize && val.sizeList && val.sizeList.length)
+          this._list = this._list.filter(val => val.express != null && !val.express.sizeSpecs && val.sizeList && val.sizeList.length)
 
           var __result = [];
           var __obj = {};
@@ -1087,25 +1063,6 @@ export default {
         }
       } catch (e) {}
     },
-    getExpressCompanyList() {
-      this._apis.order
-        .getElectronicFaceSheetExpressCompanyList()
-        .then(res => {
-          res.forEach(val => {
-            val.expressCompanyCode = val.expressCode
-            val.expressCompany = val.expressName
-          })
-          res.push({
-            expressCompanyCode: "other",
-            expressCompany: "其他"
-          });
-          this.expressCompanyList = res;
-        })
-        .catch(error => {
-          this.visible = false;
-          this.$message.error(error);
-        });
-    },
     onSubmit(value) {
       let _list = JSON.parse(JSON.stringify(this.list));
 
@@ -1166,15 +1123,22 @@ export default {
 
             // 回显选中的快递公司
             if(list && list.length) {
-              val.expressCompanyCodes = list[index].expressCompanyCodes
+              if(list[index].expressCompanyCodes) {
+                val.expressCompanyCodes = list[index].expressCompanyCodes
 
-              let expressName = this.expressCompanyList.find(item => item.expressCompanyCode == val.expressCompanyCodes).expressCompany
+                let expressName = this.expressCompanyList.find(item => item.expressCompanyCode == val.expressCompanyCodes).expressCompany
 
-              this._apis.order
-                .checkExpress({expressName})
-                .then(res => {
-                  val.express = res
-                })
+                this._apis.order
+                  .checkExpress({expressName})
+                  .then(res => {
+                    val.express = res
+                  })
+              }
+              
+              // 回显快递单号
+              if(list[index].expressNos) {
+                val.expressNos = list[index].expressNos
+              }
             }
 
             if(val.deliveryWay == 4) {
