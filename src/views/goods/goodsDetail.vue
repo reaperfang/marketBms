@@ -1125,7 +1125,7 @@ export default {
                     });
                     return false
                 }
-                if(+obj.salePrice<+obj.costPrice) {
+                if(!obj.activity && (+obj.salePrice<+obj.costPrice)) {
                     this.$message({
                         message: '售卖价不得低于成本价',
                         type: 'warning'
