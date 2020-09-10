@@ -12,7 +12,7 @@
       <el-row class="p_i_content">
         <el-col :span="24">
           <el-button type="primary" class="to_intelligent" @click.native="toIntelligent">立即体验</el-button>
-          <el-steps space="30%" :active="currentStep" finish-status="finish">
+          <el-steps space="30%" :active="currentStep-1" finish-status="finish">
             <el-step title="选择所属行业"></el-step>
             <el-step title="预览行业模板"></el-step>
             <el-step title="启用行业模板">
@@ -60,7 +60,7 @@ export default {
           const result = await this._apis.profile.getIntelligentProgress();
           console.log('获取智能开店信息: ', result);
           if(result) {
-            this.currentStep = result.currentStep ? result.currentStep + 1 : 1;
+            this.currentStep = result.currentStep ? result.currentStep : 1;
             this.stepStatus = result.status;
             this.isLoading = false;
           }
