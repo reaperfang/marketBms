@@ -27,6 +27,7 @@
 									:progress="item.progress"
 									:city="item.city"
 									:barColor="item.barColor"
+									:top="index + 1"
 								></pchart>
 								<!-- <echartprogress></echartprogress> -->
 							</div></el-col
@@ -94,7 +95,7 @@ export default {
 	methods: {
 		...mapActions(["toplist", "amoountlist"]),
 		async init() {
-			let parames = { ...this.invokeType,cid: this.cid };
+			let parames = { ...this.invokeType, cid: this.cid };
 
 			let resTop = await this._apis.dashboard.top3(parames);
 			this.toplist(JSON.parse(resTop).top3);
@@ -104,12 +105,22 @@ export default {
 		},
 		setPieData(val) {
 			this.chartData = val.map(res => {
+				// console.log(
+				// 	"res.place_order_am_s",
+				// 	res && res.place_order_am_s
+				// );
+				// console.log(
+				// 	" res.place_order_am_s.toFixed(2) * 100",
+				// 	res && res.place_order_am_s.toFixed(2) * 100
+				// );
 				return {
 					progress: res.place_order_am_s.toFixed(2) * 100,
 					barColor: "RGBA(255, 0, 139, 1)",
 					city: res.area_name
 				};
 			});
+
+			console.log("this.chartData  top", this.chartData);
 		},
 		setPayData(val) {
 			this.payData = [
