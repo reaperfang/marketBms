@@ -152,7 +152,7 @@ export default {
                     id: item.express ? item.express.id : '',
                     cid: item.express ? item.express.cid : '',
                     specificationSize: item.specificationSize.split(' ')[1],
-                    sizeSpecs: item.sizeSpecs,
+                    sizeSpecs: item.specificationSize.split(' ')[0],
                     expressCompanyCode: item.orderAfterSaleSendInfo ? item.express.expressCompanyCode : item.expressCompanyCodes,
                     name
                 })
