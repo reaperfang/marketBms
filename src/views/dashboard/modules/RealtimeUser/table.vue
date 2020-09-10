@@ -1,6 +1,6 @@
 <template>
 	<div class="realtime-user">
-		<el-table :data="tableData" :row-style="{ height: '20px' }">
+		<el-table :data="newtable" :row-style="{ height: '20px' }">
 			<el-table-column prop="id" label="ID" width="50"> </el-table-column>
 			<el-table-column prop="c_uv_name_rt" label="姓名" width="130">
 			</el-table-column>
@@ -73,6 +73,8 @@ export default {
 			//     id: 8,
 			//   },
 			// ],
+
+			newtable: []
 		};
 	},
 	computed: {
@@ -97,6 +99,8 @@ export default {
 				this.tableData.push(this.tableData[0]); // 将数组的第一个元素添加到数组的
 				this.tableData.shift(); //删除数组的第一个元素
 				//this.animate = false; // margin-top 为0 的时候取消过渡动画，实现无缝滚动
+
+				this.newtable = this.tableData.slice(0, 4);
 			}, 1000);
 		}
 	}
@@ -144,7 +148,6 @@ export default {
 	.el-table::before {
 		height: 0;
 	}
-
 	.anim {
 		transition: all 0.5s;
 		margin-top: -30px;

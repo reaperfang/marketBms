@@ -1,5 +1,12 @@
 <template>
 	<div class="v-chart-histogram">
+		<!-- <ve-histogram
+			:extend="chartExtend"
+			:data="chartData"
+			v-bind="pubSetting"
+			:legend-visible="false"
+		></ve-histogram> -->
+
 		<ve-histogram
 			:extend="chartExtend"
 			:data="chartData"
@@ -52,13 +59,6 @@ export default {
 					top: "30px",
 					bottom: "7px"
 				},
-				tooltip: {
-					trigger: "axis",
-					axisPointer: {
-						// 坐标轴指示器，坐标轴触发有效
-						type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
-					}
-				},
 				xAxis: {
 					axisLine: {
 						lineStyle: {
@@ -80,6 +80,11 @@ export default {
 					}
 				},
 				tooltip: {
+					trigger: "axis",
+					axisPointer: {
+						// 坐标轴指示器，坐标轴触发有效
+						type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
+					},
 					formatter: function(params) {
 						console.log(params);
 						let item = params[0],
