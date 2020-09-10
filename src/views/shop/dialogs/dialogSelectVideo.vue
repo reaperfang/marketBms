@@ -23,7 +23,7 @@
                       <span>{{(item.fileSize ? Math.floor(item.fileSize / 1024 / 1024 * 100) / 100 + 'MB' : '-- MB')}}</span>
                     </div>
                     <div class="video_body">
-                      <p>{{item.name || '无标题'}}</p>
+                      <p :title="item.name || '无标题'">{{item.name || '无标题'}}</p>
                       <video
                         :src="item.filePath"
                         controls="controls"
@@ -80,7 +80,7 @@
                           <span>{{item.size ? Math.floor(item.size / 1024 / 1024 * 100) / 100 + 'MB' : '-- MB'}}</span>
                         </div>
                         <div class="video_body"> 
-                          <p>{{item.original}}</p>
+                          <p :title="item.original || '无标题'">{{item.original || '无标题'}}</p>
                           <video
                             :src="item.url"
                             controls="controls"
@@ -542,6 +542,10 @@ ul.video_list{
   p{
     text-align:left;
     padding:5px 20px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   video{
     width: 100%;
