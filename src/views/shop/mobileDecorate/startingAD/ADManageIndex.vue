@@ -31,7 +31,7 @@
         <el-button type="primary" @click="_routeTo('m_createAD')">新建广告</el-button>
       </div>
     </div>
-    <div class="table" v-calcHeight="300">
+    <div class="table">
       <p>广告（{{total || 0}}个）</p>
       <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
@@ -275,10 +275,11 @@ export default {
   padding:20px;
 }
 /deep/ .table{
-  overflow-y: auto;
+  // overflow-y: auto;
   margin-top:20px;
   background:#fff;
   padding:20px;
+  padding-bottom:50px;
   p{
     margin-bottom:20px;
   }

@@ -49,14 +49,14 @@
            </p>
            <p class="pages">
               <el-pagination
+              :background="true"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="currentPage"
               :page-sizes="[10, 20, 30, 40]"
               :page-size="pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="total*1"
-              class="page_nav">
+              layout="prev, pager, next, sizes"
+              :total="total*1">
               </el-pagination>
            </p>
         </div>
@@ -545,7 +545,7 @@ export default {
 .pages{
   width: 100%;
   margin-top: 50px;
-  text-align: right;
+  text-align: center;
   .page_nav{
     display: inline-block;
   }
