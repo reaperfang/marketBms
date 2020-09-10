@@ -375,6 +375,7 @@ export default {
   justify-content: space-between;
   .list_img{
     width: 100%;
+    padding-bottom:30px;
     .imgs{
       display: flex;
       flex-flow: row wrap;

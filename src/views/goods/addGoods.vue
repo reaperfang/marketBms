@@ -90,6 +90,7 @@ export default {
 <style lang="scss" scoped>
     .add-goods {
         background-color: #fff;
-        padding: 18px 21px;
+        padding: 20px;
+        padding-top:0;
     }
 </style>

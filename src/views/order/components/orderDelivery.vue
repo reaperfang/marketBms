@@ -608,6 +608,7 @@ export default {
     .content {
         background-color: #fff;
         padding: 20px;
+        padding-bottom:0;
         //margin: 0 20px;
         padding-top: 0;
         p {

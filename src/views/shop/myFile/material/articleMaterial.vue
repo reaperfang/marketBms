@@ -214,6 +214,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.list{
+  padding-bottom:30px;
+}
 .list_top{
   height: 80px;
   line-height: 80px;

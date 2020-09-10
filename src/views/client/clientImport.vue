@@ -247,7 +247,7 @@ export default {
 }
 .c_container{
     background-color: #fff;
-    padding: 16px 20px;
+    padding: 20px;
     .c_title{
         color: #3D434A;
         font-weight: 600;
