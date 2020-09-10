@@ -55,6 +55,7 @@ export default {
 			//let result = data.goods_type_name;
 
 			data.goods_type_name.forEach(item => {
+				console.log("item", item);
 				console.log(item.goods_type_name);
 				console.log(
 					item.goods_type_name.match(/[\u4E00-\u9FA5]/g).length
