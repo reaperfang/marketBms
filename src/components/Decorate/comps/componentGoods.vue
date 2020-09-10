@@ -78,7 +78,11 @@ export default {
         const _self = this;
         this.$store.dispatch('getShopStyle');
         this.receivePropDataChange('goodsListOfGroupChange', (list) => {
-            this.displayList = list;
+            if(Array.isArray(list)) {
+                this.displayList = list.filter(item => item.status !== 0);
+            }else {
+                this.displayList = [];
+            }
         });
     },
     watch: {
@@ -271,7 +275,11 @@ export default {
 
         /* 创建数据 */
         createList(datas, componentData) {
-            this.displayList = datas;
+            if(Array.isArray(datas)) {
+                this.displayList = datas.filter(item => item.status !== 0);
+            }else {
+                this.displayList = [];
+            }
         },
 
          /* 设置分类商品参数 */

@@ -303,7 +303,7 @@ export default {
         border: 1px #D0D6E4 solid;
         box-shadow: none !important;
         .phone-body {
-          height: calc(100% - 64px) !important;
+          height: 592px;
         }
       }
     }

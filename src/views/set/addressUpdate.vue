@@ -1,5 +1,5 @@
 <template>
-   <div class="address">
+   <div class="address" v-if="renderComponent">
      <h2>地址库/{{ setTitle }}</h2>
      <el-form class="ruleForm" ref="ruleForm" :model="ruleForm" :rules="rules" label-width="102px">
        <div class="form-area">
@@ -82,6 +82,7 @@ export default {
       isMapChoose: false,
       isLoading: false,
       isDisabled: false,
+      renderComponent: true, // 初始化渲染组件
       ruleForm: {
         id: null,
         contactPerson: null, // 联系人
@@ -266,6 +267,7 @@ export default {
     },
     // 处理保存成功的逻辑
     handleSaveSuccess() {
+      
       this.confirm({
         title: "提示",
         iconSuccess: true,
@@ -276,6 +278,8 @@ export default {
         this.$router.push({ path: '/set/address' })
       }).catch(()=> {
         this.$router.push({ path: '/set/addressUpdate' })
+        location.reload()
+        
       });
     },
     // 处理数据重复问题
