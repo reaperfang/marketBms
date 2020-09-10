@@ -267,7 +267,7 @@ export default {
             showCancelButton: true,
             customClass: 'address-update'
           }).then(() => {
-            this.ApiDelAddressById(id, addressType)
+            this.delAddressById(id, addressType)
           }).catch((err) => {
           });
         }

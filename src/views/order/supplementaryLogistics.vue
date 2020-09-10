@@ -623,7 +623,7 @@ export default {
                         ],
                     }
                     this.params = params
-                    if(this.express != null && !this.express.specificationSize) {
+                    if(this.express != null && !this.express.sizeSpecs) {
                         try {
                         let res = await this._apis.order.getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
 
