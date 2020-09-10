@@ -1,23 +1,21 @@
 <template>
 	<div class="panel-content-cap">
 		<div class="chartContent">
-			<div class="circle-45">
-				<span>是否</span>
+			<div class="circle-45" v-show="five">
+				<span>{{ five }}</span>
 			</div>
-			<div class="circle-65">
-				<span>零售</span>
+			<div class="circle-55" v-show="fourth">
+				<span>{{ fourth }}</span>
 			</div>
-
-			<div class="circle-55">
-				<span>发生</span>
+			<div class="circle-65" v-show="third">
+				<span>{{ third }}</span>
 			</div>
-
-			<div class="circle-90">
-				<span>豆腐丝豆</span>
+			<div class="circle-70" v-show="sec">
+				<span>{{ sec }}</span>
 			</div>
 
-			<div class="circle-70">
-				<span>所发生</span>
+			<div class="circle-90" v-show="first">
+				<span>{{ first }}</span>
 			</div>
 		</div>
 	</div>
@@ -40,7 +38,12 @@ export default {
 	data() {
 		return {
 			chartData: "71.23",
-			chart: ""
+			chart: "",
+			first: "",
+			sec: "",
+			third: "",
+			fourth: "",
+			five: ""
 		};
 	},
 	created() {},
@@ -54,12 +57,30 @@ export default {
 		showChart(data) {
 			//let result = data.goods_type_name;
 
-			data.goods_type_name.forEach(item => {
-				console.log("item", item);
-				console.log(item.goods_type_name);
-				console.log(
-					item.goods_type_name.match(/[\u4E00-\u9FA5]/g).length
-				);
+			data.goods_type_name.forEach((item, index) => {
+				// console.log("item", item);
+				// console.log("index", index);
+				// console.log(item.goods_type_name);
+				// console.log(
+				// 	item.goods_type_name.match(/[\u4E00-\u9FA5]/g).length
+				// );
+
+				if (index == 0) {
+					this.first = item.goods_type_name;
+				}
+
+				if (index == 1) {
+					this.sec = item.goods_type_name;
+				}
+				if (index == 2) {
+					this.third = item.goods_type_name;
+				}
+				if (index == 3) {
+					this.fourth = item.goods_type_name;
+				}
+				if (index == 4) {
+					this.five = item.goods_type_name;
+				}
 			});
 		}
 	},
