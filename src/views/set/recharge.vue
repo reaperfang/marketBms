@@ -29,7 +29,7 @@
           ></numberInput>
           <span>元</span>
         </el-form-item>
-        <el-button class="recharge-btn" type="primary" size="small" @click="getRechargeNum">下一步</el-button>
+        <el-button class="recharge-btn" type="primary" size="small" @click="getRechargeNum" :loading="nextLoading">下一步</el-button>
       </el-form>
     </div>
   </div>
@@ -61,6 +61,7 @@ export default {
       rules: {
         price: [{ validator: validatePrice, trigger: "blur" }],
       },
+      nextLoading: false
     };
   },
   mounted() {},
@@ -74,53 +75,56 @@ export default {
             rechargeMoney: this.ruleForm.price,
             category: "PC",
           };
+          this.nextLoading = true;
           this._apis.set
             .getRecharge(param)
             .then((response) => {
+              this.nextLoading = false;
               let url = response.payUrl;
               if (url) {
-				window.open(url);
-				this.confirm({
-					title: "请确认支持状态",
-					text: "请在新打开的页面中完成支付",
-					showCancelButton: false,
-					customClass: "recharge-confirm",
-					confirmText: "已完成支付",
-					beforeClose: (action, instance, done) => {
-					if (action === "confirm") {
-						instance.confirmButtonLoading = true;
-						//instance.confirmButtonText = '执行中...';
-						this._apis.set
-						.getRecharge(param)
-						.then((response) => {
-							done();
-							setTimeout(() => {
-							instance.confirmButtonLoading = false;
-							}, 300);
-							//跳转到充值记录页面
-							this.$router.push({
-							name: "rechargeRecord",
-							params: {
-								sourceId: this.$route.params.sourceId,
-							},
-							});
-						})
-						.catch((error) => {
-							done();
-							setTimeout(() => {
-							instance.confirmButtonLoading = false;
-							}, 300);
-							this.$message.error(error);
-						});
-					} else {
-						done();
-					}
-					},
-				}).then(() => {});
+                window.open(url);
+                this.confirm({
+                  title: "请确认支持状态",
+                  text: "请在新打开的页面中完成支付",
+                  showCancelButton: false,
+                  customClass: "recharge-confirm",
+                  confirmText: "已完成支付",
+                  beforeClose: (action, instance, done) => {
+                  if (action === "confirm") {
+                    instance.confirmButtonLoading = true;
+                    //instance.confirmButtonText = '执行中...';
+                    this._apis.set
+                    .getRecharge(param)
+                    .then((response) => {
+                      done();
+                      setTimeout(() => {
+                      instance.confirmButtonLoading = false;
+                      }, 300);
+                      //跳转到充值记录页面
+                      this.$router.push({
+                      name: "rechargeRecord",
+                      params: {
+                        sourceId: this.$route.params.sourceId,
+                      },
+                      });
+                    })
+                    .catch((error) => {
+                      done();
+                      setTimeout(() => {
+                      instance.confirmButtonLoading = false;
+                      }, 300);
+                      this.$message.error(error);
+                    });
+                  } else {
+                    done();
+                  }
+                  },
+                }).then(() => {});
               }
             })
             .catch((error) => {
-              this.loading = false;
+              this.nextLoading = false;
+              this.$message.error(error);
             });
         }
       });
