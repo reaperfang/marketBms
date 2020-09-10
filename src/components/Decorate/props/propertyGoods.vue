@@ -349,14 +349,7 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-      let tempData = [];
-      if(Array.isArray(datas)) {
-          tempData = datas.filter(item => item.status !== 0);
-      }else {
-          tempData = [];
-      }
-      
-      this.displayList = tempData;
+      this.displayList = datas;
       if(this.currentComponentData.data.source === 2) {
           this.syncToMiddle('goodsListOfGroupChange', tempData);
       }
