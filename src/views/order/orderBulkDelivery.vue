@@ -206,8 +206,10 @@ import { validatePhone } from "@/utils/validate.js"
 
 import { asyncRouterMap } from '@/router'
 import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
+import { common, deliveryWay1 } from '@/views/order/mixins/orderMixin'
 
 export default {
+  mixins: [common, deliveryWay1],
   data() {
     return {
       list: [],
@@ -216,8 +218,6 @@ export default {
       currentData: "",
       sendGoods: "",
       title: "",
-      expressCompanyList: [],
-      sending: false,
       distributorList: [], //每个订单对应的筛选后的配送员列表
       distributorListFilter: [], //配送员列表
       distributorNameFirst: true, //配送员名字第一次输入标记
@@ -225,9 +225,6 @@ export default {
       distributorSet: false,
       allchecked: true,
       ajax: true,
-      _list: [],
-      params: {},
-      shopAddressInfo: null
     };
   },
   created() {
@@ -235,34 +232,7 @@ export default {
     this.getDetail();
     this.checkSet()
   },
-  computed: {
-    cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-      return shopInfo.id;
-    }
-  },
-  filters: {
-    goodsSpecsFilter(value) {
-      let _value;
-      if (!value) return "";
-      if (typeof value == "string") {
-        _value = JSON.parse(value);
-      }
-      let str = "";
-      for (let i in _value) {
-        if (_value.hasOwnProperty(i)) {
-          str += i + ":";
-          str += _value[i] + ",";
-        }
-      }
-
-      return str;
-    }
-  },
   methods: {
-    cancel() {
-      this.sending = false
-    },
     allcheckHandler() {
       if(this.list[0].deliveryWay == 4) {
         return
@@ -1092,25 +1062,6 @@ export default {
           this.allchecked = false
         }
       } catch (e) {}
-    },
-    getExpressCompanyList() {
-      this._apis.order
-        .getElectronicFaceSheetExpressCompanyList()
-        .then(res => {
-          res.forEach(val => {
-            val.expressCompanyCode = val.expressCode
-            val.expressCompany = val.expressName
-          })
-          res.push({
-            expressCompanyCode: "other",
-            expressCompany: "其他"
-          });
-          this.expressCompanyList = res;
-        })
-        .catch(error => {
-          this.visible = false;
-          this.$message.error(error);
-        });
     },
     onSubmit(value) {
       let _list = JSON.parse(JSON.stringify(this.list));

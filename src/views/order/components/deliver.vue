@@ -19,7 +19,7 @@
           <div class="content">
             <el-table
               :row-key="getRowKeys"
-              :class="{isIE: isIE, disabledCheckAll: orderInfo.deliveryWay != 4,'disabled-table': checkboxAllTableMark}"
+              :class="{isIE: utils.isIE(), disabledCheckAll: orderInfo.deliveryWay != 4,'disabled-table': checkboxAllTableMark}"
               ref="table"
               :data="tableData"
               style="width: 100%"
@@ -282,12 +282,13 @@ import ReceiveInformationDialog from "@/views/order/dialogs/receiveInformationDi
 import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
 
 import { validatePhone } from "@/utils/validate.js"
+import utils from "@/utils"
 
 import { asyncRouterMap } from '@/router'
-//import { deliveryWay1 } from '../mixins/orderMixin'
+import { common, deliveryWay1 } from '@/views/order/mixins/orderMixin'
 
 export default {
-  //mixins: [deliveryWay1],
+  mixins: [common, deliveryWay1],
   data() {
     var expressCompanyCodeValidator = (rule, value, callback) => {
           if(this.ruleForm.expressCompanyCode != 'other') {
@@ -352,11 +353,9 @@ export default {
       currentDialog: "",
       dialogVisible: false,
       currentData: {},
-      expressCompanyList: [],
       sendGoods: "",
       title: "",
       express: null,
-      sending: false,
       errorMessage: '',
       showError: false,
       distributorList: [], //配送员筛选后的数据
@@ -367,9 +366,6 @@ export default {
       distributorSet: false,
       ajax: true,
       _ids: [],
-      params: {},
-      _list: [],
-      shopAddressInfo: null,
       checkboxAllTableMark:false
     };
   },
@@ -378,24 +374,6 @@ export default {
     this.getExpressCompanyList();
     this.checkSet()
   },
-  filters: {
-    goodsSpecsFilter(value) {
-      let _value;
-      if (!value) return "";
-      if (typeof value == "string") {
-        _value = JSON.parse(value);
-      }
-      let str = "";
-      for (let i in _value) {
-        if (_value.hasOwnProperty(i)) {
-          str += i + ":";
-          str += _value[i] + ",";
-        }
-      }
-      str = str.replace(/(^.*)\,$/, '$1')
-      return str;
-    }
-  },
   computed: {
     afterSale() {
       if (this.$route.query.afterSale) {
@@ -403,25 +381,6 @@ export default {
       } else {
         return false;
       }
-    },
-    cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-      return shopInfo.id;
-    },
-    isIE() {
-        var userAgent = navigator.userAgent;
-        var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; 
-        var isEdge = userAgent.indexOf("Edge") > -1 && !isIE;  
-        var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1;
-        if(isIE) {
-            return true;   
-        } else if(isEdge) {
-            return true; 
-        } else if(isIE11) {
-            return true; 
-        }else{
-            return false
-        }
     },
     // orderInfo: {
     //   get() {
@@ -451,9 +410,6 @@ export default {
     // }
   },
   methods: {
-    cancel() {
-      this.sending = false
-    },
     //检测是否有配置子帐号的权限
     checkSet(){
         const setConfig = asyncRouterMap.filter(item => item.name === 'set');
@@ -704,25 +660,6 @@ export default {
           this.orderInfo.sendDetail = res.addressDetail;
         })
         .catch(error => {
-          this.$message.error(error);
-        });
-    },
-    getExpressCompanyList() {
-      this._apis.order
-        .getElectronicFaceSheetExpressCompanyList()
-        .then(res => {
-          res.forEach(val => {
-            val.expressCompanyCode = val.expressCode
-            val.expressCompany = val.expressName
-          })
-          res.push({
-            expressCompanyCode: 'other',
-            expressCompany: '其他'
-          })
-          this.expressCompanyList = res;
-        })
-        .catch(error => {
-          this.visible = false;
           this.$message.error(error);
         });
     },
