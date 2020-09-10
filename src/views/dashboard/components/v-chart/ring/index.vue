@@ -78,12 +78,8 @@ export default {
 			chartExtend: {
 				tooltip: {
 					formatter: function(params) {
-						console.log(
-							"绑定手机号 formatter: function (params) {",
-							params
-						);
 						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.color}"></span>`;
-						return `${dotHtml}${params.data.name} <br/>&nbsp&nbsp&nbsp占比:${params.percent}%`;
+						return `${dotHtml}${params.data.name} <br/>&nbsp&nbsp&nbsp占比: &nbsp${params.percent}%`;
 					}
 				}
 			}

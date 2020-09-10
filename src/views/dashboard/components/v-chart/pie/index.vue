@@ -65,11 +65,16 @@ export default {
 				//   },
 				// },
 				tooltip: {
-					show: true,
+					show: this.progress != 0,
 					//formatter: "{data.name} <br/>{b}: {c} ({d}%)"
-					formatter: function(params) {
-						//console.log("formatter: function (params) {", params);
-						return `TOP${params.data.top} ${params.data.name} <br/> 交易金额占比:${params.data.progress}%`;
+					formatter: params => {
+						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${
+							params.data.progress == 0
+								? "#1A273D"
+								: this.barColor
+						}"></span>`;
+						return `${dotHtml}TOP${params.data.top} ${params.data.name} <br/> &nbsp&nbsp&nbsp交易金额占比: &nbsp${params.data.progress}%`;
+						//return `TOP${params.data.top} ${params.data.name} <br/> 交易金额占比:${params.data.progress}%`;
 					}
 				},
 				color: ["#1A273D"],
