@@ -262,12 +262,6 @@ export default {
           if (res && res.length > 0) {
             this.isHasSkuSize = true
             this.expressElectronicSizeList = this.formateElectronicSize(res)
-            if (this.$route.query.id) {
-              const obj = this.expressElectronicSizeList.find(item => {
-                return item.templateSize === this.ruleForm.specificationSize
-              })
-              if (obj) this.ruleForm.specificationSize = `${obj.sizeSpecs} ${obj.templateSize}`
-            } 
           } else {
             this.isHasSkuSize = false
             this.expressElectronicSizeList = []
@@ -331,7 +325,7 @@ export default {
         }
         let arr = data.specificationSize.split(' ')
         data.specificationSize = arr[arr.length - 1]
-        console.log('data',data)
+        data.sizeSpecs = arr[0]
         return data
       },
       add() {
@@ -376,6 +370,7 @@ export default {
             this.isShowPwa = false
           }
           this.ruleForm = Object.assign({}, res)
+          this.ruleForm.specificationSize =  res.sizeSpecs ? `${res.sizeSpecs} ${res.specificationSize}` : ''
           this.getExpressElectronicSize(res.expressCompanyCode)
         })
         .catch(error => {
