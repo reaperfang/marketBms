@@ -16,12 +16,12 @@ export default {
     };
   },
   created() {
-    this.getList()
+    this.getDetail()
   },
   filters: {},
   computed: {},
   methods: {
-    getList() {
+    getDetail() {
       let id = this.$route.query.id || this.$route.query.ids;
 
       this._apis.order

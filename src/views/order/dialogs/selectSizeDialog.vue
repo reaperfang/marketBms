@@ -152,6 +152,7 @@ export default {
                     id: item.express ? item.express.id : '',
                     cid: item.express ? item.express.cid : '',
                     specificationSize: item.specificationSize == 'emptyTemplateSize' ? '' : item.specificationSize,
+                    sizeSpecs: item.sizeSpecs,
                     expressCompanyCode: item.orderAfterSaleSendInfo ? item.express.expressCompanyCode : item.expressCompanyCodes,
                     name
                 })
