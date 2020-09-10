@@ -16,6 +16,7 @@
                 :multiple="false"
                 :options="categoryData"
                 :normalizer="normalizer"
+                :clearable="false"
                 placeholder="请选择分类"
                 v-model="seletedClassify"></treeselect>
             </el-form-item>
@@ -92,7 +93,10 @@ export default {
       goodsClassifyList: [],
       tableData: [],
       currentClassifyId: [],
-      categoryData: [],
+      categoryData: [{
+          "id": "",
+          "name": "全部",
+      }],
       seletedClassify: '',
       normalizer(node) {
         return {
@@ -127,10 +131,7 @@ export default {
         enable: '1'
       }).then((response)=>{
         this.filterEnableData(response);
-        response = [{
-          "id": "",
-          "name": "全部",
-        }, ...response];
+        response = [...this.categoryData, ...response];
         this.categoryData = response;
         this.loading = false;
       }).catch((error)=>{
