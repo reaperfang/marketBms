@@ -69,6 +69,9 @@ export default {
 					top: "30px",
 					bottom: "7px"
 				},
+				series: {
+					smooth: false //平滑曲线
+				},
 				xAxis: {
 					axisLine: {
 						lineStyle: {

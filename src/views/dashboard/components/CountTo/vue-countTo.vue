@@ -359,7 +359,7 @@ export default {
 				height: 75%;
 				width: 52px;
 				background: rgba(71, 225, 255, 0.02);
-				box-shadow: 0px 1px 20px 0px rgba(71, 225, 255, 0.1);
+				box-shadow: 0px 1px 20px 0px rgba(71, 225, 255, 0.1) inset;
 				//margin-left: 10px;
 
 				font-size: 68px;

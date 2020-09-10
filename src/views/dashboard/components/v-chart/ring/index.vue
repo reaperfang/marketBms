@@ -30,7 +30,7 @@ import iconmobile from "../../../modules/UserAgeMobileMember/icon/mobile";
 import iconagesex from "../../../modules/UserAgeMobileMember/icon/agesex";
 export default {
 	// props: ["chartData", "chartSettings", "chartExtend"],
-	props: ["chartData", "title", "icon", "total", "sexData"],
+	props: ["chartData", "title", "icon", "total", "sexData", "chartExtend"],
 	mixins: [list],
 	data() {
 		return {

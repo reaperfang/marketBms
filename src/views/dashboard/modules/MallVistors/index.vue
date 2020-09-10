@@ -78,6 +78,9 @@ export default {
 					top: "30px",
 					bottom: "7px"
 				},
+				series: {
+					smooth: false //平滑曲线
+				},
 				xAxis: {
 					axisLine: {
 						lineStyle: {
@@ -117,7 +120,7 @@ export default {
 	methods: {
 		...mapActions(["maivistorlist"]),
 		async init() {
-			let parames = { ...this.invokeType,cid: this.cid };
+			let parames = { ...this.invokeType, cid: this.cid };
 
 			let res = await this._apis.dashboard.vistor(parames);
 			this.maivistorlist(JSON.parse(res));

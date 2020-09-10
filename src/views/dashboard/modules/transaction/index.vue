@@ -72,7 +72,7 @@ export default {
 				// 	]
 			},
 			left: {
-				columns: ["日期", "金额"],
+				columns: ["日期", "数量"],
 				rows: []
 			},
 			right: {
@@ -97,7 +97,7 @@ export default {
 	methods: {
 		...mapActions(["trasationlist"]),
 		async init() {
-			let parames = { ...this.invokeType,cid: this.cid };
+			let parames = { ...this.invokeType, cid: this.cid };
 
 			let left = await this._apis.dashboard.totalamount(parames);
 			this.trasationlist({ left: JSON.parse(left) });
@@ -124,7 +124,7 @@ export default {
 			for (var j = 0; j < y.length; j++) {
 				result.push({
 					日期: x[j],
-					金额: y[j]
+					数量: y[j]
 				});
 			}
 
