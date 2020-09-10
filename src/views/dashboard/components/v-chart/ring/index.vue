@@ -82,7 +82,8 @@ export default {
 							"绑定手机号 formatter: function (params) {",
 							params
 						);
-						return `${params.data.name} <br/>占比:${params.percent}%`;
+						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.color}"></span>`;
+						return `${dotHtml}${params.data.name} <br/>&nbsp&nbsp&nbsp占比:${params.percent}%`;
 					}
 				}
 			}
