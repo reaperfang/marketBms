@@ -36,6 +36,17 @@ export default {
 		return {
 			chartSettings: {
 				// area: false
+				// itemStyle: {
+				// 	normal: {
+				// 		//color: "#F59F00",
+				// 		label: {
+				// 			show: false
+				// 		},
+				// 		labelLine: {
+				// 			show: false
+				// 		}
+				// 	}
+				// },
 				radius: [60, 70],
 				offsetY: 89,
 				labelLine: {

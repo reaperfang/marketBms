@@ -63,7 +63,17 @@ export default {
 				//   },
 				// },
 				tooltip: {
-					show: true
+					show: this.progress != 0,
+					formatter: params => {
+						console.log("formatter: params => {", params);
+						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${
+							params.data.progress == 0
+								? "#1A273D"
+								: this.barColor
+						}"></span>`;
+						return `${dotHtml}${params.data.name} <br/> &nbsp&nbsp&nbsp占比: &nbsp${params.data.value}%`;
+						//return `TOP${params.data.top} ${params.data.name} <br/> 交易金额占比:${params.data.progress}%`;
+					}
 				},
 				color: ["#1A273D"],
 				legend: {
@@ -92,7 +102,7 @@ export default {
 						data: [
 							{
 								value: data.value,
-								name: "",
+								name: this.city,
 								itemStyle: {
 									normal: {
 										color: {
