@@ -964,7 +964,8 @@ export default {
             //   this._list.splice(index, 1)
             // }
           }
-          this._list = this._list.filter(val => val.express != null && !val.express.specificationSize && val.sizeList && val.sizeList.length)
+          console.log(this._list)
+          this._list = this._list.filter(val => val.express != null && !val.express.sizeSpecs && val.sizeList && val.sizeList.length)
 
           var __result = [];
           var __obj = {};
