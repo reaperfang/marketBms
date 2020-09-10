@@ -23,7 +23,7 @@
                       <span>{{(item.fileSize ? Math.floor(item.fileSize / 1024 / 1024 * 100) / 100 + 'MB' : '-- MB')}}</span>
                     </div>
                     <div class="video_body">
-                      <p>{{item.name}}</p>
+                      <p>{{item.name || '无标题'}}</p>
                       <video
                         :src="item.filePath"
                         controls="controls"
