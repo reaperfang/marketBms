@@ -153,7 +153,7 @@
                     </div>
                     <i class="el-icon-warning-outline"></i>
                 </el-tooltip>
-                <el-input :disabled="!ruleForm.productCategoryInfoId || (ruleForm.productCategoryInfoId && (ruleForm.isSyncProduct == 1 && authHide))" v-model="singleSpec.code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
+                <el-input :disabled="!ruleForm.productCategoryInfoId || (ruleForm.productCategoryInfoId && (ruleForm.isSyncProduct == 1 && authHide))" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
             </el-form-item>
            
         </section>
