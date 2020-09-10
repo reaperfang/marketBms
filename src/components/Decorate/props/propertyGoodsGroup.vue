@@ -128,12 +128,12 @@
         <el-radio-group v-if="ruleForm.showContents.includes('4') && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonStyle">
           <el-radio :label="1">样式1</el-radio>
           <el-radio :label="2">样式2</el-radio>
-          <el-radio :label="3" :disabled="(ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 4 || ruleForm.listStyle === 5))">样式3</el-radio>
-          <el-radio :label="4" :disabled="(ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 4 || ruleForm.listStyle === 5))">样式4</el-radio>
+          <el-radio :label="3" :disabled="((ruleForm.listStyle === 2 || ruleForm.listStyle === 4 || ruleForm.listStyle === 5))">样式3</el-radio>
+          <el-radio :label="4" :disabled="((ruleForm.listStyle === 2 || ruleForm.listStyle === 4 || ruleForm.listStyle === 5))">样式4</el-radio>
           <el-radio :label="5">样式5</el-radio>
           <el-radio :label="6">样式6</el-radio>
-          <el-radio :label="7" :disabled="(ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 4 || ruleForm.listStyle === 5))">样式7</el-radio>
-          <el-radio :label="8" :disabled="(ruleForm.showTemplate === 2 && (ruleForm.listStyle === 2 || ruleForm.listStyle === 4 || ruleForm.listStyle === 5))">样式8</el-radio>
+          <el-radio :label="7" :disabled="((ruleForm.listStyle === 2 || ruleForm.listStyle === 4 || ruleForm.listStyle === 5))">样式7</el-radio>
+          <el-radio :label="8" :disabled="((ruleForm.listStyle === 2 || ruleForm.listStyle === 4 || ruleForm.listStyle === 5))">样式8</el-radio>
           <el-radio :label="9">样式9</el-radio>
         </el-radio-group>
         <el-input ref="buyInput" v-if="ruleForm.showContents.includes('4') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText" placeholder="请输入标题"></el-input>
