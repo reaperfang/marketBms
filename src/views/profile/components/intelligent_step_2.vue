@@ -179,7 +179,7 @@
         timerConfigure: null, // 定时任务，查询配置进度
         configureProgress: 0, // 查询配置进度 0 - 5?
         configureTextArray: [], // 配置进度 文字以及成功状态
-        dataTypeText: ["","运费模板", "商品", "商品分类", "创意设计", "微信公众号底部数据"],
+        dataTypeText: ["","运费模板", "商品", "商品分类", "创意设计", "微信公众号底部"],
       }
     },
     mounted() {
@@ -190,13 +190,14 @@
       if(this.configureFail) {
         this.isConfigureFail = true;
         this.isShowConfigureBox = true;
-        this.configureTextArray = [
-          {text: "运费模板", status: 2},
-          {text: "商品", status: 2},
-          {text: "商品分类", status: 2},
-          {text: "创意设计", status: 2},
-          {text: "微信公众号底部数据", status: 2},
-        ]
+        // this.configureTextArray = [
+        //   {text: this.dataTypeText[1], status: 2},
+        //   {text: this.dataTypeText[2], status: 2},
+        //   {text: this.dataTypeText[3], status: 2},
+        //   {text: this.dataTypeText[4], status: 2},
+        //   {text: this.dataTypeText[5], status: 2}
+        // ];
+        this.timer();
       }
     },
     methods: {
@@ -261,6 +262,7 @@
       timer() {
         const _this = this;
         this.configureTextArray = [];
+        clearInterval(_this.timerConfigure);
         this.timerConfigure = setInterval(function () {
 
           _this._apis.profile.intelligentConfigurationStatus({})
@@ -297,6 +299,8 @@
       againConfigure() {
 
         // this._apis.profile.intelligentEnableTemplate()
+        this.isConfigureFail = false;
+        this.timer();
       },
 
       /** 上一张模板 */
@@ -310,8 +314,7 @@
 
       /** 设置是否启用swiper */
       settingSwiper() {
-        console.table('%c' + this.$refs.templateList.clientWidth, 'color: deepskyblue');
-        if (this.$refs.templateList.clientWidth >= (255 * 5)) this.useSwiper = false
+        if (this.$refs.templateList.clientWidth >= (255 * 5)) this.useSwiper = false;
         else this.useSwiper = true
       },
 
@@ -359,6 +362,10 @@
       'industryId'(newValue, oldValue) {
         if (newValue !== null) this.fetchListData();
       }
+    },
+    beforeDestroy() {
+      // 用户返回或者离开
+      clearInterval(this.timerConfigure);
     }
   }
 </script>
