@@ -349,9 +349,16 @@ export default {
 
       /* 创建数据 */
     createList(datas) {
-      this.displayList = datas;
+      let tempData = [];
+      if(Array.isArray(datas)) {
+          tempData = datas.filter(item => item.status !== 0);
+      }else {
+          tempData = [];
+      }
+      
+      this.displayList = tempData;
       if(this.currentComponentData.data.source === 2) {
-          this.syncToMiddle('goodsListOfGroupChange', datas);
+          this.syncToMiddle('goodsListOfGroupChange', tempData);
       }
     },
 
