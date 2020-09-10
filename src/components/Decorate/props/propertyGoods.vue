@@ -351,7 +351,7 @@ export default {
     createList(datas) {
       this.displayList = datas;
       if(this.currentComponentData.data.source === 2) {
-          this.syncToMiddle('goodsListOfGroupChange', tempData);
+          this.syncToMiddle('goodsListOfGroupChange', datas);
       }
     },
 
