@@ -8,7 +8,7 @@
       <li class="step-item step-start selected"><span class="step-text">选择经营行业</span></li>
       <li class="step-item step-middle" :class="{'selected': stepCurrent >= 2}"><span class="step-text">预览模板</span></li>
       <li class="step-item step-middle" :class="{'selected': stepCurrent >= 3}"><span class="step-text">启用模板</span></li>
-      <li class="step-item step-end" :class="{'selected': stepCurrent >= 4}"><span class="step-text">基础建设</span></li>
+      <li class="step-item step-end" :class="{'selected': stepCurrent === 4}"><span class="step-text">基础建设</span></li>
     </ul>
 
     <!--  step_1  选择行业-->
@@ -23,13 +23,14 @@
 
     <!--  step_2  预览模板-->
     <step-preview
-      v-if="stepCurrent === 2 || (stepStatus === 0 && stepCurrent === 3)"
+      v-if="stepCurrent === 2"
       @update-step="updateStep"
       @update-template-id="updateTemplateId"
       :industry-id="industryId"
       :current-step="stepCurrent"
       :step-status="stepStatus"
       :step-id="stepId"
+      :configure-fail="configureFail"
     ></step-preview>
 
     <!--  step_3  启用模板-->
@@ -60,6 +61,7 @@
         stepArray: ['industry', 'preview', 'enable', 'base'], //
         industryId: null,
         templateId: null,
+        configureFail: false, // 启用模板失败 || 中途退出关闭
       }
     },
     created() {
@@ -74,7 +76,11 @@
           console.log(result);
           if(result) {
             // this.stepStatus = result.currentStep ? result.status === 1 ? result.currentStep + 1 : result.currentStep : 1;
-            this.stepCurrent = result.currentStep;
+            if(result.currentStep === 3 && result.status === 0) {
+              this.stepCurrent = 2;
+              this.configureFail = true;
+            } else this.stepCurrent = result.currentStep;
+
             this.stepStatus = result.status;
             this.stepId = result.id;
             this.industryId = result.chooseIndustryId;

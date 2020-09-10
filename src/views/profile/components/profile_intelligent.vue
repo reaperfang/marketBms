@@ -1,5 +1,5 @@
 <template>
-  <section v-loading="isLoading" v-if="currentStep < 4">
+  <section v-loading="isLoading" v-if="currentStep <= 4">
     <div class="profile_intelligent">
       <p class="p_i_title">
         智能开店：
@@ -71,8 +71,8 @@ export default {
 
       /** 智能开店体验引导 */
       toIntelligent() {
-        this.$router.push({ path: '/profile/intelligentGuide' });
-        // this.$router.push({ path: '/profile/intelligent' });
+        // this.$router.push({ path: '/profile/intelligentGuide' });
+        this.$router.push({ path: '/profile/intelligent' });
         // this._routeTo('intelligent', {isShowGuide: this.isFirst, stepStatus: this.stepStatus});
       },
 
@@ -105,7 +105,7 @@ export default {
       margin-top: 10px;
     }
   }
-  
+
   .to_intelligent {
     float: right;
   }
@@ -159,7 +159,7 @@ export default {
     background-color: #ccc;
     overflow-y: hidden;
   }
-  
+
   /deep/ .el-step .el-step__title.is-process, /deep/ .el-step__icon-inner {
     font-weight: normal;
   }

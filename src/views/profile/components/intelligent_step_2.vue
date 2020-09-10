@@ -155,6 +155,7 @@
       stepCurrent: 0,    // 当前步骤的状态
       industryId: null, // 行业id, 用于请求行业模板
       stepId: null,
+      configureFail: false,
     },
     data() {
       return {
@@ -186,7 +187,17 @@
         this.settingSwiper()
       });
       if (this.industryId !== null) this.fetchListData();
-      if(this.stepStatus === 0 && this.stepCurrent === 3) { this.isConfigureFail = true }
+      if(this.configureFail) {
+        this.isConfigureFail = true;
+        this.isShowConfigureBox = true;
+        this.configureTextArray = [
+          {text: "运费模板", status: 2},
+          {text: "商品", status: 2},
+          {text: "商品分类", status: 2},
+          {text: "创意设计", status: 2},
+          {text: "微信公众号底部数据", status: 2},
+        ]
+      }
     },
     methods: {
       /** 加载模板数据 */
@@ -234,6 +245,7 @@
           const result = await this._apis.profile.intelligentUpdateStep(params);
 
           // todo 调用 启用模板 接口
+          // const result = await this._apis.profile.intelligentUpdateStep(params);
 
           this.isShowConfigureBox = true;
           this.timer();
@@ -248,6 +260,7 @@
       /** 查询配置进度 */
       timer() {
         const _this = this;
+        this.configureTextArray = [];
         this.timerConfigure = setInterval(function () {
 
           _this._apis.profile.intelligentConfigurationStatus({})
@@ -263,7 +276,6 @@
                       status: item.status
                     });
                     if (item.status === 1) _this.configureProgress += 1;
-
                   }
                 })
               }
