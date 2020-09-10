@@ -110,6 +110,9 @@
           // changeStep 更改步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
           // status 状态 0 未完成 1 已完成
           const stepResult = await this._apis.profile.intelligentUpdateStep({changeStep: 4, status: 1});
+          // 跳转到概况页
+          this.$router.push("/profile/profile");
+
         } catch (e) {
           this.$message.error(e || '出错了，请稍后再试~');
           console.error(e)
@@ -214,13 +217,13 @@
       cursor: pointer;
     }
   }
-  /deep/ .el-form {
+    .el-form {
     position: relative;
 
     .preview_shop_pic {
       position: absolute;
-      width: 300px;
-      left: 418px;
+      width: 342px;
+      left: 395px;
       top: 0;
       z-index: 3;
       .bg_pic {
@@ -230,7 +233,7 @@
       .top {
         position: absolute;
         left: 50%;
-        top: 66px;
+        top: 76px;
         font-size: 16px;
         color: #000000;
         transform: translateX(-50%);
@@ -238,8 +241,8 @@
       }
       .center {
         position: absolute;
-        left: 69px;
-        top: 193px;
+        left: 79px;
+        top: 223px;
         font-size: 16px;
         color: #fff;
         font-weight: 600;

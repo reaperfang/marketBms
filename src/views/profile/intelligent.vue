@@ -76,10 +76,14 @@
           console.log(result);
           if(result) {
             // this.stepStatus = result.currentStep ? result.status === 1 ? result.currentStep + 1 : result.currentStep : 1;
-            if(result.currentStep === 3 && result.status === 0) {
+            if(result.currentStep === 4 && result.status === 1) {
+              this.$router.back();
+            }else if(result.currentStep === 3 && result.status === 0) {
               this.stepCurrent = 2;
               this.configureFail = true;
             } else this.stepCurrent = result.currentStep;
+
+            // this.stepCurrent = 4;
 
             this.stepStatus = result.status;
             this.stepId = result.id;
