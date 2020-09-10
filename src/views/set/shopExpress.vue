@@ -243,15 +243,68 @@
 </template>
 
 <script>
-import merchantDeliver from './components/merchantDeliver'
-import th3Deliver from './components/th3Deliver'
+
+
+import mapRadius from './components/mapRadius'
+import { debounce } from '@/utils/base.js'
+import order from '@/system/constant/order.js'
+// let isCompleted
+let isHasOtherWay
 export default {
-  name: 'shopExpress',
-  data() {
+  components: {
+    mapRadius
+  },
+
+  data () {
+    // 校验数字格式为0.00的否则提示如下错误
+    const validateFloat = (rule, value, callback) => {
+      if (Number.isNaN(+value)) {
+        return callback(new Error('必填项，请输入非负数，支持小数点后两位'));
+      }
+      if (+value * 1000 > 0) {
+        return callback();
+      } else {
+        return callback(new Error('必填项，请输入大于0的数字'));
+      }
+    };
+    const validateFloat2 = (rule, value, callback) => {
+      if (Number.isNaN(+value)) {
+        return callback(new Error('必填项，请输入非负数，支持小数点后三位'));
+      }
+      if (+value * 1000 > 0) {
+        return callback();
+      } else {
+        return callback(new Error('必填项，请输入大于0的数字'));
+      }
+    };
+    const validatePositiveInter = (rule, value, callback) => {
+      const reg = /^[1-9]+$/
+      if (!(value && reg.test(value))) {
+       return callback(new Error('必填项，请输入天数，仅支持输入大于0的正整数'));  
+      } 
+      if (Number(value) > 5) {
+        return callback(new Error('提前下单时间不能超过5天，请重新输入'));
+      }
+      return callback()
+    }
+    const validateExceedsRadiuo = (rule, value, callback) => {
+      const curr = parseFloat(value) * 100
+      const radius = parseFloat(this.ruleForm.radius) * 100
+      console.log(curr, radius)
+      if (curr > radius) {
+        callback(new Error('已超出服务半径，请重新输入'))
+      } else {
+        callback()
+      }
+    }
+    const validateRadius = (rule, value, callback) => {
+      if (value && this.ruleForm.isOpenLadderFreight === 1) {
+        this.$refs.ruleForm.validateField('distanceLt');
+        this.$refs.ruleForm.validateField('distancePlus');
+      } 
+      callback()
+    }
     return {
-<<<<<<< HEAD
-      currentTab: 'merchantDeliver',
-=======
       prevIndex: null,
       nextIndex: null,
       zoom: 4,
@@ -361,23 +414,61 @@ export default {
         }
       ],
       errWeekMsg: ''
->>>>>>> dev_v1.6.2
     }
   },
-  components: {
-    merchantDeliver,
-    th3Deliver
+
+  computed: {
+    isCompleted() {
+      return this.addressId && this.ruleForm.price
+    },
+    btnTxt() {
+      return this.address ? '修改': '新建'
+    },
+    getCenter() {
+      let latlng
+      latlng = (this.ruleForm.lat && this.ruleForm.lng) ?  [this.ruleForm.lat,this.ruleForm.lng] : []
+      console.log('---getCenter----',latlng)
+      return latlng
+    },
+    getSwitchTxt() {
+      return this.isOpen ? '已开启' : '已关闭'
+    },
+    getTimeSlot() {
+      return order.timeSlot
+    },
+    getCheckedweeks() {
+      const checkedweeks = []
+      this.ruleForm.weeks.forEach(item => {
+        const week = this.weeks.find(val => item === val.value)
+        if (week) {
+          checkedweeks.push(week.label)
+        }
+      })
+      let str = ''
+      if (checkedweeks.length > 0) {
+        str = checkedweeks.join('、')
+      }
+      return  str ? `【 ${str}】` : ''
+    },
+    cid(){
+        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        return shopInfo.id
+    },
+    shopInfo() {
+      return this.$store.state.shop.shopInfo
+    }
   },
+
   watch: {
-    currentTab(curr) {
-      console.log(curr)
-      // this.init()
-    }
+    // shopInfo(curr) {
+    //   console.log('-----watch-shopInfo------')
+    //   if (curr) {
+    //     this.getShopInfo(curr)
+    //   }
+    // }
   },
+
   created() {
-<<<<<<< HEAD
-    // this.init()
-=======
     this._formatDecimals = debounce(this.formatDecimals, 500)
     // if (this.shopInfo) {
     //   this.getShopInfo(this.shopInfo)
@@ -397,38 +488,13 @@ export default {
          this.ruleForm.radius = res2.deliverServiceRadius || null // 配送服务半径
       }
     })
->>>>>>> dev_v1.6.2
   },
-  destroyed() {
+
+  mounted() {
+    
   },
+
   methods: {
-<<<<<<< HEAD
-    hasPermission(auth) {
-      const localMsfList = localStorage.getItem('shopInfos');
-      let msfList = [];
-      if(localMsfList && JSON.parse(localMsfList) && JSON.parse(localMsfList).data && JSON.parse(localMsfList).data.msfList) {
-        msfList = JSON.parse(localMsfList).data.msfList
-      }
-      if(msfList){
-        if (auth) {
-          return msfList.some(item => auth == item.name ) || auth == '概况首页' || auth == '概况' || auth == '账号信息'
-        }else{
-          return true
-        }
-      }else {
-        return auth == '概况首页' || auth == '概况' || auth == '账号信息' ? true : false
-      }
-    },
-    init() {
-      // this.currentTab = 'quickDelivery'
-      // this.$nextTick(() => {
-        const currentTab = this.$route.query.currentTab
-        console.log('--currentTab---', currentTab)
-        if (currentTab) {
-          this.currentTab = currentTab
-        } else {
-          const auths = [
-=======
     // 获取发货地址
     getDeliveryAddress() {
       return this._apis.set.getAddressDefaultSender().then((response) => {
@@ -946,24 +1012,10 @@ export default {
         this.ruleForm.deliveryTimeType = res.subscribeTimeType || 1 // 买家预约时间类型 1-全天 2-自定义
         this.ruleForm.repeatCycle = res.subscribeTimeCustomizeType || 1 // 买家预约时间自定义类型 1-每天重复 2-每周重复
         const defaultVal = [ 
->>>>>>> dev_v1.6.2
           {
-            name: 'merchantDeliver',
-            title: '商家配送'
-          },{
-            name: 'th3Deliver',
-            title: '第三方配送'
-          }]
-          for(let i = 0; i < auths.length; i++) {
-            console.log(this.hasPermission(auths[i].title))
-            if (this.hasPermission(auths[i].title)) {
-            console.log(auths[i].name)
-              this.currentTab = auths[i].name
-              break
-            }
+            start: '',
+            end: ''
           }
-<<<<<<< HEAD
-=======
         ]
         console.log('-----res.subscribeTimeHourRanges--', res.subscribeTimeHourRanges)
         this.ruleForm.timePeriods = this.formatSubscribeTimeHourRanges(res.subscribeTimeHourRanges) || defaultVal // 每天重复的小时时间段(~和逗号分隔): 00:00:00~00:01:00,00:08:00~00:09:00,00:13:00~00:14:00
@@ -985,41 +1037,396 @@ export default {
         if (this.ruleForm.weeks.length <= 0) {
           this.errWeekMsg = '请点击编辑，选择重复日'
           isValidWeeks = false
->>>>>>> dev_v1.6.2
         }
-      // })
+      }
+      if (!this.ruleForm.lng || !this.ruleForm.lat) {
+        this.confirm({
+          title: "提示",
+          icon: true,
+          text: '当前地址无法获取经纬度，请重新修改发货地址',
+          confirmText: '我知道了',
+          showCancelButton: false
+        })
+        this.isLoading = false
+        return false
+      }
+      console.log('handleSubmit:repeatCycle')
+      this.$refs[formName].validate((valid) => {
+      console.log('handleSubmit:valid && isValidWeeks', valid, isValidWeeks)
+        if (valid && isValidWeeks) {
+      console.log('handleSubmit:valid && isValidWeeks')
+          this.updateOrderDeliverInfo()
+          // alert('submit!');
+          // this.isLoading = false
+        } else {
+        console.log('handleSubmit:valid && isValidWeeks: else')
+          // console.log('error submit!!');
+          this.isLoading = false
+          return false;
+        }
+      });
     },
-    handleClick(comp) {
-      console.log(comp)
-      this.currentTab = comp.name;
-      this.$router.replace({path: '/set/shopExpress', query:{currentTab: comp.name }})
+    getHourMinuteSecond(start) {
+       const date = new Date(start)
+        let hour = date.getHours()
+        let minute = date.getMinutes()
+        // let second = date.getSeconds()
+        // console.log('getHourMinuteSecond:before',hour,minute,second)
+        hour = +hour >= 10 ? hour : `0${hour}`
+        minute = +minute >= 10 ? minute : `0${minute}`
+        // second = +second >= 10 ? second : `0${second}`
+        // console.log('getHourMinuteSecond:after',hour,minute,second)
+        return `${hour}:${minute}`
+
+    },
+    getSubscribeTimeHourRanges() {
+      const timePeriods = this.ruleForm.timePeriods
+      const arr = timePeriods.map(item => {
+        let start = item.start
+        let end = item.end
+        start = this.getHourMinuteSecond(start)
+        end = this.getHourMinuteSecond(end)
+        return `${start}~${end}`
+      })
+      if (arr.length > 0) {
+        return arr.join(',')
+      }
+      return ''
+    },
+    getOrderDeliverReqData() {
+      const cid = this.cid
+      const deliverBasicFreight = this.ruleForm.basicFreight
+      const deliverRadiusDelta = this.ruleForm.distancePlus
+      const deliverRadiusFreightDelta = this.ruleForm.distancePlusPrice
+      const deliverRadiusNg = this.ruleForm.distanceLt
+      const deliverStartingPrice = this.ruleForm.price
+      const deliverWeightDelta = this.ruleForm.weightPlus
+      const deliverWeightFreightDelta = this.ruleForm.weightPlusPrice
+      const deliverWeightNg = this.ruleForm.weightLt
+      const advanceSubscribeDays = this.ruleForm.advanceDays
+      const isOpenLadderFreight = this.ruleForm.isOpenLadderFreight
+      const isOpenSubscribeDeliver = this.ruleForm.isReservationDelivery
+      const subscribeTimeCustomizeType = this.ruleForm.repeatCycle
+      const subscribeTimeType = this.ruleForm.deliveryTimeType
+      let subscribeTimeHourRanges
+      if (subscribeTimeType === 2) {
+        subscribeTimeHourRanges = { subscribeTimeHourRanges: this.getSubscribeTimeHourRanges()} // this.ruleForm.
+      }
+      const subscribeTimeWeekDays = this.ruleForm.weeks.sort().join(',')
+      return {
+        cid,
+        deliverBasicFreight,
+        deliverRadiusDelta,
+        deliverRadiusFreightDelta,
+        deliverRadiusNg,
+        deliverStartingPrice,
+        deliverWeightDelta,
+        deliverWeightFreightDelta,
+        deliverWeightNg,
+        advanceSubscribeDays,
+        isOpenLadderFreight,
+        isOpenSubscribeDeliver,
+        subscribeTimeCustomizeType,
+        ...subscribeTimeHourRanges,
+        subscribeTimeType,
+        subscribeTimeWeekDays
+      }
+    },
+    updateOrderDeliverInfo() {
+      const req = this.getOrderDeliverReqData()
+      console.log('---req---', req)
+      // 更新配送价格、时间
+      const p1 = this._apis.set.updateOrderDeliverInfo(req)
+      const id = this.cid
+      const data = {
+        id,
+        deliverRangeType: this.ruleForm.radiusType,
+        deliverServiceRadius: this.ruleForm.radius,
+        longitude: this.ruleForm.longitude,
+        latitude: this.ruleForm.latitude
+      }
+      // 更新店铺经度、纬度、配送半径
+      const p2 = this._apis.set.updateShopInfo(data)
+      // const p2 = this._apis.set.
+      Promise.all([p1, p2]).then(res => {
+        this.$store.dispatch('getShopInfo'); 
+        this.getOrderDeliverInfo()
+        if (this.isOpen) {
+          this.$message({
+              message: '保存成功',
+              type: 'success'
+          });
+        } else {
+          const str = `<p style="text-align: center;"><i class="el-icon-success" style="    font-size: 40px;color: rgba(108,213,33,1);"></i><span style="ertical-align: super;">保存成功</span></p>
+          <p style="text-align: center;color:#ccc;">您可以去开启商家配送了</p>
+          `
+          this.$confirm('您可以去开启商家配送了', '保存成功', {
+            // dangerouslyUseHTMLString: true,
+            distinguishCancelAndClose: true,
+            confirmButtonText: '开启',
+            cancelButtonText: '暂不开启',
+            center: true,
+            type: 'success'
+          }).then(()=> {
+            this.openMerchantDeliver()
+          }).catch((action) => {
+          });
+        }
+      }).catch(err => {
+        this.$message.error('保存失败');
+      }).finally(() => {
+        this.isLoading = false
+      })
     }
-  }
+   }
 }
 </script>
-
-<style rel="stylesheet/scss" lang="scss">
-
-</style>
-
 <style rel="stylesheet/scss" lang="scss" scoped>
-.tabs{
-  >>> .el-tabs__item {
-    height: 60px;
-    line-height: 60px;
-    font-size: 16px;
-    font-weight: 400;
-    color: #44434B;
-  }
-  >>> .el-tabs__header {
+  $color: rgba(68, 67, 75, 1);
+  .shopExpress {
     background-color: #fff;
-    margin:0;
-    padding: 0 20px 0 20px;
+    color:$color;
+    .dashed {
+      border-bottom: 1px dashed rgba(211, 211, 211, 1);
+    }
+    h2 {
+      position: relative;
+      padding:  20px 0;
+      font-size:14px;
+      font-weight:400;
+      line-height:20px;
+      em {
+        position: absolute;
+        right: 100%;
+        top: 20px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #fd4c2b;
+        line-height: 25px;
+        padding-right: 5px;
+      }
+    }
+    .switch {
+      padding: 20px 0;
+      margin: 0 20px;
+      font-size: 14px;
+      line-height: 22px;
+    }
+    .prompt {
+      color: rgba(61, 67, 74, .5);
+      font-size: 12px;
+      .time-range {
+        color: #3D434A;
+        /deep/ span {
+          text-decoration: underline;
+        }
+      }
+    }
+    .section {
+      margin: 0 20px;
+    }
+    .delivery-area {
+      .radius {
+        span {
+          padding:0 10px;
+          position: relative;
+          em {
+            position: absolute;
+            left: 0;
+            top: 0;
+            line-height: 22px;
+            color:#FD4C2BFF;
+          }
+        }
+      }
+      /deep/ .el-radio-group label:last-child {
+        margin-left: 0;
+      }
+      .map {
+        margin-left: 120px;
+        padding-bottom: 40px;
+        max-width: 827px;
+        height: 400px;
+      }
+    }
+    .box {
+      margin-left: 120px;
+      background:rgba(249,249,249,1);
+      padding: 20px;
+      margin-bottom:20px;
+      .beforehand {
+        display: flex;
+        > .item {
+          width: 156px;
+          display: inline-block;
+          /deep/ .el-form-item__content {
+            margin-left: 0 !important;
+          }
+          /deep/ .el-form-item__error {
+            white-space: nowrap;
+          }
+        }
+        span {
+          position: relative;
+          padding: 0 10px;
+          line-height: 34px;
+          em {
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #fd4c2b;
+          }
+        }
+      }
+      .deliveryTimeType {
+        /deep/ .el-form-item__content {
+          margin-left: 0 !important;
+        }
+      }
+    }
+    .delivery-price {
+      > .item {
+        position: relative;
+        /deep/ .el-form-item__label {
+          text-align: right;
+        }
+        .group {
+          position:absolute;
+          left: 0;
+          top: 0;
+          /deep/ .el-radio {
+            padding-top: 10px;
+            padding-right: 45px;
+          }
+        }
+        .prompt {
+          position: relative;
+          min-height: 34px;
+          margin-left: 200px;
+          padding-left: 35px;
+          span {
+            position: absolute;
+            left: 0;
+            top: 0;
+          }
+        }
+      }
+      > .freight-range {
+        
+        li {
+          display: flex;
+          > .item {
+            width: 156px;
+            /deep/ .el-form-item__content {
+              margin-left: 0 !important;
+            }
+            /deep/ .el-form-item__error {
+              white-space: nowrap;
+            }
+          }
+          span {
+            position: relative;
+            padding: 0 10px;
+            line-height: 34px;
+            em {
+              position: absolute;
+              left: 0;
+              top: 0;
+              color: #fd4c2b;
+            }
+          }
+        }
+      }
+    }
+    .delivery-time {
+      .box {
+        margin-left: 140px;
+      }
+      // > .item {
+      //   width: 156px;
+      //   /deep/ .el-form-item__content {
+      //     margin-left: 0 !important;
+      //   }
+      //   /deep/ .el-form-item__error {
+      //     white-space: nowrap;
+      //   }
+      // }
+      .label {
+        position: relative;
+        padding-right: 30px;
+        .err {
+          position: absolute;
+          left: 0;
+          top: 20px;
+          color:#FD4C2B;
+        }
+      }
+      .repeatCycle {
+        /deep/ .el-form-item__content {
+        margin-left:80px;
+        }
+      }
+      .everyDayCon {
+        margin-left: 105px;
+        /deep/ .el-form-item__label {
+          text-align: right;
+        }
+        .btn-del {
+          font-size: 14px;
+          color: #fd4c2b;
+          padding: 0;
+          padding-bottom: 20px;
+          padding-left: 10px;
+        }
+      }
+      .timePeriods {
+        display: flex;
+        padding-bottom:10px;
+        span {
+          line-height: 34px;
+          padding: 0 10px 0 35px;
+        }
+        .line {
+          padding: 0 10px;
+        }
+        /deep/ .el-form-item__content {
+          margin-left: 0 !important;
+        }
+      }
+      
+      .btn {
+        position: relative;
+        padding-bottom: 25px;
+        &-add {
+          position: absolute;
+          left: 222px;
+          top: 0;
+        }
+      }
+    }
+    .btn {
+      padding-bottom:20px;
+      text-align: center;
+    }
   }
-}
-.main{
-  width: 100%;
-  padding: 20px;
-  background: #fff;
-}
+  .timeslot-popover {
+    position: relative;
+    padding-top: 15px;
+    p, li {
+      font-size: 14px;
+      line-height: 20px;
+      color: rgba(22,22,23,1);
+    }
+    li {
+      letter-spacing: 3px;
+    }
+    i {
+      position: absolute;
+      right: -5px;
+      top: -5px;
+      cursor: pointer;
+      font-size: 20px;
+      color: #B6B5C8;
+    }
+  }
 </style>
