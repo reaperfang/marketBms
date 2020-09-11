@@ -13,7 +13,7 @@
       <p class="i_title i_emtry">属性比例：</p>
       <div class="chart1_container clearfix">
         <div class="chart1">
-          <ip1Chart :title="'测试图表'" ref="ip1"></ip1Chart>
+          <ip1Chart :title="'测试图表'" ref="ip1" v-loading="loading1"></ip1Chart>
         </div>
         <div class="chart1_info">
           <p>累计用户数：{{grandTotal}}</p>
@@ -52,7 +52,7 @@
         </div>
       </div>
       <div class="chart2_container">
-        <ip2Chart :title="'测试图表'" ref="ip2"></ip2Chart>
+        <ip2Chart :title="'测试图表'" ref="ip2" v-loading="loading2"></ip2Chart>
       </div>
       <p class="i_title">支付趋势：</p>
       <div class="i_line clearfix">
@@ -70,7 +70,7 @@
 
       <div class="chart3_container clearfix" v-if="ip3Show">
         <div class="chart3">
-          <ip3Chart :title="'测试图表'" ref="ip3"></ip3Chart>
+          <ip3Chart :title="'测试图表'" ref="ip3" v-loading="loading3"></ip3Chart>
         </div>
         <div class="chart3_info">
           <el-row :gutter="20">
@@ -142,7 +142,10 @@ export default {
       date2: '',
       startTime2: "",
       endTime2: "",
-      ip3Show:true
+      ip3Show:true,
+      loading1: true,
+      loading2: true,
+      loading3: true,
     };
   },
   created() {
@@ -168,6 +171,7 @@ export default {
       let data = {
         source: null
       };
+      this.loading1 = true;
       this._apis.data
         .attributeRatio(data)
         .then(response => {
@@ -177,9 +181,11 @@ export default {
           //arr.push({ value: 10, name: "非会员" }, { value: 20, name: "会员" });
           arr.push({value: response.customerNum ,name: '非会员'},{value: response.memberNum ,name: '会员'});
           this.$refs.ip1.con(arr);
+          this.loading1 = false;
         })
         .catch(error => {
-          console.log('error',error)
+          console.log('error',error);
+          this.loading1 = false;
         });
     },
     //获取开始日期及结束日期
@@ -242,13 +248,16 @@ export default {
         endTime: this.endTime1,
         nearDay: this.nearDay1
       };
+      this.loading2 = true;
       this._apis.data
         .memberTrend(data)
         .then(response => {
           this.$refs.ip2.con(response);
+          this.loading2 = false;
         })
         .catch(error => {
-          console.log('error',error)
+          console.log('error',error);
+          this.loading2 = false;
         });
     },
     changeDayM(val) {
@@ -268,6 +277,7 @@ export default {
         startTime: this.startTime2,
         endTime: this.endTime2
       };
+      this.loading3 = true;
       this._apis.data
         .paymentTrend(data)
         .then(response => {
@@ -280,10 +290,12 @@ export default {
               response
             );
           }
+          this.loading3 = false;
         })
         .catch(error => {
           this.ip3Show = false
-          console.log('error',error)
+          console.log('error',error);
+          this.loading3 = false;
         });
     },
     changeDayPay(val) {
