@@ -1,7 +1,7 @@
 <template>
     <div class="aftermarketDeliveryInformation">
         <!-- 普通快递 -->
-        <template v-if="orderAfterSale.deliveryWay == 1">
+        <template v-if="orderAfterSale.deliveryWay == 1 || orderAfterSale.deliveryWay == 4">
         <div v-if="orderAfterSale.returnExpressNo" class="delivery-information-header">
             用户退货
         </div>

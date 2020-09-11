@@ -83,7 +83,7 @@
           prop="sendTime"
           label="发送时间"
           sortable = "custom"
-          align="center">
+          align="right">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -261,7 +261,10 @@ export default {
   border-bottom-color:#44434B;
 }
 /deep/.el-table--small td{
-  padding:16px 0;
+  padding:16px 10px;
+}
+/deep/.el-table--small th{
+  padding:8px 0px 8px 10px;
 }
 </style>
 

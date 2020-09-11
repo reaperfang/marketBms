@@ -707,7 +707,7 @@ export default {
                 width: calc(100% - 100px);
             }
             .righter-col {
-                border-left: 2px solid #CACFCB;
+                //border-left: 2px solid #CACFCB;
                 padding: 10px 20px;
             }
         }

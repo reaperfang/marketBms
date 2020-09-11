@@ -40,5 +40,6 @@ export default {
 .main{
   background: #fff;
   padding:20px;
+  padding-top:0;
 }
 </style>

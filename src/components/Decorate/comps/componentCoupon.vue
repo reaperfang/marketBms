@@ -5,11 +5,11 @@
       <template v-if="hasRealData || hasFakeData">
         <!-- 样式一 -->
         <div class="coupon_first componentCoupon" v-if="hasRealData">
-          <ul ref="scrollContent" class="clearfix" :class="'list'+currentComponentData.data.listStyle+' couponStyle'+currentComponentData.data.couponStyle">
+          <ul ref="scrollContent" class="clearfix" :class="'list'+listStyle+' couponStyle'+currentComponentData.data.couponStyle">
             <!-- status:true时候是已领取,hideScrambled:false, -->
             <template v-for="(item, key) in displayList">
               <li v-if="!(currentComponentData.hideScrambled==true&&item.receiveType!=1&&item.receiveType!=8)" :style="item.status=='true'?imgs1:imgs " :class="{'list-received': item.status=='true'}" :key="key">
-                <template v-if="currentComponentData.data.listStyle !== 3">
+                <template v-if="listStyle !== 3">
                   <div class="first_money">
                     <span :class="style1">{{getTitle(item)}}</span>
                     <span :class="style1">{{getContent(item)}}</span>
@@ -62,10 +62,13 @@ export default {
     }
   },
   computed: {
+    listStyle() {
+      return this.currentComponentData.data.listStyle || 1;
+    },
     style1() {
       // 样式为4的时候，颜色边框是什么就是是什么颜色否则走最外层默认定义的白色字体。同时当颜色为第三种的时候（白底），颜色为红色
       return [
-        this.currentComponentData.data.couponStyle === 3 && this.currentComponentData.data.listStyle !== 3 ? "col_" + this.currentComponentData.data.couponColor : "",
+        this.currentComponentData.data.couponStyle === 3 && this.listStyle !== 3 ? "col_" + this.currentComponentData.data.couponColor : "",
         this.currentComponentData.data.couponColor === 4 ? "col_1" : ""
       ];
     },
@@ -80,7 +83,7 @@ export default {
       return {
         backgroundImage:
           "url(" +
-          require(`@/assets/images/shop/coupon/listStyle${this.currentComponentData.data.listStyle}/style${this.currentComponentData.data.couponStyle}-color${this.currentComponentData.data.couponColor}.png`) +
+          require(`@/assets/images/shop/coupon/listStyle${this.listStyle}/style${this.currentComponentData.data.couponStyle}-color${this.currentComponentData.data.couponColor}.png`) +
           ")",
         backgroundRepeat: "no-repeat",
         backgroundSize: "100% 100%"
@@ -90,7 +93,7 @@ export default {
       return {
         backgroundImage:
           "url(" +
-          require(`@/assets/images/shop/coupon/listStyle${this.currentComponentData.data.listStyle}/over-style${this.currentComponentData.data.couponStyle}.png`) +
+          require(`@/assets/images/shop/coupon/listStyle${this.listStyle}/over-style${this.currentComponentData.data.couponStyle}.png`) +
           ")",
         backgroundRepeat: "no-repeat",
         backgroundSize: "100% 100%"

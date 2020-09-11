@@ -38,7 +38,7 @@ export default {
     /* 初始化表单数据 */
     initRuleForm() {
       if (this.data) {
-        this.ruleForm = this.data;
+        this.ruleForm = Object.assign({}, this.ruleForm, this.data);
       }
       this.ruleForm.saveCallBack = this.saveCallBack; //保存时需要触发的回调函数
       this.emitChangeRuleForm(this.ruleForm);

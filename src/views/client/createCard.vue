@@ -951,7 +951,7 @@ export default {
     margin-right: 20px;
   }
   .l_title{
-    padding-left: 20px;
+    // padding-left: 20px;
   }
   .cardImg {
     width: 324px;

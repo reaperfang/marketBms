@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" :class="{'shopMain-wrapper': currentTab === 'shopMainDecorated'}">
     <el-tabs v-model="currentTab">
       <el-tab-pane label="店铺主页" :name="shopMain"></el-tab-pane>
       <el-tab-pane label="个人中心" name="personCenter"></el-tab-pane>
@@ -88,4 +88,11 @@ export default {
 .loading_wrapper{
   width:100%;
 }
+</style>
+<style lang="scss">
+  .shopMain-wrapper {
+    /deep/ .phone-body {
+      height: calc(100% - 64px) !important;
+    }
+  }
 </style>

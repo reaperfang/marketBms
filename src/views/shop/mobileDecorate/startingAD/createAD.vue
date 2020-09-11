@@ -5,7 +5,7 @@
         <img :src="require('@/assets/images/shop/editor/phone_head.png')" alt="">
         <span>页面广告</span>
       </div>
-      <div class="phone-body" v-calcHeight="146+20">
+      <div class="phone-body" v-calcHeight="164">
         <div class="img_wrapper">
           <img :src="ruleForm.imagePath" alt="">
           <i></i>
@@ -267,6 +267,15 @@ export default {
 .upload_tips{
   color:rgba(211,211,211,1);
 }
+/deep/ .module.props {
+  &>form {
+    border: 0;
+  }
+  .block.button {
+    border: 0;
+  }
+}
+
 .module {
   &.view {
     .phone-body {

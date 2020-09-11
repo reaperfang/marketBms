@@ -157,7 +157,7 @@ export function goodsSpecsFilter(value) {
           str += _value[i] + ','
       }
   }
-
+  str = str.replace(/(^.*)\,$/, '$1')
   return str
 }
 

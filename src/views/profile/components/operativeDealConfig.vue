@@ -2,7 +2,7 @@
    <div class="operativeDealConfig">
     <steps class="steps" :step="step"></steps>
     <template v-if="isInitCompleted">
-      <h2>线上生意又进一步，完善下面的工作吧!</h2>
+      <h2>线上生意又进一步，完善下面的工作吧！</h2>
       <ul>
         <li>
           <p><i :class="[isHasGoods ? 'icon-success' : 'el-icon-error']"></i><span>上传您的的第一个商品：</span></p>

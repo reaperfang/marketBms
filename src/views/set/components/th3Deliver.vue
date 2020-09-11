@@ -60,6 +60,18 @@
           </div>
        </div>
      </div>
+     <div class="row">
+       <div class="label">
+         自动呼叫：
+       </div>
+       <div class="content">
+         <div>
+          <el-radio v-model="isOpenAutoCall" :label="1">开启</el-radio>
+          <el-radio v-model="isOpenAutoCall" :label="0">关闭</el-radio>
+         </div>
+         <p>说明：开通自动呼叫后，使用第三方配送的订单，在商户余额充足的情况下，将在订单付款完成后自动发单给第三方， 若商户余额不足则无法执行自动呼叫，需要手动接单给第三方发单。</p>
+       </div>
+     </div>
      <div class="btn" v-show="btnShow">
       <el-button class="register" @click="handleClickRegister" type="primary" size="small">注册新的达达账号</el-button>
      </div>
@@ -82,8 +94,10 @@
 
 <script>
 import protocolDialog from "@/views/set/dialogs/protocolDialog";
+import registerDialog from "@/views/set/dialogs/registerDialog";
 export default {
   components: {
+    registerDialog,
     protocolDialog
   },
 
@@ -109,6 +123,7 @@ export default {
       ],
       dialogVisible: true,
       currentDialog: "",
+      isOpenAutoCall: 1
     }
   },
 
