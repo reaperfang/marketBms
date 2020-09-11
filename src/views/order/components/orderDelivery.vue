@@ -177,8 +177,13 @@
                                 <span v-permission="['订单', '发货管理', '订单发货', '发货']" v-if="!scope.row.isFillUp" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${scope.row.orderId}&_ids=${scope.row.id}`)">发货</span>
                                 <span v-if="scope.row.isFillUp && scope.row.deliveryWay != 4" @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
                             </template>
-                            <template v-if="scope.row.status == 5 && scope.row.deliveryWay == 4">
-                                <span @click="verificationHandler(scope.row)">核销验证</span>
+                            <template v-if="scope.row.status == 5">
+                                <template v-if="scope.row.deliveryWay == 4">
+                                    <span @click="verificationHandler(scope.row)">核销验证</span>
+                                </template>
+                                <template v-else>
+                                    <span v-if="scope.row.isFillUp" @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
+                                </template>
                             </template>
                         </div>
                     </template>
