@@ -539,7 +539,11 @@ export default {
                 [`${this.listQuery.searchTimeType}TimeEnd`]: this.listQuery.orderTimeValue ? utils.formatDate(this.listQuery.orderTimeValue[1], "yyyy-MM-dd hh:mm:ss") : ''
             })
             this._apis.order.orderSendPageList(params).then((res) => {
-                this.tableData = res.list
+                if(this.listQuery.status == 3) {
+                    this.tableData = res.list.filter(item => item.isFillUp != 1)
+                } else {
+                    this.tableData = res.list
+                }
                 this.total = +res.total
                 this.loading = false
             }).catch(error => {
