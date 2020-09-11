@@ -256,7 +256,7 @@ export default {
     margin-bottom:20px;
     .fr_channel{
         float:left;
-        margin-left:30px;
+        // margin-left:30px;
     }
 }
 .p_container{
@@ -264,7 +264,7 @@ export default {
     background-color: #fff;
     .pane_container{
         color: #3D434A;
-        padding: 23px 38px;
+        // padding: 23px 38px;
         .p_title{
             font-size: 16px;
 			line-height: 16px;

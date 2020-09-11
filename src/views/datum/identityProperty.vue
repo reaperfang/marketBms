@@ -336,7 +336,7 @@ export default {
     color: #3d434a;
     .i_title {
       font-weight: bold;
-      margin: 23px 0 23px 0;
+      margin: 0 0 23px 0;
 		padding-top: 23px;
 		border-top: 1px dashed #d3d3d3;
     }
