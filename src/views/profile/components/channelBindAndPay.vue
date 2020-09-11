@@ -1,30 +1,29 @@
 <template>
-   <div class="channelBindAndPay">
+   <div class="channelBindAndPay" v-if="isInit">
     <steps class="steps" :step="step"></steps>
-    
       <h2>请绑定您的经营渠道</h2>
-      <ul style="height: 287px;" v-loading="!isInitCompleted" element-loading-background="rgba(255,255,255,1)" >
-        <li v-if="isInitCompleted">
-          <p><i :class="[isAuthGzhOrXcx ? 'icon-success' : 'el-icon-error']"></i><span>渠道绑定：</span></p>
-          <p class="prompt">绑定微信小程序和公众号，推广您的店铺</p>
-          <div class="btn-area">
-            <div class="gzh" v-if="isHasBindGzh">
-              <el-button class="btn-opeate" :disabled="isBindGzh" @click="goGzh">授权微信公众号</el-button>
-              <p class="success" v-if="isBindGzh">公众号授权成功</p>
-            </div>
-            <div class="xcx" v-if="isHasBindXcx">
-              <el-button class="btn-opeate" :disabled="isBindXcx" @click="goXcx">授权微信小程序</el-button>
-              <p class="success" v-if="isBindXcx">小程序授权成功</p>
-            </div>
-          </div>
-        </li>
-        <li v-if="isInitCompleted" class="pay">
-          <p><i :class="[isOpenPay ? 'icon-success' : 'el-icon-error']"></i><span>支付开通：</span></p>
-          <div class="btn-area">
-              <el-button class="btn-opeate" :disabled="!isAuthGzhOrXcx" @click="setPayInfo">开启支付</el-button>
-              <p class="prompt2">请您先进行【渠道绑定】操作后再进行【开启支付】操作</p>
-          </div>
-        </li>
+      <ul>
+       <li>
+         <p><i :class="[isAuthGzhOrXcx ? 'icon-success' : 'el-icon-error']"></i><span>渠道绑定：</span></p>
+         <p class="prompt">绑定微信小程序和公众号，推广您的店铺</p>
+         <div class="btn-area">
+           <div class="gzh" v-if="isHasBindGzh">
+             <el-button class="btn-opeate" :disabled="isBindGzh" @click="goGzh">授权微信公众号</el-button>
+             <p class="success" v-if="isBindGzh">公众号授权成功</p>
+           </div>
+           <div class="xcx" v-if="isHasBindXcx">
+            <el-button class="btn-opeate" :disabled="isBindXcx" @click="goXcx">授权微信小程序</el-button>
+             <p class="success" v-if="isBindXcx">小程序授权成功</p>
+           </div>
+         </div>
+       </li>
+       <li class="pay">
+         <p><i :class="[isOpenPay ? 'icon-success' : 'el-icon-error']"></i><span>支付开通：</span></p>
+         <div class="btn-area">
+            <el-button class="btn-opeate" :disabled="!isAuthGzhOrXcx" @click="setPayInfo">开启支付</el-button>
+            <p class="prompt2">请您先进行【渠道绑定】操作后再进行【开启支付】操作</p>
+         </div>
+       </li>
       </ul>
       <div class="btn">
         <el-button class="prev" @click="goPrev">上一步</el-button>
@@ -49,7 +48,7 @@ export default {
 
   data () {
     return {
-      isInitCompleted: false, // 是否完成初始化
+      isInit: false,
       loading: false,
       isDisabled: false,
       isBindGzh: false, // 是否绑定微信成功
@@ -186,6 +185,22 @@ export default {
       });
       let routeData = this.$router.resolve({ path: '/set/wxSet' });
       window.open(routeData.href, '_blank');
+    },
+    ApiGetShopInfo() {
+      let id = this.cid;
+      return new Promise(() => {
+        
+      })
+      this._apis.set
+        .getShopInfo({ id: id })
+        .then(response => {
+          
+        })
+        .catch(error => {
+          console.log(error)
+          this.$message.error(error || '查询失败');
+
+        });
     },
     getShopInfo() {
       let id = this.cid;
