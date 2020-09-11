@@ -1,7 +1,7 @@
 <template>
 <div>
     <!-- 悬浮按钮 数据大屏 -->
-    <router-link v-permission="['数据', '实时概况','默认页面', '数据大屏']" class="viewBut" tag="a" target="_blank" :to="{ name: 'dashboard'}">
+    <router-link v-permission="['数据', '实时概况','默认页面', '查看']" class="viewBut" tag="a" target="_blank" :to="{ name: 'dashboard'}">
         <img src="@/assets/images/realtime/curtime.png" alt="">
     </router-link>
     <!-- <div class="viewBut" @click="_routeTo('dashboard')"><img src="@/assets/images/realtime/curtime.png" alt=""></div> -->
