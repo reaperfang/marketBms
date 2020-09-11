@@ -1486,4 +1486,12 @@ export default {
 /deep/ .el-form-item.expressNos {
   margin-bottom: 0;
 }
+ @media (max-width: 1440px) {
+      .goods-specs{
+        width:150px !important;
+    }
+    .bulk-delivery .table-container .col[data-v-291bba69]:first-child {
+      margin-right: 10px;
+    }
+}
 </style>

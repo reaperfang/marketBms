@@ -143,6 +143,26 @@ export function orderStatusFilter(status) {
   }
 }
 
+//售后单状态过滤器   
+export function orderAfterSaleStatusFilter(status) {
+  switch (status) {
+    case 0:
+      return '待付款'
+    case 1:
+      return '待成团'
+    case 2:
+      return '已关闭'
+    case 3:
+      return '待发货'
+    case 4:
+      return '部分发货'
+    case 5:
+      return '待收货'
+    case 6:
+      return '已完成'
+  }
+}
+
 //商品规格过滤器
 export function goodsSpecsFilter(value) {
   let _value
