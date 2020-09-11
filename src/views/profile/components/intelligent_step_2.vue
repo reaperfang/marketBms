@@ -30,7 +30,7 @@
                   <template v-else>手机预览</template>
                 </span>
                   <span class="view_button" :class="{'selected': item.id === selectTemplateId}"
-                        @click="selectedId(item.id)">
+                        @click="selectedId(item.id, item.cid)">
                   <template v-if="item.id === selectTemplateId"> 取消选择 </template>
                   <template v-else>选  择</template>
                 </span>
@@ -46,7 +46,6 @@
               <swiper-slide ref="mySwiperSlide" :key="item.id">
 
                 <p class="template_name"> {{item.name}} </p>
-
                 <div class="view" :class="{'selected': item.id === selectTemplateId}">
                   <span class="badge"></span>
                   <div class="view_scroll">
@@ -69,7 +68,7 @@
                       <template v-else>手机预览</template>
                     </span>
                     <span class="view_button" :class="{'selected': item.id === selectTemplateId}"
-                          @click="selectedId(item.id)">
+                          @click="selectedId(item.id, item.cid)">
                       <template v-if="item.id === selectTemplateId"> 取消选择 </template>
                       <template v-else>选  择</template>
                     </span>
@@ -136,7 +135,7 @@
 
       <!--   有一项失败了就显示   -->
       <div slot="footer" v-show="isConfigureFail">
-        <el-button type="primary" @click="againConfigure"> 再次加载</el-button>
+        <el-button type="primary" @click="againConfigure" style="font-size: 14px;"> 再次加载</el-button>
       </div>
     </el-dialog>
 
@@ -151,9 +150,11 @@
     name: "intelligent_preview",
     components: {Swiper, SwiperSlide},
     props: {
-      stepStatus: 0,    // 当前步骤的状态
-      stepCurrent: 0,    // 当前步骤的状态
-      industryId: null, // 行业id, 用于请求行业模板
+      stepStatus: 0,      // 当前步骤的状态
+      stepCurrent: 0,     // 当前步骤的状态
+      industryId: null,   // 行业id, 用于请求行业模板
+      templateId: null,   //模板id, 用于回显所选店铺模板
+      templateCid: null,   //模板id, 用于回显所选店铺模板
       stepId: null,
       configureFail: false,
     },
@@ -172,6 +173,7 @@
         prevStepLoading: false, // 上一步loading
         useSwiper: true,  // 是否启用swiper
         selectTemplateId: null, // 当前选择的模板id
+        tempCid: null,
         isShowConfirmBox: false, // 是否显示确认dialog
         isShowConfigureBox: false, // 是否显示配置dialog
         isConfigureLoading: false, // 是否在配置中
@@ -184,21 +186,23 @@
     },
     mounted() {
       this.$nextTick(() => {
-        this.settingSwiper()
+        this.settingSwiper();
+        if (this.industryId !== null) this.fetchListData();
+        if (this.templateId) this.selectTemplateId = this.templateId;
+        if (this.templateCid) this.tempCid = this.templateCid;
+        if (this.configureFail) {
+          this.isConfigureFail = true;
+          this.isShowConfigureBox = true;
+          this.configureTextArray = [
+            {text: this.dataTypeText[1], status: 2},
+            {text: this.dataTypeText[2], status: 2},
+            {text: this.dataTypeText[3], status: 2},
+            {text: this.dataTypeText[4], status: 2},
+            {text: this.dataTypeText[5], status: 2}
+          ];
+          // this.timer();
+        }
       });
-      if (this.industryId !== null) this.fetchListData();
-      if(this.configureFail) {
-        this.isConfigureFail = true;
-        this.isShowConfigureBox = true;
-        // this.configureTextArray = [
-        //   {text: this.dataTypeText[1], status: 2},
-        //   {text: this.dataTypeText[2], status: 2},
-        //   {text: this.dataTypeText[3], status: 2},
-        //   {text: this.dataTypeText[4], status: 2},
-        //   {text: this.dataTypeText[5], status: 2}
-        // ];
-        this.timer();
-      }
     },
     methods: {
       /** 加载模板数据 */
@@ -242,16 +246,17 @@
       async enableConfigure() {
         if (this.isConfigureFail) return;
         try {
-          const params = {chooseTemplateId: this.selectTemplateId, changeStep: 3, status: 0, id: this.stepId};
-          const result = await this._apis.profile.intelligentUpdateStep(params);
+          let params = {chooseTemplateId: this.selectTemplateId, changeStep: 3, status: 0, id: this.stepId};
+          let result = await this._apis.profile.intelligentUpdateStep(params);
 
-          // todo 调用 启用模板 接口
-          // const result = await this._apis.profile.intelligentUpdateStep(params);
+          let enableTemplate = await this._apis.profile.intelligentEnableTemplate({tempCid: this.selectTemplateId});
 
           this.isShowConfigureBox = true;
           this.timer();
-        }catch (e) {
+
+        } catch (e) {
           this.$message.error(e || "网络错误，请稍后再试")
+
         } finally {
           this.isShowConfirmBox = false;
         }
@@ -296,11 +301,15 @@
       },
 
       /** 再次加载 */
-      againConfigure() {
+      async againConfigure() {
+        try {
+          let result = await this._apis.profile.intelligentEnableTemplate({tempCid: this.selectTemplateId});
+          this.isConfigureFail = false;
+          this.timer();
+        }catch (e) {
+          this.$message.error( e || "网络错误，请稍后再试")
+        }
 
-        // this._apis.profile.intelligentEnableTemplate()
-        this.isConfigureFail = false;
-        this.timer();
       },
 
       /** 上一张模板 */
@@ -319,8 +328,14 @@
       },
 
       /** 选择模板 */
-      selectedId(id) {
-        this.selectTemplateId = this.selectTemplateId === id ? null : id;
+      selectedId(id, cid) {
+        if (this.selectTemplateId === id) {
+          this.selectTemplateId = null;
+          this.tempCid = null;
+        } else {
+          this.selectTemplateId = id;
+          this.tempCid = cid;
+        }
       },
 
       /** 上一步 */
@@ -619,10 +634,9 @@
         line-height: 20px;
       }
 
-      .el-message-box__btns {
-        .el-button--small {
-          font-size: 14px;
-        }
+      .el-button--small {
+        font-size: 14px;
+        /*padding: 8px 11px;*/
       }
 
 

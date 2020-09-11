@@ -52,7 +52,6 @@
       changeIndustry({id}) {
         this.industryAct = id;
         this.$emit('update-industry-id', this.industryAct);
-        console.log('industryAct:   ', this.industryAct);
       },
 
       /** 进行下一步 */
@@ -79,7 +78,7 @@
 
 <style lang="scss" scoped>
   .intelligent_industry {
-    padding: 20px;
+    padding: 2px;
   }
 
   .i_industries {
@@ -87,7 +86,7 @@
     align-items: center;
     justify-content: space-between;
     margin: 110px auto 200px;
-    width: 800px;
+    width: 804px;
 
     .i_industry {
       flex: 0 0 236px;

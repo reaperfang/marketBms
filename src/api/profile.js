@@ -30,7 +30,7 @@ export function getProductNews(data) {
   })
 }
 
-// 获取智能开店的进度步骤以及总首次登录状态
+// 获取智能开店的进度步骤
 export function getIntelligentProgress(data) {
   return request({
     target: 'DECORATION_SMART_STORE_OPEN_STEPS_FIND_PROCESSOR',
@@ -49,16 +49,6 @@ export function getIntelligentIndustry(data) {
   })
 }
 
-// 是否显示再次加载弹窗(第三步启用模板是否失败了)
-export function getIntelligentEnableStatus(data) {
-  return request({
-    target: '',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
-
 // 获取预览步骤的店铺模板列表
 export function getIntelligentPreViewTemplate(data) {
   return request({
@@ -72,9 +62,9 @@ export function getIntelligentPreViewTemplate(data) {
 // 启用模板 / 再次加载
 export function intelligentEnableTemplate(data) {
   return request({
-    target: '',
+    target: 'DECORATION_SMART_STORE_TEMPLATE_ENABLE_PROCESSOR',
     method: 'post',
-    apiType: 'manager',
+    apiType: 'decorate',
     data
   })
 }
@@ -93,16 +83,6 @@ export function intelligentConfigurationStatus(data) {
 export function getwxBindStatus (data) {
   return request({
     target: 'SHOP-API-WXBIND-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
-
-// 保存基础店铺信息表单
-export function intelligentSaveBase(data) {
-  return request({
-    target: '',
     method: 'post',
     apiType: 'manager',
     data

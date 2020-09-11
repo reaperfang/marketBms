@@ -66,7 +66,7 @@
   .intelligent_enable {
     margin: 0 auto;
     width: 560px;
-    padding-top: 7px;
+    padding-top: 27px;
 
     .enable_title {
       font-size: 24px;
@@ -79,7 +79,7 @@
       .icon-enable-success {
         width: 72px;
         height: 72px;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
         vertical-align: top;
       }
     }

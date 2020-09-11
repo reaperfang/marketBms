@@ -122,7 +122,7 @@
   }
 
   .i_base_wrap {
-    width: 850px;
+    width: 848px;
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;

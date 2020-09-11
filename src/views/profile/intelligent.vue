@@ -27,6 +27,8 @@
       @update-step="updateStep"
       @update-template-id="updateTemplateId"
       :industry-id="industryId"
+      :template-id="templateId"
+      :template-cid="templateCid"
       :current-step="stepCurrent"
       :step-status="stepStatus"
       :step-id="stepId"
@@ -61,6 +63,7 @@
         stepArray: ['industry', 'preview', 'enable', 'base'], //
         industryId: null,
         templateId: null,
+        templateCid: null,
         configureFail: false, // 启用模板失败 || 中途退出关闭
       }
     },
@@ -73,22 +76,22 @@
       async fetchIntelligentStatus() {
         try {
           const result = await this._apis.profile.getIntelligentProgress();
-          console.log(result);
           if(result) {
-            // this.stepStatus = result.currentStep ? result.status === 1 ? result.currentStep + 1 : result.currentStep : 1;
             if(result.currentStep === 4 && result.status === 1) {
               this.$router.back();
-            }else if(result.currentStep === 3 && result.status === 0) {
+            } else if(result.currentStep === 3 && result.status === 0) {
               this.stepCurrent = 2;
               this.configureFail = true;
             } else this.stepCurrent = result.currentStep;
 
-            // this.stepCurrent = 4;
-
-            this.stepStatus = result.status;
             this.stepId = result.id;
-            this.industryId = result.chooseIndustryId;
-            this.chooseTemplateId = result.chooseTemplateId;
+            this.industryId = result.chooseIndustryId || null;
+            this.templateId = result.chooseTemplateId || null;
+            this.templateCid = result.tempCid || null;
+
+            // 假数据
+            // this.stepCurrent = 1;
+            // this.stepStatus = 1;
           }
         } catch (err) {
           console.error(err)
@@ -103,6 +106,8 @@
       /** 更新所选行业ID */
       updateIndustryId(id) {
         this.industryId = id;
+        this.templateId && (this.templateId = null);
+        this.templateCid && (this.templateCid = null);
       },
 
       /** 更新所选店铺模板ID */
@@ -161,6 +166,9 @@
 
         &.selected {
           color: #fff;
+        }
+        &.step-end {
+          width: 207px;
         }
       }
 
