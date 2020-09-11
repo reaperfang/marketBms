@@ -236,8 +236,10 @@ export default {
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
 .c_container{
-    padding: 19px 20px 50px 20px;
+    padding: 20px;
+    padding-top:0;
     background-color: #fff;
+    height:100%;
     .marL20{
         margin-left: 20px;
     }

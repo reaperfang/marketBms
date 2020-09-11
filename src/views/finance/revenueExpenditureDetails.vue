@@ -90,12 +90,9 @@
           label="交易流水号"
           :render-header="renderTradeDetailSn"
           align="left"
-          width="210px"
+          width="220px"
           fixed
           >
-          <template slot-scope="scope">
-            <span style="padding-left:10px;">{{scope.row.tradeDetailSn}}</span>
-          </template>
         </el-table-column>
         <el-table-column
           prop="tradeType"
@@ -122,12 +119,13 @@
           label="关联单据编号"
           :render-header="renderRelationSn"
           align="center"
-          width="200px">
+          width="220px">
         </el-table-column>
         <el-table-column
           prop="payWay"
           label="支付方式"
-          align="center">
+          align="center"
+          width="100px">
           <template slot-scope="scope">
             {{payTypes[scope.row.payWay+1].label}}
           </template>
@@ -136,7 +134,7 @@
           prop="wechatTradeSn"
           label="第三方流水号"
           align="center"
-          width="250px;">
+          width="280px;">
         </el-table-column>
         <el-table-column
           prop="amount"
@@ -467,7 +465,10 @@ export default {
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
 }
-/deep/.el-table--small td{
-  padding:16px 0;
+/deep/ .el-table--small td{
+  padding:16px 10px;
+}
+/deep/.el-table--small th{
+  padding:0px;
 }
 </style>

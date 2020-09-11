@@ -278,7 +278,7 @@
 	.template_wrapper{
 		// min-width:1650px;
 		background: #fff;
-		padding-bottom:20px;
+		padding-bottom:50px;
 		ul{
 			display:flex;
 			flex-direction: row;

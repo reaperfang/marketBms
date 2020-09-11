@@ -252,12 +252,11 @@ export default {
     .import {
         position: relative;
         background-color: #fff;
-        padding: 32px 38px;
-        padding-top: 10px;
+        padding: 20px;
         font-size: 14px;
         section {
             border-bottom: 1px dashed #d3d3d3;
-            padding-top: 15px;
+            // padding-top: 15px;
             padding-bottom: 22px;
         }
         .header {
@@ -280,6 +279,7 @@ export default {
             }
             .steps {
                 margin-top: 36px;
+                margin-left: 12px;
             }
         }
         .importing {

@@ -340,7 +340,7 @@ export default {
 }
 .tag {
   background-color: #fff;
-  padding: 25px 38px;
+  padding: 20px;
   .dialog-container {
     text-align: left;
   }

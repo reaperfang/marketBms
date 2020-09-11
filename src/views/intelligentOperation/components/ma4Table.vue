@@ -66,7 +66,8 @@
       <el-table-column
         prop="goodsCount"
         label="订单商品（总）数"
-        align="center">
+        align="center"
+        width="150px">
       </el-table-column>
     </el-table>
     <div class="page_styles">

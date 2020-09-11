@@ -48,7 +48,7 @@
 				:page-sizes="[5, 10, 20, 50, 100, 200, 500]"
 				:page-size="pageSize*1"
 				:total="total*1"
-				layout="sizes, prev, pager, next, jumper"
+				layout="prev, pager, next, sizes"
 				>
 				</el-pagination>
 			</div>
@@ -171,7 +171,7 @@
 	}
 	.recharge-con {
 		margin-top: 20px;
-		padding-bottom: 35px;
+		padding-bottom: 50px;
 	}
 	/deep/ .el-table--small td, /deep/.el-table--small th{
 		padding:8px 10px;

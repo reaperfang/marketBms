@@ -507,8 +507,9 @@ export default {
 <style lang="scss" scoped>
 .new-template {
   background-color: #fff;
+  height:100%;
   h2 {
-    padding: 18px 0 10px 20px;
+    padding: 20px 0 10px 20px;
     font-size:14px;
     font-weight:500;
     color:rgba(68,67,75,1);

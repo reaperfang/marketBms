@@ -388,6 +388,24 @@ export default {
         .catch(error => {
           console.log("error", error);
         });
+      
+      //判断是否有异常订单
+      // this._apis.shop
+      //   .getShopInfo({ id: this.cid })
+      //   .then(response => {
+      //     if (response.shopExpire == 2) {
+      //       this.$message({
+      //         showClose: true,
+      //         dangerouslyUseHTMLString: true,
+      //         message:'<p>您有{{}}条异常订单需要处理，<a>请查看</a></p>',
+      //         type: "warning",
+      //         duration: 0
+      //       });
+      //     }
+      //   })
+      //   .catch(error => {
+      //     console.log("error", error);
+      //   });
     },
 
     getLink(){
@@ -792,11 +810,11 @@ export default {
             }
             .no_isEmpower{
               width: auto;
-              height: 86px;
+              height: 106px;
             }
             .no_release{
               width: auto;
-              height: 86px;
+              height: 106px;
             }
             .opt{
               margin-top: 10px;

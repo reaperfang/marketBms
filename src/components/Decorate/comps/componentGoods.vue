@@ -10,8 +10,9 @@
                                 <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
                             </div>
                             <div class="label" v-if="item.productLabelInfo&&item.productLabelInfo.enable==1" :style="{background:color2}">{{item.productLabelInfo.name}}</div>
-                            <p class="nothing" v-if="calcSotck(item)<1">售罄</p>
-                            <div class="nothingLayer" v-if="calcSotck(item)<1"></div>
+                            <p class="nothing" v-if="item.status ===0">下架</p>
+                            <p class="nothing" v-else-if="calcSotck(item)<1">售罄</p>
+                            <div class="nothingLayer" v-if="item.status ===0 || calcSotck(item)<1"></div>
                         </div>
                         <div class="text" v-if="showContents.length>0">
                             <p class="title" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>

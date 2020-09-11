@@ -72,7 +72,7 @@ export default {
     margin-left: 8px;
 }
 .c_container{
-    padding: 32px 36px;
+    padding: 20px;
     background-color: #fff;
     .c_top{
         padding-bottom: 20px;

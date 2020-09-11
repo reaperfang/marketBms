@@ -1,9 +1,27 @@
-<!--物流查询-->
+<!--三方配送-->
 <template>
   <div>
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
-        <el-form-item>
+        <el-form-item label="订单编号">
+          <el-input v-model="ruleForm.relationSn" placeholder="请输入" style="width:200px;"></el-input>
+        </el-form-item>
+        <el-form-item label="配送公司">
+          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:200px;"></el-input>
+        </el-form-item>
+         <el-form-item label="发货时间">
+          <el-date-picker
+            v-model="ruleForm.timeValue"
+            type="datetimerange"
+            align="right"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
+          </el-date-picker>
+        </el-form-item>
+        <!-- <el-form-item>
           <el-select v-model="ruleForm.searchType" placeholder="订单编号" style="width:124px;paddinig-right:4px;">
             <el-option
               v-for="item in fsTerms"
@@ -28,7 +46,7 @@
         </el-form-item>
         <el-form-item label="快递公司">
           <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:200px;"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '物流查询', '查询']">查询</el-button>
           <el-button @click="resetForm">重置</el-button>
@@ -52,17 +70,16 @@
         >
         <el-table-column
           prop="expressSn"
-          label="快递单号">
+          label="订单编号">
         </el-table-column>
         <el-table-column
           prop="expressCompany"
-          label="快递公司">
+          label="配送公司">
         </el-table-column>
         <el-table-column
           prop="relationSn"
-          label="关联单据编号"
-          :render-header="renderRelationSn"
-          width="230px">
+          label="配送费"
+          width="150px">
         </el-table-column>
         <el-table-column
           prop="createUserName"
@@ -71,9 +88,9 @@
         </el-table-column>
         <el-table-column
           prop="createTime"
-          label="查询时间"
+          label="发货时间"
           sortable = "custom"
-          align="right"
+          align="center"
           width="200px">
         </el-table-column>
       </el-table>
@@ -110,9 +127,10 @@ export default {
     return {
       inline:true,
       ruleForm:{
-        searchType:'relationSn',
-        timeValue:'',
+        relationSn:'',
         expressCompany:'',
+        timeValue:'',
+        searchType:'relationSn',
         startIndex:1,
         pageSize:10,
         sort:'desc'
@@ -138,21 +156,6 @@ export default {
   },
   created() { },
   methods: {
-    renderRelationSn(){
-      return(
-        <div style="height:49px;line-height:49px;">
-          <span style="font-weight:bold;vertical-align:middle;">关联单据编号</span>
-          <el-popover
-            placement="top-start"
-            title=""
-            width="160"
-            trigger="hover"
-            content="订单编号、售后单编号、提现编号">
-            <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
-          </el-popover>
-        </div>
-      )
-    },
     init(){
       let query = {
         queryType:1,
@@ -167,9 +170,9 @@ export default {
         sort:'desc'
       }
       for(let key  in query){
-        if(this.ruleForm.searchType == key){
-          query[key] = this.ruleForm.searchValue
-        }
+        // if(this.ruleForm.searchType == key){
+        //   query[key] = this.ruleForm.searchValue
+        // }
         for(let item in this.ruleForm){
           if(item == key){
             query[key] = this.ruleForm[item]
@@ -203,7 +206,8 @@ export default {
     //重置
     resetForm(){
       this.ruleForm = {
-        searchType:'relationSn',
+        // searchType:'relationSn',
+        relationSn:'',
         timeValue:'',
         expressCompany:'',
         sort:'desc'
@@ -282,9 +286,6 @@ export default {
   border-bottom-color:#44434B;
 }
 /deep/.el-table--small td{
-  padding:16px 10px;
-}
-/deep/.el-table--small th{
-  padding:0px 0px 0px 10px;
+  padding:16px 0;
 }
 </style>
