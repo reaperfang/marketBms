@@ -37,7 +37,7 @@
 
                     <p>快递公司支持情况</p>
                     <div style="margin-top: 15px">
-                      顺丰速运、EMS、宅急送、圆通速递、百世快递、中通快递、韵达速递、申通快递、德邦快递、优速快递、京东快递、信丰物流、安能快递、国通快递、天天快递、跨越速运、邮政快递包裹、中铁快运、邮政国内标快、远成快运、全一快递、速尔快递、品骏快递。
+                      顺丰速运、EMS、宅急送、圆通速递、百世快递、中通快递、韵达速递、申通快递、德邦快递、优速快递、京东快递、信丰物流、安能快递、天天快递、跨越速运、邮政快递包裹、邮政国内标快、远成快运、全一快递、速尔快递、品骏快递。
                     </div>
                     <p style="margin-top: 15px">快运公司支持情况</p>
                     <div style="margin-top: 15px">德邦快运、安能快运、京东快运、龙邦快运。</div>
@@ -207,7 +207,7 @@ export default {
           dialogVisible: false,
           tableData: [{
             name: '无需申请直接打单',
-            company: '顺丰（SF）、EMS（EMS）（仅支持广东省内发货）、宅急送（ZJS）、邮政快递包裹（YZPY）、中铁快运（ZTKY）、邮政国内标快（YZBK），全一快递（UAPEX）',
+            company: '顺丰（SF）、EMS（EMS）（仅支持广东省内发货）、宅急送（ZJS）、邮政快递包裹（YZPY）、邮政国内标快（YZBK），全一快递（UAPEX）',
           }, {
             name: '月结账号直接打单',
             company: '德邦（DBL）、EMS（EMS）',
@@ -216,7 +216,7 @@ export default {
             company: '优速（UC）、韵达（YD）、圆通（YTO）、远成（YCWL）、安能（ANE）、百世快递（HTKY）',
           }, {
             name: '线下（网点）申请账号',
-            company: 'EMS（EMS）、中通（ZTO）、申通（STO）、德邦（DBL）、京东（JD）、信丰（XFEX）、国通（GTO）、天天快递（HHTT）、速尔快递（SURE）、品骏快递（PJ）',
+            company: 'EMS（EMS）、中通（ZTO）、申通（STO）、德邦（DBL）、京东（JD）、信丰（XFEX）、天天快递（HHTT）、速尔快递（SURE）、品骏快递（PJ）',
           }, {
             name: '快运电子面单',
             company: '京东快运（JDKY）,安能快运（ANEKY）,德邦快运（DBLKY），龙邦快运（LB）。',
