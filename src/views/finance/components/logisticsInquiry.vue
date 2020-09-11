@@ -91,7 +91,7 @@
         </el-pagination>
       </div>
     </div>
-	  <exportTipDialog :data=currentData  :dialogVisible.sync="dialogVisible"></exportTipDialog>
+	  <exportTipDialog :data="currentData" :dialogVisible.sync="dialogVisible"></exportTipDialog>
   </div>
 </template>
 
