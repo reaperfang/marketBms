@@ -13,7 +13,8 @@
             :src="ruleForm.videoUrl"
             controls="controls"
             class="video"
-            :poster="ruleForm.videoUrl"
+            :autoplay="true"
+            :poster="ruleForm.coverUrl"
           >您的浏览器不支持 video 标签。</video>
           <i class="delete_btn" @click.stop="deleteVideoUrl()"></i>
           <span @click="dialogVisible=true; currentDialog='dialogSelectVideo'">选择视频</span>
