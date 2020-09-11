@@ -148,7 +148,7 @@
                     label="状态"
                     >
                     <template slot-scope="scope">
-                        <span>{{scope.row.status | statusFilter}}</span>
+                        <span>{{scope.row.status | orderStatusFilter}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -264,24 +264,6 @@ export default {
         }
     },
     filters: {
-        statusFilter(code) {
-            switch(code) {
-                case 0:
-                    return '待付款'
-                case 1:
-                    return '待成团'
-                case 2:
-                    return '已关闭'
-                case 3:
-                    return '待发货'
-                case 4:
-                    return '部分发货'
-                case 5:
-                    return '待收货'
-                case 6:
-                    return '已完成'
-            }
-        },
         deliveryWayFilter(code) {
             switch(code) {
                 case 1:

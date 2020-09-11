@@ -964,6 +964,7 @@ export default {
             //   this._list.splice(index, 1)
             // }
           }
+          console.log(this._list)
           this._list = this._list.filter(val => val.express != null && !val.express.sizeSpecs && val.sizeList && val.sizeList.length)
 
           var __result = [];

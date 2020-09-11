@@ -70,7 +70,7 @@
                   <div class="col">
                     <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 4">
                         <el-form-item label="快递公司" prop="expressCompanyCodes" class="expressCompanys">
-                            <el-select @change="checkExpress(index)" v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
+                            <el-select filterable @change="checkExpress(index)" v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
                             </el-select>
                             <p v-if="item.showErrorExpressCompany" class="error-message">{{item.errorMessageExpressCompany}}</p>
