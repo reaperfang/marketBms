@@ -77,54 +77,63 @@ export default {
 			let data = await this._apis.dashboard.order(parames);
 			let res = JSON.parse(data);
 
-			// var chart = [
-			// 	{
-			// 		value: res.order_c_uv_7dco, // 转换率
-			// 		name: "下单转换率", // 转换率名称
-			// 		oriname: "访问人数",
-			// 		number: res.uv_7d
-			// 		// color: ["rgba(255,198,82,0.6)", "rgba(255,198,82,0)"]
-			// 	},
-			// 	{
-			// 		value: res.paid_c_order_7dco,
-			// 		name: "下单支付转化率",
-			// 		oriname: "下单人数",
-			// 		number: res.order_c_uv_7d
-			// 		// color: ["rgba(255,110,115,0.5)", "rgba(255,110,115,0)"]
-			// 	},
-			// 	{
-			// 		value: res.paid_c_uv_7dco,
-			// 		name: "支付转化率",
-			// 		oriname: "支付人数",
-			// 		number: res.paid_order_number_7d
-			// 		//  color: ["rgba(134,131,230,0.4)", "rgba(134,131,230,0)"]
-			// 	}
-			// ];
-
 			var chart = [
 				{
-					value: res.uv_7d, // 转换率
+					value: 60, // 转换率
 					name: "下单转换率", // 转换率名称
 					oriname: "访问人数",
 					number: res.uv_7d
 					// color: ["rgba(255,198,82,0.6)", "rgba(255,198,82,0)"]
 				},
 				{
-					value: res.order_c_uv_7d, //paid_c_order_7dco
+					value: 40, //paid_c_order_7dco
 					name: "下单支付转化率",
 					oriname: "下单人数",
 					number: res.order_c_uv_7d
 					// color: ["rgba(255,110,115,0.5)", "rgba(255,110,115,0)"]
 				},
 				{
-					value: res.paid_order_number_7d, //paid_c_uv_7dco
+					value: 20, //paid_c_uv_7dco
 					name: "支付转化率",
 					oriname: "支付人数",
 					number: res.paid_order_number_7d
 					//  color: ["rgba(134,131,230,0.4)", "rgba(134,131,230,0)"]
 				}
 			];
-			this.orderlist(chart);
+
+			// 				参数名称 参数说明 类型 schema
+			// order_c_uv_7d 下单人数 integer(int32) integer(int32)
+			// order_c_uv_7dco 下单转化率 number(float) number(float)
+			// paid_c_order_7dco 下单支付转化率 number(float) number(float)
+			// paid_c_uv_7dco 支付转化率 number(float) number(float)
+			// paid_order_number_7d 支付人数 integer(int32) integer(int32)
+			// uv_7d 访问人数 integer(int32) integer(int32)
+
+			// let youcejiantouData = [
+			// 	{
+			// 		value: 361,
+			// 		itemValue: "100%",
+			// 		show: true,
+			// 		label: markLineSetting
+			// 	},
+			// 	{
+			// 		value: 351,
+			// 		itemValue: "70%",
+			// 		label: markLineSetting
+			// 	}
+			// ];
+
+			this.orderlist({
+				chart: chart,
+				youcejiantouData: {
+					order_c_uv_7dco: parseInt(
+						res.order_c_uv_7dco.toFixed(2) * 100
+					),
+					paid_c_order_7dco: parseInt(
+						res.paid_c_order_7dco.toFixed(2) * 100
+					)
+				}
+			});
 		}
 	}
 };

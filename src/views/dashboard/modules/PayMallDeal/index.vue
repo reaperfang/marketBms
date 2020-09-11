@@ -119,8 +119,6 @@ export default {
 					city: res.area_name
 				};
 			});
-
-			console.log("this.chartData  top", this.chartData);
 		},
 		setPayData(val) {
 			this.payData = [
