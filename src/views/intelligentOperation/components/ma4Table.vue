@@ -6,6 +6,7 @@
       style="width: 100%"
       :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
+      v-loading="loading1"
       >
       <el-table-column
         type="index"
@@ -77,9 +78,9 @@
         :current-page.sync="currentPage"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="10"
-        layout="sizes, prev, pager, next"
+        layout="prev, pager, next, sizes"
         :total="listObj.totalSize"
-        :background="background">
+        :background="true">
       </el-pagination>
     </div>
   </div>
@@ -92,7 +93,8 @@ export default {
   extends: TableBase,
   data() {
     return { 
-      pageSize:10
+      pageSize:10,
+      loading1: true
     };
   },
   props:{
@@ -104,9 +106,18 @@ export default {
       type: Boolean,
       default: true
     },
+    loading: {
+      type: Boolean,
+      default: true
+    }
   },
   created() {
 
+  },
+  watch: {
+    loading(newValue) {
+      this.loading1 = newValue;
+    }
   },
   methods: {
     handleSizeChange(val){

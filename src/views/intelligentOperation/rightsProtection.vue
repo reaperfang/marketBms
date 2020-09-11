@@ -75,7 +75,7 @@
                     </el-tooltip>
                 </div>
             </div>
-            <ma2Table class="marT20s" :listObj="listObj" @getRightsProtection="getRightsProtection"></ma2Table>
+            <ma2Table class="marT20s" :listObj="listObj" @getRightsProtection="getRightsProtection" :loading="loading"></ma2Table>
         </div>
         <div v-if="listObj.members != undefined && note" >
             <h3 class="marT20s">运营建议:</h3>
@@ -84,7 +84,7 @@
             <p v-if="note ==8" class="proposal"><b>"拍错了/订单信息错误":</b>建议针对此类用户补偿商品优惠券，发放现金红包，更换升级版商品。</p>
         </div>
         <div class="contents"></div>
-        <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
+        <!-- <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div> -->
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
 </template>
@@ -124,7 +124,8 @@ export default {
             note:'',
             currentDialog:"",
             dialogVisible: false,
-            currentData:{}
+            currentData:{},
+            loading: true
         }
     },
     methods: {
@@ -137,6 +138,7 @@ export default {
         // 获取维权全部数据
         getRightsProtection(idx,pageS){
             this.form.loads = true
+            this.loading = true
             this.note = ''
             this.form.pageSize = pageS;
             this.form.startIndex = idx;
@@ -146,7 +148,11 @@ export default {
             this._apis.data.rightsProtection(this.form).then(response => {
                 this.listObj = response;
                 this.form.loads = false
+                this.loading = false
                 this.note = this.form.ProtectionReason
+            }).catch((error)=>{
+                this.$message.error(error);
+                this.loading = false
             })
         },
         changeTime(val){
@@ -245,7 +251,7 @@ export default {
 
 .m_container{
     background-color: #fff;
-    padding: 10px 20px;
+    padding: 20px;
     .el-button--small{
         border: 1px solid #655EFF;
         color: #655EFF;
@@ -257,7 +263,7 @@ export default {
 	}
     .pane_container{
         color:#3D434A;
-        padding: 10px;
+        // padding: 10px;
         .input_wrap{
             display: inline-block;
             width: 450px;

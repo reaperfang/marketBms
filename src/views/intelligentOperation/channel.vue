@@ -73,6 +73,7 @@
                     @sizeChange="sizeChange"
                     @currentChange="currentChange"
                     @changeSort="changeSort"
+                    :loading="loading"
                 >
                 </channel-table>               
             </div>
@@ -81,7 +82,7 @@
                 <p class="proposal"><b>转化率{{note.label}} ：</b>{{note.suggest}}</p>
             </div>
             <div class="contents"></div>
-           <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
+           <!-- <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div> -->
     <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
 </template>
@@ -124,6 +125,7 @@ export default {
             dialogVisible: false,
             currentData:{},
             totalNum:0,
+            loading: true
         }
     },
     mounted(){
@@ -138,11 +140,13 @@ export default {
         //查询
         goSearch(num){
             this.form.loads = true
+            this.loading = true
             this.form.startIndex = num || this.form.startIndex
             this._apis.data.channelConversion(this.form).then(response => {
                 this.listObj = response;
                 this.totalNum = response.totalSize || 0;
                 this.form.loads = false
+                this.loading = false
                 //切换成功支付转化率获取运营建议
                 for(let item of this.productiveness){
                     if(item.value == this.form.changeRatioRange){
@@ -155,6 +159,7 @@ export default {
                 }
             }).catch(error => {
                 this.$message.error(error);
+                this.loading = false
             });
         },
         // 重置
@@ -276,7 +281,7 @@ export default {
 }
 .m_container{
     background-color: #fff;
-    padding: 10px 20px;
+    padding: 20px;
     .el-button--small{
         border: 1px solid #655EFF;
         color: #655EFF;
@@ -288,7 +293,7 @@ export default {
 	}
     .pane_container{
         color:#3D434A;
-        padding: 10px;
+        // padding: 10px;
         .input_wrap{
             display: inline-block;
             width: 450px;
