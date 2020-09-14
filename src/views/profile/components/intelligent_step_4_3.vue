@@ -32,7 +32,6 @@
       <el-form-item label="5、联系地址:" prop="sendAddress">
         <el-input v-model="form.sendAddress" @change="handleChangeAddress" style="width:283px;" placeholder="请输入和点击搜索图标确定联系地址" />
         <dialog-map-search @getMapClickPoi="getMapClickPoi" :sendAddress="form.sendAddress"></dialog-map-search>
-
       </el-form-item>
 
     </el-form>
@@ -53,12 +52,12 @@
     data() {
       return {
         form: {
-          shopName: '',
-          phone: '',
-          addressCode: '',
-          lat: '',
-          lng: '',
-          sendAddress: ''
+          shopName: "",
+          phone: "",
+          addressCode: "",
+          lat: "",
+          lng: "",
+          sendAddress: ""
         },
         isMapChoose: false,  // 是否打开了地图获取了经纬度
         rules: {
@@ -70,7 +69,7 @@
               else callback();
             }, trigger: "blur" }
         },
-        showShopPreview: false, // 右侧预览店铺名图片
+        showShopPreview: false, // 右侧店铺名预览区
       }
     },
     computed: {
@@ -86,13 +85,14 @@
       async completed() {
         try {
           const valid = await this.$refs.form.validate();
-          console.log(valid);
-          console.log('%c valid', 'color: deepskyblue');
         } catch (e) {
-          this.$message.error('请正确填写表单');
+          this.$message.error("请正确填写表单");
           return
         }
-        if(!this.isMapChoose) return;
+        if(!this.isMapChoose) {
+          this.$message.error("保存失败");
+          this.form.sendAddress = "";
+        }
         try {
           this.$emit("update-completed-loading", true);
           const params = {
@@ -114,7 +114,7 @@
           this.$router.push("/profile/profile");
 
         } catch (e) {
-          this.$message.error(e || '出错了，请稍后再试~');
+          this.$message.error(e || "出错了，请稍后再试~");
           console.error(e)
         } finally {
           console.log("update-shopInfo: finally");
@@ -159,9 +159,9 @@
         this.province = this.shopInfos.province || this.province;
         this.city = this.shopInfos.city || this.city;
         this.area = this.shopInfos.area || this.area;
-        this.form.addressCode = [ this.shopInfos.provinceCode, this.shopInfos.cityCode, this.shopInfos.areaCode ];
-        this.form.lat = this.shopInfos.latitude;
-        this.form.lng = this.shopInfos.longitude
+        this.form.addressCode = this.shopInfos.provinceCode ? [ this.shopInfos.provinceCode, this.shopInfos.cityCode, this.shopInfos.areaCode ] : '';
+        this.form.lat = this.shopInfos.latitude || "";
+        this.form.lng = this.shopInfos.longitude || "";
         /*
         let id = this.cid;
         this._apis.set.getShopInfo({ id })

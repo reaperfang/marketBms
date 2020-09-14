@@ -126,9 +126,10 @@
       <ul class="configure-text-list" style="height: 164px;">
         <template v-for="(item, index) in configureTextArray">
             <li class="configure-text show">
-              <p class="text-base">{{item.text}}数据配置{{item.status === 1 ? "成功" : "失败"}}</p>
+              <p class="text-base">{{item.text}}数据配置{{configureTextItemStatusType[item.status]}}</p>
               <i class="el-icon-success" v-if="item.status === 1"></i>
-              <i class="el-icon-error" v-else></i>
+              <i class="el-icon-error" v-if="item.status === 2"></i>
+              <i class="el-icon-warning" v-if="item.status === 3"></i>
             </li>
         </template>
       </ul>
@@ -181,7 +182,8 @@
         timerConfigure: null, // 定时任务，查询配置进度
         configureProgress: 0, // 查询配置进度 0 - 5?
         configureTextArray: [], // 配置进度 文字以及成功状态
-        dataTypeText: ["","运费模板", "商品", "商品分类", "创意设计", "微信公众号底部"],
+        configureTextItemDataType: ["","运费模板", "商品", "商品分类", "创意设计", "微信公众号底部"],
+        configureTextItemStatusType: ["处理中", "成功", "失败", "异步同步数据中"]
       }
     },
     mounted() {
@@ -194,11 +196,11 @@
           this.isConfigureFail = true;
           this.isShowConfigureBox = true;
           this.configureTextArray = [
-            {text: this.dataTypeText[1], status: 2},
-            {text: this.dataTypeText[2], status: 2},
-            {text: this.dataTypeText[3], status: 2},
-            {text: this.dataTypeText[4], status: 2},
-            {text: this.dataTypeText[5], status: 2}
+            {text: this.configureTextItemDataType[1], status: 2},
+            {text: this.configureTextItemDataType[2], status: 2},
+            {text: this.configureTextItemDataType[3], status: 2},
+            {text: this.configureTextItemDataType[4], status: 2},
+            {text: this.configureTextItemDataType[5], status: 3}
           ];
           // this.timer();
         }
@@ -222,6 +224,8 @@
               qrCodePic: ''
             };
           });
+          let findRes = this.listData.find((item) => item.id == this.selectTemplateId);
+          if (!findRes) this.selectTemplateId = null;
         } catch (err) {
           console.error('加载模板数据出错', err)
         } finally {
@@ -279,10 +283,11 @@
 
                   if (item.status !== 0 && !hasItem) {
                     _this.configureTextArray.push({
-                      text: _this.dataTypeText[item.dataType],
+                      text: _this.configureTextItemDataType[item.dataType],
                       status: item.status
                     });
-                    if (item.status === 1) _this.configureProgress += 1;
+                    // 成功 || 警告 （ 非失败 ）
+                    if (item.status !== 2) _this.configureProgress += 1;
                   }
                 })
               }
@@ -663,6 +668,10 @@
       .el-icon-success {
         font-size: 18px;
         color: $successBorderColor;
+      }
+
+      .el-icon-warning {
+        color: $warningBorderColor;
       }
 
       .configure-text {
