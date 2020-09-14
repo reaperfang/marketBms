@@ -73,13 +73,13 @@
       </el-table>
       <div class="page_styles" v-if="total*1 > 20">
         <el-pagination
-          background
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="ruleForm.pageNo"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1">
         </el-pagination>
       </div>

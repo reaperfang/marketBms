@@ -94,12 +94,13 @@
     </el-table>
     <div class="page_styles">
       <el-pagination
+        :background="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="ruleForm.pageNo"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="ruleForm.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="prev, pager, next, sizes"
         :total="total*1">
       </el-pagination>
     </div>
