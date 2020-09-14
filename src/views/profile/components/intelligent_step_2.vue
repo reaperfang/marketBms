@@ -249,7 +249,7 @@
           let params = {chooseTemplateId: this.selectTemplateId, changeStep: 3, status: 0, id: this.stepId};
           let result = await this._apis.profile.intelligentUpdateStep(params);
 
-          let enableTemplate = await this._apis.profile.intelligentEnableTemplate({tempCid: this.selectTemplateId});
+          let enableTemplate = await this._apis.profile.intelligentEnableTemplate({tempCid: this.tempCid});
 
           this.isShowConfigureBox = true;
           this.timer();
@@ -289,8 +289,8 @@
               if (_this.configureTextArray.length >= 5) {
                 clearInterval(_this.timerConfigure);
                 if(_this.configureProgress < 5) _this.isConfigureFail = true;
-                if (_this.configureProgress >= 5) _this.$emit('update-step', 3);
                 // 通知父组件 更新到下一步的视图
+                if (_this.configureProgress >= 5) _this.$emit('update-step', 3);
               }
             }).catch(err => {
               this.$message.error(e || "网络错误，请稍后再试");
@@ -306,10 +306,9 @@
           let result = await this._apis.profile.intelligentEnableTemplate({tempCid: this.selectTemplateId});
           this.isConfigureFail = false;
           this.timer();
-        }catch (e) {
-          this.$message.error( e || "网络错误，请稍后再试")
+        } catch (e) {
+          this.$message.error(e || "网络错误，请稍后再试")
         }
-
       },
 
       /** 上一张模板 */
