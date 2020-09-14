@@ -3,7 +3,7 @@
     :visible.sync="visible"
     @submit="submit"
     :title="title"
-    width="780px"
+    width="640px"
     :showFooter="showFooter"
   >
     <div class="receive-information-dialog" v-if="sendGoods == 'send'">
@@ -519,7 +519,6 @@ export default {
 <style lang="scss" scoped>
 .receive-information-dialog {
   height: 670px;
-  margin: 0 50px;
   .wrapper {
     height: 300px;
     width: 100%;
@@ -585,13 +584,6 @@ export default {
 }
 /deep/.el-form-item {
   margin-bottom: 24px;
-}
-/deep/ .el-dialog__header {
-    background: #F6F7FA!important;
-    height: 50px;
-    line-height: 50px;
-    padding: 0 20px;
-    color: #44434B;
 }
 /deep/ .el-dialog {
   border-radius:3px!important;

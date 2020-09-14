@@ -7,7 +7,7 @@
                 <span @click="showTextarea = false">
                     <el-radio v-model="operationType" label="7">用户申请关闭</el-radio>
                 </span>
-                <span @click="showTextarea = false">
+                <span @click="showTextarea = false" class="mgl_30">
                     <el-radio v-model="operationType" label="6">库存不足</el-radio>
                 </span>
                 
