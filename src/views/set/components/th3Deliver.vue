@@ -39,12 +39,22 @@
               <el-table-column label="操作" align="center" width="221">
                 <template slot-scope="scope">
                   <el-button
+                    class="tableBox-btn"
                     v-if="status==1"
                     @click="handleClickIsopen(scope.row)"
                     type="text"
                     size="medium"
                   >申请开通</el-button>
-
+                  <el-button
+                    class="tableBox-btn"
+                    type="text"
+                    size="medium"
+                  >充值</el-button>
+                  <el-button
+                    class="tableBox-btn"
+                    type="text"
+                    size="medium"
+                  >查看余额</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -130,6 +140,8 @@ export default {
     handleIsOpen() {
       console.log('isOpen',this.isOpen)
       this.isTableShow = this.isOpen
+      this.btnShow = false
+      this.saveShow = true
     },
     //第三放协议
     onPprotocol() {
@@ -266,6 +278,18 @@ export default {
       color: #d0d6e4;
       display: inline-block;
       padding: 0 15px;
+    }
+    
+  }
+  .tableBox-btn {
+    padding:0;
+    padding-right: 8px;
+    padding-left: 8px;
+    border-right: 1px solid rgba(218, 218, 227, 1);
+    margin-left:0;
+    &:last-of-type {
+      padding-right: 0;
+      border-right: 0;
     }
   }
   .btn {
