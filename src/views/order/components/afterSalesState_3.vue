@@ -86,6 +86,23 @@
                 </div>
             </div>
         </template>
+        <template v-else-if="this.orderAfterSale.orderAfterSaleStatus == 6 || this.orderAfterSale.orderAfterSaleStatus == 7">
+            <!-- 系统处理中 6退款中 7退余额、积分中 -->
+            <div class="row align-center justity-between">
+                <div class="col flex1 lefter">
+                    <el-steps :active="4">
+                        <el-step class="word4" title="提交申请" :description="orderAfterSale.createTime"></el-step>
+                        <el-step class="word4" title="商户处理" :description="orderAfterSale.examineTime"></el-step>
+                        <el-step class="word2" title="退款" :description="orderAfterSale.refundTime"></el-step>
+                        <el-step class="word5" title="系统处理中" :description="orderAfterSale.refundTime"></el-step>
+                        <el-step class="word2" title="完成" :description="orderAfterSale.refundTime"></el-step>
+                    </el-steps>
+                </div>
+                <div class="col righter">
+                    <p>待处理</p>
+                </div>
+            </div>
+        </template>
     </div>
 </template>
 <script>
@@ -123,7 +140,7 @@ export default {
             })
         },
         sendGoods() {
-            this.$router.push('/order/orderAfterDeliverGoods?id=' + this.orderAfterSale.id)
+            this.$router.push('/order/orderAfterDeliverGoods?afterSale=true&id=' + this.orderAfterSale.id)
         },
         confirmTakeOver() {
             this.$emit('confirmTakeOver')

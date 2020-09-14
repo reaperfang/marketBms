@@ -70,7 +70,7 @@
                 tooltip-effect="dark"
                 style="width: 100%"
                 @selection-change="handleSelectionChange"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     type="selection"
                     width="55">
@@ -78,14 +78,14 @@
                 <el-table-column
                     prop="orderAfterSaleCode"
                     label="售后单编号"
-                    width="120">
+                    width="250">
                 </el-table-column>
                 <el-table-column
                     prop="memberName"
                     label="用户昵称"
                     width="120">
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                     prop="deliveryWay"
                     label="退货方式"
                     width="120">
@@ -95,8 +95,8 @@
                             <span class="icon-store-text">{{scope.row.deliveryWay | deliveryWayFilter}}</span>
                         </div>
                     </template>
-                </el-table-column>
-                <el-table-column
+                </el-table-column> -->
+                <!-- <el-table-column
                     prop="updateTime"
                     label="取货时间"
                     width="110">
@@ -106,7 +106,7 @@
                             <div>{{scope.row.deliveryTime}}</div>
                         </div>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column
                     prop="receivedName"
                     label="收货人">
@@ -126,11 +126,11 @@
                     prop="updateTime"
                     label="最新发货时间">
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="操作" :width="computeWidth" fixed="right">
                     <template slot-scope="scope">
                         <div class="operate-box">
                             <span v-permission="['订单', '发货管理', '售后发货', '查看']" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.orderAfterSaleId)">查看</span>
-                            <span v-permission="['订单', '发货管理', '售后发货', '发货']" v-if="scope.row.status == 2" @click="$router.push('/order/orderAfterDeliverGoods?id=' + scope.row.orderAfterSaleId + '&afterSale=' + true)">发货</span>
+                            <span v-permission="['订单', '发货管理', '售后发货', '发货']" v-if="scope.row.status == 2" @click="$router.push(`/order/orderAfterDeliverGoods?ids=${scope.row.orderAfterSaleId}&afterSale=true&_ids=${scope.row.id}`)">发货</span>
                         </div>
                     </template>
                 </el-table-column>
@@ -203,6 +203,13 @@ export default {
         cid(){
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
             return shopInfo.id
+        },
+        computeWidth() {
+            if(this.tableData.some(item => item.status == 2)) {
+                return '100'
+            } else {
+                return '60'
+            }
         }
     },
     filters: {
@@ -254,20 +261,32 @@ export default {
                 this.confirm({title: '提示', icon: true, text: '请选择需要发货的售后单'})
                 return
             }
-            if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
-                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量发货。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量发货。'})
-                return;
-            }
+            // if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
+            //     this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量发货。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量发货。'})
+            //     return;
+            // }
+            // if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
+            //     this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出普通快递、商家配送或第三方配送的待发货订单后再进行批量发货。'})
+            //     return;
+            // }
             if(this.multipleSelection.some(val => val.status != 2)) {
             this.confirm({title: '提示', icon: true, text: '请选择待发货的售后单'})
                 return
             }
-            this.$router.push('/order/afterSaleBulkDelivery?ids=' + this.multipleSelection.map(val => val.orderAfterSaleId).join(','))
+            this.$router.push(`/order/afterSaleBulkDelivery?ids=${this.multipleSelection.map(val => val.orderAfterSaleId).join(',')}&afterSale=true`)
         },
         //批量打印配送单
         batchPrintDistributionSlip() {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, text: '请选择需要打印配送单的售后单'})
+                return
+            }
+            // if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
+            //     this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出普通快递、商家配送、第三方配送或上门自提的单据，再进行批量打印配送单。'})
+            //     return;
+            // }
+            if(this.multipleSelection.some(val => (val.status != 3 && val.status != 4))) {
+                this.confirm({title: '提示', icon: true, text: '没有完成发货，不能批量打印配送单。'})
                 return
             }
             let ids = this.multipleSelection.map(val => val.orderAfterSaleId).join(',')
@@ -288,7 +307,15 @@ export default {
         },
         batchPrintElectronicForm() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择需要发货的售后单'})
+                this.confirm({title: '提示', icon: true, text: '请选择需要打印电子面单的售后单'})
+                return
+            }
+            // if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
+            //     this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出配送方式为普通快递-电子面单的单据，再进行批量打印电子面单。'})
+            //     return;
+            // }
+            if(this.multipleSelection.some(val => (!val.isSupportElectronicSheet))) {
+                this.confirm({title: '提示', icon: true, text: '含有不支持打印电子面单的售后单，不能批量打印电子面单。'})
                 return
             }
             let ids = this.multipleSelection.map(val => val.orderAfterSaleId).join(',')
@@ -371,10 +398,13 @@ export default {
         padding-right: 8px;
     }
     /deep/ .el-form--inline .el-form-item {
-        margin-right: 26px;
+        margin-right: 20px;
         .el-button+.el-button {
-            margin-left: 16px;
+            margin-left: 6px;
         }
+    }
+    /deep/ .el-button {
+      width: 60px;
     }
 }
 .after-sales {
@@ -390,6 +420,7 @@ export default {
         }
         .form-inline {
             padding: 20px;
+            padding-bottom: 0;
         }
         .buttons {
             display: flex;
@@ -407,7 +438,7 @@ export default {
     .content {
         background-color: #fff;
         padding: 20px;
-        margin: 0 20px;
+        //margin: 0 20px;
         padding-top: 0;
         p {
             font-size: 16px;
@@ -419,7 +450,7 @@ export default {
         }
         .footer {
             padding: 20px;
-            padding-left: 15px;
+            padding-left: 10px;
         }
     }
 }
@@ -465,6 +496,61 @@ export default {
     }
     .icon-store-text{
         vertical-align: middle;
+    }
+    /deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(2) {
+            text-align: left;
+        }
+    }
+    /deep/ .el-table-column--selection .cell {
+        padding-left: 20px;
+        padding-right: 10px;
+    }
+    .operate-box {
+        text-align: left;
+        span {
+            border-right: 1px solid rgba(218,218,227,1);
+            padding-right: 5px;
+            &:last-child {
+                border-right: none;
+                padding-right: 0;
+            }
+        }
+    }
+    /deep/ .el-table th.is-leaf {
+        border-bottom: none!important;
+    }
+    /deep/ .el-table thead tr {
+        height: 46px;
+    }
+    .border-button {
+        border:1px solid rgba(218,218,227,1)!important;
+        color: #44434B!important;
+        &:hover {
+            border:1px solid #655EFF!important;
+            color: #655EFF!important;
+            background-color: #fff;
+        }
+    }
+    /deep/ .el-table .cell {
+        padding-left: 0;
+        padding-right: 20px;
+    }
+    /deep/ .input-with-select .el-input-group__prepend {
+        background-color: #fff;
+    }
+    /deep/.el-table td:nth-child(1){
+         padding-left:20px;
+         .cell {
+            text-overflow: clip;
+         }
+     }
+     /deep/ .el-table--small td, /deep/  .el-table--small th {
+        padding: 16px 0;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-bottom: 20px;
     }
 </style>
 

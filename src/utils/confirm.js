@@ -1,12 +1,15 @@
 /* 全局确认弹窗工具 */
 
-export default function({title, icon, iconSuccess, text, cancel, width, confirmText, customClass, showCancelButton, showConfirmButton, beforeClose}) {
+export default function({title, icon, iconSuccess, text, cancel, width, confirmText, customClass, showCancelButton, showConfirmButton, beforeClose, cancelButtonText = '取消', iconWarning, distinguishCancelAndClose = false}) {
   return new Promise((resolve, reject) => {
     let str = ''
     let _customClass
 
     if(icon) {
       str += '<i class="el-icon-warning"></i>'
+    }
+    if(iconWarning) {
+      str += '<i class="el-icon-warning" style="color:RGBA(253, 147, 43, 1)"></i>'
     }
     if(iconSuccess) {
       str += '<i class="el-icon-success"></i>'
@@ -33,11 +36,12 @@ export default function({title, icon, iconSuccess, text, cancel, width, confirmT
       showCancelButton: _showCancelButton,
       showConfirmButton: showConfirmButton != undefined ? showConfirmButton : true,
       confirmButtonText: confirmText || '确认',
-      cancelButtonText: '取消',
+      cancelButtonText: cancelButtonText,
       dangerouslyUseHTMLString: true,
       width: width,
       customClass: _customClass,
-      beforeClose: beforeClose
+      beforeClose: beforeClose,
+      distinguishCancelAndClose: distinguishCancelAndClose
     }).then(() => {
       resolve()
     }).catch((error) => {

@@ -1,20 +1,20 @@
 <template>
-  <div class="shopExpress">
+  <div class="shopExpress" v-loading="isInit"  element-loading-background="rgba(255, 255, 255, 1)">
     <!-- 商家配送 -->
-    <section class="switch dashed">
+    <section v-if="!isInit" class="switch dashed">
       <span>商家配送</span>
       <el-switch v-model="isOpen" @change="handleIsOpen"></el-switch>
       <span>{{ getSwitchTxt }}</span>
       <span class="prompt">启用后，买家下单可以选择商家配送，申请退换货售后时可以选择商家自取，由你提供上门配送服务</span>
     </section>
-    <el-form ref="ruleForm"  :rules="rules" label-position="left" :model="ruleForm" label-width="120px">
+    <el-form v-if="!isInit" ref="ruleForm"  :rules="rules" label-position="left" :model="ruleForm" label-width="120px">
        <!-- 配送范围 -->
       <section class="section dashed delivery-area">
         <h2><em>*</em> 配送范围</h2>
-        <el-form-item label="取货地址：" class="item">
+        <el-form-item label="发货地址：" class="item">
           <!-- <label>取货地址：</label> -->
-          {{ address }}
-          <el-button type="text" @click="handleToShopInfo">修改</el-button>
+          <template v-if="address">{{ address }}</template>
+          <el-button type="text" @click="handleToShopInfo">{{ btnTxt }}</el-button>
         </el-form-item>
         <el-form-item label="配送范围设置：" prop="radiusType" class="item">
           <!-- <label>配送范围设置：</label> -->
@@ -32,7 +32,7 @@
           </div>
         </el-form-item>
         <div class="map">
-          <map-radius class="map-radius" :radius="ruleForm.radius" :center="getCenter" :zoom="zoom" :address="address"></map-radius>
+          <map-radius class="map-radius" v-if="isLoadMap" :radius="ruleForm.radius" :center="getCenter" :zoom="zoom" :address="address"></map-radius>
         </div>
         
       </section>
@@ -248,7 +248,7 @@
 import mapRadius from './components/mapRadius'
 import { debounce } from '@/utils/base.js'
 import order from '@/system/constant/order.js'
-let isCompleted
+// let isCompleted
 let isHasOtherWay
 export default {
   components: {
@@ -310,11 +310,14 @@ export default {
       zoom: 4,
       isOpen: false, // 是否开启商家配送
       address: null, // 默认取货地址
+      addressId: null,
       visible: false,
       visible2: false,
       visible3: false,
       isLoading: false,
+      isInit: true,
       tempWeeks: [],
+      isLoadMap: true,
       ruleForm: {
         radiusType: 1,  // 配送范围设置类型
         radius: null, //  配送半径
@@ -416,6 +419,12 @@ export default {
   },
 
   computed: {
+    isCompleted() {
+      return this.addressId && this.ruleForm.price
+    },
+    btnTxt() {
+      return this.address ? '修改': '新建'
+    },
     getCenter() {
       let latlng
       latlng = (this.ruleForm.lat && this.ruleForm.lng) ?  [this.ruleForm.lat,this.ruleForm.lng] : []
@@ -465,8 +474,24 @@ export default {
     // if (this.shopInfo) {
     //   this.getShopInfo(this.shopInfo)
     // }
-    this.getShopInfo()
-    this.getOrderDeliverInfo()
+    const p1 = this.getDeliveryAddress()
+    const p2 = this.getShopInfo()
+    const p3 = this.getOrderDeliverInfo()
+    this.isInit = true
+    Promise.all([p1,p2,p3]).then(([res1, res2, res3]) => {
+      console.log('promise', res1, res2, res3)
+      if (res1) {
+        this.address = `${res1.address} ${res1.addressDetail}`
+        this.ruleForm.lng = res1.longitude
+        this.ruleForm.lat = res1.latitude
+        this.addressId = res1.id
+      }
+      if (res2) {
+         this.ruleForm.radius = res2.deliverServiceRadius || null // 配送服务半径
+      }
+    }).finally(() => {
+      this.isInit = false
+    })
   },
 
   mounted() {
@@ -474,6 +499,21 @@ export default {
   },
 
   methods: {
+    // 获取发货地址
+    getDeliveryAddress() {
+      return this._apis.set.getAddressDefaultSender().then((response) => {
+        // if (response) {
+        //   this.address = `${response.address} ${response.addressDetail}`
+        //   this.ruleForm.lng = response.longitude
+        //   this.ruleForm.lat = response.latitude
+        //   this.addressId = response.id
+        // }
+        return response
+      }).catch((err) => {
+        console.log('err',err)
+        this.$message.error(err || '数据获取失败')
+      })
+    },
     handleRepeatCycleChange(val) {
       console.log('---val--', val)
       // if (val === 1) {
@@ -605,7 +645,7 @@ export default {
           console.log('---validateTimeRangesStart:prev:curr:time---', prev, curr)
           if (prev >= curr) {
             isValidated = false
-            callback(new Error('当前时间段的开始时间不能早于上一个时间段的开始时间。'))
+            callback(new Error('当前时间段的开始时间需晚于上一个时间段的开始时间'))
           }
         } 
       }
@@ -729,9 +769,10 @@ export default {
       }
     },
     open() {
+      console.log('isCompleted',this.isCompleted)
       // const isCompleted = Math.random() * 10  > 5 ? true : false // mock data
       // 是否完成配置
-      if (!isCompleted) {
+      if (!this.isCompleted) {
         this.confirm({
           title: "提示",
           icon: true,
@@ -755,7 +796,7 @@ export default {
           }
         }).catch(error =>{
           this.isOpen = false
-          this.$message.error('保存失败');
+          this.$message.error(error || '保存失败');
           // this.loading = false
         })
       }
@@ -836,15 +877,20 @@ export default {
       this.ruleForm.timePeriods.push(timePeriod)
     },
     handleToShopInfo() {
-      this.confirm({
+      if (this.addressId) {
+        this.confirm({
           title: "提示",
           icon: true,
-          text: '修改取货地址后请重新确认其它商家配送设置项，如无修改将以新的取货地址为中心按原配送规则执行',
+          text: '修改发货地址后请重新确认其它商家配送设置项，如无修改将以新的发货地址为中心按原配送规则执行',
           confirmText: '去修改'
         }).then(() => {
-          this.$router.push({ path:'/set/shopInfo' })
+          // source 1 商家配送
+          this.$router.push({ path:'/set/addressUpdate', query: {id: this.addressId, source: 1 } })
         }).catch(()=> {
         });
+      } else {
+          this.$router.push({ path:'/set/addressAdd', query: { source: 1 } })
+      }
     },
     // 开启商家配送 api
     openMerchantDeliver() {
@@ -874,25 +920,25 @@ export default {
     //  店铺查询 api
     getShopInfo(res) {
       const id = this.cid
-      this._apis.set.getShopInfo({ id }).then(res => {
+      return this._apis.set.getShopInfo({ id }).then(res => {
         
         if (res && res.hasOwnProperty('id')) {
           this.isOpen = res.isOpenMerchantDeliver === 1 ? true : false // 是否开启商家配送 0-否 1-是
           this.ruleForm.radiusType = res.deliverRangeType || 1
-          this.ruleForm.radius = res.deliverServiceRadius || null // 配送服务半径
+          // this.ruleForm.radius = res.deliverServiceRadius || null // 配送服务半径
           this.isOpenOrdinaryExpress = res.isOpenOrdinaryExpress // 是否开启普通快递 0-否 1-是
           this.isOpenTh3Deliver = res.isOpenTh3Deliver // 是否开启第三方配送 0-否 1-是
           this.isOpenSelfLift = res.isOpenSelfLift // 是否开启上门自提 0-否 1-是
-          this.ruleForm.lng = res.longitude
-          this.ruleForm.lat = res.latitude
+          // 经纬度需要获取地址库的默认地址
+          // this.ruleForm.lng = res.longitude
+          // this.ruleForm.lat = res.latitude
           const areaCode = res.areaCode
           const cityCode = res.cityCode
           const provinceCode = res.provinceCode
           isHasOtherWay = res.isOpenOrdinaryExpress === 1 || res.isOpenTh3Deliver === 1 || res.isOpenSelfLift === 1
-          // this.address = this.formatAddress(res.address, provinceCode, cityCode, areaCode) || null
-          this.address = `${res.sendAddress}${res.address}` || null
-          // this.getLngLat(this.address)
+          // this.address = `${res.sendAddress}${res.address}` || null // 取地址库的
         }
+        return res
       }).catch(err => {
         console.log('---getShopInfo--', err)
         // this.$message.error(err && err.message || '查询失败');
@@ -954,8 +1000,8 @@ export default {
     // 商家配送详情
     getOrderDeliverInfo() {
       const cid = this.cid
-      this._apis.set.getOrderDeliverInfo({ cid }).then(res => {
-        isCompleted = res.deliverStartingPrice
+      return this._apis.set.getOrderDeliverInfo({ cid }).then(res => {
+        // isCompleted = res.deliverStartingPrice
         this.ruleForm.price = res.deliverStartingPrice || null // 起送价
         this.ruleForm.basicFreight = res.deliverBasicFreight || null // 基础运费
         this.ruleForm.isOpenLadderFreight = res.isOpenLadderFreight || 0 // 是否启用阶梯运费 0-否 1-是
@@ -980,6 +1026,7 @@ export default {
         const weeks = this.formatSubscribeTimeWeekDays(res.subscribeTimeWeekDays) || [] // 以天为单位，每周重复的时间值(逗号分隔)：1,2,3,4,5,6,7
         this.ruleForm.weeks = weeks
         this.tempWeeks = weeks
+        return res
       }).catch(err => {
         console.log('---getOrderDeliverInfo--', err)
         // this.$message.error(err && err.message || '');
@@ -1000,7 +1047,7 @@ export default {
         this.confirm({
           title: "提示",
           icon: true,
-          text: '当前地址无法获取经纬度，请重新修改取货地址',
+          text: '当前地址无法获取经纬度，请重新修改发货地址',
           confirmText: '我知道了',
           showCancelButton: false
         })
@@ -1141,6 +1188,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
   $color: rgba(68, 67, 75, 1);
   .shopExpress {
+    min-height: 100%;
     background-color: #fff;
     color:$color;
     .dashed {

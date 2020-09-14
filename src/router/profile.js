@@ -20,6 +20,13 @@ export default [
         meta: { title: '概况首页', noCache: true, tabTitle: '概况',navType:2 }
       },
       {
+        path: 'guidePrompt',
+        component: () => import('@/views/profile/guidePrompt'),
+        name: 'guidePrompt',
+        hidden: false,
+        meta: { title: '开店引导入口', noCache: true, tabTitle: '开店引导',navType:2 }
+      },
+      {
         path: 'upgrade',
         component: () => import('@/views/profile/upgrade'),
         name: 'upgrade',
@@ -39,6 +46,13 @@ export default [
         name: 'passwordChange',
         hidden: false,
         meta: { title: '修改密码', noCache: true, tabTitle: '概况',navType:2 }
+      },
+      {
+        path: 'shopGuide',
+        component: () => import('@/views/profile/shopGuide'),
+        name: 'shopGuide',
+        hidden: false,
+        meta: { title: '开店引导', noCache: true, tabTitle: '开店引导',navType:2 }
       }
     ]
 	}

@@ -8,4 +8,5 @@ export default [
       'hasRealData',  //有真数据
       'hasFakeData',  //有假数据
       'needReplace',  //需要替换
+      'saveCallBack', //保存时需要触发的回调函数
 ]

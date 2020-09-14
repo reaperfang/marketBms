@@ -18,11 +18,11 @@
         <div class="tag_wrapper" v-loading="loading">
           <el-tag
             v-for="tag in displayList"
-            :key="tag.title"
+            :key="tag.id"
             :closable="ruleForm.addType === 1"
             style="margin-right:5px;"
             type="success" @close="deleteItem(tag)" :title="getTitleTips(tag)">
-            {{tag.title}}
+            {{tag.title.length >= 5 ? tag.title.substring(0, 3) + '...' : tag.title}}
           </el-tag>
         </div>
       </el-form-item>
@@ -39,7 +39,14 @@
         </el-radio-group>
         <p class="prop-message" v-if="ruleForm.addType === 2">建议最大设置为10个</p>  
       </el-form-item>
-      <el-form-item label="样式" prop="couponStyle">
+      <el-form-item label="排列样式" prop="listStyle">
+        <el-radio-group class="radio-block" v-model="ruleForm.listStyle">
+          <el-radio :label="1">横向滑动</el-radio>
+          <el-radio :label="2">一行三个</el-radio>
+          <el-radio :label="3">大图模式</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="卡片样式" prop="couponStyle">
         <el-radio-group class="radio-block" v-model="ruleForm.couponStyle">
           <el-radio :label="1">样式1</el-radio>
           <el-radio :label="2">样式2</el-radio>
@@ -84,7 +91,8 @@ export default {
         addType: 2,//添加方式
         showNumber: 5,   //显示个数限制
         couponNumberType: 1,  //券活动数类型
-        couponStyle: 1,//优惠券样式
+        listStyle: 1,  //排列样式
+        couponStyle: 1,//卡片样式
         couponColor: 1,//优惠券颜色类型
         hideScrambled: false,//隐藏已抢完券
         ids: []//优惠券id列表
@@ -119,7 +127,7 @@ export default {
         this.fetch();
       }else{
         this.displayList = [];
-        this.fetch();
+        this.fetch(false);
       }
     },
 
@@ -230,6 +238,7 @@ export default {
 
 <style lang="scss" scoped>
 /deep/ .el-tag.el-tag--success{
+  position: relative;
   color: #fff;
   width: 56px;
   height: 26px;
@@ -239,6 +248,13 @@ export default {
   line-height: 26px;
   border: none;
   padding: 0px 5px;
+  .el-icon-close {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #92929B;
+    color: #fff;
+  }
 }
 .property-coupon {
   .add-coupon {

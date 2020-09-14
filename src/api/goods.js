@@ -486,6 +486,53 @@ export function getExpressAndDeliverySet(data) {
     data
   })
 }
+//修改商品排列序号
+export function editGoodSortId(data) {
+  return request({
+    target: 'PRODUCT-EDIT-BY-SORTID-PROCESSOR',
+    method: 'post',
+    apiType: 'goods',
+    data,
+  })
+}
+//商品转移分类和新增分类
+export function editProductsCatalogs(data) {
+  return request({
+    target: 'PRODUCT-CATALOG-BATCH-EDIT-PROCESSOR',
+    method: 'post',
+    apiType: 'goods',
+    data,
+  })
+}
+
+//添加商品常用类目
+export function addProCommonCategory(data) {
+  return request({
+    target: 'PRODUCT_OFTEN_CATEGORY_ADD_PROCESSOR',
+    method: 'post',
+    apiType: 'goods',
+    data,
+  })
+}
+//查询商品常用类目
+export function getProCommonCategory(data) {
+  return request({
+    target: 'PRODUCT_OFTEN_CATEGORY_FIND_LIST_PROCESSOR',
+    method: 'post',
+    apiType: 'goods',
+    data,
+  })
+}
+//删除商品常用类目
+export function delProCommonCategory(data) {
+  return request({
+    target: 'PRODUCT_OFTEN_CATEGORY_DEL_PROCESSOR',
+    method: 'post',
+    apiType: 'goods',
+    data,
+  })
+}
+
 // 分销商品设置详情
 export function commisionGoodsDetails(data) {
   return request({

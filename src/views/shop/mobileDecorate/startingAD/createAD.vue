@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 export default {
   name: 'shopIndex',
@@ -267,6 +267,15 @@ export default {
 .upload_tips{
   color:rgba(211,211,211,1);
 }
+/deep/ .module.props {
+  &>form {
+    border: 0;
+  }
+  .block.button {
+    border: 0;
+  }
+}
+
 .module {
   &.view {
     .phone-body {

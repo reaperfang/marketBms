@@ -5,6 +5,7 @@
         :title="title"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
+        :append-to-body="appendToBody"
         @close="close"
         v-bind="$attrs"
         v-on="$listeners">
@@ -70,6 +71,10 @@ export default {
         },
         isHing: {
             type: Boolean
+        },
+        appendToBody: {
+            type: Boolean,
+            default: false
         }
     }
 }

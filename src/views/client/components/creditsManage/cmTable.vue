@@ -4,7 +4,7 @@
     <el-table
       :data="creditList"
       style="width: 100%"
-      :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+      :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
       v-loading="loading"
       >
@@ -103,19 +103,19 @@ export default {
             this.currentData.row = row;
             break;
           case 'Sign'://签到有礼            
-            this.$router.push({path:'/apply',query:{paths:'/application/customarket/checkin'}})
+            this.$router.push({path:'/apply',query:{paths:'/application/customarket/checkin',applyId:'6'}})
             this.SETCURRENT(8)
             break;
           case 'SuperPoster'://超级海报
-            this.$router.push({path:'/apply',query:{paths:'/application/feature/posterList'}})
+            this.$router.push({path:'/apply',query:{paths:'/application/feature/posterList',applyId:'5'}})
             this.SETCURRENT(8)
             break;
           case 'FullReduction'://满减/满折
-            this.$router.push({path:'/apply',query:{paths:'/application/promotion/fullreduce'}})
+            this.$router.push({path:'/apply',query:{paths:'/application/promotion/fullreduce',applyId:'4'}})
             this.SETCURRENT(8)
             break;
           case 'Holiday'://节日有礼
-            this.$router.push({path:'/apply',query:{paths:'/application/customarket/festival'}})
+            this.$router.push({path:'/apply',query:{paths:'/application/customarket/festival',applyId:'6'}})
             this.SETCURRENT(8)
             break;
           default:
@@ -158,6 +158,13 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(1) {
+            text-align: left;
+            padding-left: 20px;
+        }
+    }
 .edit_span{
     color: #655EFF;
     cursor: pointer;
@@ -171,6 +178,7 @@ export default {
 }
 .page_styles{
   text-align: center;
+  margin-top: 40px;
 }
 .yy{
   display: inline-block;

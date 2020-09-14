@@ -3,7 +3,7 @@
         <section class="information">
             <!-- <p class="section-header">售后信息</p> -->
             <div class="row align-center justify-between">
-                <div class="col">
+                <div class="col" style="width: 50%;">
                     <div class="row">
                         <div class="col list-lefter">
                             售后原因
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col righter-col">
+                <div class="col righter-col" style="width: 50%;">
                     <div v-if="orderAfterSale.type != 2" class="row">
                         <div class="col list-lefter">
                             退款方式
@@ -67,7 +67,7 @@
                             {{orderAfterSale.memberName}}
                         </div>
                     </div>
-                    <div v-if="orderAfterSale.type == 1 || orderAfterSale.type == 2" class="row">
+                    <!-- <div v-if="orderAfterSale.type == 1 || orderAfterSale.type == 2" class="row">
                         <div class="col list-lefter">
                             用户收货信息
                         </div>
@@ -84,7 +84,7 @@
                             <p>{{orderSendInfo.sendName}} {{orderSendInfo.sendPhone}}</p>
                             <p>{{orderSendInfo.sendAddress}} {{orderSendInfo.sendDetail}}</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </section>
@@ -101,26 +101,26 @@
                 <div class="content">
                     <el-table
                         :data="itemList"
-                        style="width: 100%">
+                        style="width: 100%"
+                        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
-                                    <div style="margin-right: 5px;" class="col">
+                                    <div class="col image-box">
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
                                         <p :title="scope.row.goodsName" class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
-                                        <p>{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
+                                        <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
                             </template>
                         </el-table-column>
                         <el-table-column
                             prop="goodsUnit"
-                            label="单位"
-                            width="180">
+                            label="单位">
                         </el-table-column>
                         <el-table-column
                             prop="afterSaleCount"
@@ -131,13 +131,16 @@
                             prop="salePrice"
                             label="商品单价">
                             <template  slot-scope="scope">
-                                {{scope.row.salePrice}}
+                                ¥{{scope.row.salePrice}}
                             </template>
                         </el-table-column>
                         <el-table-column
                             v-if="orderAfterSale.type != 2"
                             prop="subtotalMoney"
                             label="小计">
+                            <template  slot-scope="scope">
+                                ¥{{scope.row.subtotalMoney}}
+                            </template>
                         </el-table-column>
                         <!-- <el-table-column
                             prop="afterSaleLimitTime"
@@ -353,19 +356,19 @@
             <p class="section-header">操作记录</p>
             <el-table
                 :data="recordList"
-                style="width: 100%">
+                style="width: 100%"
+                :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
+                class="operate">
                 <el-table-column
                     prop="operationType"
-                    label="操作"
-                    width="180">
+                    label="操作">
                     <template slot-scope="scope">
                         <span>{{scope.row.operationType | operationTypeFilter}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                     prop="createUserName"
-                    label="操作人"
-                    width="180">
+                    label="操作人">
                 </el-table-column>
                 <el-table-column
                     prop="createTime"
@@ -460,7 +463,12 @@ export default {
             //} else if(code == 2) {
             //    return '原支付方式返还'
             //}
-            return '原支付方式返还'
+            //1微信支付,2线下支付-货到付款,3找人代付,4线下支付-确认收款,5线上支付(余额支付或积分支付或两者组合支付),6支付宝支付
+            if(code == 2 || code == 4) {
+                return '商户手动确认收款或用户选择货到付款的订单，实退金额都会退到用户余额中'
+            } else {
+                return '原支付方式返还'
+            }
         },
         channelTypeFilter(code) {
             if(code == 1) {
@@ -690,14 +698,16 @@ export default {
             .list-lefter {
                 margin-right: 20px;
                 width: 90px;
-                text-align: right;
+                text-align: left;
                 flex-shrink: 0;
             }
             .list-righter {
                 color: #9FA29F;  
+                flex-shrink: 0;
+                width: calc(100% - 100px);
             }
             .righter-col {
-                border-left: 2px solid #CACFCB;
+                //border-left: 2px solid #CACFCB;
                 padding: 10px 20px;
             }
         }
@@ -811,6 +821,56 @@ export default {
                 width: 100px;
             }
         }
+    }
+    .image-box {
+        margin-right: 10px;
+    }
+    .goods-specs {
+        color: #9FA29F;
+    }
+    .title-section-header {
+        height: 50px;
+        line-height: 50px;
+        background-color: #F6F7FA;
+        color: #44434B;
+    }
+    .title-section .content {
+        padding-top: 29px;
+    }
+    /deep/ .el-table th>.cell {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    /deep/ .el-table th:first-child>.cell {
+        padding-left: 20px;
+    }
+    /deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(1) {
+            text-align: left;
+        }
+    }
+    /deep/ .el-table.operate td, /deep/ .el-table.operate th {
+        text-align: center;
+        &:nth-child(1) {
+            text-align: left;
+        }
+        &:nth-child(3) {
+            text-align: right;
+        }
+    }
+    /deep/ .el-table.operate th {
+        &:nth-child(3) {
+            padding-right: 50px;
+        }
+    }
+    /deep/ .el-table table tbody tr {
+        .cell {
+            padding-left: 20px;
+        }
+    }
+    /deep/ .el-table tr th {
+        border-bottom: none;
     }
 </style>
 
