@@ -16,12 +16,12 @@ export default {
     };
   },
   created() {
-    this.getList()
+    this.getDetail()
   },
   filters: {},
   computed: {},
   methods: {
-    getList() {
+    getDetail() {
       let id = this.$route.query.id || this.$route.query.ids;
 
       this._apis.order
@@ -54,10 +54,15 @@ export default {
           })
 
           this.orderData.list = list.map(item => ({
+            deliveryWay: this.orderData.deliveryWay,
             orderId: this.$route.query.orderId || this.$route.query.id || this.$route.query.ids,
             memberInfoId: item.memberInfoId,
             orderCode: item.orderCode,
-            orderItems: [],
+            orderItems: item.orderItemList.map(orderItem => ({
+              ...orderItem,
+              cacheSendCount: orderItem.sendCount,
+              sendCount: orderItem.goodsCount - orderItem.sendCount
+            })),
             id: item.id,
             memberSn: item.memberSn,
             receivedName: item.receivedName,

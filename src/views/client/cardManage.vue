@@ -196,6 +196,7 @@ export default {
 .c_container{
     padding: 20px;
     background-color: #fff;
+    height:100%;
 }
 .marL20{
     margin-left: 20px;

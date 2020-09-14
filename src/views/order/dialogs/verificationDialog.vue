@@ -5,6 +5,7 @@
     title="核销验证"
     width="420px"
     :showFooter="showFooter"
+     @close="close"
   >
     <template v-if="!isSuccess">
       <div class="container">
@@ -12,7 +13,7 @@
           <el-option label="自提码核销" :value="1"></el-option>
         </el-select>
         <div>
-          <el-input type="text" placeholder="请输入自提码" v-model="selfCode"></el-input>
+          <el-input :class="{error: isShowError}" type="text" placeholder="请输入自提码" v-model="selfCode"></el-input>
           <span v-if="isShowError" class="msgInfo">{{errorMsg}}</span>
         </div>
       </div>
@@ -47,6 +48,13 @@ export default {
   },
   created() {},
   methods: {
+    close() {
+      this.isShowError = false
+    },
+    cancelHandler() {
+      this.isShowError = false
+      this.visible = false
+    },
     submit() {
       let self = this;
       if(self.selfCode===''){
@@ -170,6 +178,10 @@ export default {
   color: rgba(146, 146, 155, 1);
   font-size: 12px;
   margin-left: 51px;
+}
+/deep/ .el-input.error .el-input__inner {
+    border: 1px solid #FD4C2B;
+    border-radius: 4px;
 }
 </style>
 

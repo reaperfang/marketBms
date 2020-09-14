@@ -61,8 +61,8 @@
             <el-radio-button label="7">最近7天</el-radio-button>
             <el-radio-button label="15">最近15天</el-radio-button>
             <el-radio-button label="30">最近30天</el-radio-button>
+            <el-radio-button label="1">自定义时间</el-radio-button>
           </el-radio-group>
-          <el-button @click="customTime()">自定义时间</el-button>
           <span v-if="isCustomTime">
             <el-date-picker
               class="mr26"
@@ -195,9 +195,14 @@ export default {
   },
   components: {financeChart},
   watch: {
-    days(){
-      this.getDataNumRs()
-      this.init(this.days)
+    days(newValue,oldValue){
+      if(newValue == 1){
+        this.isCustomTime = true
+      }else{
+        this.isCustomTime = false
+        this.getDataNumRs()
+        this.init(this.days)
+      }
     },
     dataList(){
       let dataObj = {
@@ -316,11 +321,6 @@ export default {
         this.$message.error(error)
       })
     },
-
-    //自定义时间
-    customTime(){
-      this.isCustomTime = !this.isCustomTime
-    },
   }
 }
 </script>
@@ -347,7 +347,7 @@ export default {
   height: 160px;
   background: #fff;
   border-radius: 3px;
-  padding: 15px 20px;
+  padding: 20px;
     .title{
       display: flex;
       flex: 1;

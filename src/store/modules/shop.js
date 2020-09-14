@@ -31,6 +31,7 @@ const app = {
           resolve()
         }).catch((error)=>{
           commit('setShopInfo', {});
+          commit('setStoreGuide', null);
           reject(error)
         });
       })

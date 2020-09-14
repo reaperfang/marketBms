@@ -20,11 +20,11 @@
           <el-pagination 
             v-if="pois.length > 0"
             class="pagination"
-            background
+            :background="true"
             small
             :pager-count="5"
             :total="totalNum" 
-            layout="prev, pager, next"
+            layout="prev, pager, next, sizes"
             @current-change="handleCurrentChange"
             :current-page.sync="page"
             :page-size="pageSize"
@@ -228,11 +228,11 @@ export default {
     },
     //执行搜索
     search() {
-      if (!this.keyword) {
-        this.totalNum = 0
-        this.pois = []
-        return false
-      }
+      // if (!this.keyword) {
+      //   this.totalNum = 0
+      //   this.pois = []
+      //   return false
+      // }
       this.clearAllMaker()
       if (this.info) {
         this.info.close();
@@ -266,6 +266,11 @@ export default {
       })
     },
     handlePropSearch(keyword) {
+      if (!keyword) {
+        this.totalNum = 0
+        this.pois = []
+        return false
+      }
       console.log('----keyword---', keyword)
       this.keyword = keyword
       this.page = 1

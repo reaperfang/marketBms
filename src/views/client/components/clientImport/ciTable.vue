@@ -47,13 +47,14 @@
     </el-table>
     <div class="page_styles">
       <el-pagination
+        :background="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="Number(startIndex) || 1"
         :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
         :page-size="pageSize*1"
         :total="total*1"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="prev, pager, next, sizes"
       ></el-pagination>
     </div>
     <component 
@@ -180,19 +181,32 @@ export default {
             text-align: left;
             padding-left: 20px;
         }
+        &:nth-child(1) {
+            text-align: left;
+            padding-left: 20px;
+        }
+        &:nth-child(3) {
+            text-align: right;
+        }
+        &:nth-child(4) {
+            text-align: right;
+        }
+        &:nth-child(5) {
+            text-align: right;
+        }
     }
 /deep/ .el-table td{
   &:nth-child(3) {
     text-align: right;
-    padding-right: 75px;
+    
   }
   &:nth-child(4) {
     text-align: right;
-    padding-right: 75px;
+    
   }
   &:nth-child(5) {
     text-align: right;
-    padding-right: 75px;
+    
   }
 }
 .page_styles{

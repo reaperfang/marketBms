@@ -148,7 +148,7 @@
                     label="状态"
                     >
                     <template slot-scope="scope">
-                        <span>{{scope.row.status | statusFilter}}</span>
+                        <span>{{scope.row.status | orderStatusFilter}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -177,8 +177,17 @@
                                 <span v-permission="['订单', '发货管理', '订单发货', '发货']" v-if="!scope.row.isFillUp" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${scope.row.orderId}&_ids=${scope.row.id}`)">发货</span>
                                 <span v-if="scope.row.isFillUp && scope.row.deliveryWay != 4" @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
                             </template>
-                            <template v-if="scope.row.status == 5 && scope.row.deliveryWay == 4">
-                                <span @click="verificationHandler(scope.row)">核销验证</span>
+                            <template v-if="scope.row.status == 5">
+                                <template v-if="scope.row.deliveryWay == 1">
+                                    <span v-if="scope.row.isFillUp" @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
+                                </template>
+                                <template v-else-if="scope.row.deliveryWay == 4">
+                                    <span @click="verificationHandler(scope.row)">核销验证</span>
+                                </template>
+                                <template v-else-if="scope.row.deliveryWay == 3">
+                                    <span>重新发单</span>
+                                    <span @click="closeOrder(scope.row)">关闭订单</span>
+                                </template>
                             </template>
                         </div>
                     </template>
@@ -186,7 +195,7 @@
             </el-table>
             <div v-show="!loading" class="footer">
                 <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
-                <el-button v-permission="['订单', '发货管理', '订单发货', '批量导入发货']" class="border-button" @click="$router.push('/order/batchImportAndDelivery')">批量导入发货</el-button>
+                <el-button v-permission="['订单', '发货管理', '订单发货', '批量导入发货']" class="border-button" @click="importAndDelivery">批量导入发货</el-button>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量发货']" class="border-button" @click="batchSendGoods">批量发货</el-button>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印配送订单']" class="border-button" @click="batchPrintDistributionSlip">批量打印配送单</el-button>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印电子面单']" class="border-button" @click="batchPrintElectronicForm">批量打印电子面单</el-button>
@@ -212,6 +221,7 @@ import DeliveryMethod from "./deliveryMethod"; //配送方式组件
 import DialogPrintList from '@/components/printListDialog'
 import utils from "@/utils";
 import VerificationDialog from "@/views/order/dialogs/verificationDialog";
+import CloseThirdPartyOrderDialog from "@/views/order/dialogs/closeThirdPartyOrderDialog";
 
 export default {
     data() {
@@ -264,24 +274,6 @@ export default {
         }
     },
     filters: {
-        statusFilter(code) {
-            switch(code) {
-                case 0:
-                    return '待付款'
-                case 1:
-                    return '待成团'
-                case 2:
-                    return '已关闭'
-                case 3:
-                    return '待发货'
-                case 4:
-                    return '部分发货'
-                case 5:
-                    return '待收货'
-                case 6:
-                    return '已完成'
-            }
-        },
         deliveryWayFilter(code) {
             switch(code) {
                 case 1:
@@ -317,7 +309,7 @@ export default {
             return this.tableData.some(val => val.isAutoSend || (val.isUrge == 0))
         },
         computeWidth() {
-            if(this.tableData.some(item => item.status == 4 || (item.status == 3 && item.isFillUp))) {
+            if(this.tableData.some(item => item.status == 4 || (item.status == 5 && item.isFillUp) || (item.status == 3 && item.isFillUp))) {
                 return '118'
             } else {
                 return '100'
@@ -325,6 +317,27 @@ export default {
         }
     },
     methods: {
+        closeOrder(row) {
+            this.currentDialog = 'CloseThirdPartyOrderDialog'
+            this.dialogVisible = true
+        },
+        importAndDelivery() {
+            // this._apis.order
+            // .getShopSendAddress({ cid: this.cid })
+            // .then(res => {
+            //     if(!res) {
+            //         this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '去设置', text: '您未完成发货地址设置，请到地址库设置发货地址。'}).then(() => {
+            //             this.$router.push('/set/address')
+            //         })
+            //     } else {
+            //         this.$router.push('/order/batchImportAndDelivery')
+            //     }
+            // })
+            // .catch(error => {
+            //     this.$message.error(error);
+            // });
+            this.$router.push('/order/batchImportAndDelivery')
+        },
         verificationHandler(row) {
             this.currentData = row.orderId
             this.currentDialog = 'VerificationDialog'
@@ -538,7 +551,8 @@ export default {
         Pagination,
         DeliveryMethod,
         DialogPrintList,
-        VerificationDialog
+        VerificationDialog,
+        CloseThirdPartyOrderDialog
     }
 }
 </script>
@@ -573,6 +587,7 @@ export default {
         }
         .form-inline {
             padding: 20px;
+            padding-bottom: 0;
         }
         .buttons {
             display: flex;
@@ -590,7 +605,7 @@ export default {
     .content {
         background-color: #fff;
         padding: 20px;
-        margin: 0 20px;
+        //margin: 0 20px;
         padding-top: 0;
         p {
             font-size: 16px;
@@ -738,6 +753,7 @@ export default {
      /deep/ .el-table--small td, /deep/  .el-table--small th {
         padding: 16px 0;
     }
+    /deep/ .el-form--inline .el-form-item {
+        margin-bottom: 20px;
+    }
 </style>
-
-

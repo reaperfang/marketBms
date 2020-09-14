@@ -186,7 +186,7 @@
                         </div>
                         <i class="el-icon-warning-outline sku-code"></i>
                     </el-tooltip>
-                <el-input :disabled="(!ruleForm.productCategoryInfoId || (editor && ruleForm.activity))" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入SKU编码"></el-input>
+                <el-input :disabled="(!ruleForm.productCategoryInfoId || (editor && ruleForm.activity))" v-model="singleSpec.code" minlength="6" maxlength="18" placeholder="请输入SKU编码"></el-input>
                 </el-form-item>
                 <el-form-item  label="成本价" prop="costPrice">
                     <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.costPrice" placeholder="请输入成本价"></el-input>
@@ -464,19 +464,19 @@
                     <div class='checkbox-item' >
                         <el-checkbox :label="4" @change="((val)=>{deliveryWayChange(val, '4')})" style="margin-right:30px;">上门自提</el-checkbox>
                         <div> 
-                            <span class="prompt" v-show="!isSelfLiftSet" >“上门自提”需在设置-配送设置中开启后生效，去设置</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span>
+                            <span class="prompt" v-show="!isSelfLiftSet" >“上门自提”需在设置-配送设置中开启后生效，</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span>
                         </div>
                     </div>
                     <div class='checkbox-item'>
                         <el-checkbox :label="2" @change="((val)=>{deliveryWayChange(val, '2')})" >同城配送</el-checkbox>
                         <div>
-                        <span class="prompt" style="margin-left:30px;" v-show="!isDeliverySet">“同城配送”需在设置-配送设置中开启后生效，去设置</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
+                        <span class="prompt" style="margin-left:30px;" v-show="!isDeliverySet">“同城配送”需在设置-配送设置中开启后生效，</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
                         </div>
                     </div>
                 </el-checkbox-group>
                 <div>
                     <div style="display:none;width:296px;margin-left:24px;" v-show="!isDeliverySet || !isExpressSet">
-                        <span class="prompt" v-show="!isExpressSet">“普通快递”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isExpressSet" @click="gotoExpressSet">去设置</span>
+                        <span class="prompt" v-show="!isExpressSet">“普通快递”需在店铺设置开启后生效，</span><span class="set-btn blue pointer font12" v-show="!isExpressSet" @click="gotoExpressSet">去设置</span>
                     </div>
                     <!-- <span class="prompt" v-show="!isSelfLiftSet" style="margin-left:60px;">“上门自提”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span> -->
                     <!-- <span class="prompt" v-show="!isDeliverySet">“同城配送”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span> -->
@@ -713,6 +713,7 @@ export default {
         return {
             specRadio:0,//商品规格信息，0:单一规格，1:多规格
             singleSpec:{
+                    code:"",
                     costPrice:"",
                     salePrice:"",
                     stock:"",
@@ -1124,7 +1125,7 @@ export default {
                     });
                     return false
                 }
-                if(+obj.salePrice<+obj.costPrice) {
+                if(!obj.activity && (+obj.salePrice<+obj.costPrice)) {
                     this.$message({
                         message: '售卖价不得低于成本价',
                         type: 'warning'
@@ -1928,7 +1929,7 @@ export default {
                     this.isExpressSet = false;
                 }
                 //如果商家配送未开启则提示去设置
-                if(name == 'delivery' && res.isOpenMerchantDeliver == 0){
+                if(name == 'delivery' && (res.isOpenMerchantDeliver == 0 && res.isOpenTh3Deliver == 0)){
                     this.isDeliverySet = false;
                 }
                 //如果上门自提未开启则提示去设置

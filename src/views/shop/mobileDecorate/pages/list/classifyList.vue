@@ -13,7 +13,7 @@
         <el-button type="primary" @click="_routeTo('m_classifyEditor')">新建分类</el-button>
       </div>
     </div>
-    <div class="table" v-calcHeight="300">
+    <div class="table">
       <p>微页面分类（共{{total || 0}}个）</p>
       <el-table :data="tableData" stripe v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column prop="name" label="分类名称">
@@ -154,10 +154,11 @@ export default {
   padding-top:0;
 }
 /deep/ .table{
-  overflow-y: auto;
+  // overflow-y: auto;
   margin-top:20px;
   background:#fff;
   padding:20px;
+  padding-bottom:50px;
   p{
     margin-bottom:20px;
   }

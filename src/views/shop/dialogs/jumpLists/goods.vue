@@ -16,6 +16,7 @@
                 :multiple="false"
                 :options="categoryData"
                 :normalizer="normalizer"
+                :clearable="false"
                 placeholder="请选择分类"
                 v-model="seletedClassify"></treeselect>
             </el-form-item>
@@ -55,13 +56,14 @@
         </el-table>
       <div class="pagination">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(startIndex) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
           >
         </el-pagination>
       </div>
@@ -92,7 +94,10 @@ export default {
       goodsClassifyList: [],
       tableData: [],
       currentClassifyId: [],
-      categoryData: [],
+      categoryData: [{
+          "id": "",
+          "name": "全部",
+      }],
       seletedClassify: '',
       normalizer(node) {
         return {
@@ -127,10 +132,7 @@ export default {
         enable: '1'
       }).then((response)=>{
         this.filterEnableData(response);
-        response = [{
-          "id": "",
-          "name": "全部",
-        }, ...response];
+        response = [...this.categoryData, ...response];
         this.categoryData = response;
         this.loading = false;
       }).catch((error)=>{

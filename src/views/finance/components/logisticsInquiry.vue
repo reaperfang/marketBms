@@ -73,7 +73,7 @@
           prop="createTime"
           label="查询时间"
           sortable = "custom"
-          align="center"
+          align="right"
           width="200px">
         </el-table-column>
       </el-table>
@@ -85,13 +85,13 @@
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1"
-          :background="background">
+          :background="true">
         </el-pagination>
       </div>
     </div>
-	  <exportTipDialog :data=currentData  :dialogVisible.sync="dialogVisible"></exportTipDialog>
+	  <exportTipDialog :data="currentData" :dialogVisible.sync="dialogVisible"></exportTipDialog>
   </div>
 </template>
 
@@ -249,13 +249,13 @@ export default {
   width: 100%;
   background: #fff;
   border-radius: 3px;
-  padding: 15px 20px;
+  padding: 20px;
 }
 .under_part{
   width: 100%;
   background: #fff;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
   .total{
     display: flex;
     justify-content: space-between;
@@ -263,7 +263,7 @@ export default {
       font-size: 16px;
       color: #B6B5C8;
       display:block;
-      margin-top:15px;
+      // margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -282,6 +282,9 @@ export default {
   border-bottom-color:#44434B;
 }
 /deep/.el-table--small td{
-  padding:16px 0;
+  padding:16px 10px;
+}
+/deep/.el-table--small th{
+  padding:0px 0px 0px 10px;
 }
 </style>

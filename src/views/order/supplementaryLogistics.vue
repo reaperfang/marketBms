@@ -218,8 +218,10 @@ import { validatePhone } from "@/utils/validate.js"
 
 import { asyncRouterMap } from '@/router'
 import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
+import { common, deliveryWay1 } from '@/views/order/mixins/orderMixin'
 
 export default {
+    mixins: [common, deliveryWay1],
     data() {
         var expressCompanyCodeValidator = (rule, value, callback) => {
           if(this.ruleForm.expressCompanyCode != 'other') {
@@ -285,11 +287,9 @@ export default {
             currentDialog: '',
             dialogVisible: false,
             currentData: {},
-            expressCompanyList: [],
             sendGoods: '',
             title: '',
             express: null,
-            sending: false,
             distributorList: [], //配送员筛选后的数据
             distributorListFilter: [], //所有配送员数据
             distributorName: '', //配送员名字
@@ -298,9 +298,6 @@ export default {
             distributorSet: false,
             ajax: true,
             _ids: [],
-            params: {},
-            _list: [],
-            shopAddressInfo: null
         }
     },
     created() {
@@ -544,22 +541,6 @@ export default {
         printingElectronicForm() {
             this.$router.push('/order/printingElectronicForm?ids=' + this.orderInfo.id + '&type=supplementaryLogistics')
         },
-        getExpressCompanyList() {
-            this._apis.order.getElectronicFaceSheetExpressCompanyList().then((res) => {
-                res.forEach(val => {
-                    val.expressCompanyCode = val.expressCode
-                    val.expressCompany = val.expressName
-                })
-                res.push({
-                    expressCompanyCode: 'other',
-                    expressCompany: '其他'
-                })
-                this.expressCompanyList = res
-            }).catch(error => {
-                this.visible = false
-                this.$message.error(error);
-            })
-        },
         sendGoodsHandler(formName) {
             // if(this.orderInfo.deliveryWay == 1) {
             //     if(!this.shopAddressInfo) {
@@ -642,12 +623,16 @@ export default {
                         ],
                     }
                     this.params = params
-                    if(this.express != null && !this.express.specificationSize) {
+                    if(this.express != null && !this.express.sizeSpecs) {
                         try {
                         let res = await this._apis.order.getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
 
                         if(res && res.length) {
-                            this._list[0].sizeList = res
+                            this._list[0].sizeList = res.map(item => ({
+                                ...item,
+                                sizeSpecs: item.sizeSpecs + ' ' + item.templateSize,
+                                templateSize: `${item.sizeSpecs} ${item.templateSize}`
+                            }))
                             this.currentData = {
                                 list: this._list,
                                 expressCompanyList: this.expressCompanyList

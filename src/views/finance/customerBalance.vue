@@ -53,28 +53,32 @@
         <el-table-column
           prop="tradeDetailSn"
           label="交易流水号"
-          width="200px">
+          width="210px"
+          fixed>
         </el-table-column>
         <el-table-column
           prop="relationSn"
           label="关联单据编号"
           :render-header="renderRelationSn"
-          width="200px">
+          width="220px">
         </el-table-column>
         <el-table-column
           prop="memberSn"
           label="用户ID"
-          align="center">
+          align="center"
+          width="110px">
         </el-table-column>
         <el-table-column
           prop="nickName"
           label="用户昵称"
-          align="center">
+          align="center"
+          width="100px">
         </el-table-column>
         <el-table-column
           prop="businessType"
           label="交易类型"
-          align="center">
+          align="center"
+          width="100px">
           <template slot-scope="scope">
             {{transactionTypes[scope.row.businessType].label}}
           </template>
@@ -82,7 +86,8 @@
         <el-table-column
           prop="changeAmount"
           label="变动金额（元）"
-          align="right">
+          align="right"
+          width="140px">
           <template slot-scope="scope">
             {{scope.row.changeAmount > 0 ? '+'+scope.row.changeAmount : scope.row.changeAmount}}
           </template>
@@ -90,14 +95,16 @@
         <el-table-column
           prop="surplusAmount"
           label="剩余金额（元）"
-          align="right">
+          align="right"
+          width="140px">
         </el-table-column>
         <el-table-column
           prop="tradeTime"
           label="交易时间"
           sortable = "custom"
           align="center"
-          width="200px">
+          width="190px"
+          fixed="right">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -108,9 +115,9 @@
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1"
-          :background="background">
+          :background="true">
         </el-pagination>
       </div>
       <exportTipDialog :data = currentData :dialogVisible.sync="dialogVisible" ></exportTipDialog>
@@ -258,13 +265,13 @@ export default {
   width: 100%;
   background: #fff;
   border-radius: 3px;
-  padding: 15px 20px;
+  padding: 20px;
 }
 .under_part{
   width: 100%;
   background: #fff;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
   .total{
     display: flex;
     justify-content: space-between;
@@ -272,7 +279,7 @@ export default {
       font-size: 16px;
       color: #B6B5C8;
       display: block;
-      margin-top:15px;
+      // margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -290,7 +297,10 @@ export default {
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
 }
-/deep/.el-table--small td{
-  padding:16px 0;
+/deep/ .el-table--small td{
+  padding:16px 10px;
+}
+/deep/.el-table--small th{
+  padding:0px 10px;
 }
 </style>

@@ -518,8 +518,9 @@ export default {
     width: 6%;
 }
 .c_container{
-    padding: 16px 0 30px 20px;
+    padding: 20px;
     background-color: #fff;
+    height:100%;
     .marL20{
         margin-left: 20px;
     }

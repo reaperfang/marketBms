@@ -21,12 +21,13 @@
                   :multiple="false"
                   :options="categoryData"
                   :normalizer="normalizer"
+                  :clearable="false"
                   placeholder="全部"
                   v-model="seletedClassify"></treeselect>
               </el-form-item>
               <el-form-item label prop="name">
-                <el-button type="primary" @click="search">查 询</el-button>
-                <el-button @click="seletedClassify=categoryId || null;refresh()">刷 新</el-button>
+                <el-button type="primary" @click="search">搜 索</el-button>
+                <el-button @click="seletedClassify=categoryId || '';refresh()">刷 新</el-button>
               </el-form-item>
         </el-form>
       </div>
@@ -85,13 +86,14 @@
       </div>
       <div class="pagination" v-if="tableData.length">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.pageNum) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
         ></el-pagination>
       </div>
     </div>
@@ -125,7 +127,10 @@ export default {
       disableStatus: [0, -1],  //不可选状态值
       goodsClassifyList: [],
       currentClassifyId: [],
-      categoryData: [],
+      categoryData: [{
+          "id": "",
+          "name": "全部",
+      }],
       seletedClassify: this.categoryId || '',
       normalizer(node) {
         return {
@@ -169,10 +174,7 @@ export default {
         enable: '1'
       }).then((response)=>{
         this.filterEnableData(response);
-        response = [{
-          "id": "",
-          "name": "全部",
-        }, ...response];
+        response = [...this.categoryData, ...response];
         this.categoryData = response
       }).catch((error)=>{
         console.error(error);
