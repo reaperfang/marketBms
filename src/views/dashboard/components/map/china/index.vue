@@ -10,14 +10,33 @@
 <script>
 import echarts from "echarts";
 import chinaData from "../../../data/china.json";
+// import { mapGetters, mapActions, mapState } from "vuex";
 export default {
+	// watch: {
+	// 	"dashboard.realtimeuser"(val) {
+	// 		let result = val.map(item => {
+	// 			return {
+	// 				name: item.pro_name_rt,
+	// 				value: 1
+	// 			};
+	// 		});
+
+	// 		console.log("dashboard.realtiemuser", result);
+
+	// 		this.$refs.chart.setSeriesData(result);
+	// 	}
+	// },
+	// computed: {
+	// 	...mapState(["dashboard"])
+	// },
 	props: ["barColor", "progress", "city", "mapData"],
 	name: "TEMPLATE",
 	data() {
 		return {
 			chartData: "71.23",
 			chart: "",
-			interval: ""
+			interval: "",
+			option: ""
 		};
 	},
 	mounted() {
@@ -127,7 +146,7 @@ export default {
 				return res;
 			};
 
-			var option = {
+			this.option = {
 				// //backgroundColor: "#FF010F27", //背景色
 				tooltip: {
 					show: true,
@@ -153,45 +172,6 @@ export default {
 						return `<b>${name}</b><br />${"暂无数据"}`;
 					}
 				},
-				// tooltip: {
-				//   show:true,
-				//   trigger: "item",
-				//   formatter: function(params) {
-				//     if (typeof params.value[2] == "undefined") {
-				//       var toolTiphtml = "";
-				//       for (var i = 0; i < toolTipData.length; i++) {
-				//         if (params.name == toolTipData[i].name) {
-				//           toolTiphtml += toolTipData[i].name + ":<br>";
-				//           for (var j = 0; j < toolTipData[i].value.length; j++) {
-				//             toolTiphtml +=
-				//               toolTipData[i].value[j].name +
-				//               ":" +
-				//               toolTipData[i].value[j].value +
-				//               "<br>";
-				//           }
-				//         }
-				//       }
-				//       console.log(toolTiphtml);
-				//       return toolTiphtml;
-				//     } else {
-				//       var toolTiphtml = "";
-				//       for (var i = 0; i < toolTipData.length; i++) {
-				//         if (params.name == toolTipData[i].name) {
-				//           toolTiphtml += toolTipData[i].name + ":<br>";
-				//           for (var j = 0; j < toolTipData[i].value.length; j++) {
-				//             toolTiphtml +=
-				//               toolTipData[i].value[j].name +
-				//               ":" +
-				//               toolTipData[i].value[j].value +
-				//               "<br>";
-				//           }
-				//         }
-				//       }
-				//       console.log(toolTiphtml);
-				//       return toolTiphtml;
-				//     }
-				//   },
-				// },
 				visualMap: {
 					show: true,
 					textStyle: {
@@ -208,28 +188,6 @@ export default {
 					//calculable: true,
 
 					seriesIndex: [1],
-					// pieces: [
-					// 	{ min: 1001, label: "> 1001 ", color: "#003C87" },
-					// 	{
-					// 		min: 501,
-					// 		max: 1000,
-					// 		label: "501 - 1000 ",
-					// 		color: "#003C87"
-					// 	},
-					// 	{
-					// 		min: 101,
-					// 		max: 500,
-					// 		label: "101 - 500 ",
-					// 		color: "#0373FF"
-					// 	},
-					// 	{
-					// 		min: 1,
-					// 		max: 45,
-					// 		label: "1 - 45 ",
-					// 		color: "#5EC6F9"
-					// 	},
-					// 	{ min: -10, max: 0, label: "未下单 ", color: "#86FEFC" }
-					// ]
 					pieces: [
 						{ min: 3000, label: "> 3000 ", color: "#003C87" },
 						{
@@ -340,13 +298,27 @@ export default {
 				]
 			};
 			this.chart.clear();
-			this.chart.setOption(option);
+			this.chart.setOption(this.option);
 
 			if (this.interval) {
 				this.clearInterval();
 			}
+			if (!this.$store.state.dashboard.realtimeuser.length) {
+				return;
+			}
 
-			var seriesData = data.filter(item => {
+			let res = this.$store.state.dashboard.realtimeuser.map(item => {
+				return {
+					name: item.pro_name_rt,
+					value: 1
+				};
+			});
+
+			// var seriesData = data.filter(item => {
+			// 	return item.value > 0;
+			// });
+
+			var seriesData = res.filter(item => {
 				return item.value > 0;
 			});
 
@@ -355,8 +327,8 @@ export default {
 			this.interval = this.setInterval(() => {
 				if (j == seriesData.length) j = 0;
 				// topCity数组就是top的这个5个城市.
-				option.series[0].data = [convertData(seriesData)[j]];
-				this.chart.setOption(option);
+				this.option.series[0].data = [convertData(seriesData)[j]];
+				this.chart.setOption(this.option);
 				j++;
 			}, 1000);
 

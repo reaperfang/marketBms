@@ -59,6 +59,7 @@ export default {
 			this.$refs.countTo.start();
 		}
 	},
+
 	props: {
 		// data: {
 		//   type: Object,
