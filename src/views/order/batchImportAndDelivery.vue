@@ -39,7 +39,7 @@
             </el-upload>
           </div>
           <div class="col">
-            <p>说明：请按下载模板格式上传文件，最大支持1M的EXCEL文件</p>
+            <p>说明：仅支持 csv、xls、xlsx文件类型，不识别其他类型的本地文件，文件大小请控制在 1MB 以内</p>
             <p @click="downloadTemplate" class="blue pointer">下载批量发货模板</p>
           </div>
         </div>
@@ -147,7 +147,7 @@ export default {
           this.active = 3;
           let successLength = res.success && res.success.length || 0
           let errorLength = res.error && res.error.length || 0
-          
+
           if (successLength != 0 && errorLength == 0) {
             this.status = 0;
             this.successNumber = res.success.length;
@@ -176,7 +176,7 @@ export default {
           this.active = 3;
           let successLength = res.success && res.success.length || 0
           let errorLength = res.error && res.error.length || 0
-          
+
           if (successLength != 0 && errorLength == 0) {
             this.status = 0;
             this.successNumber = res.success.length;
