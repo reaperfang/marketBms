@@ -347,7 +347,7 @@ export function getSelfLiftList(data) {
 /*  达达-商户获取余额 */
 export function getBalance(data) {
   return request({
-    target: 'DADA-BALANCE-PROCESSOR',
+    target: 'THIRD-PART-BALANCE-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data
@@ -356,7 +356,7 @@ export function getBalance(data) {
 /*  达达-商户充值 */
 export function getRecharge(data) {
   return request({
-    target: 'DADA-RECHARGE-PROCESSOR',
+    target: 'THIRD-PART-RECHARGE-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data
