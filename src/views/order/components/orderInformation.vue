@@ -6,7 +6,28 @@
                     <div class="item">
                         <div class="label">配送方式</div>
                         <div class="value">{{orderInfo.deliveryWay | deliveryWayFilter}}</div>
+                        <!-- && orderInfo.deliveryDate -->
                     </div>
+                    <template v-if="orderInfo.deliveryWay == 4">
+                        <div class="item">
+                            <div class="label">提货信息</div> 
+                            <div class="value">
+                                <p>姓名：{{orderInfo.receivedName}}</p>
+                                <p>联系电话：{{orderInfo.receivedPhone}}</p>
+                                <p>预约自提时间：{{orderInfo.deliveryDate | formatDateRemoveZero}} {{orderInfo.deliveryTime}}</p>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="label">自提点信息</div> 
+                            <div class="value">
+                                <p>{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.pickUpName:''}}</p>
+                                <p>{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.address +' '+ orderDetail.pickUpInfoDto.addressDetail:''}}</p>
+                                <p>联系人：{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.name:''}}</p>
+                                <p>联系电话：{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.mobile:''}}</p>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else>   
                     <!-- 开启了预约配送则显示C端用户下单时选定的配送时间 -->
                     <div class="item" v-if="orderInfo.deliveryWay == 2 && orderInfo.deliveryDate">
                         <div class="label">配送时间</div>
@@ -19,6 +40,7 @@
                             <p>{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}</p>
                         </div>
                     </div>
+                    </template>
                     <!-- <p v-if="!authHide && orderInfo.orderStatus != 2 && orderInfo.orderStatus != 4 && orderInfo.orderStatus != 5 && orderInfo.orderStatus != 6" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p> -->
                 </div>
             </el-col>
@@ -180,7 +202,7 @@
             <el-table
                 :data="orderDetail.orderItems"
                 style="width: 100%"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     label="商品"
                     width="380">
@@ -229,7 +251,7 @@
                     label="商品状态"
                     class-name="goods-status">
                     <template slot-scope="scope">
-                        <template v-if="scope.row.afterSaleStatus">
+                        <template v-if="scope.row.afterSaleStatus && scope.row.afterSaleStatus != 0">
                             <router-link :to="{ path: '/order/afterSalesDetails', query: { id: scope.row.orderAfterSaleId }}">{{scope.row | orderStatusFilter}}</router-link>
                         </template>
                         <template v-else>
@@ -288,37 +310,6 @@
                         <div class="col">积分抵现:</div>
                         <div class="col">- ¥{{orderDetail.orderInfo.consumeScoreConvertMoney || '0.00'}}</div>
                     </div>
-                    <!-- <div class="row align-center">
-                        <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
-                            <el-select style="margin-right: 5px;" v-model="orderInfo.consultType" placeholder="请选择">
-                                <el-option
-                                v-for="item in reducePriceTypeList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </div>
-                        <div v-else-if="orderDetail.orderInfo.consultMoney">
-                            <el-select disabled style="margin-right: 5px;" v-model="orderInfo.consultType" placeholder="请选择">
-                                <el-option
-                                v-for="item in reducePriceTypeList"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </div>
-                        <div v-if="this.orderDetail.orderInfo.orderStatus == 0" class="col">
-                            <el-input @input="handleInput2" v-if="changePriceVisible" min="0" type="number" class="reduce-price-input" v-model="orderInfo.consultMoney"></el-input>
-                            <span v-if="!changePriceVisible">{{orderInfo.consultMoney}}</span>
-                            <span class="blue pointer" v-if="!changePriceVisible" @click="changePriceVisible = true">改价</span>
-                            <span class="blue pointer" v-if="changePriceVisible" @click="reducePriceHandler">完成</span>
-                        </div>
-                        <div v-else-if="orderDetail.orderInfo.consultMoney">
-                            <span>¥{{orderDetail.orderInfo.consultMoney}}</span>
-                        </div>
-                    </div> -->
                 </section>
                 <section>
                     <div class="row strong" style="align-items: center;">
@@ -468,6 +459,9 @@ export default {
             return this.orderDetail.orderPromotionCodeList && this.orderDetail.orderPromotionCodeList.filter(val => val.promotionCodeType == 1) || []
         },
         payMan() {
+            let unique = function(arr) {
+                return Array.from(new Set(arr))
+            }
             let str = ''
             let _arr
             if(this.orderInfo.payWay == 1) {
@@ -476,13 +470,15 @@ export default {
                 return this.orderInfo.receivedName
             } else if(this.orderInfo.payWay == 4) {
                 return this.orderInfo.memberName
+            } else if(this.orderInfo.payWay == 5) {
+                return this.orderInfo.memberName
             } else if(this.orderInfo.isConsumeBalance == 1 && (this.orderInfo.actualMoney == '0.00' || this.orderInfo.actualMoney == null)) {
                 return this.orderInfo.memberName
             } else {
                 if(this.orderDetail.orderPayRecordList) {
                     //_arr = this.orderDetail.orderPayRecordList.slice(0, 3)
                     _arr = this.orderDetail.orderPayRecordList
-                    str = _arr.map(val => val.memberName).join(',')
+                    str = unique(_arr.map(val => val.memberName)).join(',')
                 }
             }
             return str
@@ -605,28 +601,7 @@ export default {
             //this.goodsListMessage.consultMoney = (this.goodsListMessage.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
             this.orderInfo.consultMoney = (this.orderInfo.consultMoney.match(/^\d*(\.?\d{0,2})/g)[0]) || null
         },
-        // reducePriceHandler() {
-        //     if(this.orderInfo.consultType == 2) {
-        //         if(this.orderDetail.orderInfo.receivableMoney < this.orderInfo.consultMoney) {
-        //             this.$message({
-        //                 message: '不能大于第三方待支付金额',
-        //                 type: 'warning'
-        //             });
-        //             return
-        //         }
-        //     }
-        //     this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
-        //     consultType: this.orderInfo.consultType, consultMoney: this.orderInfo.consultMoney}).then(res => {
-        //         this.changePriceVisible = false
-        //         // this.$message.success('添加成功！');
-        //         this.currentDialog = 'ChangePriceDialog'
-        //         this.dialogVisible = true
-        //         this.getDetail()
-        //     }).catch(error => {
-        //         this.changePriceVisible = false
-        //         this.$message.error(error);
-        //     }) 
-        // },
+       
         reducePriceHandler() {
             if(this.orderInfo.consultType == 2) {
                 if(parseFloat(this.orderDetail.orderInfo.receivableMoney) < this.orderInfo.consultMoney) {
@@ -696,17 +671,19 @@ export default {
                 return '普通快递'
             } else if(code === 2) {
                 return '商家配送'
+            }else if(code ===4) {
+                return '上门自提'
             }
         },
         payWayFilter(code) {
             if(code === 1) {
                 return '微信支付'
             } else if(code === 2) {
-                return '货到付款'
+                return '线下支付-货到付款'
             } else if(code === 3) {
                 return '找人代付'
             } else if(code === 4) {
-                return '线下支付'
+                return '线下支付-确认收款'
             } else if(code === 5) {
                 return '线上支付'
             } else if(code === 6) {
@@ -907,6 +884,9 @@ export default {
                     text-align: right;
                     margin-top: 10px;
                 }
+                .item {
+                    line-height: 21px;
+                }
             }
             &.righter {
                 border: none;
@@ -933,6 +913,9 @@ export default {
                 }
                 .value {
                     color: #9FA29F;
+                    p{
+                        margin-bottom:5px;
+                    }
                 }
             }
         }
@@ -1013,6 +996,7 @@ export default {
     .goods-detail {
             display: flex;
             align-items: center;
+            text-align: left;
         }
         .image-box {
             margin-right: 5px;
@@ -1078,6 +1062,18 @@ export default {
 }
 .nowrap {
     white-space: nowrap;
+}
+/deep/ .el-table td, /deep/ .el-table th {
+    text-align: center;
+    &:nth-child(1) {
+        text-align: left;
+    }
+}
+/deep/ .el-table .cell {
+    text-align: center;
+    &:first-child {
+        text-align: left;
+    }
 }
 </style>
 

@@ -57,8 +57,9 @@
         :data="dataList"
         style="width: 100%"
         class="table"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
         @sort-change="sortTable"
+        :default-sort = "{prop: 'createTime', order: 'descending'}"
         >
         <!-- :default-sort = "{prop: 'createTime', order: 'descending'}" -->
         <el-table-column
@@ -73,19 +74,23 @@
         </el-table-column>
         <el-table-column
           prop="presentType"
-          label="奖励方式">
+          label="奖励方式"
+          align="center">
           <template slot-scope="scope">
             {{rewards[scope.row.presentType].label}}
           </template>
         </el-table-column>
         <el-table-column
           prop="presentContent"
-          label="奖励内容">
+          label="奖励内容"
+          align="right">
         </el-table-column>
         <el-table-column
           prop="createTime"
           label="时间"
-          sortable = "custom">
+          sortable = "custom"
+          align="right"
+          width="200px">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -97,7 +102,8 @@
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
-          :total="total*1">
+          :total="total*1"
+          :background="background">
         </el-pagination>
       </div>
 		<exportTipDialog :data=currentData  :dialogVisible.sync="dialogVisible"></exportTipDialog>
@@ -148,6 +154,12 @@ export default {
       currentData:{},
       dialogVisible:false
     };
+  },
+  props: {
+    background: {
+      type: Boolean,
+      default: true
+    },
   },
   watch: {
     times(){
@@ -290,5 +302,18 @@ export default {
 .table{
   margin-top: 20px;
 }
+/deep/.el-table .descending .sort-caret.descending{
+  border-top-color:#44434B;
+}
+/deep/.el-table .ascending .sort-caret.ascending{
+  border-bottom-color:#44434B;
+}
+/deep/.el-table--small td{
+  padding:16px 10px 16px 0;
+}
+/deep/.el-table--small th{
+  padding:0px;
+}
+
 </style>
 

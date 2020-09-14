@@ -1,64 +1,62 @@
 /* 选择商品组弹框 */
 <template>
   <DialogBase :visible.sync="visible" width="816px" :title="'选择商品分类'" @submit="submit">
-    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
-      <div class="inline-head">
-        <!-- <el-form-item label prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
-        </el-form-item>
-        <el-form-item label prop="name">
-          <el-button type="primary" @click="fetch">搜 索</el-button>
-        </el-form-item> -->
-      </div>
-    </el-form>
-
-    <div class="goodsClassify">
-      <div class="categoryTh" style="background:'#ebeafa'; color:'#655EFF';">
-        <div class="treeRow th">
-          <span class="td">分类名称</span>
-          <span class="td">已选择商品数量</span>
-          <span class="td">操作</span>
+    <div class="select_dialog">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
+        <div class="inline-head">
+          <!-- <el-form-item label prop="name">
+            <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
+          </el-form-item>
+          <el-form-item label prop="name">
+            <el-button type="primary" @click="fetch">搜 索</el-button>
+          </el-form-item> -->
         </div>
+      </el-form>
+
+      <div class="goodsClassify">
+        <div class="categoryTh" style="background:'#ebeafa'; color:'#655EFF';">
+          <div class="treeRow th">
+            <span class="td">分类名称</span>
+            <span class="td">已选择商品数量</span>
+            <span class="td">操作</span>
+          </div>
+        </div>
+        <el-tree
+          v-loading="loading"
+          class="goodsCategory"
+          :data="categoryData"
+          :props="defaultProps"
+          node-key="id"
+          ref="category"
+          :check-strictly="true"
+          :default-expand-all="true"
+          :expand-on-click-node="false"
+          :render-content="renderContent"
+        ></el-tree>
       </div>
-      <el-tree
-        v-loading="loading"
-        class="goodsCategory"
-        :data="categoryData"
-        :props="defaultProps"
-        node-key="id"
-        ref="category"
-        :check-strictly="true"
-        :default-expand-all="true"
-        :expand-on-click-node="false"
-        :render-content="renderContent"
-      ></el-tree>
+      <!-- 动态弹窗 -->
+      <component
+        v-if="dialogVisible2"
+        :is="currentDialog"
+        :dialogVisible.sync="dialogVisible2"
+        @dialogDataSelected="dialogDataSelected"
+        :categoryId="currentCategory.id"
+        :categoryName="currentCategory.name"
+        :goodsEcho.sync="echoList"
+      ></component>
     </div>
-    <!-- 动态弹窗 -->
-    <component
-      v-if="dialogVisible2"
-      :is="currentDialog"
-      :dialogVisible.sync="dialogVisible2"
-      @dialogDataSelected="dialogDataSelected"
-      :categoryId="currentCategory.id"
-      :categoryName="currentCategory.categoryName"
-      :goodsEcho.sync="echoList"
-    ></component>
   </DialogBase>
 </template>
 
 <script>
-import DialogBase from "@/components/DialogBase";
 import dialogSelectGoods from "./dialogSelectGoods";
+import mixinSelectDialogs from '../mixins/mixinSelectDialogs';
 import utils from "@/utils";
 export default {
   name: "dialogSelectGoodsGroup",
-  components: { DialogBase, dialogSelectGoods },
+  mixins: [mixinSelectDialogs],
+  components: { dialogSelectGoods },
   props: {
-    data: {},
-    dialogVisible: {
-      type: Boolean,
-      required: true
-    },
     seletedGroupInfo: {}
   },
   data() {
@@ -66,8 +64,8 @@ export default {
       loading: true,
       defaultProps: {
         //tree组件配置
-        children: "childrenList",
-        label: "categoryName"
+        children: 'childrenCatalogs',
+        label: 'name'
       },
       categoryData: [], //转化以后的分类树形数据
       flatArr: [],
@@ -77,7 +75,6 @@ export default {
         enable: "1"
       },
       echoList: [],
-      rules: {},
       dialogVisible2: false, //子弹窗是否显示
       currentDialog: "", //当前弹窗
       currentCategory: {}, //当前选中的分类
@@ -85,37 +82,40 @@ export default {
       seletedGroupGoodsLengths: {}  //已选中的商品分类里的商品个数
     };
   },
-  computed: {
-    visible: {
-      get() {
-        return this.dialogVisible;
-      },
-      set(val) {
-        this.$emit("update:dialogVisible", val);
-      }
-    }
-  },
   created() {
     this.convertGoodsLengths();
-    this.fetch();
   },
   methods: {
     fetch() {
       this.loading = true;
       this._apis.goods
-        .fetchCategoryList(this.ruleForm)
+        .fetchTreeCategoryList(this.ruleForm)
         .then(response => {
-          let data = this.restoreData(response);
-          this.responseData = data;
-          let arr = this.transTreeData(data, 0);
-          this.categoryData = arr;
-          this.flatArr = this.flatTreeArray(JSON.parse(JSON.stringify(arr)));
+          //let data = this.restoreData(response);
+          //this.responseData = data;
+          //let arr = this.transTreeData(data, 0);
+          this.filterEnableData(response);
+          this.restoreData(response);
+          this.categoryData = response;
+          this.responseData = response;
+          //this.flatArr = this.flatTreeArray(JSON.parse(JSON.stringify(arr)));
           this.loading = false;
         })
         .catch(error => {
           console.error(error);
           this.loading = false;
         });
+    },
+
+    //过滤掉禁用的数据
+    filterEnableData(data) {
+      data.forEach((item, index) => {
+        if(item.enable === 0){
+          data.splice(index, 1);
+        }else if(item.childrenCatalogs){
+          this.filterEnableData(item.childrenCatalogs)
+        }
+      })
     },
 
     //拉取点击选中的分类下的商品
@@ -204,7 +204,7 @@ export default {
         <div class="treeRow">
           <span class="td first">
            <img class="td img" src={data.image}/>
-           {data.categoryName}
+           {data.name}
            </span>
           <span class="td state">{(this.seletedGroupGoodsLengths ? this.seletedGroupGoodsLengths[data.id] : data.goods.length) || 0}</span>
           <span class="td operate">
@@ -243,13 +243,10 @@ export default {
       //   return;
       // }
       /* 重置树形数据，把选中的商品回显到列表中 */
-      for (let item of this.responseData) {
-        if (this.currentCategory.id === item.id) {
-          item["goods"] = items.map(function(item){return item.id});
-          this.seletedGroupGoodsLengths[item.id] = items.length;
-        }
-      }
-      this.categoryData = this.transTreeData(this.responseData, 0);
+
+      this.restoreList(this.responseData, items);
+
+      this.categoryData = [...this.responseData];
 
       //把选中的数据收集起来发给父组件
       this.resultData[this.currentCategory.id] = {
@@ -259,15 +256,27 @@ export default {
       this.currentDialog = "";
     },
 
+    restoreList(response, items) {
+      response.forEach((item, index) => {
+        
+        if (this.currentCategory.id === item.id) {
+          item["goods"] = items.map(function(item){return item.id});
+          this.seletedGroupGoodsLengths[item.id] = items.length;
+        }
+        if(item.childrenCatalogs){
+          this.restoreList(item.childrenCatalogs, items)
+        }
+      })
+    },
+
     /* 恢复选中的商品数据 */
     restoreData(response) {
       if(!this.seletedGroupInfo) {  //没有数据的分类不添加
         return;
       }
-      /* 重置树形数据，把选中的商品回显到列表中 */
-      for(let k in this.seletedGroupInfo) {
-        // this.seletedGroupGoodsLengths[k] = this.seletedGroupInfo[k].length;
-        for (let item of response) {
+
+      response.forEach((item, index) => {
+        for(let k in this.seletedGroupInfo) {
           if (item.id === k) {
             item["goods"] = this.seletedGroupInfo[k].goods;
             //把选中的数据收集起来发给父组件
@@ -277,30 +286,17 @@ export default {
             };
           }
         }
-      }
-      return response;
+        if(item.childrenCatalogs){
+          this.restoreData(item.childrenCatalogs)
+        }
+      })
+
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.name_wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  img {
-    width: 50px;
-    height: 50px;
-    display: block;
-    margin-right: 10px;
-    border: 1px solid #ddd;
-    object-fit: contain;
-  }
-  p{
-    width: calc(100% - 50px);
-  }
-}
 
 .blue {
   color: $globalMainColor;

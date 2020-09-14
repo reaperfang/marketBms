@@ -19,9 +19,6 @@
                 <el-tab-pane label="订单信息" name="order">
                     <orderInformation :orderInfo="orderDetail.orderInfo" :orderDetail="orderDetail" @getDetail="getDetail"></orderInformation>
                 </el-tab-pane>
-                <el-tab-pane v-if="orderDetail.sendItemAndAddress && Object.keys(orderDetail.sendItemAndAddress).length" label="发货信息" name="delivery">
-                    <deliveryInformation :orderDetail="orderDetail"></deliveryInformation>
-                </el-tab-pane>
                 <el-tab-pane v-if="orderDetail.orderSendItemMap && Object.keys(orderDetail.orderSendItemMap).length" label="发货信息" name="delivery">
                     <deliveryInformation :orderDetail="orderDetail"></deliveryInformation>
                 </el-tab-pane>
@@ -35,7 +32,7 @@
             <el-table
                 :data="orderDetail.orderOperationRecordList"
                 style="width: 100%"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     label="操作">
                     <template slot-scope="scope">
@@ -52,130 +49,8 @@
                 </el-table-column>
             </el-table>
         </div>
-        <!-- <div class="goods-list">
-            <p class="header">订单清单</p>
-            <el-table
-                :data="orderDetail.orderItems"
-                style="width: 100%"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
-                <el-table-column
-                    label="商品"
-                    width="380">
-                    <template slot-scope="scope">
-                        <div class="goods-detail">
-                            <div class="item image-box">
-                                <img width="66" :src="scope.row.goodsImage" alt="">
-                            </div>
-                            <div class="item">
-                                <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
-                                <p class="goods-specs">{{scope.row.goodsSpecs | goodsSpecsFilter}}</p>
-                            </div>
-                        </div>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="goodsUnit"
-                    label="单位"
-                    width="180">
-                </el-table-column>
-                <el-table-column
-                    prop="goodsCount"
-                    label="数量">
-                </el-table-column>
-                <el-table-column
-                    label="商品单价">
-                    <template slot-scope="scope">
-                        ¥{{scope.row.goodsPrice}}
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    label="商品小计">
-                    <template slot-scope="scope">
-                        ¥{{scope.row.subtotalMoney}}
-                    </template>
-                </el-table-column>
-            </el-table>
-            <div class="goods-list-message">
-                <div class="row">
-                    <div class="col">运费:</div>
-                    <div class="col">+ ¥{{orderDetail.orderInfo.freight}}</div>
-                </div>
-                <div class="row">
-                    <div class="col">应收金额:</div>
-                    <div class="col">¥{{orderDetail.orderInfo.receivableMoney}}</div>
-                </div>
-                <div class="row">
-                    <div class="col">优惠券金额:</div>
-                    <div class="col">
-                        ¥{{orderDetail.orderInfo.consumeCouponMoney || 0}}
-                        <i @click="currentDialog = 'CouponDialog'; currentData = {usedCouponList, usedPromotionList}; dialogVisible = true" class="coupon-img"></i>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">满减/满折:</div>
-                    <div class="col">- ¥{{orderDetail.orderInfo.discountMoney || 0}}</div>
-                </div>
-                <div class="row">
-                    <div class="col">会员折扣:</div>
-                    <div class="col">- ¥{{orderDetail.orderInfo.memberDiscountMoney || 0}}</div>
-                </div>
-                <div class="row">
-                    <div class="col">优惠套装:</div>
-                    <div class="col">- ¥{{orderDetail.orderInfo.discountPackageMoney || 0}}</div>
-                </div>
-                <div class="row" v-if="orderDetail.orderInfo && orderDetail.orderInfo.discountFreight">
-                    <div class="col">满包邮:</div>
-                    <div class="col">- ¥{{orderDetail.orderInfo.discountFreight}}</div>
-                </div>
-                <div class="row align-center">
-                    <div class="col">
-                        <el-select style="margin-right: 5px;" v-model="goodsListMessage.consultType" placeholder="请选择">
-                            <el-option
-                            v-for="item in reducePriceTypeList"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </div>
-                    <div class="col">
-                        <el-input v-if="changePriceVisible" min="0" type="number" class="reduce-price-input" v-model="goodsListMessage.consultMoney"></el-input>
-                        <span v-if="!changePriceVisible">{{goodsListMessage.consultMoney}}</span>
-                        <span class="blue pointer" v-if="!changePriceVisible" @click="changePriceVisible = true">改价</span>
-                        <span class="blue pointer" v-if="changePriceVisible" @click="reducePriceHandler">完成</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">实收金额:</div>
-                    <div class="col">¥{{orderDetail.orderInfo.actualMoney}}</div>
-                </div>
-            </div>
-            <div class="operate-record">
-                <p class="header">操作记录</p>
-                <el-table
-                    :data="orderDetail.orderOperationRecordList"
-                    style="width: 100%"
-                    :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
-                    <el-table-column
-                        label="操作"
-                        width="180">
-                        <template slot-scope="scope">
-                            {{scope.row.operationType | operationTypeFilter}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="createUserName"
-                        label="操作人"
-                        width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="createTime"
-                        label="操作时间">
-                    </el-table-column>
-                </el-table>
-            </div>
-        </div> -->
-        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
+        
+        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
 </template>
 <script>
@@ -278,6 +153,8 @@ export default {
                     return '修改收货信息'
                 case 11:
                     return '自动发货'
+                case 12:
+                    return '核销验证'
             }
         },
         channelInfoIdFilter(code) {
@@ -472,8 +349,22 @@ export default {
         margin-right: 20px;
         color: #b6b6b9;
     }
-    /deep/ .el-table .cell {
+    /deep/ .el-table tr th {
+        border-bottom: none;
+    }
+    /deep/ .operate-record .el-table td, /deep/ .operate-record .el-table th {
         text-align: center;
+        &:nth-child(1) {
+            text-align: left;
+        }
+        &:nth-child(3) {
+            text-align: right;
+        }
+    }
+    /deep/ .operate-record .el-table th {
+        &:nth-child(3) {
+            padding-right: 50px;
+        }
     }
 </style>
 

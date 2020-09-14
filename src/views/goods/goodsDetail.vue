@@ -1,15 +1,17 @@
 <template>
 <div class="app-container add-goods">
-    <!-- <header class="header">
-        <div :class="{active: index == 0}" @click="scrollTo(0)" class="item">基本信息</div>
-        <div :class="{active: index == 1}" @click="scrollTo(1)" class="item">销售信息</div>
-        <div :class="{active: index == 2}" @click="scrollTo(2)" class="item">物流/售后</div>
-        <div :class="{active: index == 3}" @click="scrollTo(3)" class="item">详情描述</div>
-    </header> -->
     <el-form :model="ruleForm" ref="ruleForm" :rules="rules" label-width="152px" class="demo-ruleForm"><!--:disabled="ruleForm.isSyncProduct == 1 && authHide && hasLeiMu"-->
         <section class="form-section">
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
+                <!-- currentDialog = 'chooseGoodCategoryDialog';dialogVisible = true -->
+                 <span class="goodCategory" @click="addGoodCategory"> 
+                     {{goodCategoryNames}}
+                     <i class="el-icon-caret-bottom"></i>
+                 </span>
+                <p class="goods-message" v-if="leimuMessage != '' && leimuMessage == true && !itemCatText">历史类目已被禁用或删除，请您重新选择</p>
+            </el-form-item>
+            <el-form-item label="商品类目" prop="productCategoryInfoId" style="display:none">
                 <el-cascader
                     popper-class="leimu-popper"
                     @focus="leimuFocus"
@@ -34,26 +36,6 @@
                 <el-input :disabled="!ruleForm.productCategoryInfoId" style="width: 840px;" type="textarea" :rows="4" v-model="ruleForm.description" maxlength="100" show-word-limit></el-input>
             </el-form-item>
             <el-form-item label="商品主图" prop="images">
-                <!-- <img v-for="(item, key) of imageList" :key="key" :src="item.src" alt="" style="width:100px;height:100px"> -->
-                <!-- <el-upload
-                    :disabled="!ruleForm.productCategoryInfoId"
-                    :action="uploadUrl"
-                    accept=".jpg,.jpeg,.png,.gif,.JPG,.JPEG,.GIF"
-                    multiple
-                    :class="{hide:hideUpload}"
-                    :file-list="fileList"
-                    list-type="picture-card"
-                    :limit="6"
-                    :data="{json: JSON.stringify({cid: cid})}"
-                    :on-preview="handlePictureCardPreview"
-                    :on-remove="handleRemove"
-                    :on-success="centerFileUrl"
-                    :on-change="changeUpload"
-                    :before-upload="beforeUpload"
-                    class="p_imgsCon">
-                    <i class="el-icon-plus"></i>
-                    <p style="line-height: 21px; margin-top: -39px; color: #92929B;">上传图片</p>
-                </el-upload> -->
                 <div class="upload-box">
                     <div class="image-list">
                         <div v-if="item" class="image-item" :style="{backgroundImage: `url(${item})`}" v-for="(item, index) in (ruleForm.images && ruleForm.images.split(',') || [])">
@@ -64,7 +46,7 @@
                                 <span @click="dialogImageUrl = item; imageDialogVisible = true" class="image-item-actions-preview"><i class="el-icon-zoom-in"></i></span>
                                 <span @click="deleteImage(index)" class="image-item-actions-delete"><i class="el-icon-delete"></i></span>
                                 <span class="image-item-actions-footer">
-                                    <i v-if="index > 0" @click="moveImage('left', index)" class="lefter el-icon-arrow-left"><</i>
+                                    <i v-if="index > 0" @click="moveImage('left', index)" class="lefter el-icon-arrow-left"></i>
                                     <i v-if="index < (ruleForm.images && ruleForm.images.split(',') || []).length - 1" @click="moveImage('right', index)" class="righter el-icon-arrow-right">></i>
                                 </span>
                             </span>
@@ -160,16 +142,73 @@
                     </div>
                 </div>
             </el-form-item>
+
             <el-form-item label="商品编码" prop="code">
+                <el-tooltip class="item" effect="light" placement="top">
+                    <div slot="content">商品编码：商品编码即为SPU编码，SPU = Standard<br/>
+                    Product Unit （标准产品单位）SPU是商品信息聚合的<br/>
+                    最小单位，是一组可复用、易检索的标准化信息的集<br/>
+                    合，该集合描述了一个产品的特性,<br/>
+                    例如：iPhone X 可以确定一个产品即为一个SPU。
+                    </div>
+                    <i class="el-icon-warning-outline"></i>
+                </el-tooltip>
                 <el-input :disabled="!ruleForm.productCategoryInfoId || (ruleForm.productCategoryInfoId && (ruleForm.isSyncProduct == 1 && authHide))" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
             </el-form-item>
+           
         </section>
         <section class="form-section spec-form-section">
             <h2>销售信息<span v-if="editor && ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品销售信息</span></h2>
-
-            <el-form-item label="规格信息" prop="goodsInfos">
-
-            </el-form-item>
+            
+            <!-- <el-form-item label="规格信息" prop="goodsInfos">
+               
+            </el-form-item> -->
+            <el-form-item >  
+                <el-radio-group v-model="specRadio">
+                    <template v-if="!editor">
+                        <el-radio :label="0" >单一规格</el-radio>
+                        <el-radio :label="1">多规格</el-radio>
+                    </template>  
+                   <template v-else>
+                       <el-radio :label="0" :disabled="specRadio!==0">单一规格</el-radio>
+                      <el-radio :label="1" :disabled="specRadio!==1">多规格</el-radio>
+                   </template>
+                </el-radio-group>
+            </el-form-item> 
+            <template v-if="specRadio===0">
+             <div class="sku-template" >
+                <el-form-item label="SKU编码" prop="code">
+                    <el-tooltip class="item" effect="light" placement="top">
+                        <div slot="content">SKU编码：SKU(Stock Keeping Unit)库存量单元 --- <br/>
+                            SKU是商品下的一个分类属性（商品下一个颜色或者尺<br/>
+                            码），单的说： SPU就是一个iPhone6s, SKU就是银色<br/>
+                            iPhone6s、粉色iPhone6s。
+                        </div>
+                        <i class="el-icon-warning-outline sku-code"></i>
+                    </el-tooltip>
+                <el-input :disabled="(!ruleForm.productCategoryInfoId || (editor && ruleForm.activity))" v-model="singleSpec.code" minlength="6" maxlength="18" placeholder="请输入SKU编码"></el-input>
+                </el-form-item>
+                <el-form-item  label="成本价" prop="costPrice">
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.costPrice" placeholder="请输入成本价"></el-input>
+                </el-form-item>
+                <el-form-item label="售卖价" prop="salePrice">
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.salePrice" placeholder="请输入售卖价"></el-input>
+                </el-form-item>
+                <el-form-item label="库存" prop="stock">
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.stock" placeholder="请输入库存"></el-input>
+                </el-form-item>
+                <el-form-item label="库存预警" prop="warningStock">
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.warningStock" placeholder="请输入库存预警"></el-input>
+                </el-form-item>
+                <el-form-item label="重量（Kg）" prop="weight">
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.weight" placeholder="请输入重量（kg）"></el-input>
+                </el-form-item>
+                <el-form-item label="体积（m³）" prop="volume">
+                    <el-input type="number" min="0" :disabled="(editor && ruleForm.activity)" v-model="singleSpec.volume" placeholder="请输入体积（m³）"></el-input>
+                </el-form-item>
+             </div>
+            </template>
+            <template v-if="specRadio===1" >
             <div class="goods-infos">
                 <!-- <el-button :disabled="!ruleForm.productCategoryInfoId" v-if="!editor" class="border-button selection-specification" @click="selectSpecificationsCurrentDialog = 'SelectSpecifications'; currentDialog = ''; currentData = specsList; selectSpecificationsDialogVisible = true">选择规格</el-button> -->
                 <div v-if="!editor" v-show="!(ruleForm.isSyncProduct == 1 && authHide)">
@@ -299,137 +338,13 @@
                 </div>
                 <template v-if="!editor">
                     <el-button v-if="ruleForm.goodsInfos && ruleForm.goodsInfos.length" @click="batchFilling" class="batch-filling" type="primary">批量填充</el-button>
-                    <!-- <el-table
-                    class="spec-information"
-                    :data="ruleForm.goodsInfos"
-                    :header-cell-style="{background:'#f2ecff', color:'#655EFF'}"
-                    style="width: 100%"
-                    :span-method="objectSpanMethod"
-                    border>
-                    <el-table-column
-                        class-name="columnSpec"
-                        v-for="(item, index) in specsLabel.split(',')"
-                        :key="index"
-                        prop="label"
-                        :label="item"
-                        width="80">
-                        <template slot-scope="scope">
-                            {{scope.row.label.split(',') && scope.row.label.split(',')[index]}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="costPrice"
-                        label="成本价"
-                        class-name="costPrice operateInput"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.costPrice" placeholder="请输入价格(元)"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="salePrice"
-                        label="售卖价"
-                        class-name="salePrice operateInput"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.salePrice" placeholder="请输入价格(元)"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="stock"
-                        label="库存"
-                        class-name="stock operateInput"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.stock" placeholder="请输入库存"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="warningStock"
-                        label="库存预警"
-                        class-name="warningStock operateInput"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.warningStock" placeholder="请输入库存预警"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="weight"
-                        label="重量"
-                        class-name="weight operateInput"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.weight" placeholder="请输入重量(kg)"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="volume"
-                        label="体积"
-                        class-name="volume operateInput"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.volume" placeholder="请输入体积(m³)"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="code"
-                        label="SKU编码"
-                        class-name="code operateInput"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="image"
-                        label="图片"
-                        class-name="image"
-                        width="152">
-                        <template slot-scope="scope">
-                            <el-upload
-                                :disabled="!ruleForm.productCategoryInfoId"
-                                class="upload-spec"
-                                :action="uploadUrl"
-                                :ref="`uploadImage_${scope.$index}`"
-                                list-type="picture-card"
-                                :file-list="scope.row.fileList"
-                                :class="{hide:scope.row.image}"
-                                :limit="1"
-                                :data="{json: JSON.stringify({cid: cid})}"
-                                :on-preview="handlePictureCardPreview"
-                                :on-remove="function() {
-                                    specHandleRemove(scope.$index)
-                                }"
-                                :on-success="function(response, file, fileList) {
-                                    specUploadSuccess(response, file, fileList, scope.$index, scope.row)
-                                }">
-                                <p v-if="!scope.row.image">
-                                    <i class="el-icon-plus"></i>
-                                    点击上传
-                                </p>
-                            </el-upload>
-                            <div v-if="!scope.row.image && ruleForm.productCategoryInfoId" style="cursor: pointer;"  @click="currentDialog = 'dialogSelectImageMaterial'; material = true; materialIndex = scope.$index; dialogVisible = true">素材库</div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        label="操作"
-                        width="152"
-                        class-name="operateDelete">
-                        <template slot-scope="scope">
-                            <div class="spec-operate">
-                                <span @click="emptySpec(scope.$index)">清空</span>
-                                <span class="deleteSpan" @click="deleteSpec(scope.$index)">删除</span>
-                            </div>
-                        </template>
-                    </el-table-column>
-                    </el-table> -->
                     <Specs :list.sync="ruleForm.goodsInfos"
                         :specsLabel="specsLabel"
                         :productCategoryInfoId="ruleForm.productCategoryInfoId"
                         :uploadUrl="uploadUrl"
                         :hideDelete="hideDelete"
                         :activity="ruleForm.activity"
-			:weightRequired="ruleForm.deliveryWay.includes(2)"
+			            :weightRequired="ruleForm.deliveryWay.includes(2)"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
                         @specUploadSuccess="specUploadSuccess"
@@ -437,100 +352,6 @@
                         @deleteSpec="deleteSpec"></Specs>
                 </template>
                 <template v-else>
-                    <!-- <el-table
-                        class="spec-information-editor"
-                        :data="ruleForm.goodsInfos"
-                        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
-                        style="width: 100%">
-                        <el-table-column
-                            prop="label"
-                            :label="specsLabel"
-                            width="180">
-                        </el-table-column>
-                        <el-table-column
-                            prop="costPrice"
-                            label="成本价"
-                            width="180"
-                            class-name="costPrice">
-                            <template slot-scope="scope">
-                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.costPrice" placeholder="请输入成本价"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="salePrice"
-                            label="售卖价"
-                            class-name="salePrice">
-                            <template slot-scope="scope">
-                                <span>¥{{scope.row.salePrice}}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="stock"
-                            label="库存"
-                            class-name="stock">
-                        </el-table-column>
-                        <el-table-column
-                            prop="warningStock"
-                            label="库存预警"
-                            class-name="warningStock">
-                            <template slot-scope="scope">
-                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.warningStock" placeholder="请输入库存预警"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="weight"
-                            label="重量(kg)"
-                            class-name="weight">
-                            <template slot-scope="scope">
-                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.weight" placeholder="请输入重量"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="volume"
-                            label="体积(m³)"
-                            class-name="volume">
-                            <template slot-scope="scope">
-                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.volume" placeholder="请输入体积"></el-input>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="image"
-                            label="图片"
-                            class-name="image">
-                            <template slot-scope="scope">
-                                <el-upload
-                                    :disabled="!ruleForm.productCategoryInfoId"
-                                    class="upload-spec"
-                                    :action="uploadUrl"
-                                    :class="{hide:scope.row.image}"
-                                    list-type="picture-card"
-                                    :file-list="scope.row.fileList"
-                                    :limit="1"
-                                    :data="{json: JSON.stringify({cid: cid})}"
-                                    :on-preview="handlePictureCardPreview"
-                                    :on-remove="function() {
-                                        specHandleRemove(scope.$index)
-                                    }"
-                                    :on-success="function(response, file, fileList) {
-                                        specUploadSuccess(response, file, fileList, scope.$index, scope.row)
-                                    }">
-                                    <p v-if="!scope.row.image">
-                                        <i class="el-icon-plus"></i>
-                                        点击上传
-                                    </p>
-                                </el-upload>
-                                <div v-if="!scope.row.image && ruleForm.productCategoryInfoId" style="cursor: pointer;"  @click="currentDialog = 'dialogSelectImageMaterial'; material = true; materialIndex = scope.$index; dialogVisible = true">素材库</div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="code"
-                            label="SKU编码"
-                            class-name="code">
-                            <template slot-scope="scope">
-                                <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="scope.row.code" placeholder="请输入SKU编码"></el-input>
-                            </template>
-                        </el-table-column>
-                    </el-table> -->
                     <Specs v-if="ruleForm.productSpecs" :list.sync="ruleForm.goodsInfos"
                         :specsLabel="specsLabel"
                         :editor="editor"
@@ -538,7 +359,7 @@
                         :uploadUrl="uploadUrl"
                         :hideDelete="hideDelete"
                         :activity="ruleForm.activity"
-			:weightRequired="ruleForm.deliveryWay.includes(2)"
+			            :weightRequired="ruleForm.deliveryWay.includes(2)"
                         @handlePictureCardPreview="handlePictureCardPreview"
                         @specHandleRemove="specHandleRemove"
                         @specUploadSuccess="specUploadSuccess"
@@ -551,6 +372,7 @@
                 </div>
                 <!-- <el-button v-if="!editor" class="border-button" @click="currentDialog = 'AddSpecifications'; selectSpecificationsCurrentDialog = ''; dialogVisible = true">新增规格</el-button> -->
             </div>
+            </template>
             <!-- <el-form-item label="起售数量" prop="number">
                 <div class="input-number">
                     <span style="user-select: none;" class="pointer" @click="reduce">-</span>
@@ -636,14 +458,29 @@
             </el-form-item>
             <el-form-item label="配送方式" prop="deliveryWay">
                 <el-checkbox-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.deliveryWay">
-                    <el-checkbox disabled :label="1" @change="((val)=>{deliveryWayChange(val, '1')})">普通快递</el-checkbox>
-                    <el-checkbox :label="2" @change="((val)=>{deliveryWayChange(val, '2')})" style="margin-left:195px;">商家配送</el-checkbox>
+                    <div class='checkbox-item'>
+                        <el-checkbox disabled :label="1" @change="((val)=>{deliveryWayChange(val, '1')})" style="margin-right:30px;">普通快递</el-checkbox>
+                    </div>
+                    <div class='checkbox-item' >
+                        <el-checkbox :label="4" @change="((val)=>{deliveryWayChange(val, '4')})" style="margin-right:30px;">上门自提</el-checkbox>
+                        <div> 
+                            <span class="prompt" v-show="!isSelfLiftSet" >“上门自提”需在设置-配送设置中开启后生效，</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span>
+                        </div>
+                    </div>
+                    <div class='checkbox-item'>
+                        <el-checkbox :label="2" @change="((val)=>{deliveryWayChange(val, '2')})" >同城配送</el-checkbox>
+                        <div>
+                        <span class="prompt" style="margin-left:30px;" v-show="!isDeliverySet">“同城配送”需在设置-配送设置中开启后生效，</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
+                        </div>
+                    </div>
                 </el-checkbox-group>
                 <div>
-                    <div style="display:inline-block;width:296px;margin-left:24px;" v-show="!isDeliverySet || !isExpressSet">
-                        <span class="prompt" v-show="!isExpressSet">“普通快递”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isExpressSet" @click="gotoExpressSet">去设置</span>
+                    <div style="display:none;width:296px;margin-left:24px;" v-show="!isDeliverySet || !isExpressSet">
+                        <span class="prompt" v-show="!isExpressSet">“普通快递”需在店铺设置开启后生效，</span><span class="set-btn blue pointer font12" v-show="!isExpressSet" @click="gotoExpressSet">去设置</span>
                     </div>
-                    <span class="prompt" v-show="!isDeliverySet">“商家配送”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span>
+                    <!-- <span class="prompt" v-show="!isSelfLiftSet" style="margin-left:60px;">“上门自提”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span> -->
+                    <!-- <span class="prompt" v-show="!isDeliverySet">“同城配送”需在店铺设置开启后生效</span><span class="set-btn blue pointer font12" v-show="!isDeliverySet" @click="gotoDeliverySet">去设置</span> -->
+
                 </div>
             </el-form-item>
             <el-form-item label="快递运费" prop="isFreeFreight" v-show="ruleForm.deliveryWay.includes(1)">
@@ -659,7 +496,6 @@
                     </el-select>
                     <div v-if="ruleForm.productCategoryInfoId" class="blue pointer" style="display: inline-block; margin-left: 24px; margin-right: 10px;">
                         <span @click="addTemplate">新增模板</span>
-                        <!--<el-button type="primary" @click="getTemplateList">刷新</el-button>-->
                         <span class="shuaxin-fenlei" @click="getTemplateList">刷新<i></i></span>
                     </div>
                 </div>
@@ -723,7 +559,7 @@
             </div>
         </section>
     </el-form>
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData" @imageSelected="imageSelected" @videoSelected="videoSelected" :specsLength.sync="specsLength" :add="add" :onSubmit="getCategoryList"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data="currentData" :imageMax="6" :isImageHave="ruleForm.images ? ruleForm.images.split(',').length : 0"  @imageSelected="imageSelected" @videoSelected="videoSelected" :specsLength.sync="specsLength" :add="add" :onSubmit="getCategoryList" @getProductCategoryInfoId="getProductCategoryInfoId"></component>
     <component :is="selectSpecificationsCurrentDialog" :dialogVisible.sync="selectSpecificationsDialogVisible" @submit="submit" :data="currentData" :specsLength.sync="specsLength" :flatSpecsList="flatSpecsList"></component>
     <el-dialog
         title=""
@@ -751,14 +587,64 @@ import TimelyShelvingDialog from '@/views/goods/dialogs/timelyShelvingDialog'
 import LibraryDialog from '@/views/goods/dialogs/libraryDialog'
 import AddCategoryDialog from '@/views/goods/dialogs/addCategoryDialog'
 import AddTagDialog from '@/views/goods/dialogs/addTagDialog'
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial'
-import dialogSelectVideo from '@/views/shop/dialogs/dialogSelectVideo'
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index'
+import dialogSelectVideo from '@/components/dialogs/selectVideo/index'
 import Specs from '@/views/goods/components/specs'
 import anotherAuth from '@/mixins/anotherAuth'
+import chooseGoodCategoryDialog from '@/views/goods/dialogs/chooseGoodCategoryDialog'
 export default {
     name: 'addGoods',
     mixins: [anotherAuth],
     data() {
+        var singleSpecValidator = (rule,value,callback) =>{
+            switch(rule.field){
+                case "costPrice":
+                     if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
+                        callback(new Error('请输入正确的数字')); 
+                     }else if(+this.singleSpec[rule.field]> 10000000){
+                        callback(new Error('当前成本价最大限制为10000000，请您重新输入'));   
+                     }else{
+                        callback();
+                     }
+                     break;
+                case "salePrice":
+                    if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(+this.singleSpec[rule.field])){
+                        callback(new Error('请输入正确的数字'));  
+                    }else if(+this.singleSpec[rule.field]> 10000000){
+                        callback(new Error('当前售卖价最大限制为10000000，请您重新输入'));  
+                    }else if(+this.singleSpec.costPrice > +this.singleSpec.salePrice){
+                        callback(new Error('售卖价不得低于成本价'));
+                    }else{
+                        callback();
+                    }
+                    break;
+                case "stock":
+                case  "warningStock":
+                    if(+this.singleSpec[rule.field] < 0 || !/^\d+$/.test(+this.singleSpec[rule.field])){
+                        callback(new Error('请输入正确的数字'));
+                    }else{
+                        callback();
+                    }
+                    break;
+                case "weight":
+                case "volume":
+                    if(+this.singleSpec[rule.field] < 0 ||  this.singleSpec[rule.field] !== '' && !/[\d+\.\d+|\d+]/.test(+this.singleSpec[rule.field])){
+                        callback(new Error('请输入正确的数字'));
+                    }else{
+                        callback();
+                    }
+                    break;
+                case "code":
+                    if(!/^[a-zA-Z\d_\$]+$/.test(this.singleSpec.code)) {
+                        callback(new Erroe("编码格式不正确"));
+                    }else{
+                        callback();
+                    }
+                    break;
+                
+            }
+            
+        }; 
         var productUnitValidator = (rule, value, callback) => {
             // if(value === '') {
             //     callback(new Error('请选择优惠方式'));
@@ -825,14 +711,27 @@ export default {
             }
         };
         return {
+            specRadio:0,//商品规格信息，0:单一规格，1:多规格
+            singleSpec:{
+                    code:"",
+                    costPrice:"",
+                    salePrice:"",
+                    stock:"",
+                    warningStock:"",
+                    weight:"",
+                    volume:""
+                },//单一规格属性
             itemCatText: '',
             categoryValue: [],
             categoryOptions: [],
             productLabelList: [], // 商品标签列表
             specIds: [],
+            goodCategoryNames: '',
+            historyProductCategoryId: '',
             add: true,
 	    isExpressSet: true, //普通快递是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
             isDeliverySet: true, //商家配送是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
+            isSelfLiftSet:true,//上门自提是否在店铺设置开启（开启则提示不显示，未开启则显示去设置提示）
 	    ruleForm: {
                 productCategoryInfoId: '', // 商品类目id
                 //productCatalogInfoId: '', // 商品商家分类ID
@@ -857,7 +756,7 @@ export default {
                 other: false,
                 otherUnit: '',
                 isCashOnDelivery: 0, // 是否支持货到付款
-		deliveryWay: [1], //配送方式(默认普通快递选中，不可取消)
+		        deliveryWay: [1], //配送方式(默认普通快递选中，不可取消)
                 isFreeFreight: 0, // 是否包邮
                 isAfterSaleService: 1, // 是否支持售后服务
                 isShowRelationProduct: 0, // 是否显示关联商品
@@ -932,6 +831,25 @@ export default {
                 selfSaleCount: [
                     { validator: selfSaleCountValidator, trigger: 'blur' },
                 ],
+                costPrice: [
+                    { required: true, validator:singleSpecValidator, trigger: 'blur' },
+                ],
+                salePrice: [
+                    { required: true, validator:singleSpecValidator, trigger: 'blur' },
+                ],
+                stock: [
+                    { required: true, validator:singleSpecValidator, trigger: 'blur' },
+                ],
+                warningStock: [
+                    { required: true,validator:singleSpecValidator, trigger: 'blur' },
+                ],
+                weight:[
+                    {validator:singleSpecValidator, trigger: 'blur' }
+                ],
+                volume:[
+                    {validator:singleSpecValidator, trigger: 'blur' }
+                ]
+
             },
             uploadUrl: `${process.env.DATA_API}/web-file/file-server/api_file_remote_upload.do`,
             optionsTypeList: [],
@@ -1019,6 +937,7 @@ export default {
         document.querySelector('body').addEventListener('click', function(e) {
             //e.stopPropagation()
             this.hideFenlei = false
+            if(this.specRadio===1){//多规格
             if(e.target.parentNode.parentNode.className != 'add-specs') {
                 that.showSpecsList = false
             }
@@ -1032,7 +951,7 @@ export default {
                 })
                 that.addedSpecs = addedSpecs
             }
-
+        }
             if(that.editor) {
                 that._globalEvent.$emit('addGoodsEvent', false);
             }
@@ -1148,6 +1067,174 @@ export default {
         });
     },
     methods: {
+        validateGoodsInfos(obj){
+            if(obj){
+                if(obj.costPrice == '') {
+                    this.$message({
+                        message: '请输入成本价',
+                        type: 'warning'
+                    });
+                return false
+                }
+                if(+obj.costPrice <= 0) {
+                    this.$message({
+                    message: '成本价必须大于0',
+                    type: 'warning'
+                    });
+                    return false
+                }
+                if(/\./.test(obj.costPrice) && obj.costPrice.split(".")[1].length > 2) {
+                    this.$message({
+                        message: '只支持小数点后两位',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(+obj.costPrice > 10000000) {
+                    this.$message({
+                        message: '当前成本价最大限制为10000000，请您重新输入',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(obj.salePrice == '') {
+                    this.$message({
+                        message: '请输入售卖价',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(+obj.salePrice <= 0) {
+                    this.$message({
+                        message: '售卖价必须大于0',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(+obj.salePrice > 10000000) {
+                    this.$message({
+                        message: '当前售卖价最大限制为10000000，请您重新输入',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(/\./.test(obj.salePrice) && obj.salePrice.split(".")[1].length > 2) {
+                    this.$message({
+                        message: '只支持小数点后两位',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(!obj.activity && (+obj.salePrice<+obj.costPrice)) {
+                    this.$message({
+                        message: '售卖价不得低于成本价',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(obj.stock === '') {
+                    this.$message({
+                        message: '请输入库存',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(!/^\d+$/.test(obj.stock)) {
+                    this.$message({
+                        message: '库存不能为小数',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(+obj.stock  < 0) {
+                    this.$message({
+                        message: '不能为负值',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(+obj.stock  > 10000000) {
+                    this.$message({
+                        message: '库存不能超过10000000',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(!obj.warningStock) {
+                    this.$message({
+                        message: '请输入库存预警',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(!/^\d+$/.test(obj.warningStock)) {
+                    this.$message({
+                        message: '库存预警不能为小数',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(+obj.warningStock  < 0) {
+                    this.$message({
+                        message: '不能为负值',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(+obj.weight  < 0) {
+                    this.$message({
+                        message: '重量不能为负值',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(+obj.weight  > 10000000) {
+                    this.$message({
+                        message: '重量不能超过10000000',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(+obj.volume  < 0) {
+                    this.$message({
+                        message: '体积不能为负值',
+                        type: 'warning'
+                    });
+                    return false
+                }
+                if(+obj.volume  > 10000000) {
+                    this.$message({
+                        message: '体积不能超过10000000',
+                        type: 'warning'
+                    });
+                    return false
+                }
+            //如果配送方式勾选了商家配送，则重量为必填项
+                if(this.ruleForm.deliveryWay.includes(2)){
+                    if(!obj.weight) {
+                        this.$message({
+                            message: '请输入重量',
+                            type: 'warning'
+                        });
+                        return false
+                    }
+                }
+                return true
+            }
+        },
+        addGoodCategory(){
+            this.currentDialog = 'chooseGoodCategoryDialog';
+            this.dialogVisible = true;
+            this.currentData=this.historyProductCategoryId;
+        },
+        getProductCategoryInfoId(data){
+            if(data&&data.child){
+                this.leimuMessage = false;
+                this.ruleForm.productCategoryInfoId=data.child.id;
+                this.goodCategoryNames = data.name + ' / '+data.child.name; 
+                this.getSpecsList(this.ruleForm.productCategoryInfoId);
+            }
+        },
         statusChange() {
             if(this.ruleForm.status == 2) {
                 this.currentDialog = 'TimelyShelvingDialog'
@@ -1600,11 +1687,13 @@ export default {
 
             this.flatSpecsList.splice(_index, 1)
             this.specsList.splice(this.specsList.findIndex(val => val.name == name), 1)
-            if(this.addedSpecs[index].valueList) {
-                this.addedSpecs[index].valueList.forEach(val => {
-                    let name = val.name
+            if(this.addedSpecs[index].list) {
+                this.addedSpecs[index].list.forEach(val => {
+                    if(val.type == 'new') {
+                        let name = val.name
 
-                    this.flatSpecsList.splice(this.flatSpecsList.findIndex(val => val.name == name), 1)
+                        this.flatSpecsList.splice(this.flatSpecsList.findIndex(val => val.name == name), 1)
+                    }
                 })
             }
             this.addedSpecs.splice(index, 1)
@@ -1823,6 +1912,10 @@ export default {
             let routeData = this.$router.resolve({ path: '/set/shopExpress' });
             window.open(routeData.href, '_blank');
         },
+        gotoSelfLiftSet(){
+            let routeData = this.$router.resolve({ path: '/set/selfLift' });
+            window.open(routeData.href, '_blank');
+        },
         //获取普通快递在店铺是否设置开启状态
         getExpressAndDeliverySet(name){
             const params = {
@@ -1838,6 +1931,10 @@ export default {
                 //如果商家配送未开启则提示去设置
                 if(name == 'delivery' && res.isOpenMerchantDeliver == 0){
                     this.isDeliverySet = false;
+                }
+                //如果上门自提未开启则提示去设置
+                if(name == 'selfLift' && res.isOpenSelfLift == 0){
+                    this.isSelfLiftSet = false;
                 }
             })
             .catch(error => {});
@@ -1858,6 +1955,14 @@ export default {
                     this.getExpressAndDeliverySet('delivery');
                 }else{ //不选中，则直接隐藏提示即可
                     this.isDeliverySet = true;
+                }
+            }
+             //上门自提
+            if(index === '4'){
+                if(val){ //如果选中，则验证店铺中是否开启，未开启则提示去设置
+                    this.getExpressAndDeliverySet('selfLift');
+                }else{ //不选中，则直接隐藏提示即可
+                    this.isSelfLiftSet = true;
                 }
             }
         },
@@ -2093,25 +2198,32 @@ export default {
         },
         getCategoryIds(arr, id) {
             try {
-                let parentId = this.flatCategoryList.find(val => val.id == id).parentId
-                arr.unshift(id)
-                if(parentId && parentId != 0) {
-                    this.getCategoryIds(arr, parentId)
+                if(this.flatCategoryList.find(val => val.id == id)){
+                    let parentId = this.flatCategoryList.find(val => val.id == id).parentId
+                    arr.unshift(id)
+                    if(parentId && parentId != 0) {
+                     this.getCategoryIds(arr, parentId)
+                    }   
                 }
+
             } catch(e) {
                 console.error(e)
             }
         },
         // 获取类目
         getCategoryInfoIds(arr, id) {
-            try {
-                let parentId = this.operateCategoryList.find(val => val.id == id).parentId
-                arr.unshift(id)
-                if(parentId && parentId != 0) {
-                    this.getCategoryInfoIds(arr, parentId)
-                }
+            if(id){
+                try {
+                    if(this.operateCategoryList.find(val => val.id == id)){
+                        let parentId = this.operateCategoryList.find(val => val.id == id).parentId
+                        arr.unshift(id)
+                        if(parentId && parentId != 0) {
+                        this.getCategoryInfoIds(arr, parentId)
+                        }
+                    }        
             } catch(e) {
                 console.error(e)
+            }
             }
         },
         computedAddSpecs(specs) {
@@ -2274,18 +2386,22 @@ export default {
             let {id, goodsInfoId} = this.$route.query
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
-                console.log(res)
+                this.historyProductCategoryId = res.productCategoryInfoId;
+                this.specRadio = res.specsType;       
 		//配送方式(根据选中去请求是否在店铺开启)
                 let deliveryWayArr = [1]; //默认选中普通快递，同时不可取消掉
                 if(res.businessDispatchType == 1){ //如果开启了商家配送
                     deliveryWayArr.push(2);
                     this.getExpressAndDeliverySet('delivery');
                 }
+                if(res.shopExtractType == 1){ //如果开启了上门自提
+                    deliveryWayArr.push(4);
+                    this.getExpressAndDeliverySet('selfLift');
+                }
                 res.deliveryWay = deliveryWayArr;
                 let arr = []
                 let itemCatAr = []
                 let __goodsInfos
-
 
                 if(this.isIE) {
                     if(this.editor) {
@@ -2303,20 +2419,24 @@ export default {
                     }
                 }
                 this.specsLabel = Object.keys(JSON.parse(res.productSpecs)).join(',')
-
-                res.goodsInfos.forEach(val => {
-                    let label = Object.values(JSON.parse(val.specs)).join(',')
-
-                    val.label = label
-                    val.editorDisabled = true
-                    val.showCodeSpan = false
-                })
-                res.goodsInfos = this.sortGoodsInfos(res)
-                this.computedAddSpecs(res.productSpecs)
-
-                __goodsInfos = this.computedList(res.goodsInfos)
-                this.setGoodsImage(__goodsInfos)
-                res.goodsInfos = __goodsInfos
+                if(res.specsType===1){//多规格   
+                    res.goodsInfos.forEach(val => {
+                        let label = Object.values(JSON.parse(val.specs)).join(',')
+                        val.label = label
+                        val.editorDisabled = true
+                        val.showCodeSpan = false
+                    })
+                     res.goodsInfos = this.sortGoodsInfos(res)    
+                    this.computedAddSpecs(res.productSpecs)
+                    __goodsInfos = this.computedList(res.goodsInfos)
+                    this.setGoodsImage(__goodsInfos)
+                    res.goodsInfos = __goodsInfos
+                    }else if(res.specsType===0){ //单一规格
+                    this.singleSpec = Object.assign({}, this.singleSpec, res.goodsInfos[0], {
+                            //goodsInfos: [res.goodsInfo]
+                        })
+                    }
+                
                 res.productCatalogInfoIds.forEach((id, index) => {
                     let _arr = []
                     this.getCategoryIds(_arr, id)
@@ -2327,6 +2447,7 @@ export default {
                     return this.operateCategoryList.find(val => val.id == id)
                 })
                 this.itemCatText = _arr.map(val => val.name).join(' > ')
+                this.goodCategoryNames = _arr.map(val => val.name).join(' / ')
                 let specs = JSON.parse(res.productSpecs)
                 let specsLabelArr = []
                 let labelArr = []
@@ -2497,9 +2618,9 @@ export default {
         },
         // 获取商品规格列表
         getSpecsList() {
-            let productCategoryInfoId = this.ruleForm.productCategoryInfoId
-            let rootId = this.getRootId(productCategoryInfoId)
-            this._apis.goodsOperate.fetchSpecsList({productCategoryId: rootId, enable: 1}).then(res => {
+            // let productCategoryInfoId = this.ruleForm.productCategoryInfoId
+            // let rootId = this.getRootId(productCategoryInfoId)
+            this._apis.goodsOperate.fetchSpecsList({productCategoryId: this.ruleForm.productCategoryInfoId, enable: 1}).then(res => {
                 console.log(res)
                 res.forEach(val => {
                     val.level = '1'
@@ -2524,7 +2645,11 @@ export default {
                     message: '新增成功！',
                     type: 'success'
                 });
-                this.$router.push('/goods/goodsList')
+                if(this.$route.name === 'addGoodsOnly') {
+                    this.$router.push('/goods/goodsListOnly')
+                }else {
+                    this.$router.push('/goods/goodsList')
+                }
             }).catch(error => {
                 this.$message.error({
                     message: error,
@@ -2565,6 +2690,11 @@ export default {
                             return
                         }
                     }
+                if(this.specRadio===0){//单一规格商品输入值校验
+                    if(!this.validateGoodsInfos(this.singleSpec)){
+                        return
+                    }
+                }
                 if (valid) {
                     if(this.ruleForm.other) {
                         if(/\s+/.test(this.ruleForm.otherUnit)) {
@@ -2584,147 +2714,19 @@ export default {
                         productUnit: this.ruleForm.other ? this.ruleForm.otherUnit : this.ruleForm.productUnit,
                     }
                     let calculationWay
+                if(this.specRadio===1){//多规格校验
                     try {
                         this.ruleForm.goodsInfos.forEach((val, index) => {
                             if(val.image_hide) {
-                                // let image = this.ruleForm.goodsInfos[index - (val.image_rowspan - 1)].image
-
-                                // val.image = image
                                 val.image = this.ruleForm.goodsInfos[index - 1].image
                             }
                         })
 
                         for(let i=0; i<this.ruleForm.goodsInfos.length; i++) {
-                            //this.ruleForm.goodsInfos[i].fileList && (this.ruleForm.goodsInfos[i].fileList = null)
-                        // if(!/^[a-zA-Z0-9_]{6,}$/.test(this.ruleForm.goodsInfos[i].code)) {
-                        //     this.$message({
-                        //         message: '当前SKU编码输入有误，请您重新输入',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        // if(!this.ruleForm.goodsInfos[i].code) {
-                        //     this.$message({
-                        //          message: '当前SKU编码输入有误，请您重新输入',
-                        //          type: 'warning'
-                        //      });
-                        //      return
-                        // }
-                        // if(this.ruleForm.goodsInfos[i].image == '') {
-                        //     this.$message({
-                        //         message: '请上传图片',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        if(this.ruleForm.goodsInfos[i].costPrice == '') {
-                            this.$message({
-                                message: '请输入成本价',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(+this.ruleForm.goodsInfos[i].costPrice <= 0) {
-                            this.$message({
-                                message: '成本价必须大于0',
-                                type: 'warning'
-                            });
-                            return
-                        }
-							if (this.ruleForm.goodsInfos[i].costPrice > 10000000) {
-								this.$message.closeAll()
-								this.$message({
-									message: '当前成本价最大限制为10000000，请您重新输入',
-									type: 'warning'
-								});
-								return
-							}
-                        if(/\./.test(this.ruleForm.goodsInfos[i].costPrice) && this.ruleForm.goodsInfos[i].costPrice.split(".")[1].length > 2) {
-                            this.$message({
-                                message: '只支持小数点后两位',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(this.ruleForm.goodsInfos[i].salePrice == '') {
-                            this.$message({
-                                message: '请输入售卖价',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(+this.ruleForm.goodsInfos[i].salePrice <= 0) {
-                            this.$message({
-                                message: '售卖价必须大于0',
-                                type: 'warning'
-                            });
-                            return
-                        }
-							if (this.ruleForm.goodsInfos[i].salePrice > 10000000) {
-								this.$message.closeAll()
-								this.$message({
-									message: '当前售卖价最大限制为10000000，请您重新输入',
-									type: 'warning'
-								});
-								return
-							}
-                        if(/\./.test(this.ruleForm.goodsInfos[i].salePrice) && this.ruleForm.goodsInfos[i].salePrice.split(".")[1].length > 2) {
-                            this.$message({
-                                message: '只支持小数点后两位',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(this.ruleForm.goodsInfos[i].stock === '') {
-                            this.$message({
-                                message: '请输入库存',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(!/^\d+$/.test(this.ruleForm.goodsInfos[i].stock)) {
-                            this.$message({
-                                message: '库存不能为小数',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(+this.ruleForm.goodsInfos[i].stock  < 0) {
-                            this.$message({
-                                message: '不能为负值',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(+this.ruleForm.goodsInfos[i].stock  > 10000000) {
-                            this.$message({
-                                message: '库存不能超过10000000',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(!this.ruleForm.goodsInfos[i].warningStock) {
-                            this.$message({
-                                message: '请输入库存预警',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(!/^\d+$/.test(this.ruleForm.goodsInfos[i].warningStock)) {
-                            this.$message({
-                                message: '库存预警不能为小数',
-                                type: 'warning'
-                            });
-                            return
-                        }
-                        if(+this.ruleForm.goodsInfos[i].warningStock  < 0) {
-                            this.$message({
-                                message: '不能为负值',
-                                type: 'warning'
-                            });
-                            return
-                        }
-			//如果配送方式勾选了商家配送，则重量为必填项
+                           if(!this.validateGoodsInfos(this.ruleForm.goodsInfos[i])){//属性值验证不通过
+                               return
+                           }
+			        //如果配送方式勾选了商家配送，则重量为必填项
                         if(this.ruleForm.deliveryWay.includes(2)){
                             if(!this.ruleForm.goodsInfos[i].weight) {
                                 this.$message({
@@ -2734,45 +2736,45 @@ export default {
                                 return
                             }
                         }
-                        // if(+this.ruleForm.goodsInfos[i].weight  <= 0) {
-                        //     this.$message({
-                        //         message: '重量必须大于0',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        // if(+this.ruleForm.goodsInfos[i].volume  <= 0) {
-                        //     this.$message({
-                        //         message: '体积必须大于0',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
+                        
                     }
                     } catch(e) {
                         console.error(e)
                     }
-                    if(this.ruleForm.name == '' || /^\s+$/.test(this.ruleForm.name)) {
-                        this.$message({
-                            message: '商品名称不能为空',
-                            type: 'warning'
-                        });
-                        return
-                    }
+                 }
+                if(this.ruleForm.name == '' || /^\s+$/.test(this.ruleForm.name)) {
+                    this.$message({
+                        message: '商品名称不能为空',
+                        type: 'warning'
+                    });
+                    return
+                }
 
-                    if(this.ruleForm.isFreeFreight == 0) {
-                        let id = this.ruleForm.freightTemplateId
-                        calculationWay = this.shippingTemplates.find(val => val.id == id).calculationWay
-                        if(calculationWay == 3) {
-                            if(this.ruleForm.goodsInfos.some(val => !val.volume)) {
+                if(this.ruleForm.isFreeFreight == 0) {
+                    let id = this.ruleForm.freightTemplateId
+                     calculationWay = this.shippingTemplates.find(val => val.id == id).calculationWay
+                    if(calculationWay == 3) {
+                        if(this.specRadio===1 &&this.ruleForm.goodsInfos.some(val => !val.volume)) {
                                 this.$message({
                                     message: '规格信息中体积不能为空',
                                     type: 'warning'
                                 });
                                 return
+                            }else if(this.specRadio===0 && !this.singleSpec.volume){
+                                this.$message({
+                                    message:'规格信息中体积不能为空',
+                                    type:'warning'
+                                });
+                                return 
                             }
                         } else if(calculationWay == 2) {
-                            if(this.ruleForm.goodsInfos.some(val => !val.weight)) {
+                            if(this.specRadio===1 && this.ruleForm.goodsInfos.some(val => !val.weight)) {
+                                this.$message({
+                                    message: '规格信息中重量不能为空',
+                                    type: 'warning'
+                                });
+                                return
+                            }else if(this.specRadio===0 && !this.singleSpec.weight){
                                 this.$message({
                                     message: '规格信息中重量不能为空',
                                     type: 'warning'
@@ -2781,120 +2783,21 @@ export default {
                             }
                         }
                     }
-                    // if(this.editor) {
-                    //     if(this.ruleForm.goodsInfos.some(val => val.costPrice == '')) {
-                    //         this.$message({
-                    //             message: '规格信息中成本价不能为空',
-                    //             type: 'warning'
-                    //         });
-                    //         return
-                    //     }
-                    //     if(!this.editor && this.ruleForm.goodsInfos.some(val => val.salePrice == '')) {
-                    //         this.$message({
-                    //             message: '规格信息中售卖价不能为空',
-                    //             type: 'warning'
-                    //         });
-                    //         return
-                    //     }
-                    //     if(!this.editor && this.ruleForm.goodsInfos.some(val => val.stock == '')) {
-                    //         this.$message({
-                    //             message: '规格信息中库存不能为空',
-                    //             type: 'warning'
-                    //         });
-                    //         return
-                    //     }
-                    //     if(!this.editor && this.ruleForm.goodsInfos.some(val => +val.stock < 0)) {
-                    //         this.$message({
-                    //             message: '规格信息中库存不能小于0',
-                    //             type: 'warning'
-                    //         });
-                    //         return
-                    //     }
-                    //     if(this.ruleForm.goodsInfos.some(val => !val.warningStock)) {
-                    //         this.$message({
-                    //             message: '规格信息中库存预警不能为空',
-                    //             type: 'warning'
-                    //         });
-                    //         return
-                    //     }
-                    //     if(this.ruleForm.goodsInfos.some(val => val.image == '')) {
-                    //         this.$message({
-                    //             message: '规格信息中图片不能为空',
-                    //             type: 'warning'
-                    //         });
-                    //         return
-                    //     }
-                    // }
-
-                    // if(this.ruleForm.productDetail) {
-                    //     let _productDetail = ''
-                    //     _productDetail = btoa(unescape(encodeURIComponent(this.ruleForm.productDetail)));
-                    //     obj.productDetail = _productDetail
-                    // }
                     if(this.categoryValue) {
                         let categoryValue = JSON.parse(JSON.stringify(this.categoryValue))
                         let arr = []
                         categoryValue.forEach(val => {
                             arr.push(val.pop())
                         })
-
                         this.ruleForm.productCatalogInfoIds = arr
                     }
                     //if(!this.editor) {
+                    if(this.specRadio===1){
                         let __goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
 
                         __goodsInfos.forEach(val => {
                             val.fileList = null
                         })
-                        // let _deleteSpecArr = Array.from(new Set(this.deleteSpecArr))
-                        // if(_deleteSpecArr.length) {
-                        //     for(let i=0; i<_deleteSpecArr.length; i++) {
-                        //         __goodsInfos.splice(_deleteSpecArr[i], 1)
-                        //     }
-                        // }
-
-                        // if(__goodsInfos.some(val => val.costPrice == '')) {
-                        //     this.$message({
-                        //         message: '规格信息中成本价不能为空',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        // if(!this.editor && __goodsInfos.some(val => val.salePrice == '')) {
-                        //     this.$message({
-                        //         message: '规格信息中售卖价不能为空',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        // if(!this.editor && __goodsInfos.some(val => val.stock == '')) {
-                        //     this.$message({
-                        //         message: '规格信息中库存不能为空',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        // if(!this.editor && __goodsInfos.some(val => +val.stock < 0)) {
-                        //     this.$message({
-                        //         message: '规格信息中库存不能小于0',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        // if(__goodsInfos.some(val => !val.warningStock)) {
-                        //     this.$message({
-                        //         message: '规格信息中库存预警不能为空',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
-                        // if(__goodsInfos.some(val => val.image == '')) {
-                        //     this.$message({
-                        //         message: '规格信息中图片不能为空',
-                        //         type: 'warning'
-                        //     });
-                        //     return
-                        // }
                         _goodsInfos = __goodsInfos.map(val => {
                             let _specs = {}
                             val.label.split(',').forEach((spec, index) => {
@@ -2904,13 +2807,13 @@ export default {
                             val.fileList = []
                             return val
                         })
-                        obj.goodsInfos = _goodsInfos
-                    // } else {
-                    //     obj.goodsInfos = this.ruleForm.goodsInfos
-                    // }
-                    // console.log(this.ruleForm.productDetail)
-                    // console.log(window.encodeURIComponent(this.ruleForm.productDetail))
-                    // console.log(window.btoa(window.encodeURIComponent(this.ruleForm.productDetail)))
+                        
+                            obj.goodsInfos = _goodsInfos
+                        }else{
+                            this.singleSpec.specs={"规格":"默认规格"};
+                            obj.goodsInfos = [this.singleSpec];
+                        }
+                        
                     params = Object.assign({}, this.ruleForm, obj, {
                         productDetail: window.escape(this.ruleForm.productDetail),
                         productCatalogInfoId: ''
@@ -2927,15 +2830,18 @@ export default {
                             productUnit: item && item.name || ''
                         })
                     }
-		    //处理配送方式参数  默认都未开启，下面判断如果是勾选则变为1开启状态
+		            //处理配送方式参数  默认都未开启，下面判断如果是勾选则变为1开启状态
                     params.generalExpressType = 1; //普通快递
                     params.businessDispatchType = 0; //商家配送
-                    if(this.ruleForm.deliveryWay.includes(2)){
+                    params.shopExtractType = 0; // 上门自提
+                    params.specsType = this.specRadio;//0：单一规格，1：多规格
+                    if(this.ruleForm.deliveryWay.includes(2)){ //勾选了商家配送
                         params.businessDispatchType = 1;
                     }
+                    if(this.ruleForm.deliveryWay.includes(4)){//勾选了上门自提
+                        params.shopExtractType = 1;
+                    }
                     delete params.deliveryWay;
-
-                    console.log(params)
                     if(!this.editor) {
                         this.addGoods(params)
                     } else {
@@ -2984,7 +2890,7 @@ export default {
             })
             this.itemCatText = arr.map(val => val.name).join(' > ')
             this.ruleForm.productCategoryInfoId = _value.pop()
-            this.getSpecsList()
+            this.getSpecsList(this.ruleForm.productCategoryInfoId)
 
             // this.$nextTick(() => {
             //     setTimeout(() => {
@@ -2997,9 +2903,6 @@ export default {
         getOperateCategoryList() {
             return new Promise((resolve, reject) => {
                 this._apis.goodsOperate.fetchCategoryList({enable: 1}).then(res => {
-                    // let arr = this.transTreeData(res.list, 0)
-                    // this.operateCategoryList = res.list
-                    // this.itemCatList = arr
                     let arr = this.transTreeData(res, 0)
                     this.operateCategoryList = res
                     this.itemCatList = arr
@@ -3286,7 +3189,7 @@ export default {
                 this.index = 3
             }
         },
-        imageSelected(image) {
+        imageSelected(images) {
             // if(this.uploadVideo) {
             //     if(!/\.mp4|\.ogg|\.mov$/.test(image.filePath)) {
             //         this.$message({
@@ -3299,6 +3202,21 @@ export default {
             //     this.uploadVideo = false
             //     return
             // }
+            images.forEach((image,index)=>{
+                if(!/\.jpg|\.jpeg|\.png|\.gif|\.JPG|\.JPEG|\.PNG|\.GIF$/.test(image.filePath)) {
+                this.$message({
+                message: '上传的文件格式不正确，请重新上传',
+                type: 'warning'
+                });
+                return
+                }
+            if(image.fileSize > 1024*1024*3) {
+                this.$message({
+                message: '上传图片不能超过3M',
+                type: 'warning'
+                });
+                return
+            }
             if(!/\.jpg|\.jpeg|\.png|\.gif|\.JPG|\.JPEG|\.PNG|\.GIF$/.test(image.filePath)) {
                 this.$message({
                 message: '上传的文件格式不正确，请重新上传',
@@ -3336,6 +3254,7 @@ export default {
                 }
                 this.hideUpload = this.imagesLength >= 6
             }
+        })
         }
     },
     mounted() {
@@ -3365,7 +3284,8 @@ export default {
         dialogSelectImageMaterial,
         RichEditor,
         Specs,
-        dialogSelectVideo
+        dialogSelectVideo,
+        chooseGoodCategoryDialog
     }
 }
 </script>
@@ -3378,6 +3298,9 @@ $blue: #655EFF;
     color: $grayColor;
     font-size: 12px;
     margin-top: -27px;
+}
+.checkbox-item{
+    float:left;
 }
 .blue {
     color: $blue;
@@ -3392,6 +3315,24 @@ $blue: #655EFF;
 .app-main .content-box .content-main {
     margin-top: 2px;
 }
+.sku-template{
+   /deep/ .el-input__inner{
+        width:490px;
+        margin-top:5px;
+        margin-bottom:10px;
+        height:30px;
+
+    }
+
+}
+/deep/ .el-form-item .el-form-item--small {
+    margin-bottom: 20px;
+}
+
+/deep/.el-form-item--small .el-form-item__error{
+    padding-left:15px;   
+}
+
 .add-goods {
     padding: 18px 21px;
     padding-top: 2px;
@@ -3582,6 +3523,24 @@ $blue: #655EFF;
     color: #f56c6c;
     margin-right: 4px;
 }
+/deep/ label[for="costPrice"]::before {
+    content: '*';
+    color: #f56c6c;
+    margin-right: 4px;
+}
+/deep/ label[for="code"] {
+    position: relative;   
+}
+/deep/ .el-icon-warning-outline{
+        position:absolute;
+        left:-90px;
+        top:10px;
+    }
+   i.sku-code{
+       left:-20px;
+   } 
+    
+
 .autoSaleTime {
     font-size: 12px;
     margin-left: 10px;
@@ -4145,6 +4104,7 @@ $blue: #655EFF;
     width: 85px;
     height: 34px;
     background-color: #e6fbf3;
+    color:#6ACEA8;
     i {
         margin-left: 12px;
         display: inline-block;
@@ -4182,5 +4142,33 @@ $blue: #655EFF;
 .set-btn:hover {
     color: #444a51;
     text-decoration: underline;
+}
+.goodCategory{
+    position:relative;
+    display:inline-block;
+    width:210px;
+    line-height:32px;
+    height:32px;
+    border-radius:4px;
+    border:1px solid rgba(218,218,227,1);
+    padding:0 10px;
+    font-size:12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    color:rgba(68,67,75,1);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    /deep/ .el-icon-caret-bottom{
+        color: #92929B;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    &:hover{
+        cursor: pointer;
+    }
 }
 </style>

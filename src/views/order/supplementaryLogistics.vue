@@ -19,7 +19,8 @@
                             ref="table"
                             :data="tableData"
                             style="width: 100%"
-                            @selection-change="handleSelectionChange">
+                            @selection-change="handleSelectionChange"
+                            :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                             <el-table-column
                                 label="序号"
                                 width="180">
@@ -69,7 +70,7 @@
                             <i class="take-in-icon"></i>
                             <span>收货信息</span>
                         </div>
-                        <!-- <div class="blue pointer" @click="changeReceivedInfo">修改收货信息</div> -->
+                        <div class="blue pointer" @click="changeReceivedInfo">修改收货信息</div>
                     </div>
                     <div class="content">
                         <div class="item">
@@ -119,14 +120,14 @@
                         <el-form-item label="配送方式">
                             <span>普通快递</span>
                         </el-form-item>
-                        <el-form-item label="快递公司" prop="expressCompanyCode" :class="{'is-disabled': !express}">
+                        <el-form-item label="快递公司" prop="expressCompanyCode" :class="{'is-disabled': express != null}">
                             <el-select filterable @change="checkExpress" v-model="ruleForm.expressCompanyCode" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
                             </el-select>
                             <el-input v-if="ruleForm.expressCompanyCode == 'other'" v-model="ruleForm.other" placeholder="请输入快递公司名称"></el-input>
                         </el-form-item>
-                        <el-form-item label="快递单号" prop="expressNos" :class="{'is-disabled': !express}">
-                            <el-input maxlength="20" :disabled="!express" :placeholder="!express ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" v-model="ruleForm.expressNos"></el-input>
+                        <el-form-item label="快递单号" prop="expressNos" :class="{'is-disabled': express != null}">
+                            <el-input maxlength="20" :disabled="express != null" :placeholder="express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'" v-model="ruleForm.expressNos"></el-input>
                         </el-form-item>
                         <el-form-item label="物流备注" prop="remark">
                             <el-input
@@ -164,7 +165,7 @@
                         </el-option>
                     </el-select>
                     <div class="pointer" v-show="distributorSet" style="display: inline-block; margin-left: 20px; margin-right: 10px;vertical-align:middle;">
-                        <span class="shuaxin-fenlei" @click="getDistributorList">刷新<i></i></span>
+                        <span class="shuaxin-fenlei" @click="getDistributorList">刷新<i></i></span>
                     </div>
                     <div class="prompt" style="display:inline-block;" v-show="isDistributorShow && distributorSet">
                         <span>您尚未创建配送员信息，去</span><span class="set-btn blue pointer font12" @click="gotoSubaccountManage">创建子账号</span><span>绑定配送员角色。</span>
@@ -193,7 +194,21 @@
                 <el-button v-if="orderInfo.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">确定</el-button>
             </div>
         </div>
-        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" :sendGoods="sendGoods"></component>
+        <component 
+            v-if="dialogVisible" 
+            :is="currentDialog" 
+            :dialogVisible.sync="dialogVisible" 
+            :data="currentData" 
+            @submit="onSubmit" 
+            :sendGoods="sendGoods" 
+            :ajax="ajax" 
+            @getDetail="getOrderDetail"
+            :orderSendGoodsHander="orderSendGoodsHander"
+            :params="params"
+            :list="_list"
+            :_ids="_ids"
+            @cancel="cancel">
+        </component>
     </div>
 </template>
 <script>
@@ -202,8 +217,11 @@ import ReceiveInformationDialog from '@/views/order/dialogs/receiveInformationDi
 import { validatePhone } from "@/utils/validate.js"
 
 import { asyncRouterMap } from '@/router'
+import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
+import { common, deliveryWay1 } from '@/views/order/mixins/orderMixin'
 
 export default {
+    mixins: [common, deliveryWay1],
     data() {
         var expressCompanyCodeValidator = (rule, value, callback) => {
           if(this.ruleForm.expressCompanyCode != 'other') {
@@ -269,17 +287,17 @@ export default {
             currentDialog: '',
             dialogVisible: false,
             currentData: {},
-            expressCompanyList: [],
             sendGoods: '',
             title: '',
-            express: true,
-            sending: false,
+            express: null,
             distributorList: [], //配送员筛选后的数据
             distributorListFilter: [], //所有配送员数据
             distributorName: '', //配送员名字
             distributorId: '', //配送员id
             isDistributorShow: false, //尚未创建配送员信息提示控制
-            distributorSet: false
+            distributorSet: false,
+            ajax: true,
+            _ids: [],
         }
     },
     created() {
@@ -302,6 +320,9 @@ export default {
         }
     },
     methods: {
+        cancel() {
+            this.sending = false
+        },
         //检测是否有配置子帐号的权限
         checkSet(){
             const setConfig = asyncRouterMap.filter(item => item.name === 'set');
@@ -464,7 +485,7 @@ export default {
         .checkExpress({expressName})
         .then(res => {
           this.express = res;
-          if(this.express) {
+          if(this.express == null) {
               this.$set(this.rules, "expressNos", [
                 { required: true, message: "请输入快递单号", trigger: "blur" }
               ]);
@@ -474,28 +495,45 @@ export default {
               ]);
 
           }
+
+          this._list.splice(0, 1, Object.assign({}, this._list[0], {
+            expressCompanyCodes: this.ruleForm.expressCompanyCode,
+            express: res
+          }))
         })
         .catch(error => {
           this.visible = false;
           this.$message.error(error);
         });
     },
-        fetchOrderAddress() {
-            this._apis.order.fetchOrderAddress({id: this.cid, cid: this.cid}).then((res) => {
-                this.orderInfo.sendName = res.senderName
-                this.orderInfo.sendPhone = res.senderPhone
-                this.orderInfo.sendProvinceCode = res.provinceCode
-                this.orderInfo.sendProvinceName = res.province
-                this.orderInfo.sendCityCode = res.cityCode
-                this.orderInfo.sendCityName = res.city
-                this.orderInfo.sendAreaCode = res.areaCode
-                this.orderInfo.sendAreaName = res.area
-                this.orderInfo.sendAddress = res.sendAddress
-                this.orderInfo.sendDetail = res.address
-            }).catch(error => {
-                this.visible = false
-                this.$message.error(error);
-            })
+        fetchOrderAddress(address) {
+            // this._apis.order.fetchOrderAddress({id: this.cid, cid: this.cid}).then((res) => {
+            //     this.orderInfo.sendName = res.senderName
+            //     this.orderInfo.sendPhone = res.senderPhone
+            //     this.orderInfo.sendProvinceCode = res.provinceCode
+            //     this.orderInfo.sendProvinceName = res.province
+            //     this.orderInfo.sendCityCode = res.cityCode
+            //     this.orderInfo.sendCityName = res.city
+            //     this.orderInfo.sendAreaCode = res.areaCode
+            //     this.orderInfo.sendAreaName = res.area
+            //     this.orderInfo.sendAddress = res.sendAddress
+            //     this.orderInfo.sendDetail = res.address
+            // }).catch(error => {
+            //     this.visible = false
+            //     this.$message.error(error);
+            // })
+            this.orderInfo.sendName = address.name;
+          this.orderInfo.sendPhone = address.mobile;
+          this.orderInfo.sendProvinceCode = address.provinceCode;
+          this.orderInfo.sendProvinceName = address.provinceName;
+          this.orderInfo.sendCityCode = address.cityCode;
+          this.orderInfo.sendCityName = address.cityName;
+          this.orderInfo.sendAreaCode = address.areaCode;
+          this.orderInfo.sendAreaName = address.areaName;
+          this.orderInfo.sendAddress = address.address;
+          this.orderInfo.sendDetail = address.addressDetail;
+          this.orderInfo.sendLatitude = address.latitude;
+          this.orderInfo.sendLongitude = address.longitude
         },
         printDistributionSheet() {
             this.$router.push('/order/printDistributionSheet?ids=' + this.orderInfo.id + '&type=supplementaryLogistics')
@@ -503,25 +541,18 @@ export default {
         printingElectronicForm() {
             this.$router.push('/order/printingElectronicForm?ids=' + this.orderInfo.id + '&type=supplementaryLogistics')
         },
-        getExpressCompanyList() {
-            this._apis.order.getElectronicFaceSheetExpressCompanyList().then((res) => {
-                res.forEach(val => {
-                    val.expressCompanyCode = val.expressCode
-                    val.expressCompany = val.expressName
-                })
-                res.push({
-                    expressCompanyCode: 'other',
-                    expressCompany: '其他'
-                })
-                this.expressCompanyList = res
-            }).catch(error => {
-                this.visible = false
-                this.$message.error(error);
-            })
-        },
         sendGoodsHandler(formName) {
-            
-            this.$refs[formName].validate((valid) => {
+            // if(this.orderInfo.deliveryWay == 1) {
+            //     if(!this.shopAddressInfo) {
+            //     this.confirm({
+            //         title: "提示",
+            //         icon: true,
+            //         text: "发货信息不能为空"
+            //     });
+            //     return;
+            //     }
+            // }
+            this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     let params
 
@@ -537,7 +568,7 @@ export default {
 
                     this.sending = true
                     let obj = {
-                        orderId: this.$route.query.orderId || this.$route.query.id, // 订单id
+                        orderId: this.$route.query.orderId || this.$route.query.ids || this.$route.query.id, // 订单id
                         memberInfoId: this.orderInfo.memberInfoId,
                         orderCode: this.orderInfo.orderCode,
                         orderItems: this.tableData.map(val => ({
@@ -574,6 +605,11 @@ export default {
                         obj.expressNos = this.ruleForm.expressNos; // 快递单号
                         obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
                         obj.remark = this.ruleForm.remark; // 发货备注
+                        if(this.orderInfo.deliveryWay == 1) {
+                            if(this.express && this.express.specificationSize) {
+                            obj.specificationSize = this.express.specificationSize
+                            }
+                        }
                       }else if(formName == 'ruleFormStore'){ //如果是商家配送
                         obj.deliveryWay = 2;
                         obj.distributorName = this.distributorName; //配送员名字
@@ -586,20 +622,48 @@ export default {
                             obj
                         ],
                     }
+                    this.params = params
+                    if(this.express != null && !this.express.sizeSpecs) {
+                        try {
+                        let res = await this._apis.order.getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
 
-                    this._apis.order.orderSendGoods(params).then((res) => {
-                        this.$message.success('补填物流成功');
-                        this.sending = false
-                        this.$router.push('/order/query')
-                    }).catch(error => {
-                        this.$message.error(error);
-                        this.sending = false
-                    })
+                        if(res && res.length) {
+                            this._list[0].sizeList = res.map(item => ({
+                                ...item,
+                                sizeSpecs: item.sizeSpecs + ' ' + item.templateSize,
+                                templateSize: `${item.sizeSpecs} ${item.templateSize}`
+                            }))
+                            this.currentData = {
+                                list: this._list,
+                                expressCompanyList: this.expressCompanyList
+                            }
+                            this.currentDialog = 'SelectSizeDialog'
+                            this.title = '提示'
+                            this.dialogVisible = true
+                        } else {
+                            this.orderSendGoodsHander(params)
+                        }
+                        } catch(e) {
+                            this.$message.error(error);
+                        }
+                    } else {
+                        this.orderSendGoodsHander(params)
+                    }
                 } else {
                     console.log('error submit!!');
                     return false;
                 }
             });
+        },
+        orderSendGoodsHander(params) {
+            this._apis.order.orderSendGoods(params).then((res) => {
+                this.$message.success('补填物流成功');
+                this.sending = false
+                this.$router.push('/order/query')
+            }).catch(error => {
+                this.$message.error(error);
+                this.sending = false
+            })
         },
         changeReceivedInfo() {
             this.currentDialog = 'ReceiveInformationDialog'
@@ -619,18 +683,30 @@ export default {
             this.orderInfo = Object.assign({}, this.orderInfo, value)
         },
         _orderDetail() {
-            let id = this.$route.query.id
+            let id = this.$route.query.ids
 
-            this._apis.order.orderSendDetail({ids: [this.$route.query.id]}).then((res) => {
+            this._apis.order.orderSendDetail({ids: [this.$route.query.ids || this.$route.query.id]}).then((res) => {
+                let _address = res.shopAddressInfo
+
+                this.shopAddressInfo = res.shopAddressInfo
+                res = res.sendInfoListData
                 res[0].orderItemList.forEach(val => {
                     val.sendCount =  val.goodsCount
                 })
                 this.orderDetail = res[0]
                 this.orderSendInfo = res[0]
+                this._list = res
                 this.tableData = res[0].orderItemList
                 this.orderInfo = res[0]
-
-                this.fetchOrderAddress()
+                this._ids = [this.orderInfo.id]
+                if(!this.orderInfo.sendAddress) {
+                    if(this.orderInfo.deliveryWay == 1 || this.orderInfo.deliveryWay == 2) {
+                        this.fetchOrderAddress(_address)
+                    }
+                }
+                // if(this.orderInfo.deliveryWay == 1) {
+                //     this.fetchOrderAddress(_address)
+                // }
 
                 //如果是商家配送，则需要请求拿到配送员列表
                 if(this.orderInfo.deliveryWay == 2){
@@ -641,7 +717,7 @@ export default {
             })
         },
         afterSaleOrderDetail() {
-            let id = this.$route.query.id
+            let id = this.$route.query.ids
 
             this._apis.order.getOrderAfterSaleDetail({id}).then((res) => {
                 this.orderDetail = res
@@ -664,7 +740,8 @@ export default {
         }
     },
     components: {
-        ReceiveInformationDialog
+        ReceiveInformationDialog,
+        SelectSizeDialog
     }
 }
 </script>
@@ -695,9 +772,10 @@ export default {
                     .title {
                         display: flex;
                         justify-content: space-between;
-                        height: 60px;
-                        line-height: 60px;
-                        background-color: rgb(243, 244, 244);
+                        height: 56px;
+                        line-height: 56px;
+                        background-color: #F6F7FA;
+                        color: #44434B;
                         border-radius: 5px 5px 0 0;
                         padding: 0 20px;
                         .title-list {
@@ -746,8 +824,13 @@ export default {
     .goods-detail {
         display: flex;
         .goods-detail-item {
+            margin-right: 10px;
             p {
                 margin-bottom: 6px!important;
+                &:last-child {
+                    color: #92929B;
+                    font-size: 12px;
+                }
             }
         }
     }
@@ -764,9 +847,9 @@ export default {
     border: 1px solid #DCDFE6;
   }
 }
-/deep/ .logistics .el-input {
-    // width: 226px;
-}
+// /deep/ .logistics .el-input {
+//     // width: 226px;
+// }
 .ellipsis {
     width: 311px;
     display: inline-block;
@@ -802,6 +885,18 @@ export default {
 .set-btn:hover {
     color: #444a51;
     text-decoration: underline;
+}
+/deep/ .el-table table thead th {
+    font-weight: normal;
+}
+/deep/ .el-table td, /deep/ .el-table th {
+    text-align: center;
+    &:nth-child(2) {
+        text-align: left;
+    }
+}
+/deep/ .el-table table thead tr th {
+    border-bottom: none;
 }
 </style>
 

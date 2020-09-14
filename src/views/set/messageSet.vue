@@ -1,6 +1,6 @@
 /*消息设置 */
 <template>
-  <div>
+  <div class="messageSet">
    <el-tabs v-model="currentTab" @tab-click="handleClick" class="tabs">
       <el-tab-pane label="用户通知" name="seller"></el-tab-pane>
       <el-tab-pane label="客户通知" name="buyer"></el-tab-pane>
@@ -40,7 +40,29 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-
+.messageSet {
+  .el-tabs__item {
+    height: 45px;
+    line-height: 45px;
+    font-size:16px;
+    font-weight:400;
+    color:rgba(68,67,75,1);
+    &.is-active {
+      color:rgba(101,94,255,1);
+      font-weight:500;
+    }
+  }
+  .table {
+    th>.cell {
+      font-weight:500;
+      color:rgba(146,146,155,1);
+    }
+    td>.cell {
+      font-weight:400;
+      color:rgba(22,22,23,1);
+    }
+  }
+}
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>

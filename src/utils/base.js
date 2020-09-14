@@ -131,7 +131,7 @@ export function orderStatusFilter(status) {
     case 1:
       return '待成团'
     case 2:
-      return '关闭'
+      return '已关闭'
     case 3:
       return '待发货'
     case 4:
@@ -139,7 +139,25 @@ export function orderStatusFilter(status) {
     case 5:
       return '待收货'
     case 6:
-      return '完成'
+      return '已完成'
+  }
+}
+
+//售后单状态过滤器   
+export function orderAfterSaleStatusFilter(status) {
+  switch (status) {
+    case 0:
+      return '待审核'
+    case 1:
+      return '待退货'
+    case 2:
+      return '待处理'
+    case 3:
+      return '待收货'
+    case 4:
+      return '已完成'
+    case 5:
+      return '已关闭'
   }
 }
 
@@ -157,7 +175,7 @@ export function goodsSpecsFilter(value) {
           str += _value[i] + ','
       }
   }
-
+  str = str.replace(/(^.*)\,$/, '$1')
   return str
 }
 
@@ -184,6 +202,7 @@ export function addNewApply(path, access) {
   let newWindow = window.open("about:blank");
   newWindow.location.href = newUrl;
 }
+
 
 
 export function equalsObj(oldData,newData){
@@ -248,8 +267,24 @@ export function isIdsUpdate(newValue, oldValue) {
 
 
 // 函数防抖
-export function debounce(func, wait) {
+export function debounce(func, wait = 500, isImmediate = false) {
   let timeout;
+
+  if(isImmediate){
+    let flag = true;
+    return function(){
+      let context = this;
+      let args = arguments;
+      if (timeout) clearTimeout(timeout);
+      if(flag){
+        flag = false;
+        func.apply(context, args)
+      }
+      timeout = setTimeout(() => {
+        flag = true;
+      }, wait);
+    }
+  }
   return function () {
     let context = this;
     let args = arguments;
@@ -261,10 +296,49 @@ export function debounce(func, wait) {
   }
 }
 
+// 函数节流
+export function throttle(func, wait = 500, isImmediate = false) {
+  let timeout;
+  if(isImmediate){
+    let flag = true;
+    return function(){
+      let context = this;
+      let args = arguments;
+
+      if(flag) {
+        func.apply(context, args);
+        flag = false;
+        timeout = setTimeout(() => {
+          flag = true
+        },wait)
+      }
+    }
+  }
+
+  return function () {
+    let context = this;
+    let args = arguments;
+    if (timeout) {
+      return;
+    }
+    timeout = setTimeout(() => {
+        func.apply(context, args)
+        clearTimeout(timeout);
+				timeout = null;
+    }, wait);
+  }
+
+}
+
+
 
 // is safari
 export function isSafariBrowser() {
   const ua = navigator.userAgent;
   const isSafariBrowser = /Safari\/([\d.]+)/.test(ua) && !/Chrome\/([\d.]+)/.test(ua);
   return isSafariBrowser
+}
+
+export function unique(arr) {
+  return Array.from(new Set(arr))
 }

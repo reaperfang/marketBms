@@ -12,8 +12,8 @@ import Vue from 'vue'
 import VueUeditorWrap from 'vue-ueditor-wrap' // ES6 Module
 Vue.component('vue-ueditor-wrap', VueUeditorWrap)
 import utils from '@/utils';
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
-import dialogSelectVideo from '@/views/shop/dialogs/dialogSelectVideo';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
+import dialogSelectVideo from '@/components/dialogs/selectVideo/index';
 export default {
   name: 'RichEditor',
   props: ['richValue', 'myConfig'],

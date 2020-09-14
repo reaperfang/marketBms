@@ -71,7 +71,7 @@
 						<span @click="changeDayM(7)" :class="nearDay == 7 ? 'active' : ''">最近7天</span>
 						<span @click="changeDayM(15)" :class="nearDay == 15 ? 'active' : ''">最近15天</span>
 						<span @click="changeDayM(30)" :class="nearDay == 30 ? 'active' : ''">最近30天</span>
-						<span @click="changeDayM(4)" :class="nearDay == 4 ? 'active' : ''">自定义時間</span>
+						<span @click="changeDayM(4)" :class="nearDay == 4 ? 'active' : ''">自定义时间</span>
 					</div>
                     <div class="input_wrap" v-show="nearDay == 4">
                         <el-date-picker
@@ -82,6 +82,8 @@
                             start-placeholder="开始时间"
                             end-placeholder="结束时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
+                            :editable="false"
+                            @focus="utils.globalTimeDisabledFocus"
                             :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
                             @change="changeTime">
                         </el-date-picker>

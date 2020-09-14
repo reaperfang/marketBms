@@ -4,24 +4,28 @@
     <div class="all_container">
         <div class="form_container">
             <el-form ref="form" :model="form">
-                <el-row>
-                    <el-col :span="wWidth < 1500 ? 8:6">
+                <div>
+                    <div class="check_con1">
                         <el-form-item label="查询条件：" prop="labelName">
-                            <el-select v-model="form.labelName" placeholder="请选择" clearable>
-                                <el-option label="昵称" value="nickName"></el-option>
-                                <el-option label="用户ID" value="memberSn"></el-option>
-                                <el-option label="手机号" value="phone"></el-option>
-                            </el-select>
+                            <div class="con1_input">
+                                <el-select v-model="form.labelName" placeholder="请选择" clearable>
+                                    <el-option label="昵称" value="nickName"></el-option>
+                                    <el-option label="用户ID" value="memberSn"></el-option>
+                                    <el-option label="手机号" value="phone"></el-option>
+                                </el-select>
+                            </div>
                         </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
+                    </div>
+                    <div class="check_con2">
                         <el-form-item prop="labelValue">
-                            <el-input v-model="form.labelValue" placeholder="请输入" maxlength="20">
-                                <el-button slot="append" icon="el-icon-search" @click="getClientList"></el-button>
-                            </el-input>
+                            <div class="con2_input">
+                                <el-input v-model="form.labelValue" placeholder="请输入" maxlength="20">
+                                    <el-button slot="append" icon="el-icon-search" @click="getClientList"></el-button>
+                                </el-input>
+                            </div>
                         </el-form-item>
-                    </el-col>
-                </el-row>
+                    </div>
+                </div>
                 <el-form-item label="用户身份：" class="relaPosition" prop="memberType">
                     <el-checkbox-group v-model="form.memberType" :max="1">
                         <el-checkbox v-for="item in clientStatusOps" :label="item" :key="item" border>{{item}}</el-checkbox>
@@ -155,14 +159,14 @@
                 </div>
                 <el-form-item class="padR40 marT20">
                     <span class="shou" @click="handleMore" v-if="showFold">收起<i class="el-icon-arrow-up margetClientListL10"></i></span>
-                    <el-button class="fr marL20" @click="resetForm('form')">重置</el-button>
+                    <el-button class="fr marL10" @click="resetForm('form')">重置</el-button>
                     <el-button type="primary" class="fr" @click="getClientList" :loading="btnloading">查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
         </div>
         <div class="all_container2">
-            <div class="btn_container" style="float: right; margin: 9px 118px 24px 0px">
+            <div class="btn_container" style="float: right; margin: 9px 106px 24px 0px">
                 <el-button type="primary" @click="_routeTo('importClient')" v-permission="['用户', '全部用户', '默认页面', '用户导入']">导入</el-button>
                 <!-- <el-button @click="exportToLocal">导出</el-button> -->
             </div>
@@ -538,12 +542,31 @@ export default {
 .marL20{
     margin-left: 20px;
 }
+.marL10{
+    margin-left: 10px;
+}
 .all_container{
     padding: 20px;
     background-color: #fff;
     font-size: 14px;
     border-radius: 4px;
     .form_container{
+        .check_con1{
+            width: 210px; 
+            display: inline-block;
+            .con1_input{
+                width: 120px; 
+                display: inline-block
+            }
+        }
+        .check_con2{
+            width: 260px; 
+            display: inline-block;
+            .con2_input{
+                width: 250px; 
+                display: inline-block;
+            }
+        }
         .relaPosition{
             .absoPosition{
                 margin-left: 15px;

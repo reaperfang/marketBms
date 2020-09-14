@@ -2,17 +2,17 @@
 .slider-wrapper {
       width: 100%;
       display: flex;
-      justify-content: flex-start!important;
+      justify-content: flex-start !important;
       align-items: center;
 
       .el-slider {
-            width: 60%;
+            flex: 1;
             margin-right: 20px;
       }
 
       span {
             margin-right: 20px;
-            width: 46px;
+            width: 60px;
       }
 }
 
@@ -30,8 +30,8 @@
 
 /* 添加图片、视频、活动等按钮样式 */
 .add_button {
-      border-radius:4px;
-      border:1px dashed rgba(182,181,200,1);
+      border-radius: 4px;
+      border: 1px dashed rgba(182, 181, 200, 1);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -39,8 +39,9 @@
       cursor: pointer;
       width: 96px;
       height: 96px;
-      color:rgba(68,67,75,1);
-      background:rgba(242,242,249,1);
+      color: rgba(68, 67, 75, 1);
+      background: rgba(242, 242, 249, 1);
+
       &:hover {
             transition: all 0.4s;
             border: 1px dashed $globalMainColor;
@@ -53,34 +54,39 @@
             background: url("../assets/images/shop/editor/plus.svg") no-repeat 0 0;
             background-size: 100% 100%;
       }
+
       p {
             line-height: 21px;
-            margin-top: 12px!important;
+            margin-top: 12px !important;
       }
 }
-.add_button_img{
+
+.add_button_img {
       .inner {
             width: 26px;
             height: 26px;
-      }   
+      }
 }
 
 .add-button-x {
-      background:rgba(248,248,250,1);
-      border-radius:4px;
-      border:1px dashed #B6B5C8;
-      color:#44434B;
+      background: rgba(248, 248, 250, 1);
+      border-radius: 4px;
+      border: 1px dashed #B6B5C8;
+      color: #44434B;
       font-size: 12px;
-      height: 34px;;
+      height: 34px;
+      ;
       line-height: 34px;
       padding: 0 15px;
       cursor: pointer;
+
       i {
             font-size: 16px;
             margin-right: 6px;
             color: #B6B5C8;
             vertical-align: -1px;
       }
+
       &:hover {
             transition: all 0.4s;
             border: 1px dashed $globalMainColor;
@@ -96,18 +102,22 @@
       // justify-content: center;
       // align-items: flex-start;
       border: 1px solid #ddd;
-      &:hover span{
-        opacity: 1;
-        transition: all 0.3s;
+
+      &:hover span {
+            opacity: 1;
+            transition: all 0.3s;
       }
-      ul{
-            width:100%;
-            height:100%;
-            li{
-                  width:100%;
-                  height:100%;
+
+      ul {
+            width: 100%;
+            height: 100%;
+
+            li {
+                  width: 100%;
+                  height: 100%;
             }
       }
+
       img {
             width: 100%;
             height: 100%;
@@ -128,6 +138,7 @@
             transition: all 0.3s;
             cursor: pointer;
       }
+
       i.delete_btn {
             width: 20px;
             height: 20px;
@@ -150,18 +161,22 @@
             flex-wrap: wrap;
             max-height: 350px;
             overflow-y: auto;
+
             &::-webkit-scrollbar {
-                width: 2px;
-                height: 8px;
+                  width: 2px;
+                  height: 8px;
             }
+
             &::-webkit-scrollbar-thumb {
-                border-radius: 10px!important;
-                background: rgba(101,94,255,.4)!important;
+                  border-radius: 10px !important;
+                  background: rgba(101, 94, 255, .4) !important;
             }
+
             &::-webkit-scrollbar-track {
-                border-radius: 0!important;
-                background: rgba(101,94,255,.1)!important;
+                  border-radius: 0 !important;
+                  background: rgba(101, 94, 255, .1) !important;
             }
+
             li {
                   margin-right: 20px;
                   margin-bottom: 20px;
@@ -169,12 +184,15 @@
                   width: 96px;
                   height: 96px;
                   border: 1px solid #eae9e9;
+
                   &.add_button {
                         border: 1px dashed #B6B5C8;
-                        &:hover{
+
+                        &:hover {
                               border-color: #655EFF;
                         }
                   }
+
                   &:nth-of-type(2n) {
                         margin-right: 0;
                   }
@@ -205,7 +223,7 @@ ul.cube {
             box-sizing: border-box;
 
             .fill_block {
-                  background: rgba(242,242,249,1);
+                  background: rgba(242, 242, 249, 1);
                   height: 100%;
                   margin-right: 2px;
                   cursor: pointer;
@@ -213,9 +231,10 @@ ul.cube {
                   &:last-child {
                         margin-right: 0;
                   }
-                  img{
-                        width:100%;
-                        height:100%;
+
+                  img {
+                        width: 100%;
+                        height: 100%;
                         vertical-align: baseline;
                         object-fit: contain;
                         display: block;
@@ -428,8 +447,9 @@ ul.cube {
                   line-height: 64px;
                   background: #fff;
                   position: relative;
-                  cursor: pointer;
-                  box-shadow: 0px 1px 10px rgba(0,0,0,0.1);
+                  // cursor: pointer;
+                  box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
+
                   img {
                         width: 100%;
                         height: 64px;
@@ -448,13 +468,14 @@ ul.cube {
             .phone-body {
                   height: 775px;
                   overflow-y: auto;
+
                   // border-left: 1px solid #f0eeee;
                   // border-right: 1px solid #f0eeee;
                   .component_wrapper {
                         position: relative;
                         cursor: pointer;
                         // border-top: 1px solid #f0eeee;
-                        min-height:10px;
+                        min-height: 10px;
                         // &:last-child{
                         //       border-bottom: 1px solid #f0eeee;
                         // }
@@ -467,23 +488,25 @@ ul.cube {
             width: 346px;
 
             form {
-                  display: block!important;
+                  display: block !important;
                   max-height: 100%;
             }
 
-            .el-button--text{
-                font-size:14px!important;    
-                span{
-                  overflow-x: hidden!important;
-                  text-overflow: ellipsis!important;
-                  white-space: nowrap!important;
-                  display: block!important;
-                  text-align: left!important;
-                }          
+            .el-button--text {
+                  font-size: 14px !important;
+
+                  span {
+                        overflow-x: hidden !important;
+                        text-overflow: ellipsis !important;
+                        white-space: nowrap !important;
+                        display: block !important;
+                        text-align: left !important;
+                  }
             }
 
             .block {
                   margin-bottom: 10px;
+
                   &.header {
                         padding: 10px 0;
                         display: flex;
@@ -505,18 +528,20 @@ ul.cube {
                                     background: $globalMainColor;
                               }
                         }
-                        .component_desc{
-                              font-size:12px;
-                              font-family:PingFangSC-Regular,PingFang SC;
-                              font-weight:400;
-                              color:#92929B;
-                              display:block;
-                              margin-top:10px;
+
+                        .component_desc {
+                              font-size: 12px;
+                              font-family: PingFangSC-Regular, PingFang SC;
+                              font-weight: 400;
+                              color: #92929B;
+                              display: block;
+                              margin-top: 10px;
                         }
 
                         .state {
-                              color:$errorColor;
-                              &.normal{
+                              color: $errorColor;
+
+                              &.normal {
                                     color: $globalMainColor;
                               }
                         }
@@ -524,11 +549,13 @@ ul.cube {
 
                   &.form {
                         padding: 0 0 20px 0;
-                        .el-form-item{
-                              &:last-child{
-                                    margin:0;
+
+                        .el-form-item {
+                              &:last-child {
+                                    margin: 0;
                               }
-                              .el-form-item__label{
+
+                              .el-form-item__label {
                                     text-align: left;
                               }
                         }
@@ -541,16 +568,18 @@ ul.cube {
                         margin-bottom: 0;
                         // z-index: 2000;
                         padding: 30px 0;
-                        .help_blank{
+
+                        .help_blank {
                               height: 10px;
-                              background: rgb(242,242,249);
+                              background: rgb(242, 242, 249);
                               width: 100%;
                         }
-                        .buttons{
+
+                        .buttons {
                               display: flex;
                               flex-direction: row;
                               justify-content: center;
-                              background:#fff;
+                              background: #fff;
                               // padding-bottom: 30px;
                               // margin-top: 30px;
                         }
@@ -563,105 +592,143 @@ ul.cube {
       }
 }
 
-.block.form .el-radio-group{
-  margin-top: 9px;
-  label{
-      &:last-child {
-            margin-left: 0;
+.block.form .el-radio-group {
+      margin-top: 9px;
+
+      label {
+            &:last-child {
+                  margin-left: 0;
+            }
       }
-  }
-  .el-radio {
-      margin-bottom: 10px;
-      margin-right: 10px;
-      .el-radio__label{
-            padding-left: 5px;
-      }
-  }
-}
 
-.temp_block{
-    padding:15px;
-}
+      .el-radio {
+            margin-bottom: 10px;
+            margin-right: 10px;
 
-/* 瑰柏翠页面头部样式 */
-.gbc_container{
-//   height: 100%;
-  background: #fff;
-  padding:20px;
-  h2{
-    font-size:16px;
-    font-weight:700!important;
-    color:rgba(22,22,23,1);
-    line-height:25px;
-    margin-bottom:10px;
-  }
-}
-
-.multiple_selection {
-      margin: 20px 0 0 14px;
-}
-.el-table__header-wrapper .el-checkbox{
-  display:none;
-}
-
-.head-wrapper{
-      .el-form-item__label {
-            padding-right: 8px;
-      }
-      .el-form--inline .el-form-item, .search_w {
-            margin-right: 26px;
-            .el-button+.el-button {
-                  margin-left: 16px;
+            .el-radio__label {
+                  padding-left: 5px;
             }
       }
 }
 
-.select_dialog {
-      /deep/.el-form-item__content{
-            display:flex!important;
+.temp_block {
+      padding: 15px;
+}
+
+/* 瑰柏翠页面头部样式 */
+.gbc_container {
+      //   height: 100%;
+      background: #fff;
+      padding: 20px;
+
+      h2 {
+            font-size: 16px;
+            font-weight: 700 !important;
+            color: rgba(22, 22, 23, 1);
+            line-height: 25px;
+            margin-bottom: 10px;
       }
 }
 
-.hide_tips{
-      color:rgba(146,146,155,1);
-      font-size:12px;
+.icon-info-popover {
+      padding: 6px !important;
+      color: #44434B !important;
+      font-size: 12px !important;
+      border-color: #DADAE3 !important;
+      box-shadow: none !important;
+      border-radius: 2px !important;
+}
+.icon-info-popover[x-placement^=top]{
+      .popper__arrow {
+            border-top-color: #DADAE3 !important;
+      }
+}
+
+.multiple_selection {
+      margin: 20px 0 0 14px;
+
+      .icon-info {
+            position: relative;
+            display: inline-block;
+            top: -8px;
+            width: 14px;
+            height: 14px;
+            background: url('~@/assets/images/common/icon-info.png') no-repeat;
+            background-size: 14px auto;
+      }
+}
+
+.el-table__header-wrapper .el-checkbox {
+      display: none;
+}
+
+.head-wrapper {
+      .el-form-item__label {
+            padding-right: 8px;
+      }
+
+      .el-form--inline .el-form-item,
+      .search_w {
+            margin-right: 20px;
+
+            .el-button+.el-button {
+                  margin-left: 16px;
+            }
+      }
+      .el-form--inline .el-form-item:last-child {
+            margin-right: 0;
+      }
+}
+
+.select_dialog {
+      /deep/.el-form-item__content {
+            display: flex !important;
+      }
+}
+
+.hide_tips {
+      color: rgba(146, 146, 155, 1);
+      font-size: 12px;
 }
 
 /* 跳转链接预览样式 */
-.link_overview{
-      display:flex;
+.link_overview {
+      display: flex;
       flex-direction: row;
-      justify-content: space-between;
       align-items: center;
+
       &.arrow {
             .cont {
                   position: relative;
+
                   &:before {
                         content: " ";
                         position: absolute;
                         width: 8px;
                         height: 8px;
-                        background: rgba(248,248,250,1);
+                        background: rgba(248, 248, 250, 1);
                         left: 26px;
                         top: -5px;
                         transform: rotate(45deg);
-                        border: 1px solid rgba(182,181,200,1);
+                        border: 1px solid rgba(182, 181, 200, 1);
                         border-right: none;
                         border-bottom: none;
-                  } 
-            }  
+                  }
+            }
       }
-      .cont{
-            margin-right:10px;
-            display:flex;
+
+      .cont {
+            margin-right: 10px;
+            display: flex;
             flex-direction: row;
             justify-content: space-between;
-            width:178px;
-            height:26px;
-            background:rgba(248,248,250,1);
-            border:1px solid rgba(182,181,200,1);
+            width: 178px;
+            height: 26px;
+            background: rgba(248, 248, 250, 1);
+            border: 1px solid rgba(182, 181, 200, 1);
             border-radius: 4px;
-            span{
+
+            span {
                   font-size: 12px;
                   font-family: MicrosoftYaHei;
                   color: #6e6e72;
@@ -673,19 +740,20 @@ ul.cube {
                   white-space: nowrap;
                   display: block;
             }
-            i{
-                  display:block;
+
+            i {
+                  display: block;
                   background: url('../assets/images/shop/close2.png') no-repeat 0 0;
                   background-size: 12px 12px;
                   width: 12px;
                   height: 12px;
                   margin-top: 6px;
-                  margin-right:10px;
+                  margin-right: 10px;
                   cursor: pointer;
             }
       }
-      .modify{
-            margin-right: 10px;
+
+      .modify {
             font-size: 14px;
             font-family: MicrosoftYaHei;
             color: #655eff;
@@ -693,11 +761,13 @@ ul.cube {
             cursor: pointer;
       }
 }
+
 .prop-message {
-      font-size:12px;
-      color:#92929B;
+      font-size: 12px;
+      color: #92929B;
       line-height: 16px;
 }
+
 .el-radio-group {
       &.radio-block {
             .el-radio {
@@ -707,32 +777,83 @@ ul.cube {
 }
 
 .app-main .content-box .content-main.m_shopEditor {
-    padding: 0!important;
-    overflow: hidden!important;
-  }
+      padding: 0 !important;
+      padding-left: 1px !important;
+      overflow: hidden !important;
+}
 
 /* 微信店铺、移动H5、启动广告右侧编辑器公共样式 */
 .group-wrapper {
       .module.props {
-            form{
+            width: 348px;
+            &>form {
                   overflow-y: auto;
+                  border: 1px #D0D6E4 solid;
             }
+
             .block.header {
                   padding: 10px;
             }
+
             .block.form {
                   padding: 30px 20px 20px 20px;
             }
+
             .block.button {
                   z-index: 2000;
                   position: absolute;
-                  bottom: 6px;
-                  width: 346px;
+                  bottom: 43px;
+                  width: 348px;
                   padding: 0;
-                  .buttons{
+                  border: 1px #D0D6E4 solid;
+                  .buttons {
                         margin-top: 30px;
                         padding-bottom: 30px;
                   }
             }
       }
+}
+
+.select_dialog {
+      /deep/ {
+            table {
+                  width: auto !important;
+            }
+
+            .el-table__empty-block {
+                  width: 100% !important;
+            }
+      }
+
+      /deep/ thead th {
+            background: rgba(247, 246, 251, 1) !important;
+            color: rgba(68, 67, 75, 1) !important;
+      }
+
+      .name_wrapper {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            img {
+                  width: 50px;
+                  height: 50px;
+                  display: block;
+                  margin-right: 10px;
+                  border: 1px solid #ddd;
+                  object-fit: contain;
+            }
+
+            p {
+                  width: calc(100% - 50px);
+            }
+      }
+      .el-form-item__label{
+            float:left !important;
+      }
+}
+
+.props_form .edui-editor-bottomContainer {
+    overflow: hidden;
+    display:none!important;
 }

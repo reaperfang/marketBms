@@ -9,7 +9,7 @@
 		</div>-->
         <div class="goods-list">
             <header class="header">
-                <div v-if="!authHide" v-permission="['商品', '商品列表', '默认页面', '新建商品']" class="item pointer" @click="$router.push('/goods/addGoods')">
+                <div v-if="!authHide" v-permission="['商品', '商品列表', '默认页面', '新建商品']" class="item pointer" @click="$route.name === 'goodsListOnly' ? $router.push('/goods/addGoodsOnly') : $router.push('/goods/addGoods')">
                     <el-button type="primary">新建商品</el-button>
                 </div>
                 <!-- <div v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="item pointer" @click="$router.push('/goods/batchPriceChange')">批量改价</div>
@@ -71,7 +71,7 @@
                     ref="table"
                     style="width: 100%"
                     :default-sort = "{prop: 'stock', order: 'descending'}"
-                    :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                    :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
                     @selection-change="handleSelectionChange"
                     @sort-change="sortChange"
                     :empty-text="emptyText">
@@ -84,6 +84,31 @@
                     label="SPU编码"
                     width="124">
                     </el-table-column> -->
+            <el-table-column label="排序" width="100">
+            <template slot-scope="scope">
+              <template v-if="!scope.row.isEdit">
+                <div @mouseover="showEidtIcon(scope.row)" @mouseleave="hideEditIcon(scope.row)">
+                    <span >{{scope.row.sortId}}</span>
+                    <span class="sort"><i v-if="scope.row.showIcon" slot="suffix" class="i-bg pointer" @click="editGoodIndex(scope.row)"></i></span>
+                </div>
+              </template>
+              <template v-if="scope.row.isEdit">
+                <!-- <el-tooltip popper-class="goodSortTip" class="item" effect="light" placement="top">
+                <div slot="content">输入框内只能输入≥1的有效数字，不能输入特殊字符、<br/>
+                    空格、中英文字符、负数、0等。  
+                </div> -->
+                <el-input
+                  ref='goodSort'
+                  v-model="scope.row.sortId"
+                  autosize
+                  class="goodIndex"
+                  @blur="changeEdit(scope.row)"
+                  @change="saveGoodIndex(scope.row)">
+                  </el-input>
+                 <!-- </el-tooltip> -->
+              </template>
+            </template>
+            </el-table-column>
                     <el-table-column
                         label="商品主图"
                         width="80">
@@ -143,18 +168,17 @@
                         <template slot-scope="scope">
                             <span class="price">
                                 {{scope.row.goodsInfos && scope.row.goodsInfos.length ? Math.min.apply(null, scope.row.goodsInfos.map(val => +val.salePrice)) : scope.row.salePrice}}
-                                <i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="currentData = JSON.parse(JSON.stringify(scope.row)); currentDialog = 'EditorPriceSpu'; dialogVisible = true" class="i-bg pointer"></i>
+                                <i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="editorPriceHandler(scope.row)" class="i-bg pointer"></i>
                             </span>
                         </template>
                     </el-table-column>
-                    <el-table-column
                     <el-table-column
                         sortable="custom"
                         :sort-method="stockSortMethod"
                         prop="stock"
                         label="总库存">
                         <template slot-scope="scope">
-                            <span :class="{'salePrice-red': scope.row.status === 1 && scope.row.goodsInfos.some(val => val.stock <= val.warningStock)}" class="store">{{scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
+                            <span :class="{'salePrice-red': scope.row.status === 1 && scope.row.goodsInfos.some(val => val.stock <= val.warningStock)}" class="store">{{scope.row.goodsInfos && scope.row.goodsInfos.length ? Math.min.apply(null, scope.row.goodsInfos.map(val => +val.stock)) : scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -166,7 +190,7 @@
                             <span class="store">{{scope.row.saleCount}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="操作" width="140">
+                    <el-table-column label="操作" width="140" fixed="right" v-if="$route.name !== 'goodsListOnly'">
                         <template slot-scope="scope">
                             <el-tooltip :visible-arrow="visibleArrow" popper-class="operate-popper" class="item" effect="dark" content="编辑" placement="bottom">
                                 <span v-permission="['商品', '商品列表', '默认页面', '修改商品信息']" @click="$router.push('/goods/addGoods?id=' + scope.row.id + '&goodsInfoId=' + scope.row.id)" class="operate-editor pointer"><i class="i-bg"></i></span>
@@ -199,19 +223,22 @@
                         </div>
                     </div>
                     <el-button v-if="showTableCheck" @click="cancelHandler">取消</el-button> -->
-                    <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
-                    <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allUpper" class="border-button">批量上架</el-button>
-                    <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allLower" class="border-button">批量下架</el-button>
-                    <el-button @click="changePriceMore" v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="border-button">批量改价</el-button>
-                    <el-button @click="shareMore" class="border-button">批量推广</el-button>
-                    <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="all-delete">批量删除</el-button>
-                    <el-button @click="copyUrl" class="border-button">复制链接</el-button>
+                    <template v-if="$route.name !== 'goodsListOnly'">
+                        <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
+                        <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allUpper" class="border-button">批量上架</el-button>
+                        <el-button v-permission="['商品', '商品列表', '默认页面', '批量上/下架']" @click="allLower" class="border-button">批量下架</el-button>
+                        <el-button @click="changePriceMore" v-permission="['商品', '商品列表', '默认页面', '批量改价']" class="border-button">批量改价</el-button>
+                        <el-button @click="shareMore" class="border-button">批量推广</el-button>
+                        <el-button v-permission="['商品', '商品列表', '默认页面', '批量删除']" @click="allDelete" class="all-delete border-button">批量删除</el-button>
+                        <el-button @click="copyUrl" class="border-button">复制链接</el-button>
+                        <el-button @click="editCategory" class="border-button">编辑分类</el-button>
+                    </template>
                 </div>
             </div>
             <div class="footer">
                 <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
             </div>
-            <component @clear="clear" v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit"></component>
+            <component @clear="clear" v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @submit="onSubmit" @changePriceSubmit="changePriceSubmit" @changeProductCatalogs="changeProductCatalogs"></component>
         </div>
         <!-- <div v-else class="goods-list-empty">
             <div v-if="!loading" class="goods-list-empty-content">
@@ -223,6 +250,22 @@
     </div>
 </template>
 <style lang="scss" scoped>
+/deep/.el-table thead {
+    color:rgba(68,67,75,1);
+    font-size:14px;
+}
+/deep/ .el-table-column--selection .cell{
+    padding-left:20px;
+}
+.border-button {
+        border:1px solid rgba(218,218,227,1)!important;
+        color: #44434B!important;
+        &:hover {
+            border:1px solid #655EFF!important;
+            color: #655EFF!important;
+            background-color: #fff;
+        }
+    }
 .table-footer {
     display: flex;
     align-items: center;
@@ -258,7 +301,7 @@
             }
         }
     }
-}
+} 
 .goods-list {
     background-color: #fff;
     padding: 20px;
@@ -315,7 +358,7 @@
             }
         }
     }
-    .store, .price {
+    .store, .price,.sort {
         .i-bg {
             background:url('../../assets/images/goods/editor.png') no-repeat;
             margin-left: 6px;
@@ -342,6 +385,7 @@
         }
     }
 }
+
 /deep/ .el-form-item__label {
     font-weight: normal;
 }
@@ -403,6 +447,7 @@
 /deep/ .el-checkbox__label {
     padding-left: 6px;
     padding-right: 6px;
+    margin-right:20px;
 }
 .el-button+.el-button {
     margin-left: 12px;
@@ -474,11 +519,13 @@ import ShareSelect from '@/views/goods/dialogs/shareSelectDialog'
 import PriceChangeDialog from "@/views/goods/dialogs/priceChangeDialog";
 import anotherAuth from '@/mixins/anotherAuth'
 import copyUrlDialog from "@/views/goods/dialogs/copyUrlDialog";
+import editCatalogDialog from "@/views/goods/dialogs/editCatalogDialog";
 
 export default {
     mixins: [anotherAuth],
     data() {
         return {
+            isEdit: false,
             checkedAll: false,
             isIndeterminate: false,
             visibleArrow: false,
@@ -539,7 +586,11 @@ export default {
                 let total = +res.total
                 
                 if(!total) {
-                    vm.$router.replace('/goods/goodsListEmpty')
+                    if(this.$route.name === 'goodsListOnly') {
+                        vm.$router.replace('/goods/goodsListEmptyOnly')
+                    }else {
+                        vm.$router.replace('/goods/goodsListEmpty')
+                    }
                 }
             }).catch(error => {
                 //this.loading = false
@@ -689,7 +740,79 @@ export default {
         }
     },
     methods: {
-        sortChange({column, prop, order}) {
+        editorPriceHandler(row) {
+            let _row = JSON.parse(JSON.stringify(row)); 
+
+            _row.goodsInfos.forEach(item => {
+                item.isShowMsg = false
+            })
+            this.currentData = JSON.parse(JSON.stringify(_row)); 
+            this.currentDialog = 'EditorPriceSpu'; 
+            this.dialogVisible = true
+        },
+        changeEdit(item){
+            item.isEdit = false;
+        },
+        showEidtIcon(item){
+            item.showIcon=true;          
+        },
+        hideEditIcon(item){
+            item.showIcon=false;
+        },
+        saveGoodIndex(data) {
+            data.isEdit = false;
+            let param = {
+                        id:data.id,
+                        cid:+data.cid,
+                        sortId:data.sortId
+                        }      
+            if (/^([1-9][0-9]*)$/.test(data.sortId) && data.sortId <= 999999) {
+                //保存修改后的商品序号
+                this._apis.goods.editGoodSortId(param)
+                .then((res)=>{
+                    this.getList();
+                }).catch(error=>{
+                    this.$message({
+                    message: "序号保存失败",
+                    type: "error"
+                    });
+                }) 
+
+            } else {
+                this.getList();
+                this.$message({
+                message: "请您输入正确的数字",
+                type: "warning"
+                });
+            }
+
+            },
+            editGoodIndex(item) {
+                item.isEdit = true;
+                item.showIcon=false;
+                this.$nextTick(() => {
+                this.$refs.goodSort.focus();
+                // console.log(this.$refs);
+            })
+            },
+            changeProductCatalogs(datas){
+                let productInfoIds =this.currentData.map(val=>val.id);
+                let param={
+                    cid:+this.currentData[0].cid,
+                    productInfoIds:this.currentData.map(val=>val.id),
+                    productCatalogInfoIds:datas.list,
+                    operateType:datas.type
+                }
+                this._apis.goods.editProductsCatalogs(param)
+                .then(res=>{
+                    this.checkedAll = false
+                    this.getList()
+                })
+                .catch(err=>{
+                    console.log("编辑分类出错啦。。。")
+                })
+            },
+            sortChange({column, prop, order}) {
             if(prop == 'salePrice') {
                 if(order == 'descending') {
                     this.listQuery.sortType = 4
@@ -820,6 +943,17 @@ export default {
                         type: 'error'
                     });
                 });
+        },
+        editCategory(){
+            if(!this.multipleSelection.length) {
+                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择商品后再进行编辑分类操作。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+
+                })
+                return
+            }
+            this.currentData = JSON.parse(JSON.stringify(this.multipleSelection));
+            this.currentDialog = 'editCatalogDialog'
+            this.dialogVisible = true
         },
         search() {
             this.listQuery = Object.assign({}, this.listQuery, {
@@ -1271,10 +1405,11 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
-
+            let checkedCount = val.length;
             if(this.list.length == this.multipleSelection.length) {
                 this.checkedAll = true
             }
+             this.isIndeterminate = checkedCount > 0 && checkedCount < this.list.length;
         },
         stateHandler(val) {
             if(this.listQuery.status === val) {
@@ -1297,7 +1432,6 @@ export default {
         getList(param) {
             this.loading = true
             let _param
-
             _param = Object.assign({}, this.listQuery, param)
             _param = Object.assign({}, _param, {
                 [this.listQuery.searchType]: this.listQuery.searchValue,
@@ -1308,8 +1442,7 @@ export default {
                 this.getMarketActivity(res.list).then((activityRes) => {
                     activityRes.forEach((val, index) => {
                         let id = val.id
-                        let goods = res.list.find(val => val.id == id)
-
+                        let goods = res.list.find(val => val.id == id)                      
                         goods.activity = true
                         if(val.isParticipateActivity) {
                             goods.goodsInfos.forEach(val => {
@@ -1331,6 +1464,8 @@ export default {
                     this.total = +res.total
                     //this.getCategoryName(res.list)
                     res.list.forEach(item => {
+                        item.isEdit = false;
+                        item.showIcon = false;
                         if(item.status === 1) {
                             item.switchStatus = true
                         } else if(item.status === 0 || item.status === 2) {
@@ -1340,7 +1475,11 @@ export default {
                     this.list = res.list
                     this.loading = false
                     // if(this.allTotal && !this.total) {
-                    //     this.$router.push('/goods/goodsListEmpty')
+                    //     if(this.$route.name === 'goodsListOnly') {
+                    //         this.$router.push('/goods/goodsListEmptyOnly')
+                    //     }else {
+                    //         this.$router.push('/goods/goodsListEmpty')
+                    //     }
                     // }
                 })
             }).catch(error => {
@@ -1382,7 +1521,11 @@ export default {
                             let total = +res.total
                             
                             if(!total) {
-                                this.$router.replace('/goods/goodsListEmpty')
+                                if(this.$route.name === 'goodsListOnly') {
+                                    vm.$router.replace('/goods/goodsListEmptyOnly')
+                                }else {
+                                    vm.$router.replace('/goods/goodsListEmpty')
+                                }
                             }
                         }).catch(error => {
                             //this.loading = false
@@ -1422,7 +1565,8 @@ export default {
         EditorUpperAndLowerRacksSpu,
         ShareSelect,
         PriceChangeDialog,
-        copyUrlDialog
+        copyUrlDialog,
+        editCatalogDialog
     }
 }
 </script>
