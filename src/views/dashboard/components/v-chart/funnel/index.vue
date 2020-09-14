@@ -88,9 +88,12 @@ export default {
 				backgroundColor: "#000B23",
 				color: colors,
 				tooltip: {
-					// show: this.progress != 0,
+					// show: params.data.num ? true : false,
 					//formatter: "{data.name} <br/>{b}: {c} ({d}%)"
 					formatter: params => {
+						if (!params.data.num) {
+							return;
+						}
 						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.color}"></span>`;
 						return `${dotHtml}${params.name} <br/> &nbsp&nbsp&nbsp人数: &nbsp${params.data.num}`;
 					}
@@ -187,10 +190,10 @@ export default {
 					},
 					// left
 					{
-						symbolOffset: [25, 37, 0, 0],
+						symbolOffset: [45, 37, 0, 0],
 						type: "pictorialBar",
 						symbolPosition: "center",
-						symbolSize: ["65", "126"],
+						symbolSize: ["95", "126"],
 						// symbol: leftArrow,
 						symbol: "image://" + dashboard.leftArrow,
 						symbolClip: false,
