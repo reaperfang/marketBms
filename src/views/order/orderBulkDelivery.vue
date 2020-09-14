@@ -964,6 +964,7 @@ export default {
             //   this._list.splice(index, 1)
             // }
           }
+          console.log(this._list)
           this._list = this._list.filter(val => val.express != null && !val.express.sizeSpecs && val.sizeList && val.sizeList.length)
 
           var __result = [];
@@ -1484,5 +1485,13 @@ export default {
 }
 /deep/ .el-form-item.expressNos {
   margin-bottom: 0;
+}
+ @media (max-width: 1440px) {
+      .goods-specs{
+        width:150px !important;
+    }
+    .bulk-delivery .table-container .col[data-v-291bba69]:first-child {
+      margin-right: 10px;
+    }
 }
 </style>

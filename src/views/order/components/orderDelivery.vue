@@ -148,7 +148,7 @@
                     label="状态"
                     >
                     <template slot-scope="scope">
-                        <span>{{scope.row.status | statusFilter}}</span>
+                        <span>{{scope.row.status | orderStatusFilter}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -177,8 +177,13 @@
                                 <span v-permission="['订单', '发货管理', '订单发货', '发货']" v-if="!scope.row.isFillUp" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${scope.row.orderId}&_ids=${scope.row.id}`)">发货</span>
                                 <span v-if="scope.row.isFillUp && scope.row.deliveryWay != 4" @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
                             </template>
-                            <template v-if="scope.row.status == 5 && scope.row.deliveryWay == 4">
-                                <span @click="verificationHandler(scope.row)">核销验证</span>
+                            <template v-if="scope.row.status == 5">
+                                <template v-if="scope.row.deliveryWay == 4">
+                                    <span @click="verificationHandler(scope.row)">核销验证</span>
+                                </template>
+                                <template v-else>
+                                    <span v-if="scope.row.isFillUp" @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
+                                </template>
                             </template>
                         </div>
                     </template>
@@ -264,24 +269,6 @@ export default {
         }
     },
     filters: {
-        statusFilter(code) {
-            switch(code) {
-                case 0:
-                    return '待付款'
-                case 1:
-                    return '待成团'
-                case 2:
-                    return '已关闭'
-                case 3:
-                    return '待发货'
-                case 4:
-                    return '部分发货'
-                case 5:
-                    return '待收货'
-                case 6:
-                    return '已完成'
-            }
-        },
         deliveryWayFilter(code) {
             switch(code) {
                 case 1:
@@ -317,7 +304,7 @@ export default {
             return this.tableData.some(val => val.isAutoSend || (val.isUrge == 0))
         },
         computeWidth() {
-            if(this.tableData.some(item => item.status == 4 || (item.status == 3 && item.isFillUp))) {
+            if(this.tableData.some(item => item.status == 4 || (item.status == 5 && item.isFillUp) || (item.status == 3 && item.isFillUp))) {
                 return '118'
             } else {
                 return '100'
