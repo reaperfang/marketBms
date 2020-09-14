@@ -113,7 +113,10 @@
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
                             <p v-show="!authHide" v-permission="['订单', '订单查询', '商城订单', '补填物流']" v-if="order.isFillUp == 1" @click="$router.push('/order/supplementaryLogistics?id=' + order.id)">补填物流</p>
-                            <!-- order.deliveryWay== 4 -->
+                            <!-- 第三方配送的异常订单 -->
+                            <p v-if="order.deliveryWay== 3">重新发单</p>
+                            <p v-if="order.deliveryWay== 3">关闭订单</p>
+
                             <p v-if="order.deliveryWay== 4" @click="currentDialog = 'VerificationDialog'; currentData = order.id; dialogVisible = true">核销验证</p>
                         </template>
                         <template v-else-if="order.orderStatus == 6">
@@ -146,7 +149,8 @@ export default {
             currentData: '',
             dialogVisible: false,
             loading: false,
-            storeMark: false //商家配送标记，如果列表中包含商家配送，则为true, 为了让配送方式标题宽度变宽
+            storeMark: false, //商家配送标记，如果列表中包含商家配送，则为true, 为了让配送方式标题宽度变宽
+            sendOrderAgain:false//是否重新发单
         }
     },
     created() {
