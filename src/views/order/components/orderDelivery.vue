@@ -184,10 +184,10 @@
                                 <template v-else-if="scope.row.deliveryWay == 4">
                                     <span @click="verificationHandler(scope.row)">核销验证</span>
                                 </template>
-                                <!-- <template v-else-if="scope.row.deliveryWay == 3">
+                                <template v-else-if="scope.row.deliveryWay == 3">
                                     <span>重新发单</span>
                                     <span @click="closeOrder(scope.row)">关闭订单</span>
-                                </template> -->
+                                </template>
                             </template>
                         </div>
                     </template>

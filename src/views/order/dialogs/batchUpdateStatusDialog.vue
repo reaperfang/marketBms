@@ -16,7 +16,7 @@
                 <div>
                     <p style="margin-bottom: 10px;">拒绝申请可能会受到用户差评，如果确定拒绝售后，请选择拒绝原因：</p>
                     <el-radio v-model="refuseReasonLabel" :label="1">人为破坏拒绝售后</el-radio>
-                    <el-radio v-model="refuseReasonLabel" :label="2">其他</el-radio>
+                    <el-radio class="mgl_30" v-model="refuseReasonLabel" :label="2">其他</el-radio>
                     <el-input
                         style="margin-top: 10px;"
                         v-if="refuseReasonLabel == 2"
@@ -28,8 +28,8 @@
                     </el-input>
                 </div>
                 <span slot="footer" class="dialog-footer" style="text-align: center; display: block;">
-                    <el-button @click="showReject = false">取 消</el-button>
                     <el-button type="primary" @click="rejectHandler">确 定</el-button>
+                    <el-button @click="showReject = false">取 消</el-button>
                 </span>
             </el-dialog>
         </div>

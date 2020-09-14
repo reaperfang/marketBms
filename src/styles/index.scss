@@ -574,45 +574,27 @@ table.yuan-table{
     margin-left: 60px;
   }
 }
-
-.confirm {
-  width: 500px;
-  padding-bottom: 30px;
-}
 .el-time-panel__footer .confirm{
   width: auto !important;
 }
-.confirm-big {
-  width: 523px;
-}
-.confirm .el-message-box__header {
-  background-color: rgb(241, 240, 255);
-  .el-message-box__title {
-      color: $contentColor
-  }
-}
-.confirm .el-message-box__content {
-  padding-top: 30px;
-  padding-left: 10px;
-  padding-right: 10px;
-  .el-message-box__message {
-      text-align: center;
-      max-height: 400px!important;
-      overflow-y: auto!important;
-      .el-icon-warning {
-          font-size: 60px;
-          color: rgb(245, 88, 88);
-      }
-      .el-icon-success {
-          font-size: 60px;
-          color: #00e223;
-      }
-      .content-text {
-          font-size: 18px;
-          margin-top: 20px;
-      }
-  }
-}
+// .confirm .el-message-box__content {
+//   // padding-top: 30px;
+//   // padding-left: 10px;
+//   // padding-right: 10px;
+//   .el-message-box__message {
+//       // text-align: center;
+//       max-height: 400px!important;
+//       overflow-y: auto!important;
+//       .el-icon-success {
+//           font-size: 60px;
+//           color: #00e223;
+//       }
+//       .content-text {
+//           font-size: 18px;
+//           margin-top: 20px;
+//       }
+//   }
+// }
 .confirm .el-message-box__message::-webkit-scrollbar-thumb {
   background: rgba(101,94,255,0.4) !important;
 }
@@ -620,22 +602,22 @@ table.yuan-table{
   width: 8px;
   height: 8px;
 }
-.confirm .el-message-box__btns {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 33px;
-  button {
-      order: 1;
-  }
-  .el-button--primary {
-      order: 0;
-  }
-  .el-button:first-child {
-      //display: none;
-      margin-left: 10px;
-  }
-}
+// .confirm .el-message-box__btns {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   margin-top: 33px;
+//   button {
+//       order: 1;
+//   }
+//   .el-button--primary {
+//       order: 0;
+//   }
+//   .el-button:first-child {
+//       //display: none;
+//       margin-left: 10px;
+//   }
+// }
 .confirm.no-cancel {
   .el-button {
     margin-left: 0!important;
