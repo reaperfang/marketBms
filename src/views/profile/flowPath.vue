@@ -5,13 +5,13 @@
                 <span slot="label">开店准备 <img :src="require('@/assets/images/star.png')" alt=""></span>
                 <div class="f_list">
                     <div class="f_list_l">
-                        <p @click="linkTo({text:'绑定微信公众号'})">
+                        <p>
                             <img :src="require('@/assets/images/star.png')" alt="">
-                            绑定微信公众号
+                            <span @click="linkTo({text:'绑定微信公众号'})">绑定微信公众号</span>
                         </p>                        
-                        <p @click="linkTo({text:'开通且启用支付方式',url:'/set/payType'})">
+                        <p>
                             <img :src="require('@/assets/images/star.png')" alt="">
-                            开通且启用支付方式
+                            <span @click="linkTo({text:'开通且启用支付方式',url:'/set/payType'})">开通且启用支付方式</span>
                         </p>
                         <p>
                             <img :src="require('@/assets/images/star.png')" alt="">
@@ -20,15 +20,15 @@
                             <i>并</i>
                             <span @click="handleBlankLinkTo({text:'设置配送方式',url:'/set/ordinaryExpress'})">设置配送方式</span>
                         </p>
-                        <p @click="linkTo({text:'完善商品详情信息',url:'/goods/goodsList'})">
+                        <p>
                             <img :src="require('@/assets/images/star.png')" alt="">
-                            完善商品详情信息
+                            <span @click="linkTo({text:'完善商品详情信息',url:'/goods/goodsList'})">完善商品详情信息</span>
                         </p>
                     </div>
                     <div class="f_list_r">
-                        <p @click="linkTo({text:'绑定微信小程序'})">
+                        <p>
                             <img :src="require('@/assets/images/star.png')" alt="">
-                            绑定微信小程序
+                            <span @click="linkTo({text:'绑定微信小程序'})">绑定微信小程序</span>
                         </p>
                         <p>
                             <img :src="require('@/assets/images/star.png')" alt="">
@@ -50,9 +50,9 @@
                                  商品批量导入
                              </span>
                         </p>
-                        <p @click="linkTo({text:'移动店铺装修',url:'/shop/m_wxShopIndex'})">
+                        <p>
                             <img :src="require('@/assets/images/star.png')" alt="">
-                            移动店铺装修
+                            <span @click="linkTo({text:'移动店铺装修',url:'/shop/m_wxShopIndex'})">移动店铺装修</span>
                         </p>
                     </div>
                 </div>
@@ -60,27 +60,27 @@
             <el-tab-pane label="搭建会员" name="搭建会员">
                 <div class="f_list">
                     <div class="f_list_l">
-                        <p @click="linkTo({text:'启用会员等级体系',url:'/client/clientLevel'})">
+                        <p>
                             <img :src="require('@/assets/images/star.png')" alt="">
-                            启用会员等级体系
+                            <span @click="linkTo({text:'启用会员等级体系',url:'/client/clientLevel'})">启用会员等级体系</span>
                         </p>
-                        <p @click="linkTo({text:'用户管理',url:'/client/allClient'})">
+                        <p>
                             <img :src="require('@/assets/images/star.png')" alt="">
-                            用户管理
+                            <span  @click="linkTo({text:'用户管理',url:'/client/allClient'})">用户管理</span>
                         </p>
-                        <p @click="linkTo({text:'积分管理',url:'/client/creditsManage'})">
+                        <p>
                             <img :src="require('@/assets/images/star.png')" alt="">
-                            积分管理
+                            <span @click="linkTo({text:'积分管理',url:'/client/creditsManage'})">积分管理</span>
                         </p>
                     </div>
                     <div class="f_list_r">
-                        <p @click="linkTo({text:'启用会员体系',url:'/client/cardManage'})">
+                        <p>
                             <img :src="require('@/assets/images/star.png')" alt="">
-                            启用会员卡体系
+                            <span @click="linkTo({text:'启用会员体系',url:'/client/cardManage'})">启用会员卡体系</span>
                         </p>
-                        <p @click="linkTo({text:'用户标签',url:'/client/clientLabel'})">
+                        <p>
                             <img :src="require('@/assets/images/star.png')" alt="">
-                            用户标签
+                            <span @click="linkTo({text:'用户标签',url:'/client/clientLabel'})">用户标签</span>
                         </p>
                     </div>
                 </div>
