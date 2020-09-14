@@ -77,8 +77,8 @@ export default {
 								fontSize: 12,
 								lineHeight: 20,
 								color: "#FFFFFF",
-								padding: [0, 0, 5, 0],
-								borderRadius: 100
+								padding: [0, 0, 5, 0]
+								//borderRadius: 100
 								// padding: [3, 3, 0, -16]
 							},
 							c: {
