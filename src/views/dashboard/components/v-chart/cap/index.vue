@@ -1,20 +1,20 @@
 <template>
 	<div class="panel-content-cap">
 		<div class="chartContent">
-			<div class="circle-45" v-show="five">
+			<div class="circle-45 circle-hover" v-show="five">
 				<span>{{ five }}</span>
 			</div>
-			<div class="circle-55" v-show="fourth">
+			<div class="circle-55 circle-hover" v-show="fourth">
 				<span>{{ fourth }}</span>
 			</div>
-			<div class="circle-65" v-show="third">
+			<div class="circle-65 circle-hover" v-show="third">
 				<span>{{ third }}</span>
 			</div>
-			<div class="circle-70" v-show="sec">
+			<div class="circle-70 circle-hover" v-show="sec">
 				<span>{{ sec }}</span>
 			</div>
 
-			<div class="circle-90" v-show="first">
+			<div class="circle-90 circle-hover" v-show="first">
 				<span>{{ first }}</span>
 			</div>
 		</div>
@@ -29,7 +29,7 @@ export default {
 	name: "TEMPLATE",
 	watch: {
 		"dashboard.hobby"(val) {
-			this.showChart(val);
+			//this.showChart(val);
 		}
 	},
 	computed: {
@@ -39,11 +39,17 @@ export default {
 		return {
 			chartData: "71.23",
 			chart: "",
-			first: "",
-			sec: "",
-			third: "",
-			fourth: "",
-			five: ""
+			// first: "",
+			// sec: "",
+			// third: "",
+			// fourth: "",
+			// five: ""
+
+			first: "测试",
+			sec: "测试",
+			third: "测试",
+			fourth: "测试",
+			five: "测试"
 		};
 	},
 	created() {},
@@ -96,6 +102,22 @@ export default {
 		height: 100%;
 		position: relative;
 
+		.text-mult {
+			// overflow: hidden;
+			// text-overflow: ellipsis;
+			// white-space: nowrap;
+
+			display: block;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			text-align: center;
+		}
+
+		.circle-hover {
+			cursor: pointer;
+		}
+
 		.circle-45 {
 			position: absolute;
 			top: 65px;
@@ -108,6 +130,12 @@ export default {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+		}
+
+		.circle-45:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			transform: scale(2.2);
 		}
 
 		.circle-65 {
@@ -124,6 +152,12 @@ export default {
 			justify-content: center;
 		}
 
+		.circle-65:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			transform: scale(1.6);
+		}
+
 		.circle-55 {
 			position: absolute;
 			top: 35px;
@@ -136,6 +170,12 @@ export default {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+		}
+
+		.circle-55:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			transform: scale(1.8);
 		}
 
 		.circle-70 {
@@ -152,6 +192,12 @@ export default {
 			justify-content: center;
 		}
 
+		.circle-70:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			transform: scale(1.4);
+		}
+
 		.circle-90 {
 			position: absolute;
 			top: 35px;
@@ -164,6 +210,12 @@ export default {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+		}
+
+		.circle-90:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			transform: scale(1.1);
 		}
 
 		span {
