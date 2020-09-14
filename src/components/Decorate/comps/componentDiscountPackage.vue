@@ -15,29 +15,27 @@
                                 <img src="@/assets/images/shop/activityCountdownBj.png" alt="" class="bj">
                                 <div class="content">
                                     <p class="caption">{{item.status==0?'距开始':'距结束'}}</p>
-                                    <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p>
+                                    <!-- <p class="time"><font>23</font>:<font>56</font>:<font>48</font></p> -->
                                     <!-- <p class="time">{{item.endTime}}</p> -->
-                                    <!-- <van-count-down :time="
-                                    item.status==0?utils.dateDifference(item.startTime):(item.status==1?utils.dateDifference(item.endTime):0)
-                                    " class="time">
+                                    <van-count-down :time="item.status==0?utils.dateDifference(item.startTime):utils.dateDifference(item.endTime)" class="time">
                                         <template v-slot="timeData">
-                                            <span class="item">{{ utils.addZero(timeData.days) }}</span>
+                                            <!-- <span class="item">{{ utils.addZero(timeData.days) }}</span> -->
                                             <span class="item">{{ utils.addZero(timeData.hours + timeData.days * 24)}}</span>:
                                             <span class="item">{{ utils.addZero(timeData.minutes)}}</span>:
                                             <span class="item">{{ utils.addZero(timeData.seconds) }}</span>
                                         </template>
-                                    </van-count-down> -->
+                                    </van-count-down>
                                 </div>
                             </div>
                         </div>
                         <div class="info_box" v-if="showContents.length > 0">
                             <p class="name" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('1')!=-1">{{item.name}}</p>
-                            <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">套餐包含商品{{item.totalGoodsNum}}件</p>
+                            <p class="caption" :class="[{textStyle:textStyle!=1},{textAlign:textAlign!=1}]" v-if="showContents.indexOf('2')!=-1">套装包含商品{{item.totalGoodsNum}}件</p>
                             <div class="limit_line" v-if="showContents.indexOf('5')!=-1&&item.joinLimit!=-1">
                                 <p class="limit">{{item.joinLimit==-1?'':'限'+item.joinLimit+'次/人'}}</p>
                             </div>
                             <div class="price_line">
-                                <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.packagePrice || 0}}</font></p>
+                                <p class="price" v-if="showContents.indexOf('3')!=-1">￥<font>{{item.packagePriceString || 0}}</font></p>
                                 <componentButton :decorationStyle="buttonStyle" :decorationText="currentComponentData.data.buttonText" class="button" v-if="showContents.indexOf('6')!=-1&&item.status==1&&utils.dateDifference(item.endTime) && listStyle != 3 && listStyle != 6"></componentButton>
                                 <p class="activity_end" v-if="(item.status==2||utils.dateDifference(item.endTime)<1)&&utils.dateDifference(item.startTime)<1">已结束</p>
                                 <p class="activity_end" v-if="item.status==0">未开始</p>
@@ -247,19 +245,12 @@ export default {
                         font-size:14px;
                         color:#333;
                         line-height:16px;
-                        font{
+                        .item {
                             background:#333;
-                            width:29px;
+                            min-width:29px;
                             height:16px;
                             color:#fff;
                             margin:0 4px;
-                        }
-                        .item {
-                            background:#333;
-                                min-width:29px;
-                                height:16px;
-                                color:#fff;
-                                margin:0 4px;
                         }
                     }
                 }
@@ -342,7 +333,7 @@ export default {
                             margin-left:7.5px;
                             height:16px;
                             color:#fff;
-                            font{
+                            .item{
                                 width:16px;
                                 height:16px;
                                 color:#FC3D42;
@@ -353,13 +344,6 @@ export default {
                                 top:-2.5px;
                                 margin:0 2px;
                                 text-align:center;
-                            }
-                            .item {
-                                background:#333;
-                                min-width:29px;
-                                height:16px;
-                                color:#fff;
-                                margin:0 4px;
                             }
                         }
                     }
@@ -538,7 +522,7 @@ export default {
                         line-height:12px;
                         font-size:9px;
                         margin-left:2px;
-                        font{
+                        .item{
                             min-width:12px;
                             height:12px;
                             color:#FC3D42;
@@ -548,13 +532,6 @@ export default {
                             position:relative;
                             margin:0 2px;
                             text-align:center;
-                        }
-                        .item {
-                            background:#333;
-                                min-width:29px;
-                                height:16px;
-                                color:#fff;
-                                margin:0 4px;
                         }
                     }
                 }
@@ -716,16 +693,9 @@ export default {
                                 font-size:14px;
                                 color:#333;
                                 line-height:16px;
-                                font{
-                                    background:#333;
-                                    width:29px;
-                                    height:16px;
-                                    color:#fff;
-                                    margin:0 4px;
-                                }
                                 .item {
                                     background:#333;
-                                min-width:29px;
+                                width:29px;
                                 height:16px;
                                 color:#fff;
                                 margin:0 4px;
@@ -797,7 +767,7 @@ export default {
                                 margin-left:7.5px;
                                 height:16px;
                                 color:#fff;
-                                font{
+                                .item{
                                     width:16px;
                                     height:16px;
                                     color:#FC3D42;
@@ -808,13 +778,6 @@ export default {
                                     top:-2.5px;
                                     margin:0 2px;
                                     text-align:center;
-                                }
-                                .item {
-                                    background:#333;
-                                min-width:29px;
-                                height:16px;
-                                color:#fff;
-                                margin:0 4px;
                                 }
                             }
                         }
@@ -1000,22 +963,12 @@ export default {
                     position:relative;
                     z-index:1;
                     overflow:hidden;
-                    .caption{
-                       
-                    }
                     .time{
                         overflow:hidden;
                         text-align:center;
-                        font{
+                        .item{
                             display:inline-block;
                             @include borderRadius(2px);
-                        }
-                        .item {
-                            background:#333;
-                                min-width:29px;
-                                height:16px;
-                                color:#fff;
-                                margin:0 4px;
                         }
                     }
                 }

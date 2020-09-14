@@ -21,11 +21,11 @@
     </div>
     <div class="table" v-calcHeight="300">
       <p>微页面（共{{total || 0}}个）</p>
-      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
+      <el-table :data="tableData" :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"
           :selectable='selectInit'
-          width="30">
+          width="34">
         </el-table-column>
         <el-table-column prop="name" label="页面名称">
           <template slot-scope="scope">
@@ -79,13 +79,14 @@
       </div>
       <div class="pagination" v-if="tableData.length">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(startIndex) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
           >
         </el-pagination>
       </div>
@@ -98,9 +99,11 @@
 <script>
 import tableBase from '@/components/TableBase';
 import dialogPopularize from '@/views/shop/dialogs/decorateDialogs/dialogPopularize';
+import dialogTableSelect from "@/mixins/dialogTableSelect";
 export default {
   name: 'pageList',
   extends: tableBase,
+  mixins: [dialogTableSelect],
   components: {dialogPopularize},
   data () {
     return {
@@ -261,6 +264,9 @@ export default {
 
     // 修改禁用
     selectInit(row, index){
+      if(row.isHomePage == 1){
+        row.disabled = true;
+      }
       return (row.isHomePage != 1)
     },
 
@@ -294,11 +300,46 @@ export default {
     margin-bottom:20px;
   }
 }
+/deep/ .el-table-column--selection .cell {
+  padding-left: 20px;
+  overflow: inherit;
+}
+.multiple_selection {
+  margin-left: 20px;
+  /deep/ .el-checkbox__label {
+    padding-left: 18px;
+  }
+}
 /deep/ thead th{
-  background: rgba(230,228,255,1)!important;
-  color:#837DFF!important;
+  background: #f6f7fa;
+  color:#44434B!important;
+}
+/deep/ .el-table td, /deep/ .el-table th {
+  text-align: center;
+  &:nth-child(2) {
+      text-align: left;
+      padding-left: 10px;
+  }
+}
+/deep/ .el-table td{
+  &:nth-child(5) {
+    text-align: right;
+    padding-right: 50px;
+  }
+  &:nth-child(6) {
+    text-align: right;
+    padding-right: 50px;
+  }
+}
+.table-btn{
+  padding-right: 5px;
+  border-right: 1px solid #dadae3;
+  &:last-child{
+    border-right: none;
+  }
 }
 .index_page_flag{
+  display: inline-block;
   color:rgba(182,130,255,1);
   padding:0px 5px;
   border:1px solid rgba(182,130,255,1);

@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 import utils from "@/utils";
 export default {
   name: 'apiNavData',

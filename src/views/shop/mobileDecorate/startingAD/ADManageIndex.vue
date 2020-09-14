@@ -36,7 +36,7 @@
       <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"  
-          width="30">
+          width="34">
         </el-table-column>
         <el-table-column prop="imagePath" label="广告图">
           <template slot-scope="scope">
@@ -85,13 +85,14 @@
       </div>
       <div class="pagination" v-if="tableData.length">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(startIndex) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
           >
         </el-pagination>
       </div>
@@ -282,9 +283,46 @@ export default {
     margin-bottom:20px;
   }
 }
+/deep/ .el-table-column--selection .cell {
+  padding-left: 20px;
+  overflow: inherit;
+}
+.multiple_selection {
+  margin-left: 20px;
+  /deep/ .el-checkbox__label {
+    padding-left: 18px;
+  }
+}
 /deep/ thead th{
-  background: rgba(230,228,255,1)!important;
-  color:#837DFF!important;
+  background: #f6f7fa!important;
+  color:#44434B!important;
+}
+/deep/ .el-table td, /deep/ .el-table th {
+  text-align: center;
+  &:nth-child(2) {
+      text-align: left;
+      padding-left: 10px;
+  }
+}
+/deep/ .el-table td{
+  &:nth-child(4) {
+    text-align: right;
+    padding-right: 19px;
+  }
+  &:nth-child(5) {
+    text-align: right;
+    padding-right: 19px;
+  }
+  &:nth-child(6) {
+    text-align: left;
+  }
+}
+.table-btn{
+  padding-right: 5px;
+  border-right: 1px solid #dadae3;
+  &:last-child{
+    border-right: none;
+  }
 }
 .name_wrapper{
     display: flex;

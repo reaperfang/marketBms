@@ -57,7 +57,7 @@
             <div class="export-header">
                 <p>已选择 <span>{{multipleSelection.length}}</span> 项，全部<span>{{total}}</span>项</p>
                 <el-tooltip class="item" effect="dark" content="当前最多支持导出1000条数据" placement="top">
-                <el-button v-permission="['订单', '售后管理', '默认页', '导出']" class="border-button" @click="exportOrder">导出</el-button>
+                <el-button style="margin-top: -20px;" v-permission="['订单', '售后管理', '默认页', '导出']" class="border-button" @click="exportOrder">导出</el-button>
                 </el-tooltip>
             </div>
             <el-table
@@ -67,7 +67,7 @@
                 tooltip-effect="dark"
                 style="width: 100%"
                 @selection-change="handleSelectionChange"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     type="selection"
                     width="55">
@@ -75,12 +75,11 @@
                 <el-table-column
                     prop="code"
                     label="售后单编号"
-                    width="120">
+                    width="200">
                 </el-table-column>
                 <el-table-column
                     prop="type"
-                    label="售后类型"
-                    width="120">
+                    label="售后类型">
                     <template slot-scope="scope">
                         <span>{{scope.row.type | typeFilter}}</span>
                     </template>
@@ -88,12 +87,11 @@
                 <el-table-column
                     prop="orderCode"
                     label="订单编号"
-                    width="120">
+                    width="200">
                 </el-table-column>
                 <el-table-column
                     prop="memberName"
-                    label="用户昵称"
-                    width="120">
+                    label="用户昵称">
                 </el-table-column>
                 <el-table-column
                     prop="orderAfterSaleStatus"
@@ -104,17 +102,20 @@
                 </el-table-column>
                 <el-table-column
                     prop="createTime"
-                    label="申请时间">
+                    label="申请时间"
+                    width="162">
                 </el-table-column>
-                <el-table-column label="操作" width="220">
+                <el-table-column label="操作" :width="computeWidth" fixed="right">
                     <template slot-scope="scope">
-                        <span v-permission="['订单', '售后管理', '默认页', '查看']" class="blue pointer" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.id)">查看</span>
-                        <span v-permission="['订单', '售后管理', '默认页', '同意']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateStatus(scope.row)">同意</span>
-                        <span v-permission="['订单', '售后管理', '默认页', '拒绝']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateRejectStatus(scope.row)">拒绝</span>
-                        <span v-permission="['订单', '售后管理', '默认页', '查看物流']" class="blue pointer" @click="showLogistics(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 3 && scope.row.exchangeConfirmation == 1 && scope.row.deliveryWay == 1">查看物流</span>
-                        <span v-show="!authHide" v-permission="['订单', '售后管理', '默认页', '确认收货']" class="blue pointer" @click="confirmReceived(scope.row)" v-if="scope.row.exchangeConfirmation ==1  &&  (scope.row.isSellerReceived == 0)">确认收货</span><!-- scope.row.orderAfterSaleStatus == 2 && !scope.row.isSellerReceived && scope.row.type != 3 && scope.row.exchangeConfirmation == 1 -->
-                        <span v-permission="['订单', '售后管理', '默认页', '退款']" class="blue pointer" @click="drawback(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 2">退款</span>
-                        <span v-show="!authHide" class="blue pointer" @click="$router.push(`/order/orderAfterDeliverGoods?id=${scope.row.id}&afterSale=true`)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type == 2">发货</span>
+                        <div class="operate-box">
+                            <span v-permission="['订单', '售后管理', '默认页', '查看']" class="blue pointer" @click="$router.push(`/order/afterSalesDetails?id=${scope.row.id}&afterSale=true`)">查看</span>
+                            <span v-permission="['订单', '售后管理', '默认页', '同意']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateStatus(scope.row)">同意</span>
+                            <span v-permission="['订单', '售后管理', '默认页', '拒绝']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateRejectStatus(scope.row)">拒绝</span>
+                            <span v-permission="['订单', '售后管理', '默认页', '查看物流']" class="blue pointer" @click="showLogistics(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 3 && scope.row.exchangeConfirmation == 1 && scope.row.deliveryWay == 1">查看物流</span>
+                            <span v-show="!authHide" v-permission="['订单', '售后管理', '默认页', '确认收货']" class="blue pointer" @click="confirmReceived(scope.row)" v-if="scope.row.exchangeConfirmation ==1  &&  (scope.row.isSellerReceived == 0)">确认收货</span><!-- scope.row.orderAfterSaleStatus == 2 && !scope.row.isSellerReceived && scope.row.type != 3 && scope.row.exchangeConfirmation == 1 -->
+                            <span v-permission="['订单', '售后管理', '默认页', '退款']" class="blue pointer" @click="drawback(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 2">退款</span>
+                            <span v-show="!authHide" class="blue pointer" @click="$router.push(`/order/orderAfterDeliverGoods?id=${scope.row.id}&afterSale=true`)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type == 2">发货</span>
+                        </div>
                     </template>
                 </el-table-column>
             </el-table>
@@ -124,7 +125,7 @@
             </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
-        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :title="title" @reject="rejectHandler" @confirm="confirmHandler" :data="currentData" :expressNo="expressNo" :expressCompanys="expressCompanys"></component>
+        <component ref="sunComponent" v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :title="title" @reject="rejectHandler" @confirm="confirmHandler" :data="currentData" :expressNo="expressNo" :expressCompanys="expressCompanys" :updateStatusDisabled.sync="updateStatusDisabled"></component>
     </div>
 </template>
 <script>
@@ -200,7 +201,8 @@ export default {
             checkedAll: false,
             isIndeterminate: false,
             expressCompanys: '',
-            expressNo: ''
+            expressNo: '',
+            updateStatusDisabled: false
         }
     },
     created() {
@@ -208,6 +210,21 @@ export default {
             this.listQuery = Object.assign({}, this.listQuery, {orderAfterSaleStatus: this.$route.query.orderAfterSaleStatus})
         }
         this.getList()
+    },
+    computed: {
+        computeWidth() {
+            if(this.tableData.some(item => item.orderAfterSaleStatus == 2 && item.type != 3 && item.exchangeConfirmation == 1 && item.deliveryWay == 1 && (item.exchangeConfirmation ==1  &&  (item.isSellerReceived == 0)) && item.orderAfterSaleStatus == 2)) {
+                return '232'
+            } else if(this.tableData.some(item => item.exchangeConfirmation ==1  &&  (item.isSellerReceived == 0))){
+                return '130'
+            } else if(this.tableData.some(item => item.orderAfterSaleStatus == 2 && item.type != 3 && item.exchangeConfirmation == 1 && item.deliveryWay == 1 && item.orderAfterSaleStatus == 2 && item.type != 2)) {
+                return '155'
+            } else if(this.tableData.some(item => item.orderAfterSaleStatus == 0 || item.orderAfterSaleStatus == 2)){
+                return '130'
+            } else {
+                return '60'
+            }
+        }
     },
     filters: {
         typeFilter(code) {
@@ -235,6 +252,8 @@ export default {
             }
              else if(code == 5) {
                 return '已关闭'
+            } else if(code == 6 || code == 7) {
+                return '待处理'
             }
         }
     },
@@ -348,13 +367,21 @@ export default {
             console.log(value)
             if(value.status == 1) {
                 // 通过
-                this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 1}).then((res) => {
-                    console.log(res)
-                    this.getList()
-                    this.$message.success('审核成功！');
-                }).catch(error => {
-                    this.$message.error(error);
-                })
+                if(this.multipleSelection.some(val => val.type == 2)) {
+                    this.currentDialog = 'ExchangeGoodsDialog'
+                    this.currentData = {id: this.multipleSelection.map(val => val.id).join(','), type: 2}
+                    this.dialogVisible = true
+                    return
+                } else {
+                    this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 1}).then((res) => {
+                        console.log(res)
+                        this.getList()
+                        this.$message.success('审核成功！');
+                        this.$refs['sunComponent'].visible = false
+                    }).catch(error => {
+                        this.$message.error(error);
+                    })
+                }
             } else {
                 this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 5, refuseReason: value.refuseReason}).then((res) => {
                     console.log(res)
@@ -380,28 +407,33 @@ export default {
             })
         },
         updateStatus(row) {
-            let _orderAfterSaleStatus
+            if(!this.updateStatusDisabled) {
+                this.updateStatusDisabled = true
 
-            if(row.type == 3) {
-                _orderAfterSaleStatus = 2
-            } else {
-                _orderAfterSaleStatus = 1
-            }
-            if(row.type == 2) {
-                let _row = JSON.parse(JSON.stringify(row))
+                let _orderAfterSaleStatus
 
-                this.currentDialog = 'ExchangeGoodsDialog'
-                this.currentData = _row;
-                this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
-                this.dialogVisible = true
-                return
+                if(row.type == 3) {
+                    _orderAfterSaleStatus = 2
+                } else {
+                    _orderAfterSaleStatus = 1
+                }
+                if(row.type == 2) {
+                    let _row = JSON.parse(JSON.stringify(row))
+
+                    this.currentDialog = 'ExchangeGoodsDialog'
+                    this.currentData = _row;
+                    this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
+                    this.dialogVisible = true
+                    return
+                }
+                this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
+                    this.getList();
+                    this.$message.success('审核成功！');
+                    this.updateStatusDisabled = true
+                }).catch(error => {
+                    this.$message.error(error);
+                })
             }
-            this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
-                this.getList();
-                this.$message.success('审核成功！');
-            }).catch(error => {
-                this.$message.error(error);
-            })
         },
         // 换货确认
         confirmHandler(value) {
@@ -464,16 +496,18 @@ export default {
         padding-right: 8px;
     }
     /deep/ .el-form--inline .el-form-item {
-        margin-right: 26px;
+        margin-right: 20px;
         .el-button+.el-button {
-            margin-left: 16px;
+            margin-left: 6px;
         }
+    }
+    /deep/ .el-button {
+      width: 60px;
     }
 }
 .after-sales {
     .search {
         background-color: #fff;
-        margin: 0 20px;
         .form-inline {
             padding: 20px;
         }
@@ -493,7 +527,6 @@ export default {
     .content {
         background-color: #fff;
         padding: 20px;
-        margin: 0 20px;
         padding-top: 23px;
         p {
             font-size: 16px;
@@ -505,7 +538,7 @@ export default {
         }
         .footer {
             padding: 20px;
-            padding-left: 15px;
+            padding-left: 10px;
         }
     }
 }
@@ -530,6 +563,55 @@ export default {
 /deep/ input:-ms-input-placeholder{
   color:#92929B;
 }
+/deep/ .el-table td, /deep/ .el-table th {
+    text-align: center;
+    &:nth-child(2) {
+        text-align: left;
+    }
+}
+/deep/ .el-table tr th {
+    border-bottom: none;
+}
+.operate-box {
+    text-align: left;
+    span {
+        border-right: 1px solid rgba(218,218,227,1);
+        padding-right: 5px;
+        &:last-child {
+            border-right: none;
+            padding-right: 0;
+        }
+    }
+}
+/deep/ .el-table-column--selection .cell {
+    padding-left: 20px;
+    padding-right: 10px;
+}
+.border-button {
+    border:1px solid rgba(218,218,227,1)!important;
+    color: #44434B!important;
+    &:hover {
+        border:1px solid #655EFF!important;
+        color: #655EFF!important;
+        background-color: #fff;
+    }
+}
+/deep/ .el-table .cell {
+    padding-left: 0;
+    padding-right: 20px;
+}
+/deep/ .input-with-select .el-input-group__prepend {
+    background-color: #fff;
+}
+/deep/.el-table td:nth-child(1){
+         padding-left:20px;
+         .cell {
+            text-overflow: clip;
+         }
+     }
+     /deep/ .el-table--small td, /deep/  .el-table--small th {
+        padding: 16px 0;
+    }
 </style>
 
 

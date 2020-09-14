@@ -133,7 +133,7 @@
 <script>
 import mixinPropsBase from '../mixins/mixinPropsBase';
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 import vuedraggable from "vuedraggable";
 export default {
   name: 'propertyArticleAD',
@@ -193,6 +193,18 @@ export default {
     }
   },
   methods: {
+    //保存时另外需要执行的
+    saveCallBackOther(componentData) {
+      //清除无图片或者图片地址无效的数据
+      const templateItemList = [...componentData.data.itemList];
+      for(let i=0;i<templateItemList.length;i++) {
+        if(!templateItemList[i].url || !this.utils.validate.isURL(templateItemList[i].url) || !this.utils.validate.isPic(templateItemList[i].url)) {
+          templateItemList.splice(i, 1);
+          i--;
+        }
+      }
+      componentData.data.itemList = templateItemList;
+    },
 
     /*  */
     selectTemplate(templateType) {

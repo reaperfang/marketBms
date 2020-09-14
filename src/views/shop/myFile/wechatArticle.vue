@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 export default {
   name: 'wechatArticle',
   components: {dialogSelectImageMaterial},

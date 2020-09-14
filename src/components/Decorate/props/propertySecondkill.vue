@@ -89,7 +89,7 @@
 
     
     <div class="block form">
-      <el-form-item label="显示内容" prop="showContents">
+      <el-form-item label="显示内容" prop="buttonText" ref="itemShowContents">
         <el-checkbox-group v-model="ruleForm.showContents">
           <el-checkbox label="1">商品名称</el-checkbox>
           <el-checkbox label="2" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 6">商品描述</el-checkbox>
@@ -103,14 +103,14 @@
         <el-radio-group v-if="ruleForm.showContents.includes('8') && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonStyle">
           <el-radio :label="1">样式1</el-radio>
           <el-radio :label="2">样式2</el-radio>
-          <el-radio :label="3">样式3</el-radio>
-          <el-radio :label="4">样式4</el-radio>
+          <el-radio :label="3" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 5 || ruleForm.listStyle === 6">样式3</el-radio>
+          <el-radio :label="4" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 5 || ruleForm.listStyle === 6">样式4</el-radio>
           <el-radio :label="5">样式5</el-radio>
           <el-radio :label="6">样式6</el-radio>
-          <el-radio :label="7">样式7</el-radio>
-          <el-radio :label="8">样式8</el-radio>
+          <el-radio :label="7" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 5 || ruleForm.listStyle === 6">样式7</el-radio>
+          <el-radio :label="8" :disabled="ruleForm.listStyle === 2 || ruleForm.listStyle === 3 || ruleForm.listStyle === 5 || ruleForm.listStyle === 6">样式8</el-radio>
         </el-radio-group>
-        <el-input v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText" placeholder="请输入标题"></el-input>
+        <el-input ref="buyInput" v-if="ruleForm.showContents.includes('8') && [3,4,7,8].includes(ruleForm.buttonStyle) && (ruleForm.listStyle !== 3 && ruleForm.listStyle !== 6)" v-model="ruleForm.buttonText" placeholder="请输入标题"></el-input>
       </el-form-item>
       <el-form-item label="更多设置">
         <el-checkbox v-model="ruleForm.hideSaledGoods">隐藏已售罄/活动结束商品</el-checkbox>
@@ -156,9 +156,19 @@ export default {
         buttonText: '立即抢购'//按钮文字
       },
       displayList: [],
-      rules: {
-
+      initRules: {
+        buttonText: [
+          { required: true, message: "请输入标题", trigger: "change", validator: this.utils.ruleValidator.validateRequired },
+          {
+            min: 1,
+            max: 5,
+            message: "最多支持5个字符",
+            trigger: "change",
+            validator: this.utils.ruleValidator.validateMax
+          }
+        ]
       },
+      rules: {},
       echoList: [],
       dialogVisible: false,
       currentDialog: '',
@@ -177,10 +187,49 @@ export default {
       deep: true
     },
 
+    ruleForm: {
+      handler(newValue) {
+        this.$nextTick(() => {
+          //如果存在购买文本输入框，则恢复rules，否则不需要验证规则
+          if(this.$refs.buyInput){
+            this.rules = this.initRules;
+          }else{
+            this.rules = {};
+          }
+        })
+      },
+      deep: true
+    },
+
      //如果新值是一行3个或横向滑动且老值不是这个就把按钮样式改为第一个
     'ruleForm.listStyle'(newValue, oldValue) {
-      if([3,6].includes(newValue) && ![3,6].includes(oldValue)) { 
+      if([2,3,5,6].includes(newValue) && ![2,3,5,6].includes(oldValue)) { 
         this.ruleForm.buttonStyle = 1;
+      }
+    },
+
+    'ruleForm.buttonStyle'(newValue, oldValue) {
+      //购买按钮样式不为3、4、7、8时清除错误提示
+      if(![3,4,7,8].includes(newValue)){
+        this.$nextTick(() => {
+          this.$refs['itemShowContents'].clearValidate();
+        })
+      }
+    },
+
+    'ruleForm.showContents'(newValue, oldValue) {
+      //如果包含购买按钮
+      if(newValue.includes('8')){
+        //购买按钮样式不为3、4、7、8时清除错误提示
+        if(![3,4,7,8].includes(this.ruleForm.buttonStyle)){
+          this.$nextTick(() => {
+            this.$refs['itemShowContents'].clearValidate();
+          })
+        }
+      }else{ //不包含购买按钮则直接清除错误提示
+        this.$nextTick(() => {
+          this.$refs['itemShowContents'].clearValidate();
+        })
       }
     },
 
