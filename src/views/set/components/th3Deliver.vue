@@ -22,9 +22,9 @@
        </div>
        <div class="content">
          <div class="tableBox">
-            <el-table style="width: 700px;" :data="dataList" class="table" :show-header="false" align="center" border>
-              <el-table-column prop="name" label="名称" align="center" width="115"></el-table-column>
-              <el-table-column prop="isOpen" label="是否开通" align="center" width="216">
+            <el-table style="width: 663px;" :data="dataList" class="table" :show-header="false" align="center" border>
+              <el-table-column prop="name" label="名称" align="center" width="220"></el-table-column>
+              <el-table-column prop="isOpen" label="是否开通" align="center" width="220">
                 <template slot-scope="scope">
                   <p v-if="status==1 || status==3">
                     未开通
@@ -34,33 +34,46 @@
                   <p v-else-if="status==2">已开通</p>
                 </template>
               </el-table-column>
-              <el-table-column prop="explanation" label="说明" align="center" width="230"></el-table-column>
+              <!-- <el-table-column prop="explanation" label="说明" align="center" width="230"></el-table-column> -->
 
-              <el-table-column label="操作" align="center" width="136">
+              <el-table-column label="操作" align="center" width="221">
                 <template slot-scope="scope">
                   <el-button
+                    class="tableBox-btn"
                     v-if="status==1"
                     @click="handleClickIsopen(scope.row)"
                     type="text"
                     size="medium"
                   >申请开通</el-button>
-                  <p v-else-if="status==2">审核通过</p>
-                  <p v-else-if="status==3">审核中</p>
+                  <el-button
+                    class="tableBox-btn"
+                    type="text"
+                    size="medium"
+                  >充值</el-button>
+                  <el-button
+                    class="tableBox-btn"
+                    type="text"
+                    size="medium"
+                  >查看余额</el-button>
                 </template>
               </el-table-column>
             </el-table>
-            <!-- <div style="width:255px">
-              <div class="btnRight" >
-                <el-button @click="onRecharge" type="text" size="mini">充值</el-button>
-                <i class="icon">|</i>
-                <el-button @click="onRechargeReCord" type="text" size="mini">充值记录</el-button>
-                <i class="icon">|</i>
-              </div>
-            </div> -->
           </div>
        </div>
      </div>
-     <div class="btn" v-show="btnShow">
+     <div class="row auto-call"  v-show="isTableShow">
+       <div class="label">
+         自动呼叫：
+       </div>
+       <div class="content">
+         <div>
+          <el-radio class="radio" v-model="isOpenAutoCall" :label="1">开启</el-radio>
+          <el-radio class="radio" v-model="isOpenAutoCall" :label="0">关闭</el-radio>
+         </div>
+         <p class="prompt">说明：开通自动呼叫后，使用第三方配送的订单，在商户余额充足的情况下，将在订单付款完成后自动发单给第三方， 若商户余额不足则无法执行自动呼叫，需要手动接单给第三方发单。</p>
+       </div>
+     </div>
+     <div class="btn btn-register" v-show="btnShow">
       <el-button class="register" @click="handleClickRegister" type="primary" size="small">注册新的达达账号</el-button>
      </div>
      <div class="btn">
@@ -82,8 +95,10 @@
 
 <script>
 import protocolDialog from "@/views/set/dialogs/protocolDialog";
+import registerDialog from "@/views/set/dialogs/registerDialog";
 export default {
   components: {
+    registerDialog,
     protocolDialog
   },
 
@@ -103,12 +118,13 @@ export default {
           id: 1,
           name: "达达",
           isOpen: "预计3个工作日审核完成",
-          explanation: "配费说明",
+          // explanation: "配费说明",
           adopt: ""
         }
       ],
       dialogVisible: true,
       currentDialog: "",
+      isOpenAutoCall: 1
     }
   },
 
@@ -124,6 +140,8 @@ export default {
     handleIsOpen() {
       console.log('isOpen',this.isOpen)
       this.isTableShow = this.isOpen
+      this.btnShow = false
+      this.saveShow = true
     },
     //第三放协议
     onPprotocol() {
@@ -180,7 +198,7 @@ export default {
     },
     //申请开通
     handleClickIsopen() {
-      //  this.isTableShow = false;
+       this.isTableShow = false;
       this.btnShow = true;
       this.saveShow = false;
     },
@@ -208,6 +226,26 @@ export default {
     display: flex;
     flex-direction: row;
     padding-top: 20px;
+    &.auto-call {
+      padding-top: 40px;
+      .radio {
+        margin-right: 30px;
+        /deep/.el-radio__label {
+          padding-left: 5px;
+        }
+        &:last-of-type {
+          margin-right: 0;
+        }
+      }
+      .prompt {
+        padding-top: 16px;
+        max-width: 728px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #FD932B;
+        line-height: 20px;
+      }
+    }
     .label, .content {
       font-size: 14px;
       font-weight: 400;
@@ -226,6 +264,7 @@ export default {
       padding-left: 10px;
       >.address-btn {
         padding: 0 0 0 20px;
+        font-size:14px;
       }
     }
   }
@@ -240,10 +279,25 @@ export default {
       display: inline-block;
       padding: 0 15px;
     }
+    
+  }
+  .tableBox-btn {
+    padding:0;
+    padding-right: 8px;
+    padding-left: 8px;
+    border-right: 1px solid rgba(218, 218, 227, 1);
+    margin-left:0;
+    &:last-of-type {
+      padding-right: 0;
+      border-right: 0;
+    }
   }
   .btn {
     text-align: center;
     padding-top:40px;
+    &-register {
+      padding-top: 400px;
+    }
     .register {
       width: 128px;
       height: 32px;

@@ -1,5 +1,5 @@
 <template>
-  <el-input :value="value" :placeholder="placeholder" :disabled="disabled" @input="inputHandler" @blur="blurHandler"></el-input>
+  <el-input v-bind="$attrs" :value="value" :placeholder="placeholder" :disabled="disabled" @input="inputHandler" @blur="blurHandler"></el-input>
 </template>
 
 <script>

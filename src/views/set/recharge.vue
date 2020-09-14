@@ -71,8 +71,8 @@ export default {
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
           let param = {
-            sourceId: this.$route.params.sourceId,
-            rechargeMoney: this.ruleForm.price,
+            type: 1,
+            amount: this.ruleForm.price,
             category: "PC",
           };
           this.nextLoading = true;

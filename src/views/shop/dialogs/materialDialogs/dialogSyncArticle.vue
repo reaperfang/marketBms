@@ -20,11 +20,12 @@
         </div>
         <p class="pages">
             <el-pagination
+            :background="true"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="currentPage"
             :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
+            layout="prev, pager, next, sizes"
             :total="total*1"
             class="page_nav">
             </el-pagination>

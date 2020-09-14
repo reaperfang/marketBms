@@ -134,12 +134,6 @@ export default [
                 meta: { title: '新建角色', noCache: true, tabTitle: '权限管理', navType:4  },
                 hidden: true
             },
-            // {
-            //     path: 'authorize',
-            //     component: () => import('@/views/set/authorize'),
-            //     name: 'authorize',
-            //     meta: { title: '授权管理', noCache: true, tabTitle: '综合服务', navType:2  },
-            // },
             {
                 path: 'newTemplate',
                 component: () => import('@/views/set/newTemplate'),
@@ -192,7 +186,7 @@ export default [
                 component: () => import('@/views/set/rechargeRecord'),
                 name: 'rechargeRecord',
                 hidden: false,
-                meta: { title: '充值记录', noCache: true, tabTitle: '配送设置' , navType: 4 }
+                meta: { title: '查看余额', noCache: true, tabTitle: '配送设置' , navType: 4 }
                 },
             {
                  path: 'authorize',

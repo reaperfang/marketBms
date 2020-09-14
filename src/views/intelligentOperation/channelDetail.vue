@@ -10,6 +10,7 @@
             style="width: 100%"
             :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
             :default-sort = "{prop: 'changeRatio', order: 'descending'}"
+            v-loading="loading"
         >
             <el-table-column
                 width="180"
@@ -55,12 +56,13 @@
         </el-table>
         <div class="page_styles">
             <el-pagination
+                :background="true"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page.sync="currentPage"
                 :page-sizes="[10, 20, 30, 40]"
                 :page-size="pageSize"
-                layout="sizes, prev, pager, next"
+                layout="prev, pager, next, sizes"
                 :total="totalCount">
             </el-pagination>
         </div>
@@ -79,6 +81,7 @@ export default {
             totalCount:0,
             ruleForm:[],
             list:[],//列表
+            loading: true
         };
     },
     mounted(){
@@ -99,9 +102,14 @@ export default {
                 startIndex : this.ruleForm.startIndex,
                 pageSize : this.ruleForm.pageSize
             }
+            this.loading = true;
             this._apis.data.channelConversionDetails(this.ruleForm).then(response => {
                 this.list = response.list;
                 this.totalCount = response.totalSize;
+                this.loading = false;
+            }).catch((error)=>{
+                this.$message.error(error);
+                this.loading = false;
             })
         },
         //导出
@@ -158,6 +166,7 @@ export default {
 .m_container{
     background-color: #fff;
     padding: 10px 20px;
+    height:100%;
 }
 /deep/ .cell{
             .btns{

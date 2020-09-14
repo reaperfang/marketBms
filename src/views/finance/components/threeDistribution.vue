@@ -1,10 +1,28 @@
-<!--电子面单-->
+<!--三方配送-->
 <template>
   <div>
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
-        <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="订单编号" style="width:124px;padding-right:4px;">
+        <el-form-item label="订单编号">
+          <el-input v-model="ruleForm.relationSn" placeholder="请输入" style="width:200px;"></el-input>
+        </el-form-item>
+        <el-form-item label="配送公司">
+          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:200px;"></el-input>
+        </el-form-item>
+         <el-form-item label="发货时间">
+          <el-date-picker
+            v-model="ruleForm.timeValue"
+            type="datetimerange"
+            align="right"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="utils.globalTimePickerOption.call(this)">
+          </el-date-picker>
+        </el-form-item>
+        <!-- <el-form-item>
+          <el-select v-model="ruleForm.searchType" placeholder="订单编号" style="width:124px;paddinig-right:4px;">
             <el-option
               v-for="item in fsTerms"
               :key="item.value"
@@ -14,33 +32,23 @@
           </el-select>
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
-        <el-form-item label="业务类型">
-          <el-select v-model="ruleForm.businessType" style="width:210px;" placeholder="全部">
-            <el-option
-              v-for="item in fsTypes"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="快递公司">
-          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:120px;"></el-input>
-        </el-form-item>
-        <el-form-item label="操作时间">
+        <el-form-item label="查询时间">
           <el-date-picker
             v-model="ruleForm.timeValue"
             type="datetimerange"
             align="right"
             range-separator="至"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
             value-format="yyyy-MM-dd HH:mm:ss"
             :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
+        <el-form-item label="快递公司">
+          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:200px;"></el-input>
+        </el-form-item> -->
         <el-form-item>
-          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '电子面单', '查询']">查询</el-button>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '物流查询', '查询']">查询</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -49,7 +57,7 @@
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '物流对账', '电子面单', '导出']">导出</el-button>
+          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '物流对账', '物流查询', '导出']">导出</el-button>
         </el-tooltip>
       </div>
       <el-table
@@ -62,24 +70,16 @@
         >
         <el-table-column
           prop="expressSn"
-          label="快递单号">
+          label="订单编号">
         </el-table-column>
         <el-table-column
           prop="expressCompany"
-          label="快递公司">
-        </el-table-column>
-        <el-table-column
-          prop="businessType"
-          label="业务类型">
-          <template slot-scope="scope">
-            {{scope.row.businessType ? '售后发货' : '订单发货'}}
-          </template>  
+          label="配送公司">
         </el-table-column>
         <el-table-column
           prop="relationSn"
-          label="关联单据编号"
-          :render-header="renderRelationSn"
-          width="230px">
+          label="配送费"
+          width="150px">
         </el-table-column>
         <el-table-column
           prop="createUserName"
@@ -88,14 +88,14 @@
         </el-table-column>
         <el-table-column
           prop="createTime"
-          label="操作时间"
+          label="发货时间"
           sortable = "custom"
-          align="right"
+          align="center"
           width="200px">
         </el-table-column>
       </el-table>
       <div class="page_styles">
-         <el-pagination
+        <el-pagination
           v-if="dataList.length != 0"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -116,22 +116,21 @@
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
 import financeCons from '@/system/constant/finance'
-import exportTipDialog from '@/components/dialogs/exportTipDialog'
+import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
-  name: 'faceSheet',
+  name: 'logisticsInquiry',
   extends: TableBase,
   components:{
-    exportTipDialog
-  },
+    exportTipDialog
+  },
   data() {
     return {
       inline:true,
       ruleForm:{
-        searchType:'relationSn',
-        searchValue:'',
-        businessType:-1,
+        relationSn:'',
         expressCompany:'',
         timeValue:'',
+        searchType:'relationSn',
         startIndex:1,
         pageSize:10,
         sort:'desc'
@@ -149,36 +148,17 @@ export default {
       default: true
     },
   },
-  watch: {},
+  watch: { },
   computed:{
     fsTerms(){
       return financeCons.fsTerms;
     },
-    fsTypes(){
-      return financeCons.fsTypes;
-    }
   },
-  created() {    
-  },
+  created() { },
   methods: {
-    renderRelationSn(){
-      return(
-        <div style="height:49px;line-height:49px;">
-          <span style="font-weight:bold;vertical-align:middle;">关联单据编号</span>
-          <el-popover
-            placement="top-start"
-            title=""
-            width="160"
-            trigger="hover"
-            content="订单编号、售后单编号、提现编号">
-            <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
-          </el-popover>
-        </div>
-      )
-    },
     init(){
       let query = {
-        queryType:0,
+        queryType:1,
         relationSn:'',
         expressSn:'',
         expressCompany:'',
@@ -190,16 +170,15 @@ export default {
         sort:'desc'
       }
       for(let key  in query){
-        if(this.ruleForm.searchType == key){
-          query[key] = this.ruleForm.searchValue
-        }
+        // if(this.ruleForm.searchType == key){
+        //   query[key] = this.ruleForm.searchValue
+        // }
         for(let item in this.ruleForm){
           if(item == key){
             query[key] = this.ruleForm[item]
           }
         }
       }
-      query.businessType = this.ruleForm.businessType == -1 ? null : this.ruleForm.businessType
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
         query.startTime = timeValue[0]
@@ -219,6 +198,7 @@ export default {
         this.loading = false
       })
     },
+
     //搜索
     onSubmit(num){
       this.fetch(num)
@@ -226,11 +206,10 @@ export default {
     //重置
     resetForm(){
       this.ruleForm = {
-        searchType:'relationSn',
-        searchValue:'',
-        businessType:'',
-        expressCompany:'',
+        // searchType:'relationSn',
+        relationSn:'',
         timeValue:'',
+        expressCompany:'',
         sort:'desc'
       }
       this.fetch()
@@ -239,14 +218,14 @@ export default {
     exportToExcel() {
       let query = this.init();
       if(this.total >1000){
-        this.dialogVisible = true;
+         this.dialogVisible = true;
          this.currentData.query = this.init()
          this.currentData.api = "finance.exportFs"
       }else{
         this._apis.finance.exportFs(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
-         this.$message.error(error)
+         this.$message.error(error);
       })
       }
     },
@@ -307,10 +286,6 @@ export default {
   border-bottom-color:#44434B;
 }
 /deep/.el-table--small td{
-  padding:16px 10px;
+  padding:16px 0;
 }
-/deep/.el-table--small th{
-  padding:0px 0px 0px 10px;
-}
-
 </style>

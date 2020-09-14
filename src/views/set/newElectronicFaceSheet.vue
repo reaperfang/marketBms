@@ -35,27 +35,27 @@
                     <!--<p class="p_title">账号说明：</p>
                     <p>快递公司账号即在已选择的快递公司申请的用户ID和密码。</p>-->
 
-						<p>快递公司支持情况</p>
-						<div style="margin-top: 15px">
-							顺丰速运、EMS、宅急送、圆通速递、百世快递、中通快递、韵达速递、申通快递、德邦快递、优速快递、京东快递、信丰物流、安能快递、国通快递、天天快递、跨越速运、邮政快递包裹、中铁快运、邮政国内标快、远成快运、全一快递、速尔快递、品骏快递。
-						</div>
-						<p style="margin-top: 15px">快运公司支持情况</p>
-						<div style="margin-top: 15px">德邦快运、安能快运、京东快运、龙邦快运。</div>
-						<el-table
-							:data="tableData">
-							<el-table-column
-								property="name"
-								label="账号类型"
-								width="180">
-							</el-table-column>
-							<el-table-column
-								property="company"
-								width="780"
-								label="支持快递公司">
-							</el-table-column>
-						</el-table>
+                    <p>快递公司支持情况</p>
+                    <div style="margin-top: 15px">
+                      顺丰速运、EMS、宅急送、圆通速递、百世快递、中通快递、韵达速递、申通快递、德邦快递、优速快递、京东快递、信丰物流、安能快递、天天快递、跨越速运、邮政快递包裹、邮政国内标快、远成快运、全一快递、速尔快递、品骏快递。
+                    </div>
+                    <p style="margin-top: 15px">快运公司支持情况</p>
+                    <div style="margin-top: 15px">德邦快运、安能快运、京东快运、龙邦快运。</div>
+                    <el-table
+                      :data="tableData">
+                      <el-table-column
+                        property="name"
+                        label="账号类型"
+                        width="180">
+                      </el-table-column>
+                      <el-table-column
+                        property="company"
+                        width="780"
+                        label="支持快递公司">
+                      </el-table-column>
+                    </el-table>
 
-					<span slot="reference" class="account-explain">查看账号说明</span>
+                  <span slot="reference" class="account-explain">查看账号说明</span>
                 </el-popover>
             </el-form-item>
             <el-form-item v-if="isShowPwa" style="width: 330px;" label="密码" prop="expressCompanyPassword">
@@ -74,13 +74,13 @@
             <el-form-item v-if="ruleForm.payType == 3 || ruleForm.payType == 4" label="邮费月结号" prop="monthCode">
               <el-input style="width: 330px;" v-model="ruleForm.monthCode" placeholder="请输入，不超过20个字符"></el-input>
             </el-form-item>
-            <el-form-item label="规格尺寸" prop="specificationSize" v-if="isHasSkuSize">
+            <el-form-item label="规格尺寸" class="is-required" prop="specificationSize" v-if="isHasSkuSize">
               <el-select style="width: 330px;" v-model="ruleForm.specificationSize" @visible-change="handleOpenVisible" placeholder="请选择">
                 <el-option
                   v-for="item in expressElectronicSizeList"
-                  :key="item.templateSize"
-                  :label="item.sizeSpecs"
-                  :value="item.templateSize">
+                  :key="item.sizeSpecsTemplateSize"
+                  :label="item.sizeSpecsTemplateSize"
+                  :value="item.sizeSpecsTemplateSize">
                   </el-option>
               </el-select>
               <p class="error" v-if="!isChooseExpressCompany">请先选定快递公司</p>
@@ -207,7 +207,7 @@ export default {
           dialogVisible: false,
           tableData: [{
             name: '无需申请直接打单',
-            company: '顺丰（SF）、EMS（EMS）（仅支持广东省内发货）、宅急送（ZJS）、邮政快递包裹（YZPY）、中铁快运（ZTKY）、邮政国内标快（YZBK），全一快递（UAPEX）',
+            company: '顺丰（SF）、EMS（EMS）（仅支持广东省内发货）、宅急送（ZJS）、邮政快递包裹（YZPY）、邮政国内标快（YZBK），全一快递（UAPEX）',
           }, {
             name: '月结账号直接打单',
             company: '德邦（DBL）、EMS（EMS）',
@@ -216,7 +216,7 @@ export default {
             company: '优速（UC）、韵达（YD）、圆通（YTO）、远成（YCWL）、安能（ANE）、百世快递（HTKY）',
           }, {
             name: '线下（网点）申请账号',
-            company: 'EMS（EMS）、中通（ZTO）、申通（STO）、德邦（DBL）、京东（JD）、信丰（XFEX）、国通（GTO）、天天快递（HHTT）、速尔快递（SURE）、品骏快递（PJ）',
+            company: 'EMS（EMS）、中通（ZTO）、申通（STO）、德邦（DBL）、京东（JD）、信丰（XFEX）、天天快递（HHTT）、速尔快递（SURE）、品骏快递（PJ）',
           }, {
             name: '快运电子面单',
             company: '京东快运（JDKY）,安能快运（ANEKY）,德邦快运（DBLKY），龙邦快运（LB）。',
@@ -247,13 +247,21 @@ export default {
           this.isChooseExpressCompany = false
         }
       },
+      formateElectronicSize(res) {
+        const map = res.map((item) => {
+          item.sizeSpecsTemplateSize = `${item.sizeSpecs} ${item.templateSize}`
+          return item
+        })
+        return map
+      },
       getExpressElectronicSize(companyCode) {
+        this.expressElectronicSizeList = []
         this._apis.order
         .getExpressSpec({ companyCode })
         .then(res => {
           if (res && res.length > 0) {
             this.isHasSkuSize = true
-            this.expressElectronicSizeList = res
+            this.expressElectronicSizeList = this.formateElectronicSize(res)
           } else {
             this.isHasSkuSize = false
             this.expressElectronicSizeList = []
@@ -315,7 +323,9 @@ export default {
         if (data.payType != 3 && data.payType != 4) {
           data.monthCode = ''
         }
-        console.log('data',data)
+        let arr = data.specificationSize.split(' ')
+        data.specificationSize = arr[arr.length - 1]
+        data.sizeSpecs = arr[0]
         return data
       },
       add() {
@@ -354,13 +364,14 @@ export default {
         .getElectronicFaceSheetDetail({expressCompanyCode: this.$route.query.expressCompanyCode})
         .then(res => {
           console.log(res)
-          this.getExpressElectronicSize(res.expressCompanyCode)
           if (res.expressCompanyAccount) {
             this.isShowPwa = true
           } else {
             this.isShowPwa = false
           }
           this.ruleForm = Object.assign({}, res)
+          this.ruleForm.specificationSize =  res.sizeSpecs ? `${res.sizeSpecs} ${res.specificationSize}` : ''
+          this.getExpressElectronicSize(res.expressCompanyCode)
         })
         .catch(error => {
           console.log('error',error)
@@ -405,8 +416,8 @@ export default {
       width: 50%;
       border-right: 1px solid #cacfcb;
       .account-explain {
-        margin-left: -355px;
-        margin-top: 18px;
+        margin-left: -97px;
+        margin-top: -14px;
         color: $globalMainColor;
         position: absolute;
         cursor: pointer;

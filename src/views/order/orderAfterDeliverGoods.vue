@@ -524,6 +524,13 @@ export default {
         checkExpress() {
         let expressName
 
+        if(this.ruleForm.expressNos) {
+            this.ruleForm.expressNos = ''
+        }
+        if(this.ruleForm.other) {
+            this.ruleForm.other = ''
+        }
+
         if(this.ruleForm.expressCompanyCode == 'other') {
                 expressName = 'other'
             } else {
@@ -650,7 +657,7 @@ export default {
                                 }
                             }
                         } else {
-                            obj.deliveryWay = 4;
+                            obj.deliveryWay = 1;
                             obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
                             obj.expressNos = this.ruleForm.expressNos; // 快递单号
                             obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
@@ -672,12 +679,16 @@ export default {
                         ],
                     }
                     this.params = params
-                    if(this.express != null && !this.express.specificationSize) {
+                    if(this.express != null && !this.express.sizeSpecs) {
                         try {
                         let res = await this._apis.order.getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
 
                         if(res && res.length) {
-                            this._list[0].sizeList = res
+                            this._list[0].sizeList = res.map(item => ({
+                                ...item,
+                                sizeSpecs: item.sizeSpecs + ' ' + item.templateSize,
+                                templateSize: `${item.sizeSpecs} ${item.templateSize}`
+                            }))
                             this.currentData = {
                                 list: this._list,
                                 expressCompanyList: this.expressCompanyList

@@ -7,8 +7,8 @@
                     <div class="item-title">{{data.goodsInfos.length>1?`${index +1}：`:''}}规格属性：{{item.specs | productSpecsFilter}}</div>
                     <div class="input-box">
                         <span class="stock-lable">售卖价：</span>
-                        <el-input @change="checkSaleprice(item)" max-length="11" type="number" :min="item.costPrice" :max="max" :disabled="item.activity" v-model="item.salePrice" placeholder="请输入价格" ></el-input>
-                        <div class="costPriceMsg" v-if="isShowMsg">售卖价不得低于成本价{{item.costPrice}}</div>
+                        <el-input @change="checkSaleprice(item, index)" max-length="11" type="number" :min="item.costPrice" :max="max" :disabled="item.activity" v-model="item.salePrice" placeholder="请输入价格" ></el-input>
+                        <div class="costPriceMsg" v-if="!item.activity && item.isShowMsg">售卖价不得低于成本价{{item.costPrice}}</div>
                         <p v-if="item.activity" class="message">该商品正在参加营销活动，活动结束/失效才可编辑售卖价</p>
                     </div>
                 </div>
@@ -50,19 +50,40 @@ export default {
         this.oldData = JSON.parse(JSON.stringify(this.data.goodsInfos))
     },
     methods: {
-        checkSaleprice(data){
-            if(+data.costPrice>+data.salePrice){
-                this.isShowMsg=true;
-            }else{
-                this.isShowMsg=false;
+        checkSaleprice(data, index){
+            if(!data.activity) {
+                if(+data.costPrice>+data.salePrice){
+                    //this.isShowMsg=true;
+                    this.data.goodsInfos.splice(index, 1, Object.assign({}, this.data.goodsInfos[index], {
+                        isShowMsg: true
+                    }))
+                }else{
+                    //this.isShowMsg=false;
+                    this.data.goodsInfos.splice(index, 1, Object.assign({}, this.data.goodsInfos[index], {
+                        isShowMsg: false
+                    }))
+                }
             }
         },
         submit() {
-            if(this.data.goodsInfos.some(val => +val.salePrice < +val.costPrice)) {
-                this.isShowMsg=true;
+            this.data.goodsInfos.forEach((val, index) => {
+                if(!val.activity) {
+                    if(+val.salePrice < +val.costPrice) {
+                        this.data.goodsInfos.splice(index, 1, Object.assign({}, this.data.goodsInfos[index], {
+                            isShowMsg: true
+                        }))
+                    } else {
+                        this.data.goodsInfos.splice(index, 1, Object.assign({}, this.data.goodsInfos[index], {
+                            isShowMsg: false
+                        }))
+                    }
+                }
+            })
+            if(this.data.goodsInfos.filter(item => !item.activity).some(val => +val.salePrice < +val.costPrice)) {
+                //this.isShowMsg=true;
                 return
             }else{
-                this.isShowMsg=false;
+                //this.isShowMsg=false;
             }
             let newData = JSON.parse(JSON.stringify(this.data.goodsInfos))
             if(utils.equalsObj(this.oldData, newData)) {

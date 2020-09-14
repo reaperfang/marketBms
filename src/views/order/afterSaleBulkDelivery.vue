@@ -70,7 +70,7 @@
                   <div class="col">
                     <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 4">
                         <el-form-item label="快递公司" prop="expressCompanyCodes" class="expressCompanys">
-                            <el-select @change="checkExpress(index)" v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
+                            <el-select filterable @change="checkExpress(index)" v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
                             </el-select>
                             <p v-if="item.showErrorExpressCompany" class="error-message">{{item.errorMessageExpressCompany}}</p>
@@ -617,7 +617,7 @@ export default {
                         item.showErrorOther = true
                         item.errorMessageOther = '请输入快递公司名称'
                       } else {
-                        if(!item.expressNos) {
+                        if(!item.orderAfterSaleSendInfo.expressNos) {
                           isWrong = true
                           item.showErrorExpressNos = true
                           item.errorMessageExpressNos = '请输入快递单号'
@@ -629,7 +629,7 @@ export default {
                         item.showErrorExpressCompany = true
                         item.errorMessageExpressCompany = '请选择快递公司'
                       } else {
-                        if((item.express == null) && !item.expressNos) {
+                        if((item.express == null) && !item.orderAfterSaleSendInfo.expressNos) {
                           isWrong = true
                           item.showErrorExpressNos = true
                           item.errorMessageExpressNos = '请输入快递单号'
@@ -699,7 +699,7 @@ export default {
                       obj.expressCompanys = expressCompanys;
                       obj.expressNos = item.orderAfterSaleSendInfo.expressNos;
                       obj.expressCompanyCodes = item.orderAfterSaleSendInfo.expressCompanyCodes;
-                      if(item.orderAfterSaleSendInfo.deliveryWay == 1) {
+                      if(item.orderAfterSaleSendInfo.deliveryWay) {
                         if(item.express && item.express.specificationSize) {
                           obj.specificationSize = item.express.specificationSize
                         }
@@ -735,12 +735,16 @@ export default {
               for(let index=values.length-1; index>=0; index--) {
                 let item = values[index]
 
-                this._list[index].sizeList = item
+                this._list[index].sizeList = item.map(_item => ({
+                  ..._item,
+                  sizeSpecs: _item.sizeSpecs + ' ' + _item.templateSize,
+                  templateSize: `${_item.sizeSpecs} ${_item.templateSize}`
+                }))
                 // if(item && item.length) {
                 //   this._list.splice(index, 1)
                 // }
               }
-              this._list = this._list.filter(val => val.express != null && !val.express.specificationSize && val.sizeList && val.sizeList.length)
+              this._list = this._list.filter(val => val.express != null && !val.express.sizeSpecs && val.sizeList && val.sizeList.length)
               console.log(this.list)
               var __result = [];
               var __obj = {};
@@ -901,15 +905,22 @@ export default {
 
             // 回显选中的快递公司
             if(list && list.length) {
-              val.orderAfterSaleSendInfo.expressCompanyCodes = list[index].orderAfterSaleSendInfo.expressCompanyCodes
+              if(list[index].orderAfterSaleSendInfo.expressCompanyCodes) {
+                val.orderAfterSaleSendInfo.expressCompanyCodes = list[index].orderAfterSaleSendInfo.expressCompanyCodes
 
-              let expressName = this.expressCompanyList.find(item => item.expressCompanyCode == val.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
+                let expressName = this.expressCompanyList.find(item => item.expressCompanyCode == val.orderAfterSaleSendInfo.expressCompanyCodes).expressCompany
+              }
 
-              this._apis.order
-                .checkExpress({expressName})
-                .then(res => {
-                  val.orderAfterSaleSendInfo.express = res
-                })
+              // this._apis.order
+              //   .checkExpress({expressName})
+              //   .then(res => {
+              //     val.express = res
+              //   })
+              val.express = list[index].express
+              // 回显快递单号
+              if(list[index].expressNos) {
+                val.orderAfterSaleSendInfo.expressNos = list[index].orderAfterSaleSendInfo.expressNos
+              }
             }
           })
 

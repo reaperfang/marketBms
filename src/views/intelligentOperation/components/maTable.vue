@@ -6,21 +6,25 @@
       style="width: 100%"
       :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
+      v-loading="loading1"
       >
       <el-table-column
         type="index"
         label="排序"
         width="80"
-        align="left">
+        align="left"
+        fixed>
       </el-table-column>
       <el-table-column
         prop="id"
         label="用户ID"
-        align="center">
+        align="center"
+        width="150px">
       </el-table-column>
       <el-table-column
         label="用户类型"
-        align="center">
+        align="center"
+        width="150px">
         <template slot-scope="scope">
           <span style="line-height:60px; display:inline-block">{{{0:'非会员',1:'新会员',2:'老会员'}[scope.row.memberType]}}</span>
         </template>
@@ -28,7 +32,8 @@
       <el-table-column
         prop="phone"
         label="手机号码"
-      align="center">
+      align="center"
+      width="150px">
         <template slot-scope="scope">
             <span v-if="!scope.row.phone" class="txtCenter"> - </span>
             <span v-else>{{scope.row.phone}}</span>
@@ -57,17 +62,20 @@
       <el-table-column
         prop="tradeCount"
         label="交易(总)次数"
-      align="center">
+        align="center"
+        width="150px">
       </el-table-column>
       <el-table-column
         prop="orderPaymentCount"
         label="订单(总)金额"
-      align="center">
+        align="center"
+        width="150px">
       </el-table-column>
       <el-table-column
         label="最后交易时间"
-        width="170"
-      align="right">
+        width="200"
+      align="right"
+      fixed="right">
         <template slot-scope="scope" style="width:171px;">
           <span>{{Number(scope.row.lastTradeTime) | formatDate('yyyy-MM-dd hh:mm:ss')}}</span>
         </template>
@@ -80,9 +88,9 @@
         :current-page.sync="currentPage"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="pageSize"
-        layout="sizes, prev, pager, next"
+        layout="prev, pager, next, sizes"
         :total="listObj.totalSize"
-        :background="background">
+        :background="true">
       </el-pagination>
     </div>
   </div>
@@ -93,10 +101,11 @@ import TableBase from "@/components/TableBase";
 export default {
   name: "mcTable",
   extends: TableBase,
-  props:['listObj','totalCount','background'],
+  props:['listObj','totalCount','background', 'loading'],
   data() {
     return {
       pageSize:10,
+      loading1: true
       // dataList:[
       //   {
       //       choose: true,
@@ -116,6 +125,11 @@ export default {
   },
   created() {
 
+  },
+  watch: {
+    loading(newValue) {
+      this.loading1 = newValue;
+    }
   },
   methods: {
     //更改每页条数

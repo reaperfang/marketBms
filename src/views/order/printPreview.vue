@@ -119,12 +119,12 @@
                 <el-pagination
                     v-if="printOrderInfo.length>1" 
                     class="pagination"
-                    background
+                    :background="true"
                     :total="printOrderInfo.length" 
                     :page-size="1"
                     :pager-count="5"
                     :current-page="1"
-                    layout="prev, pager, next"
+                    layout="prev, pager, next, sizes"
                     @current-change="handleCurrentChange"
                 >
                 </el-pagination>
