@@ -347,7 +347,7 @@ export default {
   height: 160px;
   background: #fff;
   border-radius: 3px;
-  padding: 15px 20px;
+  padding: 20px;
     .title{
       display: flex;
       flex: 1;

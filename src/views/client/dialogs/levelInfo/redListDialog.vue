@@ -25,13 +25,14 @@
         </el-table>
         <div class="page_styles">
             <el-pagination
+              :background="true"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange2"
               :current-page="Number(page) || 1"
               :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
               :page-size="pageSize*1"
               :total="total*1"
-              layout="total, sizes, prev, pager, next, jumper"
+              layout="prev, pager, next, sizes"
         ></el-pagination>
         </div>
       </div>

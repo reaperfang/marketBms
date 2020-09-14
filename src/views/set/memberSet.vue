@@ -146,7 +146,7 @@ export default {
 .main{
   width: 100%;
   background: #fff;
-  padding:15px 20px;
+  padding:20px;
   h1{
     font-size:14px;
     font-weight:500;
