@@ -29,7 +29,7 @@ export default {
 	name: "TEMPLATE",
 	watch: {
 		"dashboard.hobby"(val) {
-			//this.showChart(val);
+			this.showChart(val);
 		}
 	},
 	computed: {
@@ -39,17 +39,17 @@ export default {
 		return {
 			chartData: "71.23",
 			chart: "",
-			// first: "",
-			// sec: "",
-			// third: "",
-			// fourth: "",
-			// five: ""
+			first: "",
+			sec: "",
+			third: "",
+			fourth: "",
+			five: ""
 
-			first: "测试",
-			sec: "测试",
-			third: "测试",
-			fourth: "测试",
-			five: "测试"
+			// first: "测试",
+			// sec: "测试",
+			// third: "测试",
+			// fourth: "测试",
+			// five: "测试"
 		};
 	},
 	created() {},
@@ -120,7 +120,7 @@ export default {
 
 		.circle-45 {
 			position: absolute;
-			top: 65px;
+			top: 105px;
 			left: 120px;
 			border-radius: 50%;
 			width: 45px;
@@ -130,37 +130,27 @@ export default {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			margin-left: -20px;
+			margin-top: -20px;
 		}
 
 		.circle-45:hover {
 			background: #026dff;
 			box-shadow: 0px 0px 12px 0px #026dff inset;
-			transform: scale(2.2);
-		}
+			// transform: scale(2.2);
 
-		.circle-65 {
-			position: absolute;
-			top: 35px;
-			left: 30px;
-			border-radius: 50%;
-			width: 65px;
-			height: 65px;
-			background: rgba(255, 92, 49, 0.1);
-			box-shadow: 0px 0px 12px 0px #ff5c31 inset;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-
-		.circle-65:hover {
-			background: #026dff;
-			box-shadow: 0px 0px 12px 0px #026dff inset;
-			transform: scale(1.6);
+			width: 100px;
+			height: 100px;
+			margin-left: -50px;
+			margin-top: -50px;
+			span {
+				font-size: 18px;
+			}
 		}
 
 		.circle-55 {
 			position: absolute;
-			top: 35px;
+			top: 75px;
 			right: 300px;
 			border-radius: 50%;
 			width: 55px;
@@ -170,18 +160,57 @@ export default {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			margin-left: -20px;
+			margin-top: -20px;
 		}
 
 		.circle-55:hover {
 			background: #026dff;
 			box-shadow: 0px 0px 12px 0px #026dff inset;
-			transform: scale(1.8);
+			//transform: scale(1.8);
+			width: 100px;
+			height: 100px;
+			margin-left: -45px;
+			margin-top: -45px;
+			span {
+				font-size: 18px;
+			}
+		}
+
+		.circle-65 {
+			position: absolute;
+			top: 55px;
+			left: 50px;
+			border-radius: 50%;
+			width: 65px;
+			height: 65px;
+			background: rgba(255, 92, 49, 0.1);
+			box-shadow: 0px 0px 12px 0px #ff5c31 inset;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			margin-left: -20px;
+			margin-top: -20px;
+		}
+
+		.circle-65:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			//transform: scale(1.8);
+			width: 100px;
+			height: 100px;
+			margin-left: -45px;
+			margin-top: -45px;
+			span {
+				font-size: 18px;
+			}
 		}
 
 		.circle-70 {
 			position: absolute;
-			top: 35px;
-			right: 200px;
+			top: 55px;
+			right: 220px;
 			border-radius: 50%;
 			width: 70px;
 			height: 70px;
@@ -190,18 +219,27 @@ export default {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			margin-left: -20px;
+			margin-top: -20px;
 		}
 
 		.circle-70:hover {
 			background: #026dff;
 			box-shadow: 0px 0px 12px 0px #026dff inset;
-			transform: scale(1.4);
+			//transform: scale(1.8);
+			width: 100px;
+			height: 100px;
+			margin-left: -35px;
+			margin-top: -35px;
+			span {
+				font-size: 18px;
+			}
 		}
 
 		.circle-90 {
 			position: absolute;
-			top: 35px;
-			right: 70px;
+			top: 50px;
+			right: 90px;
 			border-radius: 50%;
 			width: 90px;
 			height: 90px;
@@ -210,12 +248,22 @@ export default {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+
+			margin-left: -20px;
+			margin-top: -20px;
 		}
 
 		.circle-90:hover {
 			background: #026dff;
 			box-shadow: 0px 0px 12px 0px #026dff inset;
-			transform: scale(1.1);
+			//transform: scale(1.8);
+			width: 100px;
+			height: 100px;
+			margin-left: -25px;
+			margin-top: -25px;
+			span {
+				font-size: 18px;
+			}
 		}
 
 		span {
