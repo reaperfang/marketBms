@@ -24,7 +24,7 @@
           <numberInput
             style="width: 193px;"
             v-model="ruleForm.price"
-            :max="99999999"
+            :max="99999999.99"
             placeholder="请输入充值金额"
           ></numberInput>
           <span>元</span>
