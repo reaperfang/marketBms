@@ -38,7 +38,7 @@ export default {
 					color: "#FFFFFF",
 					verticalAlign: "center",
 					offset: [15, 32, 0, 0],
-					fontSize: 14,
+					fontSize: 12,
 					//   padding: [3, 10, 5, 10],
 					formatter: function(d) {
 						if (d.value) {
@@ -46,9 +46,6 @@ export default {
 							var ins = d.data.name + d.data.itemValue;
 							return ins;
 						}
-					},
-					tooltip: {
-						show: false
 					}
 				}
 			};
@@ -61,7 +58,7 @@ export default {
 					color: "#FFFFFFFF",
 					verticalAlign: "middle",
 					offset: [50, 0, 0, 0],
-					fontSize: 14,
+					fontSize: 12,
 					//   padding: [3, 10, 5, 10],
 					formatter: function(d) {
 						if (d.value) {
@@ -69,9 +66,6 @@ export default {
 							var ins = d.data.name + d.data.itemValue;
 							return ins;
 						}
-					},
-					tooltip: {
-						show: false
 					}
 				}
 			};
@@ -133,6 +127,11 @@ export default {
 				],
 				series: [
 					{
+						itemStyle: {
+							borderColor: "red",
+							borderWidth: 0
+						},
+
 						top: 25,
 						// bottom:30,
 						type: "funnel",
@@ -194,7 +193,6 @@ export default {
 						type: "pictorialBar",
 						symbolPosition: "center",
 						symbolSize: ["95", "126"],
-						// symbol: leftArrow,
 						symbol: "image://" + dashboard.leftArrow,
 						symbolClip: false,
 						xAxisIndex: "1",

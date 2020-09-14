@@ -154,7 +154,7 @@ export default {
 					{ 类别: "未知", 数量: val.c_uv_age_0 },
 					{ 类别: "< 25", 数量: val.c_uv_age_25 },
 					{ 类别: "25-50", 数量: val.c_uv_age_25_50 },
-					{ 类别: "50 < ", 数量: val.c_uv_age_50 }
+					{ 类别: "> 50 ", 数量: val.c_uv_age_50 }
 				]
 			};
 

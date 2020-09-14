@@ -28,6 +28,7 @@ import iconuser from "../../../modules/UserAgeMobileMember/icon/user";
 import iconmember from "../../../modules/UserAgeMobileMember/icon/member";
 import iconmobile from "../../../modules/UserAgeMobileMember/icon/mobile";
 import iconagesex from "../../../modules/UserAgeMobileMember/icon/agesex";
+import color from "../../../../../components/Wxcolor/color.js";
 export default {
 	// props: ["chartData", "chartSettings", "chartExtend"],
 	props: ["chartData", "title", "icon", "total", "sexData"],
@@ -54,7 +55,8 @@ export default {
 						length: 5,
 						length2: 50,
 						lineStyle: {
-							type: "solid"
+							type: "solid",
+							color: "#FFFFFF"
 						}
 					}
 				},
@@ -69,13 +71,15 @@ export default {
 						height: 50,
 						fontSize: 13,
 						align: "center",
-						color: "#3494BD",
+						// color: "#FFFFFF",
 						rich: {
 							b: {
 								fontSize: 12,
 								lineHeight: 20,
-								color: "#41B3DC",
-								padding: [0, 0, 5, 0]
+								color: "#FFFFFF",
+								padding: [0, 0, 5, 0],
+								borderRadius: 100
+								// padding: [3, 3, 0, -16]
 							},
 							c: {
 								fontSize: 20,
