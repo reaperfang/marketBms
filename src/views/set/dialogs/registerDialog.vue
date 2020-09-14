@@ -275,8 +275,10 @@ export default {
   color: #44434B;
 }
 .registerDialog {
-  height: 488px;
-  overflow: auto;
+  .formBox {
+    height: 416px;
+    overflow: auto;
+  }
   .prompt {
     font-size: 12px;
     font-weight: 400;
