@@ -176,7 +176,7 @@ export default {
   },
   created() {
     this._formatText = debounce(this.formatText, 200)
-    // this.geteList();
+    this.getList();
   },
   methods: {
     onlyNumber(val, key) {
@@ -206,10 +206,11 @@ export default {
       this._formatText(val, key, rule)
     },
     //门店列表
-    geteList() {
+    getList() {
       this._apis.set
         .getCityList()
         .then(response => {
+          console.log('getList', response)
           this.cityList=response
         })
         .catch(error => {

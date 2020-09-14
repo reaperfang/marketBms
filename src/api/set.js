@@ -362,3 +362,31 @@ export function getRecharge(data) {
     data
   })
 }
+
+/*  是否开启第三方 */
+export function isOpen(data) {
+  return request({
+    target: 'THIRD-SENDER-BIND-DETAIL-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+/*  达达- 达达-城市列表 */
+export function getCityList(data) {
+  return request({
+    target: 'DADA-CITY-CODE-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+/*  达达-注册 */
+export function registerUser(data) {
+  return request({
+    target: 'THIRD-PART-BUSINESS-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
