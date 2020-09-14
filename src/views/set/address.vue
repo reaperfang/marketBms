@@ -227,12 +227,12 @@ export default {
     hanldeOpenDeliveryDelAddress(row) {
       // 需要查看发货地址数量是否剩下1条？？？
       const id = row.id
-      const addressType = row.addressType
+      // const addressType = row.addressType
       const req = Object.create(null)
       req.cid  = this.cid
       req.startIndex = 1
       req.pageSize = 20
-      req.addressType = addressType
+      req.addressType = 0
       this.ApiGetAddressList(req).then((res) => {
         // 仅有一条发货地址信息，同时商家配送已开启，此时要删除该发货地址时，弹框提示如下
         if (res && res.total == 1) {
