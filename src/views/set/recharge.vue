@@ -71,7 +71,7 @@ export default {
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
           let param = {
-            type: 1,
+            type: 1, //达达
             amount: this.ruleForm.price,
             category: "PC",
           };
