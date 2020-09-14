@@ -131,6 +131,9 @@ export default {
 					),
 					paid_c_order_7dco: parseInt(
 						res.paid_c_order_7dco.toFixed(2) * 100
+					),
+					paid_c_uv_7dco: parseInt(
+						res.paid_c_uv_7dco.toFixed(2) * 100
 					)
 				}
 			});
