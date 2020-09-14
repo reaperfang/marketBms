@@ -147,19 +147,17 @@ export function orderStatusFilter(status) {
 export function orderAfterSaleStatusFilter(status) {
   switch (status) {
     case 0:
-      return '待付款'
+      return '待审核'
     case 1:
-      return '待成团'
+      return '待退货'
     case 2:
-      return '已关闭'
+      return '待处理'
     case 3:
-      return '待发货'
-    case 4:
-      return '部分发货'
-    case 5:
       return '待收货'
-    case 6:
+    case 4:
       return '已完成'
+    case 5:
+      return '已关闭'
   }
 }
 
