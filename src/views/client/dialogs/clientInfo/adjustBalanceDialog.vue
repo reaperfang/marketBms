@@ -5,7 +5,7 @@
       <p class="marB20" style="margin-left: 9px">当前余额：{{ data.balance }}</p>
       <div class="marB20">
           <div>
-            <span class="star">*</span><span>增加余额：</span>
+            <span class="star">*</span><span>调整类型：</span>
             <el-radio-group v-model="adjustBalance" @change="handleAdjust">
               <el-radio label="1">增加余额</el-radio>
               <el-radio label="2" style="margin-left: 26px">减少余额</el-radio>
