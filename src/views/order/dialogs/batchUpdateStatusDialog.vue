@@ -74,6 +74,13 @@ export default {
         },
         submit() {
             //this.$emit('audit', this.auditStatus)
+            if(this.auditStatus == '') {
+                this.$message({
+                    message: '请选择审核状态',
+                    type: 'warning'
+                    });
+                    return
+            }
             if(this.auditStatus == 2) {
                 this.showReject = true
                 this.$nextTick(() => {
@@ -83,7 +90,7 @@ export default {
                 })
             } else {
                 this.$emit('submit', {status: 1})
-                this.visible = false
+                //this.visible = false
             }
             
         }

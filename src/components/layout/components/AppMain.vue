@@ -1,11 +1,11 @@
 <template>
-  <section class="app-main">
+  <section class="app-main" :class="{'app-main-hide-left': $route.meta.hideLeft}">
     <div class="content-box">
-      <div class="content-menu">
+      <div v-if="!$route.meta.hideLeft" class="content-menu">
         <!-- <sidebar class="sidebar-righter" /> -->
         <righter-bar></righter-bar>
       </div>
-      <div class="content-main content-info" :class="{'content-main-classify': $route.meta.classify, m_shopEditor: $route.meta.m_shopEditor}">
+      <div ref="contentMain" class="content-main content-info" :class="{'content-main-classify': $route.meta.classify, m_shopEditor: $route.meta.m_shopEditor}">
         <!-- <transition name="fade-transform" mode="out-in"> -->
           <keep-alive :include="cachedViews">
             <router-view :key="key"/>
@@ -33,18 +33,27 @@ export default {
   components: {
     Sidebar,
     RighterBar
-  }
+  },
+  watch:{
+    $route(to, from){
+      this.$refs.contentMain.scrollTop = 0;
+    }
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 .app-main {
   /*84 = navbar + tags-view = 50 +34 */
-    height: calc(100% - 66px);
+    height: calc(100% - 60px);
     width: 100%;
     position: relative;
     overflow: hidden;
-    margin-top: 66px;
+    margin-top: 60px;
+    &.app-main-hide-left {
+      height: 100%;
+      margin-top: 0;
+    }
   .content-box {
     display: flex;
     height: 100%;
@@ -58,7 +67,7 @@ export default {
       flex: 1;
       padding: 20px;
       overflow-y: auto;
-      overflow-x: scroll;
+      overflow-x: auto;
       width: 0;
     }
   }

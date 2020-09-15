@@ -1,6 +1,6 @@
 <template>
   <div class="group-wrapper">
-    <div class="module view">
+    <div class="module view" v-calcHeight="197">
       <div class="phone-head">
         <img :src="require('@/assets/images/shop/editor/phone_head.png')" alt="">
         <span>商品分类</span>
@@ -136,6 +136,16 @@ export default {
 .group-wrapper{
   display:flex;
   flex-direction: row;
-  margin-top:10px;
+  margin-top:20px;
+  .module {
+    &.view {
+      width: 377px;
+      border: 1px #D0D6E4 solid;
+      box-shadow: none !important;
+      .phone-body {
+        height: calc(100% - 64px) !important;
+      }
+    }
+  }
 }
 </style>

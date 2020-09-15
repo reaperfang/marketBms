@@ -177,6 +177,14 @@ export function dayEnd(endTime) {
   return time;
 }
 
+/* 全局时间选择器获取焦点后禁用日期和时间框 */
+export function globalTimeDisabledFocus() {
+  document.querySelectorAll('.el-date-range-picker__editor').forEach((item) => {
+    item.classList.add('is-disabled');
+    item.querySelector('.el-input__inner').setAttribute('disabled', 'disabled');
+  });
+}
+
 
 /* 全局时间选择器配置项逻辑 */
 export function globalTimePickerOption(editable = true, disableComing = true) {
@@ -235,7 +243,6 @@ export function globalTimePickerOption(editable = true, disableComing = true) {
               this.$el.onclick = function(ev) {  //当面板被点击时重新设置所有的时间输入框为不可用状态
                 disableInput.call(me);
               }
-              console.log(this.$children)
               //如果不允许编辑时分秒
               this.$children[3].$el.onclick = function() {  //点击结束时间输入框时重新关闭下拉框的可见状态
                 me.$refs.minTimePicker.visible = false;

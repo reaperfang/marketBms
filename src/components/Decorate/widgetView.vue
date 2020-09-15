@@ -25,7 +25,9 @@
 </template>
 
 <script>
+import utils from '@/utils';
 import widget from './config/widgetConfig';
+
 export default {
   name: 'widgetView',
   props: {
@@ -86,7 +88,7 @@ export default {
     },
 
     /* 选中控件 */
-    addComponent(item) {
+    addComponent: utils.throttle(function(item) {
       const id = uuidv4();
 
       //当目前选中的是基础组件的时候，先强行选中最后一个组件再执行下文
@@ -115,7 +117,7 @@ export default {
         let prev = this.componentDataIds[index];
         this._globalEvent.$emit('autoScrollToComponent', prev);
       }
-    },
+    }, 300, true),
 
     /* 拖拽添加组件 */
     dragAddComponent(ev, item) {
@@ -264,6 +266,9 @@ export default {
             }
             &.buy-notice{
               background:url('../../assets/images/shop/editor/widget/goumaigonggao.png') no-repeat 0 0;
+            }
+            &.location{
+              background:url('../../assets/images/shop/editor/widget/weizhixinxi.png') no-repeat 0 0;
             }
           }
           p{

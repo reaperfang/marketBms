@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 import '@/directives/index.js'  //导入指令
+import '@/assets/theme/index.css'
 import '@/styles/index.scss' // 导入全局scss
 import '@/system/permission' // 权限控制
 import utils from '@/utils'; //导入全局工具箱
@@ -27,7 +28,7 @@ Object.keys(utils).forEach(key => {
   Vue.filter(key, utils[key])
 })
 
-//讲工具箱里的方法绑定到vue实例上
+//将工具箱里的方法绑定到vue实例上
 Vue.prototype.utils = utils;
 
 //全局路由跳转快捷方式  routeTo('login', {a:1, b:2})
@@ -53,7 +54,6 @@ import Cookies from 'js-cookie'
 
 //注册elementUI库
 import Element from 'element-ui'
-import '@/assets/theme/index.css'
 Vue.use(Element, {
   size: Cookies.get('size') || 'small', // set element-ui default size
 })

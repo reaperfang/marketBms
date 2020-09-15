@@ -30,7 +30,7 @@ npm run build:prod   //正式环境打包
 .
 ├── build                                       // webpack配置文件和服务启动文件
 ├── config                                      // 环境变量配置
-├── dist                                        // 打包后的静态文件
+├── dist                                         // 打包后的静态文件
 ├── src                                          
 │   ├── api                                     // 接口api（其中index.js是聚合索引文件）
 │   ├── assets                                  // 静态文件目录

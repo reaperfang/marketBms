@@ -196,12 +196,12 @@ export default {
       height: calc(100% - 60px);
       overflow-y: scroll;
     }
-    border-right: 1px solid rgba(242,242,249,1);
+    // border-right: 1px solid rgba(242,242,249,1);
     font-size: 14px;
     //border-top: 1px solid #f2f2f9;
     position: fixed;
     left: 120px;
-    top: 66px;
+    top: 60px;
     z-index: 1000;
     background-color: #fff;
     width: 122px;
@@ -209,27 +209,41 @@ export default {
     .item {
       position: static;
       border-top: 1px solid #f2f2f5;
-      padding-top: 23px;
-      padding-bottom: 20px;
+      padding-top: 16px;
+      padding-bottom: 10px;
+      text-align: left;
       a {
+        position: relative;
+        width: 102px;
+        height: 30px;
+        margin-left: 10px;
+        line-height: 30px;
+        text-indent: 10px;
         color: #92929B;
         border-radius: 15px;
-        padding: 5px 10px;
+        &:hover {
+          background-color: #EFEEFF;
+        }
         &.active {
           background-color: #f0efff;
           color: #7f79ff;
         }
         &.active:after{
-          content:"\2713";
-          color: #7f79ff;
-          margin-left: 5px;
+          position: absolute;
+          right: 10px;
+          top: 11px;
+          content: "";
+          width: 5px;
+          height: 8px;
+          background: url('~@/assets/images/common/icon-right.png') no-repeat;
+          background-size: 5px 8px;
         }
       }
       &:first-child {
         border: none;
       }
       &:last-child {
-        border-bottom: 1px solid #f2f2f5;
+        // border-bottom: 1px solid #f2f2f5;
       }
       h2, .item-child {
         margin-bottom: 10px;
@@ -240,6 +254,7 @@ export default {
         color:#161617;
         line-height:20px;
         font-size: 14px;
+        text-indent: 20px;
       }
     }
   }
@@ -249,7 +264,7 @@ export default {
     }
   }
   /deep/ .item a {
-    max-width: 100px;
+    max-width: 102px;
     display: inline-block;
   }
 </style>

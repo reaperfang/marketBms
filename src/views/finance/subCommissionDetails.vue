@@ -59,7 +59,7 @@
         v-loading="loading"
         :data="dataList"
         class="table"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
         :default-sort = "{prop: 'tradeTime', order: 'descending'}"
         @sort-change="changeSort"
         >
@@ -97,7 +97,9 @@
         <el-table-column
           prop="tradeTime"
           label="交易时间"
-          sortable = "custom">
+          sortable = "custom"
+          align="center"
+          width="200px">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -108,7 +110,8 @@
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
-          :total="total*1">
+          :total="total*1"
+          :background="background">
         </el-pagination>
       </div>
     </div>
@@ -148,6 +151,12 @@ export default {
       dialogVisible: false,
       currentData:{},
     }
+  },
+  props: {
+    background: {
+      type: Boolean,
+      default: true
+    },
   },
   watch: { },
   computed:{
@@ -367,5 +376,14 @@ export default {
     }
   }
 }
-  
+
+/deep/.el-table .descending .sort-caret.descending{
+  border-top-color:#44434B;
+}
+/deep/.el-table .ascending .sort-caret.ascending{
+  border-bottom-color:#44434B;
+}
+/deep/.el-table--small td{
+  padding:16px 0;
+}
 </style>

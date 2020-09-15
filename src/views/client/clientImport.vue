@@ -15,15 +15,15 @@
                                 </el-option>
                             </el-select>
                         </div>
-                        <span class="addMainColor pointer marL20" @click="handleNew">新建</span>
+                        <span class="addMainColor pointer marL10" @click="handleNew">新建</span>
                     </el-form-item>
-                    <el-form-item label="身份：" prop="memberType">
+                    <!-- <el-form-item label="身份：" prop="memberType">
                         <div class="input_wrap">
                             <el-radio v-model="ruleForm.memberType" label="1">会员</el-radio>
                             <el-radio v-model="ruleForm.memberType" label="0">非会员</el-radio>
                         </div>
-                    </el-form-item>
-                    <el-form-item label="上传文件：">
+                    </el-form-item> -->
+                    <el-form-item label="上传文件：" style="margin-left:9px">
                         <div class="input_wrap marL">
                             <el-upload
                                 class="upload-block"
@@ -45,7 +45,7 @@
             </div>
             <div class="btn_container btns">
                 <el-button type="primary" @click="importMemberFile">导入</el-button>
-                <el-button @click="cancel">取消</el-button>
+                <el-button class="marL5" @click="cancel">取消</el-button>
             </div>
         </div>
         <div class="table_container clearfix">
@@ -54,10 +54,11 @@
                 <span>导入时间：</span>
                 <el-date-picker
                     v-model="importTime"
+                    class="marL2"
                     type="datetimerange"
                     range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
+                    start-placeholder="开始时间"
+                    end-placeholder="结束时间"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     :picker-options="utils.globalTimePickerOption.call(this)"
                 >
@@ -92,15 +93,11 @@ export default {
         return {
             uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
             ruleForm: {
-                channelId:"",
-                memberType: "1"
+                channelId:""
             },
             rules: {
                 channelId: [
                     { required: true, message: "请选择渠道", trigger:'blur' }
-                ],
-                memberType: [
-                    { required: true, message: "请选择身份", trigger:'blur' }
                 ]
             },
             channelName:"",
@@ -123,7 +120,7 @@ export default {
             this.channelId2 = "";
         }, 
         handleDownload() {
-            window.location.href = `${process.env.UPLOAD_SERVER}/web-file/0/excel/2e9d1/客户.xlsx`;
+            window.location.href = `${process.env.UPLOAD_SERVER}/web-file/0/excel/2e9d1/客户.xlsx?random=${new Date().getTime()}`;
         },
         refreshPage() {
             this.getChannels();
@@ -186,7 +183,6 @@ export default {
                 let params = {
                     channelId: this.ruleForm.channelId,
                     channelName: this.channelName,
-                    memberType: this.ruleForm.memberType,
                     importUrl: this.importUrl
                 }
                 this._apis.client.importMemberFile(params).then((response) => {
@@ -231,11 +227,23 @@ export default {
 /deep/ .el-upload-list__item{
     width: 300px !important;
 }
-/deep/.el-date-editor .el-range-separator{
+/deep/ .el-date-editor .el-range-separator{
     width: 8%;
+}
+/deep/ .el-button+.el-button{
+    margin-left: 8px;
 }
 .marL20{
     margin-left: 20px;
+}
+.marL10{
+    margin-left: 7px;
+}
+.marL5{
+    margin-left: 5px;
+}
+.marL2{
+    margin-left: -2px;
 }
 .c_container{
     background-color: #fff;
@@ -248,6 +256,7 @@ export default {
         padding-top: 17px;
         border-bottom: 1px dashed #D3D3D3;
         .form_container{
+            margin-left: 20px;
             .input_wrap{
                 position: relative;
                 display: inline-block;
@@ -257,7 +266,7 @@ export default {
                 }
                 .download_btn{
                     position: absolute;
-                    right: -9px;
+                    right: 9px;
                     top: 0;
                 }
             }
@@ -268,11 +277,11 @@ export default {
             }
         }
         .btns{
-            margin-left: 100px;
+            margin-left: 111px;
         }
     }
     .table_container{
-        padding-top: 18px;
+        padding-top: 30px;
     }
 }
 </style>
