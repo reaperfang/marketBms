@@ -34,7 +34,7 @@ export default {
     return {
       form: {
         isOpen: false,
-        isTrace:0,
+        isTrace:1,
         apiKey:'',
         kdBusinessId:''
       },
