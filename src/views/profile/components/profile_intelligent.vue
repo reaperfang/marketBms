@@ -107,6 +107,10 @@ export default {
     }
   }
 
+  /deep/ .el-loading-mask {
+    border-radius: 5px;
+  }
+
   .to_intelligent {
     float: right;
   }
