@@ -158,6 +158,8 @@ input::-moz-placeholder, textarea::-moz-placeholder{
   height: 50px;
   line-height: 50px;
   padding: 0px;
+  background: #F6F7FA;
+  border-radius: 10px 10px 0 0;
   .el-dialog__title{
     padding-left: 20px;
     font-size: 16px;
@@ -210,11 +212,16 @@ input::-moz-placeholder, textarea::-moz-placeholder{
           font-size: 16px;
           font-weight: 500;
           color: #44434B;
+          padding-top: 4px;
         }
       }
     }
   }
   .el-message-box__btns{
     padding: 45px 40px 0px 0px;
+    .el-button--small{
+      float: right;
+    margin-left: 10px;
+    }
   }
 }

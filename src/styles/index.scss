@@ -577,24 +577,6 @@ table.yuan-table{
 .el-time-panel__footer .confirm{
   width: auto !important;
 }
-// .confirm .el-message-box__content {
-//   // padding-top: 30px;
-//   // padding-left: 10px;
-//   // padding-right: 10px;
-//   .el-message-box__message {
-//       // text-align: center;
-//       max-height: 400px!important;
-//       overflow-y: auto!important;
-//       .el-icon-success {
-//           font-size: 60px;
-//           color: #00e223;
-//       }
-//       .content-text {
-//           font-size: 18px;
-//           margin-top: 20px;
-//       }
-//   }
-// }
 .confirm .el-message-box__message::-webkit-scrollbar-thumb {
   background: rgba(101,94,255,0.4) !important;
 }
@@ -602,22 +584,6 @@ table.yuan-table{
   width: 8px;
   height: 8px;
 }
-// .confirm .el-message-box__btns {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   margin-top: 33px;
-//   button {
-//       order: 1;
-//   }
-//   .el-button--primary {
-//       order: 0;
-//   }
-//   .el-button:first-child {
-//       //display: none;
-//       margin-left: 10px;
-//   }
-// }
 .confirm.no-cancel {
   .el-button {
     margin-left: 0!important;
@@ -629,18 +595,6 @@ table.yuan-table{
 .goods-custom{
   padding-bottom: 30px!important;
   width: 500px!important;
-}
-.goods-custom .el-message-box__btns {
-  margin-top:24px;
-  .el-button {
-    padding: 9px 12px 9px 20px;
-    letter-spacing: 8px;
-    font-size:14px;
-  }
-  .el-button:first-child {
-      display: block;
-      margin-left: 30px;
-  }
 }
 
 .know-custom.confirm.no-cancel .el-message-box__btns .el-button {

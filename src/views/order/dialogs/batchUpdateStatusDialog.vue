@@ -2,10 +2,10 @@
     <DialogBase :visible.sync="visible" :title="title" width="500px" :showFooter="showFooter">
         <div>
             <el-radio v-model="auditStatus" label="1">通过</el-radio>
-            <el-radio v-model="auditStatus" label="2">不通过</el-radio>
+            <el-radio class="mgl_30" v-model="auditStatus" label="2">不通过</el-radio>
             <div class="footer">
-                <el-button @click="visible = false">取消</el-button>
                 <el-button @click="submit" type="primary">确定</el-button>
+                <el-button @click="visible = false">取消</el-button>
             </div>
             <el-dialog
                 title="提示"
