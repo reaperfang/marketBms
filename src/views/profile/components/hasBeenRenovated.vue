@@ -1,22 +1,22 @@
 <template>
    <div class="hasBeenRenovated">
      <h2>您已设置店铺装修，请您预览店铺：</h2>
-     <ul v-loading="isLoading" element-loading-background="rgba(255,255,255,1)">
-       <li v-if="isHasBindGzh" class="gzh">
-         <p>微信公众号商城</p>
-         <div class="img" :class="{ 'no-bind': !isBindGzh, 'no-release': isBindGzh && !isReleaseGZ }">
+    <ul v-loading="isLoading" element-loading-background="rgba(255,255,255,1)">
+      <li v-if="!isLoading && isHasBindGzh" class="gzh">
+        <p>微信公众号商城</p>
+        <div class="img" :class="{ 'no-bind': !isBindGzh, 'no-release': isBindGzh && !isReleaseGZ }">
           <img v-if="isBindGzh && qrCode && isReleaseGZ" :src="qrCode" class="public">
-         </div>
-         <p class="prompt">{{ getPublicPrompt }}</p>
-       </li>
-       <li v-if="isHasBindXcx" class="xcx">
-         <p>微信小程序商城</p>
-         <div class="img" :class="{ 'no-bind': !isBindXcx, 'no-release': isBindXcx && !isReleaseWX }">
+        </div>
+        <p class="prompt">{{ getPublicPrompt }}</p>
+      </li>
+      <li v-if="!isLoading && isHasBindXcx" class="xcx">
+        <p>微信小程序商城</p>
+        <div class="img" :class="{ 'no-bind': !isBindXcx, 'no-release': isBindXcx && !isReleaseWX }">
           <img v-if="isBindXcx && smallQRcode && isReleaseWX" :src="smallQRcode" class="small">
-         </div>
-         <p class="prompt">{{ getSmallPrompt }}</p>
-       </li>
-     </ul>
+        </div>
+        <p class="prompt">{{ getSmallPrompt }}</p>
+      </li>
+    </ul>
     <div class="btn">
       <el-button class="prev" @click="goPrev">上一步</el-button>
       <el-button class="next" type="primary" @click="submit()">完成</el-button>
@@ -237,6 +237,8 @@ export default {
     padding-top: 85px;
     display: flex;
     justify-content: center;
+    min-height: 295px;
+    box-sizing: border-box;
     >li {
       &:nth-of-type(2) {
         margin-left: 187px;

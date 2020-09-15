@@ -224,16 +224,40 @@ export default {
         })
       })
     },
-    hanldeOpenDeliveryDelAddress(row) {
-      // 需要查看发货地址数量是否剩下1条？？？
-      const id = row.id
-      const addressType = row.addressType
+    getSendAddressList() {
       const req = Object.create(null)
       req.cid  = this.cid
       req.startIndex = 1
       req.pageSize = 20
-      req.addressType = addressType
-      this.ApiGetAddressList(req).then((res) => {
+      req.addressType = 0
+      const p1 = this.ApiGetAddressList(req)
+      req.addressType = 2
+      const p2 = this.ApiGetAddressList(req)
+      return new Promise((resolve, reject) => {
+        const res = {}
+        Promise.all([p1,p2]).then(([res1, res2]) => {
+          console.log(res1, res2)
+          const total1 = res1 ? parseInt(res1.total) : 0
+          const total2 = res2 ? parseInt(res2.total) : 0
+          res.total = total1 + total2
+          resolve(res)
+        }).catch((err) => {
+          // this.$message.error(err)
+          reject(err)
+        })
+      })
+    },
+    hanldeOpenDeliveryDelAddress(row) {
+      // 需要查看发货地址数量是否剩下1条？？？
+      const id = row.id
+      const addressType = row.addressType
+      // const req = Object.create(null)
+      // req.cid  = this.cid
+      // req.startIndex = 1
+      // req.pageSize = 20
+      // req.addressType = 0
+      this.getSendAddressList().then((res) => {
+        console.log('res',res)
         // 仅有一条发货地址信息，同时商家配送已开启，此时要删除该发货地址时，弹框提示如下
         if (res && res.total == 1) {
           this.confirm({
@@ -248,7 +272,7 @@ export default {
             const p2 = this.ApiDelAddressById(id, addressType)
             Promise.all([p1, p2]).then((arr) => {
               console.log('arr',arr)
-               this.ruleForm.pageNo = 1
+              this.ruleForm.pageNo = 1
               const req = this.getReqData(this.ruleForm)
               this.getAddressList(req)
               // if(arr && arr.length > 0) {
