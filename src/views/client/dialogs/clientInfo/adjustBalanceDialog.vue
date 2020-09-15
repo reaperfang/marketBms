@@ -115,12 +115,13 @@ export default {
       }else{
         this.showError = false;
       }
-      // if(Number(this.adjustmentBalance) > 100000000) {
-      //   this.$message({
-      //     message: '增加余额不能超过1亿',
-      //     type: 'warning'
-      //   });
-      // }
+      if(Number(this.adjustmentBalance) >= 100000000) {
+        this.$message({
+          message: '增加余额不能超过1亿',
+          type: 'warning'
+        });
+        this.adjustmentBalance = ""
+      }
     },
     handleAdjust(val) {
       if(val == "1") {
