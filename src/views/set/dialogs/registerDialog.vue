@@ -69,10 +69,10 @@
         <el-form-item label="业务类型：" prop="businessType">
           <el-select v-model="ruleForm.businessType" placeholder="请选择业务类型" style="width: 360px;">
             <el-option
-              v-for="(item,index) in businessTypeList"
-              :key="index+item.businessType"
-              :label="item.businessType"
-              :value="item.businessType"
+              v-for="(item, index) in businessTypeList"
+              :key="index"
+              :label="item.name"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -85,8 +85,9 @@
   </DialogBase>
 </template>
 <script>
-import DialogBase from "@/components/DialogBase";
+import DialogBase from '@/components/DialogBase';
 import { debounce } from '@/utils/base.js'
+import th3Deliver from '@/system/constant/th3Deliver.js'
 
 export default {
   data() {
@@ -111,7 +112,7 @@ export default {
         email: "",
         businessType: ""
       },
-      businessTypeList: [], // 业务类型列表
+      businessTypeList: th3Deliver.businessTypeList, // 业务类型列表
       rules: {
         mobile: [
           { required: true, message: "请输入手机号", trigger: "blur" },
