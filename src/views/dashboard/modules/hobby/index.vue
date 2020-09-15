@@ -8,17 +8,10 @@
 		<el-row class="item-content">
 			<vcap></vcap>
 		</el-row> -->
-		<!-- <div class="title">
+		<div class="title">
 			<gridtitle :title="'用户交易偏好'"></gridtitle>
 		</div>
 		<div class="content">
-			<vcap></vcap>
-		</div> -->
-
-		<div>
-			<gridtitle :title="'用户交易偏好'"></gridtitle>
-		</div>
-		<div>
 			<vcap></vcap>
 		</div>
 	</div>
