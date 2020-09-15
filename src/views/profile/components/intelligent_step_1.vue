@@ -61,7 +61,7 @@
         }
         else {
           this.nextIsLoading = true;
-          this._apis.profile.intelligentUpdateStep({chooseIndustryId: this.industryId, changeStep: 2, status: 0, id: this.stepId})
+          this._apis.profile.intelligentUpdateStep({chooseIndustryId: this.industryId, changeStep: 2, status: 0})
             .then(() => { this.$emit("update-step", 2) })
             .catch(error => { this.$message.error(error + "请稍后再试") })
             .finally(()=>{this.nextIsLoading = false;})

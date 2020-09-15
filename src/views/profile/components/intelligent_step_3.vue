@@ -50,7 +50,7 @@
       async nextStep() {
        try {
          this.nextStepLoading = true;
-         const result = await this._apis.profile.intelligentUpdateStep({changeStep: 4, status: 0, id: this.stepId});
+         const result = await this._apis.profile.intelligentUpdateStep({changeStep: 4, status: 0});
          this.$emit('update-step', 4);
        }catch (e) {
          this.$message.error(e || "网络错误，请稍后再试");

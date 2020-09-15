@@ -86,7 +86,7 @@
           // 返回启用模板成功页
           try {
             this.prevStepLoading = true;
-            const result = await this._apis.profile.intelligentUpdateStep({changeStep: 3, status: 1, id: this.stepId});
+            const result = await this._apis.profile.intelligentUpdateStep({changeStep: 3, status: 1});
             this.$emit('update-step', 3);
           }catch (e) {
             this.$message.error(e);

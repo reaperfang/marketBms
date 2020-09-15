@@ -250,7 +250,7 @@
       async enableConfigure() {
         if (this.isConfigureFail) return;
         try {
-          let params = {chooseTemplateId: this.selectTemplateId, changeStep: 3, status: 0, id: this.stepId};
+          let params = {chooseTemplateId: this.selectTemplateId, changeStep: 3, status: 0};
           let result = await this._apis.profile.intelligentUpdateStep(params);
 
           let enableTemplate = await this._apis.profile.intelligentEnableTemplate({tempCid: this.tempCid});
@@ -347,7 +347,7 @@
         if(this.isConfigureFail) return;
         try {
           this.prevStepLoading = true;
-          const params = {changeStep: 1, status: 1, id: this.stepId};
+          const params = {changeStep: 1, status: 1};
           const result = await this._apis.profile.intelligentUpdateStep(params);
           this.$emit('update-step', 1)
         }
