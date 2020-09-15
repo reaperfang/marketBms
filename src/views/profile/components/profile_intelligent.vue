@@ -1,5 +1,5 @@
 <template>
-  <section v-loading="isLoading" v-if="currentStep !== 4 && stepStatus !== 1">
+  <section v-loading="isLoading" v-if="!(currentStep === 4 && stepStatus === 1)">
   <!--   (currentStep:4,  stepStatus: 1, 代表最后一步完成，也就是整体完成了) -->
     <div class="profile_intelligent">
       <p class="p_i_title">
@@ -59,13 +59,19 @@ export default {
           this.isLoading = true;
           const result = await this._apis.profile.getIntelligentProgress();
           console.log('获取智能开店信息: ', result);
-          if(result) {
+          if(result){
             this.currentStep = result.currentStep ? result.currentStep : 1;
-            this.stepStatus = result.status;
-            this.isLoading = false;
+            this.stepStatus = result.status || 0;
+          }else {
+            this.currentStep =  1;
+            this.stepStatus =  0;
           }
+
+          console.log("====", this.currentStep, this.stepStatus);
         } catch (err) {
           console.error(err);
+          this.$message.error(err);
+        } finally {
           this.isLoading = false;
         }
       },

@@ -70,6 +70,7 @@
     created() {
       // 获取助用户上次操作的步骤和数据状态
       this.fetchIntelligentStatus();
+      console.log("this.stepCurrent" + this.stepCurrent);
     },
     methods: {
       /** 获取助用户上次操作的步骤和数据状态 */
@@ -92,6 +93,9 @@
             // 假数据
             // this.stepCurrent = 1;
             // this.stepStatus = 1;
+          }else {
+            this.stepCurrent = 1;
+            this.stepStatus = 0;
           }
         } catch (err) {
           console.error(err)
