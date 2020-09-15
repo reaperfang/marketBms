@@ -33,7 +33,7 @@
             <el-option label="小程序" :value="1"></el-option>
             <el-option label="公众号" :value="2"></el-option>
             <el-option label="PC" :value="3"></el-option>
-            <el-option label="WAP" :value="4"></el-option>
+            <el-option label="H5" :value="4"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="状态">
@@ -46,6 +46,13 @@
             <el-option label="部分发货" :value="4"></el-option>
             <el-option label="待收货" :value="5"></el-option>
             <el-option label="完成" :value="6"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="发票">
+          <el-select v-model="listQuery.isInvoice" placeholder>
+            <el-option label="全部" value></el-option>
+            <el-option label="是" :value="1"></el-option>
+            <el-option label="否" :value="0"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label>
@@ -164,12 +171,14 @@ export default {
         sendType: "", // 发货类型:1正常发货,2自动发货,3优先发货
         orderStatus: "", // 订单流程状态：0待付款 1待成团 2关闭 3待发货 4部分发货 5待收货 6完成
         searchTimeType: "createTime", // 下单时间: createTime 完成时间: complateTime 发货时间: sendTime
-        deliveryWay: "", // 配送方式:1普通快递,2商家配送
+        deliveryWay: "", // 配送方式:1普通快递,2商家配送,4上门自提
         deliveryDate: "", //商家配送-日期
         deliveryTime: "", //商家配送-时间段
         orderTimeValue: "",
         startIndex: 1,
-        pageSize: 20
+        pageSize: 20,
+        isInvoice: "",
+        isExpressElectronicSheet: ''
       },
       activeName: "shop",
       resellConfigInfo: null,
@@ -362,7 +371,8 @@ export default {
           deliveryWay: "", // 配送方式:1普通快递,2商家配送
           deliveryDate: "", //商家配送-日期
           deliveryTime: "", //商家配送-时间段
-          searchType2: 'resellerPhone'
+          searchType2: 'resellerPhone',
+          isExpressElectronicSheet: ''
         }
       } else {
         this.listQuery = {
@@ -388,9 +398,11 @@ export default {
           resellerName: '',
           resellerNick: '',
           resellerPhone: '',
-          deliveryWay: "", // 配送方式:1普通快递,2商家配送
+          deliveryWay: "", // 配送方式:1普通快递,2商家配送,4上门自提
           deliveryDate: "", //商家配送-日期
           deliveryTime: "", //商家配送-时间段
+          isInvoice: "",
+          isExpressElectronicSheet: ''
         }
       }
       this.checkedLength = 0
@@ -414,14 +426,20 @@ export default {
 </script>
 <style lang="scss" scoped>
 .search {
+   /deep/ .el-form-item{
+    margin-bottom:0px;
+   }
     /deep/ .el-form-item__label {
         padding-right: 8px;
     }
     /deep/ .el-form--inline .el-form-item {
-        margin-right: 26px;
+        margin-right: 20px;
         .el-button+.el-button {
-            margin-left: 16px;
+            margin-left: 6px;
         }
+    }
+    /deep/ .el-button {
+      width: 60px;
     }
 }
 .query {
@@ -436,6 +454,9 @@ export default {
         color: #45444c;
       }
     }
+  }
+  .search{
+    padding-bottom:0px;
   }
 }
 /deep/ .el-input {
@@ -485,6 +506,9 @@ export default {
 /deep/ .el-form-item__label {
   color: rgba(68,67,75,1);
   font-weight: normal!important;
+}
+.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+  margin-bottom: 20px;
 }
 </style>
 

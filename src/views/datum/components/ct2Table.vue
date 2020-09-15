@@ -4,7 +4,7 @@
     <el-table
       :data="listObj"
       style="width: 100%"
-      :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+      :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
       :default-sort = "{prop: 'pv', order: 'descending'}"
       >
       <el-table-column
@@ -21,32 +21,38 @@
       <el-table-column
         prop="pv"
         label="浏览量"
+        align="right"
        >
       </el-table-column>
       <el-table-column
         prop="uv"
         label="访客量"
+        align="right"
         >
       </el-table-column>
       <el-table-column
         prop="shoppingCart"
         label="加购人数"
+        align="right"
         >
       </el-table-column>
       <el-table-column
         prop="orders"
         label="下单人数"
+        align="right"
         >
       </el-table-column>
       <el-table-column
         prop="pays"
         label="支付人数"
+        align="right"
         >
       </el-table-column>
       <el-table-column
         prop="rateOrderPay"
         label="下单支付转化率"
         width="150"
+        align="right"
         >
         <template slot-scope="scope">
           {{scope.row.rateOrderPay == 0 ? 0 : (scope.row.rateOrderPay*100).toFixed(2)}}%
@@ -55,6 +61,7 @@
       <el-table-column
         prop="rateRepurchase"
         label="复购率"
+        align="right"
         >
         <template slot-scope="scope">
           <span v-if="scope.row.rateRepurchase">
@@ -116,5 +123,7 @@ export default {
                 }
             }
         }
-
+/deep/ .el-table--small td, /deep/.el-table--small th{
+  padding:8px 10px;
+}
 </style>

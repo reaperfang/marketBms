@@ -92,6 +92,9 @@ export default {
 .jump_wrapper{
   padding:0 20px 20px;
   background:rgb(242,242,249);
+  /deep/ .el-tabs__header {
+    margin-bottom: 15px;
+  }
 }
 .name_wrapper{
     display: flex;

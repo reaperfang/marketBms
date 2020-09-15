@@ -4,7 +4,7 @@
     <el-table
       :data="listObj.members"
       style="width: 100%"
-      :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+      :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
       >
       <el-table-column
@@ -66,7 +66,8 @@
       <el-table-column
         prop="goodsCount"
         label="订单商品（总）数"
-        align="center">
+        align="center"
+        width="150px">
       </el-table-column>
     </el-table>
     <div class="page_styles">
@@ -77,7 +78,8 @@
         :page-sizes="[10, 20, 30, 40]"
         :page-size="10"
         layout="sizes, prev, pager, next"
-        :total="listObj.totalSize">
+        :total="listObj.totalSize"
+        :background="background">
       </el-pagination>
     </div>
   </div>
@@ -97,7 +99,11 @@ export default {
     listObj:{
       type:Object,
       default:{}
-    }
+    },
+    background: {
+      type: Boolean,
+      default: true
+    },
   },
   created() {
 

@@ -50,6 +50,7 @@ export function colorHex2RGB(color) {
     return sColor;
 }
 
+
 /* 格式化数字*/
 export function formatNumber(num, digits) {
   const si = [

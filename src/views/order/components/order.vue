@@ -4,11 +4,11 @@
             <div class="item goods">
                 <div class="row justify-between">
                     <div class="col">商品信息</div>
-                    <div class="col">数量</div>
+                    <div class="col" style="margin-right: 26px;">数量</div>
                 </div>
             </div>
-            <div class="item" style="width: 120px;">应收金额</div>
-            <div class="item" style="width: 120px;">收货人及联系方式</div>
+            <div class="item" style="width: 120px; margin-right: 16px;">应收金额</div>
+            <div class="item" style="width: 120px; margin-right: 75px;">收货人及联系方式</div>
             <div class="item" :class="{'item-storew': storeMark}">配送方式</div>
             <div class="item">状态</div>
             <div class="item">操作</div>
@@ -19,18 +19,20 @@
                     <div class="item">
                         <el-checkbox v-if="!authHide" @change="checkedChange" v-model="order.checked"></el-checkbox>
                         <span class="order-code">
-                            <el-tooltip v-if="order.sendType == 2" content="自动发货" placement="bottom" effect="light">
+                            <el-tooltip v-if="order.sendType == 2" content="自动发货" placement="bottom" effect="dark">
                                 <i class="auto"></i>
                             </el-tooltip>
-                            <el-tooltip :content="`${order.memberSn}催发货，请尽快发货`" placement="bottom" effect="light">
-                                <i v-if="order.isUrge == 0" class="el-icon-message-solid"></i>
+                            <el-tooltip v-if="order.isUrge == 0" content="用户催发货，请尽快发货" placement="bottom" effect="dark">
+                                <i class="urge"></i>
                             </el-tooltip>
-                            订单编号：{{order.code}}/下单时间：{{order.createTime}}
+                            <span class="deliveryWay-icon">{{order.deliveryWayIcon}}</span>
+                            <span class="order-code-inner">订单编号：{{order.code}}</span>
+                            <span class="createTime">下单时间：{{order.createTime}}</span>
                         </span>
                     </div>
                     <div class="item righter">
                         <span>订单类型：{{order.orderType | orderTypeFilter}}</span>
-                        <span><i class="memberLevelImg" :style="{background: `url(${order.memberLevelImg})`}"></i>用户昵称：<span class="pointer" :title="order.memberName">{{order.memberName | memberNameFilter}}</span></span>
+                        <span><i v-if="order.memberLevelImg" class="memberLevelImg" :style="{background: `url(${order.memberLevelImg})`}"></i>用户昵称：<span class="pointer" :title="order.memberName">{{order.memberName | memberNameFilter}}</span></span>
                         <span>订单来源：{{order.channelName}}</span>
                         <!-- <i v-permission="['订单', '订单查询', '商城订单', '删除订单']" @click="closeOrder(order.id)" v-if="order.orderStatus == 2" class="el-icon-delete"></i> -->
                     </div>
@@ -46,26 +48,26 @@
                                                 <img width="66" :src="goods.goodsImage" alt="">
                                             </div>
                                             <div class="col">
-                                                <p :title="goods.goodsName" class="ellipsis" style="width: 297px;">{{goods.goodsName}}</p>
+                                                <p :title="goods.goodsName" class="ellipsis" style="width: 250px;">{{goods.goodsName}}</p>
                                                 <p class="goods-specs">{{goods.goodsSpecs | goodsSpecsFilter}}</p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col">
+                                    <div class="col" style="margin-right: 26px;">
                                         {{goods.goodsCount}}
                                     </div>
                                 </div>
                             </li>
                         </ul>
                     </div>
-                    <div class="item" style="width: 120px;">
+                    <div class="item" style="width: 87px; margin-right: 65px; text-align: right;">
                         <!-- <p class="pay-amount">实收：¥{{order.actualMoney}}</p>
                         <p class="payment-mode">{{order.channelName}}支付</p> -->
                         <!-- <p>¥{{order | yingshowFilter}}</p> -->
-                        <p>¥{{order.receivableMoney}}</p>
+                        <p style="margin-left: 0;">¥{{order.receivableMoney}}</p>
                         <!-- <p>{{order.channelName}}支付</p> -->
                     </div>
-                    <div class="item" style="width: 120px;">
+                    <div class="item" style="width: 120px; margin-right: 75px;">
                         <p>{{order.receivedName}}</p>
                         <p>{{order.receivedPhone}}</p>
                     </div>
@@ -96,13 +98,13 @@
                         <template v-else-if="order.orderStatus == 3">
                             <!-- 待发货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
-                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '发货']" @click="$router.push('/order/deliverGoods?orderType=order&sendType=one&ids=' + order.id)">发货</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '发货']" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${order.id}`)">发货</p>
                             <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">关闭订单</p>
                         </template>
                         <template v-else-if="order.orderStatus == 4">
                             <!-- 部分发货 -->
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
-                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '继续发货']" @click="$router.push('/order/deliverGoods?orderType=order&sendType=one&ids=' + order.id)">继续发货</p>
+                            <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '继续发货']" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${order.id}`)">继续发货</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
                             <!-- <p v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '提前关闭订单']" @click="currentDialog = 'CloseOrderDialog'; currentData = order.id; dialogVisible = true">提前关闭订单</p> -->
                         </template>
@@ -111,6 +113,8 @@
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
                             <p v-show="!authHide" v-permission="['订单', '订单查询', '商城订单', '补填物流']" v-if="order.isFillUp == 1" @click="$router.push('/order/supplementaryLogistics?id=' + order.id)">补填物流</p>
+                            <!-- order.deliveryWay== 4 -->
+                            <p v-if="order.deliveryWay== 4" @click="currentDialog = 'VerificationDialog'; currentData = order.id; dialogVisible = true">核销验证</p>
                         </template>
                         <template v-else-if="order.orderStatus == 6">
                             <!-- 完成 -->
@@ -122,11 +126,12 @@
             </div>
         </div>
         <Empty v-else></Empty>
-        <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit"></component>
+        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="submit" :data='currentData'></component>
     </div>
 </template>
 <script>
 import CloseOrderDialog from '@/views/order/dialogs/closeOrderDialog'
+import VerificationDialog from '@/views/order/dialogs/verificationDialog'
 import anotherAuth from '@/mixins/anotherAuth'
 import Empty from '@/components/Empty'
 
@@ -151,6 +156,25 @@ export default {
         list: {
             deep: true,
             handler(newVal, objVal) {
+                newVal.forEach(item=>{
+                    switch(item.deliveryWay) {
+                        case 1:
+                            item.deliveryWayIcon = "普快"
+                            break;
+                        case 2:
+                             item.deliveryWayIcon = "商配"
+                            break;
+                        case 3:
+                            item.deliveryWayIcon = "三方"
+                            break;
+                        case 4:
+                            item.deliveryWayIcon = "自提"
+                            break;
+                    }
+                    if(item.deliveryWay==1){
+
+                    }
+                })
                 //如果当前列表中包含商家配送方式，则配送方式标题需要加宽
                 if(newVal.some(item => item.deliveryWay == 2)){
                     this.storeMark = true;
@@ -181,6 +205,8 @@ export default {
                     return '普通快递'
                 case 2:
                     return '商家配送'
+                case 4:
+                    return '上门自提'
             }
         },
         goodsSpecsFilter(value) {
@@ -316,7 +342,6 @@ export default {
         checkedChange() {
             let len = this.list.filter(val => val.checked).length
             let list = this.list.filter(val => val.checked)
-
             this._globalEvent.$emit('checkedLength', len)
             this._globalEvent.$emit('checkedList', list)
         }
@@ -328,6 +353,7 @@ export default {
     },
     components: {
         CloseOrderDialog,
+        VerificationDialog,
         Empty
     }
 }
@@ -337,17 +363,25 @@ export default {
         .order-header {
             display: flex;
             min-width: 1000px;
-            color: $globalMainColor;
-            background-color: rgb(240, 239, 255);
-            padding: 12px 20px;
+            color:#44434B;
+            padding: 12px 0;
+            padding-top: 17px;
+            height: 46px;
+            background:rgba(208,214,228,.2);
+            font-weight:500;
             .item {
                 width: 80px;
-                margin-right: 20px;
+                margin-right: 30px;
                 &:last-child {
                     margin-right: 0;
                 }
                 &.goods {
                     flex: 1;
+                    .row {
+                        .col:first-child {
+                            padding-left: 69px;
+                        }
+                    }
                 }
             }
         }
@@ -376,17 +410,52 @@ export default {
                 .container-item-header {
                     display: flex;
                     justify-content: space-between;
-                    background-color: rgb(243, 244, 244);
-                    height: 60px;
-                    line-height: 60px;
+                    background:rgba(208,214,228,.2);
+                    height: 50px;
                     padding: 0 20px;
-                    color: $contentColor;
+                    padding-right: 8px;
+                    color:#44434B;
+                    font-weight:400;
                     border-radius: 10px 10px 0 0;
+                    .deliveryWay-icon{
+                        display:inline-block;
+                        width:32px;
+                        height:18px;
+                        background:rgba(230,230,250,1);
+                        border-radius:3px;  
+                        line-height:18px;
+                        text-align: center;
+                        font-size:12px;
+                        font-weight:500;
+                        color:rgba(101,94,255,1);
+                        margin-left:-10px;
+                        margin-right:5px;
+                    }
+                    .order-code {
+                       .order-code-inner {
+                           padding-right: 12px;
+                           border-right: 1px solid rgba(218,218,227,1);
+                       } 
+                       .createTime {
+                           padding-left: 12px;
+                       }
+                    }
                     .righter {
-                        color: rgb(173, 174, 177);
-                        span {
-                            margin-right: 20px;
+                        >span {
+                            padding-left: 12px;
+                            padding-right: 12px;
+                            &:nth-child(1) {
+                                border-right: 1px solid #dadae3;
+                            }
+                            &:nth-child(2) {
+                                border-right: 1px solid #dadae3;
+                            }
                         }
+                    }
+                    .item {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
                     }
                 }
                 .container-item-content {
@@ -407,7 +476,26 @@ export default {
                     }
                     >.item {
                         width: 80px;
-                        margin-right: 20px;
+                        margin-right: 27px;
+                        &:nth-child(2) {
+                            padding-left: 5px;
+                            p {
+                                margin-left: 16px;
+                            }
+                        }
+                        &:nth-child(3) {
+                            text-align: center;
+                            padding-left: 32px;
+                        }
+                        &:nth-child(4) {
+                            padding-left: 23px;
+                        }
+                        &:nth-child(5) {
+                            padding-left: 22px;
+                        }
+                        &:nth-child(6) {
+                            padding-left: 19px;
+                        }
                         p {
                             line-height: 21px;
                         }
@@ -455,7 +543,7 @@ export default {
             }
         }
         .item-storew{
-            width: 105px !important;
+            width: 108px !important;
         }
         .icon-store{
             display: inline-block;
@@ -478,7 +566,7 @@ export default {
         }
     }
     .order-code {
-        margin-left: 4px;
+        margin-left: 5px;
     }
     .memberLevelImg {
         display: inline-block;
@@ -486,22 +574,38 @@ export default {
         height: 13px;
         margin-right: 5px;
     }
-    .auto {
-        display: inline-block;
-        width: 28px;
-        height: 16px;
-        background: url(../../../assets/images/order/auto.png) no-repeat;
-        position: relative;
-        top: 3px;
-        margin-right: 5px;
-    }
     @media (max-width: 1440px) {
     .container-item {
         min-width: auto!important;
     }
+    .goods-specs{
+        width:200px !important;
+    }
     .goods-box .col:first-child {
         width: 100%!important;
     }
+    }
+    .order-code {
+        align-items: center;
+        display: inline-flex;
+        justify-content: center;
+        .auto {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: url(../../../assets/images/order/auto.png) no-repeat;
+            background-size: 100% 100%;
+            position: relative;
+            margin-right: 15px;
+        }
+        .urge {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: url(../../../assets/images/order/urge.png) no-repeat;
+            background-size: 100% 100%;
+            margin-right: 20px;
+        }
     }
 </style>
 

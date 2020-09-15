@@ -92,6 +92,16 @@ export function orderUpdateReceive(data) {
   })
 }
 
+// 修改收发货地址
+export function updateReceiveAndSend(data) {
+  return request({
+    apiType: 'order',
+    method: 'post',
+    target: 'ORDER-SENDINFO-UPDATE-ADDRESS-PROCESSOR',
+    data
+  })
+}
+
 // 订单改价
 export function orderPriceChange(data) {
   return request({
@@ -684,11 +694,62 @@ export function connectPrinter(data) {
 }
 
 
+//查看电子面单快递规格
+export function getExpressSpec(data) {
+  return request({
+    target: 'EXPRESS-ELECTRONIC-SIZE-PROCESSOR',
+    method: 'post',
+    apiType: 'goodsOperate',
+    data
+  })
+}
+// 测试验证自提码功能
+export function confirmVerifySelfLiftCode(data) {
+  return request({
+    url:`/mkt-api/v1/b/app-verify-tool-info/confirmVerifyCode`,
+    method: 'get',
+    params:data,
+    baseURL: process.env.DATA_API,
+    verifyCode:1
+  })
+}
 
+//自提点-详情
+export function getPickInfo(data) {
+  return request({
+    target: 'PICKUPINFO-FIND-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
 
+//地址库默认退货地址查询
+export function getShopAddress(data) {
+  return request({
+    target: 'SHOP-ADDRESS-DEFAULT-RETURN-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
 
+//地址库默认发货地址查询
+export function getShopSendAddress(data) {
+  return request({
+    target: 'SHOP-ADDRESS-DEFAULT-SENDER-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
 
-
-
-
-
+//更新电子面单
+export function editorExpressSize(data) {
+  return request({
+    target: 'EDIT-EXPRESS-ELECTRONIC-SHEET-PROCESSOR',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}

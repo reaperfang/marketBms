@@ -45,7 +45,7 @@
                     <template v-else>
                         <p>待处理</p>
                         <p class="des">商户未发货</p>
-                        <div class="button-box">
+                        <div v-if="this.orderAfterSale.exchangeConfirmation == 1" class="button-box">
                             <el-button v-if="!authHide" type="primary" @click="sendGoods">发货</el-button>
                         </div>
                     </template>
@@ -173,7 +173,7 @@ export default {
     },
     methods: {
         sendGoods() {
-            this.$router.push('/order/orderAfterDeliverGoods?id=' + this.orderAfterSale.id)
+            this.$router.push(`/order/orderAfterDeliverGoods?afterSale=true&id=${this.orderAfterSale.id}`)
         },
         confirmTakeOver() {
             this.$emit('confirmTakeOver')

@@ -13,7 +13,7 @@ NProgress.configure({ showSpinner: false })// NProgress Configuration
 function hasPermission(msfList, route) {
   if (route && route.path) {
     let title =  route.meta.title;
-    return msfList.some(item => title == item.name) || route.name == 'profile' || route.path == '/401' || route.path == '/login' || route.matched[0].path == '/shop' || route.name == 'accountInfo' || route.name == 'passwordChange'
+    return msfList.some(item => title == item.name) || route.name == 'profile' || route.path == '/401' || route.path == '/login' || route.matched[0].path == '/shop' || route.name == 'accountInfo' || route.name == 'passwordChange' || route.name == 'guidePrompt' || route.name == 'shopGuide'
   } else {
     return true
   }
@@ -48,6 +48,7 @@ router.beforeEach((to, from, next) => {
           store.dispatch('GenerateRoutes', {data: msfList, enable}).then(() => { // 根据roles权限生成可访问的路由表
             if(store.getters.addRouters.length != 0){
               router.selfAddRoutes(store.getters.addRouters) // 动态添加可访问路由表
+              console.log('GenerateRoutes',to)
               next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
             }else{
               next({ path: '/401'})

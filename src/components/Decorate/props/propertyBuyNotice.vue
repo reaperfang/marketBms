@@ -7,6 +7,13 @@
           <el-radio :label="2">模拟购买公告</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="字体大小" prop="fontSize">
+        <el-radio-group v-model="ruleForm.fontSize">
+          <el-radio :label="1">大</el-radio>
+          <el-radio :label="2">中</el-radio>
+          <el-radio :label="3">小</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="间隔时间" v-if="ruleForm.buyType === 2">
         <el-input v-model="ruleForm.intervalStart" style="width:60px"></el-input> - 
         <el-input v-model="ruleForm.intervalEnd" style="width:60px"></el-input>秒
@@ -59,6 +66,7 @@ export default {
         buyType: 1,// 购买公告类型
         intervalStart: 10,//间隔时间开始
         intervalEnd: 60,// 间隔时间结束 
+        fontSize: 2,
         backgroundColor: 'rgba(0,0,0,0.4)',//背景颜色
         fontColor: 'rgba(255,255,255,1)',//字体颜色
         ids: []//商品id列表
