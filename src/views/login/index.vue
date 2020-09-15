@@ -176,7 +176,7 @@ export default {
     login() {
       this.loading = true
       let tempParams = {...this.loginForm};
-      // tempParams['password'] = this.utils.aesEncryption256('XYGQLEJQrAiUXzygqdiLOzDs4DIvPN48', this.loginForm.password, 'EhYKNoYmZ7rXa1aE');
+      tempParams['password'] = this.utils.aesEncryption256('XYGQLEJQrAiUXzygqdiLOzDs4DIvPN48', this.loginForm.password, 'EhYKNoYmZ7rXa1aE');
       this.$store.dispatch('login', tempParams).then((response) => {
 	this.errorMsg = ''
         this.loading = false

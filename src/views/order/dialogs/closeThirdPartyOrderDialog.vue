@@ -4,16 +4,14 @@
             <p>关闭订单后不可撤销，且系统将发起未发货商品的自动退款，您确定关闭订单吗？</p>
             <p>建议与用户沟通后再关闭订单，并选择关闭原因：</p>
             <div>
-                <span @click="showTextarea = false">
-                    <el-radio v-model="operationType" label="7">用户申请关闭</el-radio>
-                </span>
-                <span @click="showTextarea = false" class="mgl_30">
-                    <el-radio v-model="operationType" label="6">库存不足</el-radio>
-                </span>
-                
-                <p @click="showTextarea = true" class="other">
-                    <el-radio v-model="operationType" label="8">其它</el-radio>
-                </p>
+                <el-select v-model="value" @change="change" placeholder="请选择">
+                    <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                    </el-option>
+                </el-select>
                 <el-input
                     v-if="showTextarea"
                     type="textarea"
@@ -38,47 +36,50 @@ export default {
     data() {
         return {
             showFooter: false,
-            operationType: '',
+            showTextarea: false,
             operationRemark: '',
-            showTextarea: false
+            options: [{
+                value: '1',
+                label: '没有配送员接单'
+            }, {
+                value: '2',
+                label: '配送员没来取货'
+            }, {
+                value: '3',
+                label: '配送员态度太差'
+            }, {
+                value: '4',
+                label: '顾客取消订单'
+            }, {
+                value: '5',
+                label: '订单填写错误'
+            }, {
+                value: '6',
+                label: '配送员让我取消此单'
+            }, {
+                value: '7',
+                label: '配送员不愿上门取货'
+            }, {
+                value: '8',
+                label: '我不需要配送了'
+            }, {
+                value: '9',
+                label: '配送员以各种理由表示无法完成订单'
+            }, {
+                value: '10',
+                label: '其他'
+            }],
+            value: ''
         }
     },
     methods: {
+        change() {
+            if(this.value == '10') {
+                this.showTextarea = true
+            }
+        },
         submit() {
-            let operationRemark = ''
-
-            if(this.operationType == '') {
-                this.$message({
-                    message: '请选择关闭原因',
-                    type: 'warning'
-                });
-                return
-            }
-            if(this.operationType == 7) {
-                operationRemark = '用户申请关闭'
-            } else if(this.operationType == 6) {
-                operationRemark = '库存不足'
-            } else if(this.operationType == 8) {
-                operationRemark = this.operationRemark
-                if(!this.operationRemark) {
-                    this.$message({
-                    message: '请输入关闭原因',
-                    type: 'warning'
-                    });
-                    return
-                }
-                if(/^\s+$/.test(this.operationRemark)) {
-                    this.$message({
-                    message: '关闭原因不能为空',
-                    type: 'warning'
-                    });
-                    return
-                }
-            }
-            this.$emit('submit', {
-                operationType: +this.operationType,
-                operationRemark
-            })
+            
 
             this.visible = false
         }
@@ -124,5 +125,9 @@ export default {
    }
    /deep/ .el-radio__label {
        font-size: 16px;
+   }
+   /deep/ .el-select {
+       width: 100%;
+       margin-bottom: 30px;
    }
 </style>

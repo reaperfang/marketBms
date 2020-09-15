@@ -218,7 +218,7 @@ import { validatePhone } from "@/utils/validate.js"
 
 import { asyncRouterMap } from '@/router'
 import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
-import { common, deliveryWay1 } from '@/views/order/mixins/orderMixin'
+import { common, deliveryWay1, deliveryWay2 } from '@/views/order/mixins/sendGoodsMixin'
 
 export default {
     mixins: [common, deliveryWay1],
@@ -284,10 +284,6 @@ export default {
             nameList: [],
             orderInfo: {},
             orderSendInfo: {},
-            currentDialog: '',
-            dialogVisible: false,
-            currentData: {},
-            sendGoods: '',
             title: '',
             express: null,
             distributorList: [], //配送员筛选后的数据
@@ -296,7 +292,6 @@ export default {
             distributorId: '', //配送员id
             isDistributorShow: false, //尚未创建配送员信息提示控制
             distributorSet: false,
-            ajax: true,
             _ids: [],
         }
     },
@@ -313,16 +308,9 @@ export default {
             } else {
                 return false
             }
-        },
-        cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-            return shopInfo.id
         }
     },
     methods: {
-        cancel() {
-            this.sending = false
-        },
         //检测是否有配置子帐号的权限
         checkSet(){
             const setConfig = asyncRouterMap.filter(item => item.name === 'set');

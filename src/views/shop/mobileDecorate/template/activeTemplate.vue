@@ -120,13 +120,14 @@
       <div v-show="Number(total) > 0" class="pagination"
            v-if="templateList.length || (!templateList.length && startIndex != 1)">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(startIndex) || 1"
           :page-size="pageSize*1"
           :page-sizes="[12]"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
         >
         </el-pagination>
       </div>

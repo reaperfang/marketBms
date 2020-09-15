@@ -18,8 +18,8 @@
         </div>
       </div>
       <div class="footer">
-        <el-button @click="cancelHandler">取消</el-button>
         <el-button @click="submit" type="primary">确定</el-button>
+        <el-button @click="visible = false">取消</el-button>
       </div>
     </template>
     <template v-else>

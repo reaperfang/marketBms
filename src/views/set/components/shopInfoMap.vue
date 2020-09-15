@@ -20,11 +20,11 @@
           <el-pagination 
             v-if="pois.length > 0"
             class="pagination"
-            background
+            :background="true"
             small
             :pager-count="5"
             :total="totalNum" 
-            layout="prev, pager, next"
+            layout="prev, pager, next, sizes"
             @current-change="handleCurrentChange"
             :current-page.sync="page"
             :page-size="pageSize"

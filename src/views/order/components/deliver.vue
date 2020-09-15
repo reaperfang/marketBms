@@ -285,7 +285,7 @@ import { validatePhone } from "@/utils/validate.js"
 import utils from "@/utils"
 
 import { asyncRouterMap } from '@/router'
-import { common, deliveryWay1, deliveryWay2 } from '@/views/order/mixins/orderMixin'
+import { common, deliveryWay1, deliveryWay2 } from '@/views/order/mixins/sendGoodsMixin'
 
 export default {
   mixins: [common, deliveryWay1, deliveryWay2],

@@ -16,7 +16,7 @@
         <div class="header">
           <div class="header-lefter">
             <div class="header-lefter-item number">{{index + 1}}</div>
-            <div class="header-lefter-item fb">{{item.deliveryWay | deliveryWayFilter}}</div>
+            <div class="header-lefter-item fb">{{item | deliveryWayFilter}}</div>
             <template v-if="item.deliveryWay == 1">
             <div class="header-lefter-item">快递公司：{{item.shipperName}}</div>
             <div class="header-lefter-item">快递单号：{{item.expressNo}}</div>
@@ -237,12 +237,19 @@ export default {
 
         return str
     },
-    deliveryWayFilter(code) {
-        switch(code) {
+    deliveryWayFilter(order) {
+        switch(order.deliveryWay) {
             case 1:
                 return '普通快递'
             case 2:
                 return '商家配送'
+            case 3:
+              if(order.orderStatus==5||order.orderStatus==6){
+                    return "第三方配送-达达"
+                }else{
+                    return "第三方配送" 
+                }
+                break;
             case 4:
                 return '上门自提'
         }

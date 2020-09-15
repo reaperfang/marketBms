@@ -319,4 +319,7 @@ export default {
       }
     }
   }
+  /deep/ .el-message-box__message{
+    display: block !important;
+  }
 </style>

@@ -76,7 +76,7 @@
                             </el-tooltip>
                         </div>
                     </div>
-                    <ma4Table class="marT20s" :listObj="listObj" @getEvaluation="getEvaluation"></ma4Table>
+                    <ma4Table class="marT20s" :listObj="listObj" @getEvaluation="getEvaluation" :loading="loading"></ma4Table>
                 </div>
                 <div v-if="listObj.members != undefined && (showNote || showNote1)">
                     <p>运营建议：</p>
@@ -84,7 +84,7 @@
                     <p class="proposal" v-if="showNote1"><b>差评率{{note1.label}} ：</b>{{note1.suggest}}</p>
                 </div>
                 <div class="contents"></div>
-                <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
+                <!-- <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div> -->
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
 </template>
@@ -129,13 +129,15 @@ export default {
             showNote1:false,
             currentDialog:"",
             dialogVisible: false,
-            currentData:{}
+            currentData:{},
+            loading: true
         }
     },
     methods: {
         // 查询
         getEvaluation(idx,pageS){
             this.form.loads = true
+            this.loading = true
             this.form.pageSize = pageS;
             this.form.startIndex = idx;
             this.form.memberType == 'null' && (this.form.memberType = null)
@@ -144,6 +146,7 @@ export default {
             this._apis.data.evaluation(this.form).then(response => {
                 this.listObj = response;
                 this.form.loads = false
+                this.loading = false
                 //切换满意率或差评率获取运营建议
                 for(let item of this.satisfaction){
                     if(item.value == this.form.niceRatioRange){
@@ -163,7 +166,10 @@ export default {
                         item.suggest != null && (this.showNote1 = true)
                     }
                 }
-            })
+            }).catch((error)=>{
+                this.$message.error(error)
+                this.loading = false
+            }) 
         },
         //获取口碑满意率
          memberInforNum(){
@@ -297,7 +303,7 @@ export default {
 
 .m_container{
     background-color: #fff;
-    padding: 10px 20px;
+    padding: 20px;
     .el-button--small{
         border: 1px solid #655EFF;
         color: #655EFF;
@@ -312,7 +318,7 @@ export default {
     }
     .pane_container{
         color:#3D434A;
-        padding: 10px;
+        // padding: 10px;
         .input_wrap{
             display: inline-block;
             width: 450px;

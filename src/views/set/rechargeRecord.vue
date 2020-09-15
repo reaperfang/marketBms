@@ -1,65 +1,31 @@
 <template>
-	<div>
-		<div class="recharge recharge-top">
-			<!-- 充值记录 -->
-			<h1 class="top">充值</h1>
-			<div class="rechangeBox clearfix">
-				<div class="fl">
-					<div class="price-title">账户余额（元）</div>
-					<div class="price-info">
-						<span class="price">{{price}}</span>
-						<span class="price-tip" v-if="!price && price !== null">账户余额不足，不能发单，无法使用达达配送</span>
-					</div>
-				</div>
-				<div class="fr recharge-btn">
-					<el-button @click="onRecharge" type="" plain size="small">充值</el-button>
+	<div class="recharge recharge-top">
+		<h1 class="top">充值</h1>
+		<div class="tip">
+			说明：充值金额将直接充入您在达达快送的账户中，您可以登录达达开放平台（
+			<a
+				href="https://newopen.imdada.cn"
+				target="_blank"
+				ref="nofollow"
+			>https://newopen.imdada.cn</a>）-管理中心-商户中心-运费服务-运费账户中查看，开发票请联系达达客服申请。
+		</div>
+		<div class="rechangeBox clearfix">
+			<div class="fl">
+				<div class="price-title">账户余额（元）</div>
+				<div class="price-info">
+					<span class="price">{{price}}</span>
+					<span class="price-tip" v-if="!price && price !== null">账户余额不足，不能发单，无法使用达达配送</span>
 				</div>
 			</div>
-		</div>
-		<div class="recharge recharge-con">
-			<el-table
-				ref="multipleTable"
-				v-loading="loading"
-				:data="dataList"
-				style="width: 100%"
-				:header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '500'}"
-				>
-				<el-table-column
-				prop="roleName"
-				label="充值对象">
-				</el-table-column>
-				<el-table-column
-				prop="roleDesc"
-				label="充值金额">
-				</el-table-column>
-				<el-table-column
-				width="195"
-				align="center"
-				prop="createTime"
-				label="充值时间">
-				</el-table-column>
-			</el-table>
-			<div class="pagination" v-if="dataList.length">
-				<el-pagination
-				:background="true"
-				@size-change="handleSizeChange"
-				@current-change="handleCurrentChange"
-				:current-page="Number(startIndex) || 1"
-				:page-sizes="[5, 10, 20, 50, 100, 200, 500]"
-				:page-size="pageSize*1"
-				:total="total*1"
-				layout="prev, pager, next, sizes"
-				>
-				</el-pagination>
+			<div class="fr recharge-btn">
+				<el-button @click="onRecharge" type="" plain size="small">充值</el-button>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
-	import tableBase from '@/components/TableBase';
 	export default {
 		name: 'rechargeRecord',
-		extends: tableBase,
 		data() {
 			return {
 				price: null,
@@ -69,7 +35,6 @@
 		},
 		created() {
 			this.getBalancRecord()
-			this.fetch();
 		},
 		methods: {
 			onRecharge() {
@@ -84,7 +49,7 @@
 			getBalancRecord() {
 				this._apis.set
 					.getBalance({
-						sourceId: this.$route.params.sourceId
+						type: 1 //达达
 					})
 					.then(response => {
 						this.price = response.deliverBalance
@@ -92,18 +57,7 @@
 					.catch(error => {
 						this.loading = false;
 					});
-			},
-			//获取充值记录列表
-			fetch(){
-				let query = Object.assign({cid:2},this.ruleForm)
-				this._apis.set.getRoleList(query).then(response =>{
-					this.dataList = response.list
-					this.total = response.total
-					this.loading = false
-				}).catch(error =>{
-					this.loading = false
-				})
-			},
+			}
 		}
 	};
 
@@ -112,6 +66,7 @@
 <style lang="scss" scoped>
 	.recharge {
 		width: 100%;
+		height: 100%;
 		background: #fff;
 		padding: 20px;
 		border-radius: 4px;
@@ -122,6 +77,20 @@
 			font-size: 16px;
 			color: #3d434a;
 			border-bottom: 1px solid #D9DEE9;
+		}
+		.tip {
+			padding: 12px 20px;
+			margin-top: 10px;
+			line-height: 24px;
+			font-size: 12px;
+			color: #44434b;
+			background: rgba(253, 147, 43, 0.08);
+			a {
+				color: #44434b;
+			}
+			a:hover {
+				text-decoration: underline;
+			}
 		}
 
 		.rechangeBox {
