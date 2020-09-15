@@ -49,7 +49,7 @@
                 <div class="view" :class="{'selected': item.id === selectTemplateId}">
                   <span class="badge"></span>
                   <div class="view_scroll">
-                    <img class="image" :src="item.previewPic" alt="图片丢失了">
+                    <img class="image" :src="item.pictureUrl" alt="图片丢失了">
                     <img class="gray_bottom" src="../../../assets/images/profile/intelligent_preview_bottom.png"
                          alt="~~">
                   </div>
@@ -101,7 +101,6 @@
         <i class="el-icon-warning"></i>
         <h2 class="confirm_title">确认启用该行业模板吗？</h2>
         <p class="text">行业模板一经启用、无法重置修改，模板内的<br>预设数据将自动为您配置为店铺内最新设置！</p>
-
       </div>
 
       <div slot="footer">
@@ -183,7 +182,7 @@
         configureProgress: 0, // 查询配置进度 0 - 5?
         configureTextArray: [], // 配置进度 文字以及成功状态
         configureTextItemDataType: ["","运费模板", "商品", "商品分类", "创意设计", "微信公众号底部"],
-        configureTextItemStatusType: ["处理中", "成功", "失败", "异步同步数据中"]
+        configureTextItemStatusType: ["处理中", "成功", "失败", "成功"]
       }
     },
     mounted() {
@@ -195,14 +194,8 @@
         if (this.configureFail) {
           this.isConfigureFail = true;
           this.isShowConfigureBox = true;
-          this.configureTextArray = [
-            {text: this.configureTextItemDataType[1], status: 2},
-            {text: this.configureTextItemDataType[2], status: 2},
-            {text: this.configureTextItemDataType[3], status: 2},
-            {text: this.configureTextItemDataType[4], status: 2},
-            {text: this.configureTextItemDataType[5], status: 3}
-          ];
-          // this.timer();
+          this.configureTextArray = [];
+          this.getConfigureStatus();
         }
       });
     },
@@ -251,10 +244,25 @@
         if (this.isConfigureFail) return;
         try {
           let params = {chooseTemplateId: this.selectTemplateId, changeStep: 3, status: 0};
-          let result = await this._apis.profile.intelligentUpdateStep(params);
+          let res = await this._apis.profile.intelligentUpdateStep(params);
 
-          let enableTemplate = await this._apis.profile.intelligentEnableTemplate({tempCid: this.tempCid});
+          this._apis.profile.intelligentEnableTemplate({tempCid: this.tempCid})
+            .then((result) => {
+            clearInterval(this.timerConfigure);
+            this.getConfigureStatus();
+            if(result === 0) {
+              setTimeout(() => {
+                this.isConfigureFail = true;
+              })
+            }
+            else if(result === 1) {
+              // 通知父组件 更新到下一步的视图, 不用再调用更新步骤的接口
+              setTimeout(function () {
+                this.$emit('update-step', 3)
+              }, 1000)
+            }
 
+          }).catch((err) => {this.$message.error(err); clearInterval(this.timerConfigure)});
           this.isShowConfigureBox = true;
           this.timer();
 
@@ -271,45 +279,52 @@
       timer() {
         const _this = this;
         this.configureTextArray = [];
-        clearInterval(_this.timerConfigure);
+        clearInterval(this.timerConfigure);
         this.timerConfigure = setInterval(function () {
+          _this.getConfigureStatus();
+        }, 1000);
+      },
 
-          _this._apis.profile.intelligentConfigurationStatus({})
-            .then(res => {
-              if (res && res.length > 0) {
-                _this.configureProgress = 0;
-                res.forEach(item => {
-                  const hasItem = _this.configureTextArray.find(cItem => cItem.id === item.id);
-
-                  if (item.status !== 0 && !hasItem) {
-                    _this.configureTextArray.push({
-                      text: _this.configureTextItemDataType[item.dataType],
-                      status: item.status
-                    });
-                    // 成功 || 警告 （ 非失败 ）
-                    if (item.status !== 2) _this.configureProgress += 1;
-                  }
-                })
+      /** 获取配置状态 */
+      async getConfigureStatus() {
+        try {
+          let res = await this._apis.profile.intelligentConfigurationStatus({});
+          if (res && res.length > 0) {
+            res.forEach(item => {
+              const hasItem = this.configureTextArray.find(cItem => cItem.id === item.id);
+              if (item.status !== 0 && !hasItem) {
+                this.configureTextArray.push({
+                  id: item.id,
+                  text: this.configureTextItemDataType[item.dataType],
+                  status: item.status
+                });
               }
-              if (_this.configureTextArray.length >= 5) {
-                clearInterval(_this.timerConfigure);
-                if(_this.configureProgress < 5) _this.isConfigureFail = true;
-                // 通知父组件 更新到下一步的视图
-                if (_this.configureProgress >= 5) _this.$emit('update-step', 3);
-              }
-            }).catch(err => {
-              this.$message.error(e || "网络错误，请稍后再试");
-              console.error("查询配置进度err:" + err);
-              clearInterval(_this.timerConfigure);
-          });
-        }, 1500);
+            })
+          }
+        } catch(err) {
+          this.$message.error(err || "网络错误，请稍后再试");
+          console.error("查询配置进度err:" + err);
+          clearInterval(this.timerConfigure);
+        }
       },
 
       /** 再次加载 */
       async againConfigure() {
+        this.configureTextArray = [];
         try {
-          let result = await this._apis.profile.intelligentEnableTemplate({tempCid: this.selectTemplateId});
           this.isConfigureFail = false;
+          this._apis.profile.intelligentEnableTemplate({tempCid: this.tempCid}).then((result) => {
+            clearInterval(this.timerConfigure);
+            this.getConfigureStatus();
+            if(result === 0) this.isConfigureFail = true;
+            else if(result === 1) {
+              // 通知父组件 更新到下一步的视图
+              setTimeout(function () {
+                this.$emit('update-step', 3)
+              }, 1000)
+            }
+
+          });
           this.timer();
         } catch (e) {
           this.$message.error(e || "网络错误，请稍后再试")
@@ -671,6 +686,7 @@
       }
 
       .el-icon-warning {
+        font-size: 18px;
         color: $warningBorderColor;
       }
 
@@ -678,14 +694,32 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 16px;
-        transition: opacity 1s;
         font-size: 14px;
         font-weight: 400;
         color: #44434B;
         line-height: 20px;
+        transform: translateY(20px);
+        opacity: 0;
 
         &.show {
-          animation: upShow 0.5s;
+          animation: upShow 1s;
+          animation-fill-mode: forwards;
+        }
+
+        &.show:nth-of-type(2) {
+          animation-delay: 1s;
+        }
+
+        &.show:nth-of-type(3) {
+          animation-delay: 2s;
+        }
+
+        &.show:nth-of-type(4) {
+          animation-delay: 3s;
+        }
+
+        &.show:nth-of-type(5) {
+          animation-delay: 4s;
         }
       }
     }
