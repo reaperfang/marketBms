@@ -66,7 +66,7 @@
           prop="memberSn"
           label="用户ID"
           align="center"
-          width="110px">
+          width="120px">
         </el-table-column>
         <el-table-column
           prop="nickName"
