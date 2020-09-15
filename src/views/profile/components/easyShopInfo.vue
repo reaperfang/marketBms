@@ -202,6 +202,7 @@ export default {
       
     },
     onSubmit(formName){
+      if (this.isDisabled) return false
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (!this.isMapChoose) {
