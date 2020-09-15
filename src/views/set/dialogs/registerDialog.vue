@@ -63,6 +63,14 @@
             maxlength="11"
           ></el-input>
         </el-form-item>
+         <el-form-item label="店铺名称：" prop="shopName">
+          <el-input
+            v-model.trim="ruleForm.shopName"
+            style="width: 360px;"
+            placeholder="请输入店铺名称"
+            maxlength="30"
+          ></el-input>
+        </el-form-item>
         <el-form-item label="邮箱地址：" prop="email">
           <el-input v-model.trim="ruleForm.email" maxlength="320" style="width: 360px;" placeholder="请输入邮箱地址"></el-input>
         </el-form-item>
@@ -91,7 +99,7 @@ import th3Deliver from '@/system/constant/th3Deliver.js'
 
 export default {
   data() {
-  const emailValidatePass = (rule, value, callback) => {
+    const emailValidatePass = (rule, value, callback) => {
       const reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
 
       if (!reg.test(value)) {
@@ -100,6 +108,15 @@ export default {
         callback();
       }
     };
+    const shopNameValidate = (rule, value, callback) => {
+      const reg = /^[\u4e00-\u9fa5a-zA-Z0-9]{1, 30}$/;
+
+      if (!reg.test(value)) {
+        return callback(new Error("仅支持英文、汉字和数字，最多输入30个字符"));
+      } else {
+        callback();
+      }
+    }
     return {
       showFooter: false,
       ruleForm: {
@@ -110,6 +127,7 @@ export default {
         contactName: "",
         contactPhone: "",
         email: "",
+        shopName: "",
         businessType: ""
       },
       businessTypeList: th3Deliver.businessTypeList, // 业务类型列表
@@ -148,6 +166,10 @@ export default {
           { min: 1, max: 320, message: "格式错误，请重新输入", trigger: "blur" },
           { validator: emailValidatePass, trigger: "blur" }
         ],
+        shopName: [
+          { required: true, message: "请输入店铺名称", trigger: "blur" },
+          { validator: shopNameValidate, trigger: "blur" }
+        ],
         businessType: [{ required: true, message: "必选项", trigger: "change" }],
       },
       
@@ -177,9 +199,15 @@ export default {
   },
   created() {
     this._formatText = debounce(this.formatText, 200)
-    this.getList();
+    // this.getList();
+    this.init()
   },
   methods: {
+    init() {
+      // 获取省市区
+      // 获取店铺信息
+      
+    },
     onlyNumber(val, key) {
       const reg = /\D+/gi
       this.ruleForm[key] = String(val).replace(reg, '')
