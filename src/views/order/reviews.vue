@@ -525,7 +525,7 @@ export default {
 }
 /deep/ .el-table .cell {
     padding-left: 0;
-    padding-right: 20px;
+    padding-right: 10px;
 }
 /deep/.el-table td:nth-child(1){
          padding-left:20px;
