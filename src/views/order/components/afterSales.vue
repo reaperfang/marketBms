@@ -535,7 +535,7 @@ export default {
     }
     /deep/ .el-table .cell {
         padding-left: 0;
-        padding-right: 20px;
+        padding-right: 10px;
     }
     /deep/ .input-with-select .el-input-group__prepend {
         background-color: #fff;
