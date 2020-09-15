@@ -33,7 +33,7 @@ export default {
 				// 折线文本
 				normal: {
 					show: true,
-					//   backgroundColor: "#e4f5da",
+					backgroundColor: "#010F27",
 					borderRadius: 4,
 					color: "#FFFFFF",
 					verticalAlign: "center",
@@ -53,7 +53,7 @@ export default {
 				// 折线文本
 				normal: {
 					show: true,
-					//   backgroundColor: "#e4f5da",
+					backgroundColor: "#010F27",
 					borderRadius: 4,
 					color: "#FFFFFFFF",
 					verticalAlign: "middle",
@@ -96,7 +96,7 @@ export default {
 				grid: {
 					// top: "35",
 					// left: "4%",
-					right: 20,
+					right: 17,
 					height: "135",
 					bottom: "-10"
 				},
@@ -158,7 +158,61 @@ export default {
 						data: data1
 					},
 
+					// //right
+					// {
+					// 	top: "50%",
+					// 	name: "youcejiantou",
+					// 	type: "pictorialBar",
+					// 	symbolPosition: "center",
+					// 	symbolSize: ["65", "55"],
+					// 	symbol: "image://" + dashboard.rightArrow,
+					// 	symbolClip: true,
+					// 	xAxisIndex: "1",
+					// 	z: 1,
+					// 	data: [
+					// 		{
+					// 			value: 361,
+					// 			itemValue:
+					// 				youcejiantouData.order_c_uv_7dco + "%",
+					// 			show: true,
+					// 			label: markLineSetting,
+					// 			name: "下单转化率"
+					// 		},
+					// 		{
+					// 			value: 351,
+					// 			itemValue:
+					// 				youcejiantouData.paid_c_order_7dco + "%",
+					// 			label: markLineSetting,
+					// 			name: "下单支付转化率"
+					// 		}
+					// 	]
+					// },
+					// // left
+					// {
+					// 	symbolOffset: [45, 37, 0, 0],
+					// 	type: "pictorialBar",
+					// 	symbolPosition: "center",
+					// 	symbolSize: ["95", "126"],
+					// 	symbol: "image://" + dashboard.leftArrow,
+					// 	symbolClip: false,
+					// 	xAxisIndex: "1",
+					// 	barCategoryGap: "10%",
+
+					// 	z: 1,
+					// 	y: 100,
+					// 	data: [
+					// 		{
+					// 			value: 210,
+					// 			itemValue:
+					// 				youcejiantouData.paid_c_uv_7dco + "%",
+					// 			label: markLineSettingleft,
+					// 			name: "支付转化率"
+					// 		}
+					// 	]
+					// }
+
 					//right
+
 					{
 						top: "50%",
 						name: "youcejiantou",
@@ -179,7 +233,7 @@ export default {
 								name: "下单转化率"
 							},
 							{
-								value: 351,
+								value: 348,
 								itemValue:
 									youcejiantouData.paid_c_order_7dco + "%",
 								label: markLineSetting,
@@ -187,12 +241,14 @@ export default {
 							}
 						]
 					},
+
 					// left
 					{
-						symbolOffset: [45, 37, 0, 0],
+						symbolOffset: [52, 35, 0, 0],
 						type: "pictorialBar",
 						symbolPosition: "center",
-						symbolSize: ["95", "126"],
+						symbolSize: ["75", "116"],
+						// symbol: leftArrow,
 						symbol: "image://" + dashboard.leftArrow,
 						symbolClip: false,
 						xAxisIndex: "1",
