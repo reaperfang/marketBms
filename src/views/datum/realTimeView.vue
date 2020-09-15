@@ -4,14 +4,12 @@
     <router-link v-permission="['数据', '实时概况','默认页面', '查看']" class="viewBut" tag="a" target="_blank" :to="{ name: 'dashboard'}">
         <img src="@/assets/images/realtime/curtime.png" alt="">
     </router-link>
-    <!-- <div class="viewBut" @click="_routeTo('dashboard')"><img src="@/assets/images/realtime/curtime.png" alt=""></div> -->
     <!-- 数据总览 -->
     <div class="p_container pb12">
        <div class="p_title clearfix">
            <h2>数据总览</h2>
            <span @click="refreshData()" class="refresh"><img src="@/assets/images/realtime/refresh.png" alt=""></span>
           <div class="fr fr_channel">
-            <!-- <el-button type="primary">实时战况</el-button> -->
           </div>
       </div>
       <div class="pane_container clearfix">
@@ -213,9 +211,6 @@
             <div class="p_container p_ltsiade">
                 <div class="p_title clearfix">
                     <h2>用户概览</h2>
-                    <!-- <el-tooltip class="item" effect="dark" content="商城所有订单省级区域分布" placement="top-start">
-                    <img class="fl" src="@/assets/images/realtime/hoverTips.png" alt="">
-                    </el-tooltip> -->
                     <div class="fr clearfix">
                         <serchRt class="fr ml12" @change="getUserVal" />
                         <el-radio-group class="fr radioBox" v-model="userType" @change="alluserType">
@@ -339,14 +334,6 @@ export default {
   name: "realTimeView",
   components: { pfChart,screeningChart,mapChart,pieChart,tradeChart,userChart,serchRt },
   filters: {
-    // tofix2: function(value) {
-    //   if(typeof(value)=='undefined'){
-    //       return value
-    //   }else{
-    //       console.log((0.106).toFixed(2))
-    //       return Number(value).toFixed(2)
-    //   }
-    // },
     tofix2: function(num) {
         var  dd=1;  
         var  tempnum;  
@@ -456,7 +443,6 @@ export default {
         var newTime=new Date().getTime();
         localStorage.setItem("refreshTime",newTime)
         var s=(newTime-oldTime)/1000
-        console.log(s)
         if(s>=600){
             this.getdataView()
         }else{
@@ -472,7 +458,6 @@ export default {
     this.query.date=this.seachTimetrad.date
       this._apis.realSurvey.transactionView(this.query).then(response => {
         this.dataType = JSON.parse(response)
-        // console.log(this.dataType)
         var allData=[]
         allData.push(this.dataType.pay_amounts)
         allData.push(this.dataType.pay_order_nums)
@@ -586,11 +571,9 @@ margin-left: 12px;
 }
 .p_container {
   padding:0 28px;
-//   margin-bottom: 12px;
   background-color: #fff;
   .p_title{
       width: 100%;
-    //   height: 63px;
       border-bottom: 1px solid #EDEDED;
       padding: 15px 0;
     h2{
@@ -705,9 +688,6 @@ height:0px;
         padding: 20px 0;
       }
 .p_ltsiade{
-    // width: 65%;
-    // min-width: 735px;
-    // border-right: 12px solid #f2f2f9;
     padding-bottom: 10px;
     .choose-type{
         padding: 20px 0 10px;
@@ -783,7 +763,6 @@ height:0px;
 .p_rtsiade{
     background: #fff;
     // width: calc(35% - 0px);
-    // min-width:calc(100% - 795px - 12px);
     .chartbox{
         .lengebox{
             width: 160px;
@@ -878,7 +857,6 @@ height:0px;
                     p{
                         padding-left: 10px;
                         line-height: 42px;
-                        // width: 100%;
                         height: 42px;
                         overflow: hidden;
                         text-overflow:ellipsis;
@@ -952,7 +930,6 @@ height:0px;
 </style>
 <style lang="scss">
 .radioBox{
-    // margin-right: 12px;
     .btn_bor{
         .el-radio-button__inner{
             border-color: #DADAE3;
