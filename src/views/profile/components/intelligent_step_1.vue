@@ -89,19 +89,24 @@
     width: 804px;
 
     .i_industry {
+      position: relative;
       flex: 0 0 236px;
       text-align: center;
       width: 236px;
       height: 126px;
       font-weight: 600;
-      background: url('../../../assets/images/profile/i_industry.png') no-repeat;
+      background-color: #fff;
+      border-radius: 4px;
+      background-image: url('../../../assets/images/profile/i_industry.png');
+      background-repeat: no-repeat;
       background-size: contain;
       cursor: pointer;
       user-select: none;
 
       &:hover, &.act {
-        background: url('../../../assets/images/profile/i_industry_on.png') no-repeat;
-        background-size: contain;
+        background-color: $globalMainColor;
+        background-image: url('../../../assets/images/profile/i_industry_on.png');
+        animation: hoverBg 0.3s;
       }
 
       span {
@@ -112,6 +117,7 @@
       }
 
       img {
+        position: absolute;
         display: none;
       }
 
@@ -119,10 +125,13 @@
         display: inline-block;
         width: 30px;
         height: 30px;
-        vertical-align: middle;
-        line-height: 126px;
-        margin-top: -9px;
-        margin-right: 8px;
+        top: 50%;
+        margin-top: -15px;
+
+        &+span {
+          margin-left: 40px;
+          transition: margin-left 0.2s;
+        }
       }
 
     }
@@ -135,6 +144,15 @@
 
   .bottom_buttons {
     margin-bottom: 30px;
+  }
+
+  @keyframes hoverBg {
+    from {
+      opacity: 0.7;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
 </style>
