@@ -123,6 +123,8 @@ export default {
 			// 	}
 			// ];
 
+			console.log("res.paid_c_order_7dco",res.paid_c_order_7dco);
+
 			this.orderlist({
 				chart: chart,
 				youcejiantouData: {
@@ -130,7 +132,7 @@ export default {
 						res.order_c_uv_7dco.toFixed(2) * 100
 					),
 					paid_c_order_7dco: parseInt(
-						res.paid_c_order_7dco.toFixed(2) * 100
+						res.paid_c_order_7dco==-9999?0:res.paid_c_order_7dco.toFixed(2) * 100
 					),
 					paid_c_uv_7dco: parseInt(
 						res.paid_c_uv_7dco.toFixed(2) * 100

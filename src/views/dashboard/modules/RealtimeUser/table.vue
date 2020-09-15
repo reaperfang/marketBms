@@ -1,12 +1,29 @@
 <template>
 	<div class="realtime-user">
-		<el-table :data="newtable" :row-style="{ height: '20px' }">
+		<!-- <el-table :data="newtable" :row-style="{ height: '20px' }">
 			<el-table-column prop="id" label="ID" width="50"> </el-table-column>
 			<el-table-column prop="c_uv_name_rt" label="姓名" width="130">
 			</el-table-column>
 			<el-table-column prop="pd_rt" label="商品" width="200">
 			</el-table-column>
 			<el-table-column prop="op_rt" label="操作"> </el-table-column>
+		</el-table> -->
+
+		<el-table :data="newtable" :row-style="{ height: '20px' }">
+			<!-- <el-table-column prop="id" label="ID" width="45"> </el-table-column> -->
+			<el-table-column prop="c_uv_name_rt" label="用户名" width="120">
+			</el-table-column>
+			<el-table-column label="时间" width="120">
+				<template slot-scope="scope">
+					<span class="time-text">{{ scope.row.time_rt }}</span>
+				</template>
+			</el-table-column>
+			<el-table-column prop="op_rt" label="操作"> </el-table-column>
+			<el-table-column label="商品" width="160">
+				<template slot-scope="scope">
+					<span class="time-text">{{ scope.row.pd_rt }}</span>
+				</template>
+			</el-table-column>
 		</el-table>
 	</div>
 </template>
@@ -151,6 +168,12 @@ export default {
 	.anim {
 		transition: all 0.5s;
 		margin-top: -30px;
+	}
+
+	.time-text {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 }
 </style>
