@@ -204,6 +204,9 @@ export default {
 	}
 
 	.flex-box {
+		// box-sizing: border-box;
+		// margin: 0 10px;
+
 		position: relative;
 		width: 100%;
 		height: 100%;
@@ -218,7 +221,16 @@ export default {
 			top: 43px;
 			bottom: 0px;
 			left: 0px;
+			margin: 0 5px;
 			// background: #f09529;
+
+			.item-content {
+				height: 100%;
+
+				.v-el-col {
+					height: 100%;
+				}
+			}
 		}
 	}
 }
