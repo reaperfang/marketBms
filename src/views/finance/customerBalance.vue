@@ -46,49 +46,65 @@
         v-loading="loading"
         :data="dataList"
         class="table"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+        :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
         :default-sort = "{prop: 'tradeTime', order: 'descending'}"
         @sort-change="changeSort"
         >
         <el-table-column
           prop="tradeDetailSn"
-          label="交易流水号">
+          label="交易流水号"
+          width="210px"
+          fixed>
         </el-table-column>
         <el-table-column
           prop="relationSn"
           label="关联单据编号"
-          :render-header="renderRelationSn">
+          :render-header="renderRelationSn"
+          width="230px">
         </el-table-column>
         <el-table-column
           prop="memberSn"
-          label="用户ID">
+          label="用户ID"
+          align="center"
+          width="120px">
         </el-table-column>
         <el-table-column
           prop="nickName"
-          label="用户昵称">
+          label="用户昵称"
+          align="center"
+          width="100px">
         </el-table-column>
         <el-table-column
           prop="businessType"
-          label="交易类型">
+          label="交易类型"
+          align="center"
+          width="100px">
           <template slot-scope="scope">
             {{transactionTypes[scope.row.businessType].label}}
           </template>
         </el-table-column>
         <el-table-column
           prop="changeAmount"
-          label="变动金额（元）">
+          label="变动金额（元）"
+          align="right"
+          width="140px">
           <template slot-scope="scope">
             {{scope.row.changeAmount > 0 ? '+'+scope.row.changeAmount : scope.row.changeAmount}}
           </template>
         </el-table-column>
         <el-table-column
           prop="surplusAmount"
-          label="剩余金额（元）">
+          label="剩余金额（元）"
+          align="right"
+          width="140px">
         </el-table-column>
         <el-table-column
           prop="tradeTime"
           label="交易时间"
-          sortable = "custom">
+          sortable = "custom"
+          align="center"
+          width="190px"
+          fixed="right">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -100,7 +116,8 @@
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
           layout="sizes, prev, pager, next"
-          :total="total*1">
+          :total="total*1"
+          :background="background">
         </el-pagination>
       </div>
       <exportTipDialog :data = currentData :dialogVisible.sync="dialogVisible" ></exportTipDialog>
@@ -136,6 +153,12 @@ export default {
       dialogVisible:false,
       currentData:{}
     }
+  },
+  props: {
+    background: {
+      type: Boolean,
+      default: true
+    },
   },
   watch: { },
   computed:{
@@ -267,5 +290,17 @@ export default {
 .table{
   width: 100%; 
   margin-top:20px;
+}
+/deep/.el-table .descending .sort-caret.descending{
+  border-top-color:#44434B;
+}
+/deep/.el-table .ascending .sort-caret.ascending{
+  border-bottom-color:#44434B;
+}
+/deep/ .el-table--small td{
+  padding:16px 10px;
+}
+/deep/.el-table--small th{
+  padding:0px 10px;
 }
 </style>

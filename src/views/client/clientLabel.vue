@@ -1,12 +1,15 @@
 <template>
     <div class="c_container clearfix">
+        <div class="c_top" v-permission="['用户', '用户标签', '默认页面', '添加标签']">
+            <el-button type="primary" @click="_routeTo('batchImport')" v-permission="['用户', '用户标签', '默认页面', '添加标签']">添加标签</el-button>
+        </div>
         <div class="c_line">
             <span>标签名称：</span>
             <div class="input_wrap">
                 <el-input v-model="tagName" placeholder="请输入标签名称"></el-input>
             </div>
-            <span class="marL30">标签类型：</span>
-            <div class="input_wrap marR30">
+            <span class="marL20">标签类型：</span>
+            <div class="input_wrap marR20">
                 <el-select v-model="tagType" clearable>
                     <el-option
                         v-for="item in options"
@@ -19,7 +22,6 @@
             <el-button type="primary" @click="getLabelList" :loading="btnloading">查 询</el-button>
             <el-button @click="reset">重 置</el-button>
         </div>
-        <el-button type="primary" @click="_routeTo('batchImport')" v-permission="['用户', '用户标签', '默认页面', '添加标签']" style="float: right; margin: 0px 75px 22px 0px">添加标签</el-button>
         <clTable style="margin-top: 30px" :params="params" @stopLoading="stopLoading"></clTable>
     </div>
 </template>
@@ -66,17 +68,25 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+/deep/ .el-button+.el-button{
+    margin-left: 8px;
+}
 .c_container{
     padding: 32px 36px;
     background-color: #fff;
-    .marL30{
-        margin-left: 30px;
+    .c_top{
+        padding-bottom: 20px;
+        border-bottom: 1px solid #D0D6E4;
+        margin-bottom: 20px;
+    }
+    .marL20{
+        margin-left: 20px;
     }
     .marR100{
         margin-right: 100px;
     }
-    .marR30{
-        margin-right: 30px;
+    .marR20{
+        margin-right: 20px;
     }
     .c_line{
         margin-bottom: 30px;

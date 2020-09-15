@@ -21,7 +21,7 @@
                 <el-tab-pane v-if="orderAfterSale.type != 3 && (orderAfterSale.returnExpressNo || orderAfterSaleSendInfo.expressNos || (orderAfterSale.deliveryWay == 2 && orderAfterSale.orderAfterSaleStatus > 1) || orderAfterSaleSendInfo.distributorPhone)" v-permission="['订单', '售后详情', '发货信息']" label="发货信息" name="aftermarketDeliveryInformation"></el-tab-pane>
             </el-tabs>
         </section>
-        <component @submit="onSubmit" :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :catchOrderAfterSale="catchOrderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
+        <component @submit="onSubmit" :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :catchOrderAfterSale="catchOrderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :sendInfoMap="sendInfoMap" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
         <component :is="currentDialog" :data="currentData" :dialogVisible.sync="dialogVisible" @reject="onReject" title="审核"></component>
     </div>
 </template>
@@ -49,11 +49,18 @@ export default {
             catchRealReturnWalletMoney: '',
             catchRealReturnBalance: '',
             orderSendInfo: '',
-            currentData: {}
+            currentData: {},
+            sendInfoMap: {}
         }
     },
     created() {
         this.getDetail()
+    },
+    computed: {
+        cid() {
+            let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+            return shopInfo.id;
+        }
     },
     filters: {
         typeFilter(code) {
@@ -154,6 +161,7 @@ export default {
                 }
                 this.orderAfterSale = res.orderAfterSale || {}
                 this.orderAfterSaleSendInfo = res.orderAfterSaleSendInfo || {}
+                this.sendInfoMap = res.sendInfoMap || {}
                 this.recordList = res.recordList.filter(val => val.operationType != 1 && val.operationType != 2 && val.operationType != 5 && val.operationType != 8)
                 this.sendItemList = res.sendItemList
                 this.orderType = res.orderType
@@ -161,6 +169,25 @@ export default {
                 this.catchRealReturnBalance = this.orderAfterSale.realReturnBalance
                 //this.orderAfterSale.realReturnScore = this.orderAfterSale.shouldReturnScore || 0
                 this.orderSendInfo = res.orderSendInfo
+                // if(res.orderSendInfo.deliveryWay == 1) {
+                //     this._apis.order
+                //     .getShopAddress({ cid: this.cid })
+                //     .then(_res => {
+                //         this.orderSendInfo.sendName = _res.name;
+                //         this.orderSendInfo.sendPhone = _res.mobile;
+                //         this.orderSendInfo.sendProvinceCode = _res.provinceCode;
+                //         this.orderSendInfo.sendProvinceName = _res.provinceName;
+                //         this.orderSendInfo.sendCityCode = _res.cityCode;
+                //         this.orderSendInfo.sendCityName = _res.cityName;
+                //         this.orderSendInfo.sendAreaCode = _res.areaCode;
+                //         this.orderSendInfo.sendAreaName = _res.areaName;
+                //         this.orderSendInfo.sendAddress = _res.address;
+                //         this.orderSendInfo.sendDetail = _res.addressDetail;
+                //     })
+                //     .catch(error => {
+                //         this.$message.error(error);
+                //     });
+                // }
                 this.catchOrderAfterSale = JSON.parse(JSON.stringify(res.orderAfterSale))
             }).catch(error => {
                 this.visible = false
