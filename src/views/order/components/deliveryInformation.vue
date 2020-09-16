@@ -26,6 +26,7 @@
             <div class="header-lefter-item">配送员：{{item.deliveryName}}</div>
             <div class="header-lefter-item">联系方式：{{item.phone}}</div>
             </template>
+           
           </div>
           <div class="header-righter">
             <div class="header-righter-item">{{item.expressNo | goodsStatus(orderDetail)}}</div>
@@ -391,14 +392,14 @@ export default {
       this.orderSendItems = arr;
     },
     showLogistics(expressNo, expressCompanys, id) {
-      if (this.isTrace == 0) {
+      if (this.isTrace == 0) {// 未开启物流轨迹
         this.currentDialog = "LogisticsDialog";
         this.currentData = [];
         this.reject = true;
         this.expressNo = expressNo
         this.expressCompanys = expressCompanys
         this.dialogVisible = true;
-      } else {
+      } else {  //开启
         this.reject = false;
         this.expressNo = expressNo
         this._apis.order
