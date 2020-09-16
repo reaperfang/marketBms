@@ -48,6 +48,7 @@
           </div>
         </div>
       </div>
+      <profileIntelligent></profileIntelligent>
       <div class="p_l_main">
         <div class="p_l_item dealt">
           <p class="title1">待办提醒：</p>
