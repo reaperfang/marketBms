@@ -372,19 +372,20 @@ export function isOpen(data) {
     data
   })
 }
-/*  达达- 达达-城市列表 */
-export function getCityList(data) {
+
+/*  达达-注册 */
+export function registerUser(data) {
   return request({
-    target: 'DADA-CITY-CODE-PROCESSOR',
+    target: 'THIRD-PART-BUSINESS-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data
   })
 }
-/*  达达-注册 */
-export function registerUser(data) {
+/*  获取全量省市区数据 */
+export function getAddress(data) {
   return request({
-    target: 'THIRD-PART-BUSINESS-PROCESSOR',
+    target: 'PUBLIC-CITY-ALLLIST-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data

@@ -17,7 +17,7 @@
           <div class="header-lefter">
             <div class="header-lefter-item number">{{index + 1}}</div>
             <div class="header-lefter-item fb">{{item | deliveryWayFilter}}</div>
-            <template v-if="item.deliveryWay == 1">
+            <template v-if="item.deliveryWay == 3">
             <div class="header-lefter-item">快递公司：{{item.shipperName}}</div>
             <div class="header-lefter-item">快递单号：{{item.expressNo}}</div>
             <div @click="showLogistics(item.expressNo, item.shipperName, item.id)" class="header-lefter-item blue pointer">查看物流</div>
@@ -25,6 +25,20 @@
             <template v-if="item.deliveryWay == 2">
             <div class="header-lefter-item">配送员：{{item.deliveryName}}</div>
             <div class="header-lefter-item">联系方式：{{item.phone}}</div>
+            </template>
+            <template v-if="item.deliveryWay == 1">
+              <!-- 骑手正常接单 -->
+              <template v-if="false">
+                  <div class="header-lefter-item">配送员：达达配送员</div>
+                  <div class="header-lefter-item">联系方式：12000330000</div>
+                  <div @click="showLogistics(item.expressNo, item.shipperName, item.id)" class="header-lefter-item blue pointer">查看物流</div>
+              </template>
+              <!-- 骑手取消接单 -->
+              <div v-if="true" class="header-lefter-item">骑手取消接单，重新发单中</div>
+              <div v-if="false" class="header-lefter-item">发单中，等待骑手接单</div>
+              <!-- 异常订单 -->
+              <div v-if="false" class="header-lefter-item">异常订单：达达取消订单/投妥异常</div>
+
             </template>
            
           </div>
@@ -370,7 +384,9 @@ export default {
                 orderStatus: this.orderDetail.orderInfo.orderStatus,
                 deliveryDate:this.orderDetail.orderInfo.deliveryDate,
                 deliveryTime:this.orderDetail.orderInfo.deliveryTime,
-                complateTime:this.orderDetail.orderInfo.complateTime
+                complateTime:this.orderDetail.orderInfo.complateTime,
+                is_abnormal:!!this.orderDetail.orderInfo.is_abnormal,//is_abnormal:是否是异常单：0否1是
+
               }
               );
             arr.push(obj)
