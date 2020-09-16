@@ -4,13 +4,14 @@
     <el-table
       :data="importList"
       style="width: 100%"
-      :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+      :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
       v-loading="loading"
       >
       <el-table-column
         prop="importTime"
-        label="导入时间">
+        label="导入时间"
+        :width="200">
       </el-table-column>
       <el-table-column
         prop="channerlName"
@@ -35,11 +36,11 @@
         label="操作人"
       >
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" :width="200">
         <template slot-scope="scope">
             <div class="btns clearfix">
-                <span @click="addTag(scope.row)">添加标签</span>
-                <span @click="modify(scope.row)">修改身份等级</span>
+                <span @click="addTag(scope.row)" :class="scope.row.successNum == 0?'gray':''">添加标签</span>
+                <span @click="modify(scope.row)" :class="scope.row.successNum == 0?'gray':''">修改身份等级</span>
             </div>
         </template>
       </el-table-column>
@@ -162,10 +163,52 @@ export default {
             .btns{
                 span{
                     color: #655EFF;
-                    margin-right: 5px;
                     cursor: pointer;
+                    &:first-child{
+                      padding-right: 5px;
+                      border-right: 1px solid #dadae3;
+                    }
+                    &.gray{
+                      color: #c9c9c9;
+                    }
                 }
             }
         }
-
+/deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(1) {
+            text-align: left;
+            padding-left: 20px;
+        }
+        &:nth-child(1) {
+            text-align: left;
+            padding-left: 20px;
+        }
+        &:nth-child(3) {
+            text-align: right;
+        }
+        &:nth-child(4) {
+            text-align: right;
+        }
+        &:nth-child(5) {
+            text-align: right;
+        }
+    }
+/deep/ .el-table td{
+  &:nth-child(3) {
+    text-align: right;
+    
+  }
+  &:nth-child(4) {
+    text-align: right;
+    
+  }
+  &:nth-child(5) {
+    text-align: right;
+    
+  }
+}
+.page_styles{
+  margin: 40px 0 34px 0;
+}
 </style>

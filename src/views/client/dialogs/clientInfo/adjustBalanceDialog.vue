@@ -1,17 +1,24 @@
 <template>
-  <DialogBase :visible.sync="visible" @submit="submit" title="手动调整余额" :hasCancel="hasCancel" :showFooter="false">
+  <DialogBase v-if="visible" :visible.sync="visible" @submit="submit" title="手动调整余额" :hasCancel="hasCancel" :showFooter="false" width="640px">
     <div class="c_container">
-      <p class="marB20">用户ID: {{ data.memberSn }}</p>
-      <p class="marB20">当前余额: {{ data.balance }}</p>
+      <p class="marB20" style="margin-left: 21px">用户ID：{{ data.memberSn }}</p>
+      <p class="marB20" style="margin-left: 9px">当前余额：{{ data.balance }}</p>
       <div class="marB20">
-          <span><span style="color:red">*</span>增加余额：</span>
-          <div class="input_wrap">
-              <el-input placeholder="请输入增加余额" v-model.trim="adjustmentBalance" @blur="handleBlur" @keyup.native="number($event,adjustmentBalance,'adjustmentBalance')"></el-input>
+          <div>
+            <span class="star">*</span><span>调整类型：</span>
+            <el-radio-group v-model="adjustBalance" @change="handleAdjust">
+              <el-radio label="1">增加余额</el-radio>
+              <el-radio label="2" style="margin-left: 26px">减少余额</el-radio>
+            </el-radio-group>
           </div>
+          <div class="input_wrap">
+              <el-input placeholder="请输入调整数值" v-model.trim="adjustmentBalance" @blur="handleBlur" @keyup.native="number($event,adjustmentBalance,'adjustmentBalance')"></el-input>
+          </div>
+          <p class="errMsg" v-if="showError">减少数值不得大于当前余额</p>
       </div>
-      <p class="marB20">调整后余额: {{adjustmentAfterBalance}}</p>
+      <p class="marB20" style="margin-left: -4px">调整后余额：{{adjustmentAfterBalance}}</p>
       <div class="marB20 clearfix">
-          <span class="fl"><span style="color:red">*</span>变更原因：</span>
+          <span class="fl"><span class="star">*</span>变更原因：</span>
           <div class="input_wrap2 fl">
               <el-input placeholder="请输入变更原因" v-model.trim="remark" type="textarea" :row="3" :maxlength="50" resize="none"></el-input>
               <span class="font_num">{{remark.length}}/50</span>
@@ -37,68 +44,96 @@ export default {
       hasCancel: true,
       adjustmentBalance: null,
       remark: "",
-      btnLoading: false
+      btnLoading: false,
+      adjustBalance: "1",
+      showError: false
     };
   },
   methods: {
     number(event,val,ele) {
       val = val.replace(/[^\.\d]/g,'');
-      val = val.replace('-','');
-      val = val.replace(/^0/g,'');
       this[ele] = val;
     },
     submit() {
       this.btnLoading = true;
-      if(Number(this.adjustmentBalance) <= 0 || this.adjustmentBalance == "") {
-        this.btnLoading = false;
-        this.$message({
-          message: '请输入增加余额, 且不能为0或负数',
-          type: 'warning'
-        });
-      }else if(this.remark == "") {
+      if(this.remark == "") {
         this.btnLoading = false;
         this.$message({
           message: '请输入变更原因',
           type: 'warning'
         });
-      }else{
-        let params = {
-          id: this.data.id,
-          currentBalance: this.data.balance,
-          adjustmentBalance: this.adjustmentBalance,
-          adjustmentAfterBalance: this.adjustmentAfterBalance,
-          remark: this.remark
-        }
-        this._apis.client.manualChangeBalance(params).then((response) => {
-          this.btnLoading = false;
-          this.visible = false;
-          this.$message({
-            message: '调整余额成功',
-            type: 'success'
-          });
-          this.$emit('refreshPage');
-        }).catch((error) => {
-          this.btnLoading = false;
-          this.visible = false;
-          console.log(error);
-        })
+        return;
       }
-    },
-    handleBlur() {
-      if(Number(this.adjustmentBalance) < 0) {
+      if(this.adjustmentBalance == null) {
+        this.btnLoading = false;
         this.$message({
-          message: '增加余额不能为负数',
+          message: '请输入调整数值',
           type: 'warning'
         });
-        this.adjustmentBalance = "";
-      }else if(Number(this.adjustmentBalance) > 100000000) {
+        return;
+      }
+      if(this.adjustBalance == '2' && Number(this.data.balance) < Number(this.adjustmentBalance)) {
+        this.btnLoading = false;
+        this.$message({
+          message: '减少数值不得大于当前余额',
+          type: 'warning'
+        });
+        return;
+      }
+      if(Number(this.adjustmentBalance) >= 100000000) {
+        this.btnLoading = false;
+        this.$message({
+          message: '调整余额不能超过1亿',
+          type: 'warning'
+        });
+        return;
+      }
+      let params = {
+        id: this.data.id,
+        currentBalance: Number(this.data.balance),
+        adjustmentBalance: this.adjustBalance == "1" ? Number(this.adjustmentBalance):Number(-this.adjustmentBalance),
+        adjustmentAfterBalance: Number(this.adjustmentAfterBalance),
+        remark: this.remark
+      }
+      this._apis.client.manualChangeBalance(params).then((response) => {
+        this.btnLoading = false;
+        this.visible = false;
+        this.$message({
+          message: '调整余额成功',
+          type: 'success'
+        });
+        this.$emit('refreshPage');
+      }).catch((error) => {
+        this.btnLoading = false;
+        this.visible = false;
+        console.log(error);
+      })
+    },
+    handleBlur() {
+      if(this.adjustBalance == "2" && Number(this.data.balance) < Number(this.adjustmentBalance)) {
+        this.showError = true;
+      }else{
+        this.showError = false;
+      }
+      if(Number(this.adjustmentBalance) >= 100000000) {
         this.$message({
           message: '增加余额不能超过1亿',
           type: 'warning'
         });
-        this.adjustmentBalance = "";
+        this.adjustmentBalance = ""
       }
-    } 
+    },
+    handleAdjust(val) {
+      if(val == "1") {
+        this.showError = false;
+        //this.placeholder = "请输入调整数值";
+      }else{
+        //this.placeholder = "请输入调整数值";
+        if(Number(this.adjustmentBalance) > Number(this.data.balance)) {
+          this.showError = true;
+        }
+      }
+    }
   },
   computed: {
     visible: {
@@ -110,7 +145,11 @@ export default {
       }
     },
     adjustmentAfterBalance() {
-      return Number(this.data.balance) + Number(this.adjustmentBalance);
+      if(this.adjustBalance == "1") {
+        return (Number(this.data.balance) + Number(this.adjustmentBalance)).toFixed(2);
+      }else{
+        return (Number(this.data.balance) - Number(this.adjustmentBalance)).toFixed(2);
+      }
     }
   },
   watch: {
@@ -129,19 +168,25 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.star{
+  color:#FD4C2B; 
+  margin-right: 5px;
+}
 .c_container {
     text-align: left;
+    padding-left: 10px;
     .marB20{
       margin-bottom: 20px;
     }
   .input_wrap{
-      width: 188px;
-      display: inline-block;
+      width: 360px;
+      margin: 15px 0 0 83px;
   }
   .input_wrap2{
       position: relative;
-      width: 500px;
+      width: 360px;
       display: inline-block;
+      margin-left: 5px;
       .font_num{
         position: absolute;
         display: block;
@@ -150,6 +195,11 @@ export default {
         right: 0;
         top: 33px;  
       }
+  }
+  .errMsg{
+    font-size: 12px;
+    color: #FD4C2B;
+    margin: 5px 0 0 84px;
   }
 }
 </style>

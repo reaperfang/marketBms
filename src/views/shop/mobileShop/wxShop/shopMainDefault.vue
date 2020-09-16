@@ -67,13 +67,14 @@ export default {
     ...mapMutations(['SETCURRENT']),
     linkToApply(page) {
         if(page === 'gzh'){
-            this.$router.push({path:'/apply',query:{paths:'/application/channelapp/publicnum'}})
+            this.$router.push({path:'/apply',query:{paths:'/application/channelapp/publicnum',applyId:'3'}})
             this.SETCURRENT(8)
         }else if(page === 'xcx'){
-            this.$router.push({path:'/apply',query:{paths:'/application/channelapp/smallapp'}})
+            this.$router.push({path:'/apply',query:{paths:'/application/channelapp/smallapp',applyId:'3'}})
             this.SETCURRENT(8)
         }
     }
+
   }
 }
 </script>

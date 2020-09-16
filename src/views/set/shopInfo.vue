@@ -16,9 +16,9 @@
           :options="itemCatList"
           v-model="form.business"
           @change="itemCatHandleChange"
-          :props="{ multiple: false, checkStrictly: true }"
           clearable
           filterable
+          popper-class="scope-cascader-popper"
         ></el-cascader>
         <div class="category-display" v-if="itemCatText">您当前的选择是：{{itemCatText}}</div>
       </el-form-item>
@@ -130,7 +130,7 @@
 <script>
 // import mapSearch from '@/components/mapSearch'
 import DialogMapSearch from '@/components/mapSearchDialog'
-import dialogSelectImageMaterial from "@/views/shop/dialogs/dialogSelectImageMaterial";
+import dialogSelectImageMaterial from "@/components/dialogs/selectImageMaterial/index";
 import axios from "axios";
 export default {
   name: "shopInfo",

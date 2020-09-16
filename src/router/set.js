@@ -36,6 +36,27 @@ export default [
                 name: 'memberSet',
                 meta: { title: '会员设置', noCache: true, tabTitle: '通用设置' , navType:2 }
             },
+            // 地址库
+            {
+                path: 'address',
+                component: () => import('@/views/set/address'),
+                name: 'address',
+                meta: { title: '地址库', noCache: true, tabTitle: '通用设置' , navType:2 }
+            },
+            {
+                path: 'addressAdd',
+                component: () => import('@/views/set/addressUpdate'),
+                name: 'addressAdd',
+                meta: { title: '新建地址', noCache: true, tabTitle: '通用设置' , navType:5 },
+                hidden: true
+            },
+            {
+                path: 'addressUpdate',
+                component: () => import('@/views/set/addressUpdate'),
+                name: 'addressUpdate',
+                meta: { title: '编辑', noCache: true, tabTitle: '通用设置' , navType:5 },
+                hidden: true
+            },
             {
                 path: 'ordinaryExpress',
                 component: () => import('@/views/set/ordinaryExpress'),
@@ -97,7 +118,7 @@ export default [
                 path: 'createAccount',
                 component: () => import('@/views/set/createAccount'),
                 name: 'createAccount',
-                meta: { title: '默认页面', noCache: true, tabTitle: '权限管理', navType:3 },
+                meta: { title: '新建子账号', noCache: true, tabTitle: '权限管理', navType:4 },
                 hidden: true
             },
             {
@@ -110,7 +131,7 @@ export default [
                 path: 'createRole',
                 component: () => import('@/views/set/createRole'),
                 name: 'createRole',
-                meta: { title: '默认页面', noCache: true, tabTitle: '权限管理', navType:3  },
+                meta: { title: '新建角色', noCache: true, tabTitle: '权限管理', navType:4  },
                 hidden: true
             },
             // {
@@ -124,14 +145,41 @@ export default [
                 component: () => import('@/views/set/newTemplate'),
                 name: 'newTemplate',
                 hidden: true,
-                meta: { title: '新建模板', noCache: true, tabTitle: '配送设置' ,navType:5},
+                meta: { title: '新建模板', noCache: true, tabTitle: '配送设置' ,navType:4},
+            },
+            {
+                path: 'newTemplateOnly',
+                component: () => import('@/views/set/newTemplate'),
+                name: 'newTemplateOnly',
+                hidden: true,
+                meta: { title: '新建模板', noCache: true, tabTitle: '配送设置' ,navType:5, hideLeft: true},
             },
             {
                 path: 'newElectronicFaceSheet',
                 component: () => import('@/views/set/newElectronicFaceSheet'),
                 name: 'newElectronicFaceSheet',
                 hidden: true,
-                meta: { title: '新建', noCache: true, tabTitle: '配送设置' ,navType:5},
+                meta: { title: '新建', noCache: true, tabTitle: '配送设置' ,navType:4},
+            },
+            {
+                path: 'selfLift',
+                component: () => import('@/views/set/selfLift'),
+                name: 'selfLift',
+                meta: { title: '上门自提', noCache: true, tabTitle: '配送设置' ,navType:2},
+            },
+            {
+                path: 'addSelfLift',
+                component: () => import('@/views/set/addSelfLift'),
+                name: 'addSelfLift',
+                hidden: true,
+                meta: { title: '新建自提点/从地址库选择/开启/关闭', noCache: true, tabTitle: '配送设置' ,navType:5},
+            },
+            {
+                path: 'editSelfLift',
+                component: () => import('@/views/set/addSelfLift'),
+                name: 'editSelfLift',
+                hidden: true,
+                meta: { title: '编辑', noCache: true, tabTitle: '配送设置' ,navType:5},
             }
             // {
             //      path: 'authorize',

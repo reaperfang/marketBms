@@ -40,6 +40,7 @@
 <script>
 import mapBase from "@/components/MapBase";
 import appConfig from '@/system/appConfig';
+import { debounce } from '@/utils/base.js'
 export default {
   name: "mapSearch",
   extends: mapBase,
@@ -54,7 +55,7 @@ export default {
     },
     height: {
       type: Number,
-      default: 400
+      default: 330
     }
   },
   data() {
@@ -77,8 +78,12 @@ export default {
       totalNum: 0,
       keyword: '',
       markerClusterer: null,
-      isLoded: false
+      isLoded: false,
+      debounceSearch: null
     };
+  },
+  created() {
+     this.debounceSearch = debounce(this.search)
   },
   methods: {
     getParentAreaCode(tencentCode) {
@@ -105,10 +110,10 @@ export default {
           data.provinceName = response.provinceName
           data.cityName = response.cityName
           data.areaName = response.areaName
-          this.$emit('getMapClickPoi', data)
+          this.$emit('getMapClickPoi', data, tencentCode)
         }).catch(error =>{
           // reject(error)
-          this.$emit('getMapClickPoi', data)
+          this.$emit('getMapClickPoi', data, tencentCode)
         })
       }
     },
@@ -122,7 +127,8 @@ export default {
     },
     handleCurrentChange(val) {
       this.page = val
-      this.search()
+      this.debounceSearch()
+      // this.search()
     },
     //实例初始化结束
     inited() {
@@ -218,10 +224,15 @@ export default {
     },
     handleKeyWordSearch() {
       this.page = 1
-      this.search()
+      this.debounceSearch()
     },
     //执行搜索
     search() {
+      // if (!this.keyword) {
+      //   this.totalNum = 0
+      //   this.pois = []
+      //   return false
+      // }
       this.clearAllMaker()
       if (this.info) {
         this.info.close();
@@ -239,7 +250,7 @@ export default {
 
       this.getSearch(data).then((response) => {
         console.log(1111)
-        this.totalNum = response.count
+        this.totalNum = response.count >= 200 ? 200 : response.count
         this.pois = response.data || []
         if (this.pois.length > 0) {
           this.addMarkers(response)
@@ -257,6 +268,11 @@ export default {
     handlePropSearch(keyword) {
       console.log('----keyword---', keyword)
       this.keyword = keyword
+      if (!keyword) {
+        this.totalNum = 0
+        this.pois = []
+        return false
+      }
       this.page = 1
       this.search()
     },

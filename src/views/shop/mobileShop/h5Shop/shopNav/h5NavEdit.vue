@@ -3,7 +3,7 @@
    <div class="group-wrapper">
 
       <!-- 预览区 -->
-      <div class="module view" ref="groupWrapper">
+      <div class="module view" ref="groupWrapper" v-calcHeight="314">
 
         <!-- 手机头部 -->
         <div class="phone-head">
@@ -12,7 +12,7 @@
         </div>
 
         <!-- 手机中部 -->
-        <div class="phone-body" v-calcHeight="364">
+        <div class="phone-body" v-calcHeight="442">
           <img :src="require('@/assets/images/shop/shopNav.png')" alt="">
         </div>
 
@@ -60,13 +60,13 @@
 
       <!-- 右侧属性区 -->
       <div class="module props">
-        <el-form :model="currentNav" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" v-calcHeight="364">
+        <el-form :model="currentNav" :rules="ruleForm.navStyle.id == 2 ? {} : rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" v-calcHeight="420">
           <div class="block header">
             <p class="title">导航设置</p>
             <p class="state" @click="deleteNav" style="cursor:pointer;">删除导航</p>
           </div>
           <div class="block form">
-            <el-form-item label="导航名称" prop="navName">
+            <el-form-item label="导航名称" prop="navName" ref="navNameItem">
               <el-input @input="setNavName" :value="currentNav.navName" placeholder="请输入导航名称(请勿超过4个汉字或8个字母)"></el-input>
             </el-form-item>
             <el-form-item label="导航图标" prop="">
@@ -153,7 +153,6 @@
           </div>
 
           <div class="block button">
-            <div class="help_blank"></div>
             <div class="buttons">
               <el-button @click="resetData" :loading="resetDataLoading">重    置</el-button>
               <el-button @click="save" :loading="saveLoading">保    存</el-button>
@@ -174,7 +173,7 @@
 </template>
 
 <script>
-import dialogSelectImageMaterial from '@/views/shop/dialogs/dialogSelectImageMaterial';
+import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 import dialogSelectNavTemplate from '@/views/shop/dialogs/decorateDialogs/dialogSelectNavTemplate';
 
 import DialogBase from "@/components/DialogBase";
@@ -304,7 +303,7 @@ export default {
     this._globalEvent.$on('apiNavDataChange', (data, navType)=> {
       if(navType === '0') {
         this.ruleForm = data;
-        this.selectNav(data.navIds[0]);
+        this.selectNav(data.navIds[0], true);
       }
     })
     this.initnavMap();
@@ -325,6 +324,9 @@ export default {
     /* 选中导航样式 */
     navTypeSelected(navType) {
       this.ruleForm.navStyle = navType;
+      if(navType.id == 2){ //如果选中的是APP导航样式2，则隐藏导航名称的错误验证信息
+        this.$refs.navNameItem.clearValidate();
+      }
     },
 
     /* 初始化导航列表 */
@@ -389,7 +391,7 @@ export default {
     },
 
     /* 选中一个导航来编辑 */
-    selectNav(id) {
+    selectNav(id, first) {
       this.currentNav = this.ruleForm.navMap[id];
       let curentActiveNav = null;
       for(let k in this.ruleForm.navMap) {
@@ -401,6 +403,12 @@ export default {
         this.$set(curentActiveNav, 'active', false);
       }
       this.$set(this.ruleForm.navMap[id], 'active', true);
+
+      if(!first){ //如果是手动点击触发则执行验证
+        this.$nextTick(() => {
+          this.$refs['ruleForm'].validate();
+        })
+      }
     },
 
     /* 添加一个新导航 */
@@ -438,11 +446,33 @@ export default {
       }
     },
 
+    //循环验证是否有未填写的导航名称
+    validateNavName() {
+      let mark = false;
+      const data = this.checkIcon();
+      //如果APP导航样式必须有导航名称，则循环验证
+      if(data.navStyle.id != 2){
+        for(let i = 0; i < data.navIds.length; i++){
+          if(data.navMap[data.navIds[i]].navName == ''){
+            mark = true;
+            this.selectNav(data.navIds[i]);
+            break;
+          }
+        }
+      }
+      return mark;
+    },
 
     /* 保存并启用 */
     saveAndApply() {
       this.$refs.ruleForm.validate( valid => {
         if(valid) {
+
+          const mark = this.validateNavName();
+          if(mark){
+            return;
+          }
+
           this.saveAndApplyLoading = true;
           this.$emit('submitNavData',{
             navigationKey: '',
@@ -460,6 +490,12 @@ export default {
     save() {
       this.$refs.ruleForm.validate( valid => {
         if(valid) {
+
+          const mark = this.validateNavName();
+          if(mark){
+            return;
+          }
+
           this.saveLoading = true;
           this.$emit('submitNavData', {
             navigationKey: '',
@@ -548,6 +584,21 @@ export default {
         }
       }
       return result;
+    },
+
+    /* 检查图标 */
+    checkIcon() {
+      let copyData = {...this.ruleForm};
+      for(let k in copyData.navMap) {
+        for(let k2 in copyData.navMap[k]) {
+          if(k2 === 'navIcon' || k2 === 'navIconActive') {
+            if(this.utils.validate.isBase64(copyData.navMap[k][k2])) {
+              copyData.navMap[k][k2] = '';
+            }
+          }
+        }
+      }
+      return copyData;
     }
   },
 
@@ -594,6 +645,13 @@ export default {
           }
         }
       }
+    }
+  }
+  .module {
+    &.view {
+      width: 377px;
+      border: 1px #D0D6E4 solid;
+      box-shadow: none !important;
     }
   }
 }

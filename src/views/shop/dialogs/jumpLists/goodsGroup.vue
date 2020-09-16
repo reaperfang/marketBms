@@ -30,8 +30,8 @@ export default {
       goodsClassifyList: [],
       categoryData: [],
       defaultProps: {
-        children: 'children',
-        label: 'label'
+        children: 'childrenCatalogs',
+        label: 'name'
       }
     };
   },
@@ -40,18 +40,31 @@ export default {
   },
   methods: {
     fetch() {
-       this._apis.goods.fetchCategoryList({
+       this._apis.goods.fetchTreeCategoryList({
         enable: '1'
       }).then((response)=>{
         this.responseData = response;
-        let arr = this.transTreeData(response, 0)
-        this.categoryData = arr
-        this.flatArr = this.flatTreeArray(JSON.parse(JSON.stringify(arr)))
+
+        //let arr = this.transTreeData(response, 0)
+        this.filterEnableData(response);
+        this.categoryData = response
+        this.flatArr = this.flatTreeArray(JSON.parse(JSON.stringify(response)))
         this.loading = false;
       }).catch((error)=>{
         console.error(error);
         this.loading = false;
       });
+    },
+
+    //过滤掉禁用的数据
+    filterEnableData(data) {
+      data.forEach((item, index) => {
+        if(item.enable === 0){
+          data.splice(index, 1);
+        }else if(item.childrenCatalogs){
+          this.filterEnableData(item.childrenCatalogs)
+        }
+      })
     },
 
 
@@ -117,7 +130,7 @@ export default {
         id: 4,
         data: {
           id: data.id,
-          name: data.label
+          name: data.name
         },
         cid
       });

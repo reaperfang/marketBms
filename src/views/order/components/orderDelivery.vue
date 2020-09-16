@@ -76,35 +76,46 @@
                 tooltip-effect="dark"
                 style="width: 100%"
                 @selection-change="handleSelectionChange"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}">
+                :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     type="selection"
                     width="50">
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                     prop="isAutoSend"
                     label=""
                     width="40">
-                    <template slot-scope="scope">
-                        <el-tooltip v-if="scope.row.isAutoSend" content="自动发货" placement="bottom" effect="light">
+                    <template v-if="scope.row.isAutoSend" slot-scope="scope">
+                        <el-tooltip content="自动发货" placement="bottom" effect="light">
                             <i class="auto"></i>
                         </el-tooltip>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column
                     prop="orderCode"
                     label="订单编号"
-                    width="120">
+                    width="228"
+                    :class-name="haveAuto ? 'orderCode haveAuto' : 'orderCode'">
+                    <template slot-scope="scope">
+                        <el-tooltip v-if="scope.row.isAutoSend" content="自动发货" placement="bottom" effect="dark">
+                            <i class="auto"></i>
+                        </el-tooltip>
+                        <el-tooltip v-if="scope.row.isUrge == 0" content="用户催发货，请尽快发货" placement="bottom" effect="dark">
+                            <i class="urge"></i>
+                        </el-tooltip>
+                        <i class="unauto" v-if="!scope.row.isAutoSend && (scope.row.isUrge != 0) && haveAuto"></i>
+                        {{scope.row.orderCode}}
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="memberName"
                     label="用户昵称"
-                    width="120">
+                    width="105">
                 </el-table-column>
                 <el-table-column
                     prop="deliveryWay"
                     label="配送方式"
-                    width="120">
+                    width="105">
                     <template slot-scope="scope">
                         <div>
                             <span class="icon-store" v-if="scope.row.deliveryWay == 2"></span>
@@ -114,7 +125,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="updateTime"
-                    label="配送时间"
+                    label="预约时间"
                     width="110">
                     <template slot-scope="scope">
                         <div>
@@ -129,19 +140,21 @@
                 </el-table-column>
                 <el-table-column
                     prop="receivedPhone"
-                    label="收货人电话">
+                    label="收货人电话"
+                    width="110">
                 </el-table-column>
                 <el-table-column
                     prop="status"
-                    label="状态">
+                    label="状态"
+                    >
                     <template slot-scope="scope">
-                        <span>{{scope.row.status | statusFilter}}</span>
+                        <span>{{scope.row.status | orderStatusFilter}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                     prop="sendTime"
                     label="最新发货时间"
-                    width="170">
+                    width="160">
                     <template slot-scope="scope">
                         <div>
                             <template v-if="scope.row.isAutoSend && (scope.row.status == 3) && scope.row.isFillUp">
@@ -153,16 +166,24 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="120">
+                <el-table-column label="操作" :width="computeWidth" fixed="right">
                     <template slot-scope="scope">
                         <div class="operate-box">
-                            <span v-permission="['订单', '发货管理', '订单发货', '查看']" @click="$router.push('/order/orderDetail?id=' + scope.row.orderId)">查看</span>
+                            <span v-permission="['订单', '发货管理', '订单发货', '查看']" @click="$router.push(`/order/orderDetail?id=${scope.row.orderId}&_ids=${scope.row.id}`)">查看</span>
                             <template v-if="scope.row.status == 4">
-                                <span v-permission="['订单', '发货管理', '订单发货', '继续发货']" @click="$router.push('/order/deliverGoods?orderType=order&sendType=one&ids=' + scope.row.orderId)">继续发货</span>
+                                <span v-permission="['订单', '发货管理', '订单发货', '继续发货']" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${scope.row.orderId}&_ids=${scope.row.id}`)">继续发货</span>
                             </template>
                             <template v-else-if="scope.row.status == 3">
-                                <span v-permission="['订单', '发货管理', '订单发货', '发货']" v-if="!scope.row.isFillUp" @click="$router.push('/order/deliverGoods?orderType=order&sendType=one&ids=' + scope.row.orderId)">发货</span>
-                                <span v-else @click="$router.push('/order/supplementaryLogistics?id=' + scope.row.orderId)">补填物流</span>
+                                <span v-permission="['订单', '发货管理', '订单发货', '发货']" v-if="!scope.row.isFillUp" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${scope.row.orderId}&_ids=${scope.row.id}`)">发货</span>
+                                <span v-if="scope.row.isFillUp && scope.row.deliveryWay != 4" @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
+                            </template>
+                            <template v-if="scope.row.status == 5">
+                                <template v-if="scope.row.deliveryWay == 4">
+                                    <span @click="verificationHandler(scope.row)">核销验证</span>
+                                </template>
+                                <template v-else>
+                                    <span v-if="scope.row.isFillUp" @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
+                                </template>
                             </template>
                         </div>
                     </template>
@@ -170,7 +191,7 @@
             </el-table>
             <div v-show="!loading" class="footer">
                 <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
-                <el-button v-permission="['订单', '发货管理', '订单发货', '批量导入发货']" class="border-button" @click="$router.push('/order/batchImportAndDelivery')">批量导入发货</el-button>
+                <el-button v-permission="['订单', '发货管理', '订单发货', '批量导入发货']" class="border-button" @click="importAndDelivery">批量导入发货</el-button>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量发货']" class="border-button" @click="batchSendGoods">批量发货</el-button>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印配送订单']" class="border-button" @click="batchPrintDistributionSlip">批量打印配送单</el-button>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量打印电子面单']" class="border-button" @click="batchPrintElectronicForm">批量打印电子面单</el-button>
@@ -180,6 +201,14 @@
         </div>
         <!-- 打印配送单dialog -->
         <DialogPrintList :printDialogVisible.sync="printDialogVisible" :printPath="printPathV" :printQuery="printQuery" @closeDialogVisible="closeDialogVisible()"></DialogPrintList>
+        <component
+            v-if="dialogVisible"
+            :is="currentDialog"
+            :dialogVisible.sync="dialogVisible"
+            :data="currentData"
+            @submit="onSubmit"
+            :title="title">
+        </component>
     </div>
 </template>
 <script>
@@ -187,6 +216,7 @@ import Pagination from '@/components/Pagination'
 import DeliveryMethod from "./deliveryMethod"; //配送方式组件
 import DialogPrintList from '@/components/printListDialog'
 import utils from "@/utils";
+import VerificationDialog from "@/views/order/dialogs/verificationDialog";
 
 export default {
     data() {
@@ -217,7 +247,9 @@ export default {
                 receivedName: '',
                 deliveryWay: "", // 配送方式:1普通快递,2商家配送
                 deliveryDate: "", //商家配送-日期
-                deliveryTime: "" //商家配送-时间段
+                deliveryTime: "", //商家配送-时间段
+                isSupportElectronicSheet: 0,
+                isExpressElectronicSheet: '',
             },
             tableData: [],
             loading: false,
@@ -229,34 +261,22 @@ export default {
             printDialogVisible:false,
             printRadio:null,
             printPathV:'',
-            printQuery:{}
+            printQuery:{},
+            currentDialog: '',
+            dialogVisible: false,
+            currentData: {},
+            title: ''
         }
     },
     filters: {
-        statusFilter(code) {
-            switch(code) {
-                case 0:
-                    return '待付款'
-                case 1:
-                    return '待成团'
-                case 2:
-                    return '已关闭'
-                case 3:
-                    return '待发货'
-                case 4:
-                    return '部分发货'
-                case 5:
-                    return '待收货'
-                case 6:
-                    return '已完成'
-            }
-        },
         deliveryWayFilter(code) {
             switch(code) {
                 case 1:
                     return '普通快递'
                 case 2:
                     return '商家配送'
+                case 4:
+                    return '上门自提'
             }
         },
     },
@@ -279,9 +299,41 @@ export default {
         cid(){
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
             return shopInfo.id
+        },
+        haveAuto() {
+            return this.tableData.some(val => val.isAutoSend || (val.isUrge == 0))
+        },
+        computeWidth() {
+            if(this.tableData.some(item => item.status == 4 || (item.status == 5 && item.isFillUp) || (item.status == 5 && (item.deliveryWay == 4)) || (item.status == 3 && item.isFillUp))) {
+                return '118'
+            } else {
+                return '100'
+            }
         }
     },
     methods: {
+        importAndDelivery() {
+            // this._apis.order
+            // .getShopSendAddress({ cid: this.cid })
+            // .then(res => {
+            //     if(!res) {
+            //         this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '去设置', text: '您未完成发货地址设置，请到地址库设置发货地址。'}).then(() => {
+            //             this.$router.push('/set/address')
+            //         })
+            //     } else {
+            //         this.$router.push('/order/batchImportAndDelivery')
+            //     }
+            // })
+            // .catch(error => {
+            //     this.$message.error(error);
+            // });
+            this.$router.push('/order/batchImportAndDelivery')
+        },
+        verificationHandler(row) {
+            this.currentData = row.orderId
+            this.currentDialog = 'VerificationDialog'
+            this.dialogVisible = true
+        },
         getShopInfo() {
             let id = this.cid
             this._apis.set.getShopInfo({id:id}).then(response =>{
@@ -303,6 +355,10 @@ export default {
                 this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要补填物流信息的订单。'})
                 return
             }
+            if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
+                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出普通快递、商家配送或第三方配送的待发货订单后再进行批量补填物流。'})
+                return;
+            }
             if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
                 this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量补填物流。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量补填物流。'})
                 return;
@@ -311,7 +367,7 @@ export default {
                 this.confirm({title: '提示', icon: true, text: '您勾选的订单包括不能补填物流信息的订单，请重新选择。'})
                 return
             }
-            this.$router.push('/order/batchSupplementaryLogistics?ids=' + this.multipleSelection.map(val => val.orderId + '').join(','))
+            this.$router.push(`/order/batchSupplementaryLogistics?ids=${this.multipleSelection.map(val => val.orderId + '').join(',')}&_ids=${this.multipleSelection.map(val => val.id + '').join(',')}`)
         },
         checkedAllChange() {
             if(this.checkedAll) {
@@ -341,8 +397,12 @@ export default {
                 this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量发货的单据。'})
                 return
             }
-            if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
-                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量发货。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量发货。'})
+            // if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
+            //     this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量发货。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量发货。'})
+            //     return;
+            // }
+            if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
+                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出普通快递、商家配送或第三方配送的待发货订单后再进行批量发货。'})
                 return;
             }
             if(this.multipleSelection.some(val => val.status != 3 && val.status != 4)) {
@@ -353,7 +413,7 @@ export default {
             this.confirm({title: '提示', icon: true, text: '勾选单据包含已完成发货或已关闭的单据，无法批量发货，请重新选择。'})
                 return
             }
-            this.$router.push('/order/orderBulkDelivery?ids=' + this.multipleSelection.map(val => val.orderId).join(','))
+            this.$router.push(`/order/orderBulkDelivery?ids=${this.multipleSelection.map(val => val.orderId).join(',')}&_ids=${this.multipleSelection.map(val => val.id).join(',')}`)
         },
         batchPrintElectronicForm() {
             // if(this.express) {
@@ -363,6 +423,10 @@ export default {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量打印电子面单的单据。'})
                 return
+            }
+            if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
+                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出配送方式为普通快递-电子面单的单据，再进行批量打印电子面单。'})
+                return;
             }
             if(!this.multipleSelection.map(val => val.isKDBird).every(val => val == true)) {
                 this.confirm({title: '提示', icon: true, text: '勾选单据中包含不支持电子面单的单据，无法批量打印，请先依据支持电子面单的快递公司筛选单据后，再打印。'})
@@ -391,6 +455,10 @@ export default {
             if(!this.multipleSelection.length) {
                 this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量打印配送单的单据。'})
                 return
+            }
+            if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
+                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出普通快递、商家配送、第三方配送或上门自提的单据，再进行批量打印配送单。'})
+                return;
             }
             if(this.multipleSelection.some(val => val.status == 3)) {
                 this.confirm({title: '提示', icon: true, text: '勾选订单包含未发货或未付款订单，无法批量打印；请重新勾选已发货订单批量打印配送单。'})
@@ -435,14 +503,15 @@ export default {
                 receivedName: '',
                 deliveryWay: "", // 配送方式:1普通快递,2商家配送
                 deliveryDate: "", //商家配送-日期
-                deliveryTime: "" //商家配送-时间段
+                deliveryTime: "", //商家配送-时间段
+                isExpressElectronicSheet: ''
             }
             this.getList()
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
             let checkedCount = val.length;
-            this.checkedAll = checkedCount === this.tableData.length;
+            this.checkedAll = (checkedCount === this.tableData.length) && (checkedCount !== 0);
             this.isIndeterminate = checkedCount > 0 && checkedCount < this.tableData.length;
         },
         getList() {
@@ -472,7 +541,8 @@ export default {
     components: {
         Pagination,
         DeliveryMethod,
-        DialogPrintList
+        DialogPrintList,
+        VerificationDialog
     }
 }
 </script>
@@ -485,10 +555,13 @@ export default {
         padding-right: 8px;
     }
     /deep/ .el-form--inline .el-form-item {
-        margin-right: 26px;
+        margin-right: 20px;
         .el-button+.el-button {
-            margin-left: 16px;
+            margin-left: 6px;
         }
+    }
+    /deep/ .el-button {
+      width: 60px;
     }
 }
 .order-delivery {
@@ -504,6 +577,7 @@ export default {
         }
         .form-inline {
             padding: 20px;
+            padding-bottom: 0;
         }
         .buttons {
             display: flex;
@@ -521,7 +595,7 @@ export default {
     .content {
         background-color: #fff;
         padding: 20px;
-        margin: 0 20px;
+        //margin: 0 20px;
         padding-top: 0;
         p {
             font-size: 16px;
@@ -533,7 +607,7 @@ export default {
         }
         .footer {
             padding: 20px;
-            padding-left: 15px;
+            padding-left: 10px;
         }
     }
 }
@@ -555,12 +629,21 @@ export default {
 }
 .auto {
         display: inline-block;
-        width: 28px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
         background: url(../../../assets/images/order/auto.png) no-repeat;
+        background-size: 100% 100%;
         position: relative;
         top: 3px;
-        margin-right: 5px;
+        margin-right: 10px;
+    }
+    .unauto {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        position: relative;
+        top: 3px;
+        margin-right: 10px;
     }
     /deep/ .searchTimeType .date-picker-select .el-input {
         width: 100px;
@@ -593,6 +676,75 @@ export default {
     }
     .icon-store-text{
         vertical-align: middle;
+    }
+    /deep/ .el-table td, /deep/ .el-table th {
+        text-align: center;
+        &:nth-child(2) {
+            text-align: left;
+        }
+    }
+    /deep/ .el-table-column--selection .cell {
+        padding-left: 20px;
+        padding-right: 10px;
+    }
+    /deep/ .el-table thead .orderCode {
+        &.haveAuto {
+            padding-left: 32px;
+        }
+    }
+    .operate-box {
+        text-align: left;
+        span {
+            border-right: 1px solid rgba(218,218,227,1);
+            padding-right: 5px;
+            &:last-child {
+                border-right: none;
+                padding-right: 0;
+            }
+        }
+    }
+    .urge {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background: url(../../../assets/images/order/urge.png) no-repeat;
+        background-size: 100% 100%;
+        margin-right: 10px;
+    }
+    /deep/ .el-table th.is-leaf {
+        border-bottom: none!important;
+    }
+    /deep/ .el-table thead tr {
+        height: 46px;
+    }
+    .border-button {
+        border:1px solid rgba(218,218,227,1)!important;
+        color: #44434B!important;
+        &:hover {
+            border:1px solid #655EFF!important;
+            color: #655EFF!important;
+            background-color: #fff;
+        }
+    }
+    /deep/ .el-table .cell {
+        padding-left: 0;
+        padding-right: 10px;
+    }
+    /deep/ .input-with-select .el-input-group__prepend {
+        background-color: #fff;
+    }
+
+     /deep/.el-table td:nth-child(1){
+         padding-left:20px;
+         .cell {
+            text-overflow: clip;
+         }
+     }
+     /deep/ .el-table--small td, /deep/  .el-table--small th {
+        padding: 16px 0;
+    }
+    /deep/ .el-form--inline .el-form-item {
+        margin-bottom: 20px;
     }
 </style>
 
