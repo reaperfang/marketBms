@@ -318,7 +318,7 @@ export function getMiniAppQrcode(data) {
   return request({
     target: 'SHOP-API-APPMAURL-PROCESSOR',
     method: 'post',
-    apiType: 'decorate',
+    apiType: 'manager',
     data
   })
 }

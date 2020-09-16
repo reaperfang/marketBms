@@ -246,26 +246,7 @@
         try {
           let params = {chooseTemplateId: this.selectTemplateId, changeStep: 3, status: 0};
           let res = await this._apis.profile.intelligentUpdateStep(params);
-
-          this._apis.profile.intelligentEnableTemplate({tempCid: this.tempCid})
-            .then((result) => {
-            clearInterval(this.timerConfigure);
-            this.getConfigureStatus();
-            if(result === 0) {
-              setTimeout(() => {
-                this.isConfigureFail = true;
-              })
-            }
-            else if(result === 1) {
-              // 通知父组件 更新到下一步的视图, 不用再调用更新步骤的接口
-              setTimeout(function () {
-                this.$emit('update-step', 3)
-              }, 1000)
-            }
-
-          }).catch((err) => {this.$message.error(err); clearInterval(this.timerConfigure)});
-          this.isShowConfigureBox = true;
-          this.timer();
+          this.enableConfigureStatus();
 
         } catch (e) {
           this.$message.error(e || "网络错误，请稍后再试")
@@ -275,6 +256,42 @@
         }
 
       },
+
+      /** 调用 启用模板接口： 抽出来了， 启用和再次加载都用到了！ */
+      enableConfigureStatus() {
+        const _this = this;
+        const BEGIN_TIME = Date.now();
+        this._apis.profile.intelligentEnableTemplate({tempCid: this.tempCid})
+          .then((result) => {
+            clearInterval(this.timerConfigure);
+            this.getConfigureStatus();
+            let timeoutTime = 1000;
+
+            const END_TIME = Date.now();
+            if (BEGIN_TIME - END_TIME < 5000) timeoutTime = 5000; // 为了预留出 加载数据动画时间
+
+            // 0 失败 1 成功
+            if (result === 0) {
+              let time = 1000 * this.configureTextArray.length || 1000;
+              setTimeout(() => {
+                _this.isConfigureFail = true;
+              }, time)
+            } else if (result === 1) {
+              // 通知父组件 更新到下一步的视图, 不用再调用更新步骤的接口
+              setTimeout(function () {
+                _this.$emit('update-step', 3)
+              }, timeoutTime)
+            }
+
+          })
+          .catch((err) => {
+            this.$message.error(err);
+            clearInterval(this.timerConfigure)
+          });
+        this.isShowConfigureBox = true;
+        this.timer();
+      },
+
 
       /** 查询配置进度 */
       timer() {
@@ -312,26 +329,7 @@
       /** 再次加载 */
       async againConfigure() {
         this.configureTextArray = [];
-        try {
-          const _this = this;
-          this.isConfigureFail = false;
-          this._apis.profile.intelligentEnableTemplate({tempCid: this.tempCid}).then((result) => {
-            clearInterval(this.timerConfigure);
-            this.getConfigureStatus();
-            if(result === 0) this.isConfigureFail = true;
-            else if(result === 1) {
-              console.log("数据配置成功")
-              // 通知父组件 更新到下一步的视图
-              setTimeout(function () {
-                _this.$emit('update-step', 3)
-              }, 1000)
-            }
-
-          });
-          this.timer();
-        } catch (e) {
-          this.$message.error(e || "网络错误，请稍后再试")
-        }
+        this.enableConfigureStatus();
       },
 
       /** 上一张模板 */
@@ -383,7 +381,7 @@
 
         try{
           item.isLoadingCode = true;
-          const qrCodePic = await this._apis.shop.getMiniAppQrcode({id: item.id, tenantInfoId: item.tenantInfoId});
+          const qrCodePic = await this._apis.shop.getMiniAppQrcode({cid: item.cid, id: item.cid, tenantInfoId: item.tenantInfoId});
           if(qrCodePic) item.qrCodePic = qrCodePic;
         }
         catch (e) {
