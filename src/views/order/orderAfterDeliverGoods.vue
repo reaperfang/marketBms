@@ -187,7 +187,7 @@
                 </div>
             </div>
             <div class="footer">
-                <el-button v-if="orderAfterSaleSendInfo.deliveryWay == 1 || orderAfterSaleSendInfo.deliveryWay == 4" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
+                <el-button v-if="orderAfterSaleSendInfo.deliveryWay == 1 || orderAfterSaleSendInfo.deliveryWay == 3 || orderAfterSaleSendInfo.deliveryWay == 4" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
                 <el-button v-if="orderAfterSaleSendInfo.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">发 货</el-button>
             </div>
         </div>

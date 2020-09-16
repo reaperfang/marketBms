@@ -560,9 +560,15 @@ export default {
         if (valid) {
           let params;
 
+          // if(true) {
+          //   this.confirm({title: '提示', text: '达达账户余额不足，请充值后再发货', confirmText: '去充值'}).then(() => {
+                //this.$router.push('/set/recharge')
+          //   })
+          //   return
+          // }
           //如果是普通快递
           if(formName == 'ruleForm'){
-            if(this.orderInfo.deliveryWay != 4) {
+            if(this.orderInfo.deliveryWay != 4 && this.orderInfo.deliveryWay != 3) {
               if(this.ruleForm.expressCompanyCode == 'other') {
                 this.ruleForm.expressCompany = this.ruleForm.other
               } else {
@@ -610,7 +616,7 @@ export default {
           
           if(formName == 'ruleForm'){
             //如果是普通快递
-            if(this.orderInfo.deliveryWay != 4) {
+            if(this.orderInfo.deliveryWay != 4 && this.orderInfo.deliveryWay != 3) {
               obj.deliveryWay = 1;
               obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
               obj.expressNos = this.ruleForm.expressNos; // 快递单号
@@ -623,11 +629,17 @@ export default {
                 }
               }
             } else {
-              //上门自提
-              obj.deliveryWay = 4;
-              obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
-              obj.verifyCode = this.orderInfo.verifyCode
-              obj.pickId = this.orderInfo.pickId
+              if(this.orderInfo.deliveryWay == 4) {
+                //上门自提
+                obj.deliveryWay = 4;
+                obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
+                obj.verifyCode = this.orderInfo.verifyCode
+                obj.pickId = this.orderInfo.pickId
+              } else if(this.orderInfo.deliveryWay == 3) {
+                //第三方配送
+                obj.deliveryWay = 3;
+                obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
+              }
             }
           }else if(formName == 'ruleFormStore'){ //如果是商家配送
             obj.deliveryWay = 2;
