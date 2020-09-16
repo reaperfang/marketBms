@@ -19,7 +19,7 @@
           <div class="content">
             <el-table
               :row-key="getRowKeys"
-              :class="{isIE: utils.isIE(), disabledCheckAll: orderInfo.deliveryWay != 4,'disabled-table': checkboxAllTableMark}"
+              :class="{isIE: utils.isIE(), disabledCheckAll: orderInfo.deliveryWay != 4 && orderInfo.deliveryWay != 3,'disabled-table': checkboxAllTableMark}"
               ref="table"
               :data="tableData"
               style="width: 100%"
@@ -57,7 +57,7 @@
                 <template slot-scope="scope">
                   <el-input
                     :class="{'send-input': scope.row.errorMessage}"
-                    :disabled="orderInfo.deliveryWay == 4 || scope.row.goodsCount - scope.row.cacheSendCount == 0"
+                    :disabled="orderInfo.deliveryWay == 4 || orderInfo.deliveryWay == 3 || scope.row.goodsCount - scope.row.cacheSendCount == 0"
                     type="number"
                     step="1"
                     :max="scope.row.goodsCount - scope.row.cacheSendCount"
@@ -245,6 +245,23 @@
            >
             <el-form-item label="配送方式">
               <span>上门自提</span>
+            </el-form-item>
+            <el-form-item label="备注" prop="desc">
+              <el-input type="textarea" v-model="ruleForm.sendRemark" placeholder="非必填，请输入，不超过100个字符" maxlength="100"></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+        <!-- 配送方式 第三方配送 -->
+        <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 3">
+          <el-form
+            :model="ruleForm"
+            :rules="rules"
+            ref="ruleForm"
+            label-width="100px"
+            class="demo-ruleForm"
+           >
+            <el-form-item label="配送方式">
+              <span>第三方配送</span>
             </el-form-item>
             <el-form-item label="备注" prop="desc">
               <el-input type="textarea" v-model="ruleForm.sendRemark" placeholder="非必填，请输入，不超过100个字符" maxlength="100"></el-input>
@@ -441,53 +458,12 @@ export default {
       }, 500)
     },
     selectable(row, index) {
-      if(this.orderInfo.deliveryWay == 4 || (row.goodsCount - row.cacheSendCount == 0)) {
+      if(this.orderInfo.deliveryWay == 4 || this.orderInfo.deliveryWay == 3 || (row.goodsCount - row.cacheSendCount == 0)) {
         this.checkboxAllTableMark = true
         return false
       }
        this.checkboxAllTableMark = false
        return true
-    },
-    checkExpress() {
-      let expressName
-
-      if(this.ruleForm.expressNos) {
-        this.ruleForm.expressNos = ''
-      }
-      if(this.ruleForm.other) {
-        this.ruleForm.other = ''
-      }
-      if(this.ruleForm.expressCompanyCode == 'other') {
-            expressName = 'other'
-          } else {
-            expressName = this.expressCompanyList.find(
-              val => val.expressCompanyCode == this.ruleForm.expressCompanyCode
-            ).expressCompany;
-          }
-      this._apis.order
-        .checkExpress({expressName})
-        .then(res => {
-          this.express = res;
-          if(this.express == null) {
-              this.$set(this.rules, "expressNos", [
-                { required: true, message: "请输入快递单号", trigger: "blur" }
-              ]);
-          } else {
-            this.$set(this.rules, "expressNos", [
-                { required: false, message: "请输入快递单号", trigger: "blur" }
-              ]);
-          }
-
-          this._list.splice(0, 1, Object.assign({}, this._list[0], {
-            expressCompanyCodes: this.ruleForm.expressCompanyCode,
-            express: res
-          }))
-          console.log(this._list)
-        })
-        .catch(error => {
-          this.visible = false;
-          this.$message.error(error);
-        });
     },
     fetchOrderAddress(address) {
       this.orderInfo.sendName = address.name;

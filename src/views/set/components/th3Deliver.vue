@@ -32,6 +32,7 @@
                     {{scope.row.isOpen}}
                   </p>
                   <p v-else-if="status==2">已开通</p>
+                  <p class="prompt">审核通过</p>
                 </template>
               </el-table-column>
               <!-- <el-table-column prop="explanation" label="说明" align="center" width="230"></el-table-column> -->
@@ -49,11 +50,13 @@
                     class="tableBox-btn"
                     type="text"
                     size="medium"
+                    @click="goPay"
                   >充值</el-button>
                   <el-button
                     class="tableBox-btn"
                     type="text"
                     size="medium"
+                    @click="viewBalance"
                   >查看余额</el-button>
                 </template>
               </el-table-column>
@@ -96,6 +99,7 @@
 <script>
 import protocolDialog from "@/views/set/dialogs/protocolDialog";
 import registerDialog from "@/views/set/dialogs/registerDialog";
+
 export default {
   components: {
     registerDialog,
@@ -124,24 +128,85 @@ export default {
       ],
       dialogVisible: true,
       currentDialog: "",
-      isOpenAutoCall: 1
+      isOpenAutoCall: 0
     }
   },
 
-  computed: {},
+  computed: {
+    cid() {
+      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      return shopInfo.id;
+    }
+  },
 
-  watch: {},
+  watch: {
+    isOpen(val) {
+      this.isTableShow = this.isOpen
+      this.btnShow = false
+      this.saveShow = true
+    }
+  },
 
-  created() {},
+  created() {
+    this.init()
+  },
 
   mounted() {},
 
   methods: {
+    init() {
+      this.getShopInfo()
+    },
+    getShopInfo() {
+      let id = this.cid;
+      return this._apis.set
+        .getShopInfo({ id: id })
+        .then(response => {
+          if (!response) return false
+          this.isOpen = response.isOpenTh3Deliver === 1 ? true : false
+          // 自动呼叫 isOpenAutoCall
+        })
+        .catch(error => {
+          this.$message.error(error || '查询失败');
+        });
+    },
+    handleSubmit() {
+      if (this.isLoading) return false
+      this.isLoading = true
+      const req = Object.create(null)
+      // req.isOpenAutoCall = this.isOpenAutoCall
+      req.isOpenTh3Deliver = this.isOpen ? 1 : 0
+      req.id = this.cid
+      this._apis.set.updateShopInfo(req).then(response =>{
+        this.$store.dispatch('getShopInfo');
+        const html = '<p style="font-size: 16px;font-weight: 500;color: #44434B;line-height: 22px;">保存成功</p><p style="font-size: 12px;font-weight: 400;color: #44434B;line-height: 20px;">第三方配送-达达配送已开启。</p>'
+        this.confirm({
+          title: '提示', 
+          iconSuccess: true, 
+          text: html,
+          customClass: 'th3Deliver-custom',
+          confirmText: '确定',
+          showCancelButton: false
+        });
+      }).catch(error =>{
+        this.$message.error(error || '保存失败');
+      }).finally(() => {
+        this.isLoading = false
+      })
+    },
+    viewBalance() {
+      // 查看余额
+      this.$router.push({ path: '/set/rechargeRecord'})
+    },
+    // 去充值
+    goPay() {
+      this.$router.push({ path: '/set/recharge'})
+    },
     handleIsOpen() {
       console.log('isOpen',this.isOpen)
-      this.isTableShow = this.isOpen
-      this.btnShow = false
-      this.saveShow = true
+      // this.isTableShow = this.isOpen
+      // this.btnShow = false
+      // this.saveShow = true
     },
     //第三放协议
     onPprotocol() {
@@ -279,7 +344,11 @@ export default {
       display: inline-block;
       padding: 0 15px;
     }
-    
+    .prompt {
+      font-size: 14px;
+      font-weight: 400;
+      color: #13CE66;
+    }
   }
   .tableBox-btn {
     padding:0;
