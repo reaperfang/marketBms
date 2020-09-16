@@ -25,6 +25,7 @@
 				:chartSettings="chartSettings"
 				:chartExtend="chartExtend"
 				ref="vfunnel"
+				class="item-content"
 			></vfunnel>
 		</div>
 	</div>
