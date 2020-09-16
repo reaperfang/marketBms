@@ -1,9 +1,9 @@
 <template>
-  <section class="intelligent_guide">
+  <section v-if="isFirstLogin" class="intelligent_guide">
     <h2 class="i_g_title"> 请选择您需要的开店方式 </h2>
     <div class="i_g_content">
       <div class="i_g_item left">
-        <div @click=""> 立即开店 </div>
+        <div @click="goPrompt"> 立即开店 </div>
       </div>
       <div class="i_g_item right">
         <div @click="toIntelligent"> 立即开店 </div>
@@ -20,24 +20,91 @@
     name: 'intelligent-guide',
     data() {
       return {
-        test: null,
+        isFirstLogin: false,
+        isClick: false, // 为了解决在初始化设置引导状态时，后端未返回结果的情况，用户直接操作后，导致bug
       }
     },
-    created() {
-      
+
+    computed: {
+      cid() {
+        let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+        return shopInfo.id;
+      },
+      storeGuide() {
+        return this.$store.state.shop.storeGuide || null
+        // let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+        // return shopInfo.storeGuide || null;
+      }
     },
+
+    created() {
+      this.init();
+    },
+
     methods: {
+      setStoreGuide(storeGuide) {
+        let id = this.cid
+        let data = {
+          id,
+          storeGuide
+        }
+        this._apis.set.updateShopInfo(data).then(response =>{
+          this.$store.dispatch('getShopInfo');
+          const storeGuide = response && response.storeGuide || storeGuide
+          this.$store.commit('setStoreGuide', storeGuide)
+          this.isClick = true
+          // this.$nextTick(()=> {
+          //   this.$refs.shopInfoMap.clearSearchResultList()
+          //   this.$refs.shopInfoMap.clearKeyword()
+          // })
+        }).catch(error =>{
+          console.log('updateShopInfo:error', error)
+          // this.$message.error('保存失败');
+        })
+      },
+      init() {
+        this.isFirstLogin = this.storeGuide && this.storeGuide === -1
+        if (!this.isFirstLogin) {
+          this.isClick = true
+          this.$router.push({ path: '/profile/profile'}) 
+        } else {
+          this.setStoreGuide(0)
+        }
+      },
+      updateStep() {
+        const cid = this.cid;
+        const step = 1
+        this._apis.shop
+          .updateStep({ cid, step })
+          .then(response => {
+            this.$router.push({ path: '/profile/shopGuide'})
+          }).catch((err) => {
+            console.log(err)
+          })
+      },
+      getShopInfo() {
+        let id = this.cid;
+        this._apis.set
+          .getShopInfo({ id: id })
+          .then(response => {
+            // this.storeGuide = response && response.storeGuide
+            this.init()
+          })
+      },
+
       /** v1.6开店 */
-      // to do sth...
+      goPrompt() {
+        if (this.isClick) this.updateStep();
+      },
 
       /** v1.8智能开店 */
-      toIntelligent(){
-        this.$router.push({ path: '/profile/intelligent' });
+      toIntelligent() {
+        if (this.isClick) this.$router.push({ path: '/profile/intelligent'});
       },
 
       /** 返回概况页 */
-      toProfile(){
-        this.$router.push({ path: '/profile/profile' });
+      toProfile() {
+        if (this.isClick) this.$router.push({ path: '/profile/profile'});
       },
     },
   }

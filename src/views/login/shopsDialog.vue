@@ -159,7 +159,8 @@ export default {
             this.handleClose()
             this.$store.commit('setStoreGuide', shop.storeGuide)
             if (this.isAdminUser && shop.storeGuide === -1) {
-                this.$router.push({ path: '/profile/guidePrompt' })
+                // this.$router.push({ path: '/profile/guidePrompt' })
+                this.$router.push({ path: '/profile/intelligentGuide' })
               } else {
                 this.$router.push({ path: '/profile/profile' })
               }
