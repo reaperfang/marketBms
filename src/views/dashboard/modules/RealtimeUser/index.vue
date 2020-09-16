@@ -15,7 +15,7 @@
 			<gridtitle :title="'实时交易用户'"></gridtitle>
 		</div>
 		<div class="content">
-			<vtable :tableData="tableData"></vtable>
+			<vtable class="item-content" :tableData="tableData"></vtable>
 		</div>
 	</div>
 </template>

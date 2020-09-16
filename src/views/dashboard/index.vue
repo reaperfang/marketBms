@@ -208,7 +208,7 @@ export default {
 		// margin: 0 10px;
 
 		position: relative;
-		width: 100%;
+		// width: 100%;
 		height: 100%;
 		.title {
 			width: 100%;
@@ -221,11 +221,13 @@ export default {
 			top: 43px;
 			bottom: 0px;
 			left: 0px;
-			margin: 0 5px;
+			right: 0px;
+			// margin-left: 8px;
 			// background: #f09529;
 
 			.item-content {
 				height: 100%;
+				margin: 0 8px;
 
 				.v-el-col {
 					height: 100%;
