@@ -210,6 +210,7 @@
             return {
               cid: item.cid,
               id: item.id,
+              tenantInfoId: item.tenantInfoId,
               isLoadingCode: false,
               isShowCode: false,
               name: item.name,
@@ -312,15 +313,17 @@
       async againConfigure() {
         this.configureTextArray = [];
         try {
+          const _this = this;
           this.isConfigureFail = false;
           this._apis.profile.intelligentEnableTemplate({tempCid: this.tempCid}).then((result) => {
             clearInterval(this.timerConfigure);
             this.getConfigureStatus();
             if(result === 0) this.isConfigureFail = true;
             else if(result === 1) {
+              console.log("数据配置成功")
               // 通知父组件 更新到下一步的视图
               setTimeout(function () {
-                this.$emit('update-step', 3)
+                _this.$emit('update-step', 3)
               }, 1000)
             }
 
@@ -380,7 +383,7 @@
 
         try{
           item.isLoadingCode = true;
-          const qrCodePic = await this._apis.shop.getMiniAppQrcode({id: item.id, cid: item.cid});
+          const qrCodePic = await this._apis.shop.getMiniAppQrcode({id: item.id, tenantInfoId: item.tenantInfoId});
           if(qrCodePic) item.qrCodePic = qrCodePic;
         }
         catch (e) {

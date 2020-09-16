@@ -89,11 +89,12 @@
           this.$message.error("请正确填写表单");
           return
         }
-        if(!this.isMapChoose) {
+        if(this.form.sendAddress !== "" && !this.isMapChoose) {
           this.$message.error("保存失败");
           this.form.sendAddress = "";
           return
         }
+
         try {
           this.$emit("update-completed-loading", true);
           const params = {
@@ -107,7 +108,11 @@
             latitude: this.form.lat,
             longitude: this.form.lng,
           };
-          const formResult = await this._apis.set.updateShopInfo(params);
+          //  非空校验，全部空，则不调用 form表单更新 接口
+          if(!this.isAllValueEmpty(this.form)) {
+            const formResult = await this._apis.set.updateShopInfo(params);
+            console.log("表单数据为空，不调用接口");
+          }
           // changeStep 更改步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
           // status 状态 0 未完成 1 已完成
           const stepResult = await this._apis.profile.intelligentUpdateStep({changeStep: 4, status: 1});
@@ -121,6 +126,16 @@
           console.log("update-shopInfo: finally");
           this.$emit("update-completed-loading", false);
         }
+      },
+
+      // 校验对象 所有的key对应的value是否为空
+      isAllValueEmpty(obj) {
+        let emptyCount = 0;
+        for (const key in obj) {
+          if(obj[key] === "") {emptyCount ++}
+        }
+        if(Object.values(obj).length === emptyCount) return true;
+        else return false;
       },
 
       /** 跳转到 '短信群发'页面 */

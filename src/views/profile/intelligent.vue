@@ -37,7 +37,7 @@
 
     <!--  step_3  启用模板-->
     <step-enable
-      v-if="stepCurrent === 3 && stepStatus === 1"
+      v-if="stepCurrent === 3"
       @update-step="updateStep"
       :step-id="stepId"
     ></step-enable>
@@ -79,11 +79,14 @@
           const result = await this._apis.profile.getIntelligentProgress();
           if(result) {
             if(result.currentStep === 4 && result.status === 1) {
-              // this.$router.back();
+              this.$router.back();
             } else if(result.currentStep === 3 && result.status === 0) {
               this.stepCurrent = 2;
               this.configureFail = true;
-            } else this.stepCurrent = result.currentStep;
+            } else {
+              this.stepCurrent = result.currentStep;
+            }
+            this.stepStatus = result.status;
 
             this.stepId = result.id;
             this.industryId = result.chooseIndustryId || null;
