@@ -1,5 +1,6 @@
 <template>
-   <div class="th3Deliver">
+  <div  v-loading="isInitLoading" element-loading-background="rgba(255,255,255,1)" style="min-height:200px;background-color:#fff;">
+   <div v-if="!isInitLoading" class="th3Deliver">
      <div class="switch-area">
        <span>启用第三方配送：</span>
        <el-switch active-color="#13ce66" inactive-color="#cacfcb" v-model="isOpen" @change="handleIsOpen"></el-switch>
@@ -12,7 +13,7 @@
          发货地址：
        </div>
        <div class="content">
-         北京市北京市东城区长保大厦<el-button class="address-btn" type="text">修改</el-button>
+        <span v-if="address"> {{ address }}</span><el-button class="address-btn" type="text">{{ btnTxt }}</el-button>
        </div>
      </div>
      <!-- 第三方列表 -->
@@ -94,6 +95,7 @@
       @submitForm="submitForm"
     ></component>
    </div>
+  </div> 
 </template>
 
 <script>
@@ -110,12 +112,17 @@ export default {
 
   data () {
     return {
+      address: null, // 发货地址
+      provinceCode: null,
+      cityCode: null,
+      areaCode: null,
       isOpen: false,
       status: 1,
       rechargeShow: false,
       btnShow: false,
       saveShow: true,
       isLoading: false,
+      isInitLoading: true, // 初始化加载loading显示
       isTableShow: false, // 是否显示列表
       dataList: [
         {
@@ -133,6 +140,9 @@ export default {
   },
 
   computed: {
+    btnTxt() {
+      return this.address ? '修改': '新建'
+    },
     cid() {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
@@ -155,7 +165,22 @@ export default {
 
   methods: {
     init() {
-      this.getShopInfo()
+      this.isInitLoading = true
+      const p1 = this.getShopInfo()
+      const p2 = this.getTh3DeliverAddress()
+      Promise.all([p1, p2]).finally(() => {
+        this.isInitLoading = false
+      })
+    },
+    getTh3DeliverAddress() {
+      // mock
+      this.provinceCode = ''
+      this.cityCode = ''
+      this.areaCode = ''
+      this.address = '北京大兴区数码庄园'
+      return new Promise((resolve, reject) => {
+        resolve(this.address)
+      })
     },
     getShopInfo() {
       let id = this.cid;
@@ -178,7 +203,6 @@ export default {
       req.isOpenTh3Deliver = this.isOpen ? 1 : 0
       req.id = this.cid
       this._apis.set.updateShopInfo(req).then(response =>{
-        this.$store.dispatch('getShopInfo');
         const html = '<p style="font-size: 16px;font-weight: 500;color: #44434B;line-height: 22px;">保存成功</p><p style="font-size: 12px;font-weight: 400;color: #44434B;line-height: 20px;">第三方配送-达达配送已开启。</p>'
         this.confirm({
           title: '提示', 
@@ -192,6 +216,7 @@ export default {
         this.$message.error(error || '保存失败');
       }).finally(() => {
         this.isLoading = false
+        this.getShopInfo()
       })
     },
     viewBalance() {
@@ -261,9 +286,24 @@ export default {
         params: { sourceId: this.sourceId }
       });
     },
+    isFullAddress() {
+      return this.address && this.provinceCode && this.cityCode && this.areaCode
+    },
     //申请开通
     handleClickIsopen() {
-       this.isTableShow = false;
+      if (!this.isFullAddress()) {
+        this.confirm({
+          title: '提示', 
+          iconSuccess: true, 
+          text: '请先将发货地址补充完成，再申请开通。',
+          confirmText: '确定',
+          showCancelButton: false
+        });
+        return false
+      }
+      // 判断达达是否覆盖
+      this.isDaDaCoveredArea()
+      this.isTableShow = false;
       this.btnShow = true;
       this.saveShow = false;
     },
