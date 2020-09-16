@@ -1,13 +1,13 @@
 <template>
-  <div class="shopExpress">
+  <div class="shopExpress" v-loading="isInit"  element-loading-background="rgba(255, 255, 255, 1)">
     <!-- 商家配送 -->
-    <section class="switch dashed">
+    <section v-if="!isInit" class="switch dashed">
       <span>商家配送</span>
       <el-switch v-model="isOpen" @change="handleIsOpen"></el-switch>
       <span>{{ getSwitchTxt }}</span>
       <span class="prompt">启用后，买家下单可以选择商家配送，申请退换货售后时可以选择商家自取，由你提供上门配送服务</span>
     </section>
-    <el-form ref="ruleForm"  :rules="rules" label-position="left" :model="ruleForm" label-width="120px">
+    <el-form v-if="!isInit" ref="ruleForm"  :rules="rules" label-position="left" :model="ruleForm" label-width="120px">
        <!-- 配送范围 -->
       <section class="section dashed delivery-area">
         <h2><em>*</em> 配送范围</h2>
@@ -315,6 +315,7 @@ export default {
       visible2: false,
       visible3: false,
       isLoading: false,
+      isInit: true,
       tempWeeks: [],
       isLoadMap: true,
       ruleForm: {
@@ -476,6 +477,7 @@ export default {
     const p1 = this.getDeliveryAddress()
     const p2 = this.getShopInfo()
     const p3 = this.getOrderDeliverInfo()
+    this.isInit = true
     Promise.all([p1,p2,p3]).then(([res1, res2, res3]) => {
       console.log('promise', res1, res2, res3)
       if (res1) {
@@ -487,6 +489,8 @@ export default {
       if (res2) {
          this.ruleForm.radius = res2.deliverServiceRadius || null // 配送服务半径
       }
+    }).finally(() => {
+      this.isInit = false
     })
   },
 
@@ -1184,6 +1188,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
   $color: rgba(68, 67, 75, 1);
   .shopExpress {
+    min-height: 100%;
     background-color: #fff;
     color:$color;
     .dashed {
