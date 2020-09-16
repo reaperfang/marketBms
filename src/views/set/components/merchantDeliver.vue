@@ -497,7 +497,7 @@ export default {
   methods: {
     // 获取发货地址
     getDeliveryAddress() {
-      return this._apis.set.getAddressDefaultSender().then((response) => {
+      return this._apis.set.getAddressDefaultSender({ isBindShopsend: 1}).then((response) => {
         // if (response) {
         //   this.address = `${response.address} ${response.addressDetail}`
         //   this.ruleForm.lng = response.longitude
@@ -881,11 +881,11 @@ export default {
           confirmText: '去修改'
         }).then(() => {
           // source 1 商家配送
-          this.$router.push({ path:'/set/addressUpdate', query: {id: this.addressId, source: 1 } })
+          this.$router.push({ path:'/set/addressUpdate', query: {id: this.addressId, source: 1, sourceType: 1 } })
         }).catch(()=> {
         });
       } else {
-          this.$router.push({ path:'/set/addressAdd', query: { source: 1 } })
+          this.$router.push({ path:'/set/addressAdd', query: { source: 1, sourceType: 1 } })
       }
     },
     // 开启商家配送 api
