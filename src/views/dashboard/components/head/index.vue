@@ -131,30 +131,36 @@ export default {
 	methods: {
 		//...mapActions([""]),
 		fullscreen() {
-			let element = document.documentElement;
-			// 判断是否已经是全屏
-			// 如果是全屏，退出
-			if (document.fullscreen) {
+			var isInFullScreen =
+				(document.fullscreenElement &&
+					document.fullscreenElement !== null) ||
+				(document.webkitFullscreenElement &&
+					document.webkitFullscreenElement !== null) ||
+				(document.mozFullScreenElement &&
+					document.mozFullScreenElement !== null) ||
+				(document.msFullscreenElement &&
+					document.msFullscreenElement !== null);
+
+			var docElm = document.documentElement;
+			if (!isInFullScreen) {
+				if (docElm.requestFullscreen) {
+					docElm.requestFullscreen();
+				} else if (docElm.mozRequestFullScreen) {
+					docElm.mozRequestFullScreen();
+				} else if (docElm.webkitRequestFullScreen) {
+					docElm.webkitRequestFullScreen();
+				} else if (docElm.msRequestFullscreen) {
+					docElm.msRequestFullscreen();
+				}
+			} else {
 				if (document.exitFullscreen) {
 					document.exitFullscreen();
-				} else if (document.webkitCancelFullScreen) {
-					document.webkitCancelFullScreen();
+				} else if (document.webkitExitFullscreen) {
+					document.webkitExitFullscreen();
 				} else if (document.mozCancelFullScreen) {
 					document.mozCancelFullScreen();
 				} else if (document.msExitFullscreen) {
 					document.msExitFullscreen();
-				}
-			} else {
-				// 否则，进入全屏
-				if (element.requestFullscreen) {
-					element.requestFullscreen();
-				} else if (element.webkitRequestFullScreen) {
-					element.webkitRequestFullScreen();
-				} else if (element.mozRequestFullScreen) {
-					element.mozRequestFullScreen();
-				} else if (element.msRequestFullscreen) {
-					// IE11
-					element.msRequestFullscreen();
 				}
 			}
 		},
