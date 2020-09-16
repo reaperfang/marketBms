@@ -12,7 +12,7 @@
         <el-form-item label="手机号：" prop="mobile">
           <el-input
             v-model="ruleForm.mobile"
-            style="width: 360px;"
+            style="width: 470px;"
             placeholder="请输入手机号"
             maxlength="11"
             @input="handleText(ruleForm.mobile, 'mobile', 1)"
@@ -21,20 +21,48 @@
         <el-form-item label="">
           <p class="prompt">此手机号将作为达达商户账号的注册手机号，用于登录达达商户后台， 申请提交后，生成的初始化密码会以短信形式发送到注册手机号上。</p>
         </el-form-item>
-        <el-form-item label="城市：" prop="cityName">
-          <el-select v-model="ruleForm.cityName" placeholder="选择城市" style="width: 360px;">
-            <el-option
-              v-for="(item,index) in cityList"
-              :key="index+item.cityCode"
-              :label="item.cityName"
-              :value="item.cityName"
-            ></el-option>
-          </el-select>
+        <el-form-item label="城市：" required>
+          <el-col :span="8">
+            <el-form-item prop="provinceCode">
+              <el-select v-model="ruleForm.provinceCode" @change="handleProvince" placeholder="选择省份" style="width: 150px;">
+                <el-option
+                  v-for="(item,index) in provinceList"
+                  :key="index"
+                  :label="item.name"
+                  :value="item.code"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="cityCode">
+              <el-select v-model="ruleForm.cityCode" @change="handleCity" placeholder="选择城市" style="width: 150px;">
+                <el-option
+                  v-for="(item,index) in cityList"
+                  :key="index"
+                  :label="item.name"
+                  :value="item.code"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="areaCode">
+              <el-select v-model="ruleForm.areaCode" placeholder="选择区域" style="width: 150px;">
+                <el-option
+                  v-for="(item,index) in areaList"
+                  :key="index"
+                  :label="item.name"
+                  :value="item.code"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
         </el-form-item>
         <el-form-item label="企业全称：" prop="enterpriseName">
           <el-input
             v-model.trim="ruleForm.enterpriseName"
-            style="width: 360px;"
+            style="width: 470px;"
             placeholder="请输入企业全称"
             maxlength="100"
           ></el-input>
@@ -42,7 +70,7 @@
         <el-form-item label="企业地址：" prop="enterpriseAddress">
           <el-input
             v-model.trim="ruleForm.enterpriseAddress"
-            style="width: 360px;"
+            style="width: 470px;"
             placeholder="请输入企业地址"
             maxlength="400"
           ></el-input>
@@ -50,7 +78,7 @@
         <el-form-item label="联系人姓名：" prop="contactName">
           <el-input
             v-model.trim="ruleForm.contactName"
-            style="width: 360px;"
+            style="width: 470px;"
             placeholder="请输入联系人姓名"
             maxlength="30"
           ></el-input>
@@ -58,7 +86,7 @@
         <el-form-item label="联系人电话：" prop="contactPhone">
           <el-input
             v-model.number="ruleForm.contactPhone"
-            style="width: 360px;"
+            style="width: 470px;"
             placeholder="请输入联系人电话"
             maxlength="11"
           ></el-input>
@@ -66,16 +94,16 @@
          <el-form-item label="店铺名称：" prop="shopName">
           <el-input
             v-model.trim="ruleForm.shopName"
-            style="width: 360px;"
+            style="width: 470px;"
             placeholder="请输入店铺名称"
             maxlength="30"
           ></el-input>
         </el-form-item>
         <el-form-item label="邮箱地址：" prop="email">
-          <el-input v-model.trim="ruleForm.email" maxlength="320" style="width: 360px;" placeholder="请输入邮箱地址"></el-input>
+          <el-input v-model.trim="ruleForm.email" maxlength="320" style="width: 470px;" placeholder="请输入邮箱地址"></el-input>
         </el-form-item>
         <el-form-item label="业务类型：" prop="businessType">
-          <el-select v-model="ruleForm.businessType" placeholder="请选择业务类型" style="width: 360px;">
+          <el-select v-model="ruleForm.businessType" placeholder="请选择业务类型" style="width: 470px;">
             <el-option
               v-for="(item, index) in businessTypeList"
               :key="index"
@@ -121,7 +149,9 @@ export default {
       showFooter: false,
       ruleForm: {
         mobile: "",
-        cityName: "",
+        provinceCode: "",
+        cityCode: "",
+        areaCode: "",
         enterpriseName: "",
         enterpriseAddress: "",
         contactName: "",
@@ -131,6 +161,7 @@ export default {
         businessType: ""
       },
       businessTypeList: th3Deliver.businessTypeList, // 业务类型列表
+      provinceList: [],
       rules: {
         mobile: [
           { required: true, message: "请输入手机号", trigger: "blur" },
@@ -140,7 +171,9 @@ export default {
             trigger: "blur"
           }
         ],
-        cityName: [{ required: true, message: "必选项", trigger: "change" }],
+        provinceCode: [{ required: true, message: "必选项", trigger: "change" }],
+        cityCode: [{ required: true, message: "必选项", trigger: "change" }],
+        areaCode: [{ required: true, message: "必选项", trigger: "change" }],
         enterpriseName: [
           { required: true, message: "请输入企业全称", trigger: "blur" },
            { min: 1, max: 100, message: "仅支持英文和汉字，最多输入100个字符", trigger: "blur" }
@@ -172,8 +205,6 @@ export default {
         ],
         businessType: [{ required: true, message: "必选项", trigger: "change" }],
       },
-      
-      cityList:[],
       _formatText: null
     };
   },
@@ -195,6 +226,26 @@ export default {
       set(val) {
         this.$emit("update:dialogVisible", val);
       }
+    },
+    cityList() {
+      const provinceCode = this.ruleForm.provinceCode
+      if (!provinceCode) return []
+      const provinceList = this.provinceList
+      const province = provinceList.find(item => {
+        return +item.code === +provinceCode
+      })
+      const cityList = province ? province.citys : []
+      return cityList
+    },
+    areaList() {
+      const cityCode = this.ruleForm.cityCode
+      if (!cityCode) return []
+      const cityList = this.cityList
+      const city = cityList.find(item => {
+        return +item.code === +cityCode
+      })
+      const areaList = city ? city.areas : []
+      return areaList
     }
   },
   created() {
@@ -203,10 +254,17 @@ export default {
     this.init()
   },
   methods: {
+    handleProvince() {
+      this.ruleForm.cityCode = ''
+      this.ruleForm.areaCode = ''
+    },
+    handleCity() {
+      this.ruleForm.areaCode = ''
+    },
     init() {
       // 获取省市区
       // 获取店铺信息
-      
+      this.getAddressData()
     },
     onlyNumber(val, key) {
       const reg = /\D+/gi
@@ -234,13 +292,11 @@ export default {
     handleText(val,key, rule = 2) {
       this._formatText(val, key, rule)
     },
-    //门店列表
-    getList() {
-      this._apis.set
-        .getCityList()
+    getAddressData() {
+      this._apis.order
+        .getArea()
         .then(response => {
-          console.log('getList', response)
-          this.cityList=response
+          this.provinceList = response
         })
         .catch(error => {
           this.loading = false;
