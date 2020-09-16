@@ -266,7 +266,7 @@
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
                             <span v-if="index==3">04</span>
                             <span v-if="index==4">05</span>
-                            <span><img class="fl" :src="item.goods_image" alt=""><p>{{item.goods_name}}</p></span>
+                            <span><img class="fl" :src="(item.goods_image).split(',')[0]" alt=""><p>{{item.goods_name}}</p></span>
                             <span><p>{{item.paid_order_am_pr}}</p></span>
                         </li>
                     </ul>
@@ -283,7 +283,7 @@
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
                             <span v-if="index==3">04</span>
                             <span v-if="index==4">05</span>
-                            <span><img class="fl" :src="item.goods_image" alt=""><p>{{item.goods_name}}</p></span>
+                            <span><img class="fl" :src="(item.goods_image).split(',')[0]" alt=""><p>{{item.goods_name}}</p></span>
                             <span><p>{{item.product_nu}}</p></span>
                         </li>
                     </ul>
@@ -300,7 +300,7 @@
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
                             <span v-if="index==3">04</span>
                             <span v-if="index==4">05</span>
-                            <span><img class="fl" :src="item.goods_image" alt=""><p>{{item.goods_name}}</p></span>
+                            <span><img class="fl" :src="(item.goods_image).split(',')[0]" alt=""><p>{{item.goods_name}}</p></span>
                             <span><p>{{item.pv_pr}}</p></span>
                         </li>
                     </ul>
