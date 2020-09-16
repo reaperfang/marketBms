@@ -1,6 +1,6 @@
 <template>
-	<div class="row-3-grid-content middle-grid-margin flex-column">
-		<el-row type="flex" justify="space-between" class="item-title">
+	<div class="row-3-grid-content middle-grid-margin flex-box">
+		<!-- <el-row type="flex" justify="space-between" class="item-title">
 			<el-col :span="24">
 				<gridtitle :title="'商城访客(最近七天)'"></gridtitle>
 			</el-col>
@@ -11,7 +11,17 @@
 				:chartSettings="chartSettings"
 				:chartExtend="chartExtend"
 			></vline>
-		</el-row>
+		</el-row> -->
+		<div class="titile">
+			<gridtitle :title="'商城访客(最近七天)'"></gridtitle>
+		</div>
+		<div class="content">
+			<vline
+				:chartData="chartData"
+				:chartSettings="chartSettings"
+				:chartExtend="chartExtend"
+			></vline>
+		</div>
 	</div>
 </template>
 

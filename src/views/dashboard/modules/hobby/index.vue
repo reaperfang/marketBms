@@ -1,13 +1,19 @@
 <template>
-	<div class="row-3-grid-content flex-column">
-		<el-row type="flex" justify="space-between" class="item">
+	<div class="row-3-grid-content flex-column flex-box">
+		<!-- <el-row type="flex" justify="space-between" class="item-title">
 			<el-col :span="24">
 				<gridtitle :title="'用户交易偏好'"></gridtitle>
 			</el-col>
 		</el-row>
 		<el-row class="item-content">
 			<vcap></vcap>
-		</el-row>
+		</el-row> -->
+		<div class="title">
+			<gridtitle :title="'用户交易偏好'"></gridtitle>
+		</div>
+		<div class="content">
+			<vcap></vcap>
+		</div>
 	</div>
 </template>
 
@@ -57,3 +63,23 @@ export default {
 	}
 };
 </script>
+<style lang="scss">
+// .main-box {
+// 	position: relative;
+// 	width: 100%;
+// 	height: 100%;
+// 	.title {
+// 		width: 100%;
+// 		height: 43px;
+// 		// background: #29f0bf;
+// 	}
+// 	.content {
+// 		width: 100%;
+// 		position: absolute;
+// 		top: 43px;
+// 		bottom: 0px;
+// 		left: 0px;
+// 		// background: #f09529;
+// 	}
+// }
+</style>

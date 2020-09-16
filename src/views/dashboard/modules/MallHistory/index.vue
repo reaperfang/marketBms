@@ -1,5 +1,5 @@
 <template>
-	<div class="row-3-grid-content middle-grid-margin flex-column">
+	<!-- <div class="row-3-grid-content middle-grid-margin flex-column">
 		<el-row type="flex" justify="space-between" class="item-title">
 			<el-col :span="12">
 				<gridtitle :title="'支付金额(最近七天)'"></gridtitle>
@@ -24,6 +24,37 @@
 				></vline>
 			</el-col>
 		</el-row>
+	</div> -->
+
+	<div class="row-3-grid-content middle-grid-margin flex-box">
+		<div class="titile">
+			<el-row type="flex" justify="space-between" class="item-title">
+				<el-col :span="12">
+					<gridtitle :title="'支付金额(最近七天)'"></gridtitle>
+				</el-col>
+				<el-col :span="12">
+					<gridtitle :title="'商城浏览(最近七天)'"></gridtitle>
+				</el-col>
+			</el-row>
+		</div>
+		<div class="content">
+			<el-row class="item-content">
+				<el-col :span="12" class="v-el-col">
+					<vline
+						:chartData="left"
+						:chartSettings="chartSettings"
+						:chartExtend="chartExtend"
+					></vline>
+				</el-col>
+				<el-col :span="12" class="v-el-col">
+					<vline
+						:chartData="right"
+						:chartSettings="chartSettings"
+						:chartExtend="chartExtend"
+					></vline>
+				</el-col>
+			</el-row>
+		</div>
 	</div>
 </template>
 

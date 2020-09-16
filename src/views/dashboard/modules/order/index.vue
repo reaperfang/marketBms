@@ -1,5 +1,5 @@
 <template>
-	<div class="row-3-grid-content flex-column">
+	<!-- <div class="row-3-grid-content flex-column">
 		<el-row type="flex" justify="space-between" class="item-title">
 			<el-col :span="24">
 				<gridtitle :title="'下单转换漏斗(最近七天)'"></gridtitle>
@@ -13,6 +13,21 @@
 				ref="vfunnel"
 			></vfunnel>
 		</el-row>
+	</div> -->
+
+	<div class="row-3-grid-content flex-box">
+		<div class="titile">
+			<gridtitle :title="'下单转换漏斗(最近七天)'"></gridtitle>
+		</div>
+		<div class="content">
+			<vfunnel
+				:chartData="lineargroup"
+				:chartSettings="chartSettings"
+				:chartExtend="chartExtend"
+				ref="vfunnel"
+				class="item-content"
+			></vfunnel>
+		</div>
 	</div>
 </template>
 
@@ -123,7 +138,7 @@ export default {
 			// 	}
 			// ];
 
-			console.log("res.paid_c_order_7dco",res.paid_c_order_7dco);
+			console.log("res.paid_c_order_7dco", res.paid_c_order_7dco);
 
 			this.orderlist({
 				chart: chart,
@@ -132,7 +147,9 @@ export default {
 						res.order_c_uv_7dco.toFixed(2) * 100
 					),
 					paid_c_order_7dco: parseInt(
-						res.paid_c_order_7dco==-9999?0:res.paid_c_order_7dco.toFixed(2) * 100
+						res.paid_c_order_7dco == -9999
+							? 0
+							: res.paid_c_order_7dco.toFixed(2) * 100
 					),
 					paid_c_uv_7dco: parseInt(
 						res.paid_c_uv_7dco.toFixed(2) * 100

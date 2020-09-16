@@ -202,5 +202,38 @@ export default {
 			}
 		}
 	}
+
+	.flex-box {
+		// box-sizing: border-box;
+		// margin: 0 10px;
+
+		position: relative;
+		// width: 100%;
+		height: 100%;
+		.title {
+			width: 100%;
+			height: 43px;
+			// background: #29f0bf;
+		}
+		.content {
+			width: 100%;
+			position: absolute;
+			top: 43px;
+			bottom: 0px;
+			left: 0px;
+			right: 0px;
+			// margin-left: 8px;
+			// background: #f09529;
+
+			.item-content {
+				height: 100%;
+				margin: 0 8px;
+
+				.v-el-col {
+					height: 100%;
+				}
+			}
+		}
+	}
 }
 </style>

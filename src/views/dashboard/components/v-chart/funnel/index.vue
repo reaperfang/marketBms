@@ -55,8 +55,8 @@ export default {
 					show: true,
 					backgroundColor: "#010F27",
 					borderRadius: 4,
-					color: "#FFFFFFFF",
-					verticalAlign: "middle",
+					color: "#FFFFFF",
+					verticalAlign: "center",
 					offset: [50, 0, 0, 0],
 					fontSize: 12,
 					//   padding: [3, 10, 5, 10],
@@ -98,7 +98,7 @@ export default {
 					// left: "4%",
 					right: 17,
 					height: "135",
-					bottom: "-10"
+					bottom: "-2"
 				},
 				xAxis: [
 					{
