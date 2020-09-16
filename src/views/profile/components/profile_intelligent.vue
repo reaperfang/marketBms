@@ -67,7 +67,6 @@ export default {
             this.stepStatus =  0;
           }
 
-          console.log("====", this.currentStep, this.stepStatus);
         } catch (err) {
           console.error(err);
           this.$message.error(err);

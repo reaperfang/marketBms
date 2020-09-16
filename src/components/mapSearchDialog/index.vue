@@ -76,10 +76,6 @@ import mapSearch from '@/components/mapSearch'
         // console.log('------',this.$refs.shopInfoMap)
         //   this.$refs.shopInfoMap.handlePropSearch(this.sendAddress)
         // })
-        if(this.sendAddress === ""){
-          this.$message.error("请输入要搜索的内容");
-          return
-        }
         if(!this.mapLoaded) {
           this._globalEvent.$on('mapLoaded', ()=>{
             this.$nextTick(()=> {

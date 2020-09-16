@@ -92,6 +92,7 @@
         if(!this.isMapChoose) {
           this.$message.error("保存失败");
           this.form.sendAddress = "";
+          return
         }
         try {
           this.$emit("update-completed-loading", true);
@@ -145,6 +146,7 @@
         this.province = poi.provinceName;
         this.city = poi.cityName;
         this.area = poi.areaName;
+        this.isMapChoose = true
         this.$nextTick(() => {
           this.$refs.form.validateField('sendAddress')
         })

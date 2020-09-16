@@ -79,7 +79,7 @@
           const result = await this._apis.profile.getIntelligentProgress();
           if(result) {
             if(result.currentStep === 4 && result.status === 1) {
-              this.$router.back();
+              // this.$router.back();
             } else if(result.currentStep === 3 && result.status === 0) {
               this.stepCurrent = 2;
               this.configureFail = true;
@@ -90,9 +90,9 @@
             this.templateId = result.chooseTemplateId || null;
             this.templateCid = result.tempCid || null;
 
-            // 假数据
-            // this.stepCurrent = 1;
-            // this.stepStatus = 1;
+            // 调试假数据
+            // this.stepCurrent = 4;
+            // this.stepStatus = 0;
           }else {
             this.stepCurrent = 1;
             this.stepStatus = 0;
