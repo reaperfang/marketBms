@@ -501,10 +501,6 @@ export default {
     overflow: auto;
     height: 502px;
 }
-/deep/ .el-dialog__header{
-    background: #f1f0ff;
-    border-radius: 10px 10px 0 0;
-}
 /deep/ .el-input-number--small .el-input-number__decrease{
     width: 18px;
     font-size: 13px;

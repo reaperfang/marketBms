@@ -83,10 +83,6 @@ export default {
     /deep/ .el-dialog {
         border-radius: 10px;
     }
-    /deep/ .el-dialog__header {
-        background: #F6F7FA;
-        border-radius: 10px 10px 0 0;
-    }
     /deep/ .el-dialog__title {
         color: #44434B;
     }

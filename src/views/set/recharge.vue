@@ -71,7 +71,7 @@ export default {
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
           let param = {
-            type: 1,
+            type: 1, //达达
             amount: this.ruleForm.price,
             category: "PC",
           };
@@ -80,46 +80,24 @@ export default {
             .getRecharge(param)
             .then((response) => {
               this.nextLoading = false;
-              let url = response.payUrl;
+              let url = response;
               if (url) {
                 window.open(url);
                 this.confirm({
                   title: "请确认支持状态",
-                  text: "请在新打开的页面中完成支付",
+                  text: "请在新开页面中完成支付",
                   showCancelButton: false,
                   customClass: "recharge-confirm",
                   confirmText: "已完成支付",
-                  beforeClose: (action, instance, done) => {
-                  if (action === "confirm") {
-                    instance.confirmButtonLoading = true;
-                    //instance.confirmButtonText = '执行中...';
-                    this._apis.set
-                    .getRecharge(param)
-                    .then((response) => {
-                      done();
-                      setTimeout(() => {
-                      instance.confirmButtonLoading = false;
-                      }, 300);
-                      //跳转到充值记录页面
-                      this.$router.push({
-                      name: "rechargeRecord",
-                      params: {
-                        sourceId: this.$route.params.sourceId,
-                      },
-                      });
-                    })
-                    .catch((error) => {
-                      done();
-                      setTimeout(() => {
-                      instance.confirmButtonLoading = false;
-                      }, 300);
-                      this.$message.error(error);
-                    });
-                  } else {
-                    done();
-                  }
-                  },
-                }).then(() => {});
+                }).then(() => {
+                  //跳转到充值记录页面
+                  this.$router.push({
+                    name: "rechargeRecord",
+                    params: {
+                      sourceId: this.$route.params.sourceId,
+                    }
+                  });
+                });
               }
             })
             .catch((error) => {
@@ -208,16 +186,5 @@ export default {
 .proText {
   font-size: 14px;
   color: #44434b !important;
-}
-</style>
-
-<style lang="scss">
-.recharge-confirm {
-  /deep/ .el-message-box__headerbtn {
-    display: none;
-  }
-  /deep/ .el-icon-loading {
-    letter-spacing: 0;
-  }
 }
 </style>

@@ -289,10 +289,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-/deep/ .el-dialog__header{
-    background: #f1f0ff;
-    border-radius: 10px 10px 0 0;
-}
 /deep/ .el-dialog{
     border-radius: 10px;
 }
