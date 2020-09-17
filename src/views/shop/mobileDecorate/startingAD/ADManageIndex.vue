@@ -273,6 +273,7 @@ export default {
 .ad_head_wrapper{
   background:#fff;
   padding:20px;
+  border-radius: 4px;
 }
 /deep/ .table{
   // overflow-y: auto;
@@ -280,6 +281,7 @@ export default {
   background:#fff;
   padding:20px;
   padding-bottom:50px;
+  border-radius: 4px;
   p{
     margin-bottom:20px;
   }

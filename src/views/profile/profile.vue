@@ -648,7 +648,7 @@ export default {
     .p_l_item {
       background-color: #fff;
       padding: 20px;
-      border-radius: 5px;
+      border-radius: 4px;
     }
     .p_l_top {
       .p_p {
@@ -837,7 +837,7 @@ export default {
       padding: 20px 16px;
       // width: 215px;
       color: #3d434a;
-      border-radius: 5px;
+      border-radius: 4px;
     }
     //客服中心
     .p_r_kefu {

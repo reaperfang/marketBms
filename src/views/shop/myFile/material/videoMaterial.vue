@@ -45,7 +45,7 @@
               <p class="img_name">{{item.fileName}}</p>
             </div>
            </div>
-           <p>
+           <p style="margin-top: -30px;">
             <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
             <el-button type="warning" plain class="ml10" @click="deleteImages">批量删除</el-button>
             <el-button type="warning" plain class="ml10" @click="moveGroups">移动分组</el-button>
@@ -505,7 +505,7 @@ export default {
 }
 .pages{
   width: 100%;
-  margin-top: 50px;
+  margin-top: 40px;
   text-align: center;
   .page_nav{
     display: inline-block;

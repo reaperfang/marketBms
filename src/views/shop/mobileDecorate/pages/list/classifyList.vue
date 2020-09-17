@@ -152,6 +152,7 @@ export default {
   background:#fff;
   padding:20px;
   padding-top:0;
+  border-radius: 0 0 4px 4px;
 }
 /deep/ .table{
   // overflow-y: auto;
@@ -159,6 +160,7 @@ export default {
   background:#fff;
   padding:20px;
   padding-bottom:50px;
+  border-radius: 4px;
   p{
     margin-bottom:20px;
   }
