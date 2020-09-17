@@ -8,9 +8,10 @@
 		<el-row class="item-end">
 			<div class="maill-deal-s">
 				<el-row class="box-item-start">
-					<el-col :span="24">
+					<el-col :span="12">
 						<gridtitle :title="'商城成交来源TOP3'"></gridtitle>
 					</el-col>
+					<el-col :span="12"> </el-col>
 				</el-row>
 				<div class="box-item-end">
 					<el-row class="fill-height">

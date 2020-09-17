@@ -9,7 +9,12 @@
 			<vcap></vcap>
 		</el-row> -->
 		<div class="title">
-			<gridtitle :title="'用户交易偏好'"></gridtitle>
+			<el-row type="flex" justify="space-between" class="item-title">
+				<el-col :span="12">
+					<gridtitle :title="'用户交易偏好'"></gridtitle>
+				</el-col>
+				<el-col :span="12"> </el-col>
+			</el-row>
 		</div>
 		<div class="content">
 			<vcap></vcap>
