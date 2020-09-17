@@ -542,12 +542,6 @@ export default {
         }
     }
 }
-/deep/ .el-input {
-    width: auto;
-}
-/deep/ .input-with-select .el-input__inner {
-  width: 139px;
-}
 .export-header {
   display: flex;
   justify-content: space-between;

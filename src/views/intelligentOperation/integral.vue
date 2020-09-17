@@ -317,7 +317,6 @@ export default {
         }
         .input_wrap2{
             display: inline-block;
-            width: 140px;
         }
         .input_wrap3{
             display: inline-block;

@@ -4,7 +4,7 @@
       <el-form :inline="true" :model="listQuery" ref="formInline" class="form-inline">
         <el-form-item label>
           <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
-            <el-select class="w_135" v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
+            <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
               <el-option label="订单编号" value="code"></el-option>
               <el-option label="商品名称" value="goodsName"></el-option>
               <!--<el-option label="商品SPU编码" value="code"></el-option>
@@ -57,7 +57,7 @@
         </el-form-item>
         <el-form-item label>
           <el-input placeholder="请输入内容" v-model="listQuery.searchValue2" class="input-with-select">
-            <el-select v-model="listQuery.searchType2" class="w_135" slot="prepend" placeholder="请输入">
+            <el-select v-model="listQuery.searchType2" slot="prepend" placeholder="请输入">
               <el-option label="用户ID" value="memberSn"></el-option>
               <el-option label="用户昵称" value="memberName"></el-option>
               <el-option label="收货人姓名" value="receivedName"></el-option>

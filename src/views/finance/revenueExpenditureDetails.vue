@@ -5,7 +5,7 @@
     <div class="top_part head-wrapper">
       <el-form :model="ruleForm" ref="ruleForm" :inline="inline">
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:130px;padding-right:4px;">
+          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:135px;padding-right:4px;">
             <el-option
               v-for="item in revenueExpenditureTerms"
               :key="item.value"
@@ -16,7 +16,7 @@
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
-          <el-select v-model="ruleForm.businessType" style="width:210px;" placeholder="全部">
+          <el-select v-model="ruleForm.businessType" placeholder="全部">
             <el-option
               v-for="item in rebusinessTypes"
               :key="item.value"
@@ -27,7 +27,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="支付方式">
-          <el-select v-model="ruleForm.payWay" style="width:210px;" placeholder="全部">
+          <el-select v-model="ruleForm.payWay" placeholder="全部">
             <el-option
               v-for="item in payTypeList"
               :key="item.value"

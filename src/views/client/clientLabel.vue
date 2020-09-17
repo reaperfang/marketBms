@@ -5,7 +5,7 @@
         </div>
         <div class="c_line">
             <span>标签名称：</span>
-            <div class="input_wrap">
+            <div class="input_wrap w_210">
                 <el-input v-model="tagName" placeholder="请输入标签名称"></el-input>
             </div>
             <span class="marL20">标签类型：</span>
@@ -94,7 +94,6 @@ export default {
             color: #3D434A;
         }
         .input_wrap{
-            width: 160px;
             display: inline-block;
         }
     }

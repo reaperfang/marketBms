@@ -166,6 +166,11 @@ export default {
 .p_container .input_wrap{
     vertical-align: middle;
 }
+/deep/.el-input{
+    .el-input__inner{
+        width: 210px;
+    }
+}
 /deep/ .el-table--small td, /deep/.el-table--small th{
   padding:8px 10px;
 }

@@ -427,9 +427,6 @@
 /deep/ .search-code .el-form-item__content {
     display: flex;
 }
-/deep/ .input-with-select .el-input__inner {
-  width: 160px;
-}
 .table-header {
     margin-bottom: 10px;
 }
