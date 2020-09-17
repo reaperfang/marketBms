@@ -115,6 +115,9 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
+.page_styles {
+  margin: 40px 0 30px 0;
+}
 /deep/ .el-table td, /deep/ .el-table th {
         text-align: center;
         &:nth-child(1) {

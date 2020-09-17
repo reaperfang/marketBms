@@ -294,3 +294,18 @@ Vue.directive('calcHeight', {
     }
 })
 
+Vue.directive('calcMinHeight', {
+    inserted: function (el, binding, vnode) {
+       el.style.minHeight = document.body.clientHeight - (binding.value || 0) + 'px';
+       vnode.context._globalEvent.$on('resize', ()=> {
+           el.style.minHeight = document.body.clientHeight - (binding.value || 0) + 'px';
+       })
+    },
+    componentUpdated: function (el, binding, vnode) {
+       el.style.minHeight = document.body.clientHeight - (binding.value || 0) + 'px'
+       vnode.context._globalEvent.$on('resize', ()=> {
+           el.style.minHeight = document.body.clientHeight - (binding.value || 0) + 'px';
+       })
+    }
+})
+

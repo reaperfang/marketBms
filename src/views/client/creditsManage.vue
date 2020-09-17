@@ -239,7 +239,8 @@ export default {
     padding: 20px;
     padding-top:0;
     background-color: #fff;
-    height:100%;
+    min-height:100%;
+    border-radius: 4px;
     .marL20{
         margin-left: 20px;
     }

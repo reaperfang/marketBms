@@ -262,6 +262,7 @@ export default {
 .p_container{
     padding: 20px;
     background-color: #fff;
+    border-radius: 4px;
     .pane_container{
         color: #3D434A;
         // padding: 23px 38px;

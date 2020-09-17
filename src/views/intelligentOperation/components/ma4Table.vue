@@ -150,5 +150,8 @@ export default {
                 }
             }
         }
+        .page_styles {
+    margin: 40px 0 30px 0;
+}
 
 </style>

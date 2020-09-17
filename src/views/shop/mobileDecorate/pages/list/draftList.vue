@@ -19,7 +19,7 @@
         <el-button type="primary" @click="_routeTo('m_templateManageIndex', {'tab':'myTemplate'})">新建页面</el-button>
       </div>
     </div>
-    <div class="table">
+    <div class="table" v-calcMinHeight="313">
       <p>草稿（共{{total || 0}}个）</p>
       <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column

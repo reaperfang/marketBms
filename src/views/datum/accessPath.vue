@@ -274,6 +274,7 @@ export default {
 .p_container {
   padding: 20px;
   background-color: #fff;
+  border-radius: 4px;
   .pane_container {
     .p_line {
 		padding-bottom: 30px;
