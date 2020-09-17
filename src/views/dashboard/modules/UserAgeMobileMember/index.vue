@@ -161,8 +161,10 @@ export default {
 			this.sexageData = {
 				ageData: result,
 				sexData: {
-					female: val.c_uv_sex_female, //c_uv_sex_female
-					gender: val.c_uv_sex_gender
+					female: parseInt(
+						val.c_uv_share_sex_female.toFixed(2) * 100
+					), //c_uv_sex_female
+					gender: parseInt(val.c_uv_share_sex_gender.toFixed(2) * 100)
 				}
 			};
 		},
