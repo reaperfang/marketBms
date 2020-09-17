@@ -986,6 +986,7 @@ export default {
   color: #333333;
   background-color: #fff;
   padding: 20px;
+  border-radius: 4px;
   > .title {
     font-size: 16px;
   }

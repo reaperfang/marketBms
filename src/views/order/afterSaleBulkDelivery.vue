@@ -1001,6 +1001,7 @@ export default {
   background-color: #fff;
   padding: 20px;
   color: #333;
+  border-radius: 4px;
   > .title {
     font-size: 16px;
   }

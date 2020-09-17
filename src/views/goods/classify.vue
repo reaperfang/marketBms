@@ -427,6 +427,7 @@ export default {
 .classify {
     background: #fff;
     padding: 20px;
+    border-radius: 4px;
     .dialog-container {
         text-align: left;
     }

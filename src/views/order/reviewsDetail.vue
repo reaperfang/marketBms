@@ -438,6 +438,7 @@ export default {
     background-color: #fff;
     padding: 20px;
     margin-bottom: 20px;
+    border-radius: 4px;
     &.customer-reviews {
       .title {
         font-size: 16px;

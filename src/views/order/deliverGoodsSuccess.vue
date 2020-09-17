@@ -108,6 +108,7 @@ export default {
     background-color: #fff;
     font-size: 18px;
     color: #443D4A;
+    border-radius: 4px;
     .success-icon {
         text-align: center;
         margin-top: 60px;

@@ -647,6 +647,7 @@ export default {
         padding: 30px 50px;
         display: flex;
         justify-content: space-between;
+        border-radius: 4px;
         .item.righter {
             margin-left: 10px;
             p {

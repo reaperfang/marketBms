@@ -215,6 +215,7 @@ export default {
             line-height: 60px;
             background-color: #fff;
             padding: 0 20px;
+            border-radius: 4px;
             .header-righter {
                 text-align: right;
                 color: #b8b8bb;
@@ -230,6 +231,7 @@ export default {
             background-color: #fff;
             padding: 20px 40px;
             margin-top: 20px;
+            border-radius: 4px;
             &.container {
                 padding-top: 0;
             }

@@ -215,6 +215,7 @@ export default {
         background-color: #fff;
         padding: 20px;
         color: rgb(205, 208, 206);
+        border-radius: 4px;
         .header {
             margin-bottom: 20px;
         }

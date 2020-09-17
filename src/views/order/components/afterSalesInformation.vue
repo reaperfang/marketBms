@@ -674,6 +674,7 @@ export default {
         background-color: #fff;
         padding: 20px;
         margin-top: 20px;
+        border-radius: 4px;
         .row {
             margin: 10px 0;
             &:first-child {

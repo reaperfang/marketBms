@@ -1040,6 +1040,7 @@ export default {
   padding: 20px;
   color: #333333;
   font-size: 14px;
+  border-radius: 4px;
   > .title {
     font-size: 16px;
   }
