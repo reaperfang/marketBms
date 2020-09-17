@@ -12,7 +12,7 @@
           <div class="fr fr_channel">
           </div>
       </div>
-      <div class="pane_container clearfix">
+      <div class="pane_container clearfix"  v-loading="dataRtload">
         <div class="p_screening">
             <div class="clearfix pt">
                 <p class="fl">支付金额（元）</p>
@@ -101,14 +101,14 @@
     <!-- 交易看板 -->
     <el-container class="pb12 clearfix">
         <el-aside class="asideBox" width="65%">
-            <div class="p_container p_ltsiade">
+            <div class="p_container p_ltsiade" v-loading="dataTypeload">
                 <div class="p_title clearfix">
                     <h2>交易看板</h2>
                     <div class="fr clearfix">
                         <serchRt @change="getVal" class="fr" />
                     </div>
                 </div>
-                <div class="choose-type clearfix">
+                <div class="choose-type clearfix" >
                     <div class="choose_item" :class="checkList[0]?'active':''">
                         <div class="choosetop">
                             <p>支付金额（元）<span class="chooseBut" @click="chooseType(0)"></span></p>
@@ -355,10 +355,12 @@ export default {
         checkList:[true,false,false,false],
         activetype: 0,
         dataType:{},
+        dataTypeload:true,
         startTime: "",
         endTime:"",
         nearDay: 7, 
         dataRt:{},//右侧 类别数据
+        dataRtload:true,
         dataChart1: {},//数据总览
         dataChart2: {},//用户概览
         dataChart3: {},//交易看板
@@ -427,7 +429,8 @@ export default {
     },
     getdataView(){//数据总览数据
       this._apis.realSurvey.dataView(this.query).then(response => {
-        this.dataRt = JSON.parse(response)  
+        this.dataRt = JSON.parse(response) 
+        this.dataRtload=false 
         this.dataChart1 = {
             xAxis:JSON.parse(response).x,
             data_rt:JSON.parse(response).data_rt,
@@ -458,6 +461,7 @@ export default {
     this.query.date=this.seachTimetrad.date
       this._apis.realSurvey.transactionView(this.query).then(response => {
         this.dataType = JSON.parse(response)
+        this.dataTypeload=false
         var allData=[]
         allData.push(this.dataType.pay_amounts)
         allData.push(this.dataType.pay_order_nums)
