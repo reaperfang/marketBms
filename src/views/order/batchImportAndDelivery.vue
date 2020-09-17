@@ -249,6 +249,13 @@ export default {
     },
     beforeUpload(file) {
       console.log(file);
+      if (file.name) {
+		  let name=file.name.substring(file.name.lastIndexOf(".")+1);
+		  if (name != 'csv' && name != 'xls' && name != 'xlsx') {
+			  this.$message.error('上传的文件仅支持 csv、xls、xlsx格式！');
+			  return false
+		  }
+	  }
       if (file.size > 1048576) {
         this.confirm({
           title: "提示",
