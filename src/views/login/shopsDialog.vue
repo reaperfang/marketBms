@@ -9,7 +9,7 @@
         :close-on-press-escape="false"
         :show-close="showClose"
         style="margin-top:5vh;">
-        <span slot="title" class="dialog_title">
+        <span slot="title" class="el-dialog__title">
             我的店铺
         </span>
         <div class="content"  v-loading="loading">
@@ -268,9 +268,9 @@ export default {
   }
 
 }
-/deep/ .el-dialog__header{
-  background:rgba(101,94,255,0.09) !important;
-}
+// /deep/ .el-dialog__header{
+//   background:rgba(101,94,255,0.09) !important;
+// }
 .p_center{
   text-align: center;
 }

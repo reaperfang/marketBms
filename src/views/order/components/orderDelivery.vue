@@ -40,7 +40,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item class="searchTimeType">
-                    <el-select class="date-picker-select" v-model="listQuery.searchTimeType" placeholder>
+                    <el-select class="date-picker-select w_135" v-model="listQuery.searchTimeType" placeholder>
                         <el-option label="发货时间" value="send"></el-option>
                         <el-option label="下单时间" value="create"></el-option>
                     </el-select>
@@ -607,16 +607,6 @@ export default {
         }
     }
 }
-/deep/ .el-input {
-    width: auto;
-}
-/deep/ .input-with-select .el-input__inner {
-  width: 139px;
-}
-/deep/ .el-date-editor {
-  margin-left: -6px;
-  border-radius: 0 0 4px 4px;
-}
 /deep/ .date-picker-select .el-input__inner {
   border-radius: 4px 0 0 4px;
 }
@@ -640,9 +630,6 @@ export default {
         position: relative;
         top: 3px;
         margin-right: 10px;
-    }
-    /deep/ .searchTimeType .date-picker-select .el-input {
-        width: 100px;
     }
     /deep/ .searchTimeType .el-form-item__content {
         display: flex;
