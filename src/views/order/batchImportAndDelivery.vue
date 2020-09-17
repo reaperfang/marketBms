@@ -39,7 +39,7 @@
             </el-upload>
           </div>
           <div class="col">
-            <p>说明：仅支持 csv、xls、xlsx文件类型，不识别其他类型的本地文件，文件大小请控制在 1MB 以内</p>
+            <p>说明：请按模板内容仔细填写快递公司及快递单号，发货成功后不可修改，支持 csv、xls、xlsx，文件大小需控制在 1MB 以内</p>
             <p @click="downloadTemplate" class="blue pointer">下载批量发货模板</p>
           </div>
         </div>
@@ -183,8 +183,11 @@ export default {
           }
         })
         .catch(error => {
-          this.$message.error(error);
-			this.dialogVisible1 = true
+        	if (error == '您未完成发货地址设置，请到地址库设置发货地址。') {
+				this.dialogVisible1 = true
+			} else {
+				this.$message.error(error);
+			}
         });
     },
     afterSaleImport() {
@@ -220,12 +223,14 @@ export default {
       if (this.$route.query.afterSale) {
         this.afterSaleImport();
       } else {
-      	// this.dialogVisible1 = true
         this.import();
       }
     },
 	  goSetAddress() {
-    	this.$router.push({path: '/set/addressAdd', query: { orderType: 1 }})
+    	// this.$router.push({path: '/set/addressAdd', query: { orderType: 1 }})
+		  let routeData = this.$router.resolve({ path: '/set/addressAdd', query: { orderType: 1 } });
+		  window.open(routeData.href, '_blank');
+		  this.dialogVisible1 = false
 	  },
     onSubmit() {},
     cancelImport() {
