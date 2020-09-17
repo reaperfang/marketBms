@@ -111,7 +111,6 @@
           //  非空校验，全部空，则不调用 form表单更新 接口
           if(!this.isAllValueEmpty(this.form)) {
             const formResult = await this._apis.set.updateShopInfo(params);
-            console.log("表单数据为空，不调用接口");
           }
           // changeStep 更改步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
           // status 状态 0 未完成 1 已完成

@@ -181,7 +181,7 @@
         timerConfigure: null, // 定时任务，查询配置进度
         configureProgress: 0, // 查询配置进度 0 - 5?
         configureTextArray: [], // 配置进度 文字以及成功状态
-        configureTextItemDataType: ["","运费模板", "商品", "商品分类", "创意设计", "微信公众号底部"],
+        configureTextItemDataType: ["","运费模板", "商品分类", "商品", "创意设计", "微信公众号底部"],
         configureTextItemStatusType: ["处理中", "成功", "失败", "成功"]
       }
     },
