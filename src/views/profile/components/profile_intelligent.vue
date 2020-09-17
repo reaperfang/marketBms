@@ -88,7 +88,7 @@ export default {
 
 <style lang="scss" scoped>
   .profile_intelligent {
-    margin-top: 15px;
+    margin-top: 10px;
     padding: 26px;
     border-radius: 5px;
     background-color: #fff;
