@@ -342,7 +342,7 @@ export default {
         }  
         tempnum = num*dd;
         tempnum = Math.round(tempnum); 
-        return (tempnum/dd)
+        return Number(tempnum/dd).toFixed(2)
     },
   },
   data() {
