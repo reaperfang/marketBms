@@ -183,33 +183,6 @@
         this.form.addressCode = this.shopInfos.provinceCode ? [ this.shopInfos.provinceCode, this.shopInfos.cityCode, this.shopInfos.areaCode ] : '';
         this.form.lat = this.shopInfos.latitude || "";
         this.form.lng = this.shopInfos.longitude || "";
-        /*
-        let id = this.cid;
-        this._apis.set.getShopInfo({ id })
-          .then(response => {
-            this.form.shopName = response.shopName || '';
-            this.form.phone = response.phone || '';
-            this.form.sendAddress = response.sendAddress || '';
-
-            if (response.provinceCode) {
-              let arr = [];
-              arr.push(response.provinceCode);
-              arr.push(response.cityCode);
-              arr.push(response.areaCode);
-              this.form.addressCode = arr;
-            }
-            // 解决省市区名称第二次保存时，没有点选地图的重新获取地址时，省市区名称丢失问题
-            this.province = response.province || this.province;
-            this.city = response.city || this.city;
-            this.area = response.area || this.area;
-            // 经纬度
-            this.form.lat = response.latitude;
-            this.form.lng = response.longitude
-          })
-          .catch(error => {
-            this.$message.error('查询失败');
-          });
-         */
       },
 
       /** 需要重新地图选点 */
