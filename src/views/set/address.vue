@@ -55,9 +55,9 @@
           width="150">
           <template slot-scope="scope">
             <div class="opeater">
-              <el-button class="btn" @click="goAddressEdit(scope.row.id)" type="text"  v-permission="['设置','地址库', '默认页面', '编辑']">编辑</el-button>
+              <el-button class="btn" @click="goAddressEdit(scope.row.id)" type="text"  v-permission="['设置','地址管理', '默认页面', '编辑']">编辑</el-button>
               <span>|</span>
-              <el-button class="btn" v-permission="['设置','地址库', '默认页面', '删除']" :class="[getDefaultAddress(scope.row) ? 'disabled' : '']" @click="delAddress(scope.row)" type="text">删除</el-button>
+              <el-button class="btn" v-permission="['设置','地址管理', '默认页面', '删除']" :class="[getDefaultAddress(scope.row) ? 'disabled' : '']" @click="delAddress(scope.row)" type="text">删除</el-button>
             </div>
           </template>
         </el-table-column>
