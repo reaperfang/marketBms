@@ -2632,19 +2632,18 @@ export default {
                 this.specsList = res
                 //this.specsLength = this.specsList.length
                 //this.flatSpecsList = this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')
-                let _obj = {}
-                let _arr = []
+                let __obj = {}
+                let __result = []
                 let _flatSpecsList = [...this.flatSpecsList, ...this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')]
                 
 
-                for(let i=0; i<_flatSpecsList.length; i++) {
-                    if(!_obj.id) {
-                        _arr.push(_flatSpecsList[i])
-                    } else {
-                        _obj.id = true
+                this.flatSpecsList.forEach(item=>{
+                    if(!__obj[item.id]){
+                         __result.push(item);
+                         __obj[item.id] = true;
                     }
-                }
-                this.flatSpecsList = _arr
+                })
+                this.flatSpecsList = __result
             }).catch(error => {
                 this.$message.error({
                     message: error,
