@@ -72,6 +72,14 @@ div:focus{
   float: left;
 }
 
+.h {
+  height: 100%;
+}
+
+.mh {
+  min-height: 100%;
+}
+
 .clearfix {
   &:after {
 	visibility: hidden;

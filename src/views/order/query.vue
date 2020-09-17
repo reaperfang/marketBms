@@ -113,7 +113,7 @@
         <!-- <p class="explain">当前最多只支持导出1000条数据</p> -->
       </div>
     </section>
-    <section>
+    <section v-calcMinHeight="299">
       <div class="export-header">
         <p class="statistics">
           已选择
@@ -461,6 +461,9 @@ export default {
         color: #45444c;
       }
     }
+  }
+  section:last-child {
+    margin-bottom: 0;
   }
   .search{
     padding-bottom:0px;
