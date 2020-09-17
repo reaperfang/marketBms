@@ -89,12 +89,12 @@ export default {
 <style lang="scss" scoped>
   .profile_intelligent {
     margin-top: 10px;
-    padding: 26px;
+    padding: 20px;
     border-radius: 5px;
     background-color: #fff;
 
     .p_i_title {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 500;
       color: #161617;
       line-height: 22px;
