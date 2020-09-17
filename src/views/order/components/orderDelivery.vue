@@ -119,7 +119,7 @@
                     <template slot-scope="scope">
                         <div>
                             <span class="icon-store" v-if="scope.row.deliveryWay == 2"></span>
-                            <span class="icon-store-text">{{scope.row.deliveryWay | deliveryWayFilter}}</span>
+                            <span class="icon-store-text">{{scope.row | deliveryWayFilter}}</span>
                         </div>
                     </template>
                 </el-table-column>
@@ -185,7 +185,7 @@
                                     <span @click="verificationHandler(scope.row)">核销验证</span>
                                 </template>
                                 <template v-else-if="scope.row.deliveryWay == 3">
-                                    <span>重新发单</span>
+                                    <span class="reOrder(scope.row)">重新发单</span>
                                     <span @click="closeOrder(scope.row)">关闭订单</span>
                                 </template>
                             </template>
@@ -222,8 +222,10 @@ import DialogPrintList from '@/components/printListDialog'
 import utils from "@/utils";
 import VerificationDialog from "@/views/order/dialogs/verificationDialog";
 import CloseThirdPartyOrderDialog from "@/views/order/dialogs/closeThirdPartyOrderDialog";
+import { orderDeliveryMethods } from '@/views/order/mixins/orderDeliveryMixin'
 
 export default {
+    mixins: [orderDeliveryMethods],
     data() {
 
         return {
@@ -273,18 +275,6 @@ export default {
             title: ''
         }
     },
-    filters: {
-        deliveryWayFilter(code) {
-            switch(code) {
-                case 1:
-                    return '普通快递'
-                case 2:
-                    return '商家配送'
-                case 4:
-                    return '上门自提'
-            }
-        },
-    },
     created() {
         if(typeof this.$route.query.status != 'undefined') {
             this.listQuery = Object.assign({}, this.listQuery, {status: this.$route.query.status})
@@ -317,10 +307,6 @@ export default {
         }
     },
     methods: {
-        closeOrder(row) {
-            this.currentDialog = 'CloseThirdPartyOrderDialog'
-            this.dialogVisible = true
-        },
         importAndDelivery() {
             // this._apis.order
             // .getShopSendAddress({ cid: this.cid })

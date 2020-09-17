@@ -227,6 +227,7 @@ export default {
                 this._apis.order.fetchOrderDetail({id}).then((res) => {
                     res.orderInfo && (res.orderInfo.consultType = res.orderInfo.consultType || 2)
                     this.orderDetail = res
+                    debugger
                     console.log(typeof res)
                     resolve(res)
                 }).catch(error => {
