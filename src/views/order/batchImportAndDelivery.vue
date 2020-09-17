@@ -91,6 +91,23 @@
       </section>
     </div>
     <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit"></component>
+	  <el-dialog
+		  class="dia_Box"
+		  :visible.sync="dialogVisible1"
+		  width="30%">
+		  <div class="diaBox">
+			  <div>
+				  <i class="el-icon-warning" style="color: #FD932B"></i>
+			  </div>
+			  <div class="center">
+				  您未完成发货地址设置，请到地址库设置发货地址。
+			  </div>
+		  </div>
+		  <span slot="footer" class="dialog-footer">
+				<el-button type="primary" @click="goSetAddress">去设置</el-button>
+			  <el-button @click="dialogVisible1 = false">取消</el-button>
+			</span>
+	  </el-dialog>
   </div>
 </template>
 <script>
@@ -108,7 +125,8 @@ export default {
       status: 0, // 0 全部成功 1 部分成功 2 全部失败
       successNumber: 0,
       errorNumber: 0,
-      ids: ""
+      ids: "",
+		dialogVisible1: false
     };
   },
   computed:{
@@ -166,6 +184,7 @@ export default {
         })
         .catch(error => {
           this.$message.error(error);
+			this.dialogVisible1 = true
         });
     },
     afterSaleImport() {
@@ -201,9 +220,13 @@ export default {
       if (this.$route.query.afterSale) {
         this.afterSaleImport();
       } else {
+      	// this.dialogVisible1 = true
         this.import();
       }
     },
+	  goSetAddress() {
+    	this.$router.push({path: '/set/addressAdd', query: { orderType: 1 }})
+	  },
     onSubmit() {},
     cancelImport() {
       this.currentDialog = "CancelImportDialog";
@@ -329,6 +352,19 @@ export default {
   margin-left: 50px;
   margin-bottom: 20px;
 }
+	.diaBox{
+		display: flex;
+		justify-content: flex-start;
+		i{
+			font-size: 30px;
+			margin-top: -7px;
+		}
+		.center{
+			color: #44434B;
+			font-size: 16px;
+			margin-left: 5px;
+		}
+	}
 </style>
 
 
