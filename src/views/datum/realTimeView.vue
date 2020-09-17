@@ -694,7 +694,7 @@ height:0px;
     }
     .choose_item{
         float: left;
-        width:176px;
+        min-width:176px;
         height:125px;
         border-radius:4px;
         border:1px solid #EDEDED;
