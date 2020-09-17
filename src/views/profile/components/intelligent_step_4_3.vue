@@ -22,7 +22,7 @@
       </el-form-item>
 
       <el-form-item label="3、预览并生效您的公众号首页菜单栏:">
-        <el-button class="button-link" @click="linkToGZH"> 公众号菜单管理 </el-button>
+        <el-button class="button-link" @click="linkToGZH" :loading="isLoadingBindStatus"> 公众号菜单管理 </el-button>
       </el-form-item>
 
       <el-form-item label="4、客服电话:" prop="phone">
@@ -49,6 +49,9 @@
   export default {
     name: "intelligent_base_shop",
     components: { DialogMapSearch },
+    props: {
+      wxAccount: 0,  // 是否绑定微信公众号  0 否  1 是
+    },
     data() {
       return {
         form: {
@@ -70,12 +73,13 @@
             }, trigger: "blur" }
         },
         showShopPreview: false, // 右侧店铺名预览区
+        isLoadingBindStatus: false,
       }
     },
     computed: {
       shopInfos() {
         return localStorage.getItem("shopInfos") ? JSON.parse(localStorage.getItem("shopInfos")) : null
-      },
+      }
     },
     created() {
       this.getShopInfo();
@@ -149,9 +153,33 @@
       },
 
       /** 跳转到 '公众号设置' */
-      linkToGZH() {
-        const routeData =  this.$router.resolve({path:'/apply',query:{paths:'/application/channelapp/wechat',applyId:'3'}});
-        window.open(routeData.href, '_blank');
+      async linkToGZH() {
+        try {
+          if(this.wxAccount === 1) { // 已绑定，去 "自定义菜单" 应用
+            let routeData =  this.$router.resolve({path:'/apply',query:{paths:'/application/channelapp/custommenu',applyId:'3'}});
+            window.open(routeData.href, '_blank');
+            return
+          }
+          this.isLoadingBindStatus = true;
+          // 请求接口 获取最新的状态
+          let bindResult = await this._apis.profile.getwxBindStatus({ id: this.shopInfos.id });
+
+          // 更新父组件状态，达到同步兄弟组件状态
+          this.$emit('wechat-status', {bindWechatAccount: bindResult.bindWechatAccount, bindWechatApplet: bindResult.bindWechatApplet});
+
+          this.isLoadingBindStatus = false;
+
+          if(bindResult.bindWechatAccount === 0){ // 未绑定，去 "自定义菜单" 的上一级菜单
+            let routeData =  this.$router.resolve({path:'/apply',query:{paths:'/application/channelapp/wechat',applyId:'3'}});
+            window.open(routeData.href, '_blank');
+          } else {  // 已绑定，去 "自定义菜单" 应用
+            let routeData =  this.$router.resolve({path:'/apply',query:{paths:'/application/channelapp/custommenu',applyId:'3'}});
+            window.open(routeData.href, '_blank');
+          }
+        }catch (e) {
+          this.$message.error(e || "出错了，请稍后再试~");
+          console.log(e);
+        }
       },
 
       /**  地图  */

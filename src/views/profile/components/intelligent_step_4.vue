@@ -30,7 +30,7 @@
         <wx v-show="baseStatus === 2" @wxpay-status="wechatPayStatus"></wx>
 
         <!--  店铺信息  -->
-        <shop v-show="baseStatus === 3" ref="BaseShopInfoView" @update-completed-loading="updateCompletedLoading"></shop>
+        <shop v-show="baseStatus === 3" ref="BaseShopInfoView" :wx-account="bindWechatAccount" @update-completed-loading="updateCompletedLoading"></shop>
       </div>
     </div>
 
