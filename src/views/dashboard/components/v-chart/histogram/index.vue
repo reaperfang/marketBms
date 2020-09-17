@@ -64,6 +64,10 @@ export default {
 						lineStyle: {
 							color: "rgba(255,255,255,0.8)"
 						}
+					},
+					axisLabel: {
+						interval: 0,
+						rotate: 35
 					}
 				},
 				yAxis: {

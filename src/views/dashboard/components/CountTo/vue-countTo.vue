@@ -363,7 +363,7 @@ export default {
 				//margin-left: 10px;
 
 				font-size: 68px;
-				font-weight: normal;
+				font-weight: bold;
 				color: #ffffff;
 				background: linear-gradient(180deg, #dafffd 0%, #14e1fc 100%);
 				-webkit-background-clip: text;

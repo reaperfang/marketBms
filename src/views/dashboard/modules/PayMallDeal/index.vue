@@ -126,7 +126,10 @@ export default {
 					children: [
 						{ title: "支付人数", content: val.paid_order_nu_rt },
 						{ title: "支付金额", content: val.paid_order_am_rt },
-						{ title: "客单价", content: val.atv_rt }
+						{
+							title: "客单价",
+							content: val.atv_rt.toFixed(2)
+						}
 					]
 				},
 				{
