@@ -95,7 +95,9 @@ export default {
         addressCode: null, // code码
         province: null, // 省
         city: null, // 市
-        area: null // 区
+        area: null, // 区
+        isBindShopsend: 0,
+        isBindThirdsend: 0
       },
       rules: {
         contactPerson: [
@@ -176,6 +178,8 @@ export default {
       this.ruleForm.province = data.provinceName || null
       this.ruleForm.city = data.cityName || null
       this.ruleForm.area = data.areaName || null
+      this.ruleForm.isBindShopsend = data.isBindShopsend
+      this.ruleForm.isBindThirdsend = data.isBindThirdsend
     },
     init() {
       this.ruleForm.id = this.$route.query && this.$route.query.id
@@ -252,6 +256,8 @@ export default {
         obj.is_defalt_return_address = data.defaultReturnAddress
         obj.address = data.sendAddress
         obj.address_detail = data.address
+        obj.isBindShopsend = data.isBindShopsend
+        obj.isBindThirdsend = data.isBindThirdsend
       }
       return obj
     },
@@ -260,6 +266,12 @@ export default {
       // 处理地址类型
       const type = this.formateAddressType()
       delete data.type
+      // 同城配送默认地址逻辑变更
+      const source = this.$route.query && this.$route.query.source // 来源是否为同城配送
+      const sourceType = this.$route.query && this.$route.query.sourceType // 1 商家配送 2 三方配送
+      data.isBindShopsend = +source === 1 && +sourceType === 1 ? 1 : this.ruleForm.isBindShopsend
+      data.isBindThirdsend = +source === 1 && +sourceType === 2 ? 1 : this.ruleForm.isBindThirdsend
+
       return { ...data, ...type }
     },
     hasChecked(val) {

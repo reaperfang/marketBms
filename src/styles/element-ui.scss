@@ -154,6 +154,8 @@ input::-moz-placeholder, textarea::-moz-placeholder{
 }
 // 2.1版本  弹框样式的修改
 .mgl_30{margin-left: 30px !important;}
+.w_135{width: 135px !important;}
+.w_226{width: 226px !important;}
 .el-dialog__header{
   height: 50px;
   line-height: 50px;
@@ -224,4 +226,21 @@ input::-moz-placeholder, textarea::-moz-placeholder{
     margin-left: 10px;
     }
   }
+}
+.input-with-select >.el-input__inner {
+  width: 230px;
+}
+.input-with-select {
+  .el-input-group__prepend {
+      background-color: #fff;
+      color: #44434B;
+  }
+}
+.el-date-editor {
+  margin-left: -5px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.el-form-item__content>.el-select{
+  width: 184px;
 }
