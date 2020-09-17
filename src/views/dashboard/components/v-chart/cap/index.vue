@@ -2,20 +2,20 @@
 	<div class="panel-content-cap">
 		<div class="chartContent">
 			<div class="circle-45 circle-hover" v-show="five">
-				<span>{{ five }}</span>
+				<span class="time-text">{{ five }}</span>
 			</div>
 			<div class="circle-55 circle-hover" v-show="fourth">
-				<span>{{ fourth }}</span>
+				<span class="time-text">{{ fourth }}</span>
 			</div>
 			<div class="circle-65 circle-hover" v-show="third">
-				<span>{{ third }}</span>
+				<span class="time-text">{{ third }}</span>
 			</div>
 			<div class="circle-70 circle-hover" v-show="sec">
-				<span>{{ sec }}</span>
+				<span class="time-text">{{ sec }}</span>
 			</div>
 
 			<div class="circle-90 circle-hover" v-show="first">
-				<span>{{ first }}</span>
+				<span class="time-text">{{ first }}</span>
 			</div>
 		</div>
 	</div>
@@ -264,6 +264,8 @@ export default {
 			span {
 				font-size: 18px;
 			}
+
+			// text-align: center;
 		}
 
 		span {
@@ -272,6 +274,13 @@ export default {
 			color: #ffffff;
 			padding: 5px;
 		}
+	}
+
+	.time-text {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		//text-align: center;
 	}
 }
 </style>

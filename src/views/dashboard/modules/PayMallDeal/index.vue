@@ -106,15 +106,14 @@ export default {
 		setPieData(val) {
 			this.chartData = val.map(res => {
 				// console.log(
-				// 	"res.place_order_am_s",
-				// 	res && res.place_order_am_s
+				// 	"parseInt(res.place_order_am_s.toFixed(2)) * 100",
+				// 	parseInt(res.place_order_am_s.toFixed(2)) * 100
 				// );
-				// console.log(
-				// 	" res.place_order_am_s.toFixed(2) * 100",
-				// 	res && res.place_order_am_s.toFixed(2) * 100
-				// );
+
+				console.log(res.place_order_am_s.toFixed(2));
+				console.log(res.place_order_am_s.toFixed(2) * 100);
 				return {
-					progress: res.place_order_am_s.toFixed(2) * 100,
+					progress: parseInt(res.place_order_am_s.toFixed(2) * 100),
 					barColor: "RGBA(255, 0, 139, 1)",
 					city: res.area_name
 				};

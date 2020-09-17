@@ -11,7 +11,10 @@
 
 		<el-table :data="newtable" :row-style="{ height: '20px' }">
 			<!-- <el-table-column prop="id" label="ID" width="45"> </el-table-column> -->
-			<el-table-column prop="c_uv_name_rt" label="用户名" width="120">
+			<el-table-column label="用户名" width="120">
+				<template slot-scope="scope">
+					<span class="time-text">{{ scope.row.c_uv_name_rt }}</span>
+				</template>
 			</el-table-column>
 			<el-table-column label="时间" width="120">
 				<template slot-scope="scope">
