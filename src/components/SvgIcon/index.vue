@@ -1,13 +1,12 @@
-<!-- svg图标 -->
 <template>
-  <svg :class="svgClass" aria-hidden="true">
-    <use :xlink:href="iconName"/>
+  <svg :class="svgClass" aria-hidden="true" v-on="$listeners">
+    <use :xlink:href="iconName" />
   </svg>
 </template>
 
 <script>
 export default {
-  name: 'SvgIcon',
+  name: "SvgIcon",
   props: {
     iconClass: {
       type: String,
@@ -15,22 +14,22 @@ export default {
     },
     className: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   computed: {
     iconName() {
-      return `#icon-${this.iconClass}`
+      return `#icon-${this.iconClass}`;
     },
     svgClass() {
       if (this.className) {
-        return 'svg-icon ' + this.className
+        return "svg-icon " + this.className;
       } else {
-        return 'svg-icon'
+        return "svg-icon";
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -40,5 +39,6 @@ export default {
   vertical-align: -0.15em;
   fill: currentColor;
   overflow: hidden;
+  margin-right: 16px;
 }
 </style>

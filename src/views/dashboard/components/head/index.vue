@@ -48,10 +48,12 @@
 							@click="fullscreen"
 							ref="fullscreen"
 						>
-							<img
+							<!-- <img
 								src="../../../../assets/images/dashboard/head/right/fullscreen/default.png"
 								alt
-							/>
+							/> -->
+							<svg-icon iconClass="fullscreen"></svg-icon>
+							 <!-- <svg-icon icon-class="time" /> -->
 							<span>全 屏</span>
 						</div>
 					</el-col>

@@ -41,6 +41,7 @@
     "reconnecting-websocket": "^4.4.0",
     "screenfull": "^5.0.2",
     "scss-loader": "^0.0.1",
+    "svg-sprite-loader": "^5.0.0",
     "swiper": "^6.2.0",
     "tinycolor2": "^1.4.1",
     "v-charts": "^1.19.0",

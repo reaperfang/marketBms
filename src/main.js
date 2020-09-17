@@ -98,6 +98,8 @@ Vue.use(CountDown);
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 
+import "./icons";
+
 
 /* ***************************** 导出vue实例 ******************************/
 new Vue({
