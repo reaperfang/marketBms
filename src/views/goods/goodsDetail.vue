@@ -2631,7 +2631,20 @@ export default {
                 })
                 this.specsList = res
                 //this.specsLength = this.specsList.length
-                this.flatSpecsList = this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')
+                //this.flatSpecsList = this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')
+                let _obj = {}
+                let _arr = []
+                let _flatSpecsList = [...this.flatSpecsList, ...this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')]
+                
+
+                for(let i=0; i<_flatSpecsList.length; i++) {
+                    if(!_obj.id) {
+                        _arr.push(_flatSpecsList[i])
+                    } else {
+                        _obj.id = true
+                    }
+                }
+                this.flatSpecsList = _arr
             }).catch(error => {
                 this.$message.error({
                     message: error,
