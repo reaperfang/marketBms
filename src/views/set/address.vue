@@ -67,7 +67,7 @@
           </div>
           <p>
             暂无数据，去
-            <router-link :to="{ path: '/set/addressAdd'}" v-permission="['设置','地址库', '默认页面', '新建地址']">新建地址</router-link>
+            <router-link :to="{ path: '/set/addressAdd'}" v-permission="['设置','地址管理', '默认页面', '新建地址']">新建地址</router-link>
           </p>
         </div>
       </el-table>
