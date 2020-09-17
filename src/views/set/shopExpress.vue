@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div class="shopExpress">
     <el-tabs v-model="currentTab" @tab-click="handleClick" class="tabs">
       <el-tab-pane name="merchantDeliver" >
-        <span slot="label">商家配送</span>
-        <component v-if="currentTab === 'merchantDeliver'" :is="currentTab"></component>
+        <span slot="label" v-permission="['设置','同城配送','商家配送']">商家配送</span>
+        <component v-if="currentTab === 'merchantDeliver'" v-permission="['设置','同城配送','商家配送']" :is="currentTab"></component>
       </el-tab-pane>
       <el-tab-pane name="th3Deliver">
-        <span slot="label">第三方配送</span>
-        <component v-if="currentTab === 'th3Deliver'" :is="currentTab"></component>
+        <span slot="label" v-permission="['设置','同城配送','第三方配送']">第三方配送</span>
+        <component v-if="currentTab === 'th3Deliver'" v-permission="['设置','同城配送','第三方配送']" :is="currentTab"></component>
       </el-tab-pane>
     </el-tabs>
   </div>     
@@ -34,7 +34,7 @@ export default {
     }
   },
   created() {
-    // this.init()
+    this.init()
   },
   destroyed() {
   },
@@ -96,6 +96,10 @@ export default {
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+.shopExpress {
+  background: #fff;
+  height: 100%;
+}
 .tabs{
   >>> .el-tabs__item {
     height: 60px;
