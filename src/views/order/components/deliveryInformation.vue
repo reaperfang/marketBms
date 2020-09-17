@@ -28,16 +28,16 @@
             </template>
             <template v-if="item.deliveryWay == 1">
               <!-- 骑手正常接单 -->
-              <template v-if="false">
+              <template v-if="!is_abnormal">
                   <div class="header-lefter-item">配送员：达达配送员</div>
                   <div class="header-lefter-item">联系方式：12000330000</div>
                   <div @click="showLogistics(item.expressNo, item.shipperName, item.id)" class="header-lefter-item blue pointer">查看物流</div>
               </template>
               <!-- 骑手取消接单 -->
-              <div v-if="true" class="header-lefter-item">骑手取消接单，重新发单中</div>
-              <div v-if="false" class="header-lefter-item">发单中，等待骑手接单</div>
+              <div v-if="!is_abnormal" class="header-lefter-item">骑手取消接单，重新发单中</div>
+              <div v-if="!is_abnormal" class="header-lefter-item">发单中，等待骑手接单</div>
               <!-- 异常订单 -->
-              <div v-if="false" class="header-lefter-item">异常订单：达达取消订单/投妥异常</div>
+              <div v-if="is_abnormal" class="header-lefter-item">异常订单：达达取消订单/投妥异常</div>
 
             </template>
            
@@ -357,6 +357,7 @@ export default {
         }
       }
       sendProductsArr.forEach((item,index)=>{
+        debugger
         let obj = Object.assign(
               {},
               {
