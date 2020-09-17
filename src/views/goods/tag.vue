@@ -341,6 +341,7 @@ export default {
 .tag {
   background-color: #fff;
   padding: 20px;
+  border-radius: 4px;
   .dialog-container {
     text-align: left;
   }
@@ -360,7 +361,7 @@ export default {
 .table-footer {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 20px 20px 10px 20px;
   padding-left: 15px;
   button {
     margin-left: 0;

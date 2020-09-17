@@ -269,7 +269,7 @@
 .table-footer {
     display: flex;
     align-items: center;
-    padding: 20px;
+    padding: 20px 20px 0 20px;
     padding-left: 15px;
     button {
         margin-left: 0;
@@ -306,6 +306,7 @@
     background-color: #fff;
     padding: 20px;
     color: $contentColor;
+    border-radius: 4px;
     .header {
         display: flex;
         align-items: center;

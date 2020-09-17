@@ -590,6 +590,7 @@ export default {
         }
         background-color: #fff;
         padding: 20px;
+        border-radius: 4px;
         .deliver-goods-header {
             display: flex;
             justify-content: space-between;

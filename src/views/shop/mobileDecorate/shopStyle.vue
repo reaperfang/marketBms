@@ -163,6 +163,7 @@ export default {
   background:#fff;
   padding:20px;
   height: 100%;
+  border-radius: 4px;
   h3{
     margin-bottom:20px;
     .tips{

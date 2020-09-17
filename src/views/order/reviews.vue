@@ -430,6 +430,7 @@ export default {
 .reviews {
     .search {
         background-color: #fff;
+        border-radius: 4px;
         .form-inline {
             padding: 20px;
         }
@@ -446,6 +447,7 @@ export default {
         background-color: #fff;
         padding: 20px;
         margin-top: 20px;
+        border-radius: 4px;
         p {
             font-size: 16px;
             color: #B6B5C8;
@@ -455,7 +457,7 @@ export default {
             }
         }
         .footer {
-            padding: 20px;
+            padding: 20px 20px 10px 20px;
             padding-left: 10px;
         }
     }

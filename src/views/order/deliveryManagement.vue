@@ -44,6 +44,7 @@ export default {
 <style lang="scss" scoped>
     .delivery-management {
         background-color: #fff;
+        border-radius: 4px;
         section {
           padding: 0 0 20px 0;
         }

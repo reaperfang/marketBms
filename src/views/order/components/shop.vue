@@ -204,6 +204,7 @@ export default {
     }
     /deep/ .el-checkbox {
         margin-right: 8px;
+        margin-bottom: 10px;
     }
 </style>
 

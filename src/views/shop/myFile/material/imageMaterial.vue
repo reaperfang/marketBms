@@ -544,7 +544,7 @@ export default {
 }
 .pages{
   width: 100%;
-  margin-top: 50px;
+  margin-top: 40px;
   text-align: center;
   .page_nav{
     display: inline-block;

@@ -1,6 +1,6 @@
 <template>
 	<div id="templateManage">
-		<el-tabs v-model="currentTab" @tab-click="handleClick">
+		<el-tabs v-model="currentTab" @tab-click="handleClick" style="border-radius: 4px 4px 0 0;">
 			<el-tab-pane label="首页模板" name="homeTemplate"></el-tab-pane>
 			<el-tab-pane label="活动页模板" name="activeTemplate"></el-tab-pane>
 			<el-tab-pane label="我的模板" name="myTemplate"></el-tab-pane>

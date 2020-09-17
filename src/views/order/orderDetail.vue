@@ -257,6 +257,7 @@ export default {
             height: 60px;
             line-height: 60px;
             padding: 0 20px;
+            border-radius: 4px;
             .lefter {
                 span {
                     border-right: 1px solid #cacfcb;
@@ -275,6 +276,7 @@ export default {
             margin-top: 20px;
             padding: 20px;
             padding-top: 5px;
+            border-radius: 4px;
         }
         .goods-detail {
             display: flex;
@@ -284,6 +286,7 @@ export default {
             background-color: #fff;
             margin-top: 20px;
             padding: 20px;
+            border-radius: 4px;
             .header {
                 padding-bottom: 20px;
                 font-size: 16px;
