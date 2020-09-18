@@ -5,16 +5,18 @@
 				<el-row>
 					<el-col :xs="5" :sm="5" :md="5" :lg="5" :xl="5">
 						<div class="left">
-							<img
+							<!-- <img
 								src="../../../../assets/images/dashboard/head/left/default.png"
 								alt
-							/>
+							/> -->
+							<svg-icon iconClass="shop"></svg-icon>
 							<span>{{ shopName }}</span>
-							<img
+							<!-- <img
 								src="../../../../assets/images/dashboard/head/time/default.png"
 								alt
 								style="margin:0 3px 0 10px"
-							/>
+							/> -->
+							<svg-icon iconClass="time"></svg-icon>
 							<span> {{ currentTime }}</span>
 						</div>
 					</el-col>
@@ -37,10 +39,11 @@
 						class="right"
 					>
 						<div class="refresh" @click="refresh">
-							<img
+							<!-- <img
 								src="../../../../assets/images/dashboard/head/right/refresh/default.png"
 								alt
-							/>
+							/> -->
+							<svg-icon iconClass="refresh"></svg-icon>
 							<span>刷 新</span>
 						</div>
 						<div
@@ -53,7 +56,7 @@
 								alt
 							/> -->
 							<svg-icon iconClass="fullscreen"></svg-icon>
-							 <!-- <svg-icon icon-class="time" /> -->
+							<!-- <svg-icon icon-class="time" /> -->
 							<span>全 屏</span>
 						</div>
 					</el-col>
@@ -192,7 +195,7 @@ export default {
 				font-size: 14px;
 				font-weight: 500;
 				color: rgba(255, 255, 255, 0.8);
-				margin-left: 2px;
+				margin-right: 5px;
 			}
 		}
 		.content {
@@ -208,7 +211,7 @@ export default {
 			.refresh,
 			.fullscreen {
 				display: inline-block;
-				width: 66px;
+				width: 75px;
 				height: 25px;
 				background: rgba(71, 225, 255, 0.08);
 				border-radius: 2px;

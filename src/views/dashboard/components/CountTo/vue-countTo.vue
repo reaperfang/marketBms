@@ -3,57 +3,90 @@
 		<div class="box">
 			<div class="box-item">
 				<div class="box-item-start">千万</div>
-				<div class="number-item">{{ eight }}</div>
+				<div class="number-item">
+					{{ eight }}
+					<div class="line"></div>
+				</div>
 			</div>
 
 			<div class="box-item">
 				<div class="box-item-start">百万</div>
-				<div class="number-item">{{ seven }}</div>
+				<div class="number-item">
+					{{ seven }}
+					<div class="line"></div>
+				</div>
 			</div>
 			<div class="box-item flex-end" style="width:5px">
-				<span class="semicolon">,</span>
+				<!-- <span class="semicolon">,</span> -->
+				<svg-icon iconClass="semicolon"></svg-icon>
 			</div>
 
 			<div class="box-item">
 				<div class="box-item-start">十万</div>
-				<div class="number-item">{{ six }}</div>
+				<div class="number-item">
+					{{ six }}
+					<div class="line"></div>
+				</div>
 			</div>
 
 			<div class="box-item">
 				<div class="box-item-start">万元</div>
-				<div class="number-item">{{ five }}</div>
+				<div class="number-item">
+					{{ five }}
+					<div class="line"></div>
+				</div>
 			</div>
 			<div class="box-item">
 				<div class="box-item-start"></div>
-				<div class="number-item">{{ four }}</div>
+				<div class="number-item">
+					{{ four }}
+					<div class="line"></div>
+				</div>
 			</div>
 			<div class="box-item flex-end" style="width:5px">
-				<span class="semicolon">,</span>
+				<!-- <span class="semicolon">,</span> -->
+				<svg-icon iconClass="semicolon"></svg-icon>
 			</div>
 			<div class="box-item">
 				<div class="box-item-start"></div>
-				<div class="number-item">{{ third }}</div>
+				<div class="number-item">
+					{{ third }}
+					<div class="line"></div>
+				</div>
 			</div>
 			<div class="box-item">
 				<div class="box-item-start"></div>
-				<div class="number-item">{{ sec }}</div>
+				<div class="number-item">
+					{{ sec }}
+					<div class="line"></div>
+				</div>
 			</div>
 			<div class="box-item">
 				<div class="box-item-start"></div>
-				<div class="number-item">{{ first }}</div>
+				<div class="number-item">
+					{{ first }}
+					<div class="line"></div>
+				</div>
 			</div>
 			<div class="box-item flex-end" style="width:5px">
-				<span class="point">.</span>
+				<!-- <span class="point">.</span> -->
+				<svg-icon iconClass="point"></svg-icon>
 			</div>
 
 			<div class="box-item">
 				<div class="box-item-start"></div>
-				<div class="number-item">{{ nine }}</div>
+				<div class="number-item">
+					{{ nine }}
+					<div class="line"></div>
+				</div>
 			</div>
 
 			<div class="box-item">
 				<div class="box-item-start"></div>
-				<div class="number-item">{{ last }}</div>
+				<div class="number-item">
+					{{ last }}
+					<div class="line"></div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -355,7 +388,7 @@ export default {
 			}
 
 			.number-item {
-				justify-self: end;
+				// justify-self: end;
 				height: 75%;
 				width: 52px;
 				background: rgba(71, 225, 255, 0.02);
@@ -370,6 +403,23 @@ export default {
 				-webkit-text-fill-color: transparent;
 
 				text-align: center;
+
+				// display: flex;
+				// align-self: center;
+				position: relative;
+
+				.line {
+					width: 100%;
+					height: 1px;
+					background: #033d55;
+					display: inline-block;
+					position: absolute;
+					top: 0px;
+					bottom: 0px;
+					left: 0px;
+					right: 0px;
+					margin: auto;
+				}
 			}
 		}
 
