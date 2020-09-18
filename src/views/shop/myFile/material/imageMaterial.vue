@@ -551,7 +551,7 @@ export default {
   }
 }
 .search_w{
-  width: 250px;
+  width: 210px;
 }
 .inline{
   display: inline-block;

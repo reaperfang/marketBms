@@ -26,7 +26,7 @@
         >新建模板</el-button> -->
       </section>
       <section class="search">
-        <el-form ref="inline" :inline="true" :model="listQuery" class="form-inline">
+        <el-form ref="inline" :inline="true" :model="listQuery" class="form-inline input_style">
           <div class="row justify-between">
             <div class="col">
               <el-form-item label="模板名称">

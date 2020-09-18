@@ -37,7 +37,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="收支类型">
-          <el-select v-model="ruleForm.tradeType" style="width:150px;" placeholder="全部">
+          <el-select v-model="ruleForm.tradeType"  placeholder="全部">
             <el-option
               v-for="item in tradeTypes"
               :key="item.value"

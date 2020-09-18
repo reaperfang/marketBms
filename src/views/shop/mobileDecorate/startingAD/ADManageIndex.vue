@@ -10,7 +10,7 @@
       </el-switch>
     </div>
     <div class="ad_head_wrapper head-wrapper">
-      <el-form ref="ruleForm" :model="ruleForm" :inline="true">
+      <el-form ref="ruleForm" :model="ruleForm" :inline="true" class="input_style">
         <el-form-item label="" prop="status">
           <el-select v-model="ruleForm.status" placeholder="请选择广告状态">
             <el-option label="全部广告" :value="''"></el-option>

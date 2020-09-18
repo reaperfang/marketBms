@@ -157,6 +157,7 @@ input::-moz-placeholder, textarea::-moz-placeholder{
 .w_135{width: 135px !important;}
 .w_210{width: 210px !important;}
 .w_226{width: 226px !important;}
+.w_230{width: 230px !important;}
 .el-dialog__header{
   height: 50px;
   line-height: 50px;
@@ -228,9 +229,6 @@ input::-moz-placeholder, textarea::-moz-placeholder{
     }
   }
 }
-.el-form-item__content>.input-with-select >.el-input__inner {
-  width: 230px !important;
-}
 .input-with-select {
   .el-input-group__prepend {
       background-color: #fff;
@@ -242,12 +240,15 @@ input::-moz-placeholder, textarea::-moz-placeholder{
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
-.input-with-select>.el-input-group__prepend>.el-select{
+.input_style .input-with-select>.el-input-group__prepend>.el-select{
   width: 135px;
 }
-.el-form-item__content>.date-picker-select>.el-input--suffix{
-  width: 135px !important;
+.input_style .el-form-item__content>.input-with-select >.el-input__inner {
+  width: 230px !important;
 }
-.el-form-item__content>.el-input--small>.el-input__inner{
+// .el-form-item__content>.date-picker-select>.el-input--suffix{
+//   width: 135px !important;
+// }
+.input_style .el-form-item__content>.el-input--small>.el-input__inner{
   width: 210px;
 }

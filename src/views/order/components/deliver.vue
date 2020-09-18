@@ -1,5 +1,5 @@
 <template>
-  <div class="deliver-goods">
+  <div class="deliver-goods mh bor-radius">
     <div class="deliver-goods-header">
       <div class="item">发货</div>
       <div class="item">
