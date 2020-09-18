@@ -119,7 +119,7 @@
           label="关联单据编号"
           :render-header="renderRelationSn"
           align="center"
-          width="220px">
+          width="230px">
         </el-table-column>
         <el-table-column
           prop="payWay"

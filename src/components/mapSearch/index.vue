@@ -266,13 +266,13 @@ export default {
       })
     },
     handlePropSearch(keyword) {
+      console.log('----keyword---', keyword)
+      this.keyword = keyword
       if (!keyword) {
         this.totalNum = 0
         this.pois = []
         return false
       }
-      console.log('----keyword---', keyword)
-      this.keyword = keyword
       this.page = 1
       this.search()
     },
