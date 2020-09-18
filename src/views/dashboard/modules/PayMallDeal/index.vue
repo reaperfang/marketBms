@@ -74,7 +74,24 @@ export default {
 				// { progress: 95, barColor: "RGBA(245, 159, 0, 1)", city: "深圳" },
 			],
 			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
-			payData: {}
+			payData: {},
+			defaultChart: [
+				{
+					progress: 0,
+					barColor: "RGBA(255, 0, 139, 1)",
+					city: "北京"
+				},
+				{
+					progress: 0,
+					barColor: "RGBA(255, 92, 49, 1)",
+					city: "上海"
+				},
+				{
+					progress: 0,
+					barColor: "RGBA(245, 159, 0, 1)",
+					city: "深圳"
+				}
+			]
 		};
 	},
 	computed: {
@@ -105,14 +122,11 @@ export default {
 			this.amoountlist(JSON.parse(resPay));
 		},
 		setPieData(val) {
+			if (!val) {
+				this.chartData = this.defaultChart;
+				return;
+			}
 			this.chartData = val.map(res => {
-				// console.log(
-				// 	"parseInt(res.place_order_am_s.toFixed(2)) * 100",
-				// 	parseInt(res.place_order_am_s.toFixed(2)) * 100
-				// );
-
-				console.log(res.place_order_am_s.toFixed(2));
-				console.log(res.place_order_am_s.toFixed(2) * 100);
 				return {
 					progress: parseInt(res.place_order_am_s.toFixed(2) * 100),
 					barColor: "RGBA(255, 0, 139, 1)",

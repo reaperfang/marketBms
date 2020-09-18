@@ -29,7 +29,9 @@ export default {
 	name: "TEMPLATE",
 	watch: {
 		"dashboard.hobby"(val) {
-			this.showChart(val);
+			if (val) {
+				this.showChart(val);
+			}
 		}
 	},
 	computed: {
