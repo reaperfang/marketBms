@@ -305,20 +305,6 @@ export default {
         }
     },
     methods: {
-        //检测是否有配置子帐号的权限
-        checkSet(){
-            const setConfig = asyncRouterMap.filter(item => item.name === 'set');
-            if(setConfig.length == 0){
-                this.distributorSet = false;
-                return;
-            }
-            const subaccountManage = setConfig[0].children.filter(item => item.name === 'subaccountManage');
-            if(subaccountManage.length == 0){
-                this.distributorSet = false;
-                return;
-            }
-            this.distributorSet = true;
-        },
         dataFilter() {
             //这里需要使用input本身的value，且过滤前后空格
             const input = this.$refs.searchSelect.$children[0].$refs.input;
@@ -502,19 +488,6 @@ export default {
                 this.$message.error(error);
                 this.sending = false
             })
-        },
-        changeReceivedInfo() {
-            this.currentDialog = 'ReceiveInformationDialog'
-            this.currentData = this.orderInfo
-            this.sendGoods = 'received'
-            this.dialogVisible = true
-        },
-        changeSendInfo() {
-            this.currentDialog = 'ReceiveInformationDialog'
-            this.currentData = this.orderInfo
-            this.sendGoods = 'send'
-            this.title = '修改发货信息'
-            this.dialogVisible = true
         },
         onSubmit(value) {
             //this.getOrderDetail()
