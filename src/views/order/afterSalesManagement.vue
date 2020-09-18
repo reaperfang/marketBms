@@ -53,7 +53,7 @@
             </el-form>
         </div>
         <div class="line"></div>
-        <div class="content">
+        <div class="content" v-calcMinHeight="211">
             <div class="export-header">
                 <p>已选择 <span>{{multipleSelection.length}}</span> 项，全部<span>{{total}}</span>项</p>
                 <el-tooltip class="item" effect="dark" content="当前最多支持导出1000条数据" placement="top">

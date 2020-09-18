@@ -590,9 +590,7 @@ export default {
     }
     .content {
         background-color: #fff;
-        padding: 20px;
-        //margin: 0 20px;
-        padding-top: 0;
+        padding: 0 20px;
         p {
             font-size: 16px;
             color: #B6B5C8;

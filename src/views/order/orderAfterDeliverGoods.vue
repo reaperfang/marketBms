@@ -1,5 +1,5 @@
 <template>
-    <div class="deliver-goods">
+    <div class="deliver-goods mh">
         <div class="deliver-goods-header">
             <div class="item">售后发货</div>
             <div class="item"><el-button @click="$router.go(-1)">返 回</el-button></div>

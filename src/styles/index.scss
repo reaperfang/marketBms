@@ -80,6 +80,10 @@ div:focus{
   min-height: 100%;
 }
 
+.bor-radius {
+  border-radius: 4px;
+}
+
 .clearfix {
   &:after {
 	visibility: hidden;

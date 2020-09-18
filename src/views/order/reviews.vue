@@ -48,7 +48,7 @@
                 <div style="clear: both;"></div>
             </el-form>
         </div>
-        <div class="content">
+        <div class="content" v-calcMinHeight="262">
             <div class="content-header">
                 <p class="statistics">已选择<span>{{multipleSelection.length}}</span>项，全部<span>{{total}}</span>项</p>
                 <el-button v-permission="['订单', '评价管理', '默认页面', '敏感词设置']" @click="$router.push('/order/sensitiveWords')" class="border-button">敏感词设置</el-button>
