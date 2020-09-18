@@ -24,9 +24,9 @@ export default {
     con(){
       this.flow = {
         xAxis:this.n.xAxis,
-        yAxis1:this.n.yAxis1 && this.n.yAxis1.map(item => { return (item*1).toFixed(1)}),
-        yAxis2:this.n.yAxis2 && this.n.yAxis2.map(item => { return (item*1).toFixed(1)}),
-        yAxis3:this.n.yAxis3 && this.n.yAxis3.map(item => { return (item*1).toFixed(1)}),
+        yAxis1:this.n.yAxis1,
+        yAxis2:this.n.yAxis2,
+        yAxis3:this.n.yAxis3,
       }
       this.option = {
         tooltip: {
