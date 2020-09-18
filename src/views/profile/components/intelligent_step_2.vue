@@ -134,8 +134,8 @@
       </ul>
 
       <!--   有一项失败了就显示   -->
-      <div slot="footer" v-show="isConfigureFail">
-        <el-button type="primary" @click="againConfigure" style="font-size: 14px;"> 再次加载</el-button>
+      <div slot="footer">
+        <el-button v-show="isConfigureFail" type="primary" @click="againConfigure" style="font-size: 14px;"> 再次加载</el-button>
       </div>
     </el-dialog>
 
@@ -306,11 +306,11 @@
             console.log(_this.configureTextArray.length);
             /*  0 失败 1 成功  */
             if(result === 0) {
-              let time = 1000 * _this.configureTextArray.length || 1000;
+              let time = 750 * _this.configureTextArray.length || 1000;
               setTimeout(() => { _this.isConfigureFail = true; }, time)
             }else if(result === 1){
               /* 通知父组件 更新到下一步的视图, 不用再调用更新步骤的接口 */
-              setTimeout(() => { _this.$emit('update-step', 3) }, 5000)
+              setTimeout(() => { _this.$emit('update-step', 3) }, 750*5)
             }
           });
         }catch (e) {
@@ -662,6 +662,10 @@
         padding: 25px 25px 30px 40px;
       }
 
+      .el-dialog__footer {
+        height: 64px;
+      }
+
       .configure-title {
         margin-bottom: 24px;
         font-size: 16px;
@@ -697,24 +701,24 @@
         opacity: 0;
 
         &.show {
-          animation: upShow 1s;
+          animation: upShow 0.75s;
           animation-fill-mode: forwards;
         }
 
         &.show:nth-of-type(2) {
-          animation-delay: 1s;
+          animation-delay: 0.75s;
         }
 
         &.show:nth-of-type(3) {
-          animation-delay: 2s;
+          animation-delay: 0.75*2s;
         }
 
         &.show:nth-of-type(4) {
-          animation-delay: 3s;
+          animation-delay: 0.75*3s;
         }
 
         &.show:nth-of-type(5) {
-          animation-delay: 4s;
+          animation-delay: 0.75*4s;
         }
       }
     }
