@@ -58,7 +58,6 @@ export default {
         try {
           this.isLoading = true;
           const result = await this._apis.profile.getIntelligentProgress();
-          console.log('获取智能开店信息: ', result);
           if(result){
             this.currentStep = result.currentStep ? result.currentStep : 1;
             this.stepStatus = result.status || 0;

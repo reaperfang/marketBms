@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      <profileIntelligent></profileIntelligent>
+      <profileIntelligent ref="intelligentBar"></profileIntelligent>
       <div class="p_l_main">
         <div class="p_l_item dealt">
           <p class="title1">待办提醒：</p>
@@ -152,7 +152,7 @@
               <p class="title3">微信小程序商城</p>
               <div style="position:relative;">
                 <div class="el-loading-mask profile-wxsc-loading"><div class="el-loading-spinner"><svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg><!----></div></div>
-                
+
                 <div v-if="!isReleaseWX && !isEmpowerWX && wxQrcode" class="profile-wxsc-item">
                   <img  class="erweima" :src="wxQrcode" alt/>
                   <p class="opt">
@@ -203,7 +203,7 @@
                 </div>
               </div>
             </div>
-          </div>  
+          </div>
         </div>
       </div>
     </div>
@@ -354,6 +354,7 @@ export default {
       this.isEmpower();
       this.getIsReleaseWX();
       this.getIsReleaseGZ();
+      this.$refs.intelligentBar.getIntelligent();
     });
     this.$message.closeAll();
     this.init();
@@ -598,7 +599,7 @@ export default {
           console.error(error);
         });
     },
-    
+
     //获取公众号二维码
     getGZQrcode(){
       this._apis.shop
@@ -623,7 +624,7 @@ export default {
   display: flex;
   width:100%;
   .title1{
-    font-size:16px; 
+    font-size:16px;
     font-weight:500;
     color:rgba(22,22,23,1);
   }
@@ -701,7 +702,7 @@ export default {
               display: block;
             }
           }
-          .dealt_list_l{  
+          .dealt_list_l{
             .dealt_item_1{
               width: 94px;
               height: 110px;

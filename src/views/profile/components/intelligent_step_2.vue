@@ -240,71 +240,8 @@
         this.isShowConfirmBox = true;
       },
 
-      /** 确认启用 */
-      async enableConfigure() {
-        if (this.isConfigureFail) return;
-        try {
-          let params = {chooseTemplateId: this.selectTemplateId, changeStep: 3, status: 0};
-          let res = await this._apis.profile.intelligentUpdateStep(params);
-          this.enableConfigureStatus();
-
-        } catch (e) {
-          this.$message.error(e || "网络错误，请稍后再试")
-
-        } finally {
-          this.isShowConfirmBox = false;
-        }
-
-      },
-
-      /** 调用 启用模板接口： 抽出来了， 启用和再次加载都用到了！ */
-      enableConfigureStatus() {
-        const _this = this;
-        const BEGIN_TIME = Date.now();
-        this._apis.profile.intelligentEnableTemplate({tempCid: this.tempCid})
-          .then((result) => {
-            clearInterval(this.timerConfigure);
-            this.getConfigureStatus();
-            let timeoutTime = 1000;
-
-            const END_TIME = Date.now();
-            if (BEGIN_TIME - END_TIME < 5000) timeoutTime = 5000; // 为了预留出 加载数据动画时间
-
-            // 0 失败 1 成功
-            if (result === 0) {
-              let time = 1000 * this.configureTextArray.length || 1000;
-              setTimeout(() => {
-                _this.isConfigureFail = true;
-              }, time)
-            } else if (result === 1) {
-              // 通知父组件 更新到下一步的视图, 不用再调用更新步骤的接口
-              setTimeout(function () {
-                _this.$emit('update-step', 3)
-              }, timeoutTime)
-            }
-
-          })
-          .catch((err) => {
-            this.$message.error(err);
-            clearInterval(this.timerConfigure)
-          });
-        this.isShowConfigureBox = true;
-        this.timer();
-      },
-
-
-      /** 查询配置进度 */
-      timer() {
-        const _this = this;
-        this.configureTextArray = [];
-        clearInterval(this.timerConfigure);
-        this.timerConfigure = setInterval(function () {
-          _this.getConfigureStatus();
-        }, 1000);
-      },
-
-      /** 获取配置状态 */
-      async getConfigureStatus() {
+      /** 4获取配置状态 */
+      async getConfigureStatus(callback) {
         try {
           let res = await this._apis.profile.intelligentConfigurationStatus({});
           if (res && res.length > 0) {
@@ -319,6 +256,8 @@
               }
             })
           }
+          /* 上面的2拿到数据之后， 做一些动画处理 */
+          callback && callback();
         } catch(err) {
           this.$message.error(err || "网络错误，请稍后再试");
           console.error("查询配置进度err:" + err);
@@ -326,9 +265,64 @@
         }
       },
 
-      /** 再次加载 */
+      /** 5查询配置进度 */
+      timer() {
+        const _this = this;
+        this.configureTextArray = [];
+        clearInterval(this.timerConfigure);
+        this.timerConfigure = setInterval(function () {
+          _this.getConfigureStatus();
+        }, 1000);
+      },
+
+      /** 1确认启用 */
+      async enableConfigure() {
+        if (this.isConfigureFail) return;
+        try {
+          /* 1先更新步骤， */
+          let params = {chooseTemplateId: this.selectTemplateId, changeStep: 3, status: 0};
+          let res = await this._apis.profile.intelligentUpdateStep(params);
+          /* 2 再调用 启用模板接口 */
+          this.isShowConfigureBox = true; // 显示配置窗口
+          this.enableConfigureStatus();
+
+        } catch (e) {
+          this.$message.error(e || "网络错误，请稍后再试")
+
+        } finally {
+          this.isShowConfirmBox = false;
+        }
+
+      },
+
+      /** 2 调用 启用模板接口： 抽出来了，启用和再次加载都用到了！ */
+      async enableConfigureStatus() {
+        try{
+          const _this = this;
+          this.timer();
+          let result = await this._apis.profile.intelligentEnableTemplate({tempCid: this.tempCid});
+          clearInterval(this.timerConfigure);
+          this.getConfigureStatus(function () {
+            console.log(_this.configureTextArray.length);
+            /*  0 失败 1 成功  */
+            if(result === 0) {
+              let time = 1000 * _this.configureTextArray.length || 1000;
+              setTimeout(() => { _this.isConfigureFail = true; }, time)
+            }else if(result === 1){
+              /* 通知父组件 更新到下一步的视图, 不用再调用更新步骤的接口 */
+              setTimeout(() => { _this.$emit('update-step', 3) }, 5000)
+            }
+          });
+        }catch (e) {
+          this.$message.error(e || "网络错误~");
+          clearInterval(this.timerConfigure)
+        }
+      },
+
+      /** 3再次加载 */
       async againConfigure() {
         this.configureTextArray = [];
+        this.isConfigureFail = false;
         this.enableConfigureStatus();
       },
 
