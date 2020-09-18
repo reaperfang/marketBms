@@ -1,6 +1,9 @@
 <template>
 	<div class="panel-content-cap">
-		<div class="chartContent">
+		<div class="chartContent empty" v-show="isEmpty">
+			<span>暂无数据</span>
+		</div>
+		<div class="chartContent" v-show="!isEmpty">
 			<div class="circle-45 circle-hover" v-show="five">
 				<span class="time-text">{{ five }}</span>
 			</div>
@@ -43,7 +46,9 @@ export default {
 			sec: "",
 			third: "",
 			fourth: "",
-			five: ""
+			five: "",
+
+			isEmpty: false
 
 			// first: "测试",
 			// sec: "测试",
@@ -61,7 +66,10 @@ export default {
 	},
 	methods: {
 		showChart(data) {
-			//let result = data.goods_type_name;
+			if (!data.goods_type_name) {
+				this.isEmpty = true;
+				return;
+			}
 
 			data.goods_type_name.forEach((item, index) => {
 				// console.log("item", item);
@@ -281,6 +289,15 @@ export default {
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		//text-align: center;
+	}
+
+	.empty {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		span {
+			color: #92929b;
+		}
 	}
 }
 </style>

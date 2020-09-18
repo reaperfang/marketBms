@@ -12,7 +12,7 @@
           <div class="fr fr_channel">
           </div>
       </div>
-      <div class="pane_container clearfix">
+      <div class="pane_container clearfix"  v-loading="dataRtload">
         <div class="p_screening">
             <div class="clearfix pt">
                 <p class="fl">支付金额（元）</p>
@@ -101,14 +101,16 @@
     <!-- 交易看板 -->
     <el-container class="pb12 clearfix">
         <el-aside class="asideBox" width="65%">
-            <div class="p_container p_ltsiade">
+            <div class="p_container p_ltsiade" v-loading="dataTypeload">
                 <div class="p_title clearfix">
                     <h2>交易看板</h2>
                     <div class="fr clearfix">
                         <serchRt @change="getVal" class="fr" />
                     </div>
                 </div>
-                <div class="choose-type clearfix">
+                <div class="choosebox">
+                    <el-scrollbar>
+                <div class="choose-type clearfix" >
                     <div class="choose_item" :class="checkList[0]?'active':''">
                         <div class="choosetop">
                             <p>支付金额（元）<span class="chooseBut" @click="chooseType(0)"></span></p>
@@ -174,6 +176,8 @@
                                 {{Math.abs(dataType.atv_up_pct*100).toFixed(2)}}%</span><span v-else>--</span></p>
                         </div>
                     </div>
+                </div>
+                </el-scrollbar>
                 </div>
                 <tradeChart :title="'测试图表'" ref="tradeChart" :dataChart="dataChart3" :checkList="checkList" height="420px" ></tradeChart>
             </div>
@@ -242,7 +246,7 @@
                 </div>
                 </div>
                 <div class="chartbox">
-                    <pieChart :title="'测试图表'" ref="pieChart" :dataChart="dataChart" height="280px"></pieChart>
+                    <pieChart :title="'测试图表'" ref="pieChart" :dataChart="dataChart" height="300px"></pieChart>
                 </div>
             </div>
         </el-main>
@@ -260,7 +264,8 @@
                     <div class="pro_tle tle1">支付商品TOP</div>
                     <ul>
                         <li><span>排名</span><span>商品</span><span>支付金额</span></li>
-                        <li v-for="(item,index) in goodsList.payProducttop5" :key="index">
+                        <li v-if="goodsList.payProducttop5==null"><div class="datanull">暂无数据</div></li>
+                        <li v-else v-for="(item,index) in goodsList.payProducttop5" :key="index">
                             <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
                             <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
@@ -277,7 +282,8 @@
                     <div class="pro_tle tle2">销量商品TOP</div>
                     <ul>
                         <li><span>排名</span><span>商品</span><span>销量</span></li>
-                        <li v-for="(item,index) in goodsList.saleProducttop5" :key="index">
+                        <li v-if="goodsList.saleProducttop5==null"><div class="datanull">暂无数据</div></li>
+                        <li v-else v-for="(item,index) in goodsList.saleProducttop5" :key="index">
                             <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
                             <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
@@ -294,7 +300,8 @@
                     <div class="pro_tle tle3">浏览商品TOP</div>
                     <ul>
                         <li><span>排名</span><span>商品</span><span>浏览数</span></li>
-                        <li v-for="(item,index) in goodsList.browseProducttop5" :key="index">
+                        <li v-if="goodsList.browseProducttop5==null"><div class="datanull">暂无数据</div></li>
+                        <li v-else v-for="(item,index) in goodsList.browseProducttop5" :key="index">
                             <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
                             <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
@@ -355,10 +362,12 @@ export default {
         checkList:[true,false,false,false],
         activetype: 0,
         dataType:{},
+        dataTypeload:true,
         startTime: "",
         endTime:"",
         nearDay: 7, 
         dataRt:{},//右侧 类别数据
+        dataRtload:true,
         dataChart1: {},//数据总览
         dataChart2: {},//用户概览
         dataChart3: {},//交易看板
@@ -427,7 +436,8 @@ export default {
     },
     getdataView(){//数据总览数据
       this._apis.realSurvey.dataView(this.query).then(response => {
-        this.dataRt = JSON.parse(response)  
+        this.dataRt = JSON.parse(response) 
+        this.dataRtload=false 
         this.dataChart1 = {
             xAxis:JSON.parse(response).x,
             data_rt:JSON.parse(response).data_rt,
@@ -458,6 +468,7 @@ export default {
     this.query.date=this.seachTimetrad.date
       this._apis.realSurvey.transactionView(this.query).then(response => {
         this.dataType = JSON.parse(response)
+        this.dataTypeload=false
         var allData=[]
         allData.push(this.dataType.pay_amounts)
         allData.push(this.dataType.pay_order_nums)
@@ -607,8 +618,8 @@ margin-left: 12px;
 	  position: relative;
       padding: 14px 0;
       .p_screening{
-        //   width: calc(100% - 580px);
-        width: 50%;
+          width: calc(100% - 570px);
+        // width: 50%;
           color: #92929B;
           font-size: 14px;
           line-height: 16px;
@@ -633,10 +644,10 @@ margin-left: 12px;
       
   }
   .card-content{
-    //   width: 558px;
-    width: 50%;
+      width: 558px;
+    // width: 50%;
       float: right;
-      padding-left: 30px;
+    //   padding-left: 30px;
       .card-item{
           width:176px;
         height:106px;
@@ -685,13 +696,19 @@ height:0px;
 }
 .chartbox{
         width: 100%;
-        padding: 20px 0;
+        padding: 20px 0 0;
       }
 .p_ltsiade{
     padding-bottom: 10px;
-    .choose-type{
-        padding: 20px 0 10px;
+    .choosebox{
+        width: 100%;
+        overflow-x: scroll;
+        .choose-type{
+            min-width: 745px;
+            padding: 20px 0 10px;
+        }
     }
+    
     .choose_item{
         float: left;
         min-width:176px;
@@ -825,6 +842,12 @@ height:0px;
         }
         .tle3{
             background-image: url(../../assets/images/realtime/title3.png);
+        }
+        .datanull{
+            padding: 20px;
+            text-align: center;
+            line-height: 30px;
+            color: #3D434A;
         }
         ul{
             li{

@@ -30,6 +30,8 @@ export default {
       var name=['支付金额','支付订单数', '支付人数','客单价']
       var series=[]
       this.checkList.forEach((item,index)=>{
+        this.n.data[0]=this.n.data[0] && this.n.data[0].map(item => { return (item*1).toFixed(2)})
+        this.n.data[3]=this.n.data[3] && this.n.data[3].map(item => { return (item*1).toFixed(2)})
         if(item){
           series.push({
               name: name[index],

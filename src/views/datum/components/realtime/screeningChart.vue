@@ -24,10 +24,10 @@ export default {
     con(){
       this.flow = {
         xAxis:this.n.xAxis,
-        // yAxis1:this.n.data_rt && this.n.data_rt.map(item => { return (item*1).toFixed(1)}),
-        // yAxis2:this.n.data_rd && this.n.data_rd.map(item => { return (item*1).toFixed(1)}),
-        yAxis1:this.n.data_rt,
-        yAxis2:this.n.data_rd,
+        yAxis1:this.n.data_rt && this.n.data_rt.map(item => { return (item*1).toFixed(2)}),
+        yAxis2:this.n.data_rd && this.n.data_rd.map(item => { return (item*1).toFixed(2)}),
+        // yAxis1:this.n.data_rt,
+        // yAxis2:this.n.data_rd,
       }
       this.option = {
         tooltip: {
@@ -53,12 +53,15 @@ export default {
           boundaryGap: false,
           axisLabel:{
             showMaxLabel:true,
+            interval: 5,
           },
           data: this.flow['xAxis']
         },
         yAxis: {//Y轴
           type: "value",
           minInterval: 1,
+          // max:leftY.max,
+          // min:leftY.min,
           axisLine:{       //y轴
             show:false
           },

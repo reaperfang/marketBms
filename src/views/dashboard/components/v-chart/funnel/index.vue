@@ -223,11 +223,15 @@ export default {
 						symbolClip: true,
 						xAxisIndex: "1",
 						z: 1,
+						//-999900
 						data: [
 							{
 								value: 361,
 								itemValue:
-									youcejiantouData.order_c_uv_7dco + "%",
+									youcejiantouData.order_c_uv_7dco == -999900
+										? "0%"
+										: youcejiantouData.order_c_uv_7dco +
+										  "%",
 								show: true,
 								label: markLineSetting,
 								name: "下单转化率"
@@ -260,7 +264,9 @@ export default {
 							{
 								value: 210,
 								itemValue:
-									youcejiantouData.paid_c_uv_7dco + "%",
+									youcejiantouData.paid_c_uv_7dco == -999900
+										? "0%"
+										: youcejiantouData.paid_c_uv_7dco + "%",
 								label: markLineSettingleft,
 								name: "支付转化率"
 							}
