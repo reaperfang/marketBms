@@ -14,7 +14,7 @@
 				<div class="price-title">账户余额（元）</div>
 				<div class="price-info">
 					<span class="price">{{price}}</span>
-					<span class="price-tip" v-if="!price && price !== null">账户余额不足，不能发单，无法使用达达配送</span>
+					<span class="price-tip" v-if="price === '0.00' && price !== null">账户余额不足，不能发单，无法使用达达配送</span>
 				</div>
 			</div>
 			<div class="fr recharge-btn">

@@ -185,7 +185,7 @@ export default [
                 path: 'rechargeRecord',
                 component: () => import('@/views/set/rechargeRecord'),
                 name: 'rechargeRecord',
-                hidden: false,
+                hidden: true,
                 meta: { title: '查看余额', noCache: true, tabTitle: '配送设置' , navType: 4 }
                 },
             {
