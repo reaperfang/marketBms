@@ -62,7 +62,7 @@
           lng: "",
           sendAddress: ""
         },
-        isMapChoose: false,  // 是否打开了地图获取了经纬度
+        isMapChoose: false,  // 是否打开了地图获取了经纬度, 由于可以不填，所以默认为true
         rules: {
           shopName: { min: 1, max: 10, message: "长度在 1 到 10 个字符", trigger: "blur" },
           phone: { validator: (rule, value, callback) => {
@@ -112,10 +112,7 @@
             latitude: this.form.lat,
             longitude: this.form.lng,
           };
-          //  非空校验，全部空，则不调用 form表单更新 接口
-          if(!this.isAllValueEmpty(this.form)) {
-            const formResult = await this._apis.set.updateShopInfo(params);
-          }
+          const formResult = await this._apis.set.updateShopInfo(params);
           // changeStep 更改步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
           // status 状态 0 未完成 1 已完成
           const stepResult = await this._apis.profile.intelligentUpdateStep({changeStep: 4, status: 1});
@@ -193,24 +190,48 @@
         this.province = poi.provinceName;
         this.city = poi.cityName;
         this.area = poi.areaName;
-        this.isMapChoose = true
+        this.isMapChoose = true;
         this.$nextTick(() => {
           this.$refs.form.validateField('sendAddress')
         })
       },
 
       /** get店铺信息 */
-      getShopInfo() {
-        if(!this.shopInfos) return;
-        this.form.shopName = this.shopInfos.shopName || '';
-        this.form.phone = this.shopInfos.phone || '';
-        this.form.sendAddress = this.shopInfos.sendAddress || '';
-        this.province = this.shopInfos.province || this.province;
-        this.city = this.shopInfos.city || this.city;
-        this.area = this.shopInfos.area || this.area;
-        this.form.addressCode = this.shopInfos.provinceCode ? [ this.shopInfos.provinceCode, this.shopInfos.cityCode, this.shopInfos.areaCode ] : '';
-        this.form.lat = this.shopInfos.latitude || "";
-        this.form.lng = this.shopInfos.longitude || "";
+      async getShopInfo() {
+        /*本地拿到的会有旧的数据， 先不用了， 直接请求接口*/
+        // this.form.shopName = this.shopInfos.shopName || '';
+        // this.form.phone = this.shopInfos.phone || '';
+        // this.form.sendAddress = this.shopInfos.sendAddress || '';
+        // this.province = this.shopInfos.province || this.province;
+        // this.city = this.shopInfos.city || this.city;
+        // this.area = this.shopInfos.area || this.area;
+        // this.form.addressCode = this.shopInfos.provinceCode ? [ this.shopInfos.provinceCode, this.shopInfos.cityCode, this.shopInfos.areaCode ] : '';
+        // this.form.lat = this.shopInfos.latitude || "";
+        // this.form.lng = this.shopInfos.longitude || "";
+        try {
+          let id = this.shopInfos.id;
+          let result = await this._apis.set.getShopInfo({ id });
+          this.form.shopName = result.shopName || "";
+          this.form.phone = result.phone || "";
+          this.form.sendAddress = result.sendAddress || "";
+          this.province = result.province || "";
+          this.city = result.city || "";
+          this.area = result.area || "";
+          if (result.provinceCode) {
+            let arr = [];
+            arr.push(result.provinceCode);
+            arr.push(result.cityCode);
+            arr.push(result.areaCode);
+            this.form.addressCode = arr;
+          }
+          // 经纬度
+          this.form.lat = result.latitude;
+          this.form.lng = result.longitude;
+          this.isMapChoose = true;
+        }catch (e) {
+          this.$message.error(e || '查询失败');
+        }
+
       },
 
       /** 需要重新地图选点 */
