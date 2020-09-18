@@ -1,7 +1,7 @@
 <template>
   <div class="query">
     <section class="search">
-      <el-form :inline="true" :model="listQuery" ref="formInline" class="form-inline">
+      <el-form :inline="true" :model="listQuery" ref="formInline" class="form-inline input_style">
         <el-form-item label>
           <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
             <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">

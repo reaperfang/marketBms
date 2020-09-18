@@ -515,7 +515,7 @@ export default {
   margin-left: 10px;
 }
 .search_w{
-  width: 250px;
+  width: 210px;
 }
 .inline{
   display: inline-block;

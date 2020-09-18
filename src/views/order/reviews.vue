@@ -1,7 +1,7 @@
 <template>
     <div class="reviews">
         <div class="search">
-            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline">
+            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline input_style">
                 <el-form-item label="订单编号">
                     <el-input v-model="listQuery.orderCode" placeholder="请输入"></el-input>
                 </el-form-item>
