@@ -264,7 +264,8 @@
                     <div class="pro_tle tle1">支付商品TOP</div>
                     <ul>
                         <li><span>排名</span><span>商品</span><span>支付金额</span></li>
-                        <li v-for="(item,index) in goodsList.payProducttop5" :key="index">
+                        <li v-if="goodsList.payProducttop5==null"><div class="datanull">暂无数据</div></li>
+                        <li v-else v-for="(item,index) in goodsList.payProducttop5" :key="index">
                             <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
                             <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
@@ -281,7 +282,8 @@
                     <div class="pro_tle tle2">销量商品TOP</div>
                     <ul>
                         <li><span>排名</span><span>商品</span><span>销量</span></li>
-                        <li v-for="(item,index) in goodsList.saleProducttop5" :key="index">
+                        <li v-if="goodsList.saleProducttop5==null"><div class="datanull">暂无数据</div></li>
+                        <li v-else v-for="(item,index) in goodsList.saleProducttop5" :key="index">
                             <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
                             <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
@@ -298,7 +300,8 @@
                     <div class="pro_tle tle3">浏览商品TOP</div>
                     <ul>
                         <li><span>排名</span><span>商品</span><span>浏览数</span></li>
-                        <li v-for="(item,index) in goodsList.browseProducttop5" :key="index">
+                        <li v-if="goodsList.browseProducttop5==null"><div class="datanull">暂无数据</div></li>
+                        <li v-else v-for="(item,index) in goodsList.browseProducttop5" :key="index">
                             <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
                             <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
@@ -839,6 +842,12 @@ height:0px;
         }
         .tle3{
             background-image: url(../../assets/images/realtime/title3.png);
+        }
+        .datanull{
+            padding: 20px;
+            text-align: center;
+            line-height: 30px;
+            color: #3D434A;
         }
         ul{
             li{
