@@ -399,10 +399,19 @@ export function getAddress(data) {
     data
   })
 }
-/*  三方-注册详情 */
+/*  三方-达达-注册详情 */
 export function getTh3DeliverDetail(data) {
   return request({
     target: 'THIRD-PART-DETAIL-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+/*  三方-达达--判断当前城市是否开通费配送 */
+export function isDaDaCoveredArea(data) {
+  return request({
+    target: 'THIRD-PART-IS-OPEN-DELIVERY-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data

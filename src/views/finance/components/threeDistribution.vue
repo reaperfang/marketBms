@@ -4,10 +4,10 @@
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="订单编号">
-          <el-input v-model="ruleForm.relationSn" placeholder="请输入" style="width:200px;"></el-input>
+          <el-input v-model="ruleForm.relationSn" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
         <el-form-item label="配送公司">
-          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:200px;"></el-input>
+          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
          <el-form-item label="发货时间">
           <el-date-picker

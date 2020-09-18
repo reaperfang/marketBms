@@ -292,6 +292,11 @@ export default {
   },
   mounted() {
     this.$refs.ruleForm.$el.addEventListener('scroll', this.scrollHandler, false)
+
+    //如果没有分销中心，则先移除，避免向上向下移动时数量索引index不正确
+    if(this.isOpenResell!=1){
+      this.ruleForm.moduleList.pop();
+    }
   },
   computed: {
       shopInfo() {

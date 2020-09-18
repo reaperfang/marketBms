@@ -4,7 +4,7 @@
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="交易流水号">
-          <el-input v-model="ruleForm.tradeDetailSn" placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.tradeDetailSn" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
         <el-form-item label="交易类型">
           <el-select v-model="ruleForm.businessType" placeholder="全部">
@@ -60,13 +60,13 @@
           prop="relationSn"
           label="关联单据编号"
           :render-header="renderRelationSn"
-          width="220px">
+          width="230px">
         </el-table-column>
         <el-table-column
           prop="memberSn"
           label="用户ID"
           align="center"
-          width="110px">
+          width="120px">
         </el-table-column>
         <el-table-column
           prop="nickName"

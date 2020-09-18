@@ -5,7 +5,7 @@
       <p class="marB20" style="margin-left: 9px">当前余额：{{ data.balance }}</p>
       <div class="marB20">
           <div>
-            <span class="star">*</span><span>增加余额：</span>
+            <span class="star">*</span><span>调整类型：</span>
             <el-radio-group v-model="adjustBalance" @change="handleAdjust">
               <el-radio label="1">增加余额</el-radio>
               <el-radio label="2" style="margin-left: 26px">减少余额</el-radio>
@@ -115,12 +115,13 @@ export default {
       }else{
         this.showError = false;
       }
-      // if(Number(this.adjustmentBalance) > 100000000) {
-      //   this.$message({
-      //     message: '增加余额不能超过1亿',
-      //     type: 'warning'
-      //   });
-      // }
+      if(Number(this.adjustmentBalance) >= 100000000) {
+        this.$message({
+          message: '增加余额不能超过1亿',
+          type: 'warning'
+        });
+        this.adjustmentBalance = ""
+      }
     },
     handleAdjust(val) {
       if(val == "1") {

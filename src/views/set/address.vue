@@ -227,16 +227,40 @@ export default {
         })
       })
     },
-    hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId) {
-      // 需要查看发货地址数量是否剩下1条？？？
-      const id = row.id
-      const addressType = row.addressType
+    getSendAddressList() {
       const req = Object.create(null)
       req.cid  = this.cid
       req.startIndex = 1
       req.pageSize = 20
-      req.addressType = addressType
-      this.ApiGetAddressList(req).then((res) => {
+      req.addressType = 0
+      const p1 = this.ApiGetAddressList(req)
+      req.addressType = 2
+      const p2 = this.ApiGetAddressList(req)
+      return new Promise((resolve, reject) => {
+        const res = {}
+        Promise.all([p1,p2]).then(([res1, res2]) => {
+          console.log(res1, res2)
+          const total1 = res1 ? parseInt(res1.total) : 0
+          const total2 = res2 ? parseInt(res2.total) : 0
+          res.total = total1 + total2
+          resolve(res)
+        }).catch((err) => {
+          // this.$message.error(err)
+          reject(err)
+        })
+      })
+    },
+    hanldeOpenDeliveryDelAddress(row) {
+      // 需要查看发货地址数量是否剩下1条？？？
+      const id = row.id
+      const addressType = row.addressType
+      // const req = Object.create(null)
+      // req.cid  = this.cid
+      // req.startIndex = 1
+      // req.pageSize = 20
+      // req.addressType = 0
+      this.getSendAddressList().then((res) => {
+        console.log('res',res)
         // 仅有一条发货地址信息，同时商家配送已开启，此时要删除该发货地址时，弹框提示如下
         if (res && res.total == 1) {
           this.confirm({
@@ -253,7 +277,7 @@ export default {
             const p2 = this.ApiDelAddressById(id, addressType)
             Promise.all([p1, p2]).then((arr) => {
               console.log('arr',arr)
-               this.ruleForm.pageNo = 1
+              this.ruleForm.pageNo = 1
               const req = this.getReqData(this.ruleForm)
               this.getAddressList(req)
               // if(arr && arr.length > 0) {
@@ -281,10 +305,10 @@ export default {
       })
       
     },
-    // 判断地址是否为商家配送地址
+    // 获取商家配送地址
     getMerchantDeliverAddressById(id) {
       return new Promise((resolve, reject) => {
-        this._apis.set.getAddressDefaultSender().then((response) => {
+        this._apis.set.getAddressDefaultSender({ isBindShopsend: 1 }).then((response) => {
           resolve(response)
         }).catch((err) => {
           reject(err)
@@ -293,7 +317,13 @@ export default {
     },
     // 获取三方配送发货地址
     getTh3DeliverAddressById() {
-      // 
+      return new Promise((resolve, reject) => {
+        this._apis.set.getAddressDefaultSender({ isBindThirdsend: 1 }).then((response) => {
+          resolve(response)
+        }).catch((err) => {
+          reject(err)
+        })
+      })
     },
     /**
      * 1 获取商家配送地址id和三方配送地址id
@@ -309,7 +339,8 @@ export default {
       const p3 = this.getTh3DeliverAddressById() // 获取三方配送默认地址
       Promise.all([p1, p2, p3]).then((result) => {
         const [ { isOpenMerchantDeliver, isOpenTh3Deliver }, merchantDeliver, th3Deliver ] = result
-        const isOpen = (merchantDeliver && merchantDeliver.id === +id && isOpenMerchantDeliver) || (th3Deliver && th3Deliver.id === +id && isOpenTh3Deliver)
+        console.log('------result-----',result)
+        const isOpen = (merchantDeliver && +merchantDeliver.id === +id && isOpenMerchantDeliver) || (th3Deliver && +th3Deliver.id === +id && isOpenTh3Deliver)
         if (isOpen) {
           this.hanldeOpenDelivery(id)
         } else {
@@ -328,19 +359,6 @@ export default {
           const isOpenMerchantDeliver = res && res.isOpenMerchantDeliver === 1 ? true : false // 是否开启商家配送 0-否 1-是
           const isOpenTh3Deliver = res && res.isOpenTh3Deliver === 1 ? true : false // 是否开启三方配送 0-否 1-是
           resolve({isOpenMerchantDeliver, isOpenTh3Deliver })
-        }).catch(err => {
-          reject(err)
-        })
-      })
-    },
-    // 是否开启商家配送
-    isOpenMerchantDeliver() {
-      const id = this.cid
-      return new Promise((resolve, reject) => {
-        this._apis.set.getShopInfo({ id }).then(res => {
-          console.log("----",res)
-          const isOpenMerchantDeliver = res && res.isOpenMerchantDeliver === 1 ? true : false // 是否开启商家配送 0-否 1-是
-          resolve(isOpenMerchantDeliver)
         }).catch(err => {
           reject(err)
         })
@@ -409,7 +427,7 @@ export default {
       // 3 
       const id = row.id
       const addressType = row.addressType
-      const isDefaultAddress = row.isDefaltReturnAddress === 1 || row.isDefaltSenderAddress === 1 // mock
+      const isDefaultAddress = row.isDefaltReturnAddress === 1 || row.isDefaltSenderAddress === 1
       if (!isDefaultAddress) {
         const p1 = this.isOpenCityDeliver() // 是否开启同城配送
         const p2 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
@@ -418,7 +436,7 @@ export default {
           const [ { isOpenMerchantDeliver, isOpenTh3Deliver }, merchantDeliver, th3Deliver ] = result
           const merchantDeliverId = merchantDeliver && merchantDeliver.id
           const th3DeliverId = th3Deliver && th3Deliver.id
-          const isOpen = (merchantDeliverId === +id && isOpenMerchantDeliver) || (th3DeliverId === +id && isOpenTh3Deliver)
+          const isOpen = (+merchantDeliverId === +id && isOpenMerchantDeliver) || (+th3DeliverId === +id && isOpenTh3Deliver)
           
           if (isOpen) {
             this.hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId)

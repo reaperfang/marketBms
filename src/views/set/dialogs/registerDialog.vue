@@ -302,16 +302,16 @@ export default {
     this.init()
   },
   methods: {
-    getSubmitPromptMessage(status) {
+    getSubmitPromptMessage(status, err) {
       this.submitPromptMessage = ''
       // 1 达达商户注册失败，达达门店注册失败
-      if (status === 1) {
-        this.submitPromptMessage = '<i class="el-icon-error" style="font-size:13px;"></i><span style="padding-left:9px;">达达商户注册失败，达达门店注册失败</span>'
+      if (status === 1 && err) {
+        this.submitPromptMessage = `<i class="el-icon-error" style="font-size:13px;"></i><span style="padding-left:9px;">${err}</span>`
         return false
       }
       // 2 达达商户注册成功，达达门店注册失败
-      if (status === 2) {
-        this.submitPromptMessage = '<i class="el-icon-error" style="font-size:13px;"></i><span style="padding-left:9px;">达达商户注册成功，达达门店注册失败</span>'
+      if (status === 2 && err) {
+        this.submitPromptMessage = `<i class="el-icon-error" style="font-size:13px;"></i><span style="padding-left:9px;">${err}</span>`
         return false
       }
       return ''
@@ -521,12 +521,12 @@ export default {
           this.$emit("submitForm");
           this.visible = false;
           this.resetForm(this.ruleForm)
-        }).catch(() => {
-          this.getSubmitPromptMessage(2)
+        }).catch((err) => {
+          this.getSubmitPromptMessage(2, err)
           this.isEdit = true
         })
       }).catch(() => {
-        this.getSubmitPromptMessage(1)
+        this.getSubmitPromptMessage(1, err)
       }).finally(() => {
         // this.visible = false;
         this.isSubmit = false

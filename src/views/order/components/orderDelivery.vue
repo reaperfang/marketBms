@@ -2,7 +2,7 @@
     <div class="order-delivery">
         <div class="search">
             <div v-show="isOrderAutoSend" class="top">说明：当前已开启订单自动发货，自动发货后请尽快补充物流信息，您也可以到 <span @click="oderDeliver_decor" class="oderDeliver_decor">设置-交易设置</span> 中关闭自动发货 </div> 
-            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline">
+            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline input_style">
                 <el-form-item>
                     <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
                         <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
@@ -709,7 +709,7 @@ export default {
     }
     /deep/ .el-table .cell {
         padding-left: 0;
-        padding-right: 20px;
+        padding-right: 10px;
     }
     /deep/ .input-with-select .el-input-group__prepend {
         background-color: #fff;

@@ -1,7 +1,7 @@
 <template>
     <div class="after-sales">
         <div class="search">
-            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline">
+            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline input_style">
                 <el-form-item>
                     <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
                         <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
@@ -594,7 +594,7 @@ export default {
 }
 /deep/ .el-table .cell {
     padding-left: 0;
-    padding-right: 20px;
+    padding-right: 10px;
 }
 /deep/ .input-with-select .el-input-group__prepend {
     background-color: #fff;

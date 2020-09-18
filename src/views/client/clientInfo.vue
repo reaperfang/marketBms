@@ -99,7 +99,7 @@
                 </div>
                 <div class="assets_item rb">
                     <p>累计消费订单数</p>
-                    <p class="pointer p_style" @click="_routeTo('query',{id: userId, orderStatus: 6})" style="color: #655EFF; text-decoration: none">{{clientInfoById.dealTimes || 0}}</p>
+                    <p class="pointer p_style" @click="_routeTo('query',{id: userId, isPay: 1})" style="color: #655EFF; text-decoration: none">{{clientInfoById.dealTimes || 0}}</p>
                 </div>
             </div>
         </div>

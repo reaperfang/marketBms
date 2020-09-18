@@ -4,7 +4,7 @@
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="状态">
-          <el-select v-model="ruleForm.acceptStatus" style="width:200px;">
+          <el-select v-model="ruleForm.acceptStatus">
             <el-option
               v-for="item in smsStatus"
               :key="item.value"
