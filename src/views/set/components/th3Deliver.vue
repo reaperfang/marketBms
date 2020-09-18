@@ -265,9 +265,30 @@ export default {
           this.$message.error(error || '查询失败');
         });
     },
+    // 是否有设置发货地址与开通达达设置
+    hasSetting() {
+      const isFullAddress = this.isFullAddress()
+      const isOpenTh3 = this.dataList.find(item => item.status === 1)
+      return isFullAddress && isOpenTh3
+    },
     handleSubmit() {
       if (this.isLoading) return false
+      // 判断是否设置发货地址和开通达达设置
+      if (this.isOpen && !this.hasSetting()) {
+        this.confirm({
+          title: '提示', 
+          iconWarning: true, 
+          text: '您未完成发货地址或开通第三方等配置项设置，设置成功后，才能成功开启第三方配送开关。',
+          confirmText: '我知道了',
+          showCancelButton: false
+        }).finally(() => {
+          this.isOpen = false
+        });
+        
+        return false
+      }
       this.isLoading = true
+
       const req = Object.create(null)
       req.autoCall = this.isOpenAutoCall
       req.isOpenTh3Deliver = this.isOpen ? 1 : 0
@@ -278,7 +299,7 @@ export default {
           title: '提示', 
           iconSuccess: true, 
           text: html,
-          customClass: 'th3Deliver-custom',
+          customClass: 'goods-custom',
           confirmText: '确定',
           showCancelButton: false
         });
@@ -359,28 +380,42 @@ export default {
     isFullAddress() {
       return this.address && this.provinceCode && this.cityCode && this.areaCode && this.lat && this.lng
     },
-    isDaDaCoveredArea() {
-      
+    isDaDaCoveredArea(curr) {
+      const req = {
+        cid: this.cid,
+        cityCode: this.cityCode,
+        areaCode: this.areaCode,
+        thirdType: curr.thirdType
+      }
+      return this._apis.set.isDaDaCoveredArea(req)
     },
     //申请开通
     handleClickIsopen(row) {
       if (!this.isFullAddress()) {
         this.confirm({
           title: '提示', 
-          iconSuccess: true, 
+          iconWarning: true, 
           text: '请先将发货地址补充完成，再申请开通。',
-          confirmText: '确定',
+          confirmText: '我知道了',
           showCancelButton: false
         });
         return false
       }
       this.currTh3Deliver = row
       // 判断达达是否覆盖
-      // this.isDaDaCoveredArea().then(() => {
+      this.isDaDaCoveredArea(row).then(() => {
         this.isTableShow = false;
         this.btnShow = true;
         this.saveShow = false;
-      // })
+      }).catch(() => {
+        this.confirm({
+          title: '提示', 
+          iconWarning: true, 
+          text: '非常抱歉，发货地所在的城市尚未开通达达同城配送，暂无法使用，敬请期待。',
+          confirmText: '我知道了',
+          showCancelButton: false
+        });
+      })
       
     },
   }

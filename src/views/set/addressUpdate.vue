@@ -269,8 +269,15 @@ export default {
       // 同城配送默认地址逻辑变更
       const source = this.$route.query && this.$route.query.source // 来源是否为同城配送
       const sourceType = this.$route.query && this.$route.query.sourceType // 1 商家配送 2 三方配送
-      data.isBindShopsend = +source === 1 && +sourceType === 1 ? 1 : this.ruleForm.isBindShopsend
-      data.isBindThirdsend = +source === 1 && +sourceType === 2 ? 1 : this.ruleForm.isBindThirdsend
+      // 如果选择发货地址
+      if (type === 0 || type === 2) {
+        data.isBindShopsend = +source === 1 && +sourceType === 1 ? 1 : this.ruleForm.isBindShopsend
+        data.isBindThirdsend = +source === 1 && +sourceType === 2 ? 1 : this.ruleForm.isBindThirdsend
+      } else {
+        data.isBindShopsend = 0
+        data.isBindThirdsend = 0
+      }
+     
 
       return { ...data, ...type }
     },
@@ -341,6 +348,20 @@ export default {
         this.saveAddress()
       }
     },
+    // 是否开启同城配送
+    isOpenCityDeliver() {
+      const id = this.cid
+      return new Promise((resolve, reject) => {
+        this._apis.set.getShopInfo({ id }).then(res => {
+          console.log("----",res)
+          const isOpenMerchantDeliver = res && res.isOpenMerchantDeliver === 1 ? true : false // 是否开启商家配送 0-否 1-是
+          const isOpenTh3Deliver = res && res.isOpenTh3Deliver === 1 ? true : false // 是否开启三方配送 0-否 1-是
+          resolve({isOpenMerchantDeliver, isOpenTh3Deliver })
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
     // 是否开启商家配送
     isOpenMerchantDeliver() {
       const id = this.cid
@@ -401,10 +422,20 @@ export default {
       
       // this.handleAfterSave(res)
     },
-    // 判断地址是否为商家配送地址
+    // 获取商家配送地址
     getMerchantDeliverAddressById(id) {
       return new Promise((resolve, reject) => {
-        this._apis.set.getAddressDefaultSender().then((response) => {
+        this._apis.set.getAddressDefaultSender({ isBindShopsend: 1 }).then((response) => {
+          resolve(response)
+        }).catch((err) => {
+          reject(err)
+        })
+      })
+    },
+    // 获取三方配送发货地址
+    getTh3DeliverAddressById() {
+      return new Promise((resolve, reject) => {
+        this._apis.set.getAddressDefaultSender({ isBindThirdsend: 1 }).then((response) => {
           resolve(response)
         }).catch((err) => {
           reject(err)
@@ -421,11 +452,13 @@ export default {
             return false
           }
           this.isLoading = true
-          const p2 = this.isOpenMerchantDeliver()
-          const p1 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
-          Promise.all([p1, p2]).then((result) => {
-            console.log(result)
-            const [response, isOpen] = result
+          const p1 = this.isOpenCityDeliver()
+          const p2 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
+          const p3 = this.getTh3DeliverAddressById() // 获取三方配送默认地址
+           Promise.all([p1, p2, p3]).then((result) => {
+            const [ { isOpenMerchantDeliver, isOpenTh3Deliver }, merchantDeliver, th3Deliver ] = result
+            console.log('------result-----',result)
+            const isOpen = (merchantDeliver && +merchantDeliver.id === +id && isOpenMerchantDeliver) || (th3Deliver && +th3Deliver.id === +id && isOpenTh3Deliver)
             // 是否打开
             if (isOpen) {
               this.hanldeIsOpenDelivery(response)
