@@ -122,8 +122,8 @@
           // 店铺名更新
           let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
           if (shopInfo.shopName !== this.form.shopName) shopInfo.shopName = this.form.shopName;
-          let setStoreRes = await this.$store.dispatch("setShopInfos", shopInfo);
-          let getStoreRes = await this.$store.dispatch('getShopInfo');
+          let setRes = await this.$store.dispatch("setShopInfos", shopInfo);
+          await this.$store.dispatch('getShopInfo');
           // 跳转到概况页
           this.$router.push("/profile/profile");
 
