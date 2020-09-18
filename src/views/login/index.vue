@@ -1,8 +1,10 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-      <img src="@/assets/images/chahua.png" alt="">
-      <div class="main">
+      <div class="pic fl">
+        <img src="@/assets/images/chahua.png" alt="">
+      </div>
+      <div class="main fl">
         <div class="title-container">
           <h3 class="title">移动商城用户营销系统</h3>
         </div>
@@ -250,6 +252,7 @@ $light_block:#000;
     height: 47px;
     width: calc(100% - 30px);
     input {
+      width: 100% !important;
       background: transparent;
       border: 0px;
       border-bottom:1px solid #EEEEEE;
@@ -299,6 +302,9 @@ $bg_white:#fff;
     background-color:$bg_white;
     display: flex;
     flex: 1;
+    .pic {
+      width: 385px;
+    }
     .main{
       margin-left: 30px;
       width: 350px;

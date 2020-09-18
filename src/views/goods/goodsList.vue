@@ -1,5 +1,5 @@
 <template>
-    <div style="min-height: 100vh;" v-loading="loading">
+    <div class="goods-list mh" v-loading="loading">
 		<!--<div v-if="!list.length && !allTotal && !loading" class="goods-list-empty">
 			<div class="goods-list-empty-content">
 				<div class="image"></div>
@@ -7,7 +7,7 @@
 				<el-button @click="$router.push('/goods/addGoods')" class="add-goods" type="primary">新建商品</el-button>
 			</div>
 		</div>-->
-        <div class="goods-list">
+        <div>
             <header class="header">
                 <div v-if="!authHide" v-permission="['商品', '商品列表', '默认页面', '新建商品']" class="item pointer" @click="$route.name === 'goodsListOnly' ? $router.push('/goods/addGoodsOnly') : $router.push('/goods/addGoods')">
                     <el-button type="primary">新建商品</el-button>

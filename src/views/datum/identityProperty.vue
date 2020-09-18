@@ -332,6 +332,7 @@ export default {
 .p_container {
   padding: 20px;
   background-color: #fff;
+  border-radius: 4px;
   .pane_container {
     color: #3d434a;
     .i_title {

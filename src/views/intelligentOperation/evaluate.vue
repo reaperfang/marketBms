@@ -83,7 +83,6 @@
                     <p class="proposal" v-if="showNote"><b>满意率{{note.label}} ：</b>{{note.suggest}}</p>
                     <p class="proposal" v-if="showNote1"><b>差评率{{note1.label}} ：</b>{{note1.suggest}}</p>
                 </div>
-                <div class="contents"></div>
                 <!-- <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div> -->
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
@@ -304,6 +303,7 @@ export default {
 .m_container{
     background-color: #fff;
     padding: 20px;
+    border-radius: 4px;
     .el-button--small{
         border: 1px solid #655EFF;
         color: #655EFF;
@@ -346,7 +346,7 @@ export default {
 }
 .marT20s{
     position: relative;
-    top:10px;
+    padding-top:10px;
 }
 .contents{
     width: 100%;

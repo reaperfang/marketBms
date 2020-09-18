@@ -13,7 +13,7 @@
          发货地址：
        </div>
        <div class="content">
-        <span v-if="address"> {{ address }}</span><el-button class="address-btn" type="text">{{ btnTxt }}</el-button>
+        <span v-if="address"> {{ address }}</span><el-button class="address-btn" @click="handleToTh3Info" type="text">{{ btnTxt }}</el-button>
        </div>
      </div>
      <!-- 第三方列表 -->
@@ -25,15 +25,15 @@
          <div class="tableBox">
             <el-table style="width: 663px;" :data="dataList" class="table" :show-header="false" align="center" border>
               <el-table-column prop="name" label="名称" align="center" width="220"></el-table-column>
-              <el-table-column prop="isOpen" label="是否开通" align="center" width="220">
+              <el-table-column label="是否开通" align="center" width="220">
                 <template slot-scope="scope">
-                  <p v-if="status==1 || status==3">
+                  <p v-if="scope.row.status !== 1">
                     未开通
                     <br />
-                    {{scope.row.isOpen}}
+                    预计3个工作日审核完成
                   </p>
-                  <p v-else-if="status==2">已开通</p>
-                  <p class="prompt">审核通过</p>
+                  <p v-if="scope.row.status === 1">已开通</p>
+                  <p v-if="scope.row.status === 1" class="prompt">审核通过</p>
                 </template>
               </el-table-column>
               <!-- <el-table-column prop="explanation" label="说明" align="center" width="230"></el-table-column> -->
@@ -42,7 +42,7 @@
                 <template slot-scope="scope">
                   <el-button
                     class="tableBox-btn"
-                    v-if="status==1"
+                    v-if="scope.row.status !== 1"
                     @click="handleClickIsopen(scope.row)"
                     type="text"
                     size="medium"
@@ -52,12 +52,14 @@
                     type="text"
                     size="medium"
                     @click="goPay"
+                    v-if="scope.row.status === 1"
                   >充值</el-button>
                   <el-button
                     class="tableBox-btn"
                     type="text"
                     size="medium"
                     @click="viewBalance"
+                    v-if="scope.row.status === 1"
                   >查看余额</el-button>
                 </template>
               </el-table-column>
@@ -85,12 +87,15 @@
         type="primary"
         class="submit"
         @click="handleSubmit('ruleForm')"
+        v-permission="['设置','同城配送','第三方配送', '保存']"
         :loading="isLoading"
         v-show="saveShow"
       >保 存</el-button>
     </div>
     <component
       :is="currentDialog"
+      :addressInfo="addressInfo"
+      :data="currTh3Deliver"
       :dialogVisible.sync="dialogVisible"
       @submitForm="submitForm"
     ></component>
@@ -112,10 +117,15 @@ export default {
 
   data () {
     return {
+      currTh3Deliver: null,
+      addressInfo: null,
       address: null, // 发货地址
       provinceCode: null,
       cityCode: null,
       areaCode: null,
+      lng: null,
+      lat: null,
+      addressId: null,
       isOpen: false,
       status: 1,
       rechargeShow: false,
@@ -126,11 +136,9 @@ export default {
       isTableShow: false, // 是否显示列表
       dataList: [
         {
-          id: 1,
+          thirdType: 1,
           name: "达达",
-          isOpen: "预计3个工作日审核完成",
-          // explanation: "配费说明",
-          adopt: ""
+          status: 0,
         }
       ],
       dialogVisible: true,
@@ -166,20 +174,81 @@ export default {
   methods: {
     init() {
       this.isInitLoading = true
-      const p1 = this.getShopInfo()
-      const p2 = this.getTh3DeliverAddress()
-      Promise.all([p1, p2]).finally(() => {
+      const p1 = this.getTh3DeliverAddress()
+      const p2 = this.getShopInfo()
+      const p3 = this.getTh3DeliverList()
+      Promise.all([p1, p2, p3]).then(([res1,res2, res3])=> {
+        if (res1) {
+          this.addressInfo = res1
+          this.provinceCode = res1.provinceCode
+          this.cityCode = res1.cityCode
+          this.areaCode = res1.areaCode
+          this.address =  `${res1.address} ${res1.addressDetail}`
+          this.lng = res1.longitude
+          this.lat = res1.latitude
+          this.addressId = +res1.id
+        }
+      }).finally(() => {
         this.isInitLoading = false
       })
     },
+    formatTh3DeliverList(list) {
+      console.log('-----formatTh3DeliverList---', list)
+      let arr = [
+        {
+          thirdType: 1,
+          name: "达达",
+          status: 0,
+        }
+      ]
+      if (list.length <= 0) return arr
+      arr = list.map((item) => {
+        const map = Object.create(null)
+        map.thirdType = item.thirdType
+        map.status = item.status
+        if (item.thirdType === 1) map.name = '达达'
+
+        return map
+      })
+      return arr
+    },
+    // 获取三方配送列表
+    getTh3DeliverList() {
+      return this._apis.set.getTh3DeliverList().then((res) => {
+        this.dataList = this.formatTh3DeliverList(res)
+        return res
+      }).catch((err) => {
+        this.$message.error(err)
+      })  
+    },
+    handleToTh3Info() {
+      if (this.addressId) {
+        // this.confirm({
+        //   title: "提示",
+        //   icon: true,
+        //   text: '修改发货地址后请重新确认其它商家配送设置项，如无修改将以新的发货地址为中心按原配送规则执行',
+        //   confirmText: '去修改'
+        // }).then(() => {
+          // source 1 商家配送
+        this.$router.push({ path:'/set/addressUpdate', query: {id: this.addressId, source: 1, sourceType: 2 } })
+        // }).catch(()=> {
+        // });
+      } else {
+        this.$router.push({ path:'/set/addressAdd', query: { source: 1, sourceType: 2 } })
+      }
+    },
     getTh3DeliverAddress() {
-      // mock
-      this.provinceCode = ''
-      this.cityCode = ''
-      this.areaCode = ''
-      this.address = '北京大兴区数码庄园'
-      return new Promise((resolve, reject) => {
-        resolve(this.address)
+      return this._apis.set.getAddressDefaultSender({ isBindThirdsend: 1}).then((response) => {
+        // if (response) {
+        //   this.address = `${response.address} ${response.addressDetail}`
+        //   this.ruleForm.lng = response.longitude
+        //   this.ruleForm.lat = response.latitude
+        //   this.addressId = response.id
+        // }
+        return response
+      }).catch((err) => {
+        // console.log('err',err)
+        this.$message.error(err || '数据获取失败')
       })
     },
     getShopInfo() {
@@ -189,17 +258,39 @@ export default {
         .then(response => {
           if (!response) return false
           this.isOpen = response.isOpenTh3Deliver === 1 ? true : false
+          this.isOpenAutoCall = response.autoCall === 1 ? 1 : 0
           // 自动呼叫 isOpenAutoCall
         })
         .catch(error => {
           this.$message.error(error || '查询失败');
         });
     },
+    // 是否有设置发货地址与开通达达设置
+    hasSetting() {
+      const isFullAddress = this.isFullAddress()
+      const isOpenTh3 = this.dataList.find(item => item.status === 1)
+      return isFullAddress && isOpenTh3
+    },
     handleSubmit() {
       if (this.isLoading) return false
+      // 判断是否设置发货地址和开通达达设置
+      if (this.isOpen && !this.hasSetting()) {
+        this.confirm({
+          title: '提示', 
+          iconWarning: true, 
+          text: '您未完成发货地址或开通第三方等配置项设置，设置成功后，才能成功开启第三方配送开关。',
+          confirmText: '我知道了',
+          showCancelButton: false
+        }).finally(() => {
+          this.isOpen = false
+        });
+        
+        return false
+      }
       this.isLoading = true
+
       const req = Object.create(null)
-      // req.isOpenAutoCall = this.isOpenAutoCall
+      req.autoCall = this.isOpenAutoCall
       req.isOpenTh3Deliver = this.isOpen ? 1 : 0
       req.id = this.cid
       this._apis.set.updateShopInfo(req).then(response =>{
@@ -208,7 +299,7 @@ export default {
           title: '提示', 
           iconSuccess: true, 
           text: html,
-          customClass: 'th3Deliver-custom',
+          customClass: 'goods-custom',
           confirmText: '确定',
           showCancelButton: false
         });
@@ -239,9 +330,7 @@ export default {
       this.dialogVisible = true;
     },
     //注册成功
-    submitForm(val) {
-      this.sourceId = val;
-      this.status = 3;
+    submitForm() {
       // this.dataList = [
       //   {
       //     name: "达达",
@@ -253,7 +342,9 @@ export default {
       this.isTableShow = true;
       this.btnShow = false;
       this.saveShow = true;
-      this.rechargeShow = false;
+      this.getTh3DeliverList()
+      // this.rechargeShow = false;
+
     },
     //注册新的达达账号
     handleClickRegister() {
@@ -287,25 +378,45 @@ export default {
       });
     },
     isFullAddress() {
-      return this.address && this.provinceCode && this.cityCode && this.areaCode
+      return this.address && this.provinceCode && this.cityCode && this.areaCode && this.lat && this.lng
+    },
+    isDaDaCoveredArea(curr) {
+      const req = {
+        cid: this.cid,
+        cityCode: this.cityCode,
+        areaCode: this.areaCode,
+        thirdType: curr.thirdType
+      }
+      return this._apis.set.isDaDaCoveredArea(req)
     },
     //申请开通
-    handleClickIsopen() {
+    handleClickIsopen(row) {
       if (!this.isFullAddress()) {
         this.confirm({
           title: '提示', 
-          iconSuccess: true, 
+          iconWarning: true, 
           text: '请先将发货地址补充完成，再申请开通。',
-          confirmText: '确定',
+          confirmText: '我知道了',
           showCancelButton: false
         });
         return false
       }
+      this.currTh3Deliver = row
       // 判断达达是否覆盖
-      this.isDaDaCoveredArea()
-      this.isTableShow = false;
-      this.btnShow = true;
-      this.saveShow = false;
+      this.isDaDaCoveredArea(row).then(() => {
+        this.isTableShow = false;
+        this.btnShow = true;
+        this.saveShow = false;
+      }).catch(() => {
+        this.confirm({
+          title: '提示', 
+          iconWarning: true, 
+          text: '非常抱歉，发货地所在的城市尚未开通达达同城配送，暂无法使用，敬请期待。',
+          confirmText: '我知道了',
+          showCancelButton: false
+        });
+      })
+      
     },
   }
 }

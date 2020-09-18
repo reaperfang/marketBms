@@ -236,7 +236,7 @@
         </div>
       </section>
       <div class="btn">
-        <el-button type="primary" class="submit"  v-permission="['设置','同城配送','默认页面', '保存']" @click="handleSubmit('ruleForm')" :loading="isLoading">保 存</el-button>
+        <el-button type="primary" class="submit"  v-permission="['设置','同城配送','商家配送', '保存']" @click="handleSubmit('ruleForm')" :loading="isLoading">保 存</el-button>
       </div>
      </el-form>
   </div>
@@ -1188,7 +1188,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
   $color: rgba(68, 67, 75, 1);
   .shopExpress {
-    min-height: 100%;
+    min-height: 200px;
     background-color: #fff;
     color:$color;
     .dashed {

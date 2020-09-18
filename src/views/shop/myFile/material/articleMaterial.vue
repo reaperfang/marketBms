@@ -25,7 +25,7 @@
       <el-button type="primary" plain @click="_routeTo('generalArticle')">新建图文素材</el-button>
       <el-button type="primary" plain @click="syncImage">同步图文</el-button>
     </div>
-    <div class="list">
+    <div class="list" v-calcMinHeight="273">
       <p class="list_top">图文素材<span>{{total*1}}</span>条</p>
       <div class="list_main">
         <div class="list_img">

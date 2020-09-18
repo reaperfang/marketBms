@@ -306,6 +306,7 @@ export default {
 .p_block{
     background-color: #fff;
     padding: 20px;
+    border-radius: 4px;
     .res_export{
         position: relative;
 		margin-bottom: 39px;
@@ -428,6 +429,9 @@ width: 84px;
 }
 /deep/ .el-table--small td, /deep/.el-table--small th{
   padding:8px 10px;
+}
+.page_styles {
+    margin: 40px 0 30px 0;
 }
 </style>
 

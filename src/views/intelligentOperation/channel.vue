@@ -81,7 +81,6 @@
                 <p>运营建议：</p>
                 <p class="proposal"><b>转化率{{note.label}} ：</b>{{note.suggest}}</p>
             </div>
-            <div class="contents"></div>
            <!-- <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div> -->
     <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
@@ -282,6 +281,7 @@ export default {
 .m_container{
     background-color: #fff;
     padding: 20px;
+    border-radius: 4px;
     .el-button--small{
         border: 1px solid #655EFF;
         color: #655EFF;
@@ -321,7 +321,7 @@ export default {
 }
 .marT20s{
     position: relative;
-    top:10px;
+    padding-top:10px;
 }
 .buttonfl{
     -webkit-box-pack: end;

@@ -74,6 +74,7 @@ export default {
 .c_container{
     padding: 20px;
     background-color: #fff;
+    border-radius: 4px;
     .c_top{
         padding-bottom: 20px;
         border-bottom: 1px solid #D0D6E4;

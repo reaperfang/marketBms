@@ -43,6 +43,7 @@ export default {
 .c_container{
     padding: 20px;
     background-color: #fff;
+    border-radius: 4px;
     .marR10{
         margin-right: 10px;
     }

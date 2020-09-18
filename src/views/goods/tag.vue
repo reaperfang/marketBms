@@ -1,5 +1,5 @@
 <template>
-  <div class="tag">
+  <div class="tag mh">
     <div class="search">
       <div>
         <el-button v-permission="['商品', '商品标签', '默认页面', '新建标签']" @click="addTagHandler" type="primary">新建标签</el-button>

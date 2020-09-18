@@ -72,6 +72,14 @@ div:focus{
   float: left;
 }
 
+.h {
+  height: 100%;
+}
+
+.mh {
+  min-height: 100%;
+}
+
 .clearfix {
   &:after {
 	visibility: hidden;
@@ -325,7 +333,7 @@ table.yuan-table{
 /* 分页样式 */
 .page_styles{
   text-align: center;
-  margin-top: 20px;
+  margin: 40px 0 30px 0;
 }
 
 /**加一些公共样式***/
