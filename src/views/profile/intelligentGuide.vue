@@ -82,15 +82,6 @@
             console.log(err)
           })
       },
-      getShopInfo() {
-        let id = this.cid;
-        this._apis.set
-          .getShopInfo({ id: id })
-          .then(response => {
-            // this.storeGuide = response && response.storeGuide
-            this.init()
-          })
-      },
 
       /** v1.6开店 */
       goPrompt() {
