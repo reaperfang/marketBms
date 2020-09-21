@@ -24,7 +24,6 @@ export default {
 		// 	this.$refs.chart.setSeriesData(result);
 		// }
 		"dashboard.highlight"(newVal, oldVal) {
-			console.log("hightlightgeoCoordMap", this.hightlightgeoCoordMap);
 			this.setHightlight(newVal);
 		}
 	},
@@ -366,8 +365,6 @@ export default {
 		setHightlight(val) {
 			this.chart.clear();
 			this.chart.setOption(this.option);
-
-			console.log("setHightlight(val) {", val);
 			if (val.length == 0) {
 				window.clearInterval(this.interval);
 				return;
@@ -379,8 +376,6 @@ export default {
 					value: 1
 				};
 			});
-
-			console.log("seriesData", seriesData);
 
 			// for (let j = 0; j < res.length; j++) {
 			// 	this.option.series[0].data = [
@@ -395,17 +390,11 @@ export default {
 				if (j == seriesData.length) {
 					return;
 				}
-				console.log("start hightlight", j);
 				// topCity数组就是top的这个5个城市.
 				this.option.series[0].data = [
 					this.convertData(this.hightlightgeoCoordMap, seriesData)[j]
 				];
 
-				console.log(
-					"this.option.series[0].data",
-					this.option.series[0].data
-				);
-				console.log("geoCoordMap", this.hightlightgeoCoordMap);
 				this.chart.setOption(this.option);
 				j++;
 			}, 1000);
