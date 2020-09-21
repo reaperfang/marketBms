@@ -271,15 +271,28 @@ export default {
       const isOpenTh3 = this.dataList.find(item => item.status === 1)
       return isFullAddress && isOpenTh3
     },
+    // 设置绑定三方配送
+    setBindThirdsend() {
+      if (!this.addressInfo) return Promise.resolve()
+      const req = {
+        id: this.addressInfo.id,
+        isBindThirdsend: 1,
+        addressType: this.addressInfo.addressType,
+        is_defalt_sender_address: this.addressInfo.isDefaltSenderAddress,
+        is_defalt_return_address: this.addressInfo.isDefaltReturnAddress
+      }
+      return this._apis.set.editAddressById(req)
+    },
     handleSubmit() {
       if (this.isLoading) return false
       // 判断是否设置发货地址和开通达达设置
       if (this.isOpen && !this.hasSetting()) {
         this.confirm({
-          title: '提示', 
-          iconWarning: true, 
+          title: '',
+          iconWarning: true,
           text: '您未完成发货地址或开通第三方等配置项设置，设置成功后，才能成功开启第三方配送开关。',
           confirmText: '我知道了',
+          customClass: 'setting-custom',
           showCancelButton: false
         }).finally(() => {
           this.isOpen = false
@@ -293,13 +306,15 @@ export default {
       req.autoCall = this.isOpenAutoCall
       req.isOpenTh3Deliver = this.isOpen ? 1 : 0
       req.id = this.cid
-      this._apis.set.updateShopInfo(req).then(response =>{
-        const html = '<p style="font-size: 16px;font-weight: 500;color: #44434B;line-height: 22px;">保存成功</p><p style="font-size: 12px;font-weight: 400;color: #44434B;line-height: 20px;">第三方配送-达达配送已开启。</p>'
+      const p1 = this.setBindThirdsend()
+      const p2 = this._apis.set.updateShopInfo(req)
+      Promise.all([p1, p2]).then(response =>{
+        const html = '<span class="sucess">保存成功！</span><span class="prompt" style="">第三方配送-达达配送已开启。</span>'
         this.confirm({
-          title: '提示', 
+          title: '', 
           iconSuccess: true, 
           text: html,
-          customClass: 'goods-custom',
+          customClass: 'setting-custom',
           confirmText: '确定',
           showCancelButton: false
         });
@@ -393,9 +408,10 @@ export default {
     handleClickIsopen(row) {
       if (!this.isFullAddress()) {
         this.confirm({
-          title: '提示', 
+          title: '', 
           iconWarning: true, 
           text: '请先将发货地址补充完成，再申请开通。',
+          customClass: 'setting-custom',
           confirmText: '我知道了',
           showCancelButton: false
         });
@@ -409,10 +425,11 @@ export default {
         this.saveShow = false;
       }).catch(() => {
         this.confirm({
-          title: '提示', 
+          title: '', 
           iconWarning: true, 
           text: '非常抱歉，发货地所在的城市尚未开通达达同城配送，暂无法使用，敬请期待。',
           confirmText: '我知道了',
+          customClass: 'setting-custom',
           showCancelButton: false
         });
       })
@@ -421,6 +438,27 @@ export default {
   }
 }
 </script>
+<style rel="stylesheet/scss" lang="scss">
+.setting-custom {
+  .el-icon-success {
+    font-size: 32px;
+    color:rgba(108, 213, 33, 1);
+  }
+  .success,.prompt {
+    display: block;
+  }
+  .success {
+    font-size: 16px;font-weight: 500;color: #44434B;line-height: 22px;
+  }
+  .prompt {
+    padding-top: 10px;
+    font-size: 12px;font-weight: 400;color: #44434B;line-height: 20px;
+  }
+  &.no-cancel .el-button {
+    letter-spacing: 0;
+  }
+}
+</style>
 <style rel="stylesheet/scss" lang="scss" scoped>
 .th3Deliver {
   background: #fff;

@@ -1,5 +1,5 @@
 <template>
-  <DialogBase :visible.sync="visible" :showFooter="showFooter" width="640px" title="申请达达账号">
+  <DialogBase :visible.sync="visible" :showFooter="showFooter" width="660px" title="申请达达账号">
     <div class="registerDialog">
       <p class="error" v-if="submitPromptMessage" v-html="submitPromptMessage"></p>
       <el-form
@@ -581,8 +581,21 @@ export default {
     align-items: center;
   }
   .formBox {
+    width: 590px;
     height: 416px;
-    overflow: auto;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 8px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 2px !important;
+        background: #D0D6E4 !important;
+    }
+    &::-webkit-scrollbar-track {
+        border-radius: 0 !important;
+        background: #D0D6E4 !important;
+    }
     .item {
       margin-bottom: 20px;
     }
