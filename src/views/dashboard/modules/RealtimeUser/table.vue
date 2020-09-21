@@ -36,64 +36,14 @@ import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
 	watch: {
-		// flowData(val) {
-		// }
+		tableData(val) {
+			this.newtable = this.setNewTable(val);
+		}
 	},
 	props: ["tableData"],
 	components: {},
 	data: function() {
 		return {
-			// tableData: [
-			//   {
-			//     date: "2016-05-02",
-			//     name: "王小虎1",
-			//     address: "上海路 1518 弄",
-			//     id: 1,
-			//   },
-			//   {
-			//     date: "2016-05-04",
-			//     name: "王小虎2",
-			//     address: "上海市路 1517 弄",
-			//     id: 2,
-			//   },
-			//   {
-			//     date: "2016-05-01",
-			//     name: "王小虎3",
-			//     address: "上海市",
-			//     id: 3,
-			//   },
-			//   {
-			//     date: "2016-05-03",
-			//     name: "王小虎4",
-			//     address: "上海市普江路 1516 弄",
-			//     id: 4,
-			//   },
-			//   {
-			//     date: "2016-05-02",
-			//     name: "王小虎5",
-			//     address: "上海路 1518 弄",
-			//     id: 5,
-			//   },
-			//   {
-			//     date: "2016-05-04",
-			//     name: "王小虎6",
-			//     address: "上海市路 1517 弄",
-			//     id: 6,
-			//   },
-			//   {
-			//     date: "2016-05-01",
-			//     name: "王小虎7",
-			//     address: "上海市",
-			//     id: 7,
-			//   },
-			//   {
-			//     date: "2016-05-03",
-			//     name: "王小虎8",
-			//     address: "上海市普江路 1516 弄",
-			//     id: 8,
-			//   },
-			// ],
-
 			newtable: []
 		};
 	},
@@ -101,7 +51,7 @@ export default {
 		//...mapState([""])
 	},
 	mounted() {
-		setInterval(this.scroll, 1000);
+		//setInterval(this.scroll, 1000);
 	},
 	beforeCreate() {},
 	created() {},
@@ -112,12 +62,22 @@ export default {
 	destroyed: function() {},
 	methods: {
 		//...mapActions([""]),
+		setNewTable(val) {
+			return val.slice(0, 4).map(item => {
+				return {
+					...item,
+					time_rt: item.time_rt.split(" ")[1]
+				};
+			});
+		},
 		scroll() {
 			//this.animate = true; // 因为在消息向上滚动的时候需要添加css3过渡动画，所以这里需要设置true
 			setTimeout(() => {
 				//  这里直接使用了es6的箭头函数，省去了处理this指向偏移问题，代码也比之前简化了很多
 				this.tableData.push(this.tableData[0]); // 将数组的第一个元素添加到数组的
 				this.tableData.shift(); //删除数组的第一个元素
+				// this.tableData.push(this.tableData[this.tableData.length - 1]);
+				// this.tableData.pop();
 				//this.animate = false; // margin-top 为0 的时候取消过渡动画，实现无缝滚动
 
 				// this.newtable = this.tableData.slice(0, 4);
