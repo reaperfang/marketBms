@@ -296,7 +296,7 @@ export default {
             showCancelButton: true,
             customClass: 'address-update'
           }).then(() => {
-            this.delAddressById(id, addressType)
+            this.delAddressById(id, isBindThirdsend)
           }).catch((err) => {
           });
         }
@@ -437,7 +437,7 @@ export default {
           const merchantDeliverId = merchantDeliver && merchantDeliver.id
           const th3DeliverId = th3Deliver && th3Deliver.id
           const isOpen = (+merchantDeliverId === +id && isOpenMerchantDeliver) || (+th3DeliverId === +id && isOpenTh3Deliver)
-          
+          console.log('result',result, isOpen)
           if (isOpen) {
             this.hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId)
           } else {

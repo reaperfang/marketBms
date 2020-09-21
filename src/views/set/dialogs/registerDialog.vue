@@ -538,7 +538,7 @@ export default {
           this.getSubmitPromptMessage(2, err)
           this.isEdit = true
         })
-      }).catch(() => {
+      }).catch((err) => {
         this.getSubmitPromptMessage(1, err)
       }).finally(() => {
         // this.visible = false;

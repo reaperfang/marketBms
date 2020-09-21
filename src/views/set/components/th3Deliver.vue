@@ -136,7 +136,7 @@ export default {
       isTableShow: false, // 是否显示列表
       dataList: [
         {
-          thirdType:null,
+          thirdType:1,
           name: "达达",
           status: 0,
         }
@@ -196,7 +196,7 @@ export default {
       console.log('-----formatTh3DeliverList---', list)
       let arr = [
         {
-          thirdType: null,
+          thirdType: 1,
           name: "达达",
           status: 0,
         }
@@ -385,7 +385,7 @@ export default {
         cid: this.cid,
         cityCode: this.cityCode,
         areaCode: this.areaCode,
-        thirdType: curr.thirdType
+        thirdType: curr.thirdType || 1
       }
       return this._apis.set.isDaDaCoveredArea(req)
     },
