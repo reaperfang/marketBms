@@ -1,3 +1,5 @@
+import { asyncRouterMap } from '@/router'
+
 export const deliveryWay1 = {
   data() {
     return {
@@ -85,6 +87,20 @@ export const deliveryWay2 = {
     }
   },
   methods: {
+    //检测是否有配置子帐号的权限
+    checkSet(){
+        const setConfig = asyncRouterMap.filter(item => item.name === 'set');
+        if(setConfig.length == 0){
+            this.distributorSet = false;
+            return;
+        }
+        const subaccountManage = setConfig[0].children.filter(item => item.name === 'subaccountManage');
+        if(subaccountManage.length == 0){
+            this.distributorSet = false;
+            return;
+        }
+        this.distributorSet = true;
+    },
     //获取配送员列表
     getDistributorList() {
       this._apis.order
@@ -526,6 +542,20 @@ export const common = {
   methods: {
     cancel() {
       this.sending = false
+    },
+    changeReceivedInfo() {
+      this.currentDialog = "ReceiveInformationDialog";
+      this.currentData = this.orderInfo;
+      this.sendGoods = "received";
+      this.title = "修改收货信息";
+      this.dialogVisible = true;
+    },
+    changeSendInfo() {
+      this.currentDialog = 'ReceiveInformationDialog'
+      this.currentData = this.orderInfo
+      this.sendGoods = 'send'
+      this.title = '修改发货信息'
+      this.dialogVisible = true
     },
   },
   components: {

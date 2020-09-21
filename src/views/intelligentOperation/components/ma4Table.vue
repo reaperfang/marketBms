@@ -71,7 +71,7 @@
         width="150px">
       </el-table-column>
     </el-table>
-    <div class="page_styles">
+    <div class="page_styles" v-show="listObj.totalSize>0">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"

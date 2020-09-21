@@ -16,7 +16,7 @@
                 <div v-permission="['商品', '商品列表', '默认页面', '商品导入']" class="item pointer" @click="$router.push('/goods/import')">商品导入</div> -->
             </header>
             <div class="search">
-                <el-form :inline="true" :model="listQuery" ref="form" class="demo-form-inline">
+                <el-form :inline="true" :model="listQuery" ref="form" class="demo-form-inline input_style">
                     <el-form-item label="商品状态" prop="status">
                         <el-select v-model="listQuery.status" placeholder="请选择商品状态">
                             <el-option label="全部" value=""></el-option>

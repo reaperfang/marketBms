@@ -53,7 +53,7 @@
         </span>
       </div>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="280">
       <div class="title">
         <span class="name">趋势分析<em>（截止到昨日）</em></span>
         <div class="time">
@@ -346,7 +346,7 @@ export default {
   width: 100%;
   height: 160px;
   background: #fff;
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 20px;
     .title{
       display: flex;

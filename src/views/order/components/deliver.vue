@@ -1,5 +1,5 @@
 <template>
-  <div class="deliver-goods">
+  <div class="deliver-goods mh bor-radius">
     <div class="deliver-goods-header">
       <div class="item">发货</div>
       <div class="item">
@@ -105,7 +105,12 @@
                 <i class="deliver-icon"></i>
                 <span>发货信息</span>
               </div>
-              <div class="blue pointer" @click="changeSendInfo">修改发货信息</div>
+              <template v-if="orderInfo.deliveryWay == 3">
+                <div class="blue pointer" :class="{disabled: orderInfo.deliveryWay == 3}">修改发货信息</div>
+              </template>
+              <template v-else>
+                <div class="blue pointer" @click="changeSendInfo">修改发货信息</div>
+              </template>
             </div>
             <div class="content">
               <div class="item">
@@ -414,20 +419,6 @@ export default {
     // }
   },
   methods: {
-    //检测是否有配置子帐号的权限
-    checkSet(){
-        const setConfig = asyncRouterMap.filter(item => item.name === 'set');
-        if(setConfig.length == 0){
-            this.distributorSet = false;
-            return;
-        }
-        const subaccountManage = setConfig[0].children.filter(item => item.name === 'subaccountManage');
-        if(subaccountManage.length == 0){
-            this.distributorSet = false;
-            return;
-        }
-        this.distributorSet = true;
-    },
     //新页面打开角色管理
     gotoRoleManage() {
         let routeData = this.$router.resolve({ path: '/set/roleManage' });
@@ -708,20 +699,6 @@ export default {
           this.sending = false
         });
     },
-    changeReceivedInfo() {
-      this.currentDialog = "ReceiveInformationDialog";
-      this.currentData = this.orderInfo;
-      this.sendGoods = "received";
-      this.title = "修改收货信息";
-      this.dialogVisible = true;
-    },
-    changeSendInfo() {
-      this.currentDialog = "ReceiveInformationDialog";
-      this.currentData = this.orderInfo;
-      this.sendGoods = "send";
-      this.title = "修改发货信息";
-      this.dialogVisible = true;
-    },
     onSubmit(value) {
       this.orderInfo = Object.assign({}, this.orderInfo, value);
     },
@@ -932,6 +909,9 @@ export default {
           }
           .take-in-icon {
             background: url(../../../assets/images/order/take-in-icon.png);
+          }
+          .disabled {
+            color: #9fa29f;
           }
         }
         .content {

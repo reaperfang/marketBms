@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head-wrapper">
-      <el-form :inline="true" :model="form" class="demo-form-inline">
+      <el-form :inline="true" :model="form" class="demo-form-inline input_style">
         <el-form-item label="创建时间">
           <el-date-picker
             v-model="form.timeValue"

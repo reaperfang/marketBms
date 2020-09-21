@@ -1,8 +1,8 @@
 <template>
-    <div class="c_container">
+    <div class="c_container mh">
         <div>
             <span class="marR10">状态</span>
-            <el-select v-model="status" placeholder="请选择" clearable class="w_184">
+            <el-select v-model="status" placeholder="请选择" clearable >
                 <el-option label="全部" value="2"></el-option>
                 <el-option label="禁用" value="0"></el-option>
                 <el-option label="启用" value="1"></el-option>
