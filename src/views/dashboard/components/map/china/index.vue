@@ -87,11 +87,6 @@ export default {
 
 			this.hightlightgeoCoordMap = geoCoordMap;
 
-			// console.log("============geoCoordMap===================")
-			// console.log(geoCoordMap)
-			// console.log("================data======================")
-			// console.log(data);
-			// console.log(toolTipData);
 			var max = 44,
 				min = 0; // todo
 			var maxSize4Pin = 50,
@@ -142,6 +137,7 @@ export default {
 					}
 				},
 				visualMap: {
+					hoverLink: false,
 					show: true,
 					textStyle: {
 						fontSize: 12,
@@ -268,6 +264,17 @@ export default {
 			};
 			this.chart.clear();
 			this.chart.setOption(this.option);
+
+			this.chart.on("mouseover", params => {
+				this.chart.dispatchAction({
+					type: "downplay"
+				});
+				// if (params.data.value == undefined) {
+				// 	this.chart.dispatchAction({
+				// 		type: "downplay"
+				// 	});
+				// }
+			});
 
 			// if (this.interval) {
 			// 	this.clearInterval();
