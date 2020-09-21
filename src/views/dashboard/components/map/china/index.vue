@@ -181,6 +181,7 @@ export default {
 					]
 				},
 				geo: {
+					roam: true,
 					show: true,
 					map: mapName,
 					label: {
@@ -191,7 +192,6 @@ export default {
 							show: false
 						}
 					},
-					roam: false,
 					itemStyle: {
 						normal: {
 							areaColor: "#031525",
@@ -236,14 +236,7 @@ export default {
 						type: "map",
 						map: mapName,
 						geoIndex: 0,
-						zoom: 1, //当前视角的缩放比例
-						roam: true, //是否开启平游或缩放
-						scaleLimit: {
-							//滚轮缩放的极限控制
-							min: 1,
-							max: 2
-						},
-						// aspectScale: 0.75, //长宽比
+						aspectScale: 0.75, //长宽比
 						aspectScale: 0.5, //长宽比
 						showLegendSymbol: true, // 存在legend时显示
 						label: {
