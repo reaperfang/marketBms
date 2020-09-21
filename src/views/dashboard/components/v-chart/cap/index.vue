@@ -124,8 +124,8 @@ export default {
 
 		.circle-45 {
 			position: absolute;
-			top: 80px;
-			right: 210px;
+			top: 70px;
+			right: 220px;
 			border-radius: 50%;
 			width: 45px;
 			height: 45px;
@@ -155,7 +155,7 @@ export default {
 		.circle-55 {
 			position: absolute;
 			top: 45px;
-			right: 290px;
+			right: 280px;
 			border-radius: 50%;
 			width: 55px;
 			height: 55px;
@@ -184,7 +184,7 @@ export default {
 		.circle-65 {
 			position: absolute;
 			top: 55px;
-			left: 140px;
+			left: 150px;
 			border-radius: 50%;
 			width: 65px;
 			height: 65px;
@@ -243,7 +243,7 @@ export default {
 		.circle-90 {
 			position: absolute;
 			top: 85px;
-			right: 120px;
+			right: 137px;
 			border-radius: 50%;
 			width: 90px;
 			height: 90px;
