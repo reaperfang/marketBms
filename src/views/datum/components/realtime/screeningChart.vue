@@ -59,6 +59,7 @@ export default {
         },
         yAxis: {//Y轴
           type: "value",
+          // splitNumber: 5,
           minInterval: 1,
           // max:leftY.max,
           // min:leftY.min,
