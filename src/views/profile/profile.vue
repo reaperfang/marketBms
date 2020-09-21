@@ -325,7 +325,6 @@ export default {
 
   watch:{
     cid(newValue,oldValue){
-      console.log('????')
       this.isEmpowerWX = true;
       this.isEmpowerGZ = true;
       this.isReleaseWX = true;
@@ -388,29 +387,16 @@ export default {
         .catch(error => {
           console.log("error", error);
         });
-      
-      //判断是否有异常订单
-      // this._apis.shop
-      //   .getShopInfo({ id: this.cid })
-      //   .then(response => {
-      //     if (response.shopExpire == 2) {
-      //       this.$message({
-      //         showClose: true,
-      //         dangerouslyUseHTMLString: true,
-      //         message:'<p>您有{{}}条异常订单需要处理，<a>请查看</a></p>',
-      //         type: "warning",
-      //         duration: 0
-      //       });
-      //     }
-      //   })
-      //   .catch(error => {
-      //     console.log("error", error);
-      //   });
     },
 
     getLink(){
       this.pageLink = process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9002` : location.origin + "/bh" //客户工作台地址
       this.gzLink = process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9001` : location.origin + "/cp/?cid=" + this.cid //公众号商城地址
+    },
+
+    //是否开通订单动能
+    isOpenOrder(){
+      
     },
 
     //获取客户工作台二维码
@@ -459,9 +445,22 @@ export default {
         this.stayProcessedCount = response.stayProcessedCount;
         this.staySendCount = response.staySendCount;
         this.stayAuthCount = response.stayAuthCount;
+        //判断是否有异常订单
+        console.log('异常订单数',response.abnormalCount)
+        // let num = response.abnormalCount
+        let num = 1
+        if(num>0){
+          this.$message({
+            showClose: true,
+            dangerouslyUseHTMLString: true,
+            message:'<p>您有'+ num +'条异常订单需要处理，<a href="/order/query?isAbnormal=1">请查看</a></p>',
+            type: "warning",
+            duration: 0
+          });
+        }
       });
     },
-    // 待办售罄
+    // 待办提醒-商品售罄
     getOverviewSelling() {
       this._apis.overview.overviewSelling({}).then(response => {
         this.toBeSoldOut = response;
