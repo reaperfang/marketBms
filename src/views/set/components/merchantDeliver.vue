@@ -1,5 +1,5 @@
 <template>
-  <div class="shopExpress" v-loading="isInit"  element-loading-background="rgba(255, 255, 255, 1)">
+  <div class="shopExpress bor-radius" v-loading="isInit"  element-loading-background="rgba(255, 255, 255, 1)">
     <!-- 商家配送 -->
     <section v-if="!isInit" class="switch dashed">
       <span>商家配送</span>
@@ -1207,8 +1207,6 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
   $color: rgba(68, 67, 75, 1);
   .shopExpress {
-    min-height: 200px;
-    background-color: #fff;
     color:$color;
     .dashed {
       border-bottom: 1px dashed rgba(211, 211, 211, 1);
@@ -1455,23 +1453,23 @@ export default {
   }
 </style>
 <style rel="stylesheet/scss" lang="scss">
-.setting-custom {
-  .el-icon-success {
-    font-size: 32px;
-    color:rgba(108, 213, 33, 1);
-  }
-  .success,.prompt {
-    display: block;
-  }
-  .success {
-    font-size: 16px;font-weight: 500;color: #44434B;line-height: 22px;
-  }
-  .prompt {
-    padding-top: 10px;
-    font-size: 12px;font-weight: 400;color: #44434B;line-height: 20px;
-  }
-  &.no-cancel .el-button {
-    letter-spacing: 0;
-  }
-}
+// .setting-custom {
+//   .el-icon-success {
+//     font-size: 32px;
+//     color:rgba(108, 213, 33, 1);
+//   }
+//   .success,.prompt {
+//     display: block;
+//   }
+//   .success {
+//     font-size: 16px;font-weight: 500;color: #44434B;line-height: 22px;
+//   }
+//   .prompt {
+//     padding-top: 10px;
+//     font-size: 12px;font-weight: 400;color: #44434B;line-height: 20px;
+//   }
+//   &.no-cancel .el-button {
+//     letter-spacing: 0;
+//   }
+// }
 </style>

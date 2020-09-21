@@ -544,6 +544,7 @@ export const common = {
       this.sending = false
     },
     changeReceivedInfo() {
+      this.ajax = false
       this.currentDialog = "ReceiveInformationDialog";
       this.currentData = this.orderInfo;
       this.sendGoods = "received";

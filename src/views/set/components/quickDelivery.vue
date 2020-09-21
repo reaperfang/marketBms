@@ -112,6 +112,7 @@
           </el-table-column>
         </el-table>
         <pagination
+          style="margin-top: 10px;"
           v-show="total>0"
           :total="total"
           :page.sync="listQuery.startIndex"
