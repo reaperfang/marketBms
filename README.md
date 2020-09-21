@@ -674,3 +674,147 @@ helloWorld.vue
   }
 ]
 ```boom_merge_com1.2boom_merge_com1.2boom_merge_com1.2
+
+```
+
+## 文件命名规范
+
+* 文件夹名
+小写或者小驼峰 如：goods, login, errorPage
+
+* 页面
+同文件夹
+
+* 组件
+基础组件以大驼峰命名 如：DialogBase.vue
+
+* 样式
+样式名单词之间用下划线拼接 如：first_one
+
+* class类
+采用大驼峰法命名 如: class FirstOne() {}
+
+* 常量
+常量就是不能更改的变量，为了醒目所以都遵循全大写的蛇形命名法则，如：const FIRST_ONE = 3
+
+* 变量
+小写或者小驼峰
+
+* 根据类型定义变量，类型的首字母作为变量首字母
+
+```js
+
+let aApple; //array
+let nApple; //number
+let sApple; //string
+let oApple; //object
+let fnApple; //function
+let bApple; //boolean
+
+```
+* 函数专有的动词前辍
+has 有没有某个东西 
+is  是不是
+get 获取
+set 设置
+
+## JS规范
+
+### 引用
+
+  使用const定义你的所有引用，避免使用let。这样能确保你不能重新赋值你的引用，否则可能导致错误或者产生难以理解的代码。
+  如果必须重新赋值你的引用，可以使用let。
+<br/>
+* let和const都是块级范围的
+
+  ```js
+
+  {
+    let a = 1;
+    const b = 1;
+  }
+  console.log(a); //ReferenceError
+  console.log(b); //ReferenceError
+
+  ```
+### 对象
+定义一个空对象
+```js
+//bad
+const item = new Object();
+
+//good
+const item = {}
+```
+* 使用对象方法的缩写
+```js
+//bad
+const atom = {
+  value: 1,
+  addValue: function(value) {
+    return atom.value + value;
+  }
+};
+//good
+const atom = {
+  value: 1,
+  addValue(value) {
+    return atom.value + value;
+  }
+};
+```
+* 用对象扩展操作符代替Object.assign进行浅拷贝
+```js
+//very bad
+const original = { a: 1, b: 2 };
+const copy = Object.assign(original, { c: 3 }); // 变异的 `original` ಠ_ಠ
+delete copy.a; // 这....
+
+// bad
+const original = { a: 1, b: 2 };
+const copy = Object.assign({}, original, { c: 3 }); // copy => { a: 1, b: 2, c: 3 }
+
+// good
+const original = { a: 1, b: 2 };
+const copy = { ...original, c: 3 }; // copy => { a: 1, b: 2, c: 3 }
+
+const { a, ...noA } = copy; // noA => { b: 2, c: 3 }
+```
+### 数组
+
+* 使用数组展开方法 ... 来拷贝数组。
+```js
+// bad
+const len = items.length;
+const itemsCopy = [];
+let i;
+
+for (i = 0; i < len; i += 1) {
+  itemsCopy[i] = items[i];
+}
+
+// good
+const itemsCopy = [...items];
+```
+* 将一个类数组对象转换成一个数组， 使用展开方法 ... 代替 Array.from
+```js
+const foo = document.querySelectorAll('.foo');
+
+// good
+const nodes = Array.from(foo);
+
+// best
+const nodes = [...foo];
+```
+
+
+
+
+
+
+
+
+
+
+
+
