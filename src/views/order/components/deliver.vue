@@ -275,7 +275,7 @@
         </div>
       </div>
       <div class="footer">
-        <el-button v-if="orderInfo.deliveryWay == 1 || orderInfo.deliveryWay == 4" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
+        <el-button v-if="orderInfo.deliveryWay == 1 || orderInfo.deliveryWay == 3 || orderInfo.deliveryWay == 4" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
         <el-button v-if="orderInfo.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">发 货</el-button>
       </div>
     </div>
