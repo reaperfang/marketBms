@@ -1,13 +1,5 @@
 <template>
 	<div class="row-3-grid-content flex-column flex-box">
-		<!-- <el-row type="flex" justify="space-between" class="item-title">
-			<el-col :span="24">
-				<gridtitle :title="'用户交易偏好'"></gridtitle>
-			</el-col>
-		</el-row>
-		<el-row class="item-content">
-			<vcap></vcap>
-		</el-row> -->
 		<div class="title">
 			<el-row type="flex" justify="space-between" class="item-title">
 				<el-col :span="12">

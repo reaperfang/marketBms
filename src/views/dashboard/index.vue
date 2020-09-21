@@ -136,6 +136,8 @@ export default {
 		.el-col {
 			height: 100%;
 		}
+
+		min-height: 220px;
 	}
 
 	.row-4 {

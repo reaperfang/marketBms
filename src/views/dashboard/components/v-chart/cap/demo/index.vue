@@ -111,6 +111,10 @@ export default {
 		position: relative;
 
 		.text-mult {
+			// overflow: hidden;
+			// text-overflow: ellipsis;
+			// white-space: nowrap;
+
 			display: block;
 			white-space: nowrap;
 			overflow: hidden;
@@ -124,8 +128,8 @@ export default {
 
 		.circle-45 {
 			position: absolute;
-			top: 80px;
-			right: 210px;
+			top: 105px;
+			left: 120px;
 			border-radius: 50%;
 			width: 45px;
 			height: 45px;
@@ -138,24 +142,24 @@ export default {
 			margin-top: -20px;
 		}
 
-		// .circle-45:hover {
-		// 	background: #026dff;
-		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
-		// 	// transform: scale(2.2);
+		.circle-45:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			// transform: scale(2.2);
 
-		// 	width: 100px;
-		// 	height: 100px;
-		// 	margin-left: -50px;
-		// 	margin-top: -50px;
-		// 	span {
-		// 		font-size: 18px;
-		// 	}
-		// }
+			width: 100px;
+			height: 100px;
+			margin-left: -50px;
+			margin-top: -50px;
+			span {
+				font-size: 18px;
+			}
+		}
 
 		.circle-55 {
 			position: absolute;
-			top: 45px;
-			right: 290px;
+			top: 75px;
+			right: 300px;
 			border-radius: 50%;
 			width: 55px;
 			height: 55px;
@@ -168,23 +172,23 @@ export default {
 			margin-top: -20px;
 		}
 
-		// .circle-55:hover {
-		// 	background: #026dff;
-		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
-		// 	//transform: scale(1.8);
-		// 	width: 100px;
-		// 	height: 100px;
-		// 	margin-left: -45px;
-		// 	margin-top: -45px;
-		// 	span {
-		// 		font-size: 18px;
-		// 	}
-		// }
+		.circle-55:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			//transform: scale(1.8);
+			width: 100px;
+			height: 100px;
+			margin-left: -45px;
+			margin-top: -45px;
+			span {
+				font-size: 18px;
+			}
+		}
 
 		.circle-65 {
 			position: absolute;
 			top: 55px;
-			left: 140px;
+			left: 50px;
 			border-radius: 50%;
 			width: 65px;
 			height: 65px;
@@ -198,23 +202,23 @@ export default {
 			margin-top: -20px;
 		}
 
-		// .circle-65:hover {
-		// 	background: #026dff;
-		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
-		// 	//transform: scale(1.8);
-		// 	width: 100px;
-		// 	height: 100px;
-		// 	margin-left: -45px;
-		// 	margin-top: -45px;
-		// 	span {
-		// 		font-size: 18px;
-		// 	}
-		// }
+		.circle-65:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			//transform: scale(1.8);
+			width: 100px;
+			height: 100px;
+			margin-left: -45px;
+			margin-top: -45px;
+			span {
+				font-size: 18px;
+			}
+		}
 
 		.circle-70 {
 			position: absolute;
-			top: 105px;
-			right: 255px;
+			top: 55px;
+			right: 220px;
 			border-radius: 50%;
 			width: 70px;
 			height: 70px;
@@ -227,23 +231,23 @@ export default {
 			margin-top: -20px;
 		}
 
-		// .circle-70:hover {
-		// 	background: #026dff;
-		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
-		// 	//transform: scale(1.8);
-		// 	width: 100px;
-		// 	height: 100px;
-		// 	margin-left: -35px;
-		// 	margin-top: -35px;
-		// 	span {
-		// 		font-size: 18px;
-		// 	}
-		// }
+		.circle-70:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			//transform: scale(1.8);
+			width: 100px;
+			height: 100px;
+			margin-left: -35px;
+			margin-top: -35px;
+			span {
+				font-size: 18px;
+			}
+		}
 
 		.circle-90 {
 			position: absolute;
-			top: 85px;
-			right: 120px;
+			top: 50px;
+			right: 90px;
 			border-radius: 50%;
 			width: 90px;
 			height: 90px;
@@ -257,18 +261,20 @@ export default {
 			margin-top: -20px;
 		}
 
-		// .circle-90:hover {
-		// 	background: #026dff;
-		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
-		// 	//transform: scale(1.8);
-		// 	width: 100px;
-		// 	height: 100px;
-		// 	margin-left: -25px;
-		// 	margin-top: -25px;
-		// 	span {
-		// 		font-size: 18px;
-		// 	}
-		// }
+		.circle-90:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			//transform: scale(1.8);
+			width: 100px;
+			height: 100px;
+			margin-left: -25px;
+			margin-top: -25px;
+			span {
+				font-size: 18px;
+			}
+
+			// text-align: center;
+		}
 
 		span {
 			font-size: 14px;
