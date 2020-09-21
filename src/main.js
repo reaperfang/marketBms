@@ -88,10 +88,11 @@ import waterfall from 'vue-waterfall2'
 Vue.use(waterfall)
 
 //按需注册vant组件
-import { Swipe, SwipeItem, NoticeBar, CountDown } from 'vant';
+import { Swipe, SwipeItem, NoticeBar, CountDown,Toast  } from 'vant';
 Vue.use(Swipe).use(SwipeItem);
 Vue.use(NoticeBar);
 Vue.use(CountDown);
+Vue.use(Toast);
 
 
 /*注册复制剪贴板组件 */
