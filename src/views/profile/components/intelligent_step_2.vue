@@ -19,7 +19,7 @@
                 <transition name="el-fade-in">
                   <div class="view_preview" v-show="item.isShowCode">
                     <p class="hint text">使用手机扫描下方二维码 <br> 预览完整模版</p>
-                    <img class="qr_code" v-loading="item.isLoadingCode" :src="item.qrCodePic" alt="二维码"/>
+                    <img class="qr_code" v-loading="item.isLoadingCode" :src="'data:image/png;base64,'+item.qrCodePic" alt="二维码"/>
                   </div>
                 </transition>
 
@@ -57,7 +57,7 @@
                   <transition name="el-fade-in">
                     <div class="view_preview" v-show="item.isShowCode">
                       <p class="hint text">使用手机扫描下方二维码 <br> 预览完整模版</p>
-                      <img class="qr_code" v-loading="item.isLoadingCode" :src="item.qrCodePic" alt="二维码"/>
+                      <img class="qr_code" v-loading="item.isLoadingCode" :src="'data:image/png;base64,'+item.qrCodePic" alt="二维码"/>
                     </div>
                   </transition>
 
@@ -563,13 +563,13 @@
 
         .qr_code {
           margin-bottom: 40px;
-          width: 150px;
-          padding: 3px;
+          width: 130px;
+          padding: 10px;
           background-color: #fff;
         }
 
         .hint {
-          margin-top: 58px;
+          margin-top: 78px;
           margin-bottom: 20px;
           font-size: 14px;
           font-weight: 500;
