@@ -773,7 +773,7 @@ export default {
             }
             this._ids = [this.orderInfo.id]
             if(!this.orderInfo.sendAddress) {
-              if(this.orderInfo.deliveryWay == 1 || this.orderInfo.deliveryWay == 2) {
+              if(this.orderInfo.deliveryWay == 1 || this.orderInfo.deliveryWay == 2 || this.orderInfo.deliveryWay == 3) {
                 this.fetchOrderAddress(_address);
               } else if(this.orderInfo.deliveryWay == 4) {
                 this.fetchPickInfo(this.orderInfo.pickId)
