@@ -380,10 +380,6 @@ export default {
 <style lang="scss" scoped>
 /deep/ .el-dialog {
   height: 619px;
-  .el-dialog__title {
-    font-size: 22px;
-    color: rgba(68, 67, 75, 1);
-  }
   .el-icon-search {
     width: 32px;
     background: rgba(146, 146, 155, 0.2);

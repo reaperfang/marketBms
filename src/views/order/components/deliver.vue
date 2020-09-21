@@ -275,7 +275,7 @@
         </div>
       </div>
       <div class="footer">
-        <el-button v-if="orderInfo.deliveryWay == 1 || orderInfo.deliveryWay == 4" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
+        <el-button v-if="orderInfo.deliveryWay == 1 || orderInfo.deliveryWay == 3 || orderInfo.deliveryWay == 4" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
         <el-button v-if="orderInfo.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">发 货</el-button>
       </div>
     </div>
@@ -773,7 +773,7 @@ export default {
             }
             this._ids = [this.orderInfo.id]
             if(!this.orderInfo.sendAddress) {
-              if(this.orderInfo.deliveryWay == 1 || this.orderInfo.deliveryWay == 2) {
+              if(this.orderInfo.deliveryWay == 1 || this.orderInfo.deliveryWay == 2 || this.orderInfo.deliveryWay == 3) {
                 this.fetchOrderAddress(_address);
               } else if(this.orderInfo.deliveryWay == 4) {
                 this.fetchPickInfo(this.orderInfo.pickId)

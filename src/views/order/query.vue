@@ -233,6 +233,14 @@ export default {
               isPay
           })
       }
+
+    if(this.$route.query.isAbnormal) {
+          let isAbnormal = +this.$route.query.isAbnormal
+
+          this.listQuery = Object.assign({}, this.listQuery, {
+              isAbnormal
+          })
+      }
     /**从分销跳转过来的 */
     if(this.$route.query.orderCode){
       this.listQuery.searchValue= this.$route.query.orderCode;

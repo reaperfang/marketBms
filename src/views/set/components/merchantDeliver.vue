@@ -774,21 +774,24 @@ export default {
       // 是否完成配置
       if (!this.isCompleted) {
         this.confirm({
-          title: "提示",
-          icon: true,
+          title: "",
+          iconWarning: true,
           text: '您未完成配送范围、起送金额、配送时间等配置项设置，需设置并提交保存后，才能开启商家配送开关。',
           confirmText: '我知道了',
+          customClass: 'setting-custom',
           showCancelButton: false
         }).finally(() => {
           this.isOpen = false
         })
       } else {
         this.updateShopInfo({ isOpenMerchantDeliver: 1 }).then(response =>{
+          const html = '<span class="sucess">已成功开启商家配送！</span>'
           this.confirm({
-            title: "提示",
+            title: "",
             iconSuccess: true,
-            text: '已成功开启商家配送！',
+            text: html,
             confirmText: '我知道了',
+            customClass: 'setting-custom',
             showCancelButton: false
           });
           if (!this.isOpen) {
@@ -818,8 +821,8 @@ export default {
       // const isHasOtherWay = Math.random() * 10  > 5 ? true : false // mock data
       if (isHasOtherWay) {
         this.confirm({
-          title: "提示",
-          icon: true,
+          title: "",
+          iconWarning: true,
           text: '关闭后买家下单后将不再支持商家配送，您确定要关闭吗？',
           // beforeClose() {
           //   this.isOpen = true
@@ -840,8 +843,8 @@ export default {
         });
       } else {
         this.confirm({
-          title: "提示",
-          icon: true,
+          title: "",
+          iconWarning: true,
           text: '至少需要开启快递发货、商家配送中的一种配送方式 店铺才能正常经营',
           confirmText: '我知道了',
           showCancelButton: false,
@@ -879,8 +882,9 @@ export default {
     handleToShopInfo() {
       if (this.addressId) {
         this.confirm({
-          title: "提示",
-          icon: true,
+          title: "",
+          iconWarning: true,
+          customClass: 'setting-custom',
           text: '修改发货地址后请重新确认其它商家配送设置项，如无修改将以新的发货地址为中心按原配送规则执行',
           confirmText: '去修改'
         }).then(() => {
@@ -900,12 +904,14 @@ export default {
         isOpenMerchantDeliver: 1
       }
       this._apis.set.updateShopInfo(data).then(response =>{  
-        this.$store.dispatch('getShopInfo');      
+        this.$store.dispatch('getShopInfo');
+        const html = '<span class="sucess">已成功开启商家配送！</span>'
         this.confirm({
-          title: "提示",
+          title: "",
           iconSuccess: true,
-          text: '已成功开启商家配送！',
+          text: html,
           confirmText: '我知道了',
+          customClass: 'setting-custom',
           showCancelButton: false
         });
         if (!this.isOpen) {
@@ -1045,10 +1051,11 @@ export default {
       }
       if (!this.ruleForm.lng || !this.ruleForm.lat) {
         this.confirm({
-          title: "提示",
-          icon: true,
+          title: "",
+          iconWarning: true,
           text: '当前地址无法获取经纬度，请重新修改发货地址',
           confirmText: '我知道了',
+          customClass: 'setting-custom',
           showCancelButton: false
         })
         this.isLoading = false
@@ -1161,16 +1168,28 @@ export default {
               type: 'success'
           });
         } else {
-          const str = `<p style="text-align: center;"><i class="el-icon-success" style="    font-size: 40px;color: rgba(108,213,33,1);"></i><span style="ertical-align: super;">保存成功</span></p>
-          <p style="text-align: center;color:#ccc;">您可以去开启商家配送了</p>
-          `
-          this.$confirm('您可以去开启商家配送了', '保存成功', {
-            // dangerouslyUseHTMLString: true,
-            distinguishCancelAndClose: true,
-            confirmButtonText: '开启',
-            cancelButtonText: '暂不开启',
-            center: true,
-            type: 'success'
+          // const str = `<p style="text-align: center;"><i class="el-icon-success" style="    font-size: 40px;color: rgba(108,213,33,1);"></i><span style="ertical-align: super;">保存成功</span></p>
+          // <p style="text-align: center;color:#ccc;">您可以去开启商家配送了</p>
+          // `
+          // this.$confirm('您可以去开启商家配送了', '保存成功', {
+          //   // dangerouslyUseHTMLString: true,
+          //   distinguishCancelAndClose: true,
+          //   confirmButtonText: '开启',
+          //   cancelButtonText: '暂不开启',
+          //   center: true,
+          //   type: 'success'
+          // }).then(()=> {
+          //   this.openMerchantDeliver()
+          // }).catch((action) => {
+          // });
+          const html = '<span class="sucess">保存成功！</span><span class="prompt" style="">您可以去开启商家配送了</span>'
+          this.confirm({
+            title: '', 
+            iconSuccess: true, 
+            text: html,
+            customClass: 'setting-custom',
+            confirmText: '开启',
+            cancelButtonText: '暂不开启'
           }).then(()=> {
             this.openMerchantDeliver()
           }).catch((action) => {
@@ -1432,4 +1451,25 @@ export default {
       color: #B6B5C8;
     }
   }
+</style>
+<style rel="stylesheet/scss" lang="scss">
+// .setting-custom {
+//   .el-icon-success {
+//     font-size: 32px;
+//     color:rgba(108, 213, 33, 1);
+//   }
+//   .success,.prompt {
+//     display: block;
+//   }
+//   .success {
+//     font-size: 16px;font-weight: 500;color: #44434B;line-height: 22px;
+//   }
+//   .prompt {
+//     padding-top: 10px;
+//     font-size: 12px;font-weight: 400;color: #44434B;line-height: 20px;
+//   }
+//   &.no-cancel .el-button {
+//     letter-spacing: 0;
+//   }
+// }
 </style>

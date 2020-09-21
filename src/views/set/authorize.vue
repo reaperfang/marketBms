@@ -192,7 +192,7 @@ export default {
       this.showCodeDialog = true
       this._apis.set.getShopCode().then((res) => {
           this.shopCode = res
-          let text = `<h2>${this.shopCode}</h2><p class="message">用户绑定授权平台、数据对接，一经授权不得修改</p>`
+          let text = `${this.shopCode}<br/><span class="message">用户绑定授权平台、数据对接，一经授权不得修改</span>`
           let beforeClose = (action, instance, done) => {
             let code = this.shopCode;
 
