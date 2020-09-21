@@ -10,25 +10,27 @@
 <script>
 import echarts from "echarts";
 import chinaData from "../../../data/china.json";
-// import { mapGetters, mapActions, mapState } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 export default {
-	// watch: {
-	// 	"dashboard.realtimeuser"(val) {
-	// 		let result = val.map(item => {
-	// 			return {
-	// 				name: item.pro_name_rt,
-	// 				value: 1
-	// 			};
-	// 		});
-
-	// 		console.log("dashboard.realtiemuser", result);
-
-	// 		this.$refs.chart.setSeriesData(result);
-	// 	}
-	// },
-	// computed: {
-	// 	...mapState(["dashboard"])
-	// },
+	watch: {
+		// "dashboard.realtimeuser"(val) {
+		// 	let result = val.map(item => {
+		// 		return {
+		// 			name: item.pro_name_rt,
+		// 			value: 1
+		// 		};
+		// 	});
+		// 	console.log("dashboard.realtiemuser", result);
+		// 	this.$refs.chart.setSeriesData(result);
+		// }
+		"dashboard.highlight"(newVal, oldVal) {
+			console.log("hightlightgeoCoordMap", this.hightlightgeoCoordMap);
+			this.setHightlight(newVal);
+		}
+	},
+	computed: {
+		...mapState(["dashboard"])
+	},
 	props: ["barColor", "progress", "city", "mapData"],
 	name: "TEMPLATE",
 	data() {
@@ -36,7 +38,8 @@ export default {
 			chartData: "71.23",
 			chart: "",
 			interval: "",
-			option: ""
+			option: "",
+			hightlightgeoCoordMap: {}
 		};
 	},
 	mounted() {
@@ -71,44 +74,9 @@ export default {
 			var subname_fontSize = 15;
 			var name_fontSize = 30;
 			var mapName = "china";
-			// var data = [
-			//   { name: "湖北", value: 67803 },
-			//   { name: "广东", value: 1533 },
-			//   { name: "河南", value: 1276 },
-			//   { name: "浙江", value: 1265 },
-			//   { name: "湖南", value: 1019 },
-			//   { name: "安徽", value: 990 },
-			//   { name: "江西", value: 937 },
-			//   { name: "江苏", value: 651 },
-			//   { name: "重庆", value: 579 },
-			//   { name: "山东", value: 781 },
-			//   { name: "四川", value: 560 },
-			//   { name: "黑龙江", value: 544 },
-			//   { name: "北京", value: 587 },
-			//   { name: "上海", value: 538 },
-			//   { name: "河北", value: 327 },
-			//   { name: "福建", value: 351 },
-			//   { name: "广西", value: 254 },
-			//   { name: "陕西", value: 256 },
-			//   { name: "云南", value: 184 },
-			//   { name: "海南", value: 168 },
-			//   { name: "贵州", value: 147 },
-			//   { name: "山西", value: 138 },
-			//   { name: "天津", value: 180 },
-			//   { name: "辽宁", value: 144 },
-			//   { name: "甘肃", value: 139 },
-			//   { name: "吉林", value: 98 },
-			//   { name: "新疆", value: 76 },
-			//   { name: "内蒙古", value: 1213 },
-			//   { name: "宁夏", value: 75 },
-			//   { name: "香港", value: 914 },
-			//   { name: "台湾", value: 373 },
-			//   { name: "青海", value: 18 },
-			//   { name: "澳门", value: 44 },
-			//   { name: "西藏", value: 1 },
-			// ];
 
-			var geoCoordMap = {};
+			// let geoCoordMap = this.geoCoordMap ? this.geoCoordMap : {};
+			let geoCoordMap = {};
 			var toolTipData = [];
 
 			/*获取地图数据*/
@@ -117,6 +85,8 @@ export default {
 				const name = v.properties.name;
 				geoCoordMap[name] = v.properties.cp;
 			});
+
+			this.hightlightgeoCoordMap = geoCoordMap;
 
 			// console.log("============geoCoordMap===================")
 			// console.log(geoCoordMap)
@@ -318,19 +288,34 @@ export default {
 			// 	return item.value > 0;
 			// });
 
-			var seriesData = res.filter(item => {
-				return item.value > 0;
-			});
+			// let seriesData = this.$store.state.dashboard.highlight.map(item => {
+			// 	let row = JSON.parse(item);
+			// 	return {
+			// 		name: row.pro_name_rt,
+			// 		value: 1
+			// 	};
+			// });
 
-			var j = 0;
+			// var seriesData = res.filter(item => {
+			// 	return item.value > 0;
+			// });
 
-			this.interval = this.setInterval(() => {
-				if (j == seriesData.length) j = 0;
-				// topCity数组就是top的这个5个城市.
-				this.option.series[0].data = [convertData(seriesData)[j]];
-				this.chart.setOption(this.option);
-				j++;
-			}, 1000);
+			// var j = 0;
+
+			// console.log("seriesData", seriesData);
+
+			// this.interval = this.setInterval(() => {
+			// 	if (j == seriesData.length) j = 0;
+			// 	// topCity数组就是top的这个5个城市.
+			// 	this.option.series[0].data = [convertData(seriesData)[j]];
+			// 	console.log(
+			// 		"this.option.series[0].data",
+			// 		this.option.series[0].data
+			// 	);
+			// 	console.log("geoCoordMap", geoCoordMap);
+			// 	this.chart.setOption(this.option);
+			// 	j++;
+			// }, 1000);
 
 			// var j = 0;
 			// var IntervalId = window.setInterval(() => {
@@ -356,14 +341,15 @@ export default {
 		convertData(geoCoordMap, data) {
 			var res = [];
 			for (var i = 0; i < data.length; i++) {
-				var geoCoord = geoCoordMap[data[i].showName];
+				// document.write(data[i].value[0]);
+				// document.write('\t');
+				// document.write(data[i].value[1]);
+				// document.write('\t\t');
+				var geoCoord = geoCoordMap[data[i].name];
 				if (geoCoord) {
-					geoCoord[0] = +geoCoord[0] + 0.2 + "";
-					geoCoord[1] = +geoCoord[1] + 0.1 + "";
 					res.push({
-						name: data[i].showName,
-						// insickCount: geoCoord.concat(data[i].insickCount),
-						value: geoCoord.concat(data[i].insickCount)
+						name: data[i].name,
+						value: geoCoord.concat(data[i].value)
 					});
 				}
 			}
@@ -376,6 +362,53 @@ export default {
 		},
 		clearInterval() {
 			window.clearInterval(this.interval);
+		},
+		setHightlight(val) {
+			this.chart.clear();
+			this.chart.setOption(this.option);
+
+			console.log("setHightlight(val) {", val);
+			if (val.length == 0) {
+				window.clearInterval(this.interval);
+				return;
+			}
+			let seriesData = val.map(item => {
+				let row = JSON.parse(item);
+				return {
+					name: row.pro_name_rt,
+					value: 1
+				};
+			});
+
+			console.log("seriesData", seriesData);
+
+			// for (let j = 0; j < res.length; j++) {
+			// 	this.option.series[0].data = [
+			// 		this.convertData(this.hightlightgeoCoordMap, res)[j]
+			// 	];
+			// 	this.chart.setOption(this.option);
+			// }
+
+			var j = 0;
+
+			this.interval = this.setInterval(() => {
+				if (j == seriesData.length) {
+					return;
+				}
+				console.log("start hightlight", j);
+				// topCity数组就是top的这个5个城市.
+				this.option.series[0].data = [
+					this.convertData(this.hightlightgeoCoordMap, seriesData)[j]
+				];
+
+				console.log(
+					"this.option.series[0].data",
+					this.option.series[0].data
+				);
+				console.log("geoCoordMap", this.hightlightgeoCoordMap);
+				this.chart.setOption(this.option);
+				j++;
+			}, 1000);
 		}
 	},
 	components: {}

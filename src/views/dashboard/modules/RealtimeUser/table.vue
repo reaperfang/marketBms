@@ -1,14 +1,5 @@
 <template>
 	<div class="realtime-user">
-		<!-- <el-table :data="newtable" :row-style="{ height: '20px' }">
-			<el-table-column prop="id" label="ID" width="50"> </el-table-column>
-			<el-table-column prop="c_uv_name_rt" label="姓名" width="130">
-			</el-table-column>
-			<el-table-column prop="pd_rt" label="商品" width="200">
-			</el-table-column>
-			<el-table-column prop="op_rt" label="操作"> </el-table-column>
-		</el-table> -->
-
 		<el-table :data="newtable" :row-style="{ height: '20px' }">
 			<!-- <el-table-column prop="id" label="ID" width="45"> </el-table-column> -->
 			<el-table-column label="用户名" width="120">
@@ -41,9 +32,6 @@ export default {
 			this.newtable = this.setNewTable(newVal);
 			this.setHightLight(newVal, oldVal);
 		}
-		// "dashboard.highlight"(newVal, oldVal) {
-		// 	console.log('"dashboard.highlight"(val) {', newVal, oldVal);
-		// }
 	},
 	props: ["tableData"],
 	components: {},
