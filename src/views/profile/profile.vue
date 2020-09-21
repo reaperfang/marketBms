@@ -446,9 +446,7 @@ export default {
         this.staySendCount = response.staySendCount;
         this.stayAuthCount = response.stayAuthCount;
         //判断是否有异常订单
-        console.log('异常订单数',response.abnormalCount)
-        // let num = response.abnormalCount
-        let num = 1
+        let num = response.abnormalCount
         if(num>0){
           this.$message({
             showClose: true,
