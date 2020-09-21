@@ -567,8 +567,8 @@
 
         .qr_code {
           display: inline-block;
-          width: 130px;
-          height: 130px;
+          width: 140px;
+          height: 140px;
           padding: 10px;
           background-color: #fff;
         }
@@ -579,7 +579,7 @@
         }
 
         .hint {
-          margin-top: 78px;
+          margin-top: 68px;
           margin-bottom: 20px;
           font-size: 14px;
           font-weight: 500;
