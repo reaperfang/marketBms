@@ -1,22 +1,19 @@
-
-
 const dashboard = {
 	state: {
-		hobby:[],
-		member:{},
-		user:{},
-		sexage:{},
-		phone:{},
-		top3:[],
-		transation:{},
-		mailvistor:{},
-		paymail:{},
-		order:{},
-		amount:{},
-		realtimeuser:{},
-		chinamap:{
-
-		}
+		hobby: [],
+		member: {},
+		user: {},
+		sexage: {},
+		phone: {},
+		top3: [],
+		transation: {},
+		mailvistor: {},
+		paymail: {},
+		order: {},
+		amount: {},
+		realtimeuser: {},
+		chinamap: {},
+		highlight: []
 	},
 	mutations: {
 		HOBBY_LIST: (state, data) => {
@@ -31,29 +28,29 @@ const dashboard = {
 		SEXAGE_LIST: (state, data) => {
 			state.sexage = data;
 		},
-		SETPHONE_LIST:(state,data)=>{
-			state.phone=data;
+		SETPHONE_LIST: (state, data) => {
+			state.phone = data;
 		},
-		SETTOP_LIST:(state,data)=>{
-			state.top3=data;
+		SETTOP_LIST: (state, data) => {
+			state.top3 = data;
 		},
-		MAILVISTOR_LIST:(state,data)=>{
-			state.mailvistor=data;
+		MAILVISTOR_LIST: (state, data) => {
+			state.mailvistor = data;
 		},
-		SETTRA_LIST:(state,data)=>{
-			state.transation={
+		SETTRA_LIST: (state, data) => {
+			state.transation = {
 				...state.transation,
 				...data
 			};
 		},
-		PAYMAIL_LIST:(state,data)=>{
-			state.paymail={
+		PAYMAIL_LIST: (state, data) => {
+			state.paymail = {
 				...state.paymail,
 				...data
 			};
 		},
-		ORDER_LIST:(state,data)=>{
-			state.order=data;
+		ORDER_LIST: (state, data) => {
+			state.order = data;
 		},
 		AMOUNT_LIST: (state, data) => {
 			state.amount = data;
@@ -63,47 +60,53 @@ const dashboard = {
 		},
 		MAP_LIST: (state, data) => {
 			state.chinamap = data;
+		},
+		HIGHTLIGHT_LIST: (state, data) => {
+			state.highlight = data;
 		}
 	},
 	actions: {
-		hobbylist({ commit },data) {
-			commit("HOBBY_LIST",data);
+		hobbylist({ commit }, data) {
+			commit("HOBBY_LIST", data);
 		},
-		memberlist({ commit },data) {
-			commit("MEMBER_LIST",data);
+		memberlist({ commit }, data) {
+			commit("MEMBER_LIST", data);
 		},
-		userlist({ commit },data) {
-			commit("USER_LIST",data);
+		userlist({ commit }, data) {
+			commit("USER_LIST", data);
 		},
-		sexagelist({ commit },data) {
-			commit("SEXAGE_LIST",data);
+		sexagelist({ commit }, data) {
+			commit("SEXAGE_LIST", data);
 		},
-		phonelist({ commit },data) {
-			commit("SETPHONE_LIST",data);
+		phonelist({ commit }, data) {
+			commit("SETPHONE_LIST", data);
 		},
-		toplist({ commit },data) {
-			commit("SETTOP_LIST",data);
+		toplist({ commit }, data) {
+			commit("SETTOP_LIST", data);
 		},
-		trasationlist({ commit },data) {
-			commit("SETTRA_LIST",data);
+		trasationlist({ commit }, data) {
+			commit("SETTRA_LIST", data);
 		},
-		maivistorlist({ commit },data) {
-			commit("MAILVISTOR_LIST",data);
+		maivistorlist({ commit }, data) {
+			commit("MAILVISTOR_LIST", data);
 		},
-		paymaillist({ commit },data) {
-			commit("PAYMAIL_LIST",data);
+		paymaillist({ commit }, data) {
+			commit("PAYMAIL_LIST", data);
 		},
-		orderlist({ commit },data) {
-			commit("ORDER_LIST",data);
+		orderlist({ commit }, data) {
+			commit("ORDER_LIST", data);
 		},
-		amoountlist({ commit },data) {
-			commit("AMOUNT_LIST",data);
+		amoountlist({ commit }, data) {
+			commit("AMOUNT_LIST", data);
 		},
-		realtimeuserlist({ commit },data) {
-			commit("REALTIMEUSER_LIST",data);
+		realtimeuserlist({ commit }, data) {
+			commit("REALTIMEUSER_LIST", data);
 		},
-		maplist({ commit },data) {
-			commit("MAP_LIST",data);
+		maplist({ commit }, data) {
+			commit("MAP_LIST", data);
+		},
+		hightlist({ commit }, data) {
+			commit("HIGHTLIGHT_LIST", data);
 		}
 	}
 };

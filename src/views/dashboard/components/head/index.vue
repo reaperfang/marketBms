@@ -136,38 +136,56 @@ export default {
 	methods: {
 		//...mapActions([""]),
 		fullscreen() {
-			var isInFullScreen =
-				(document.fullscreenElement &&
-					document.fullscreenElement !== null) ||
-				(document.webkitFullscreenElement &&
-					document.webkitFullscreenElement !== null) ||
-				(document.mozFullScreenElement &&
-					document.mozFullScreenElement !== null) ||
-				(document.msFullscreenElement &&
-					document.msFullscreenElement !== null);
-
-			var docElm = document.documentElement;
-			if (!isInFullScreen) {
-				if (docElm.requestFullscreen) {
-					docElm.requestFullscreen();
-				} else if (docElm.mozRequestFullScreen) {
-					docElm.mozRequestFullScreen();
-				} else if (docElm.webkitRequestFullScreen) {
-					docElm.webkitRequestFullScreen();
-				} else if (docElm.msRequestFullscreen) {
-					docElm.msRequestFullscreen();
-				}
-			} else {
-				if (document.exitFullscreen) {
-					document.exitFullscreen();
-				} else if (document.webkitExitFullscreen) {
-					document.webkitExitFullscreen();
-				} else if (document.mozCancelFullScreen) {
-					document.mozCancelFullScreen();
-				} else if (document.msExitFullscreen) {
-					document.msExitFullscreen();
-				}
-			}
+			this.$toast({
+				message:
+					"全屏或退出全屏操作 windows 使用F11  mac 使用 Command+Control+F",
+				position: "top"
+			});
+			// this.$toast({
+			// 	message:
+			// 		"快捷键全屏或退出全屏操作\n windows F11 \n mac Command+Control+F",
+			// 	position: "top"
+			// });
+			//this.$message("F11 全屏或退出全屏");
+			// this.$message({
+			// 	dangerouslyUseHTMLString: true,
+			// 	message:
+			// 		"<strong>windows 用户 F11 全屏或退出全屏操作</strong><br><br>" +
+			// 		"<strong>mac 用户 F11 全屏或退出全屏操作</strong>",
+			// 	center: true
+			// });
+			// return;
+			// var isInFullScreen =
+			// 	(document.fullscreenElement &&
+			// 		document.fullscreenElement !== null) ||
+			// 	(document.webkitFullscreenElement &&
+			// 		document.webkitFullscreenElement !== null) ||
+			// 	(document.mozFullScreenElement &&
+			// 		document.mozFullScreenElement !== null) ||
+			// 	(document.msFullscreenElement &&
+			// 		document.msFullscreenElement !== null);
+			// var docElm = document.documentElement;
+			// if (!isInFullScreen) {
+			// 	if (docElm.requestFullscreen) {
+			// 		docElm.requestFullscreen();
+			// 	} else if (docElm.mozRequestFullScreen) {
+			// 		docElm.mozRequestFullScreen();
+			// 	} else if (docElm.webkitRequestFullScreen) {
+			// 		docElm.webkitRequestFullScreen();
+			// 	} else if (docElm.msRequestFullscreen) {
+			// 		docElm.msRequestFullscreen();
+			// 	}
+			// } else {
+			// 	if (document.exitFullscreen) {
+			// 		document.exitFullscreen();
+			// 	} else if (document.webkitExitFullscreen) {
+			// 		document.webkitExitFullscreen();
+			// 	} else if (document.mozCancelFullScreen) {
+			// 		document.mozCancelFullScreen();
+			// 	} else if (document.msExitFullscreen) {
+			// 		document.msExitFullscreen();
+			// 	}
+			// }
 		},
 		refresh() {
 			window.location.reload();

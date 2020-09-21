@@ -87,6 +87,19 @@ export default {
 	data() {
 		return {};
 	}
+	// 组件内守卫
+	// 因为这个钩子调用的时候，组件实例还没有被创建出来，因此获取不到this
+	// beforeRouteEnter(to, from, next) {
+	// 	next();
+	// }
+	// 路由即将要离开的时候调用此方法
+	// 比如说，用户编辑了一个东西，但是还么有保存，这时候他要离开这个页面，就要提醒他一下，还没保存，是否要离开
+	// beforeRouteLeave(to, from, next) {
+	// 	//const leave = confirm("确定要离开吗？");
+	// 	//if (leave) next();
+	// 	// 离开
+	// 	//else next(false); // 不离开
+	// }
 };
 </script>
 

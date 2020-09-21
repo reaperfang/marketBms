@@ -3,7 +3,7 @@
 		<el-row type="flex" justify="space-between" class="item-four-section">
 			<el-col :span="12">
 				<vitem
-					:title="'用户渠道分别'"
+					:title="'用户渠道分布'"
 					:chartData="userData.chartData"
 					:total="userData.total"
 					:icon="'0'"
@@ -11,7 +11,7 @@
 			</el-col>
 			<el-col :span="12">
 				<vitem
-					:title="'渠道会员转换'"
+					:title="'渠道会员转化'"
 					:chartData="memberData.chartData"
 					:total="memberData.total"
 					:icon="'1'"
