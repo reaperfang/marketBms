@@ -250,7 +250,7 @@ export default {
         })
       })
     },
-    hanldeOpenDeliveryDelAddress(row) {
+    hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId) {
       // 需要查看发货地址数量是否剩下1条？？？
       const id = row.id
       const addressType = row.addressType
