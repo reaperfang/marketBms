@@ -1,5 +1,5 @@
 <template>
-  <div class="bulk-delivery">
+  <div class="bulk-delivery mh">
     <div class="title">批量补填物流</div>
     <div class="container">
       <section>

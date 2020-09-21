@@ -1,7 +1,5 @@
 <template>
-  <div class="deliver-goods">
-    <deliver :data="orderData"></deliver>
-  </div>
+  <deliver :data="orderData"></deliver>
 </template>
 <script>
 import deliver from "./components/deliver";
