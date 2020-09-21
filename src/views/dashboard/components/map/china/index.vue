@@ -269,19 +269,19 @@ export default {
 			this.chart.clear();
 			this.chart.setOption(this.option);
 
-			if (this.interval) {
-				this.clearInterval();
-			}
-			if (!this.$store.state.dashboard.realtimeuser.length) {
-				return;
-			}
+			// if (this.interval) {
+			// 	this.clearInterval();
+			// }
+			// if (!this.$store.state.dashboard.realtimeuser.length) {
+			// 	return;
+			// }
 
-			let res = this.$store.state.dashboard.realtimeuser.map(item => {
-				return {
-					name: item.pro_name_rt,
-					value: 1
-				};
-			});
+			// let res = this.$store.state.dashboard.realtimeuser.map(item => {
+			// 	return {
+			// 		name: item.pro_name_rt,
+			// 		value: 1
+			// 	};
+			// });
 
 			// var seriesData = data.filter(item => {
 			// 	return item.value > 0;
