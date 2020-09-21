@@ -253,7 +253,7 @@ export default {
     hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId) {
       // 需要查看发货地址数量是否剩下1条？？？
       const id = row.id
-      const addressType = row.addressType
+      const isBindThirdsend = row.isBindThirdsend
       // const req = Object.create(null)
       // req.cid  = this.cid
       // req.startIndex = 1
@@ -274,7 +274,7 @@ export default {
             const isCloseMerchantDeliver = +merchantDeliverId === +id
             const isClostTh3DeliverId = +th3DeliverId === +id
             const p1 = this.closeCityDeliver(isCloseMerchantDeliver, isClostTh3DeliverId)
-            const p2 = this.ApiDelAddressById(id, addressType)
+            const p2 = this.ApiDelAddressById(id, isBindThirdsend)
             Promise.all([p1, p2]).then((arr) => {
               console.log('arr',arr)
               this.ruleForm.pageNo = 1
@@ -374,7 +374,7 @@ export default {
         cancelButtonText: '取消'
       }).then(() => {
         // 调用删除接口方法
-        this.delAddressById(row.id, row.addressType)
+        this.delAddressById(row.id, row.isBindThirdsend)
       });
     },
     // 处理删除默认地址
@@ -389,18 +389,18 @@ export default {
       }).then(() => {
       });
     },
-    ApiDelAddressById(id, addressType) {
+    ApiDelAddressById(id, isBindThirdsend) {
       return new Promise((resolve, reject) => {
-        this._apis.set.delAddressById({ id, addressType }).then((res) => {
+        this._apis.set.delAddressById({ id, isBindThirdsend }).then((res) => {
           resolve(res)
         }).catch((err) => {
           reject(err)
         })
       })
     },
-    delAddressById(id, addressType) {
+    delAddressById(id, isBindThirdsend) {
       // 删除api
-      this.ApiDelAddressById(id, addressType).then(() => {
+      this.ApiDelAddressById(id, isBindThirdsend).then(() => {
         this.ruleForm.pageNo = 1
         const req = this.getReqData(this.ruleForm)
         this.getAddressList(req)

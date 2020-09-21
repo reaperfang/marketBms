@@ -136,7 +136,7 @@ export default {
       isTableShow: false, // 是否显示列表
       dataList: [
         {
-          thirdType: 1,
+          thirdType:null,
           name: "达达",
           status: 0,
         }
@@ -196,7 +196,7 @@ export default {
       console.log('-----formatTh3DeliverList---', list)
       let arr = [
         {
-          thirdType: 1,
+          thirdType: null,
           name: "达达",
           status: 0,
         }

@@ -511,9 +511,22 @@ export default {
       const req = this.getReqRegisterStoreData()
       return this._apis.set.registerStore(req)
     },
+    // 设置绑定三方配送
+    setBindThirdsend() {
+      const req = {
+        id: this.addressInfo.id,
+        isBindThirdsend: 1,
+        addressType: this.addressInfo.addressType,
+        is_defalt_sender_address: this.addressInfo.isDefaltSenderAddress,
+        is_defalt_return_address: this.addressInfo.isDefaltReturnAddress
+      }
+      return this._apis.set.editAddressById(req)
+    },
     add() {
       this.registerMerchants().then((res) => {
-        this.registerStore(res).then(() => {
+        const p1 = this.setBindThirdsend()
+        const p2 = this.registerStore(res)
+        Promise.all([p1, p2]).then(() => {
           this.$message({
             message: '注册成功',
             type: 'success'
@@ -531,28 +544,6 @@ export default {
         // this.visible = false;
         this.isSubmit = false
       })
-      // this._apis.set
-      //   .registerUser(this.ruleForm)
-      //   .then(response => {
-      //     console.log("zhuce ", response);
-      //     this.sourceId=response
-      //     this.$message({
-      //       message: "提交成功！",
-      //       type: "success"
-      //     });
-         
-      //     this.$emit("submitForm",this.sourceId);
-      //     this.visible = false;
-      //     this.resetForm(this.ruleForm)
-      //   })
-      //   .catch(error => {
-      //    // this.visible = false;
-      //    // this.resetForm("ruleForm");
-      //     this.$message.error({
-      //       message: error,
-      //       type: "error"
-      //     });
-      //   });
     }
   }
 };
