@@ -33,13 +33,17 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
+import _ from "lodash";
 
 export default {
 	watch: {
-		tableData(val) {
-			console.log("tableData(val) {", val);
-			this.newtable = this.setNewTable(val);
+		tableData(newVal, oldVal) {
+			this.newtable = this.setNewTable(newVal);
+			this.setHightLight(newVal, oldVal);
 		}
+		// "dashboard.highlight"(newVal, oldVal) {
+		// 	console.log('"dashboard.highlight"(val) {', newVal, oldVal);
+		// }
 	},
 	props: ["tableData"],
 	components: {},
@@ -49,7 +53,7 @@ export default {
 		};
 	},
 	computed: {
-		//...mapState([""])
+		...mapState(["dashboard"])
 	},
 	mounted() {
 		//setInterval(this.scroll, 1000);
@@ -62,7 +66,7 @@ export default {
 	beforeDestroy() {},
 	destroyed: function() {},
 	methods: {
-		//...mapActions([""]),
+		...mapActions(["hightlist"]),
 		setNewTable(val) {
 			return val.slice(0, 4).map(item => {
 				return {
@@ -70,6 +74,26 @@ export default {
 					time_rt: item.time_rt.split(" ")[1]
 				};
 			});
+		},
+		setHightLight(newtable, oldTable) {
+			let newOrder = newtable
+				.filter(item => {
+					return item.op_rt == "下单";
+				})
+				.map(item => {
+					return JSON.stringify(item);
+				});
+
+			let oldOrder = oldTable
+				.filter(item => {
+					return item.op_rt == "下单";
+				})
+				.map(item => {
+					return JSON.stringify(item);
+				});
+
+			let difference = _.difference(newOrder, oldOrder);
+			this.hightlist(difference);
 		},
 		scroll() {
 			//this.animate = true; // 因为在消息向上滚动的时候需要添加css3过渡动画，所以这里需要设置true
