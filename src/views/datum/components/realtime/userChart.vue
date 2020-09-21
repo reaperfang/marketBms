@@ -53,7 +53,7 @@ export default {
           boundaryGap: false,
           axisLabel:{
             showMaxLabel:true,
-            interval:0,
+            // interval:0,
             formatter: function (params) {
               var newParamsName = "";
               var paramsNameNumber = params.length;

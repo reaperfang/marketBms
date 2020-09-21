@@ -347,9 +347,10 @@ export default {
         for(var i=0;i<2;i++){
             dd*=10;  
         }  
-        tempnum = num*dd;
+        tempnum = (num?num:0) *dd;
         tempnum = Math.round(tempnum); 
-        return Number(tempnum/dd).toFixed(2)
+        var endNum = Number(tempnum/dd).toFixed(2)
+        return endNum
     },
   },
   data() {
