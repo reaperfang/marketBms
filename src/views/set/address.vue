@@ -191,7 +191,7 @@ export default {
     },
     hanldeOpenDelivery(id) {
       this.confirm({
-        title: "提示",
+        title: "",
         iconWarning: true,
         text: '此地址已设置为同城配送的发货地址，修改或删除后同城配送设置也将修改，您确定要修改吗？',
         confirmText: '确定',
@@ -264,7 +264,7 @@ export default {
         // 仅有一条发货地址信息，同时商家配送已开启，此时要删除该发货地址时，弹框提示如下
         if (res && res.total == 1) {
           this.confirm({
-            title: "提示",
+            title: "",
             iconWarning: true,
             text: '同城配送已开启并使用此地址为发货地址，删除后同城配送功能将自动关闭，您确定要删除吗？',
             confirmText: '确定',
@@ -289,7 +289,7 @@ export default {
           });
         } else {
           this.confirm({
-            title: "提示",
+            title: "",
             iconWarning: true,
             text: '此地址已设置为同城配送的发货地址，修改或删除后同城配送设置也将修改，您确定要修改吗？',
             confirmText: '确定',
@@ -367,8 +367,8 @@ export default {
     // 删除操作，默认地址处理逻辑
     handleDelAddress(row) {
       this.confirm({
-        title: "提示",
-        icon: true,
+        title: "",
+        iconWarning: true,
         text: '确定要删除此地址信息吗？',
         confirmText: '确定',
         cancelButtonText: '取消'
@@ -380,8 +380,8 @@ export default {
     // 处理删除默认地址
     handleDelDefaultAddress() {
       this.confirm({
-        title: "提示",
-        icon: true,
+        title: "",
+        iconWarning: true,
         text: '默认地址不可删除',
         confirmText: '我知道了',
         customClass: 'address-disable-del',

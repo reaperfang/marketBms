@@ -1455,23 +1455,23 @@ export default {
   }
 </style>
 <style rel="stylesheet/scss" lang="scss">
-.setting-custom {
-  .el-icon-success {
-    font-size: 32px;
-    color:rgba(108, 213, 33, 1);
-  }
-  .success,.prompt {
-    display: block;
-  }
-  .success {
-    font-size: 16px;font-weight: 500;color: #44434B;line-height: 22px;
-  }
-  .prompt {
-    padding-top: 10px;
-    font-size: 12px;font-weight: 400;color: #44434B;line-height: 20px;
-  }
-  &.no-cancel .el-button {
-    letter-spacing: 0;
-  }
-}
+// .setting-custom {
+//   .el-icon-success {
+//     font-size: 32px;
+//     color:rgba(108, 213, 33, 1);
+//   }
+//   .success,.prompt {
+//     display: block;
+//   }
+//   .success {
+//     font-size: 16px;font-weight: 500;color: #44434B;line-height: 22px;
+//   }
+//   .prompt {
+//     padding-top: 10px;
+//     font-size: 12px;font-weight: 400;color: #44434B;line-height: 20px;
+//   }
+//   &.no-cancel .el-button {
+//     letter-spacing: 0;
+//   }
+// }
 </style>

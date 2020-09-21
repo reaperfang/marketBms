@@ -249,7 +249,7 @@ export default {
       if (item.pickUpStatus === 1) {
         if (!this.isOpen) {
           this.confirm({
-            title: "提示",
+            title: "",
             iconWarning: true,
             text: '禁用后用户将不能使用该自提点进行下单，您确定要禁用吗？',
             confirmText: '确定',
@@ -267,7 +267,7 @@ export default {
         this.ApiGetSelfLiftList(req).then((res) => {
           if (res && res.list.length === 1) {
             this.confirm({
-              title: "提示",
+              title: "",
               iconWarning: true,
               text: '您正在禁用当前仅有的启用自提点，禁用后，上门自提的配送方式将关闭，用户将不能使用上门自提，您确定要禁用吗？',
               confirmText: '确定',
@@ -280,7 +280,7 @@ export default {
             })
           } else {
             this.confirm({
-              title: "提示",
+              title: "",
               iconWarning: true,
               text: '禁用后用户将不能使用该自提点进行下单，您确定要禁用吗？',
               confirmText: '确定',
@@ -391,13 +391,14 @@ export default {
             url = `${location.protocol}//${location.host}/bp/shop/m_shopEditor?pageId=${pageId}`;
           }
           
-          text = `<p style="font-size:16px;color:rgba(68,67,75,1);">上门自提开启成功！</p><p style="font-size:12px;color:rgba(68,67,75,1);">您还没有装修位置组件<a href="${url}" style="color:#655EFF;text-decoration: underline;" target="_blank">去装修 &gt;</a></p>`
+          text = `<span class="success" style="font-size:16px;color:rgba(68,67,75,1);">上门自提开启成功！</span><span class="prompt" style="font-size:12px;color:rgba(68,67,75,1);">您还没有装修位置组件<a href="${url}" style="color:#655EFF;text-decoration: underline;" target="_blank">去装修 &gt;</a></span>`
           this.confirm({
-            title: "提示",
+            title: "",
             iconSuccess: true,
             text,
             showConfirmButton,
             confirmText: '我知道了',
+            customClass: 'setting-custom',
             showCancelButton: false
           });
         } else {
@@ -447,10 +448,11 @@ export default {
           })
         } else {
           this.confirm({
-            title: "提示",
+            title: "",
             text: '当前没有启用的自提点信息，请先新建或启用自提点后再开启。',
             confirmText: '我知道了',
             cancelButtonText: '去新建',
+            customClass: 'setting-custom',
             distinguishCancelAndClose: true
           }).then(() => {
             // 关闭弹窗
@@ -465,7 +467,7 @@ export default {
     },
     closeSelfLift() {
        this.confirm({
-        title: "提示",
+        title: "",
         iconWarning: true,
         text: '关闭后用户下单时将不能再使用上门自提，您确定要关闭吗？',
         confirmText: '确定',

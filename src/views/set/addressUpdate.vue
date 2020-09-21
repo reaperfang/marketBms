@@ -286,11 +286,12 @@ export default {
     },
     // 处理保存成功的逻辑
     handleSaveSuccess() {
-      
+      const html = '<span class="sucess">保存成功！</span>'
       this.confirm({
-        title: "提示",
-        iconSuccess: true,
-        text: '保存成功',
+        title: '', 
+        iconSuccess: true, 
+        text: html,
+        customClass: 'setting-custom',
         confirmText: '返回地址列表',
         cancelButtonText: '继续新建地址'
       }).then(() => {
@@ -304,7 +305,7 @@ export default {
     // 处理数据重复问题
     handleDataRepeatErr(id) {
       this.confirm({
-        title: "提示",
+        title: "",
         iconWarning: true,
         text: '地址信息重复，点击可直接查看或编辑已创建的地址信息。',
         confirmText: '查看',
@@ -350,7 +351,7 @@ export default {
       // 么有发货地址的情况
       if (!res) {
         this.confirm({
-          title: "提示",
+          title: "",
           iconWarning: true,
           text: '保存后，此地址将成为商家配送的发货地址，商家配送规则将以最新发货地址为准，您确定要保存吗？',
           confirmText: '确定',
@@ -375,7 +376,7 @@ export default {
 
       if (isTrue) {
         this.confirm({
-          title: "提示",
+          title: "",
           iconWarning: true,
           text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
           confirmText: '确定',
