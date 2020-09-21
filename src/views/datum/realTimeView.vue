@@ -192,7 +192,7 @@
                     </el-tooltip>
                 </div>
                 </div>
-                <div class="chartbox">
+                <div class="chartbox" style="padding:20px 10px;">
                     <mapChart 
                     :title="'测试图表'" 
                     ref="mapChart"

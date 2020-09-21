@@ -76,6 +76,7 @@ export default {
         series: [{
           type: 'map',
           mapType: 'chinaAll',
+          roam: true,//是否开启地图放大缩小功能
           label: {
             normal: {
                 show: true, //显示省份标签
