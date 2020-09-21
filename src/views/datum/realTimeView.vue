@@ -192,7 +192,7 @@
                     </el-tooltip>
                 </div>
                 </div>
-                <div class="chartbox">
+                <div class="chartbox" style="padding:20px 10px;">
                     <mapChart 
                     :title="'测试图表'" 
                     ref="mapChart"
@@ -272,7 +272,7 @@
                             <span v-if="index==3">04</span>
                             <span v-if="index==4">05</span>
                             <span><img class="fl" :src="(item.goods_image).split(',')[0]" alt=""><p>{{item.goods_name}}</p></span>
-                            <span><p>{{item.paid_order_am_pr}}</p></span>
+                            <span><p>{{item.paid_order_am_pr | tofix2}}</p></span>
                         </li>
                     </ul>
                 </div>
@@ -347,9 +347,10 @@ export default {
         for(var i=0;i<2;i++){
             dd*=10;  
         }  
-        tempnum = num*dd;
+        tempnum = (num?num:0) *dd;
         tempnum = Math.round(tempnum); 
-        return Number(tempnum/dd).toFixed(2)
+        var endNum = Number(tempnum/dd).toFixed(2)
+        return endNum
     },
   },
   data() {
@@ -443,7 +444,6 @@ export default {
             data_rt:JSON.parse(response).data_rt,
             data_rd:JSON.parse(response).data_rd,//昨日
         }
-        console.log(this.dataChart1)
       }).catch(error => {
         this.$message.error(error);
       });
@@ -484,7 +484,6 @@ export default {
     },
     gettradeDistribution(){//交易分布数据
         this._apis.realSurvey.tradeDistribution(this.query).then(response => {
-            console.log(JSON.parse(response))
             this.dataChart4 = JSON.parse(response)  
         }).catch(error => {
             this.$message.error(error);
@@ -541,7 +540,6 @@ export default {
     },
     getUserVal(val){//用户概览 组件传值
         val.date=this.getDayTime(val.date)
-        console.log(val.date)
         this.seachTime=val
         this.getuserView()
     },
