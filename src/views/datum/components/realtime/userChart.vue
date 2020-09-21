@@ -43,7 +43,7 @@ export default {
         color:['#2FC25B','#FF8615'],
         grid: {
           top:'11%',
-          left: "0%",
+          left: "2%",
           right: "4%",
           bottom: "3%",
           containLabel: true
