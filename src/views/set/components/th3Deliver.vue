@@ -271,13 +271,24 @@ export default {
       const isOpenTh3 = this.dataList.find(item => item.status === 1)
       return isFullAddress && isOpenTh3
     },
+    // 设置绑定三方配送
+    setBindThirdsend() {
+      const req = {
+        id: this.addressInfo.id,
+        isBindThirdsend: 1,
+        addressType: this.addressInfo.addressType,
+        is_defalt_sender_address: this.addressInfo.isDefaltSenderAddress,
+        is_defalt_return_address: this.addressInfo.isDefaltReturnAddress
+      }
+      return this._apis.set.editAddressById(req)
+    },
     handleSubmit() {
       if (this.isLoading) return false
       // 判断是否设置发货地址和开通达达设置
       if (this.isOpen && !this.hasSetting()) {
         this.confirm({
-          title: '提示', 
-          iconWarning: true, 
+          title: '提示',
+          iconWarning: true,
           text: '您未完成发货地址或开通第三方等配置项设置，设置成功后，才能成功开启第三方配送开关。',
           confirmText: '我知道了',
           showCancelButton: false
@@ -293,7 +304,9 @@ export default {
       req.autoCall = this.isOpenAutoCall
       req.isOpenTh3Deliver = this.isOpen ? 1 : 0
       req.id = this.cid
-      this._apis.set.updateShopInfo(req).then(response =>{
+      const p1 = this.setBindThirdsend()
+      const p2 = this._apis.set.updateShopInfo(req)
+      Promise.all([p1, p2]).then(response =>{
         const html = '<p style="font-size: 16px;font-weight: 500;color: #44434B;line-height: 22px;">保存成功</p><p style="font-size: 12px;font-weight: 400;color: #44434B;line-height: 20px;">第三方配送-达达配送已开启。</p>'
         this.confirm({
           title: '提示', 
