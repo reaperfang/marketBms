@@ -272,7 +272,7 @@
                             <span v-if="index==3">04</span>
                             <span v-if="index==4">05</span>
                             <span><img class="fl" :src="(item.goods_image).split(',')[0]" alt=""><p>{{item.goods_name}}</p></span>
-                            <span><p>{{item.paid_order_am_pr | tofix2}}</p></span>
+                            <span><p>{{item.paid_order_am_pr.toFixed(2)}}</p></span>
                         </li>
                     </ul>
                 </div>
