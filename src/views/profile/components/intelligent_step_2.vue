@@ -19,7 +19,9 @@
                 <transition name="el-fade-in">
                   <div class="view_preview" v-show="item.isShowCode">
                     <p class="hint text">使用手机扫描下方二维码 <br> 预览完整模版</p>
-                    <img class="qr_code" v-loading="item.isLoadingCode" :src="'data:image/png;base64,'+item.qrCodePic" alt="二维码"/>
+                    <div class="qr_code" v-loading="item.isLoadingCode">
+                      <img class="qr_code_pic" v-show="item.qrCodePic !== ''" :src="'data:image/png;base64,'+item.qrCodePic" alt="二维码"/>
+                    </div>
                   </div>
                 </transition>
 
@@ -57,7 +59,9 @@
                   <transition name="el-fade-in">
                     <div class="view_preview" v-show="item.isShowCode">
                       <p class="hint text">使用手机扫描下方二维码 <br> 预览完整模版</p>
-                      <img class="qr_code" v-loading="item.isLoadingCode" :src="'data:image/png;base64,'+item.qrCodePic" alt="二维码"/>
+                      <div class="qr_code" v-loading="item.isLoadingCode">
+                        <img class="qr_code_pic" v-show="item.qrCodePic !== ''" :src="'data:image/png;base64,'+item.qrCodePic" alt="二维码"/>
+                      </div>
                     </div>
                   </transition>
 
@@ -128,7 +132,7 @@
               <p class="text-base">{{item.text}}数据配置{{configureTextItemStatusType[item.status]}}</p>
               <i class="el-icon-success" v-if="item.status === 1"></i>
               <i class="el-icon-error" v-if="item.status === 2"></i>
-              <i class="el-icon-warning" v-if="item.status === 3"></i>
+              <i class="el-icon-success" v-if="item.status === 3"></i>
             </li>
         </template>
       </ul>
@@ -562,10 +566,16 @@
         z-index: 5;
 
         .qr_code {
-          margin-bottom: 40px;
+          display: inline-block;
           width: 130px;
+          height: 130px;
           padding: 10px;
           background-color: #fff;
+        }
+
+        .qr_code_pic {
+          width: 100%;
+          vertical-align: center;
         }
 
         .hint {
