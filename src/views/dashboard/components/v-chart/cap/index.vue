@@ -279,10 +279,13 @@ export default {
 	}
 
 	.time-text {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+		// overflow: hidden;
+		// text-overflow: ellipsis;
+		// white-space: nowrap;
 		//text-align: center;
+
+		width: 50px;
+		text-align: center;
 	}
 
 	.empty {
