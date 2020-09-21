@@ -1,5 +1,5 @@
 <template>
-  <div class="bulk-delivery">
+  <div class="bulk-delivery mh">
     <div class="title">订单批量发货</div>
     <div class="container">
       <section>
@@ -966,7 +966,7 @@ export default {
           
           res.forEach(item => {
             if(!item.sendAddress) {
-              if(item.deliveryWay == 1 || item.deliveryWay == 2) {
+              if(item.deliveryWay == 1 || item.deliveryWay == 2 || item.deliveryWay == 3) {
                 if(_orderItem) {
                   item.sendName = _orderItem.sendName;
                   item.sendPhone = _orderItem.sendPhone;

@@ -1,6 +1,6 @@
 /*子账号管理 */
 <template>
-    <div class="main">
+    <div class="main mh bor-radius">
       <div class="top_part">
         <div class="search head-wrapper">
           <el-form ref="form" :inline="true" :model="form">

@@ -1,6 +1,6 @@
 /*支付方式 */
 <template>
-    <div class="main">
+    <div class="main mh bor-radius">
         <div class="pay_item">
           <div class="left_cont">
             <img src="@/assets/images/set/set-pay1.png"/>
@@ -182,9 +182,9 @@ export default {
           this.wechatPay = true
         });
       } else {
-        const html = '<p style="font-size:18px;color: #443D4A;line-height: 28px;">您确定要关闭微信支付吗？</p><p style="color:rgba(146,146,155,1);font-size:16px;line-height: 28px;">关闭后买家将无法使用微信支付完成订单付款。</p>'
+        const html = '您确定要关闭微信支付吗？<br/><span style="color:#44434B;font-size:12px;">关闭后买家将无法使用微信支付完成订单付款。</span>'
         this.confirm({
-          title: '提示', 
+          title: '', 
           iconWarning: true, 
           customClass: 'goods-custom',
           text: html,
@@ -231,9 +231,9 @@ export default {
           this.aliPay = true
         });
       } else {
-        const html = '<p style="font-size:18px;color: #443D4A;line-height: 28px;">您确定要关闭支付宝支付吗？</p><p style="color:rgba(146,146,155,1);font-size:16px;line-height: 28px;">关闭后买家将无法使用支付宝支付完成订单付款。</p>'
+        const html = '您确定要关闭支付宝支付吗？<br/><span style="color:#44434B;font-size:12px;">关闭后买家将无法使用支付宝支付完成订单付款。</span>'
         this.confirm({
-          title: '提示', 
+          title: '', 
           iconWarning: true, 
           customClass: 'goods-custom',
           text: html,
@@ -294,9 +294,9 @@ export default {
           this.balanceOfAccountPay = true
         });
       } else {
-        const html = '<p style="font-size:18px;color: #443D4A;line-height: 28px;">您确定要关闭账户余额吗？</p><p style="color:rgba(146,146,155,1);font-size:16px;line-height: 28px;">关闭后买家将无法使用余额支付完成订单付款。</p>'
+        const html = '您确定要关闭账户余额吗？<br/><span style="color:#44434B;font-size:12px;">关闭后买家将无法使用余额支付完成订单付款。</span>'
         this.confirm({
-          title: '提示', 
+          title: '', 
           iconWarning: true, 
           customClass: 'goods-custom',
           text: html,
@@ -351,9 +351,9 @@ export default {
           this.payOnDelivery = true
         });
       } else {
-        const html = '<p style="font-size:18px;color: #443D4A;line-height: 28px;">您确定要关闭货到付款吗？</p><p style="color:rgba(146,146,155,1);font-size:16px;line-height: 28px;">关闭后买家将无法使用货到付款完成订单付款。</p>'
+        const html = '您确定要关闭货到付款吗？<br/><span style="color:#44434B;font-size:12px;line-height: 28px;">关闭后买家将无法使用货到付款完成订单付款。</span>'
         this.confirm({
-          title: '提示', 
+          title: '', 
           iconWarning: true, 
           customClass: 'goods-custom',
           text: html,
@@ -434,7 +434,7 @@ export default {
 .main{
   width: 100%;
   background: #fff;
-  padding: 20px 20px 300px 20px;
+  padding: 20px 20px 40px 20px;
 }
 .pay_item{
   width: 100%;

@@ -1,6 +1,6 @@
 /*交易设置 */
 <template>
-  <div>
+  <div class="tradeSet mh bor-radius">
     <el-tabs v-model="currentTab" @tab-click="handleClick" class="tabs">
       <el-tab-pane label="售前相关" name="preSale"></el-tab-pane>
       <el-tab-pane label="售后相关" name="afterSale"></el-tab-pane>
@@ -42,13 +42,14 @@ export default {
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.tabs{
+.tradeSet {
   background:#fff; 
+}
+.tabs{
   padding:0 20px;
 }
 .main{
   width: 100%;
   padding: 20px;
-  background: #fff;
 }
 </style>

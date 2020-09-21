@@ -1,6 +1,6 @@
 /*店铺信息 */
 <template>
-  <div class="shopInfo">
+  <div class="shopInfo mh bor-radius">
     <h1>基本信息</h1>
     <el-form ref="form" :model="form" :rules="rules" label-width="120px">
       <el-form-item label="商户名称:" prop="shopName">

@@ -1,7 +1,7 @@
 /*消息设置 */
 <template>
-  <div class="messageSet">
-   <el-tabs v-model="currentTab" @tab-click="handleClick" class="tabs">
+  <div class="messageSet mh bor-radius">
+   <el-tabs v-model="currentTab" @tab-click="handleClick" class="tabs bor-radius">
       <el-tab-pane label="用户通知" name="seller"></el-tab-pane>
       <el-tab-pane label="客户通知" name="buyer"></el-tab-pane>
     </el-tabs>
@@ -41,7 +41,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 .messageSet {
-  .el-tabs__item {
+ .el-tabs__item {
     height: 45px;
     line-height: 45px;
     font-size:16px;
@@ -66,8 +66,10 @@ export default {
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.tabs{
+.messageSet{
   background:#fff; 
+}
+.tabs{
   padding:0 20px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="shopExpress">
+  <div class="shopExpress mh bor-radius">
     <el-tabs v-model="currentTab" @tab-click="handleClick" class="tabs">
       <el-tab-pane name="merchantDeliver" >
         <span slot="label" v-permission="['设置','同城配送','商家配送']">商家配送</span>
@@ -98,7 +98,6 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .shopExpress {
   background: #fff;
-  height: 100%;
 }
 .tabs{
   >>> .el-tabs__item {
@@ -109,7 +108,6 @@ export default {
     color: #44434B;
   }
   >>> .el-tabs__header {
-    background-color: #fff;
     margin:0;
     padding: 0 20px 0 20px;
   }
@@ -117,6 +115,5 @@ export default {
 .main{
   width: 100%;
   padding: 20px;
-  background: #fff;
 }
 </style>

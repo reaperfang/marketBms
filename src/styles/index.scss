@@ -9,6 +9,7 @@
 @import './decorate/iconfont.css';
 @import './animate.css';
 @import './shopStyle.scss';
+@import './confirm.scss';
 // @font-face {
 //   font-family: 'PingFangSC-Regular';
 //   src: url('../assets/font/PingFangSCRegular.ttf'); //你的资源目录
@@ -78,6 +79,10 @@ div:focus{
 
 .mh {
   min-height: 100%;
+}
+
+.bor-radius {
+  border-radius: 4px;
 }
 
 .clearfix {

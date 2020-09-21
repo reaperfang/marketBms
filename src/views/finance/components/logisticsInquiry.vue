@@ -12,7 +12,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:230px;"></el-input>
         </el-form-item>
         <el-form-item label="查询时间">
           <el-date-picker
@@ -27,7 +27,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="快递公司">
-          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:200px;"></el-input>
+          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '物流查询', '查询']">查询</el-button>
@@ -35,7 +35,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="301">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
@@ -248,7 +248,7 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 20px;
 }
 .under_part{

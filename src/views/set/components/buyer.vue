@@ -274,13 +274,11 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .tabs{
-  background:#fff; 
   padding:10px 20px;
 }
 .main{
   width: 100%;
   padding: 0px 20px 50px 20px;
-  background: #fff;
 }
 .title{
   font-size: 14px;

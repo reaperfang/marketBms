@@ -4,7 +4,7 @@
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="状态">
-          <el-select v-model="ruleForm.acceptStatus" style="width:200px;">
+          <el-select v-model="ruleForm.acceptStatus">
             <el-option
               v-for="item in smsStatus"
               :key="item.value"
@@ -31,7 +31,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="414">
       <div class="total">
         <span>全部 <em>{{total*1}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
@@ -230,7 +230,7 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
+  border-radius: 4px;
   margin-top: 20px;
   padding: 20px;
 }

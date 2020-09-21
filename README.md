@@ -2,7 +2,7 @@
 
 http://test-omo.aiyouyi.cn/xiaoyaoji/doc/2ShuYz40m这个是接口地址
 
-名：admin-mdl  密码：123456
+名：admin-mdl  密码：nBEtNs*Q53avSg6^
 
 ### 项目运行
 
@@ -18,7 +18,7 @@ npm run dev   //启动开发服务器
 
 npm run build:dev   //本地开发打包
 
-npm run build:test   //测试环境打包
+npm run build:test+n   //测试环境打包(n表示对应的环境)
 
 npm run build:prod   //正式环境打包
 
@@ -29,8 +29,8 @@ npm run build:prod   //正式环境打包
 ```
 .
 ├── build                                       // webpack配置文件和服务启动文件
-├── config                                      // 环境变量配置
-├── dist                                         // 打包后的静态文件
+├── config                                      // 环境变量配置，本地调试时需要改环境可在proxyTable.js中修改代理
+├── dist                                        // 打包后的静态文件
 ├── src                                          
 │   ├── api                                     // 接口api（其中index.js是聚合索引文件）
 │   ├── assets                                  // 静态文件目录
@@ -39,13 +39,15 @@ npm run build:prod   //正式环境打包
 │   ├── router                                  // 路由目录（其中index.js是聚合索引文件，按需模块化的添加你的路由文件）
 │   ├── store                                   // 状态管理目录
 │   ├── styles                                  // 样式目录
+│   ├── directives                              // directive目录
+│   ├── mixins                                  // mixin目录
 │   ├── system                                  
 │   │  ├── appConfig.js                         // 系统配置
 │   │  ├── auth.js                              // 系统认证token管理
 │   │  ├── permission.js                        // 系统权限验证
 │   │  ├── request.js                           // 接口请求方法封装
 │   │  ├── constant.js                          // 常量配置
-│   ├── utils                                   // 工具箱集合（其中index.js是聚合索引文件,使用时在页面中导入utils模块，然后用.运算符直接取到对应的方                                                              法名即可使用）
+│   ├── utils                                   // 工具箱集合（其中index.js是聚合索引文件,使用时在页面中导入utils模块，然后用.运算符直接取到对应的方法名即可使用）
 │   ├── views                                   // 页面目录
 │   ├── App.vue                                 // vue主文件
 │   ├── main.js                                 // 项目主文件
@@ -53,7 +55,7 @@ npm run build:prod   //正式环境打包
 ```
 
 ## 添加一个第三方插件
-文件路径： \src\components\static\index.js
+先npm install 该插件，然后在main.js中引入
 
 ```js
 //添加时间轴demo
@@ -74,16 +76,25 @@ export default {
 };
 
 ```
-* 在新建的文件里面添加api接口，写法如下：(注：url即接口相对地址，target即接口唯一标识号，baseURL:基础url, data： post请求时传入的业务参数，params: get请求时传入的业务参数)
+* 在新建的文件里面添加api接口，写法如下：(注：url即接口相对地址，target即接口唯一标识号，baseURL:基础url, data： post请求时传入的业务参数，params: get请求时传入的业务参数，apiType: system/request.js中setApiAddress方法对应的apiType)
 ```js
-// 获取列表
+// get请求
+export function getAllCoupons(data) {
+    return request({
+        url: '/v1/b/app-coupon/activity/page-list',
+        method: 'get',
+        baseURL: process.env.SALE_API,
+        params:data
+    })
+}
+// post请求
 export function getList(data) {
-  return request({
-    url: '/admin/shop/all',
-    method: 'post',
-    baseURL: process.env.DATA_API,
-    data
-  })
+    return request({
+      target:'CARD-LEVEL-INFO-FIND-PAGE-LIST-PROCESSOR',
+      method: 'post',
+      apiType: 'member',
+      data
+    })
 }
 ```
 
@@ -164,7 +175,9 @@ this._apis.websocketDemo.getData({aaa:1}, {
 ## 添加你的路由
 目录路径： \src\router
 * 在目录中添加一个路由模块文件
+
 ```js
+
 import Layout from '@/components/layout/Layout'
 
 export default [
@@ -226,9 +239,13 @@ export default [
     ]
 	}
 ]
+
 ```
+
 * 在目录中的index.js中添加此路由模块
+
 ```js
+
 import Vue from 'vue'
 import Router from 'vue-router'
 import Layout from '@/components/layout/Layout'
@@ -250,8 +267,15 @@ export default new Router({
 
 ## 添加公共功能组件并使用
 目录路径： \src\components
+* Decorate是装修需要的组件
+* dialogs是系统所用的公共弹窗，如选择图片弹窗
+* errorPage是放的404页面
+* Form 表单组件
+* layout 组件是布局基础组件，部分页面骨架基于此布局组件
+* mapSearch 带搜索功能的腾讯地图组件
+* mapSearchDialog 地图弹窗
+* Pagination 分页组件
 * 带base的组件是基础功能组件，使用此类功能的业务组件可从此类文件继承以获得基本能力，在各视图目录中的业务组件中去做具体的实现
-* layout组件是布局基础组件，部分页面骨架基于此布局组件
 * static目录是导入第三方组件的入口，需求的话可以去添加
 ```js
 <script type='es6'>
@@ -318,18 +342,20 @@ export default {
 ```js
 export default {
       head: {
-		VERSION: "vsesion-1.0.0.1", // 版本号
-		CHANNEL: "新零售", // 渠道
-		KEY:"134147627CD2", // 公钥，由Leader平台系统进行分配
-		VALUE:"EB24B602A9364B87AA967B7678676B84", // 私钥
-		CLIENT:7 //客户端
+		VERSION: "vsesion-2.0.0.1", // 版本号
+		CHANNEL: "页面测试", // 渠道
+		KEY:"133C9CB27DA0", // 公钥，由Leader平台系统进行分配
+		VALUE:"FD4007DB87B245EEACA7DAD5D4A1CECD", // 私钥
+		CLIENT:"3" //客户端
 	},
 	//地图参数配置
 	map: {
 		url: 'https://map.qq.com/api/js?v=2.exp',
-		key: '7FYBZ-SKMKW-D5HR6-RUHRK-Z76EE-DNBYL',
-		defaultCenter: [39.9046900000,116.4071700000]
-	}
+		key: 'C4XBZ-P2HWS-5BGOP-64Z2O-FROKK-JEFA7',
+		defaultCenter: [39.9046900000,116.4071700000],
+		apiBaseUrl: 'https://apis.map.qq.com/ws/'
+	},
+	realmName: 'http://172.22.146.118'
 }
 ```
 
@@ -348,8 +374,8 @@ export default {
 
 ## 添加工具方法
 目录路径： \src\utils
-*对于单独的工具方法，可放在base.js中，使用时可直接在utils上调用添加的方法
-*对于需要一个文件来承载的工具类，可添加对应的js文件，然后在index.js中注册此文件，使用时也可直接在utils上调用添加的方法（需注意名称对应）
+* 对于单独的工具方法，可放在base.js中，使用时可直接在utils上调用添加的方法
+* 对于需要一个文件来承载的工具类，可添加对应的js文件，然后在index.js中注册此文件，使用时也可直接在utils上调用添加的方法（需注意名称对应）
 ```js
 base.js
 /**
@@ -365,16 +391,21 @@ export function percent(value, fmt) {
 ```js
 index.js
 import * as utils from "./base"; //基础工具方法
-import clipboard from "./clipboard"; //剪切板
 import * as eventHub from "./eventHub"; //全局事件中心
-import print from "./print"; //打印工具箱
 import * as validate from "./validate"; //验证工具箱
+import * as listManager from "./listManager"; //列表管理器
+import * as confirm from "./confirm"; //重新封装确认弹窗
+import * as dateTime from "./dateTime"; //日期时间相关
+import * as security from "./security"; //安全加解密转码相关
+import * as transform from "./transform"; //数据转换相关
+import * as ruleValidator from "./ruleValidator"; //element-ui 表单验证rules自定义的验证规则validator
 
-export default Object.assign(utils, {
-	clipboard,
+export default Object.assign(utils, dateTime, security, transform, {
 	eventHub,
-	print,
-	validate
+	validate,
+	listManager,
+	confirm,
+	ruleValidator
 });
 
 ```
@@ -394,6 +425,10 @@ let value = utils.percent(0.34546757, 3)
 ```html
   <button  @click="_routeTo('page1')">按钮</button>
   <button  @click="_routeTo('page2', {id: 123, name: 'hahaha'})">按钮</button>
+```
+* 获取上面的路由参数
+```js
+console.log(this.$route.params)  //{id:123, name: 'hahaha'}
 ```
 
 * 全局事件中心(观察者模式跨作用域消息通讯)

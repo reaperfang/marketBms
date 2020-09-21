@@ -16,7 +16,7 @@
                 <div v-permission="['商品', '商品列表', '默认页面', '商品导入']" class="item pointer" @click="$router.push('/goods/import')">商品导入</div> -->
             </header>
             <div class="search">
-                <el-form :inline="true" :model="listQuery" ref="form" class="demo-form-inline">
+                <el-form :inline="true" :model="listQuery" ref="form" class="demo-form-inline input_style">
                     <el-form-item label="商品状态" prop="status">
                         <el-select v-model="listQuery.status" placeholder="请选择商品状态">
                             <el-option label="全部" value=""></el-option>
@@ -573,23 +573,70 @@ export default {
             this.listQuery = Object.assign({}, this.listQuery, {status: +this.$route.query.status})
         }
         //this.getAllList()
-        this.getList()
+        //this.getList()
         this.getCategoryList()
         this.getMiniappInfo()
         //this.getProductCatalogTreeList()
     },
     beforeRouteEnter (to, from, next) {
         next(vm => {
+            vm.loading = true
+            
             vm._apis.goods.fetchSpuGoodsList().then((res) => {
                 let total = +res.total
                 
                 if(!total) {
-                    if(this.$route.name === 'goodsListOnly') {
+                    if(vm.$route.name === 'goodsListOnly') {
                         vm.$router.replace('/goods/goodsListEmptyOnly')
                     }else {
                         vm.$router.replace('/goods/goodsListEmpty')
                     }
                 }
+
+                vm.allTotal = +res.total
+                vm.getMarketActivity(res.list).then((activityRes) => {
+                    activityRes.forEach((val, index) => {
+                        let id = val.id
+                        let goods = res.list.find(val => val.id == id)                      
+                        goods.activity = true
+                        if(val.isParticipateActivity) {
+                            goods.goodsInfos.forEach(val => {
+                                val.activity = true
+                            })
+                        } else {
+                            if(val.goodsInfos) {
+                                val.goodsInfos.forEach(skuVal => {
+                                    let skuid = skuVal.id
+                                    let item = goods.goodsInfos.find(val => val.id == skuid)
+
+                                    if(item) {
+                                        item.activity = true
+                                    }
+                                })
+                            }
+                        }
+                    })
+                    vm.total = +res.total
+                    //this.getCategoryName(res.list)
+                    res.list.forEach(item => {
+                        item.isEdit = false;
+                        item.showIcon = false;
+                        if(item.status === 1) {
+                            item.switchStatus = true
+                        } else if(item.status === 0 || item.status === 2) {
+                            item.switchStatus = false
+                        }
+                    })
+                    vm.list = res.list
+                    vm.loading = false
+                    // if(this.allTotal && !this.total) {
+                    //     if(this.$route.name === 'goodsListOnly') {
+                    //         this.$router.push('/goods/goodsListEmptyOnly')
+                    //     }else {
+                    //         this.$router.push('/goods/goodsListEmpty')
+                    //     }
+                    // }
+                })
             }).catch(error => {
                 //this.loading = false
             })
