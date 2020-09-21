@@ -1,5 +1,5 @@
 <template>
-  <div class="addSelfLift">
+  <div class="addSelfLift mh bor-radius">
     <h2>{{ setTitle }}</h2>
     <el-form class="ruleForm" ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px">
        <div class="form-area">

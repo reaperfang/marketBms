@@ -80,6 +80,7 @@
           </el-table-column>
         </el-table>
         <pagination
+          style="margin-top: 10px;"
           v-show="total>0"
           :total="total"
           :page.sync="listQuery.startIndex"
@@ -212,7 +213,7 @@ export default {
   color: $grayColor;
 }
 .table-box {
-  padding-bottom: 20px;
+  padding-bottom: 20px !important;
 }
 .table-box .table {
     margin-left: 0;

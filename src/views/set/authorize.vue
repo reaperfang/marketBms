@@ -1,10 +1,10 @@
 <template>
   <div class="authorize">
-    <section class="header">
+    <section class="header bor-radius">
       <h2>第三方平台授权</h2>
       <el-button @click="getCode" class="border-button">获取授权码</el-button>
     </section>
-    <section class="container">
+    <section class="container bor-radius" v-calcMinHeight="236" style="margin-bottom: 0;">
       <h2>授权记录</h2>
       <el-table
         v-loading="loading"
@@ -58,7 +58,7 @@
             </template>
         </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
+    <pagination style="margin-top: 10px;" v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
     </section>
   </div>
 </template>

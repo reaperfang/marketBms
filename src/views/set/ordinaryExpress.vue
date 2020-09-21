@@ -1,6 +1,6 @@
 /*普通快递 */
 <template>
-  <div>
+  <div class="bgf mh bor-radius">
     <el-tabs v-model="currentTab" @tab-click="handleClick" class="tabs">
       <el-tab-pane name="courierSettings" >
         <span slot="label" v-permission="['设置','普通快递','快递设置']">快递设置</span>
@@ -108,24 +108,14 @@ export default {
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+.bgf {
+  background: #fff;
+}
 .tabs{
-  >>> .el-tabs__item {
-    padding: 0;
-    height: 57px;
-    line-height: 57px;
-    span {
-      padding: 0 20px;
-    }
-  }
-  >>> .el-tabs__header {
-    background-color: #fff;
-    margin:0;
-    padding: 0 0 15px;
-  }
+  padding:0px 20px;
 }
 .main{
   width: 100%;
   padding: 20px;
-  background: #fff;
 }
 </style>

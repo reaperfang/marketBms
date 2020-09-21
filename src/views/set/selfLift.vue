@@ -1,5 +1,5 @@
 <template>
-   <div class="selfLift">
+   <div class="selfLift mh bor-radius">
     <!-- 开关 -->
     <div class="switch">
       <span class="title">上门自提</span>

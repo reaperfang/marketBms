@@ -1,5 +1,5 @@
 <template>
-   <div class="address">
+   <div class="address mh bor-radius">
      <div class="btn-area"><el-button type="primary" @click="goAddressNew()" v-permission="['设置','地址库', '默认页面', '新建地址']">新建地址</el-button></div>
      <div class="list-area">
        <div class="total">

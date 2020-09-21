@@ -1,6 +1,6 @@
 /*支付方式 */
 <template>
-    <div class="main">
+    <div class="main mh bor-radius">
         <div class="pay_item">
           <div class="left_cont">
             <img src="@/assets/images/set/set-pay1.png"/>
@@ -434,7 +434,7 @@ export default {
 .main{
   width: 100%;
   background: #fff;
-  padding: 20px 20px 300px 20px;
+  padding: 20px 20px 40px 20px;
 }
 .pay_item{
   width: 100%;

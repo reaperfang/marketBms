@@ -1,5 +1,5 @@
 <template>
-  <div class="shopExpress" v-loading="isInit"  element-loading-background="rgba(255, 255, 255, 1)">
+  <div class="shopExpress bor-radius" v-loading="isInit"  element-loading-background="rgba(255, 255, 255, 1)">
     <!-- 商家配送 -->
     <section v-if="!isInit" class="switch dashed">
       <span>商家配送</span>
@@ -1188,8 +1188,6 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
   $color: rgba(68, 67, 75, 1);
   .shopExpress {
-    min-height: 200px;
-    background-color: #fff;
     color:$color;
     .dashed {
       border-bottom: 1px dashed rgba(211, 211, 211, 1);
