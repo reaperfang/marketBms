@@ -145,7 +145,6 @@ export default {
 					document.mozFullScreenElement !== null) ||
 				(document.msFullscreenElement &&
 					document.msFullscreenElement !== null);
-
 			var docElm = document.documentElement;
 			if (!isInFullScreen) {
 				if (docElm.requestFullscreen) {
