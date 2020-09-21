@@ -141,7 +141,7 @@ export default {
 
 <style lang="scss" scoped>
 /deep/ .el-dialog {
-  border-radius: 10px;
+  border-radius: 3px;
   overflow: hidden;
 }
 /deep/ .el-dialog__header {
