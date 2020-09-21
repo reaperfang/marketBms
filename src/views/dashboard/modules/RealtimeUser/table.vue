@@ -37,6 +37,7 @@ import { mapGetters, mapActions, mapState } from "vuex";
 export default {
 	watch: {
 		tableData(val) {
+			console.log("tableData(val) {", val);
 			this.newtable = this.setNewTable(val);
 		}
 	},

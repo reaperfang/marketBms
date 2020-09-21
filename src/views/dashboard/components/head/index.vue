@@ -138,7 +138,7 @@ export default {
 		fullscreen() {
 			this.$toast({
 				message:
-					"快捷键全屏或退出全屏操作 windows 使用F11  mac 使用 Command+Control+F",
+					"全屏或退出全屏操作 windows 使用F11  mac 使用 Command+Control+F",
 				position: "top"
 			});
 			// this.$toast({
