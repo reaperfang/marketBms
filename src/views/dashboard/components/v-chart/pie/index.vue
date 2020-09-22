@@ -1,7 +1,6 @@
 <template>
 	<div class="panel-content">
-		<div style="width: 150px;height: 150px;" ref="chartContentPie"></div>
-
+		<div class="chartContentPie" ref="chartContentPie"></div>
 		<icon :progress="progress" :city="city"></icon>
 	</div>
 </template>
@@ -21,15 +20,21 @@ export default {
 	mounted() {
 		this.showChart();
 
-		// window.addEventListener("resize", (ev) => {
-		//   this.$dt.start({
-		//     type: "debounce",
-		//     immediate: true,
-		//     time: 100,
-		//     success: () => {
-		//       this.chart.resize();
-		//     },
-		//   });
+		window.addEventListener("resize", ev => {
+			this.chart.resize();
+		});
+
+		// window.addEventListener("resize", ev => {
+		// 	//   this.$dt.start({
+		// 	//     type: "debounce",
+		// 	//     immediate: true,
+		// 	//     time: 100,
+		// 	//     success: () => {
+		// 	//       this.chart.resize();
+		// 	//     },
+		// 	//   });
+
+		// 	this.chart.resize();
 		// });
 	},
 	methods: {
@@ -143,8 +148,32 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .panel-content {
 	position: relative;
+	//background: red;
+	//min-width: 400px;
+
+	.chartContentPie {
+		width: 150px;
+		height: 150px;
+	}
+
+	// .chartContentPie {
+	// 	width: 100px;
+	// 	height: 100px;
+	// }
 }
+
+// @media screen and (min-width: 1511px) {
+// 	.panel-content {
+// 		position: relative;
+// 		background: yellow;
+
+// 		.chartContentPie {
+// 			width: 150px;
+// 			height: 150px;
+// 		}
+// 	}
+// }
 </style>
