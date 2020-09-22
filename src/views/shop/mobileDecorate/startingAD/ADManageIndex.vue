@@ -67,14 +67,14 @@
             <span v-else>--</span>
           </template>
         </el-table-column>
-        <el-table-column prop="" label="操作" width="154" align="left" fixed="right" class-name="table-padding table-th-center">>
+        <el-table-column prop="" label="操作" width="154" align="left" fixed="right" header-align="center" class-name="table-padding">>
           <template slot-scope="scope">
             <span class="table-btn" v-if="scope.row.status === 0" @click="_routeTo('m_createAD', {ADId: scope.row.id, showType: 'view'})">查看</span>
             <span class="table-btn" v-if="scope.row.status === 3" @click="startAD(scope.row)">启用</span>
-            <span class="table-btn" v-else-if="scope.row.status === 0 || scope.row.status === 1" @click="stopAD(scope.row)">停用</span>
-            <span class="table-btn" v-else>---</span>
+            <span class="table-btn table-warning" v-else-if="scope.row.status === 0 || scope.row.status === 1" @click="stopAD(scope.row)">停用</span>
+            <span class="table-btn" style="padding: 0 9px;" v-else>---</span>
             <span class="table-btn" v-if="scope.row.status !== 0" @click="_routeTo('m_createAD', {ADId: scope.row.id})">编辑</span>
-            <span class="table-btn" @click="deleteAD(scope.row)">删除</span>
+            <span class="table-btn table-warning" @click="deleteAD(scope.row)">删除</span>
             <!-- <el-button class="table-btn" type="text" @click="deleteAD(scope.row)" :disabled="true">删除</el-button> -->
           </template>
         </el-table-column>

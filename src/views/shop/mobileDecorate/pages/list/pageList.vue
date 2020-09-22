@@ -45,11 +45,11 @@
         <el-table-column prop="createTime" label="创建时间" align="center" min-width="160"></el-table-column>
         <el-table-column prop="updateTime" sortable="custom" label="最后编辑时间" align="center" min-width="160"></el-table-column>
         <el-table-column prop="updateUserName" label="操作账号" align="center"></el-table-column>
-        <el-table-column prop="" label="操作" width="258" align="left" fixed="right" class-name="table-padding table-th-center">
+        <el-table-column prop="" label="操作" width="258" align="left" fixed="right" header-align="center" class-name="table-padding">
           <template slot-scope="scope">
             <span class="table-btn" @click="copyPage(scope.row)">复制</span>
             <span class="table-btn" @click="_routeTo('m_shopEditor', {pageId: scope.row.id})">编辑</span>
-            <span class="table-btn" @click="deletePage(scope.row)" v-if="scope.row.isHomePage !== 1">删除</span>
+            <span class="table-btn table-warning" @click="deletePage(scope.row)" v-if="scope.row.isHomePage !== 1">删除</span>
             <span class="table-btn" @click="spread(scope.row)">推广</span>
             <span class="table-btn" @click="setIndex(scope.row)" v-if="scope.row.isHomePage !== 1">设为首页</span>
           </template>

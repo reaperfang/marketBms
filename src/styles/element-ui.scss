@@ -259,9 +259,6 @@ input::-moz-placeholder, textarea::-moz-placeholder{
     padding: 0 20px !important;
   }
 }
-.el-table th.table-th-center {
-  text-align: center;
-}
 // 全选
 .table-select {
   font-size: 0;
@@ -271,5 +268,24 @@ input::-moz-placeholder, textarea::-moz-placeholder{
   }
   .el-button+.el-button {
     margin-left: 12px !important;
+  }
+  .border-button {
+    color: #44434B !important;
+    border: 1px solid #DADAE3 !important;
+    &:hover {
+      color: #655EFF !important;
+      border-color: #655EFF !important;
+    }
+  }
+}
+// 删除、停用文字颜色
+.table-warning {
+  color: #FD4C2B !important;
+}
+.table-btn{
+  padding-right: 5px !important;
+  border-right: 1px solid #dadae3;
+  &:last-child{
+    border-right: none;
   }
 }
