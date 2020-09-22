@@ -5,7 +5,7 @@ export default {
   name: "durationChart",
   extends: chartBase,
   computed:{},
-  props: ['dataChart','checkList'],
+  props: ['dataChart','checkList','units'],
   data() {
     return {
       flow:{},
@@ -26,6 +26,10 @@ export default {
   methods: {
     // 数据显示控制
     con(){
+      var interval=0
+      if(this.units==0){
+        interval=2
+      }
       var color=['#FF8615','#0077FF','#2FC25B','#655EFF']
       var name=['支付金额','支付订单数', '支付人数','客单价']
       var series=[]
@@ -83,7 +87,7 @@ export default {
           boundaryGap: false,
           axisLabel:{
             showMaxLabel:true,
-            // interval:0,
+            interval:interval,
             formatter: function (params) {
               var newParamsName = "";
               var paramsNameNumber = params.length;
