@@ -90,27 +90,16 @@ export default {
       year: new Date().getFullYear(),
       yearcur: new Date().getFullYear(),
       monthcur:(Math.ceil((new Date().getMonth()+1)/3)-1),//当前季度前一季度
-      showValue: ''
+      showValue:''
     }
   },
   created() {
-    if (this.defaultValue) {
-      let value = this.defaultValue
-      let arr = value.split('-')
-      this.year = arr[0].slice(0, 4)
-      let str = arr[0].slice(4, 6) + '-' + arr[1].slice(4, 6)
-      let arrAll = this.valueArr
-      this.showValue = `${this.year}年${arrAll.indexOf(str) + 1}季度`
-    }
+    this.showValue= `${this.year}年${this.monthcur}季度`
+    
   },
   watch: {
     defaultValue: function(value, oldValue) {
-      let arr = value.split('-')
-      this.year = arr[0].slice(0, 4)
-      let str = arr[0].slice(4, 6) + '-' + arr[1].slice(4, 6)
-      let arrAll = this.valueArr
-      this.showValue = `${this.year}年${arrAll.indexOf(str) + 1}季度`
-    }
+    },
   },
   methods: {
     one() {

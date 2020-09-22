@@ -533,26 +533,13 @@ export default {
         this.dataChart=thisdata
     },
     getVal(val){//交易看板 组件传值
-        val.date=this.getDayTime(val.date)
         this.seachTimetrad=val
         this.activetype=0
         this.gettransactionView()
     },
     getUserVal(val){//用户概览 组件传值
-        val.date=this.getDayTime(val.date)
         this.seachTime=val
         this.getuserView()
-    },
-    getDayTime(val){ //把时间戳 转为 2020-08-16格式
-        let date = new Date(val);
-        let y = date.getFullYear();
-        let MM = date.getMonth() + 1;
-        MM = MM < 10 ? ('0' + MM) : MM;
-        let d = date.getDate();
-        d = d < 10 ? ('0' + d) : d;
-        var day=y + '-' + MM + '-' + d
-        // console.log(day)
-        return day
     },
     getgoodsView(){//商品看板数据
       this._apis.realSurvey.goodsView(this.query).then(response => {

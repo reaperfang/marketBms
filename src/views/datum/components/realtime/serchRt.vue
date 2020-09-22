@@ -1,6 +1,6 @@
 <template>
 <div class="fr clearfix" style="position:relative;">
-                        <el-select class="dayselect" v-model="value" placeholder="请选择" @change="value2=''">
+                        <el-select class="dayselect" v-model="value" placeholder="请选择" @change="getUnits">
                             <el-option label="日" value="0"></el-option>
                             <el-option label="周" value="1"></el-option>
                             <el-option label="月" value="2"></el-option>
@@ -56,15 +56,67 @@ export default {
         },
         value2: '',
         value:'0',
-        getquarter:''
+        getquarter:'',
     }
   },
   created() {
+      this.getUnits()
   },
   methods: {
+      getDayTime(val){ //把时间戳 转为 2020-08-16格式
+        let date = new Date(val);
+        let y = date.getFullYear();
+        let MM = date.getMonth() + 1;
+        MM = MM < 10 ? ('0' + MM) : MM;
+        let d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var day=y + '-' + MM + '-' + d
+        console.log(day)
+        return day
+    },
+      getUnits(){
+        var lastday=''
+        if(this.value==0){
+            var daytime=this.getDayTime(new Date().getTime()-(8.64e7*1))
+            this.value2=new Date(daytime).getTime()
+            lastday=this.value2
+        }else if(this.value==1){//选中周的 周日 日期 时间戳 到秒
+            var today = new Date().getDay();// 今天是这周的第几天
+            var stepSunDay = -today + 1;//上周日距离今天的天数（负数表示）
+            if (today == 0) {// 如果今天是周日
+                stepSunDay = -7;
+            };
+            stepSunDay=stepSunDay-1
+            this.value2=new Date().getTime()+(8.64e7*stepSunDay)//上周日的时间戳
+            lastday=new Date().getTime()+(8.64e7*stepSunDay)
+        }else if(this.value==2){//选中月的最后一天时间戳 到秒
+            var nowMonth = new Date().getMonth()+1;
+            var nowYear = new Date().getFullYear();
+            var monthEndDate = new Date(nowYear, nowMonth-1, 0);//上一月的月底
+            var timeEnd=Date.parse(monthEndDate);
+            this.value2=timeEnd
+            lastday=timeEnd
+        }else if(this.value==3){
+            var year=new Date().getFullYear()
+            var monthcur=(Math.ceil((new Date().getMonth()+1)/3)-1)//当前季度前一季度
+            if(monthcur==1){
+                lastday=(new Date(year+'-03-31 00:00:00')).getTime()
+            }
+            if(monthcur==2){
+                lastday=(new Date(year+'-06-30 00:00:00')).getTime()
+            }
+            if(monthcur==3){
+                lastday=(new Date(year+'-09-30 00:00:00')).getTime()
+            }
+            if(monthcur==4){
+                lastday=(new Date(year+'-12-31 00:00:00')).getTime()
+            }
+        }
+        this.$emit("change",{units:this.value,date:this.getDayTime(lastday)})
+      },
       getquar(val){
           this.getquarter=val
-          this.$emit("change",{units:this.value,date:this.getquarter})
+          this.$emit("change",{units:this.value,date:this.getDayTime(this.getquarter)})
       },
     getData(){
         var lastday=''
@@ -85,7 +137,7 @@ export default {
         }else if(this.value==0){
             lastday=this.value2
         }
-        this.$emit("change",{units:this.value,date:lastday})
+        this.$emit("change",{units:this.value,date:this.getDayTime(lastday)})
     }
   }
 }
