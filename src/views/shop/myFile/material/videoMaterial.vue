@@ -135,13 +135,15 @@ export default {
         fileGroupInfoId:id || '',
         startIndex:this.currentPage,
         pageSize:this.pageSize,
-        sourceMaterialType:'2'
+        sourceMaterialType:'2',
+        fileName:this.searchWord
       }
       this.getData(query)
     },
 
     //查询
     search(){
+      this.currentPage = 1; // 查询前将条件页码置为1
       let query ={
         fileGroupInfoId:'',
         startIndex:this.currentPage,
