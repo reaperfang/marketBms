@@ -38,26 +38,26 @@
           type="selection"  
           width="34">
         </el-table-column>
-        <el-table-column prop="imagePath" label="广告图">
+        <el-table-column prop="imagePath" label="广告图" min-width="100" fixed="left" class-name="table-padding">
           <template slot-scope="scope">
             <div class="name_wrapper">
               <img :src="scope.row.imagePath">
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="广告名称"></el-table-column>
-        <el-table-column prop="vv" label="访客数" width="100"></el-table-column>
-        <el-table-column prop="pv" label="浏览数" width="100"></el-table-column>
-        <el-table-column prop="updateTime" label="展示时间" :width="170">
+        <el-table-column prop="name" label="广告名称" min-width="130"></el-table-column>
+        <el-table-column prop="vv" label="访客数" align="right"></el-table-column>
+        <el-table-column prop="pv" label="浏览数" align="right"></el-table-column>
+        <el-table-column prop="updateTime" label="展示时间" min-width="310" align="center">
           <template slot-scope="scope">
             {{scope.row.startTime}} 至 {{scope.row.endTime}}
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" :width="170"></el-table-column>
-        <el-table-column prop="updateTime" sortable="custom" label="最后编辑时间" :width="170"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" min-width="160" align="center"></el-table-column>
+        <el-table-column prop="updateTime" sortable="custom" label="最后编辑时间" min-width="160" align="center"></el-table-column>
         <!-- <el-table-column prop="startTime" sortable label="开始时间" :width="170"></el-table-column>
         <el-table-column prop="endTime" sortable label="结束时间" :width="170"></el-table-column> -->
-        <el-table-column prop="createUserName" label="操作账号"></el-table-column>
+        <el-table-column prop="createUserName" label="操作账号" align="center"></el-table-column>
         <el-table-column prop="status" label="状态">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 0">展示中</span>
@@ -67,7 +67,7 @@
             <span v-else>--</span>
           </template>
         </el-table-column>
-        <el-table-column prop="" label="操作" :width="'150px'" fixed="right">
+        <el-table-column prop="" label="操作" width="154" align="left" fixed="right" class-name="table-padding table-th-center">>
           <template slot-scope="scope">
             <span class="table-btn" v-if="scope.row.status === 0" @click="_routeTo('m_createAD', {ADId: scope.row.id, showType: 'view'})">查看</span>
             <span class="table-btn" v-if="scope.row.status === 3" @click="startAD(scope.row)">启用</span>
@@ -79,7 +79,7 @@
           </template>
         </el-table-column>
       </el-table>
-       <div class="multiple_selection" v-if="tableData.length">
+       <div class="multiple_selection table-select" v-if="tableData.length">
         <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button class="border-button" @click="batchDeleteAD"  :disabled="!this.multipleSelection.length">批量删除</el-button>
       </div>
@@ -299,26 +299,6 @@ export default {
 /deep/ thead th{
   background: #f6f7fa!important;
   color:#44434B!important;
-}
-/deep/ .el-table td, /deep/ .el-table th {
-  text-align: center;
-  &:nth-child(2) {
-      text-align: left;
-      padding-left: 10px;
-  }
-}
-/deep/ .el-table td{
-  &:nth-child(4) {
-    text-align: right;
-    padding-right: 19px;
-  }
-  &:nth-child(5) {
-    text-align: right;
-    padding-right: 19px;
-  }
-  &:nth-child(6) {
-    text-align: left;
-  }
 }
 .table-btn{
   padding-right: 5px;

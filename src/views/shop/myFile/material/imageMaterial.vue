@@ -42,9 +42,9 @@
               </div>
             </div>
            </div>
-           <p>
+           <p class="table-select">
             <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
-            <el-button plain class="ml10 border-button" @click="deleteImages">批量删除</el-button>
+            <el-button plain class="border-button" @click="deleteImages">批量删除</el-button>
             <el-button class="border-button" plain @click="moveGroups">移动分组</el-button>
            </p>
            <p class="pages">
