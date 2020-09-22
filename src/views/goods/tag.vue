@@ -34,27 +34,24 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="name" label="标签名称" width="300"></el-table-column>
-      <el-table-column prop="productCount" label="绑定商品数量" width="150" align="right" header-align="right"></el-table-column>
-      <el-table-column label="状态" width="250" align="center" header-align="center">
+      <el-table-column prop="name" label="标签名称" min-width="150" fixed="left" class-name="table-padding"></el-table-column>
+      <el-table-column prop="productCount" label="绑定商品数量" align="right"></el-table-column>
+      <el-table-column label="状态" align="center">
         <template slot-scope="scope">
           <span>{{scope.row.enable | enableFilter}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" fixed="right" align="center" header-align="center
-      ">
+      <el-table-column label="操作" width="154" align="left" fixed="right" header-align="center" class-name="table-padding">
         <template slot-scope="scope" >
           <div class="operate-box">
-          <span v-permission="['商品', '商品标签', '默认页面', '修改']" class="operate-span blue pointer" @click="change(scope.row)">修改</span>
-          <span v-permission="['商品', '商品标签', '默认页面', '显示/隐藏']" class="operate-span blue pointer" @click="hide(scope.row)">
-            {{scope.row.enable | operateEnable}}
-          </span>
-          <span v-permission="['商品', '商品标签', '默认页面', '删除']" class="operate-span deleteColor pointer" @click="deleteTag(scope.row)">删除</span>
+          <span v-permission="['商品', '商品标签', '默认页面', '修改']" class="table-btn" @click="change(scope.row)">修改</span>
+          <span v-permission="['商品', '商品标签', '默认页面', '显示/隐藏']" class="table-btn" @click="hide(scope.row)">{{scope.row.enable | operateEnable}}</span>
+          <span v-permission="['商品', '商品标签', '默认页面', '删除']" class="table-btn table-warning" @click="deleteTag(scope.row)">删除</span>
         </div>
         </template>
       </el-table-column>
     </el-table>
-    <div class="table-footer">
+    <div class="table-footer table-select">
       <!-- <div class="row justify-between">
         <div class="col">
           <el-button v-if="showTableCheck" @click="checkAllHandler">全选</el-button>

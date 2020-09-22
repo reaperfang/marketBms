@@ -183,7 +183,7 @@ export default {
     },
     init() {
       this.ruleForm.id = this.$route.query && this.$route.query.id
-      this.isDisabled = this.$route.query && this.$route.query.source === 1 ? true : false
+      this.isDisabled = this.$route.query && +this.$route.query.source === 1 ? true : false
       if (this.ruleForm.id) {
         this.getAddressById(this.ruleForm.id)
       } 
@@ -267,7 +267,7 @@ export default {
       const obj = this.formateAddressType()
       delete data.type
       // 同城配送默认地址逻辑变更
-      const source = this.$route.query && this.$route.query.source // 来源是否为同城配送
+      const source = this.$route.query && +this.$route.query.source // 来源是否为同城配送
       const sourceType = this.$route.query && this.$route.query.sourceType // 1 商家配送 2 三方配送
       // 如果选择发货地址
       if (obj.type === 0 || obj.type === 2) {

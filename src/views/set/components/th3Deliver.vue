@@ -67,7 +67,7 @@
           </div>
        </div>
      </div>
-     <div class="row auto-call"  v-show="isTableShow">
+     <div class="row auto-call"  v-show="isTableShow && isHasOpenTh3Config">
        <div class="label">
          自动呼叫：
        </div>
@@ -154,6 +154,10 @@ export default {
     cid() {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
+    },
+    isHasOpenTh3Config() {
+      const obj = this.dataList.find(item => item.status === 1)
+      return obj ? true : false
     }
   },
 

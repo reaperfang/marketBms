@@ -84,7 +84,7 @@
                     label="SPU编码"
                     width="124">
                     </el-table-column> -->
-            <el-table-column label="排序" width="100">
+            <el-table-column label="排序" width="100" fixed="left" class-name="table-padding">
             <template slot-scope="scope">
               <template v-if="!scope.row.isEdit">
                 <div @mouseover="showEidtIcon(scope.row)" @mouseleave="hideEditIcon(scope.row)">
@@ -135,6 +135,7 @@
                     </el-table-column>
                     <el-table-column
                         label="状态"
+                        align="center"
                         width="120">
                         <template slot-scope="scope">
                             <span class="goods-state">
@@ -153,6 +154,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column
+                     align="center"
                         label="商品分类">
                         <template slot-scope="scope">
                             <span>{{scope.row.productCatalogInfoName}}</span>
@@ -162,6 +164,7 @@
                         sortable="custom"
                         :sort-method="salePriceMethod"
                         prop="salePrice"
+                         align="right"
                         label="售卖价（元）"
                         width="130"
                         class-name="salePrice">
@@ -176,6 +179,8 @@
                         sortable="custom"
                         :sort-method="stockSortMethod"
                         prop="stock"
+                         align="right"
+                         width="130"
                         label="总库存">
                         <template slot-scope="scope">
                             <span :class="{'salePrice-red': scope.row.status === 1 && scope.row.goodsInfos.some(val => val.stock <= val.warningStock)}" class="store">{{scope.row.goodsInfos && scope.row.goodsInfos.length ? Math.min.apply(null, scope.row.goodsInfos.map(val => +val.stock)) : scope.row.stock}}<i v-permission="['商品', '商品列表', '默认页面', '修改库存']" @click="(currentDialog = 'EditorStockSpu') && (dialogVisible = true) && (currentData = JSON.parse(JSON.stringify(scope.row)))" class="i-bg pointer"></i></span>
@@ -185,26 +190,22 @@
                         sortable="custom"
                         prop="saleCount"
                         :sort-method="saleCountSortMethod"
+                         align="right"
+                         width="130"
                         label="总销量">
                         <template slot-scope="scope">
                             <span class="store">{{scope.row.saleCount}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="操作" width="140" fixed="right" v-if="$route.name !== 'goodsListOnly'">
+                    <el-table-column label="操作" width="154" fixed="right" header-align="center" class-name="table-padding" v-if="$route.name !== 'goodsListOnly'">
                         <template slot-scope="scope">
-                            <el-tooltip :visible-arrow="visibleArrow" popper-class="operate-popper" class="item" effect="dark" content="编辑" placement="bottom">
-                                <span v-permission="['商品', '商品列表', '默认页面', '修改商品信息']" @click="$router.push('/goods/addGoods?id=' + scope.row.id + '&goodsInfoId=' + scope.row.id)" class="operate-editor pointer"><i class="i-bg"></i></span>
-                            </el-tooltip>
-                            <el-tooltip :visible-arrow="visibleArrow" popper-class="operate-popper" class="item" effect="dark" content="分享" placement="bottom">
-                                <span @click="shareHandler(scope.row)" class="operate-share pointer"><i class="i-bg"></i></span>
-                            </el-tooltip>
-                            <el-tooltip :visible-arrow="visibleArrow" popper-class="operate-popper" class="item" effect="dark" content="删除" placement="bottom">
-                                <span v-permission="['商品', '商品列表', '默认页面', '删除商品']" @click="deleleHandler(scope.row)" class="operate-delete pointer"><i class="i-bg"></i></span>
-                            </el-tooltip>
+                            <span v-permission="['商品', '商品列表', '默认页面', '修改商品信息']" @click="$router.push('/goods/addGoods?id=' + scope.row.id + '&goodsInfoId=' + scope.row.id)" class="table-btn">编辑</span>
+                            <span @click="shareHandler(scope.row)" class="table-btn">分享</span>
+                            <span v-permission="['商品', '商品列表', '默认页面', '删除商品']" @click="deleleHandler(scope.row)" class="table-btn table-warning">删除</span>
                         </template>
                     </el-table-column>
                 </el-table>
-                <div v-show="!loading" class="table-footer">
+                <div v-show="!loading" class="table-footer table-select">
                     <!-- <el-button @click="moreManageHandler" type="primary">批量管理</el-button> -->
                     <!-- <el-button v-if="showTableCheck" @click="checkAllHandler">全选</el-button> -->
                     <!-- <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
@@ -270,7 +271,6 @@
     display: flex;
     align-items: center;
     padding: 20px 20px 0 20px;
-    padding-left: 15px;
     button {
         margin-left: 0;
         // margin-right: 28px;
@@ -445,7 +445,6 @@
 /deep/ .el-checkbox__label {
     padding-left: 6px;
     padding-right: 6px;
-    margin-right:20px;
 }
 .el-button+.el-button {
     margin-left: 12px;
@@ -461,18 +460,6 @@
 }
 .ellipsis2-big {
     width: 239px;
-}
-/deep/ .el-table td, .el-table th {
-    text-align: center;
-    &:nth-child(3) {
-        text-align: left;
-    }
-}
-/deep/ .el-table th {
-    text-align: center;
-    &:nth-child(3) {
-        text-align: left;
-    }
 }
 .mainImage {
     background-repeat: no-repeat;
@@ -490,6 +477,13 @@
 }
 /deep/ .el-table table thead tr th .cell {
     font-weight: normal;
+}
+.table-btn{
+  padding-right: 5px;
+  border-right: 1px solid #dadae3;
+  &:last-child{
+    border-right: none;
+  }
 }
 </style>
 <style lang="scss">
