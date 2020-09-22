@@ -94,7 +94,7 @@
                 <el-table-column
                     prop="orderCode"
                     label="订单编号"
-                    width="228"
+                    width="238"
                     :class-name="haveAuto ? 'orderCode haveAuto' : 'orderCode'">
                     <template slot-scope="scope">
                         <el-tooltip v-if="scope.row.isAutoSend" content="自动发货" placement="bottom" effect="dark">
@@ -104,6 +104,7 @@
                             <i class="urge"></i>
                         </el-tooltip>
                         <i class="unauto" v-if="!scope.row.isAutoSend && (scope.row.isUrge != 0) && haveAuto"></i>
+                        <span class="deliveryWay-icon">{{scope.row | deliveryWayIconFilter}}</span>
                         {{scope.row.orderCode}}
                     </template>
                 </el-table-column>
@@ -293,6 +294,26 @@ export default {
     })
     //this.checkExpress()
     this.getShopInfo()
+    },
+    filters: {
+        deliveryWayIconFilter(item) {
+            let  code = item.deliveryWay
+
+            switch(code) {
+                case 1:
+                    return "普快"
+                case 2:
+                    return "商配"
+                case 3:
+                    if(item.orderStatus==5||item.orderStatus==6){
+                        return "达达"
+                    }else{
+                        return "三方"
+                    }
+                case 4:
+                    return "自提"
+            }
+        }
     },
     computed:{
         cid(){
@@ -743,5 +764,19 @@ export default {
     }
     /deep/ .el-form--inline .el-form-item {
         margin-bottom: 20px;
+    }
+    .deliveryWay-icon{
+        display:inline-block;
+        width:32px;
+        height:18px;
+        background:rgba(230,230,250,1);
+        border-radius:3px;  
+        line-height:18px;
+        text-align: center;
+        font-size:12px;
+        font-weight:500;
+        color:rgba(101,94,255,1);
+        margin-left:-10px;
+        margin-right:5px;
     }
 </style>
