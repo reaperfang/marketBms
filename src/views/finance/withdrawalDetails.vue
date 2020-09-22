@@ -96,7 +96,8 @@
         <el-table-column
           prop="amount"
           align="right"
-          label="提现金额（元）">
+          label="提现金额（元）"
+          width="120px">
         </el-table-column>
         <el-table-column
           prop="status"
@@ -122,10 +123,25 @@
         label="操作"
         align="center">
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small" v-permission="['财务', '提现明细', '默认页面', '查看']">查看</el-button> 
+            <el-button 
+              @click="handleClick(scope.row)"  
+              type="text" size="small" 
+              v-permission="['财务', '提现明细', '默认页面', '查看']"
+              class="fsize"
+            >
+              查看
+            </el-button> 
             <span v-if="scope.row.status == 0">
               <span class="c_line">|</span>
-              <el-button type="text" size="small" @click="examine(scope.row)" v-permission="['财务', '提现明细', '默认页面', '审核']" >审核</el-button>
+              <el-button 
+                type="text" 
+                size="small" 
+                @click="examine(scope.row)" 
+                v-permission="['财务', '提现明细', '默认页面', '审核']"
+                class="fsize"
+              >
+                审核
+              </el-button>
             </span>
             <span v-else class="placeholders"></span>
           </template>
@@ -144,9 +160,9 @@
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1"
-          :background="background">
+          :background="true">
         </el-pagination>
       </div>
     </div>
@@ -434,7 +450,7 @@ export default {
   width: 100%;
   background: #fff;
   border-radius: 3px;
-  padding: 15px 20px;
+  padding: 20px;
   .withdraw{
     text-align: right;
     display: block;
@@ -447,7 +463,7 @@ export default {
   width: 100%;
   background: #fff;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
   
   .total{
     display: flex;
@@ -456,7 +472,7 @@ export default {
       font-size: 16px;
       color: #B6B5C8;
       display: block;
-      margin-top:15px;
+      // margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -495,6 +511,17 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
+}
+/deep/ .el-table-column--selection .cell {
+    padding-left: 20px;
+    padding-right: 10px;
+}
+/deep/.el-table--small td{
+  padding:16px 0;
+}
+
+.fsize{
+  font-size: 14px;
 }
   
 </style>

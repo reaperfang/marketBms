@@ -80,12 +80,13 @@ export default {
       },
       rules: {
         textContent: [
-          { required: true, message: "请输入内容", trigger: "blur" },
+          { required: true, message: "请输入内容", trigger: "blur", validator: this.utils.ruleValidator.validateRequired },
           {
             min: 1,
             max: 100,
             message: "请输入要说明的文字，最多100字",
-            trigger: "blur"
+            trigger: "blur",
+            validator: this.utils.ruleValidator.validateMax
           }
         ],
       },
@@ -110,9 +111,9 @@ export default {
     changeValidate(value) {
       let self = this;
       this.$refs.ruleForm.validate( valid => {
-        if(!valid) {
-          this.$message.warning('请输入要说明的文字，最多100字');
-        }
+        // if(!valid) {
+        //   this.$message.warning('请输入要说明的文字，最多100字');
+        // }
         self.ruleForm.vError = !valid;
       })
     }

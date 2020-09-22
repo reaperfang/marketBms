@@ -49,14 +49,14 @@
           <span class="edit_span" v-if="scope.row.enable == 1" v-permission="['用户', '会员卡', '会员卡管理', '启用/禁用']">未启用</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" :width="200">
         <template slot-scope="scope">
             <div class="btns clearfix">
                 <span v-if="!!scope.row.name" @click="goToEdit(scope.row)" v-permission="['用户', '会员卡', '会员卡管理', '查看']">编辑</span>
                 <span v-if="scope.row.enableShow == true  && scope.row.name" @click="handleAble($event, scope.row, 0)">启用</span>
                 <span v-if="scope.row.disableShow == true" @click="handleAble($event, scope.row, 1)" style="color:#FD4C2B; padding-right: 5px; border-right: 1px solid #dadae3;">禁用</span>
                 <span v-if="!!scope.row.name" @click="sendCard(scope.row)" v-permission="['用户', '会员卡', '会员卡管理', '发卡']">发卡</span>
-                <span v-if="!scope.row.name" :style="{color: scope.row.isGray ? '#eee':'#655EFF'}" @click="handleConfig(scope.row)" v-permission="['用户', '会员卡', '会员卡管理', '待配置']">待配置</span>
+                <span v-if="!scope.row.name" :style="{color: scope.row.isGray ? '#eee':'#655EFF', 'border-right': '0' }" @click="handleConfig(scope.row)" v-permission="['用户', '会员卡', '会员卡管理', '待配置']">待配置</span>
             </div>
         </template>
         
@@ -159,12 +159,22 @@ export default {
             text-align: left;
             padding-left: 20px;
         }
+        &:nth-child(5) {
+            text-align: left;
+        }
     }
 /deep/ .el-table td{
   &:nth-child(5) {
     text-align: left;
   }
+  &:nth-child(8) {
+    text-align: left;
+    padding-left: 39px;
+  }
 }
+/deep/ .el-table--small td, .el-table--small th{
+  padding: 16px 0;
+} 
 /deep/ .cell{
             .btns{
                 span{

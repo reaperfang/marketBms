@@ -3,7 +3,10 @@
   <DialogBase :visible.sync="visible" width="816px" :title="'选择优惠套装'" @submit="submit">
     <div class="select_dialog">
       <div class="head-wrapper">
-        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" :inline="true">
+        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" :inline="true">
+          <el-form-item label="套装名称" prop="name">
+            <el-input v-model="ruleForm.name" placeholder="请输入套装名称" clearable></el-input>
+          </el-form-item>
           <el-form-item label="优惠套装状态" prop="status">
             <el-select label="优惠套装状态" v-model="ruleForm.status" placeholder="请选择优惠套装状态">
               <el-option label="全部" :value="''"></el-option>
@@ -12,11 +15,8 @@
               <!-- <el-option label="已失效" :value="2"></el-option> -->
             </el-select>
           </el-form-item>
-          <el-form-item label="套装名称" prop="name">
-            <el-input v-model="ruleForm.name" placeholder="请输入套装名称" clearable></el-input>
-          </el-form-item>
           <el-form-item label="" prop="name">
-            <el-button type="primary" @click="search">查 询</el-button>
+            <el-button type="primary" @click="search">搜 索</el-button>
             <el-button @click="refresh">刷 新</el-button>
           </el-form-item>
         </el-form>
@@ -70,13 +70,14 @@
         </div>
         <div class="pagination" v-if="tableData.length">
           <el-pagination
+            :background="true"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="Number(ruleForm.pageNum) || 1"
             :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
             :page-size="pageSize*1"
             :total="total*1"
-            layout="total, sizes, prev, pager, next, jumper"
+            layout="prev, pager, next, sizes"
             >
           </el-pagination>
         </div>

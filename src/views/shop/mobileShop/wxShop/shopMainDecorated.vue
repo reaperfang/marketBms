@@ -2,6 +2,7 @@
   <div class="preview_wrapper">
     <!-- 装修编辑器 -->
     <Decorate 
+      v-calcHeight="197"
       ref="Decorate" 
       :decorateData="decorateData" 
       :config="config" 
@@ -13,7 +14,7 @@
       @dataLoadProgress="dataLoadProgress"
       @finished="finished"
     ></Decorate>
-    <div class="shop_info" v-calcHeight="200+10">
+    <div class="shop_info" v-calcHeight="197">
       <div class="shop_code">
         <h3>店铺微信预览</h3>
         <h4>使用微信扫描二维码，预览店铺效果</h4>
@@ -297,7 +298,10 @@ export default {
     padding-top:20px;
     /deep/.module {
       &.view {
-        width: 374px;
+        width: 377px;
+        height: 100% !important;
+        border: 1px #D0D6E4 solid;
+        box-shadow: none !important;
         .phone-body {
           height: 592px;
         }
@@ -317,12 +321,12 @@ export default {
         text-align:center;
       }
       .shop_code{
-        padding:30px;
+        padding:25px 30px 30px 30px;
         box-sizing: border-box;
         text-align:center;
-        // border:1px solid rgba(211,211,211,1);
-        // background:rgba(248,248,248,1);
         background:#fff;
+        border: 1px #D0D6E4 solid;
+        border-radius: 2px;
         h3{
           font-size:18px;
         }
@@ -344,12 +348,12 @@ export default {
       }
       .tools{
         margin-top:10px;
-        padding:30px;
+        padding:20px 20px 10px 20px;
         box-sizing: border-box;
         text-align:center;
-        // border:1px solid rgba(211,211,211,1);
-        // background:rgba(248,248,248,1);
         background: #fff;
+        border: 1px #D0D6E4 solid;
+        border-radius: 2px;
         h3{
           text-align:center;
           font-size:18px;

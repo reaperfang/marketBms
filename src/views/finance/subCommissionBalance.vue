@@ -6,7 +6,7 @@
         <el-form-item label="交易流水号">
           <el-input v-model="ruleForm.tradeDetailSn" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
-        <el-form-item> 
+        <el-form-item>
           <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
             <el-option
               v-for="item in commissionClerkStatus"
@@ -113,9 +113,9 @@
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1"
-          :background="background">
+          :background="true">
         </el-pagination>
       </div>
       <exportTipDialog :data = currentData :dialogVisible.sync="dialogVisible" ></exportTipDialog>
@@ -279,7 +279,7 @@ export default {
       }else if(val && val.order == 'descending'){
         this.ruleForm.sort = 'desc'
       }else{
-        return 
+        return
       }
       this.fetch()
     },
@@ -296,13 +296,13 @@ export default {
   width: 100%;
   background: #fff;
   border-radius: 3px;
-  padding: 15px 20px;
+  padding: 20px;
 }
 .under_part{
   width: 100%;
   background: #fff;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
   .total{
     display: flex;
     justify-content: space-between;
@@ -310,7 +310,7 @@ export default {
       font-size: 16px;
       color: #B6B5C8;
       display: block;
-      margin-top:15px;
+      // margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -319,7 +319,7 @@ export default {
   }
 }
 .table{
-  width: 100%; 
+  width: 100%;
   margin-top:20px;
 }
 /deep/.el-table .descending .sort-caret.descending{
@@ -327,5 +327,8 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
+}
+/deep/.el-table--small td{
+  padding:16px 0;
 }
 </style>

@@ -20,7 +20,7 @@
               <el-input v-model="ruleForm.idOrName" placeholder="请输入名称" clearable style="width:120px;"></el-input>
             </el-form-item>
             <el-form-item label="" prop="">
-              <el-button type="primary" @click="fetch">搜  索</el-button>
+              <el-button type="primary" @click="search">搜  索</el-button>
             </el-form-item>
           </div>
         </el-form>
@@ -45,13 +45,14 @@
         </el-table>
       <div class="pagination">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="Number(startIndex) || 1"
+          :current-page="Number(pageNum) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
           >
         </el-pagination>
       </div>
@@ -88,6 +89,13 @@ export default {
     this.fetch();
   },
   methods: {
+    search() {
+      this.startIndex = 1;
+      this.ruleForm.startIndex = 1;
+      this.pageNum = 1;
+      this.ruleForm.pageNum = 1;
+      this.fetch();
+    },
     getActivitiesList() {
       this._apis.shop.getActivitiesList({}).then((response)=>{
         const list = [];

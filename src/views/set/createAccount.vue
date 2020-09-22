@@ -8,7 +8,7 @@
             <!-- <el-form-item label="店铺名称:" prop="shopName">
                 <el-input v-model="form.shopName" style="width:182px;" placeholder="10个汉字"></el-input>
             </el-form-item> -->
-            <el-form-item label="姓名:" prop="userName">
+            <el-form-item label="账号:" prop="userName">
                 <el-input v-model="form.userName" style="width:182px;" placeholder="10个汉字" :disabled="isEdit"></el-input>
             </el-form-item>
             <el-form-item label="手机号:" prop="mobile">
@@ -29,8 +29,8 @@
             </el-form-item>
             <el-form-item label="同步店铺:" prop="shopInfoIds">
                 <el-checkbox-group v-model="form.shopInfoIds" class="inline">
-                    <el-checkbox 
-                    v-for="item in shops" 
+                    <el-checkbox
+                    v-for="item in shops"
                     :label="String(item.id)"
                     :key="String(item.id)"
                     style="display:block; width:100px;">
@@ -137,7 +137,7 @@ export default {
         shopInfoId:'',
         startIndex:1,
         pageSize:100,
-      } 
+      }
       this._apis.set.getRoleList(query).then(response =>{
         this.roles = response.list
         if(this.roles.length){
@@ -157,7 +157,7 @@ export default {
     handleShop(roleName){
       if(this.accountInfo && this.accountInfo.roleNames){
         this.accountInfo.roleNames.split(',')[0] !=roleName && (this.form.shopInfoIds = [])
-      }      
+      }
       let query = {
           cid:this.cid,
           roleName:roleName,
@@ -172,7 +172,7 @@ export default {
                 item.id == id && newShops.push(item)
             })
         })
-        this.shops = JSON.parse(JSON.stringify(newShops)) 
+        this.shops = JSON.parse(JSON.stringify(newShops))
       }).catch(error =>{
         this.$message.error(error);
       })
@@ -202,7 +202,7 @@ export default {
             }).catch(error =>{
               this.loading = false
               this.$message.error(error);
-            }) 
+            })
         }else{//新建子账号
             let query = {
                cid:this.cid,
@@ -212,7 +212,7 @@ export default {
                mcOrganizationId:0,
                roleName:this.form.roleName,
                shopInfoIds:this.form.shopInfoIds
-           } 
+           }
             this._apis.set.newSubAccount(query).then(response =>{
               this.loading = false
               this.$message.success('添加成功！');

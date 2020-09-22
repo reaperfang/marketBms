@@ -59,7 +59,7 @@
                   <el-button type="text" class="more" @click="showMoreAreaInfoList(scope.row)" v-if="scope.row.areaInfoList && scope.row.areaInfoList.length > 4">更多</el-button>
                 </template>
               </el-table-column>
-              <el-table-column :label="one" width="250" align="center">
+              <el-table-column :label="one" min-width="300" align="center">
                 <template slot-scope="scope">
                   <!-- <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.theFirst"></el-input> -->
                   <el-input-number  size="large" :disabled="$route.query.mode == 'look'" style="width: 160px"  v-model="scope.row.theFirst" controls-position="right" :min="0" ></el-input-number>
@@ -72,7 +72,7 @@
                   <el-input-number  size="large" :disabled="$route.query.mode == 'look'" style="width: 160px"  v-model="scope.row.freight" controls-position="right" :min="0" ></el-input-number>
                 </template>
               </el-table-column>
-              <el-table-column :label="two" width="250" align="center">
+              <el-table-column :label="two" min-width="300" align="center">
                 <template slot-scope="scope">
                   每增加
                   <!-- <el-input :disabled="$route.query.mode == 'look'" style="width: 120px" type="number" min="0" v-model="scope.row.superaddition"></el-input> -->
@@ -87,7 +87,7 @@
                   <el-input-number  size="large" :disabled="$route.query.mode == 'look'" style="width: 160px"  v-model="scope.row.renew" controls-position="right" :min="0" ></el-input-number>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" align="center">
+              <el-table-column label="操作" align="center" fixed="right">
                 <template slot-scope="scope">
                   <span @click="deleteRow(scope.$index)" v-if="scope.$index != 0 && $route.query.mode != 'look'" class="blue">删除</span>
                 </template>
@@ -507,8 +507,9 @@ export default {
 <style lang="scss" scoped>
 .new-template {
   background-color: #fff;
+  height:100%;
   h2 {
-    padding: 18px 0 10px 20px;
+    padding: 20px 0 10px 20px;
     font-size:14px;
     font-weight:500;
     color:rgba(68,67,75,1);
@@ -532,19 +533,19 @@ export default {
       margin: 0 20px;
       border-top: 1px dashed rgba(211, 211, 211, 1);
       .table {
-        border: 1px solid #D0D6E4;
+        border: 1px solid #DADAE3;
         border-bottom: 0;
         /deep/ th.is-leaf {
           border:0;
         }
         /deep/ td {
-          border-bottom: 1px solid #D0D6E4;
+          border-bottom: 1px solid #DADAE3;
         }
         /deep/ th>.cell {
           line-height: 30px;
         }
-        &::before {
-          height: 0;
+        .blue {
+          cursor: pointer;
         }
         .more {
 

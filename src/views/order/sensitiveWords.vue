@@ -117,6 +117,7 @@ export default {
     .sensitive-words {
         background-color: #fff;
         padding: 20px;
+        height:100%;
         .title {
             .words-label {
                 font-size: 16px;

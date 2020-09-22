@@ -57,7 +57,7 @@
             <div class="export-header">
                 <p>已选择 <span>{{multipleSelection.length}}</span> 项，全部<span>{{total}}</span>项</p>
                 <el-tooltip class="item" effect="dark" content="当前最多支持导出1000条数据" placement="top">
-                <el-button v-permission="['订单', '售后管理', '默认页', '导出']" class="border-button" @click="exportOrder">导出</el-button>
+                <el-button style="margin-top: -20px;" v-permission="['订单', '售后管理', '默认页', '导出']" class="border-button" @click="exportOrder">导出</el-button>
                 </el-tooltip>
             </div>
             <el-table
@@ -74,7 +74,8 @@
                 </el-table-column>
                 <el-table-column
                     prop="code"
-                    label="售后单编号">
+                    label="售后单编号"
+                    width="200">
                 </el-table-column>
                 <el-table-column
                     prop="type"
@@ -85,7 +86,8 @@
                 </el-table-column>
                 <el-table-column
                     prop="orderCode"
-                    label="订单编号">
+                    label="订单编号"
+                    width="200">
                 </el-table-column>
                 <el-table-column
                     prop="memberName"
@@ -100,7 +102,8 @@
                 </el-table-column>
                 <el-table-column
                     prop="createTime"
-                    label="申请时间">
+                    label="申请时间"
+                    width="162">
                 </el-table-column>
                 <el-table-column label="操作" :width="computeWidth" fixed="right">
                     <template slot-scope="scope">
@@ -122,7 +125,7 @@
             </div>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
         </div>
-        <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :title="title" @reject="rejectHandler" @confirm="confirmHandler" :data="currentData" :expressNo="expressNo" :expressCompanys="expressCompanys"></component>
+        <component ref="sunComponent" v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit" :title="title" @reject="rejectHandler" @confirm="confirmHandler" :data="currentData" :expressNo="expressNo" :expressCompanys="expressCompanys" :updateStatusDisabled.sync="updateStatusDisabled"></component>
     </div>
 </template>
 <script>
@@ -198,7 +201,8 @@ export default {
             checkedAll: false,
             isIndeterminate: false,
             expressCompanys: '',
-            expressNo: ''
+            expressNo: '',
+            updateStatusDisabled: false
         }
     },
     created() {
@@ -213,8 +217,10 @@ export default {
                 return '232'
             } else if(this.tableData.some(item => item.exchangeConfirmation ==1  &&  (item.isSellerReceived == 0))){
                 return '130'
+            } else if(this.tableData.some(item => item.orderAfterSaleStatus == 2 && item.type != 3 && item.exchangeConfirmation == 1 && item.deliveryWay == 1 && item.orderAfterSaleStatus == 2 && item.type != 2)) {
+                return '155'
             } else if(this.tableData.some(item => item.orderAfterSaleStatus == 0 || item.orderAfterSaleStatus == 2)){
-                return '100'
+                return '130'
             } else {
                 return '60'
             }
@@ -246,6 +252,8 @@ export default {
             }
              else if(code == 5) {
                 return '已关闭'
+            } else if(code == 6 || code == 7) {
+                return '待处理'
             }
         }
     },
@@ -359,13 +367,21 @@ export default {
             console.log(value)
             if(value.status == 1) {
                 // 通过
-                this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 1}).then((res) => {
-                    console.log(res)
-                    this.getList()
-                    this.$message.success('审核成功！');
-                }).catch(error => {
-                    this.$message.error(error);
-                })
+                if(this.multipleSelection.some(val => val.type == 2)) {
+                    this.currentDialog = 'ExchangeGoodsDialog'
+                    this.currentData = {id: this.multipleSelection.map(val => val.id).join(','), type: 2}
+                    this.dialogVisible = true
+                    return
+                } else {
+                    this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 1}).then((res) => {
+                        console.log(res)
+                        this.getList()
+                        this.$message.success('审核成功！');
+                        this.$refs['sunComponent'].visible = false
+                    }).catch(error => {
+                        this.$message.error(error);
+                    })
+                }
             } else {
                 this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 5, refuseReason: value.refuseReason}).then((res) => {
                     console.log(res)
@@ -391,28 +407,33 @@ export default {
             })
         },
         updateStatus(row) {
-            let _orderAfterSaleStatus
+            if(!this.updateStatusDisabled) {
+                this.updateStatusDisabled = true
 
-            if(row.type == 3) {
-                _orderAfterSaleStatus = 2
-            } else {
-                _orderAfterSaleStatus = 1
-            }
-            if(row.type == 2) {
-                let _row = JSON.parse(JSON.stringify(row))
+                let _orderAfterSaleStatus
 
-                this.currentDialog = 'ExchangeGoodsDialog'
-                this.currentData = _row;
-                this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
-                this.dialogVisible = true
-                return
+                if(row.type == 3) {
+                    _orderAfterSaleStatus = 2
+                } else {
+                    _orderAfterSaleStatus = 1
+                }
+                if(row.type == 2) {
+                    let _row = JSON.parse(JSON.stringify(row))
+
+                    this.currentDialog = 'ExchangeGoodsDialog'
+                    this.currentData = _row;
+                    this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
+                    this.dialogVisible = true
+                    return
+                }
+                this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
+                    this.getList();
+                    this.$message.success('审核成功！');
+                    this.updateStatusDisabled = true
+                }).catch(error => {
+                    this.$message.error(error);
+                })
             }
-            this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
-                this.getList();
-                this.$message.success('审核成功！');
-            }).catch(error => {
-                this.$message.error(error);
-            })
         },
         // 换货确认
         confirmHandler(value) {
@@ -487,7 +508,6 @@ export default {
 .after-sales {
     .search {
         background-color: #fff;
-        margin: 0 20px;
         .form-inline {
             padding: 20px;
         }
@@ -507,7 +527,6 @@ export default {
     .content {
         background-color: #fff;
         padding: 20px;
-        margin: 0 20px;
         padding-top: 23px;
         p {
             font-size: 16px;
@@ -584,6 +603,15 @@ export default {
 /deep/ .input-with-select .el-input-group__prepend {
     background-color: #fff;
 }
+/deep/.el-table td:nth-child(1){
+         padding-left:20px;
+         .cell {
+            text-overflow: clip;
+         }
+     }
+     /deep/ .el-table--small td, /deep/  .el-table--small th {
+        padding: 16px 0;
+    }
 </style>
 
 

@@ -1,7 +1,7 @@
 <template>
     <div class="aftermarketDeliveryInformation">
         <!-- 普通快递 -->
-        <template v-if="orderAfterSale.deliveryWay == 1">
+        <template v-if="orderAfterSale.deliveryWay == 1 || orderAfterSale.deliveryWay == 4">
         <div v-if="orderAfterSale.returnExpressNo" class="delivery-information-header">
             用户退货
         </div>
@@ -30,12 +30,12 @@
                         <p>
                             <span>收货信息</span>
                             <span>{{orderSendReceivedAddress.receivedName}} {{orderSendReceivedAddress.receivedPhone && '/'}} {{orderSendReceivedAddress.receivedPhone}}</span>
-                            <span>{{orderSendReceivedAddress.receivedProvinceName}} {{orderSendReceivedAddress.receivedCityName}} {{orderSendReceivedAddress.receivedAreaName}} {{orderSendReceivedAddress.receivedDetail}} </span>
+                            <span>{{orderSendReceivedAddress.receiveAddress}} {{orderSendReceivedAddress.receivedDetail}} </span>
                         </p>
                         <p>
                             <span>发货信息</span>
                             <span>{{orderSendReceivedAddress.sendName}} {{orderSendReceivedAddress.sendPhone && '/'}} {{orderSendReceivedAddress.sendPhone}}</span>
-                            <span>{{orderSendReceivedAddress.sendProvinceName}} {{orderSendReceivedAddress.sendCityName}} {{orderSendReceivedAddress.sendAreaName}} {{orderSendReceivedAddress.sendDetail}} </span>
+                            <span>{{orderSendReceivedAddress.sendAddress}} {{orderSendReceivedAddress.sendDetail}} </span>
                         </p>
                     </div>
                     <el-table
@@ -98,7 +98,7 @@
                     </div>
                     <div class="header-righter">
                         <div class="header-righter-item">{{orderAfterSale | businessFilter(orderAfterSaleSendInfo.expressNos)}}</div>
-                        <div class="header-righter-item">发货人：{{orderAfterSaleSendInfo.sendName}}</div>
+                        <div class="header-righter-item">发货人：{{tenantName}}</div>
                         <div class="header-righter-item">{{orderAfterSaleSendInfo.sendTime}}</div>
                         <div @click="showContent = !showContent">
                             <i v-if="showContent" class="el-icon-caret-top pointer"></i>
@@ -111,12 +111,12 @@
                         <p>
                             <span>收货信息</span>
                             <span>{{orderAfterSaleSendInfo.receivedName}} / {{orderAfterSaleSendInfo.receivedPhone}}</span>
-                            <span>{{orderAfterSaleSendInfo.receivedProvinceName}} {{orderAfterSaleSendInfo.receivedCityName}} {{orderAfterSaleSendInfo.receivedAreaName}} {{orderAfterSaleSendInfo.receivedDetail}} </span>
+                            <span>{{orderAfterSaleSendInfo.receiveAddress}} {{orderAfterSaleSendInfo.receivedDetail}} </span>
                         </p>
                         <p>
                             <span>发货信息</span>
                             <span>{{orderAfterSaleSendInfo.sendName}} / {{orderAfterSaleSendInfo.sendPhone}}</span>
-                            <span>{{orderAfterSaleSendInfo.sendProvinceName}} {{orderAfterSaleSendInfo.sendCityName}} {{orderAfterSaleSendInfo.sendAreaName}} {{orderAfterSaleSendInfo.sendDetail}} </span>
+                            <span>{{orderAfterSaleSendInfo.sendAddress}} {{orderAfterSaleSendInfo.sendDetail}} </span>
                         </p>
                     </div>
                     <el-table
@@ -328,6 +328,7 @@ export default {
             expressCompanys: '',
             isTrace: 0,
             reject: false,
+            tenantName: ''
         }
     },
     filters: {
@@ -395,8 +396,21 @@ export default {
     },
     created() {
         this.getIsTrace();
+        this.getShopInfo()
     },
     methods: {
+        getShopInfo() {
+            let id = this.cid;
+            this._apis.set
+                .getShopInfo({ id: id })
+                .then(response => {
+                    console.log(response)
+                    this.tenantName = response.tenantName
+                })
+                .catch(error => {
+                    this.$message.error('查询失败');
+                });
+            },
         showLogistics(expressNo, isComstomer, id) {
             this.expressNo = expressNo
             if(isComstomer) {

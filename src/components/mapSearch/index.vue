@@ -20,11 +20,11 @@
           <el-pagination 
             v-if="pois.length > 0"
             class="pagination"
-            background
+            :background="true"
             small
             :pager-count="5"
             :total="totalNum" 
-            layout="prev, pager, next"
+            layout="prev, pager, next, sizes"
             @current-change="handleCurrentChange"
             :current-page.sync="page"
             :page-size="pageSize"
@@ -40,6 +40,7 @@
 <script>
 import mapBase from "@/components/MapBase";
 import appConfig from '@/system/appConfig';
+import { debounce } from '@/utils/base.js'
 export default {
   name: "mapSearch",
   extends: mapBase,
@@ -77,8 +78,12 @@ export default {
       totalNum: 0,
       keyword: '',
       markerClusterer: null,
-      isLoded: false
+      isLoded: false,
+      debounceSearch: null
     };
+  },
+  created() {
+     this.debounceSearch = debounce(this.search)
   },
   methods: {
     getParentAreaCode(tencentCode) {
@@ -122,7 +127,8 @@ export default {
     },
     handleCurrentChange(val) {
       this.page = val
-      this.search()
+      this.debounceSearch()
+      // this.search()
     },
     //实例初始化结束
     inited() {
@@ -218,10 +224,15 @@ export default {
     },
     handleKeyWordSearch() {
       this.page = 1
-      this.search()
+      this.debounceSearch()
     },
     //执行搜索
     search() {
+      // if (!this.keyword) {
+      //   this.totalNum = 0
+      //   this.pois = []
+      //   return false
+      // }
       this.clearAllMaker()
       if (this.info) {
         this.info.close();
@@ -239,7 +250,7 @@ export default {
 
       this.getSearch(data).then((response) => {
         console.log(1111)
-        this.totalNum = response.count
+        this.totalNum = response.count >= 200 ? 200 : response.count
         this.pois = response.data || []
         if (this.pois.length > 0) {
           this.addMarkers(response)
@@ -255,6 +266,11 @@ export default {
       })
     },
     handlePropSearch(keyword) {
+      if (!keyword) {
+        this.totalNum = 0
+        this.pois = []
+        return false
+      }
       console.log('----keyword---', keyword)
       this.keyword = keyword
       this.page = 1

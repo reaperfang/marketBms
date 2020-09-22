@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" :title="title" width="640px" :showFooter="showFooter">
+    <DialogBase :visible.sync="visible" @submit="submit" :title="title" width="640px" :showFooter="showFooter" @close="close">
         <div>
             <div>
                 <div class="header">
@@ -10,15 +10,22 @@
                     <el-form ref="ruleForm" label-width="150px" class="demo-ruleForm">
                         <div v-for="(item, index) in data.list" :key="index">
                             <el-form-item label="已选快递公司：">
-                                <el-select disabled v-model="item.expressCompanyCodes" placeholder="请选择">
-                                    <el-option v-for="(item, index) in data.expressCompanyList" :key="index" :label="item.expressCompany" :value="item.expressCompanyCode"></el-option>
-                                </el-select>
+                                <template v-if="item.expressCompanyCodes">
+                                    <el-select disabled v-model="item.expressCompanyCodes" placeholder="请选择">
+                                        <el-option v-for="(item, index) in data.expressCompanyList" :key="index" :label="item.expressCompany" :value="item.expressCompanyCode"></el-option>
+                                    </el-select>
+                                </template>
+                                <template v-else-if="item.orderAfterSaleSendInfo.expressCompanyCodes">
+                                    <el-select disabled v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
+                                        <el-option v-for="(item, index) in data.expressCompanyList" :key="index" :label="item.expressCompany" :value="item.expressCompanyCode"></el-option>
+                                    </el-select>
+                                </template>
                             </el-form-item>
                             <el-form-item label="电子面单规格尺寸：" prop="specificationSize">
-                                <el-select v-model="item.specificationSize" placeholder="请选择" @change="specificationSizeChange(item.specificationSize, index)">
+                                <el-select :class="{error: item.showError}" v-model="item.specificationSize" placeholder="请选择" @change="specificationSizeChange(item.specificationSize, index)">
                                     <el-option v-for="(item, index) in item.sizeList" :key="index" :label="item.sizeSpecs" :value="item.templateSize"></el-option>
                                 </el-select>
-                                <p v-if="item.showError">请选择</p>
+                                <p style="color: #FD4C2B;" v-if="item.showError">必填项</p>
                             </el-form-item>
                         </div>
                     </el-form>
@@ -26,7 +33,7 @@
             </div>
             <div class="footer">
                 <el-button @click="submit" type="primary">继续</el-button>
-                <el-button @click="visible = false">取消</el-button>
+                <el-button @click="cancelHandler">取消</el-button>
             </div>
         </div>
     </DialogBase>
@@ -48,7 +55,39 @@ export default {
             }
         }
     },
+    created() {
+        this.data.list.forEach((item, index) => {
+            if(item.sizeList && (item.sizeList.length == 1)) {
+                this.data.list.splice(index, 1, Object.assign({}, this.data.list[index], {
+                    specificationSize: item.sizeList[0].templateSize
+                }))
+            } else {
+                this.data.list.splice(index, 1, Object.assign({}, this.data.list[index], {
+                    specificationSize: ''
+                }))
+            }
+        })
+    },
     methods: {
+        close() {
+            this.data.list.forEach((item, index) => {
+                this.data.list.splice(index, 1, Object.assign({}, this.data.list[index], {
+                    specificationSize: '',
+                    showError: false
+                }))
+            })
+            this.$emit('cancel')
+        },
+        cancelHandler() {
+            this.visible = false
+            this.data.list.forEach((item, index) => {
+                this.data.list.splice(index, 1, Object.assign({}, this.data.list[index], {
+                    specificationSize: '',
+                    showError: false
+                }))
+            })
+            this.$emit('cancel')
+        },
         specificationSizeChange(value, index) {
             if(!value) {
                 this.$set(this.data.list, index, Object.assign({}, this.data.list[index], {
@@ -63,9 +102,28 @@ export default {
         submit() {
             let _params = JSON.parse(JSON.stringify(this.params))
 
-            _params.sendInfoDtoList.forEach((val, index) => {
-                val.specificationSize = this.data.list[index].specificationSize
-            })
+            
+            if(_params.sendInfoDtoList) {
+                _params.sendInfoDtoList.forEach((val, index) => {
+                    let listItem = this.data.list.find(item => item.expressCompanyCodes == val.expressCompanyCodes)
+
+                    if(listItem && listItem.specificationSize) {
+                        val.specificationSize = listItem.specificationSize
+                    } else {
+                        val.specificationSize = ''
+                    }
+                })
+            } else if(_params.orderAfterSaleSendInfoDtoList) {
+                _params.orderAfterSaleSendInfoDtoList.forEach((val, index) => {
+                    let listItem = this.data.list.find(item => item.express.expressCompanyCodes == val.expressCompanyCodes)
+
+                    if(listItem && listItem.specificationSize) {
+                        val.specificationSize = listItem.specificationSize
+                    } else {
+                        val.specificationSize = ''
+                    }
+                })
+            }
             this.data.list.forEach((item, index) => {
                 if(!item.specificationSize) {
                     this.$set(this.data.list, index, Object.assign({}, this.data.list[index], {
@@ -80,6 +138,31 @@ export default {
             if(this.data.list.find(item => !item.specificationSize)) {
                 return
             }
+            this.data.list.forEach((item, index) => {
+                let name
+
+                if(item.orderAfterSaleSendInfo) {
+                    name = this.data.expressCompanyList.find(val => val.expressCompanyCode == item.express.expressCompanyCode).expressCompany
+                } else {
+                    name = this.data.expressCompanyList.find(val => val.expressCompanyCode == item.expressCompanyCodes).expressCompany
+                }
+
+                this._apis.order
+                .editorExpressSize({
+                    id: item.express ? item.express.id : '',
+                    cid: item.express ? item.express.cid : '',
+                    specificationSize: item.specificationSize.split(' ')[1],
+                    sizeSpecs: item.specificationSize.split(' ')[0],
+                    expressCompanyCode: item.orderAfterSaleSendInfo ? item.express.expressCompanyCode : item.expressCompanyCodes,
+                    name
+                })
+                .then(res => {
+                    
+                })
+                .catch(error => {
+                    this.$message.error(error);
+                });
+            })
             this.orderSendGoodsHander(_params)
             this.visible = false
         }
@@ -96,6 +179,10 @@ export default {
                 this.$emit('update:dialogVisible', val)
             }
         },
+        cid() {
+            let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+            return shopInfo.id;
+        },
     },
     props: {
         data: {
@@ -107,7 +194,7 @@ export default {
         },
         title: {
             type: String,
-            required: true
+            default: '提示'
         },
         orderSendGoodsHander: {
 
@@ -116,6 +203,9 @@ export default {
 
         },
         list: {
+
+        },
+        express: {
 
         }
     },
@@ -147,7 +237,7 @@ export default {
        }
    }
    /deep/ .el-input {
-       width: 360px;
+       width: 360px!important;
    }
    /deep/ .el-dialog__body {
        padding: 40px 40px 35px 40px;
@@ -162,6 +252,10 @@ export default {
     .content-box::-webkit-scrollbar {
         width: 8px;
         height: 8px;
+    }
+    /deep/ .el-select.error .el-input__inner {
+        border: 1px solid #FD4C2B;
+        border-radius: 4px;
     }
 </style>
 

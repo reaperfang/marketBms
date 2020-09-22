@@ -19,13 +19,13 @@
         <el-button type="primary" @click="_routeTo('m_templateManageIndex', {'tab': 'myTemplate'})">新建页面</el-button>
       </div>
     </div>
-    <div class="table" v-calcHeight="300">
+    <div class="table">
       <p>微页面（共{{total || 0}}个）</p>
       <el-table :data="tableData" :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"
           :selectable='selectInit'
-          width="30">
+          width="34">
         </el-table-column>
         <el-table-column prop="name" label="页面名称">
           <template slot-scope="scope">
@@ -79,13 +79,14 @@
       </div>
       <div class="pagination" v-if="tableData.length">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(startIndex) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
           >
         </el-pagination>
       </div>
@@ -291,12 +292,23 @@ export default {
   padding-top:0;
 }
 /deep/ .table{
-  overflow-y: auto;
+  // overflow-y: auto;
   margin-top:20px;
   background:#fff;
   padding:20px;
+  padding-bottom:50px;
   p{
     margin-bottom:20px;
+  }
+}
+/deep/ .el-table-column--selection .cell {
+  padding-left: 20px;
+  overflow: inherit;
+}
+.multiple_selection {
+  margin-left: 20px;
+  /deep/ .el-checkbox__label {
+    padding-left: 18px;
   }
 }
 /deep/ thead th{
@@ -307,7 +319,7 @@ export default {
   text-align: center;
   &:nth-child(2) {
       text-align: left;
-      padding-left: 20px;
+      padding-left: 10px;
   }
 }
 /deep/ .el-table td{

@@ -11,8 +11,8 @@
       v-loading="loading"
       @sort-change="changeSort"
     >
-      <el-table-column type="selection" :reserve-selection="true"></el-table-column>
-      <el-table-column prop="memberSn" label="用户ID"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" fixed="left"></el-table-column>
+      <el-table-column prop="memberSn" label="用户ID" fixed="left" :width="110"></el-table-column>
       <el-table-column label="用户信息" :width="163">
         <template slot-scope="scope">
           <div class="clearfix icon_cont">
@@ -23,7 +23,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="phone" label="手机号" :width="150"></el-table-column>
-      <el-table-column label="身份" :width="130">
+      <el-table-column label="身份">
         <template slot-scope="scope">
           <div class="clearfix iden_cont">
             <span class="fl">{{scope.row?scope.row.memberType:""}}</span>
@@ -36,22 +36,22 @@
       </el-table-column>
       <el-table-column label="余额" sortable="custom" prop="balance">
         <template slot-scope="scope">
-          ¥{{scope.row.balance}}
+          ¥{{scope.row.balance || '0.00'}}
         </template>
       </el-table-column>
       <el-table-column prop="score" label="积分" sortable="custom"></el-table-column>
-      <el-table-column label="累计消费金额" sortable="custom" prop="totalDealMoney">
+      <el-table-column label="累计消费金额" sortable="custom" prop="totalDealMoney" :width="150">
         <template slot-scope="scope">
-          ¥{{scope.row.totalDealMoney}}
+          ¥{{scope.row.totalDealMoney || 0.00}}
         </template>
       </el-table-column>
-      <el-table-column prop="dealTimes" label="购买次数" sortable="custom"></el-table-column>
-      <el-table-column label="客单价（元）" prop="perUnitPrice" sortable="custom">
+      <el-table-column prop="dealTimes" label="购买次数" sortable="custom" :width="150"></el-table-column>
+      <el-table-column label="客单价（元）" prop="perUnitPrice" sortable="custom" :width="150">
         <template slot-scope="scope">
-          ¥{{scope.row.perUnitPrice}}
+          ¥{{scope.row.perUnitPrice || 0.00}}
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200">
+      <el-table-column label="操作" width="200" fixed="right">
         <template slot-scope="scope">
           <div class="btns clearfix">
             <span class="s1" @click="_routeTo('clientInfo',{id: scope.row.id})" v-permission="['用户', '全部用户', '默认页面', '查看详情']">详情</span>
@@ -63,23 +63,24 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="page_styles">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="Number(startIndex) || 1"
-        :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
-        :page-size="pageSize*1"
-        :total="total*1"
-        layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
-    </div>
     <div class="a_line">
       <el-checkbox v-model="checkAll" @change="handleChange" style="margin-right: 20px">全选</el-checkbox>
       <!-- <el-button type="primary" @click="batchDelete">批量删除</el-button> -->
       <el-button class="border_btn border-button" @click="batchAddTag" v-permission="['用户', '全部用户', '默认页面', '打标签']">打标签</el-button>
       <el-button class="border_btn border-button" @click="batchAddBlack" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
       <el-button class="border_btn border-button" @click="batchRemoveBlack" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">取消黑名单</el-button>
+    </div>
+    <div class="page_styles">
+      <el-pagination
+        :background="true"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="Number(startIndex) || 1"
+        :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
+        :page-size="pageSize*1"
+        :total="total*1"
+        layout="prev, pager, next, sizes"
+      ></el-pagination>
     </div>
     <component
       :is="currentDialog"
@@ -340,6 +341,9 @@ export default {
         &:nth-child(2) {
             text-align: left;
         }
+        &:nth-child(3) {
+            text-align: left;
+        }
         &:nth-child(5) {
             text-align: left;
         }
@@ -363,6 +367,9 @@ export default {
         padding-left: 20px;
         padding-right: 10px;
     }
+/deep/ .el-checkbox__label{
+  padding-left: 6px;
+}
 .acTable_container{
   position: relative;
   margin-top: 60px;
@@ -373,10 +380,11 @@ export default {
   }
 }
 .a_line {
-  padding-left: 14px;
+  margin: 20px 0 40px 22px;
 }
 .page_styles{
   text-align: center;
+  margin-bottom: 30px;
 }
 .icon_cont{
   width: 163px;

@@ -53,32 +53,32 @@
           <p class="title1">待办提醒：</p>
           <div class="dealt_list">
             <div class="dealt_list_l">
-              <p>
-                <span class="name">待发货订单</span>
-                <router-link to="/order/deliveryManagement?status=3">
+              <router-link to="/order/deliveryManagement?status=3">
+                <p class="dealt_item_1">
+                  <span class="name">待发货订单</span>
                   <span class="num">{{staySendCount || 0}}</span>
-                </router-link>
-              </p>
-              <p>
-                <span class="name">商品售罄</span>
-                <router-link to="/goods/goodsList?status=-1">
+                </p>
+              </router-link>
+              <router-link to="/goods/goodsList?status=-1">
+                <p class="dealt_item_2">
+                  <span class="name">商品售罄</span>
                   <span class="num">{{toBeSoldOut || 0}}</span>
-                </router-link>
-              </p>
+                </p>
+              </router-link>
             </div>
             <div class="dealt_list_r">
-              <p>
-                <span class="name">维权待审核</span>
-                <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=0">
+              <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=0">
+                <p class="dealt_item_3">
+                  <span class="name">维权待审核</span>
                   <span class="num">{{stayAuthCount || 0}}</span>
-                </router-link>
-              </p>
-              <p>
-                <span class="name">维权中订单</span>
-                <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=2">
+                </p>
+              </router-link>
+              <router-link to="/order/afterSalesManagement?orderAfterSaleStatus=2">
+                <p class="dealt_item_4">
+                  <span class="name">维权中订单</span>
                   <span class="num">{{stayProcessedCount || 0}}</span>
-                </router-link>
-              </p>
+                </p>
+              </router-link>
             </div>
           </div>
         </div>
@@ -149,49 +149,57 @@
           <div class="main">
             <div>
               <p class="title3">微信小程序商城</p>
-              <div v-if="!isReleaseWX && !isEmpowerWX && wxQrcode">
-                <img  class="erweima" :src="wxQrcode" alt/>
-                <p class="opt">
-                  <el-button @click="downs(wxQrcode,'微信小程序商城二维码')">下载</el-button>
-                </p>
-              </div>
-              <div v-if="isEmpowerWX">
-                <img  :src="require('@/assets/images/profile/no_empower.png')" alt/>
-                <p class="title4">您当前还未授权小程序</p>
-                <p class="opt">
-                  <el-button @click="linkTo({text:'绑定微信小程序'})">立即授权</el-button>
-                </p>
-              </div>
-              <div v-if="!isEmpowerWX &&  isReleaseWX">
-                <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="no_release" alt/>
-                <p class="title4">您当前还未发布小程序</p>
-                <p class="opt">
-                  <el-button @click="linkTo({text:'绑定微信小程序'})">立即发布</el-button>
-                </p>
+              <div style="position:relative;">
+                <div class="el-loading-mask profile-wxsc-loading"><div class="el-loading-spinner"><svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg><!----></div></div>
+                
+                <div v-if="!isReleaseWX && !isEmpowerWX && wxQrcode" class="profile-wxsc-item">
+                  <img  class="erweima" :src="wxQrcode" alt/>
+                  <p class="opt">
+                    <el-button @click="downs(wxQrcode,'微信小程序商城二维码')">下载</el-button>
+                  </p>
+                </div>
+                <div v-if="isEmpowerWX && isEmpowerWX === 'true'"  class="profile-wxsc-item">
+                  <img  :src="require('@/assets/images/profile/no_empower.jpg')" class="no_isEmpower" alt/>
+                  <p class="title4">您当前还未授权小程序</p>
+                  <p class="opt">
+                    <el-button @click="linkTo({text:'绑定微信小程序'})">立即授权</el-button>
+                  </p>
+                </div>
+                <div v-if="!isEmpowerWX && isReleaseWX"  class="profile-wxsc-item">
+                  <img  :src="require('@/assets/images/profile/no_release_wx.png')"  class="no_release" alt/>
+                  <p class="title4">您当前还未发布小程序</p>
+                  <p class="opt">
+                    <el-button @click="linkTo({text:'绑定微信小程序'})">立即发布</el-button>
+                  </p>
+                </div>
               </div>
             </div>
             <div>
               <p class="title3">微信公众号商城</p>
-              <div v-if="!isReleaseGZ && !isEmpowerGZ && gzQrcode">
-                <img  class="erweima" :src="gzQrcode" alt>
-                <p class="opt">
-                  <el-button @click="downs(gzQrcode,'微信公众号商城二维码')">下载</el-button>
-                  <el-button v-clipboard:copy="gzLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</el-button>
-                </p>
-              </div>
-              <div v-if="isEmpowerGZ">
-                <img  :src="require('@/assets/images/profile/no_empower.png')" alt/>
-                <p class="title4">您当前还未授权公众号</p>
-                <p class="opt">
-                  <el-button @click="linkTo({text:'绑定微信公众号'})">立即授权</el-button>
-                </p>
-              </div>
-              <div v-if="!isEmpowerGZ && isReleaseGZ">
-                <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="no_release" alt/>
-                <p class="title4">您当前还未设置商城首页</p>
-                <p class="opt">
-                  <el-button @click="linkTo({text:'设置首页',url:'/shop/m_wxShopIndex'})">设置首页</el-button>
-                </p>
+              <div style="position:relative;">
+                <div class="el-loading-mask profile-wxsc-loading"><div class="el-loading-spinner"><svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg><!----></div></div>
+
+                <div v-if="!isReleaseGZ && !isEmpowerGZ && gzQrcode"  class="profile-wxsc-item">
+                  <img  class="erweima" :src="gzQrcode" alt>
+                  <p class="opt">
+                    <el-button @click="downs(gzQrcode,'微信公众号商城二维码')">下载</el-button>
+                    <el-button v-clipboard:copy="gzLink" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</el-button>
+                  </p>
+                </div>
+                <div v-if="isEmpowerGZ && isEmpowerGZ === 'true'"  class="profile-wxsc-item">
+                  <img  :src="require('@/assets/images/profile/no_empower.jpg')" class="no_isEmpower" alt/>
+                  <p class="title4">您当前还未授权公众号</p>
+                  <p class="opt">
+                    <el-button @click="linkTo({text:'绑定微信公众号'})">立即授权</el-button>
+                  </p>
+                </div>
+                <div v-if="!isEmpowerGZ && isReleaseGZ"  class="profile-wxsc-item">
+                  <img  :src="require('@/assets/images/profile/no_release_gz.png')" class="no_release" alt/>
+                  <p class="title4">您当前还未设置商城首页</p>
+                  <p class="opt">
+                    <el-button @click="linkTo({text:'设置首页',url:'/shop/m_wxShopIndex'})">设置首页</el-button>
+                  </p>
+                </div>
               </div>
             </div>
           </div>  
@@ -302,19 +310,29 @@ export default {
       qrCode: "",//客户工作台二维码
       wxQrcode:"",//小程序二维码
       gzQrcode:"",//公众号二维码
-      isEmpowerWX:false,//微信小程序是否授权
-      isEmpowerGZ:false,//微信公众号是否授权
-      isReleaseWX:false,//微信小程序是否发布
-      isReleaseGZ:false,//微信公众号是否发布
+      isEmpowerWX:true,//微信小程序是否授权
+      isEmpowerGZ:true,//微信公众号是否授权
+      isReleaseWX:true,//微信小程序是否发布
+      isReleaseGZ:true,//微信公众号是否发布
       zxLink: `${process.env.ZX_HELP}`, //链接
       productNews: [],
       helpNews: [],
-      cid:''
+      cid:'',
+      isGetWXstatus:true,//是否获取到小程序状态数据
+      isGetGZstatus:true,//是否获取到公众号状态数据
     };
   },
 
   watch:{
     cid(newValue,oldValue){
+      console.log('????')
+      this.isEmpowerWX = true;
+      this.isEmpowerGZ = true;
+      this.isReleaseWX = true;
+      this.isReleaseGZ = true;
+
+      this.isGetWXstatus = true;
+      this.isGetGZstatus = true;
       return newValue;
     }
   },
@@ -370,6 +388,24 @@ export default {
         .catch(error => {
           console.log("error", error);
         });
+      
+      //判断是否有异常订单
+      // this._apis.shop
+      //   .getShopInfo({ id: this.cid })
+      //   .then(response => {
+      //     if (response.shopExpire == 2) {
+      //       this.$message({
+      //         showClose: true,
+      //         dangerouslyUseHTMLString: true,
+      //         message:'<p>您有{{}}条异常订单需要处理，<a>请查看</a></p>',
+      //         type: "warning",
+      //         duration: 0
+      //       });
+      //     }
+      //   })
+      //   .catch(error => {
+      //     console.log("error", error);
+      //   });
     },
 
     getLink(){
@@ -534,8 +570,8 @@ export default {
     isEmpower(){
       this._apis.profile
         .getwxBindStatus({id:this.cid}).then(response => {
-          this.isEmpowerWX = response.bindWechatApplet ? false : true
-          this.isEmpowerGZ = response.bindWechatAccount ? false : true
+          this.isEmpowerWX = response.bindWechatApplet ? false : 'true'
+          this.isEmpowerGZ = response.bindWechatAccount ? false : 'true'
         })
         .catch(error => {
           console.error(error);
@@ -546,10 +582,12 @@ export default {
     getIsReleaseWX(){
       this._apis.profile
         .getSmallRelease({id:this.cid}).then(response => {
-          this.isReleaseWX = response.status ? false :  true
+          this.isReleaseWX = response.status ? true :  false
+          this.isGetWXstatus = false
         })
         .catch(error => {
           console.error(error);
+          this.isGetWXstatus = false
         });
     },
 
@@ -558,9 +596,11 @@ export default {
       this._apis.shop
         .getHomePage({pageTag:0}).then(response => {
           this.isReleaseGZ = response ? false : true
+          this.isGetGZstatus = false
         })
         .catch(error => {
           console.error(error);
+          this.isGetGZstatus = false
         });
     },
 
@@ -580,8 +620,8 @@ export default {
       this._apis.shop
         .getQrcode({
           url: this.gzLink,
-          width: "80",
-          height: "80"
+          width: "120",
+          height: "120"
         })
         .then(response => {
           this.gzQrcode = `data:image/png;base64,${response}`;
@@ -678,13 +718,13 @@ export default {
             }
           }
           .dealt_list_l{  
-            p:nth-of-type(1){
+            .dealt_item_1{
               width: 94px;
               height: 110px;
               background:#FEEDE9;
               border-radius:8px;
             }
-            p:nth-of-type(2){
+            .dealt_item_2{
               width:94px;
               height:78px;
               background:#E8FAF5;
@@ -693,13 +733,13 @@ export default {
             }
           }
           .dealt_list_r{
-            p:nth-of-type(1){
+            .dealt_item_3{
               width: 94px;
               height: 78px;
               background:rgba(101,94,255,.1);
               border-radius:8px;
             }
-            p:nth-of-type(2){
+            .dealt_item_4{
               width:94px;
               height:110px;
               background:#FEEDE9;
@@ -758,22 +798,26 @@ export default {
               font-size: 14px;
               color: #161617;
               font-weight:500;
-              line-height: 70px;
+              line-height: 50px;
             }
             .title4{
               font-size: 12px;
               color: #92929B;
             }
             .erweima{
-              width: 76px;
-              height: 76px;
+              width: 120px;
+              height: auto;
+            }
+            .no_isEmpower{
+              width: auto;
+              height: 106px;
             }
             .no_release{
-              width: 61px;
-              height:61px;
+              width: auto;
+              height: 106px;
             }
             .opt{
-              margin-top: 20px;
+              margin-top: 10px;
               button{
                 color: #655EFF;
                 border: 1px solid #655EFF;
@@ -947,6 +991,17 @@ export default {
 .ml15{
   margin-left:15px;
 }
+.profile-wxsc-loading {
+  z-index: 1;
+  height: 120px;
+}
+.profile-wxsc-item {
+  z-index: 2;
+  position: relative;
+  background: #fff;
+}
+
+
 </style>
 
 

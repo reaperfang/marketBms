@@ -32,13 +32,14 @@
       </el-table>
       <div class="page_styles">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(startIndex) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
         ></el-pagination>
       </div>
     </div>
@@ -288,10 +289,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-/deep/ .el-dialog__header{
-    background: #f1f0ff;
-    border-radius: 10px 10px 0 0;
-}
 /deep/ .el-dialog{
     border-radius: 10px;
 }

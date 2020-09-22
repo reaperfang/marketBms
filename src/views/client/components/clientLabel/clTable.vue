@@ -22,7 +22,13 @@
           <span class="edit_span" v-else style="color:#000">{{scope.row.labelContains}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="labelCondition" label="标签条件"></el-table-column>
+      <el-table-column label="标签条件">
+        <template slot-scope="scope">
+          <div>
+            {{scope.row.labelCondition?scope.row.labelCondition.substring(0,scope.row.labelCondition.lastIndexOf(',')):""}}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="createTime" label="创建时间"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -38,20 +44,21 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="a_line">
+      <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
+      <el-button @click="batchDelete" class="marL20 border-button">批量删除</el-button>
+    </div>
     <div class="page_styles">
       <el-pagination
+        :background="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="Number(startIndex) || 1"
         :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
         :page-size="pageSize*1"
         :total="total*1"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="prev, pager, next, sizes"
       ></el-pagination>
-    </div>
-    <div class="a_line">
-      <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
-      <el-button @click="batchDelete" class="marL20 border-button">批量删除</el-button>
     </div>
   </div>
 </template>
@@ -208,6 +215,9 @@ export default {
     text-align: left;
   }
 }
+/deep/ .el-table--small td, .el-table--small th{
+  padding: 16px 0;
+}
 .marL20 {
   margin-left: 20px;
 }
@@ -216,6 +226,10 @@ export default {
   cursor: pointer;
 }
 .a_line {
-  padding-left: 17px;
+  margin: 20px 0 40px 16px;
+}
+.page_styles{
+  text-align: center;
+  margin-bottom: 30px;
 }
 </style>

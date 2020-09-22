@@ -49,14 +49,14 @@
            </p>
            <p class="pages">
               <el-pagination
+              :background="true"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="currentPage"
               :page-sizes="[10, 20, 30, 40]"
               :page-size="pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="total*1"
-              class="page_nav">
+              layout="prev, pager, next, sizes"
+              :total="total*1">
               </el-pagination>
            </p>
         </div>
@@ -449,7 +449,7 @@ export default {
             top:0;
             left:0;
             z-index: 2;
-            background-color:rgba(0,0,0,0.2);
+            background-color:rgba(0,0,0,0.6);
             padding: 20px 0px 0px 80px;
             display:none;
           }
@@ -545,7 +545,7 @@ export default {
 .pages{
   width: 100%;
   margin-top: 50px;
-  text-align: right;
+  text-align: center;
   .page_nav{
     display: inline-block;
   }
@@ -557,10 +557,10 @@ export default {
   display: inline-block;
 }
 .btn_groups{
-  border: 1px solid #655EFF !important;
+  border: 1px solid #fff !important;
   border-radius: 4px;
   background-color:transparent !important;
-  color: #655EFF !important;
+  color: #fff !important;
 }
 .btn_groups:hover{
   border: 1px solid #655EFF !important;
@@ -569,10 +569,10 @@ export default {
   color: #fff !important;
 }
 .btn_tailor{
-  border: 1px solid #655EFF !important;
+  border: 1px solid #fff !important;
   border-radius: 4px;
   background-color:transparent !important;
-  color: #655EFF !important;
+  color: #fff !important;
 }
 .btn_tailor:hover{
   border: 1px solid #655EFF !important;
@@ -581,15 +581,15 @@ export default {
   color: #fff !important;
 }
 .btn_delete{
-  border: 1px solid #FD4C2B !important;
+  border: 1px solid #fff !important;
   border-radius: 4px;
   background-color:transparent !important;
-  color: #FD4C2B !important;
+  color: #fff !important;
 }
 .btn_delete:hover{
-  border: 1px solid #FD4C2B !important;
+  border: 1px solid #655EFF !important;
   border-radius: 4px;
-  background: #FD4C2B !important;
+  background: #655EFF !important;
   color: #fff !important;
 }
 

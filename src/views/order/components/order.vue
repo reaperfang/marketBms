@@ -4,11 +4,11 @@
             <div class="item goods">
                 <div class="row justify-between">
                     <div class="col">商品信息</div>
-                    <div class="col">数量</div>
+                    <div class="col" style="margin-right: 26px;">数量</div>
                 </div>
             </div>
-            <div class="item" style="width: 120px;">应收金额</div>
-            <div class="item" style="width: 120px;">收货人及联系方式</div>
+            <div class="item" style="width: 120px; margin-right: 16px;">应收金额</div>
+            <div class="item" style="width: 120px; margin-right: 75px;">收货人及联系方式</div>
             <div class="item" :class="{'item-storew': storeMark}">配送方式</div>
             <div class="item">状态</div>
             <div class="item">操作</div>
@@ -48,31 +48,31 @@
                                                 <img width="66" :src="goods.goodsImage" alt="">
                                             </div>
                                             <div class="col">
-                                                <p :title="goods.goodsName" class="ellipsis" style="width: 297px;">{{goods.goodsName}}</p>
+                                                <p :title="goods.goodsName" class="ellipsis" style="width: 250px;">{{goods.goodsName}}</p>
                                                 <p class="goods-specs">{{goods.goodsSpecs | goodsSpecsFilter}}</p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col">
+                                    <div class="col" style="margin-right: 26px;">
                                         {{goods.goodsCount}}
                                     </div>
                                 </div>
                             </li>
                         </ul>
                     </div>
-                    <div class="item" style="width: 120px;">
+                    <div class="item" style="width: 87px; margin-right: 65px; text-align: right;">
                         <!-- <p class="pay-amount">实收：¥{{order.actualMoney}}</p>
                         <p class="payment-mode">{{order.channelName}}支付</p> -->
                         <!-- <p>¥{{order | yingshowFilter}}</p> -->
-                        <p>¥{{order.receivableMoney}}</p>
+                        <p style="margin-left: 0;">¥{{order.receivableMoney}}</p>
                         <!-- <p>{{order.channelName}}支付</p> -->
                     </div>
-                    <div class="item" style="width: 120px;">
+                    <div class="item" style="width: 120px; margin-right: 75px;">
                         <p>{{order.receivedName}}</p>
                         <p>{{order.receivedPhone}}</p>
                     </div>
                     <div class="item" :class="{'item-storew': storeMark, 'item-indent': storeMark && order.deliveryWay == 1}">
-                        <span class="icon-store" v-if="storeMark  && order.deliveryWay == 2"></span><span class="icon-store-text">{{order.deliveryWay | deliveryWayFilter}}</span>
+                        <span class="icon-store" v-if="storeMark  && order.deliveryWay == 2"></span><span class="icon-store-text">{{order | deliveryWayFilter}}</span>
                         <div class="store-time" v-if="storeMark && order.deliveryWay == 2">
                             <p>{{order.deliveryDate | formatDateRemoveZero}}</p>
                             <p>{{order.deliveryTime}}</p>
@@ -113,7 +113,10 @@
                             <p v-permission="['订单', '订单查询', '商城订单', '查看详情']" @click="$router.push('/order/orderDetail?id=' + order.id)">查看详情</p>
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
                             <p v-show="!authHide" v-permission="['订单', '订单查询', '商城订单', '补填物流']" v-if="order.isFillUp == 1" @click="$router.push('/order/supplementaryLogistics?id=' + order.id)">补填物流</p>
-                            <!-- order.deliveryWay== 4 -->
+                            <!-- 第三方配送的异常订单 -->
+                            <p v-if="order.deliveryWay== 3">重新发单</p>
+                            <p v-if="order.deliveryWay== 3">关闭订单</p>
+
                             <p v-if="order.deliveryWay== 4" @click="currentDialog = 'VerificationDialog'; currentData = order.id; dialogVisible = true">核销验证</p>
                         </template>
                         <template v-else-if="order.orderStatus == 6">
@@ -146,7 +149,8 @@ export default {
             currentData: '',
             dialogVisible: false,
             loading: false,
-            storeMark: false //商家配送标记，如果列表中包含商家配送，则为true, 为了让配送方式标题宽度变宽
+            storeMark: false, //商家配送标记，如果列表中包含商家配送，则为true, 为了让配送方式标题宽度变宽
+            sendOrderAgain:false//是否重新发单
         }
     },
     created() {
@@ -165,7 +169,11 @@ export default {
                              item.deliveryWayIcon = "商配"
                             break;
                         case 3:
-                            item.deliveryWayIcon = "三方"
+                            if(item.orderStatus==5||item.orderStatus==6){
+                                item.deliveryWayIcon = "达达"
+                            }else{
+                                item.deliveryWayIcon = "三方"
+                            }
                             break;
                         case 4:
                             item.deliveryWayIcon = "自提"
@@ -199,12 +207,18 @@ export default {
                 //wyyfx删除     return '分销订单'
             }
         },
-        deliveryWayFilter(code) {
-            switch(code) {
+        deliveryWayFilter(order) {
+            switch(order.deliveryWay) {
                 case 1:
                     return '普通快递'
                 case 2:
                     return '商家配送'
+                case 3:
+                    if(order.orderStatus==5||order.orderStatus == 6){
+                        return '第三方配送-达达'
+                    }else{
+                        return '第三方配送'
+                    }
                 case 4:
                     return '上门自提'
             }
@@ -371,7 +385,7 @@ export default {
             font-weight:500;
             .item {
                 width: 80px;
-                margin-right: 20px;
+                margin-right: 30px;
                 &:last-child {
                     margin-right: 0;
                 }
@@ -476,7 +490,7 @@ export default {
                     }
                     >.item {
                         width: 80px;
-                        margin-right: 17px;
+                        margin-right: 27px;
                         &:nth-child(2) {
                             padding-left: 5px;
                             p {
@@ -543,7 +557,7 @@ export default {
             }
         }
         .item-storew{
-            width: 105px !important;
+            width: 108px !important;
         }
         .icon-store{
             display: inline-block;
@@ -578,6 +592,9 @@ export default {
     .container-item {
         min-width: auto!important;
     }
+    .goods-specs{
+        width:200px !important;
+    }
     .goods-box .col:first-child {
         width: 100%!important;
     }
@@ -591,6 +608,7 @@ export default {
             width: 20px;
             height: 20px;
             background: url(../../../assets/images/order/auto.png) no-repeat;
+            background-size: 100% 100%;
             position: relative;
             margin-right: 15px;
         }

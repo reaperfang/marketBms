@@ -21,6 +21,8 @@
                         start-placeholder="开始时间"
                         end-placeholder="结束时间"
                         value-format="yyyy-MM-dd HH:mm:ss"
+                        :editable="false"
+                        @focus="utils.globalTimeDisabledFocus"
                         :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
                         @change="getData">
                     </el-date-picker>
@@ -65,7 +67,8 @@
                 @currentChange="currentChange"
                 :pageSize="10"
                 :listObj="listObj"
-                :totalCount="listObj.totalSize">
+                :totalCount="listObj.totalSize"
+                :loading="loading">
             </ma3Table>
         </div>
         <div v-if="listObj.members != undefined && showNote">
@@ -73,7 +76,7 @@
             <p class="proposal"><b>消耗次数{{note.label}} ：</b>{{note.suggest}}</p>
         </div>
         <div class="contents"></div>
-        <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
+        <!-- <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div> -->
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
 </template>
@@ -131,6 +134,7 @@ export default {
             currentDialog:"",
             dialogVisible: false,
             currentData:{},
+            loading:true
         }
     },
     created(){
@@ -164,6 +168,7 @@ export default {
         //查询
         goSearch(num){
             this.form.loads = true
+            this.loading = true;
             this.form.startIndex = num || this.form.startIndex
             this._apis.data.integralconsumption(this.form).then(res => {
                 this.memberCount = res.memberCount;
@@ -182,8 +187,10 @@ export default {
                         item.suggest != null && (this.showNote = true)
                     }
                 }
+                this.loading = false;
             }).catch(error => {
                 this.$message.error(error);
+                this.loading = false;
             });
         },
         //消耗次数
@@ -291,7 +298,7 @@ export default {
 }
 .m_container{
     background-color: #fff;
-    padding: 10px 20px;
+    padding: 20px;
     .el-button--small{
         border: 1px solid #655EFF;
         color: #655EFF;
@@ -303,7 +310,7 @@ export default {
 	}
     .pane_container{
         color:#3D434A;
-        padding: 10px;
+        // padding: 10px;
         .input_wrap{
             display: inline-block;
             width: 450px;

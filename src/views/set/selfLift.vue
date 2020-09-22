@@ -6,15 +6,16 @@
       <el-switch
         @change="handleSwitch"
         v-model="isOpen"
+        v-permission="['设置', '上门自提', '默认页面', '新建自提点/从地址库选择/开启/关闭']"
         active-color="#13ce66"
         inactive-color="#cacfcb">
       </el-switch>
-      <span>开启后，用户下单时可选择上门自提的配送方式。</span>
+      <span v-permission="['设置', '上门自提', '默认页面', '新建自提点/从地址库选择/开启/关闭']">开启后，用户下单时可选择上门自提的配送方式。</span>
     </div>
     <!-- 按钮区域 -->
     <div class="btn-area">
-      <el-button class="primary" type="primary" @click="handleAddSelfLift()" v-permission="['设置', '上门自提', '默认页面', '新建自提点']">新建自提点</el-button>
-      <el-button v-if="addressTotal > 0" v-permission="['设置', '上门自提', '默认页面', '从地址库选择']" @click="handleChooseAddress" class="text" type="text">从地址库中选择</el-button>
+      <el-button class="primary" type="primary" @click="handleAddSelfLift()" v-permission="['设置', '上门自提', '默认页面', '新建自提点/从地址库选择/开启/关闭']">新建自提点</el-button>
+      <el-button v-if="addressTotal > 0" v-permission="['设置', '上门自提', '默认页面', '新建自提点/从地址库选择/开启/关闭']" @click="handleChooseAddress" class="text" type="text">从地址库中选择</el-button>
     </div>
     <!-- 列表 -->
     <el-table
@@ -22,9 +23,10 @@
       :data="dataList"
       class="table"
       style="width: 100%"
-      :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '400'}"
+      :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '500'}"
       >
       <el-table-column
+        class-name="pickUpId"
         prop="pickUpId"
         label="自提点编号"
         width="150"
@@ -35,12 +37,18 @@
         label="自提点名称"
         align="left"
         width="130">
+        <template slot-scope="scope">
+          <div class="pickUpName" :title="scope.row.pickUpName">{{scope.row.pickUpName}}</div>
+        </template>
       </el-table-column>
       <el-table-column
         prop='name'
         label="联系人"
         align="left"
         width="118">
+         <template slot-scope="scope">
+          <div class="name" :title="scope.row.name">{{scope.row.name}}</div>
+        </template>
       </el-table-column>
       <el-table-column
         prop="mobile"
@@ -73,24 +81,26 @@
       <el-table-column
         label="操作"
         align="center"
+        fixed="right"
         width="150">
         <template slot-scope="scope">
           <div class="opeater">
             <el-button class="btn" @click="goEdit(scope.row.id)" type="text" v-permission="['设置', '上门自提','默认页面', '编辑']">编辑</el-button>
             <span>|</span>
-            <el-button class="btn" type="text" v-permission="['设置', '上门自提','默认页面', '启用']" @click="handleEnableSelfLift(scope.row)">{{ getStatusTxt(scope.row) }}</el-button>
+            <el-button class="btn" type="text" v-permission="['设置', '上门自提','默认页面', '启用/禁用']" @click="handleEnableSelfLift(scope.row)">{{ getStatusTxt(scope.row) }}</el-button>
           </div>
         </template>
       </el-table-column>
     </el-table>
     <div class="page_styles">
       <el-pagination
+        :background="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="ruleForm.pageNo"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="ruleForm.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="prev, pager, next, sizes"
         :total="total*1">
       </el-pagination>
     </div>
@@ -178,7 +188,7 @@ export default {
       })
     },
     goEdit(id) {
-      this.$router.push({ path: '/set/addSelfLift',query: { id } })
+      this.$router.push({ path: '/set/editSelfLift',query: { id } })
     },
     ApiEditSelfLiftById(req) {
       return new Promise((resolve, reject) => {
@@ -328,12 +338,15 @@ export default {
       })
     },
     getSelfLift() {
+      this.loading = true
       const req = this.getReqData()
       this.ApiGetSelfLiftList(req).then((res) => {
         this.dataList = res.list
         this.total = +res.total || 0
       }).catch((err) => {
         this.$message.error(err || '获取数据失败')
+      }).finally(() => {
+        this.loading = false
       })
     },
     updateShopInfo(data) {
@@ -373,7 +386,11 @@ export default {
         let text = '上门自提开启成功！'
         if (!isHasLocation) {
           showConfirmButton = false
-          const url = `${location.protocol}//${location.host}/bp/shop/m_shopEditor?pageId=${pageId}`
+          let url = `${location.protocol}//${location.host}/bp/shop/m_wxShopIndex`;
+          if(pageId){
+            url = `${location.protocol}//${location.host}/bp/shop/m_shopEditor?pageId=${pageId}`;
+          }
+          
           text = `<p style="font-size:16px;color:rgba(68,67,75,1);">上门自提开启成功！</p><p style="font-size:12px;color:rgba(68,67,75,1);">您还没有装修位置组件<a href="${url}" style="color:#655EFF;text-decoration: underline;" target="_blank">去装修 &gt;</a></p>`
           this.confirm({
             title: "提示",
@@ -405,6 +422,11 @@ export default {
         console.log('isExistEnabled',isExistEnabled)
         if (isExistEnabled) {
           this._apis.shop.getHomePage({pageTag:0}).then((res) => {
+            //如果店铺主页不存在，则正常提示去装修，去装修跳转至店铺主页即可
+            if(!res){
+              this.openSelfLiftSuccess(false, false);
+              return;
+            }
             const str = utils.uncompileStr(res.pageData);
             const pageData = JSON.parse(str);
             if (pageData && pageData.length > 0) {
@@ -428,11 +450,13 @@ export default {
             title: "提示",
             text: '当前没有启用的自提点信息，请先新建或启用自提点后再开启。',
             confirmText: '我知道了',
-            cancelButtonText: '去新建'
+            cancelButtonText: '去新建',
+            distinguishCancelAndClose: true
           }).then(() => {
             // 关闭弹窗
-          }).catch(()=> {
-            this.$router.push({ path: '/set/addSelfLift' })
+          }).catch((action)=> {
+            console.log('action',action)
+            if (action === 'cancel') this.$router.push({ path: '/set/addSelfLift' })
           }).finally(() => {
             this.isOpen = false
           });
@@ -518,17 +542,32 @@ export default {
   }
   .btn-area {
     padding-top: 30px;
+    .primary, .text {
+      font-size: 14px;
+    }
+    
   }
   .table {
-    padding-top: 20px;
+    margin-top: 20px;
     /deep/ th.is-leaf {
       border:0;
+      .cell {
+        font-size: 14px;
+        font-weight: 500;
+        color: #44434B;
+      }
     }
     /deep/ th>.cell {
       line-height: 30px;
     }
-    &::before {
-      height: 0;
+    /deep/ .pickUpId {
+      padding-left: 10px;
+    }
+    .pickUpName, .name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
     }
     .opeater {
       display: flex;

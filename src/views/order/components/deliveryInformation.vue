@@ -16,7 +16,7 @@
         <div class="header">
           <div class="header-lefter">
             <div class="header-lefter-item number">{{index + 1}}</div>
-            <div class="header-lefter-item fb">{{item.deliveryWay | deliveryWayFilter}}</div>
+            <div class="header-lefter-item fb">{{item | deliveryWayFilter}}</div>
             <template v-if="item.deliveryWay == 1">
             <div class="header-lefter-item">快递公司：{{item.shipperName}}</div>
             <div class="header-lefter-item">快递单号：{{item.expressNo}}</div>
@@ -29,7 +29,7 @@
           </div>
           <div class="header-righter">
             <div class="header-righter-item">{{item.expressNo | goodsStatus(orderDetail)}}</div>
-            <div class="header-righter-item">发货人：{{item.sendName}}</div>
+            <div class="header-righter-item">发货人：{{item.sendProductName}}</div>
             <div class="header-righter-item">{{item.goodsList && item.goodsList[0] && item.goodsList[0].createTime && item.goodsList && item.goodsList[0] && item.goodsList[0].createTime}}</div>
             <div @click="showContent(index)">
               <i v-if="item.showContent" class="el-icon-caret-top pointer"></i>
@@ -44,10 +44,10 @@
                     <div class="message-item">提货信息</div>
                   </div>
                   <div class="message-item-list">
-                    <div class="message-item">{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.name:''}}</div>
+                    <div class="message-item">{{item.receivedName}}</div>
                   </div>
                   <div class="message-item-list">
-                      <div class="message-item">{{orderDetail.pickUpInfoDto?orderDetail.pickUpInfoDto.mobile:''}}</div>
+                      <div class="message-item">{{item.receivedPhone}}</div>
                   </div>
                   </div>
                   <div class="message">
@@ -199,14 +199,24 @@ export default {
   },
   filters: {
     goodsStatus(value, orderDetail) {
-      let status = orderDetail.expressNoStatusMap[value]
-
-      if(status == 3) {
-        return '【用户签收】'
-      } else if(status == 0 || status == 1 || status == 2 || status == 4) {
-        return '【商户发货】'
-      } else {
-        return ''
+      if(orderDetail.orderInfo.deliveryWay==4){
+          let orderStatus = orderDetail.orderInfo.orderStatus;
+          if(orderStatus ==6){
+            return '【用户签收】'
+          }else if(orderStatus == 3|| orderStatus ==4 || orderStatus ==5){
+            return '【商户发货】'
+          }else{
+            return ''
+          }
+      }else{
+        let  status= orderDetail.expressNoStatusMap[value]
+        if(status == 3) {
+            return '【用户签收】'
+          } else if(status == 0 || status == 1 || status == 2 || status == 4) {
+            return '【商户发货】'
+          } else {
+            return ''
+        }
       }
     },
     goodsSpecsFilter(value) {
@@ -227,12 +237,19 @@ export default {
 
         return str
     },
-    deliveryWayFilter(code) {
-        switch(code) {
+    deliveryWayFilter(order) {
+        switch(order.deliveryWay) {
             case 1:
                 return '普通快递'
             case 2:
                 return '商家配送'
+            case 3:
+              if(order.orderStatus==5||order.orderStatus==6){
+                    return "第三方配送-达达"
+                }else{
+                    return "第三方配送" 
+                }
+                break;
             case 4:
                 return '上门自提'
         }
@@ -279,43 +296,84 @@ export default {
     },
     getOrderSendItems() {
       let arr = [];
+      let sendProductsArr = [];
+      let objTemp={}
       if(this.orderDetail.orderSendItemMap && Object.keys(this.orderDetail.orderSendItemMap).length){
         for (let i in this.orderDetail.orderSendItemMap) {
           if (this.orderDetail.orderSendItemMap.hasOwnProperty(i)) {
-            let obj = Object.assign(
+            Array.from(this.orderDetail.orderSendItemMap[i]).forEach(item=>{
+              if(item.sendReceivedAddressId&&!objTemp[item.sendReceivedAddressId]){
+                objTemp[item.sendReceivedAddressId]={sendReceivedAddressId:item.sendReceivedAddressId,datas:[]}
+                sendProductsArr.push(objTemp[item.sendReceivedAddressId])
+              }
+              objTemp[item.sendReceivedAddressId].datas.push(item)
+           
+            }) 
+            // let obj = Object.assign(
+            //   {},
+            //   {
+            //     goodsList: this.orderDetail.orderSendItemMap[i],
+            //     expressNo: i,
+            //     shipperName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].expressCompany || '',
+            //     showContent: true,
+            //     sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
+            //     sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendName || '',
+            //     sendProductName:this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5) && this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5).createUserName||'',
+            //     id: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].orderId || '',
+            //     createTime: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].createTime || '',
+            //     deliveryWay: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].deliveryWay || '',
+            //     deliveryName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorName || '',
+            //     phone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorPhone || '',
+            //     receiveAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receiveAddress || '',
+            //     receivedDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedDetail || '',
+            //     sendAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendAddress || '',
+            //     sendDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendDetail || '',
+            //     receivedName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedName || '',
+            //     receivedPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedPhone || '',
+            //     sendPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendPhone || '',
+            //     orderStatus: this.orderDetail.orderInfo.orderStatus,
+            //     deliveryDate:this.orderDetail.orderInfo.deliveryDate,
+            //     deliveryTime:this.orderDetail.orderInfo.deliveryTime,
+            //     complateTime:this.orderDetail.orderInfo.complateTime
+            //   }
+            // );
+            // arr.push(obj);
+          }
+        }
+      }
+      sendProductsArr.forEach((item,index)=>{
+        let obj = Object.assign(
               {},
               {
-                goodsList: this.orderDetail.orderSendItemMap[i],
-                expressNo: i,
-                shipperName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].expressCompany || '',
+                goodsList:item.datas||[],
+                expressNo:JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address).expressNo,
+                shipperName:item.datas[0]&&item.datas[0].expressCompany || '',
                 showContent: true,
-                sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
-                sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendName || '',
-                id: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].orderId || '',
-                createTime: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].createTime || '',
-                deliveryWay: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].deliveryWay || '',
-                deliveryName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorName || '',
-                phone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorPhone || '',
-                receiveAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receiveAddress || '',
-                receivedDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedDetail || '',
-                sendAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendAddress || '',
-                sendDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendDetail || '',
-                receivedName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedName || '',
-                receivedPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedPhone || '',
-                sendPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendPhone || '',
+                sendRemark:item.datas[0]&&item.datas[0].sendRemark||'',
+                sendName:JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address).sendName || '',
+                sendProductName:this.orderDetail.orderInfo.sendType==2
+                    ?(this.orderDetail.orderOperationRecordList.find(item=>item.operationType==4) && this.orderDetail.orderOperationRecordList.find(item=>item.operationType==4).createUserName||'')
+                    :(this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5) && this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5).createUserName||''),
+                id:item.datas[0]&&item.datas[0].orderId || '',
+                createTime: item.datas[0]&&item.datas[0]&&item.datas[0].createTime || '',
+                deliveryWay: item.datas[0]&&item.datas[0].deliveryWay || '',
+                deliveryName:item.datas[0]&&item.datas[0].distributorName || '',
+                phone: item.datas[0]&&item.datas[0].distributorPhone || '',
+                receiveAddress:JSON.parse(item.datas[0].address)&& JSON.parse(item.datas[0].address).receiveAddress || '',
+                receivedDetail: JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address).receivedDetail || '',
+                sendAddress: JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address).sendAddress || '',
+                sendDetail: JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address).sendDetail || '',
+                receivedName: JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address).receivedName || '',
+                receivedPhone: JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address).receivedPhone || '',
+                sendPhone: JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address).sendPhone || '',
                 orderStatus: this.orderDetail.orderInfo.orderStatus,
                 deliveryDate:this.orderDetail.orderInfo.deliveryDate,
                 deliveryTime:this.orderDetail.orderInfo.deliveryTime,
                 complateTime:this.orderDetail.orderInfo.complateTime
-
-
               }
-            );
-            arr.push(obj);
-          }
-        }
-      }
-      
+              );
+            arr.push(obj)
+      })
       arr.sort((a, b) => {
         const thisTimeA = a.createTime.replace(/-/g, '/')
         const thisTimeB = b.createTime.replace(/-/g, '/')

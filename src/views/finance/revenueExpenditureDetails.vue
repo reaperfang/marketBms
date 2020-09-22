@@ -90,17 +90,16 @@
           label="交易流水号"
           :render-header="renderTradeDetailSn"
           align="left"
-          width="200px"
+          width="220px"
+          fixed="left"
           >
-          <template slot-scope="scope">
-            <span style="padding-left:10px;">{{scope.row.tradeDetailSn}}</span>
-          </template>
         </el-table-column>
         <el-table-column
           prop="tradeType"
           label="收支类型"
           :render-header="renderTradeTypen"
-          align="center">
+          align="center"
+          width="90px">
           <template slot-scope="scope">
             {{scope.row.tradeType ? '支出' : '收入' }}
           </template>
@@ -109,7 +108,8 @@
           prop="businessType"
           label="业务类型"
           :render-header="renderBusinessType"
-          align="center">
+          align="center"
+          width="150px">
           <template slot-scope="scope">
             {{rebusinessTypes[scope.row.businessType] ? rebusinessTypes[scope.row.businessType].label : ''}}
           </template>
@@ -119,12 +119,13 @@
           label="关联单据编号"
           :render-header="renderRelationSn"
           align="center"
-          width="200px">
+          width="220px">
         </el-table-column>
         <el-table-column
           prop="payWay"
           label="支付方式"
-          align="center">
+          align="center"
+          width="100px">
           <template slot-scope="scope">
             {{payTypes[scope.row.payWay+1].label}}
           </template>
@@ -132,12 +133,17 @@
         <el-table-column
           prop="wechatTradeSn"
           label="第三方流水号"
-          align="center">
+          align="center"
+          width="280px;">
         </el-table-column>
         <el-table-column
           prop="amount"
           label="交易金额（元）"
-          align="right">
+          align="right"
+          width="140px;">
+          <template slot-scope="scope">
+            <span style="padding-right:10px;">{{scope.row.amount}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="isInvoice"
@@ -153,6 +159,7 @@
           sortable="custom"
           align="center"
           width="200px"
+          fixed="right"
           >
         </el-table-column>
       </el-table>
@@ -164,9 +171,9 @@
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1"
-          :background="background">
+          :background="true">
         </el-pagination>
       </div>
       <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component> 
@@ -426,13 +433,13 @@ export default {
   width: 100%;
   background: #fff;
   border-radius: 3px;
-  padding: 15px 20px;
+  padding: 20px;
 }
 .under_part{
   width: 100%;
   background: #fff;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
   .total{
     display: flex;
     justify-content: space-between;
@@ -440,7 +447,7 @@ export default {
       font-size: 16px;
       color: #B6B5C8;
       display: block;
-      margin-top:15px;
+      // margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -457,5 +464,11 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
+}
+/deep/ .el-table--small td{
+  padding:16px 10px;
+}
+/deep/.el-table--small th{
+  padding:0px;
 }
 </style>

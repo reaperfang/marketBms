@@ -12,7 +12,7 @@
             </el-radio-group>
           </div>
           <div class="input_wrap">
-              <el-input :placeholder="placeholder" v-model.trim="adjustmentBalance" @blur="handleBlur" @keyup.native="number($event,adjustmentBalance,'adjustmentBalance')"></el-input>
+              <el-input placeholder="请输入调整数值" v-model.trim="adjustmentBalance" @blur="handleBlur" @keyup.native="number($event,adjustmentBalance,'adjustmentBalance')"></el-input>
           </div>
           <p class="errMsg" v-if="showError">减少数值不得大于当前余额</p>
       </div>
@@ -46,8 +46,7 @@ export default {
       remark: "",
       btnLoading: false,
       adjustBalance: "1",
-      showError: false,
-      placeholder: "请输入增加余额"
+      showError: false
     };
   },
   methods: {
@@ -81,6 +80,14 @@ export default {
         });
         return;
       }
+      if(Number(this.adjustmentBalance) >= 100000000) {
+        this.btnLoading = false;
+        this.$message({
+          message: '调整余额不能超过1亿',
+          type: 'warning'
+        });
+        return;
+      }
       let params = {
         id: this.data.id,
         currentBalance: Number(this.data.balance),
@@ -108,20 +115,19 @@ export default {
       }else{
         this.showError = false;
       }
-      if(Number(this.adjustmentBalance) > 100000000) {
-        this.$message({
-          message: '增加余额不能超过1亿',
-          type: 'warning'
-        });
-        this.adjustmentBalance = "";
-      }
+      // if(Number(this.adjustmentBalance) > 100000000) {
+      //   this.$message({
+      //     message: '增加余额不能超过1亿',
+      //     type: 'warning'
+      //   });
+      // }
     },
     handleAdjust(val) {
       if(val == "1") {
         this.showError = false;
-        this.placeholder = "请输入增加余额";
+        //this.placeholder = "请输入调整数值";
       }else{
-        this.placeholder = "请输入减少余额";
+        //this.placeholder = "请输入调整数值";
         if(Number(this.adjustmentBalance) > Number(this.data.balance)) {
           this.showError = true;
         }

@@ -23,7 +23,7 @@
                       <span>{{(item.fileSize ? Math.floor(item.fileSize / 1024 / 1024 * 100) / 100 + 'MB' : '-- MB')}}</span>
                     </div>
                     <div class="video_body">
-                      <p>{{item.name}}</p>
+                      <p :title="item.name || '无标题'">{{item.name || '无标题'}}</p>
                       <video
                         :src="item.filePath"
                         controls="controls"
@@ -38,12 +38,13 @@
             </div>
             <p class="pages" v-if="materialResultList.length">
                 <el-pagination
+                :background="true"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="materialCurrentPage"
                 :page-sizes="[9, 18, 27, 45, 90, 100]"
                 :page-size="materialPageSize"
-                layout="total, sizes, prev, pager, next, jumper"
+                layout="prev, pager, next, sizes"
                 :total="materialTotal*1"
                 class="page_nav">
                 </el-pagination>
@@ -80,7 +81,7 @@
                           <span>{{item.size ? Math.floor(item.size / 1024 / 1024 * 100) / 100 + 'MB' : '-- MB'}}</span>
                         </div>
                         <div class="video_body"> 
-                          <p>{{item.original}}</p>
+                          <p :title="item.original || '无标题'">{{item.original || '无标题'}}</p>
                           <video
                             :src="item.url"
                             controls="controls"
@@ -542,6 +543,10 @@ ul.video_list{
   p{
     text-align:left;
     padding:5px 20px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   video{
     width: 100%;

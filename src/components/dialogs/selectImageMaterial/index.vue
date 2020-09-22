@@ -1,6 +1,6 @@
 /* 选择图片素材弹框 */
 <template>
-  <div>
+  <div class="select-wrap">
     <DialogBase :visible.sync="visible" width="816px" :title="'选择图片'" @submit="submit" @close="close" :showFooter="false">
      <el-tabs v-model="currentTab">
        <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="item.label" :name="item.name"></el-tab-pane>
@@ -192,8 +192,6 @@ export default {
     margin-top:40px;
   }
   .dialog-footer .el-button{
-    padding: 9px 20px;
-    margin-left: 30px;
     span{
       letter-spacing: 5px;
       margin-right: -4px;
@@ -202,5 +200,13 @@ export default {
   .el-button:first-child {
       display: block;
       margin-left: 0;
+  }
+  .select-wrap {
+    /deep/ .el-dialog__body {
+      padding-top: 0;
+    }
+    /deep/ .el-tabs__header {
+      margin-bottom: 15px !important;
+    }
   }
 </style>

@@ -16,7 +16,7 @@
           <img :src="form.logo" class="logo_img" />
           <canvas ref="canvas1" width="80px" height="80px" v-show="false"></canvas>
           <div class="btn">
-            <el-button @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'" class="uploadImg" size="mini" type="primary">更新图片</el-button>
+            <el-button @click="dialogVisible=true; currentDialog='dialogSelectImageMaterial'" class="uploadImg" size="mini" type="primary">更换图片</el-button>
           </div>
         </div>
         <div
@@ -64,8 +64,8 @@
         ></el-input>
       </el-form-item> -->
       <h2>店铺渠道</h2>
-      
-      <el-form-item prop="businessChannel">
+      <p class="channelPrompt">请您告诉我们您将在哪个渠道经营您的店铺：</p>
+      <el-form-item prop="businessChannel" class="businessChannel">
         <el-checkbox-group v-model="form.businessChannel">
           <el-checkbox :label="2" style="margin-right:78px;" disabled name="businessChannel">微信公众号</el-checkbox>
           <el-checkbox :label="1" name="businessChannel">微信小程序</el-checkbox>
@@ -265,6 +265,19 @@ export default {
       padding-left: 6px;
     }
   }
+  .channelPrompt {
+    padding-left: 100px;
+    font-size:14px;
+    font-weight:400;
+    color:rgba(68,67,75,1);
+    line-height:20px;
+    padding-bottom: 15px;
+  }
+  .businessChannel {
+    /deep/ .el-form-item__content {
+      margin-left: 100px !important;
+    }
+  }
 }
 /deep/ .area-select .area-selected-trigger {
   padding: 0 0 0 10px;
@@ -417,8 +430,8 @@ export default {
     height: 534px;
     background: url('~@/assets/images/set/shop-set.jpg') no-repeat;
     background-size: 100% 100%;
-    right: 60px;
-    top: 0;
+    left: 600px;
+    top: 20px;
     z-index: 3;
     .top {
       position: absolute;
@@ -428,6 +441,11 @@ export default {
       color: #000000;
       transform: translateX(-50%);
       font-weight: 400;
+      overflow: hidden;
+      width: 150px;
+      height: 18px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .center {
       position: absolute;

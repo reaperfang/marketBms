@@ -4,6 +4,9 @@
     <div class="select_dialog">
       <div class="head-wrapper">
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="65px" :inline="true">
+          <el-form-item label="活动名称" prop="activeName">
+            <el-input v-model="ruleForm.activeName" placeholder="请输入活动名称" clearable></el-input>
+          </el-form-item>
           <el-form-item label="活动状态" prop="status">
             <el-select label="活动状态" v-model="ruleForm.status" placeholder="请选择活动状态">
               <el-option label="全部" :value="''"></el-option>
@@ -11,9 +14,6 @@
               <el-option label="生效中" :value="1"></el-option>
               <!-- <el-option label="已失效" :value="2"></el-option> -->
             </el-select>
-          </el-form-item>
-          <el-form-item label="活动名称" prop="activeName">
-            <el-input v-model="ruleForm.activeName" placeholder="请输入活动名称" clearable></el-input>
           </el-form-item>
           <el-form-item label>
             <el-button type="primary" @click="search">搜 索</el-button>
@@ -69,13 +69,14 @@
       </div>
       <div class="pagination" v-if="tableData.length">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.pageNum) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
         ></el-pagination>
       </div>
     </div>

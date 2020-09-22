@@ -1,5 +1,5 @@
 <template>
-   <div class="address">
+   <div class="address" v-if="renderComponent">
      <h2>地址库/{{ setTitle }}</h2>
      <el-form class="ruleForm" ref="ruleForm" :model="ruleForm" :rules="rules" label-width="102px">
        <div class="form-area">
@@ -24,7 +24,7 @@
             show-word-limit
           ></el-input>
         </el-form-item>
-        <el-form-item label="地址类型" prop="type">
+        <el-form-item label="地址类型" prop="type" class="is-required">
           <el-checkbox-group v-model="ruleForm.type">
             <div class="address-group">
               <el-checkbox class="address-item" :disabled="isDisabled" :label="1" name="type">发货地址</el-checkbox>
@@ -82,6 +82,7 @@ export default {
       isMapChoose: false,
       isLoading: false,
       isDisabled: false,
+      renderComponent: true, // 初始化渲染组件
       ruleForm: {
         id: null,
         contactPerson: null, // 联系人
@@ -107,6 +108,9 @@ export default {
         ],
         sendAddress: [
           { required: true, message: "联系地址不能为空，请输入后点击搜索地图，在地图上选择准确位置", trigger: "blur" }
+        ],
+        address: [
+          { required: true, message: "详细地址不能为空", trigger: "blur" }
         ],
         type: [
           // { type: 'array', required: true, message: '必选项', trigger: 'change' }
@@ -178,6 +182,10 @@ export default {
       this.isDisabled = this.$route.query && this.$route.query.source === 1 ? true : false
       if (this.ruleForm.id) {
         this.getAddressById(this.ruleForm.id)
+      } 
+      // 如果没有id 则为新建，如果商家配送页面点击新建跳转过来，需要默认选中发货地址
+      if (this.isDisabled && !this.ruleForm.id) {
+        this.ruleForm.type.push(1)
       }
     },
     // 格式化回显地址类型数据
@@ -259,6 +267,7 @@ export default {
     },
     // 处理保存成功的逻辑
     handleSaveSuccess() {
+      
       this.confirm({
         title: "提示",
         iconSuccess: true,
@@ -269,6 +278,8 @@ export default {
         this.$router.push({ path: '/set/address' })
       }).catch(()=> {
         this.$router.push({ path: '/set/addressUpdate' })
+        location.reload()
+        
       });
     },
     // 处理数据重复问题

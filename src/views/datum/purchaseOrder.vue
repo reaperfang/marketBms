@@ -16,7 +16,7 @@
     <div class="p_container">
         <div class="pane_container">
             <p class="p_title">交易总况：</p>
-            <div class="order_list">
+            <div class="order_list" v-loading="loading1">
                 <div class="order_line">
                     <div class="clearfix">
                         <img src="../../assets/images/datum/icon_order.png" alt="" class="fl order_img">
@@ -82,13 +82,15 @@
                             start-placeholder="开始时间"
                             end-placeholder="结束时间"
                             value-format="yyyy-MM-dd HH:mm:ss"
+                            :editable="false"
+                            @focus="utils.globalTimeDisabledFocus"
                             :picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
                             @change="changeTime">
                         </el-date-picker>
                     </div>
                 </div>
             </div>
-            <ip4Chart :title="'测试图表'" ref="ip4"></ip4Chart>
+            <ip4Chart :title="'测试图表'" ref="ip4" v-loading="loading2"></ip4Chart>
         </div>
     </div>
     </div>
@@ -119,7 +121,9 @@ export default {
             paymentData:[],
             orderProbabilityData:[],
             isPc:false,
-			classId:7
+			classId:7,
+            loading1: true,
+            loading2: true
         }
     },
     components:{ip4Chart},
@@ -178,6 +182,8 @@ export default {
                 startTime:this.startTime,
                 endTime:this.endTime,
             }
+            this.loading1 = true;
+            this.loading2 = true;
             this._apis.data.tradingTrend(query).then(response => {
                 // console.log('res',response)
                 this.placeOrderData.forEach(e => {
@@ -223,8 +229,12 @@ export default {
                     }
                 });
                  this.$refs.ip4.con(response.echarts)
+                this.loading1 = false;
+                this.loading2 = false;
             }).catch(error =>{
                 console.log(error)
+                this.loading1 = false;
+                this.loading2 = false;
             })
         },
     },
@@ -253,7 +263,7 @@ export default {
     margin-bottom:20px;
     .fr_channel{
         float:left;
-        margin-left:38px;
+        // margin-left:38px;
     }
 }
 .p_container{
@@ -261,7 +271,7 @@ export default {
     background-color: #fff;
     .pane_container{
         color: #3D434A;
-        padding: 23px 38px;
+        // padding: 23px 38px;
         .p_title{
             font-size: 16px;
             font-weight: bold;
@@ -324,7 +334,7 @@ export default {
             }
         }
         .order_list{
-            width: 1080px;
+            max-width: 1080px;
             margin: 22px 0;
             border-top: 1px solid #CACFCB;
             .order_line{

@@ -14,7 +14,7 @@
       </div>
 
   </div>
-  <div class="p_container">
+  <div class="p_container" v-calcHeight="60+40+92">
     <div class="pane_container">
 		<div class="p_line">
 			<!--<el-radio-group v-model="dateType" @change="changeDay">-->
@@ -38,12 +38,14 @@
 					start-placeholder="开始时间"
 					end-placeholder="结束时间"
 					value-format="yyyy-MM-dd HH:mm:ss"
+          :editable="false"
+          @focus="utils.globalTimeDisabledFocus"
 					:picker-options="Object.assign(utils.globalTimePickerOption.call(this, false), this.pickerOptions)"
 					@change="changeTime"
 				></el-date-picker>
 			</div>
 		</div>
-      <div class="chart_container">
+      <div class="chart_container" v-loading="loading">
         <div class="path_line clearfix" v-if="dataObj.uv">
           <div class="p_l">
             <p>第一步</p>
@@ -171,7 +173,8 @@ export default {
       dateType: 7,
       dataObj: {},
       channel: "0",
-      isPc:false
+      isPc:false,
+      loading: true
     };
   },
   created() {
@@ -205,13 +208,16 @@ export default {
         //visitSourceType: this.visitSourceType,
         channel: this.channel
       };
+      this.loading = true;
       this._apis.data
         .transformation(data)
         .then(response => {
           this.dataObj = response;
+          this.loading = false;
         })
         .catch(error => {
           this.$message.error(error);
+          this.loading = false;
         });
     },
     changeTime(val) {
@@ -269,7 +275,6 @@ export default {
   padding: 20px;
   background-color: #fff;
   .pane_container {
-     height: 600px;
     .p_line {
 		padding-bottom: 30px;
 		border-bottom: 1px dashed #d3d3d3;

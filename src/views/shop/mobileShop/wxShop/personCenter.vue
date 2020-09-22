@@ -1,11 +1,11 @@
 <template>
   <div class="group-wrapper">
-    <div class="module view">
+    <div class="module view" v-calcHeight="197">
       <div class="phone-head">
         <img :src="require('@/assets/images/shop/editor/phone_head.png')" alt="">
         <span>个人中心</span>
       </div>
-      <div ref="body" class="phone-body" v-calcHeight="220+20">
+      <div ref="body" class="phone-body">
         <componentUserCenter 
         :data="ruleForm" 
         :isOpenResell="shopInfo.isOpenResell"
@@ -183,6 +183,10 @@ export default {
     resetData() {
       this._apis.shop.resetPersonalInfo({pageTag: 0}).then((response)=>{
         this.$message.success('重置成功！')
+        if(!response){
+          this._globalEvent.$emit('userCenterResetLoading', true);
+          response = {};
+        }
         //如果还未保存过，则重置后应变为初始化
         if(!response.pageData) {
           this.ruleForm = utils.deepClone(this.initRuleForm);
@@ -250,6 +254,16 @@ export default {
 .group-wrapper{
   display:flex;
   flex-direction: row;
-  margin-top:10px;
+  margin-top:20px;
+  .module {
+    &.view {
+      width: 377px;
+      border: 1px #D0D6E4 solid;
+      box-shadow: none !important;
+      .phone-body {
+        height: calc(100% - 64px) !important;
+      }
+    }
+  }
 }
 </style>

@@ -1,6 +1,6 @@
 /* 微信个人中心装修属性区 */
 <template>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" v-calcHeight="154+102">
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" v-calcHeight="303">
         <div class="block header">
           <p class="title">个人信息页设置</p>
           <p class="state" :class="{'normal': ruleForm.status === 0}">{{ruleForm.status === 0 ? '生效中' : '未生效'}}</p>
@@ -111,7 +111,6 @@
         </div>  
 
         <div class="block button">
-          <div class="help_blank"></div>
           <div class="buttons">
             <el-button @click="resetLoading = true; resetData()" :loading="resetLoading">重    置</el-button>
             <el-button @click="userCenterSave()" :loading="saveDataLoading">保    存</el-button>
@@ -231,7 +230,7 @@ export default {
             id: uuidv4(),
             title: '分销中心',
             titleValue: '分销中心',
-            icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAA2CAYAAACBWxqaAAAEdklEQVRoQ+1aWSi0YRR+xl5ISSlkSfalRJLiQlKKbJFwZylRtogbKRdEyJaEOySyJRRRKCRbsiY3QlnKBclS/J23RjP/zJj5vu/tn75+p+ZCM+97znOes75RQOaikLn9UHx9fX3JEYRCoWDOlwzg4+MDU1NT7LO9vY2bmxvmDycnJ4SFhSE5OZl9zM3NufqJC4DJyUlUVlbi4uIClpaWCA8Ph4uLCzP06uoKW1tbeHt7g6enJ5qbm5GSksINhCQAn5+fqK6uZkY5Ozujrq4OmZmZsLGxUTPw+fkZIyMj7Pvr62sGtrGxESYmJpKBSAJQVVXFjE9KSsLg4KCG4X9bR0BycnIwPT3NQDQ1NRkPAIVNamoqM35iYsJgbxJrdI5A0Dmp4SSKAUpYPz8/vL6+4vT0VK/ntTHh6+sLKysrnJycSEpsUQDGxsaQkZGBvr4+5OXliQqD/v5+5OfnY3R0FOnp6aLuYOVTTBnNzs7G+Pg4Hh4eBHtfaSnlg4ODA9LS0jA0NPRvAfj4+MDR0RGrq6uiFdPB6Oho3N7e4uzsTPQ9ohiwtbVFYmIihoeHRSumg1lZWZiZmcHT05Poe/5PALIPIdknsezLqOwbGZUMWY8Sypon62GOQMh+nFYyobrQmJqaIjIyUutCQzuDtbU1FhYW4ObmJrp5qR4U1ci0ad7Y2GCGe3t7s6+1rZTu7u6IiIhg8w8NcTyEGwAynmaa8/Nz2Nvb67StoKCATbErKytsFpIqXADQNEmbVmdnJ4qLi3+06f7+Hl5eXvDw8MDOzo7Bi5CuSyUDeHl5AY0WdnZ22N/fh5mZmV6ntra2oqKiAr29vSBGpIhkALW1taivr8fi4iJiY2MNsoUaYWBgIB4fH1nIEXix8iOAo6Mj0OZEVePy8pLpcHV1RVxcHNvE6PWBVkv6m96DhMjs7CwSEhJQXl6OlpYWIUfVfqsVwPv7O7u4p6cH9GAXEhLCwoSEEnVvb49WORbHBIz2WnrzESrx8fFYWlrC4eHhd/USeocGADKeLl5eXmZlcWBgALSAqwot8jSR7u7uMkYoDCwsLITqZg8CQUFBjEFiRB/jAQEBGjo0AFAV6e7uBo0JDQ0NOqsEdWFKQAJYVFSErq4uwQDoQGlpKdrb21k4zc3N/ch4YWEhqACoOksNAHkgODiYNZu1tTW9JY5AREVFYXNzEwcHB9DmIX2o7u7uWNemxP6J8dzcXKyvryMmJgbz8/PfINQAlJWVMW8cHx9rhI0uQygM/P39UVJSgra2Nn32anyvZJxY7Ojo+JHxmpoa9pqnyrgaAPIgPTZRgxEioaGh7JGLGBQiPBhXAyD2tUHs6wIPxo0KgAfjRg0hHoxzSWLqxlQOhSYxdwA8kkpIEnMPIVIupJFpK2tCAIhNYlXGRY8SuhqLEAA8GJc0zGlr7UIA8GBc0jgtZnT4G6Chw6NBo4RQ7/H6vaHju95hjpdBYu/hMk6LVW6sc985YCwDeOmV/3+r8PKEse75ZcBYnlfq/WXglwGJHvgDwfrCZCm1+M8AAAAASUVORK5CYII=',
+            icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAsCAMAAAAQPRtoAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQwIDc5LjE2MDQ1MSwgMjAxNy8wNS8wNi0wMTowODoyMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjc2RTNCNkY5QzREMzExRUFCRjY1QjVCM0ZBMDA0QTA4IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjc2RTNCNkZBQzREMzExRUFCRjY1QjVCM0ZBMDA0QTA4Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NzZFM0I2RjdDNEQzMTFFQUJGNjVCNUIzRkEwMDRBMDgiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NzZFM0I2RjhDNEQzMTFFQUJGNjVCNUIzRkEwMDRBMDgiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7oTte5AAAA2FBMVEX9/f1ZWVkMDAwCAgLX19fz8/PU1NRwcHAyMjIqKioBAQE6Ojpra2v5+flPT08mJiZ1dXWbm5sbGxs9PT2urq76+vpaWlojIyMHBweqqqpCQkJ2dnYEBATq6urg4OAGBgYnJyccHBxNTU2Tk5OZmZnLy8v7+/tlZWUzMzNISEhycnK0tLRKSkoJCQlkZGR9fX1sbGw5OTkfHx8wMDArKyvt7e3c3NwFBQXBwcGNjY3Z2dnw8PCkpKQSEhIkJCTHx8e7u7sPDw9VVVVvb2/19fUVFRUAAAD///+xiGnWAAAASHRSTlP//////////////////////////////////////////////////////////////////////////////////////////////wCc7PJgAAABgUlEQVR42qyW13KDMBBFRRG9d9yd3nvvdf3/f5RxbBgJ5EhmwtOK9WEO2ivGaLb2hdq30jLzZdnPylQUSXIoYkmKC8gTIQQFEIV4XuEwggAJIAF4uKqxBwEfScAj7iAPEh6S5hEm1zjKUw5SQki3Qyg5SFZguo2LjIP4cbMf+xxElpp9Sf5/pINYh9fvsMkdRtkhMF1i2SX8v0dssDhi08lI8CC/WpPFQd5WPgSR8+frZbULd0LIE2xW5fD9EgkgX9OrnXpxD1sCyCm8EaP1vx9XIppuyrKpa6Njj2wfwsEKxHUUy5Akw1JexjdUf//2gYm4PbDVeaHuwYVL9dXBUW1AIg70l4LoBBz6mZ+wURk4bo1oil3vArIVjUKG48rAhp5bIbqlEiaWTiEOnFUG/YXBfGka5G8Mk1wxDFDrI0F/IBgGPIRhwBNjPK79+qALIH9t8goxcpT9xigZBo3AVOPibTIZS8dthLBt0Ax/K+ptA8T9Z9Ay4CMzZvjXu34EGABVpAqSyI3rmAAAAABJRU5ErkJggg==',
             color: '#000',
             disabled: 2,
             linkTo: {

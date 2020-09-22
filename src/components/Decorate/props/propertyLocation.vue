@@ -29,7 +29,7 @@
               <p style="font-size: 14px;">上传图片</p>
             </div>
           </div>
-          <p class="prop-message">建议尺寸: <br>300*40像素或同等比例<br>大小不超过3M</p>
+          <p class="prop-message">建议尺寸: 300*40像素或同等比例<br>大小不超过3M</p>
         </el-radio-group>
       </el-form-item>
       
@@ -68,7 +68,8 @@ export default {
   },
   methods: {
     //保存时需要触发的回调函数
-    saveCallBack(data) {
+    saveCallBack(componentData) {
+      const data = componentData.data;
       if(data.bgType === 2 && data.backgroundImage === ''){
         this.$alert('请上传背景图片!', '警告', {
           confirmButtonText: '确定'

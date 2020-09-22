@@ -5,6 +5,7 @@
     title="核销验证"
     width="420px"
     :showFooter="showFooter"
+     @close="close"
   >
     <template v-if="!isSuccess">
       <div class="container">
@@ -12,13 +13,13 @@
           <el-option label="自提码核销" :value="1"></el-option>
         </el-select>
         <div>
-          <el-input type="text" placeholder="请输入自提码" v-model="selfCode"></el-input>
+          <el-input :class="{error: isShowError}" type="text" placeholder="请输入自提码" v-model="selfCode"></el-input>
           <span v-if="isShowError" class="msgInfo">{{errorMsg}}</span>
         </div>
       </div>
       <div class="footer">
-        <el-button @click="visible = false">取消</el-button>
         <el-button @click="submit" type="primary">确定</el-button>
+        <el-button @click="visible = false">取消</el-button>
       </div>
     </template>
     <template v-else>
@@ -47,15 +48,22 @@ export default {
   },
   created() {},
   methods: {
+    close() {
+      this.isShowError = false
+    },
+    cancelHandler() {
+      this.isShowError = false
+      this.visible = false
+    },
     submit() {
       let self = this;
       if(self.selfCode===''){
         this.isShowError = true
-        self.errorMsg='请输入自提码'
+        self.errorMsg='验证码不可为空！'
         return
       }else if(this.selfCode.length!=6){
         this.isShowError = true
-         self.errorMsg='请核对自提码'
+         self.errorMsg='自提码为6位数字，请核对后重新输入！'
          return
       }
       //调取核销验证码接口
@@ -80,6 +88,8 @@ export default {
           this.$parent.$parent.getList()
         } else if(this.$route.name == 'orderDetail') {
           this.$parent.$parent.getDetail()
+        } else if(this.$route.name == 'deliveryManagement') {
+          this.$parent.getList()
         }
         }else{//自提码验证失败
            self.isShowError = true;
@@ -168,6 +178,10 @@ export default {
   color: rgba(146, 146, 155, 1);
   font-size: 12px;
   margin-left: 51px;
+}
+/deep/ .el-input.error .el-input__inner {
+    border: 1px solid #FD4C2B;
+    border-radius: 4px;
 }
 </style>
 

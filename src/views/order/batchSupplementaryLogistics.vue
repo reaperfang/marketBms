@@ -8,6 +8,7 @@
           <div class="item-title">
             <span>商品清单</span>
             <span>订单编号 {{item.orderCode}}</span>
+            <i v-if="list.length > 1" @click="deleteOrder(index)" class="el-icon-delete"></i>
           </div>
           <div class="item-content">
             <div class="row align-center table-title">
@@ -23,7 +24,7 @@
               </div>
               <div class="col">
                 <div class="row align-center row-margin">
-                  <div class="col" style="width: 180px;">收货信息</div>
+                  <div class="col" style="width: 186px;">收货信息</div>
                   <div class="col" style="width: 281px; text-align: center;">查看物流</div>
                 </div>
               </div>
@@ -57,14 +58,17 @@
               </div>
               <div class="col">
                 <div class="row row-margin">
-                  <div class="col" style="width: 180px;">
-                    <p>收货人: {{item.receivedName}}</p>
-                    <p>联系电话: {{item.receivedPhone}}</p>
-                    <p>收货地址: {{item.receiveAddress}} {{item.receivedDetail}}</p>
+                  <div class="col message-box" style="width: 186px;">
+                    <div>收货人: {{item.receivedName}}</div>
+                    <div>联系电话: {{item.receivedPhone}}</div>
+                    <div class="message-box-address">
+                      <div class="label">收货地址: </div> 
+                      <div>{{item.receiveAddress}} {{item.receivedDetail}}</div>
+                    </div>
                   </div>
                   <div class="col">
                     <el-form :model="item" label-width="70px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
-                        <el-form-item label="快递公司" prop="expressCompanys">
+                        <el-form-item label="快递公司" prop="expressCompanys" class="expressCompanys">
                             <el-select filterable @change="checkExpress(index)" v-model="item.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
                             </el-select>
@@ -78,9 +82,9 @@
                         ></el-input>
                         <p v-if="item.expressCompanyCodes == 'other' && item.showErrorOther" class="error-message">{{item.errorMessageOther}}</p>
                         </el-form-item>
-                        <el-form-item label="快递单号" prop="expressNos">
-                            <el-input :disabled="item.express != null" v-model="item.expressNos" @input="ExpressNosInput(index)" maxlength="20"></el-input>
-                            <p v-if="item.express && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
+                        <el-form-item label="快递单号" prop="expressNos" class="expressNos">
+                            <el-input :disabled="item.express != null" v-model="item.expressNos" @input="ExpressNosInput(index)" maxlength="20" :placeholder="item.express != null ? '已开通电子面单，无需输入快递单号' : '请输入快递单号'"></el-input>
+                            <p v-if="item.express == null && item.showErrorExpressNos" class="error-message">{{item.errorMessageExpressNos}}</p>
                         </el-form-item>
                     </el-form>
                     <el-form :model="item" label-width="100px" class="demo-ruleForm" v-if="item.deliveryWay == 2">
@@ -159,7 +163,8 @@
       @getDetail="getDetail"
       :orderSendGoodsHander="orderSendGoodsHander"
       :params="params"
-      :list="list"></component>
+      :list="list"
+      @cancel="cancel"></component>
   </div>
 </template>
 <script>
@@ -190,12 +195,13 @@ export default {
       distributorSet: false,
       ajax: true,
       _list: [],
-      params: {}
+      params: {},
+      shopAddressInfo: null
     };
   },
   created() {
-    this.getDetail();
     this.getExpressCompanyList()
+    this.getDetail();
     this.checkSet()
   },
   computed: {
@@ -205,6 +211,12 @@ export default {
         }
     },
   methods: {
+    deleteOrder(index) {
+      this.list.splice(index, 1);
+    },
+    cancel() {
+        this.sending = false
+    },
     //检测是否有配置子帐号的权限
     checkSet(){
         const setConfig = asyncRouterMap.filter(item => item.name === 'set');
@@ -439,6 +451,10 @@ export default {
             showErrorExpressNos: true,
             errorMessageExpressNos: '请输入快递单号'
           }))
+        }else{
+          this.list.splice(index, 1, Object.assign({}, this.list[index], {
+            showErrorExpressNos: false
+          }))
         }
       }
     },
@@ -471,10 +487,25 @@ export default {
               if(index != 0) {
                 val.expressCompanyCodes = expressCompanyCodes
                 val.express = express
+                val.expressNos = ''
+                val.showErrorExpressCompany = false
+                val.errorMessageExpressCompany = ''
               }
             })
 
             this.list = list
+          }
+
+          if(res) {
+            this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              expressNos: '',
+              express: res
+            }))
+          } else {
+            this.list.splice(index, 1, Object.assign({}, this.list[index], {
+              showErrorExpressCompany: false,
+              errorMessageExpressCompany: ''
+            }))
           }
         })
         .catch(error => {
@@ -482,10 +513,10 @@ export default {
           this.$message.error(error);
         });
 
-        this.list.splice(index, 1, Object.assign({}, this.list[index], {
-          showErrorExpressCompany: false,
-          errorMessageExpressCompany: ''
-        }))
+        // this.list.splice(index, 1, Object.assign({}, this.list[index], {
+        //   showErrorExpressCompany: false,
+        //   errorMessageExpressCompany: ''
+        // }))
     },
     printingElectronicForm() {
       this.$router.push('/order/printingElectronicForm?ids=' + this.list.map(val => val.id).join(',') + '&type=batchSupplementaryLogistics')
@@ -578,6 +609,17 @@ export default {
               return
             }
 
+            // if(this.list && this.list[0] && this.list[0].deliveryWay == 1) {
+            //   if(!this.shopAddressInfo) {
+            //     this.confirm({
+            //       title: "提示",
+            //       icon: true,
+            //       text: "发货信息不能为空"
+            //     });
+            //     return;
+            //   }
+            // }
+
             this.sending = true
 
             params = {
@@ -628,6 +670,9 @@ export default {
                       obj.expressCompanys = expressCompanys;
                       obj.expressNos = item.expressNos;
                       obj.expressCompanyCodes = item.expressCompanyCodes;
+                      if(item.express && item.express.specificationSize) {
+                        obj.specificationSize = item.express.specificationSize
+                      }
                     }
                     //如果是商家配送，则添加配送员信息
                     if(item.deliveryWay == 2){
@@ -649,14 +694,39 @@ export default {
             })
             this._list = JSON.parse(JSON.stringify(this.list)) 
             Promise.all(_arr).then((values) => {
-              values.forEach((item, index) => {
-                this._list[index].sizeList = item
-                if(!item || !item.length) {
-                  this._list.splice(index, 1)
-                }
-              })
+              // values.forEach((item, index) => {
+              //   this._list[index].sizeList = item
+              //   if(item && item.length) {
+              //     this._list.splice(index, 1)
+              //   }
+              // })
 
-              if(this._list.length) {
+              for(let index=values.length-1; index>=0; index--) {
+                let item = values[index]
+
+                this._list[index].sizeList = item.map(_item => ({
+                  ..._item,
+                  sizeSpecs: _item.sizeSpecs + ' ' + _item.templateSize,
+                  templateSize: `${_item.sizeSpecs} ${_item.templateSize}`
+                }))
+                // if(item && item.length) {
+                //   this._list.splice(index, 1)
+                // }
+              }
+              this._list = this._list.filter(val => val.express != null && !val.express.sizeSpecs && val.sizeList && val.sizeList.length)
+
+              var __result = [];
+              var __obj = {};
+                for(var i =0; i<this._list.length; i++){
+                   if(!__obj[this._list[i].expressCompanyCodes]){
+                      __result.push(this._list[i]);
+                      __obj[this._list[i].expressCompanyCodes] = true;
+                  }
+                }
+
+              this._list = __result
+
+              if(this.list[0].deliveryWay == 1 && this._list.length) {
                 this.currentData = {
                   list: this._list,
                   expressCompanyList: this.expressCompanyList,
@@ -676,7 +746,7 @@ export default {
           this._apis.order.orderSendGoods(params).then((res) => {
               this.$message.success('批量补填物流成功');
               this.sending = false
-              this.$router.push('/order/query')
+              this.$router.push('/order/deliveryManagement')
           }).catch(error => {
               this.$message.error(error);
               this.sending = false
@@ -749,7 +819,7 @@ export default {
             this.sendGoods = 'send'
             this.dialogVisible = true
         },
-    getDetail() {
+    getDetail(selection, list) {
       this._apis.order
         .orderSendDetail({
           ids: this.$route.query.ids.split(",").map(val => +val)
@@ -757,9 +827,10 @@ export default {
         .then(res => {
           console.log(res)
           let _address = res.shopAddressInfo
-            
+          
+          this.shopAddressInfo = res.shopAddressInfo
           res = res.sendInfoListData
-          res.forEach(val => {
+          res.forEach((val, index) => {
             val.express = null
             val.other = "";
             val.checked = false;
@@ -785,7 +856,38 @@ export default {
             val.errorMessageDistributorName = '请输入或选择配送员';
             val.showErrorPhone = false;
             val.errorMessagePhone = '';
+
+            try {
+              // 回显选中的快递公司
+              if(list && list.length) {
+                if(list[index].expressCompanyCodes) {
+                  val.expressCompanyCodes = list[index].expressCompanyCodes
+
+                  let expressName = this.expressCompanyList.find(item => item.expressCompanyCode == val.expressCompanyCodes).expressCompany
+
+                  this._apis.order
+                    .checkExpress({expressName})
+                    .then(res => {
+                      val.express = res
+                    })
+                }
+
+                // 回显快递单号
+                if(list[index].expressNos) {
+                  val.expressNos = list[index].expressNos
+                }
+              }
+            } catch(e) {
+              
+            }
           });
+          if(list && list.length) {
+            for(let i=res.length-1; i>=0; i--) {
+              if(!list.find(item => item.id == res[i].id)) {
+                res.splice(i, 1)
+              }
+            }
+          }
           res.forEach(val => {
             val.orderItemList.forEach(item => {
               item.cacheSendCount = item.sendCount
@@ -800,7 +902,6 @@ export default {
           }
 
           
-          this.list = res;
 
           // this._apis.order
           //   .fetchOrderAddress({ id: this.cid, cid: this.cid })
@@ -824,20 +925,48 @@ export default {
           //     this.visible = false;
           //     this.$message.error(error);
           //   });
-          this.list.forEach(res => {
-            if(!res.sendAddress) {
-              res.sendName = _address.name;
-              res.sendPhone = _address.mobile;
-              res.sendProvinceCode = _address.provinceCode;
-              res.sendProvinceName = _address.provinceName;
-              res.sendCityCode = _address.cityCode;
-              res.sendCityName = _address.cityName;
-              res.sendAreaCode = _address.areaCode;
-              res.sendAreaName = _address.areaName;
-              res.sendAddress = _address.address;
-              res.sendDetail = _address.addressDetail;
+
+          // 如果一个订单与发货数据，就付给其他没有的订单
+          let _orderItem = res.find(val => val.sendAddress)
+
+          res.forEach((item, index) => {
+            if(!item.sendAddress) {
+              if(item.deliveryWay == 1 || item.deliveryWay == 2) {
+                if(_orderItem) {
+                  item.sendName = _orderItem.sendName;
+                  item.sendPhone = _orderItem.sendPhone;
+                  item.sendProvinceCode = _orderItem.sendProvinceCode;
+                  item.sendProvinceName = _orderItem.sendProvinceName;
+                  item.sendCityCode = _orderItem.sendCityCode;
+                  item.sendCityName = _orderItem.sendCityName;
+                  item.sendAreaCode = _orderItem.sendAreaCode;
+                  item.sendAreaName = _orderItem.sendAreaName;
+                  item.sendAddress = _orderItem.sendAddress;
+                  item.sendDetail = _orderItem.sendDetail;
+                  item.sendLatitude = _orderItem.sendLatitude;
+                  item.sendLongitude = _orderItem.sendLongitude
+                }
+
+                if(!_address){
+                  return;
+                }
+                item.sendName = _address.name;
+                item.sendPhone = _address.mobile;
+                item.sendProvinceCode = _address.provinceCode;
+                item.sendProvinceName = _address.provinceName;
+                item.sendCityCode = _address.cityCode;
+                item.sendCityName = _address.cityName;
+                item.sendAreaCode = _address.areaCode;
+                item.sendAreaName = _address.areaName;
+                item.sendAddress = _address.address;
+                item.sendDetail = _address.addressDetail;
+                item.sendLatitude = _address.latitude;
+                item.sendLongitude = _address.longitude
+              }
             }
           });
+
+          this.list = res;
         })
         .catch(error => {
           this.visible = false;
@@ -853,7 +982,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .bulk-delivery {
-  min-width: 1153px;
+  min-width: 1290px;
   color: #333333;
   background-color: #fff;
   padding: 20px;
@@ -871,10 +1000,8 @@ export default {
         .item-title {
           background-color: #F6F7FA;
           color: #44434B;
-          padding: 0 20px;
+          padding: 20px;
           border-radius: 10px 10px 0 0;
-          height: 56px;
-          line-height: 56px;
         }
         .item-content {
           padding: 20px;
@@ -1004,5 +1131,34 @@ export default {
 }
 .send-count {
   text-align: center;
+}
+.message-box {
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
+  >div {
+    margin-bottom: 10px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .message-box-address {
+    display: flex;
+    line-height: 21px;
+    .label {
+      flex-shrink: 0;
+      padding-right: 2px;
+    }
+  }
+}
+.el-icon-delete {
+  float: right;
+  cursor: pointer;
+}
+/deep/ .expressCompanys .el-input, /deep/ .expressNos .el-input {
+  width: 236px;
+}
+/deep/ .el-form-item.expressNos {
+  margin-bottom: 0;
 }
 </style>

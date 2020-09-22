@@ -130,15 +130,30 @@ export default {
       localStorage.setItem('siderBarCurrent', index)
       this.jumpTo(index)
     },
+    getNoHideChildPath(children = []) {
+      let path = children && children.length > 0 ? children[0].path : ''
+      let index = 0;
+      const len = children.length
+      while(index < len) {
+        const isObject = Object.prototype.toString.call(children[index])==='[object Object]';
+        const child = isObject ? children[index] : null
+        if (child && (!child.hasOwnProperty('hidden') || !child.hidden)) {
+          path = child.path
+          return path
+        }
+        index++
+      }
+      return path
+    },
     jumpTo(index) {
       let current = localStorage.getItem('siderBarCurrent') || '0'
       let currentBar = this.permission_routers_tree[current]
 
       let basePath = currentBar.path
       let children = currentBar.children
-
+      console.log('children',children)
       if(children && children.length) {
-        let _path = children[0].path
+        let _path = this.getNoHideChildPath(children)
 
         this.$router.push({path: this.resolvePath(basePath, _path)})
       }
@@ -180,20 +195,24 @@ export default {
       color: #9596a9;
       font-size:16px;
       ul li {
-        padding: 15px 0 15px 17px;
         display: flex;
+        height: 60px;
         align-items: center;
         cursor: pointer;
+        &:hover {
+          background-color: #4b4c6c;
+        }
         &.active {
           border-left: 4px solid #655eff;
           background-color: #4b4c6c;
           color: #fff;
+          i {
+            margin-left: 13px;
+          }
         }
         i {
-          margin-right: 9px;
-        }
-        span {
-          padding-right: 5px;
+          margin-left: 17px;
+          margin-right: 5px;
         }
         &:first-child {
           margin-top: 15px;
@@ -232,8 +251,8 @@ export default {
     z-index: 999;
   }
   .icons{
-    width: 18px;
-    height: 18px;
+    width: 26px;
+    height: 26px;
   }
   .icon_profile{
     background: url('../../assets/images/icons/profile.png') no-repeat;

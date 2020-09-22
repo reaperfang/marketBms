@@ -7,7 +7,7 @@ const mixin = {
       let mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
       let tel = /^\d{3,4}-?\d{7,9}$/;
       if (!tel.test(value) && !mobile.test(value)) {
-        return callback(new Error("请填写联系电话(座机格式'区号-座机号码')"));
+        return callback(new Error("请填写客服电话(座机格式'区号-座机号码')"));
       } else {
         callback();
       }
@@ -57,7 +57,7 @@ const mixin = {
           { min: 1, max: 10, message: "长度在 1 到 10 个字符", trigger: "blur" }
         ],
         phone: [
-          { required: true, message: "请输入联系电话", trigger: "blur" },
+          { required: true, message: "请输入客服电话", trigger: "blur" },
           { validator: validatePass, trigger: "blur" }
         ],
         addressCode: [

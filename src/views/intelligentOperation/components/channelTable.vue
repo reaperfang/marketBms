@@ -7,6 +7,7 @@
             :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
             :default-sort = "{prop: 'changeRatio', order: 'descending'}"
             @sort-change="changeSort"
+            v-loading="loading1"
         >
             <el-table-column
                 width="180"
@@ -50,9 +51,9 @@
                 :current-page.sync="currentPage"
                 :page-sizes="[10, 20, 30, 40]"
                 :page-size="pageSize"
-                layout="sizes, prev, pager, next"
+                layout="prev, pager, next, sizes"
                 :total="listObj.totalSize"
-                :background="background">
+                :background="true">
             </el-pagination>
         </div>
     </div>
@@ -63,13 +64,19 @@ import TableBase from "@/components/TableBase";
 export default {
     name: "channelTable",
     extends: TableBase,
-    props:['listObj','background'],
+    props:['listObj','background', 'loading'],
     data() {
         return {
             pageSize:10,
+            loading1: true
         };
     },
     created() {
+    },
+    watch: {
+        loading(newValue) {
+            this.loading1 = newValue;
+        }
     },
     methods: {
         //更改每页条数
@@ -117,5 +124,8 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
+}
+/deep/ .el-table--small td, /deep/.el-table--small th{
+  padding:8px 10px;
 }
 </style>

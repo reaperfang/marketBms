@@ -654,6 +654,7 @@ ul.cube {
             width: 14px;
             height: 14px;
             background: url('~@/assets/images/common/icon-info.png') no-repeat;
+            background-size: 14px auto;
       }
 }
 
@@ -673,6 +674,9 @@ ul.cube {
             .el-button+.el-button {
                   margin-left: 16px;
             }
+      }
+      .el-form--inline .el-form-item:last-child {
+            margin-right: 0;
       }
 }
 
@@ -774,14 +778,17 @@ ul.cube {
 
 .app-main .content-box .content-main.m_shopEditor {
       padding: 0 !important;
+      padding-left: 1px !important;
       overflow: hidden !important;
 }
 
 /* 微信店铺、移动H5、启动广告右侧编辑器公共样式 */
 .group-wrapper {
       .module.props {
-            form {
+            width: 348px;
+            &>form {
                   overflow-y: auto;
+                  border: 1px #D0D6E4 solid;
             }
 
             .block.header {
@@ -795,10 +802,10 @@ ul.cube {
             .block.button {
                   z-index: 2000;
                   position: absolute;
-                  bottom: 6px;
-                  width: 346px;
+                  bottom: 43px;
+                  width: 348px;
                   padding: 0;
-
+                  border: 1px #D0D6E4 solid;
                   .buttons {
                         margin-top: 30px;
                         padding-bottom: 30px;

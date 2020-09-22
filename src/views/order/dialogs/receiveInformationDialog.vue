@@ -3,7 +3,7 @@
     :visible.sync="visible"
     @submit="submit"
     :title="title"
-    width="780px"
+    width="640px"
     :showFooter="showFooter"
   >
     <div class="receive-information-dialog" v-if="sendGoods == 'send'">
@@ -29,7 +29,7 @@
           <el-input
             type="textarea"
             :rows="2"
-            placeholder="请输入补充地址信息，非必填项"
+            placeholder="请输入补充地址信息，必填项"
             maxlength="100"
             v-model="ruleForm.sendDetail"
           ></el-input>
@@ -75,7 +75,7 @@
           <el-input
             type="textarea"
             :rows="2"
-            placeholder="请输入补充地址信息，非必填项"
+            placeholder="请输入补充地址信息，必填项"
             maxlength="100"
             v-model="ruleForm.receivedDetail"
           ></el-input>
@@ -114,7 +114,11 @@ export default {
         if (/^\s+$/.test(this.ruleForm.sendName)) {
           callback(new Error("发货人姓名不能为空白字符"));
         } else {
-          callback();
+          if(this.ruleForm.sendName.length > 50) {
+            callback(new Error("发货人姓名不能超过50个字符"));
+          }else {
+            callback();
+          }
         }
       }
     };
@@ -125,7 +129,11 @@ export default {
         if (/^\s+$/.test(this.ruleForm.receivedName)) {
           callback(new Error("收货人姓名不能为空白字符"));
         } else {
-          callback();
+          if(this.ruleForm.receivedName.length > 50) {
+            callback(new Error("收货人姓名不能超过50个字符"));
+          }else {
+            callback();
+          }
         }
       }
     };
@@ -195,6 +203,12 @@ export default {
         // ],
         address: [
           { required: true, message: "请选择收货地址", trigger: "blur" }
+        ],
+        sendDetail: [
+          { required: true, message: "请输入补充地址信息", trigger: "blur" }
+        ],
+        receivedDetail: [
+          { required: true, message: "请输入补充地址信息", trigger: "blur" }
         ],
 
         sendName: [{ validator: sendNameValidator, trigger: "blur" }],
@@ -304,7 +318,6 @@ export default {
     submit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-
         if(this.submitFlag == false){
             this.$message.error("请在地图上标记位置!");
             return false;
@@ -409,10 +422,23 @@ export default {
               orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id)
             })
           }
+          try {
+            if(this.$refs.mapSearch.poi) {
+              params.tencentCode = this.$refs.mapSearch.poi.ad_info.adcode
+            } else {
+              params.tencentCode = this.$refs.mapSearch.pois[0].ad_info.adcode
+            }
+          } catch(e) {
+            console.error(e)
+          }
           this._apis.order
             .updateReceiveAndSend(params)
             .then(res => {
-              this.$emit('getDetail')
+              if(this.list) {
+                this.$emit('getDetail', this.multipleSelection, JSON.parse(JSON.stringify(this.list)))
+              } else {
+                this.$emit('getDetail', this.multipleSelection)
+              }
               this.$emit("submit");
               this.visible = false;
               this.$message.success("修改成功！");
@@ -476,6 +502,12 @@ export default {
     _ids: {
       type: Array,
       default: () => []
+    },
+    multipleSelection: {
+
+    },
+    list: {
+
     }
   },
   components: {
@@ -487,7 +519,6 @@ export default {
 <style lang="scss" scoped>
 .receive-information-dialog {
   height: 670px;
-  margin: 0 50px;
   .wrapper {
     height: 300px;
     width: 100%;
@@ -553,13 +584,6 @@ export default {
 }
 /deep/.el-form-item {
   margin-bottom: 24px;
-}
-/deep/ .el-dialog__header {
-    background: #F6F7FA!important;
-    height: 50px;
-    line-height: 50px;
-    padding: 0 20px;
-    color: #44434B;
 }
 /deep/ .el-dialog {
   border-radius:3px!important;

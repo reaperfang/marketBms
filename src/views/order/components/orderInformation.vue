@@ -5,7 +5,7 @@
                 <div class="grid-content lefter">
                     <div class="item">
                         <div class="label">配送方式</div>
-                        <div class="value">{{orderInfo.deliveryWay | deliveryWayFilter}}</div>
+                        <div class="value">{{orderInfo | deliveryWayFilter}}</div>
                         <!-- && orderInfo.deliveryDate -->
                     </div>
                     <template v-if="orderInfo.deliveryWay == 4">
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                     </template>
-                    <!-- <p v-if="!authHide && orderInfo.orderStatus != 2 && orderInfo.orderStatus != 4 && orderInfo.orderStatus != 5 && orderInfo.orderStatus != 6" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p> -->
+                    <p v-if="orderInfo.deliveryWay !=4 && orderInfo.orderStatus != 2 && orderInfo.orderStatus != 4 && orderInfo.orderStatus != 5 && orderInfo.orderStatus != 6" @click="changeReceivedInfo" class="change"><span class="pointer">修改</span></p>
                 </div>
             </el-col>
             <el-col :span="8"><div class="grid-content center">
@@ -251,7 +251,7 @@
                     label="商品状态"
                     class-name="goods-status">
                     <template slot-scope="scope">
-                        <template v-if="scope.row.afterSaleStatus || scope.row.afterSaleStatus === 0">
+                        <template v-if="scope.row.afterSaleStatus && scope.row.afterSaleStatus != 0">
                             <router-link :to="{ path: '/order/afterSalesDetails', query: { id: scope.row.orderAfterSaleId }}">{{scope.row | orderStatusFilter}}</router-link>
                         </template>
                         <template v-else>
@@ -663,15 +663,28 @@ export default {
                 this.remarkVisible = false
                 this.$message.error(error);
             }) 
-        }
+        },
+         changeReceivedInfo() {
+            this.currentDialog = "ReceiveInformationDialog";
+            this.currentData = this.orderInfo;
+            this.sendGoods = "received";
+            this.title = "修改收货信息";
+            this.dialogVisible = true;
+        },
     },
     filters: {
-        deliveryWayFilter(code) {
-            if(code === 1) {
+        deliveryWayFilter(order) {
+            if(order.deliveryWay === 1) {
                 return '普通快递'
-            } else if(code === 2) {
+            } else if(order.deliveryWay === 2) {
                 return '商家配送'
-            }else if(code ===4) {
+            } else if(order.deliveryWay === 3){
+                if(order.orderStatus==5||order.orderStatus==6){
+                    return "第三方配送-达达"
+                }else{
+                    return "第三方配送"
+                }
+            } else if(order.deliveryWay ===4) {
                 return '上门自提'
             }
         },
@@ -883,6 +896,9 @@ export default {
                     color: $globalMainColor;
                     text-align: right;
                     margin-top: 10px;
+                }
+                .item {
+                    line-height: 21px;
                 }
             }
             &.righter {

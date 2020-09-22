@@ -1,28 +1,30 @@
 <template>
    <div class="operativeDealConfig">
     <steps class="steps" :step="step"></steps>
-     <h2>线上生意又进一步，完善下面的工作吧!</h2>
-     <ul>
-       <li>
-         <p><i :class="[isHasGoods ? 'icon-success' : 'el-icon-error']"></i><span>上传您的的第一个商品：</span></p>
-         <p class="prompt">
-           <el-button type="text" class="link" @click="createGood">创建商品</el-button>
-           <span>或</span>
-           <el-button type="text" class="link" @click="importGoods">商品批量导入</el-button>
-         </p>
-         
-       </li>
-       <li class="sms">
-         <p><i :class="[isHasSms ? 'icon-success' : 'el-icon-error']"></i><span>设置短信息，收纳您的会员</span></p>
-         <p class="prompt">
-           <el-button type="text" class="link" @click="setSms">设置短信签名</el-button>
-         </p>
-       </li>
-     </ul>
+    <template v-if="isInitCompleted">
+      <h2>线上生意又进一步，完善下面的工作吧！</h2>
+      <ul>
+        <li>
+          <p><i :class="[isHasGoods ? 'icon-success' : 'el-icon-error']"></i><span>上传您的的第一个商品：</span></p>
+          <p class="prompt">
+            <el-button type="text" class="link" @click="createGood">创建商品</el-button>
+            <span>或</span>
+            <el-button type="text" class="link" @click="importGoods">商品批量导入</el-button>
+          </p>
+          
+        </li>
+        <li class="sms">
+          <p><i :class="[isHasSms ? 'icon-success' : 'el-icon-error']"></i><span>设置短信息，收纳您的会员</span></p>
+          <p class="prompt">
+            <el-button type="text" class="link" @click="setSms">设置短信签名</el-button>
+          </p>
+        </li>
+      </ul>
       <div class="btn">
         <el-button class="prev" @click="goPrev">上一步</el-button>
         <el-button class="next" type="primary" :loading="loading" @click="submit()" :disabled="isDisabled">下一步</el-button>
       </div>
+    </template>
    </div>
 </template>
 
@@ -39,6 +41,7 @@ export default {
 
   data () {
     return {
+      isInitCompleted: false, // 是否完成初始化
       loading: false,
       isHasGoods: false,
       isHasSms: false
@@ -59,13 +62,23 @@ export default {
   watch: {},
 
   created() {
-    this.getIsHasGoods()
-    this.getIsHasSms()
+    this.init()
+    
+    // this.getIsHasGoods()
+    // this.getIsHasSms()
   },
 
   mounted() {},
 
   methods: {
+    init() {
+      this.isInitCompleted = false
+      const p1 = this.getIsHasGoods()
+      const p2 = this.getIsHasSms()
+      Promise.all([p1, p2]).finally(() => {
+        this.isInitCompleted = true
+      })
+    },
     updateStep() {
       const cid = this.cid;
       const step = 5
@@ -148,7 +161,7 @@ export default {
         sortType:1,
         code:""
       }
-      this._apis.goods.fetchSpuGoodsList(req).then((res) => {
+      return this._apis.goods.fetchSpuGoodsList(req).then((res) => {
         if (res && res.total > 0) {
           this.isHasGoods = true
         } else {
@@ -161,7 +174,7 @@ export default {
     },
     getIsHasSms() {
       // 查询签名
-      this._apis.profile.getSignatureList({
+      return this._apis.profile.getSignatureList({
         pageNum: 1,
         pageSize: 1,
         orderBy: "create_time desc",
@@ -208,6 +221,10 @@ export default {
         line-height:20px;
         display: flex;
         align-items: center;
+        span {
+          padding-left:11px;
+          font-weight:500;
+        }
         i {
           display:inline-block;
           width: 20px;

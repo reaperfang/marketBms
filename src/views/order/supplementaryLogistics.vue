@@ -206,7 +206,8 @@
             :orderSendGoodsHander="orderSendGoodsHander"
             :params="params"
             :list="_list"
-            :_ids="_ids">
+            :_ids="_ids"
+            @cancel="cancel">
         </component>
     </div>
 </template>
@@ -217,8 +218,10 @@ import { validatePhone } from "@/utils/validate.js"
 
 import { asyncRouterMap } from '@/router'
 import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
+import { common, deliveryWay1, deliveryWay2 } from '@/views/order/mixins/sendGoodsMixin'
 
 export default {
+    mixins: [common, deliveryWay1],
     data() {
         var expressCompanyCodeValidator = (rule, value, callback) => {
           if(this.ruleForm.expressCompanyCode != 'other') {
@@ -281,24 +284,15 @@ export default {
             nameList: [],
             orderInfo: {},
             orderSendInfo: {},
-            currentDialog: '',
-            dialogVisible: false,
-            currentData: {},
-            expressCompanyList: [],
-            sendGoods: '',
             title: '',
             express: null,
-            sending: false,
             distributorList: [], //配送员筛选后的数据
             distributorListFilter: [], //所有配送员数据
             distributorName: '', //配送员名字
             distributorId: '', //配送员id
             isDistributorShow: false, //尚未创建配送员信息提示控制
             distributorSet: false,
-            ajax: true,
             _ids: [],
-            params: {},
-            _list: []
         }
     },
     created() {
@@ -314,10 +308,6 @@ export default {
             } else {
                 return false
             }
-        },
-        cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-            return shopInfo.id
         }
     },
     methods: {
@@ -495,7 +485,8 @@ export default {
           }
 
           this._list.splice(0, 1, Object.assign({}, this._list[0], {
-            expressCompanyCodes: this.ruleForm.expressCompanyCode
+            expressCompanyCodes: this.ruleForm.expressCompanyCode,
+            express: res
           }))
         })
         .catch(error => {
@@ -529,6 +520,8 @@ export default {
           this.orderInfo.sendAreaName = address.areaName;
           this.orderInfo.sendAddress = address.address;
           this.orderInfo.sendDetail = address.addressDetail;
+          this.orderInfo.sendLatitude = address.latitude;
+          this.orderInfo.sendLongitude = address.longitude
         },
         printDistributionSheet() {
             this.$router.push('/order/printDistributionSheet?ids=' + this.orderInfo.id + '&type=supplementaryLogistics')
@@ -536,24 +529,17 @@ export default {
         printingElectronicForm() {
             this.$router.push('/order/printingElectronicForm?ids=' + this.orderInfo.id + '&type=supplementaryLogistics')
         },
-        getExpressCompanyList() {
-            this._apis.order.getElectronicFaceSheetExpressCompanyList().then((res) => {
-                res.forEach(val => {
-                    val.expressCompanyCode = val.expressCode
-                    val.expressCompany = val.expressName
-                })
-                res.push({
-                    expressCompanyCode: 'other',
-                    expressCompany: '其他'
-                })
-                this.expressCompanyList = res
-            }).catch(error => {
-                this.visible = false
-                this.$message.error(error);
-            })
-        },
         sendGoodsHandler(formName) {
-            
+            // if(this.orderInfo.deliveryWay == 1) {
+            //     if(!this.shopAddressInfo) {
+            //     this.confirm({
+            //         title: "提示",
+            //         icon: true,
+            //         text: "发货信息不能为空"
+            //     });
+            //     return;
+            //     }
+            // }
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     let params
@@ -570,7 +556,7 @@ export default {
 
                     this.sending = true
                     let obj = {
-                        orderId: this.$route.query.orderId || this.$route.query.ids, // 订单id
+                        orderId: this.$route.query.orderId || this.$route.query.ids || this.$route.query.id, // 订单id
                         memberInfoId: this.orderInfo.memberInfoId,
                         orderCode: this.orderInfo.orderCode,
                         orderItems: this.tableData.map(val => ({
@@ -607,6 +593,11 @@ export default {
                         obj.expressNos = this.ruleForm.expressNos; // 快递单号
                         obj.expressCompanyCodes = this.ruleForm.expressCompanyCode; // 快递公司编码
                         obj.remark = this.ruleForm.remark; // 发货备注
+                        if(this.orderInfo.deliveryWay == 1) {
+                            if(this.express && this.express.specificationSize) {
+                            obj.specificationSize = this.express.specificationSize
+                            }
+                        }
                       }else if(formName == 'ruleFormStore'){ //如果是商家配送
                         obj.deliveryWay = 2;
                         obj.distributorName = this.distributorName; //配送员名字
@@ -620,12 +611,16 @@ export default {
                         ],
                     }
                     this.params = params
-                    if(this.express != null && !this.express.specificationSize) {
+                    if(this.express != null && !this.express.sizeSpecs) {
                         try {
                         let res = await this._apis.order.getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
 
                         if(res && res.length) {
-                            this._list[0].sizeList = res
+                            this._list[0].sizeList = res.map(item => ({
+                                ...item,
+                                sizeSpecs: item.sizeSpecs + ' ' + item.templateSize,
+                                templateSize: `${item.sizeSpecs} ${item.templateSize}`
+                            }))
                             this.currentData = {
                                 list: this._list,
                                 expressCompanyList: this.expressCompanyList
@@ -633,6 +628,8 @@ export default {
                             this.currentDialog = 'SelectSizeDialog'
                             this.title = '提示'
                             this.dialogVisible = true
+                        } else {
+                            this.orderSendGoodsHander(params)
                         }
                         } catch(e) {
                             this.$message.error(error);
@@ -679,6 +676,7 @@ export default {
             this._apis.order.orderSendDetail({ids: [this.$route.query.ids || this.$route.query.id]}).then((res) => {
                 let _address = res.shopAddressInfo
 
+                this.shopAddressInfo = res.shopAddressInfo
                 res = res.sendInfoListData
                 res[0].orderItemList.forEach(val => {
                     val.sendCount =  val.goodsCount
@@ -690,8 +688,13 @@ export default {
                 this.orderInfo = res[0]
                 this._ids = [this.orderInfo.id]
                 if(!this.orderInfo.sendAddress) {
-                    this.fetchOrderAddress(_address)
+                    if(this.orderInfo.deliveryWay == 1 || this.orderInfo.deliveryWay == 2) {
+                        this.fetchOrderAddress(_address)
+                    }
                 }
+                // if(this.orderInfo.deliveryWay == 1) {
+                //     this.fetchOrderAddress(_address)
+                // }
 
                 //如果是商家配送，则需要请求拿到配送员列表
                 if(this.orderInfo.deliveryWay == 2){

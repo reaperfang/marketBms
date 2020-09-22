@@ -168,7 +168,7 @@
                         <template slot-scope="scope">
                             <span class="price">
                                 {{scope.row.goodsInfos && scope.row.goodsInfos.length ? Math.min.apply(null, scope.row.goodsInfos.map(val => +val.salePrice)) : scope.row.salePrice}}
-                                <i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="currentData = JSON.parse(JSON.stringify(scope.row)); currentDialog = 'EditorPriceSpu'; dialogVisible = true" class="i-bg pointer"></i>
+                                <i v-permission="['商品', '商品列表', '默认页面', '修改售卖价']" @click="editorPriceHandler(scope.row)" class="i-bg pointer"></i>
                             </span>
                         </template>
                     </el-table-column>
@@ -253,6 +253,9 @@
 /deep/.el-table thead {
     color:rgba(68,67,75,1);
     font-size:14px;
+}
+/deep/ .el-table-column--selection .cell{
+    padding-left:20px;
 }
 .border-button {
         border:1px solid rgba(218,218,227,1)!important;
@@ -737,6 +740,16 @@ export default {
         }
     },
     methods: {
+        editorPriceHandler(row) {
+            let _row = JSON.parse(JSON.stringify(row)); 
+
+            _row.goodsInfos.forEach(item => {
+                item.isShowMsg = false
+            })
+            this.currentData = JSON.parse(JSON.stringify(_row)); 
+            this.currentDialog = 'EditorPriceSpu'; 
+            this.dialogVisible = true
+        },
         changeEdit(item){
             item.isEdit = false;
         },

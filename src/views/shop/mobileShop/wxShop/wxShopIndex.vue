@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper" :class="{'shopMain-wrapper': currentTab === 'shopMainDecorated'}">
     <el-tabs v-model="currentTab">
       <el-tab-pane label="店铺主页" :name="shopMain"></el-tab-pane>
       <el-tab-pane label="个人中心" name="personCenter"></el-tab-pane>
@@ -50,7 +50,6 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.shop.getHomePage(this.ruleForm).then((response)=>{
-
         //没有装修首页
         if(!response) {
           this.hasHomePage = false;
@@ -75,12 +74,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.wrapper {
+  background: #fff;
+  padding: 0 20px 20px 20px;
+  border-radius: 4px;
+}
 .el-tabs{
-  padding:20px;
-  padding-bottom: 0;
   background: rgb(255, 255, 255);
+}
+/deep/ .el-tabs__header {
+  margin: 0;
 }
 .loading_wrapper{
   width:100%;
 }
+</style>
+<style lang="scss">
+  .shopMain-wrapper {
+    /deep/ .phone-body {
+      height: calc(100% - 64px) !important;
+    }
+  }
 </style>

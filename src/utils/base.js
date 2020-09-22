@@ -131,7 +131,7 @@ export function orderStatusFilter(status) {
     case 1:
       return '待成团'
     case 2:
-      return '关闭'
+      return '已关闭'
     case 3:
       return '待发货'
     case 4:
@@ -139,7 +139,25 @@ export function orderStatusFilter(status) {
     case 5:
       return '待收货'
     case 6:
-      return '完成'
+      return '已完成'
+  }
+}
+
+//售后单状态过滤器   
+export function orderAfterSaleStatusFilter(status) {
+  switch (status) {
+    case 0:
+      return '待审核'
+    case 1:
+      return '待退货'
+    case 2:
+      return '待处理'
+    case 3:
+      return '待收货'
+    case 4:
+      return '已完成'
+    case 5:
+      return '已关闭'
   }
 }
 
@@ -157,7 +175,7 @@ export function goodsSpecsFilter(value) {
           str += _value[i] + ','
       }
   }
-
+  str = str.replace(/(^.*)\,$/, '$1')
   return str
 }
 

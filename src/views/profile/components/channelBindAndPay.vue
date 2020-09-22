@@ -1,34 +1,36 @@
 <template>
    <div class="channelBindAndPay">
     <steps class="steps" :step="step"></steps>
-     <h2>请绑定您的经营渠道</h2>
-     <ul>
-       <li>
-         <p><i :class="[isAuthGzhOrXcx ? 'icon-success' : 'el-icon-error']"></i><span>渠道绑定：</span></p>
-         <p class="prompt">绑定微信小程序和公众号，推广您的店铺</p>
-         <div class="btn-area">
-           <div class="gzh" v-if="isHasBindGzh">
-             <el-button class="btn-opeate" :disabled="isBindGzh" @click="goGzh">授权微信公众号</el-button>
-             <p class="success" v-if="isBindGzh">公众号授权成功</p>
-           </div>
-           <div class="xcx" v-if="isHasBindXcx">
-            <el-button class="btn-opeate" :disabled="isBindXcx" @click="goXcx">授权微信小程序</el-button>
-             <p class="success" v-if="isBindXcx">小程序授权成功</p>
-           </div>
-         </div>
-       </li>
-       <li class="pay">
-         <p><i :class="[isOpenPay ? 'icon-success' : 'el-icon-error']"></i><span>支付开通：</span></p>
-         <div class="btn-area">
-            <el-button class="btn-opeate" :disabled="!isAuthGzhOrXcx" @click="setPayInfo">开启支付</el-button>
-            <p class="prompt2">请您先进行【渠道绑定】操作后再进行【开启支付】操作</p>
-         </div>
-       </li>
-     </ul>
+    
+      <h2>请绑定您的经营渠道</h2>
+      <ul style="height: 287px;" v-loading="!isInitCompleted" element-loading-background="rgba(255,255,255,1)" >
+        <li v-if="isInitCompleted">
+          <p><i :class="[isAuthGzhOrXcx ? 'icon-success' : 'el-icon-error']"></i><span>渠道绑定：</span></p>
+          <p class="prompt">绑定微信小程序和公众号，推广您的店铺</p>
+          <div class="btn-area">
+            <div class="gzh" v-if="isHasBindGzh">
+              <el-button class="btn-opeate" :disabled="isBindGzh" @click="goGzh">授权微信公众号</el-button>
+              <p class="success" v-if="isBindGzh">公众号授权成功</p>
+            </div>
+            <div class="xcx" v-if="isHasBindXcx">
+              <el-button class="btn-opeate" :disabled="isBindXcx" @click="goXcx">授权微信小程序</el-button>
+              <p class="success" v-if="isBindXcx">小程序授权成功</p>
+            </div>
+          </div>
+        </li>
+        <li v-if="isInitCompleted" class="pay">
+          <p><i :class="[isOpenPay ? 'icon-success' : 'el-icon-error']"></i><span>支付开通：</span></p>
+          <div class="btn-area">
+              <el-button class="btn-opeate" :disabled="!isAuthGzhOrXcx" @click="setPayInfo">开启支付</el-button>
+              <p class="prompt2">请您先进行【渠道绑定】操作后再进行【开启支付】操作</p>
+          </div>
+        </li>
+      </ul>
       <div class="btn">
         <el-button class="prev" @click="goPrev">上一步</el-button>
         <el-button class="next" type="primary" :loading="loading" @click="submit()" :disabled="!isOpenPay">下一步</el-button>
       </div>
+    
    </div>
 </template>
 
@@ -47,6 +49,7 @@ export default {
 
   data () {
     return {
+      isInitCompleted: false, // 是否完成初始化
       loading: false,
       isDisabled: false,
       isBindGzh: false, // 是否绑定微信成功
@@ -82,24 +85,36 @@ export default {
   watch: {},
 
   created() {
-    this.getShopInfo()
-    this.getIsAuth()
-    this.getIsOpenPay()
+    this.init()
+    // console.log()
+    // this.getShopInfo()
+    // this.getIsAuth()
+    // this.getIsOpenPay()
   },
 
   mounted() {},
 
   methods: {
+    init() {
+      this.isInitCompleted = false
+      const p1 = this.getShopInfo()
+      const p2 = this.getIsAuth()
+      const p3 = this.getIsOpenPay()
+      Promise.all([p1, p2, p3]).finally(() => {
+        this.isInitCompleted = true
+      })
+    },
     ...mapMutations(["SETCURRENT"]),
     getIsAuth() {
       // 需要调用微信是否授权接口
       const id = this.cid
-      this._apis.profile.getwxBindStatus({ id }).then(response => {
+      return this._apis.profile.getwxBindStatus({ id }).then(response => {
         console.log('getwxBindStatus',response)
         this.isBindGzh = response && response.bindWechatAccount === 1 || false
         this.isBindXcx = response && response.bindWechatApplet === 1 || false
       }).catch((err) => {
         console.log(err)
+        this.$message.error(err)
       })
     },
     goGzh() {
@@ -148,7 +163,7 @@ export default {
         mchId:this.cid,
         channelId:'WX_ALL',
       }
-      this._apis.set.getShopPayInfo(query).then(response =>{
+      return this._apis.set.getShopPayInfo(query).then(response =>{
         const id = response && response.id
         this.isOpenPay = id ? true : false
       }).catch(error =>{
@@ -174,15 +189,14 @@ export default {
     },
     getShopInfo() {
       let id = this.cid;
-      this._apis.set
+      return this._apis.set
         .getShopInfo({ id: id })
         .then(response => {
          console.log('----response--', response)
          this.businessChannel = response && response.businessChannel
         })
         .catch(error => {
-          console.log(error)
-          // this.$message.error('查询失败');
+          this.$message.error(error || '查询失败');
         });
     },
     goPrev() {
@@ -250,6 +264,7 @@ export default {
         }
         span {
           padding-left: 11px;
+          font-weight:500;
         }
         &.prompt {
           padding-top: 17px;

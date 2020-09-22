@@ -10,7 +10,7 @@
         :data="dataList"
         class="table"
         style="width: 100%"
-        :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '400'}"
+        :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '500'}"
         >
         <el-table-column
           prop="address"
@@ -51,6 +51,7 @@
         <el-table-column
           label="操作"
           align="center"
+          fixed="right"
           width="150">
           <template slot-scope="scope">
             <div class="opeater">
@@ -72,13 +73,13 @@
       </el-table>
       <div class="page_styles" v-if="total*1 > 20">
         <el-pagination
-          background
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="ruleForm.pageNo"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1">
         </el-pagination>
       </div>
@@ -161,6 +162,7 @@ export default {
       })
     },
     getAddressList(req) {
+      this.loading = true
       this.ApiGetAddressList(req).then((res) => {
         console.log(res)
         if (res) {
@@ -169,6 +171,8 @@ export default {
         }
       }).catch((err) => {
         this.$message.error(err || '获取数据失败')
+      }).finally(() => {
+        this.loading = false
       })
     },
     handleSizeChange(val) {
@@ -189,7 +193,7 @@ export default {
       this.confirm({
         title: "提示",
         iconWarning: true,
-        text: '此地址已设置为商家配送的发货地址，修改或删除后商家配送设置也将修改，您确定要修改吗？',
+        text: '此地址已设置为同城配送的发货地址，修改或删除后同城配送设置也将修改，您确定要修改吗？',
         confirmText: '确定',
         showCancelButton: true,
         customClass: 'address-update'
@@ -198,10 +202,24 @@ export default {
       }).catch(() => {
       });
     },
-    // 关闭商家配送
-    closeMerchantDeliver() {
+    updateShopInfo(data) {
+      const id = this.cid
       return new Promise((resolve, reject) => {
-        this.updateShopInfo({ isOpenMerchantDeliver: 0 }).then(response =>{
+        this._apis.set.updateShopInfo({...data, id }).then(response =>{
+          this.$store.dispatch('getShopInfo');    
+          resolve(response)
+        }).catch(error =>{
+          reject(error)
+        })
+      })
+    },
+    // 关闭商家配送
+    closeCityDeliver(isCloseMerchantDeliver, isClostTh3DeliverId) {
+      const req = Object.create(null)
+      if (isCloseMerchantDeliver) req.isOpenMerchantDeliver = 0
+      if (isClostTh3DeliverId) req.isOpenTh3Deliver = 0
+      return new Promise((resolve, reject) => {
+        this.updateShopInfo( req ).then(response =>{
             resolve(response)
         }).catch(error =>{
           reject(error)
@@ -209,7 +227,7 @@ export default {
         })
       })
     },
-    hanldeOpenDeliveryDelAddress(row) {
+    hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId) {
       // 需要查看发货地址数量是否剩下1条？？？
       const id = row.id
       const addressType = row.addressType
@@ -224,27 +242,23 @@ export default {
           this.confirm({
             title: "提示",
             iconWarning: true,
-            text: '商家配送已开启并使用此地址为发货地址，删除后商家配送功能将自动关闭，您确定要删除吗？',
+            text: '同城配送已开启并使用此地址为发货地址，删除后同城配送功能将自动关闭，您确定要删除吗？',
             confirmText: '确定',
             showCancelButton: true,
             customClass: 'address-update'
           }).then(() => {
-            const p1 = this.closeMerchantDeliver()
+            const isCloseMerchantDeliver = +merchantDeliverId === +id
+            const isClostTh3DeliverId = +th3DeliverId === +id
+            const p1 = this.closeCityDeliver(isCloseMerchantDeliver, isClostTh3DeliverId)
             const p2 = this.ApiDelAddressById(id, addressType)
             Promise.all([p1, p2]).then((arr) => {
-              if(arr && arr.length > 0) {
-                this.confirm({
-                  title: "提示",
-                  iconSuccess: true,
-                  text: '保存成功',
-                  confirmText: '确定',
-                  cancelButtonText: '取消'
-                }).then(() => {
-                  this.ruleForm.pageNo = 1
-                  const req = this.getReqData(this.ruleForm)
-                  this.getAddressList(req)
-                });
-              }
+              console.log('arr',arr)
+               this.ruleForm.pageNo = 1
+              const req = this.getReqData(this.ruleForm)
+              this.getAddressList(req)
+              // if(arr && arr.length > 0) {
+                this.$message.success('保存成功')
+              // }
             }).catch((err) => {
               this.$message.error(err || '保存失败')
             })
@@ -253,12 +267,12 @@ export default {
           this.confirm({
             title: "提示",
             iconWarning: true,
-            text: '此地址已设置为商家配送的发货地址，修改或删除后商家配送设置也将修改，您确定要修改吗？',
+            text: '此地址已设置为同城配送的发货地址，修改或删除后同城配送设置也将修改，您确定要修改吗？',
             confirmText: '确定',
             showCancelButton: true,
             customClass: 'address-update'
           }).then(() => {
-            this.ApiDelAddressById(id, addressType)
+            this.delAddressById(id, addressType)
           }).catch((err) => {
           });
         }
@@ -277,24 +291,46 @@ export default {
         })
       })
     },
+    // 获取三方配送发货地址
+    getTh3DeliverAddressById() {
+      // 
+    },
+    /**
+     * 1 获取商家配送地址id和三方配送地址id
+     * 2 获取是否开启商家配送
+     * 3 如果开启则拿到获取的商家配送地址id与当前要编辑的id进行对比，一致则提示
+     * 4 获取是否开启三方配送
+     * 5 如果开启，则拿获取的商家配送地址id与当前要编辑的id进行对比，一致则提示
+     */
     goAddressEdit(id) {
-      // 判断是否是商家配送地址// 
-      const p2 = this.isOpenMerchantDeliver() // 是否开启商家配送
-      const p1 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
-      Promise.all([p1, p2]).then((result) => {
-        const [ response, isOpen ] = result
-        if (response && +response.id === +id) {
-            // 是否打开
-            if (isOpen) {
-              this.hanldeOpenDelivery(id)
-            } else {
-              this.$router.push({ path: '/set/addressUpdate', query: { id } }) 
-            }
+      // 判断是否开启同城配送地址// 
+      const p1 = this.isOpenCityDeliver()
+      const p2 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
+      const p3 = this.getTh3DeliverAddressById() // 获取三方配送默认地址
+      Promise.all([p1, p2, p3]).then((result) => {
+        const [ { isOpenMerchantDeliver, isOpenTh3Deliver }, merchantDeliver, th3Deliver ] = result
+        const isOpen = (merchantDeliver && merchantDeliver.id === +id && isOpenMerchantDeliver) || (th3Deliver && th3Deliver.id === +id && isOpenTh3Deliver)
+        if (isOpen) {
+          this.hanldeOpenDelivery(id)
         } else {
-          this.$router.push({ path: '/set/addressUpdate', query: { id } }) 
+           this.$router.push({ path: '/set/addressUpdate', query: { id } }) 
         }
       }).catch((errors) => {
         console.log(errors)
+      })
+    },
+    // 是否开启同城配送
+    isOpenCityDeliver() {
+      const id = this.cid
+      return new Promise((resolve, reject) => {
+        this._apis.set.getShopInfo({ id }).then(res => {
+          console.log("----",res)
+          const isOpenMerchantDeliver = res && res.isOpenMerchantDeliver === 1 ? true : false // 是否开启商家配送 0-否 1-是
+          const isOpenTh3Deliver = res && res.isOpenTh3Deliver === 1 ? true : false // 是否开启三方配送 0-否 1-是
+          resolve({isOpenMerchantDeliver, isOpenTh3Deliver })
+        }).catch(err => {
+          reject(err)
+        })
       })
     },
     // 是否开启商家配送
@@ -368,47 +404,30 @@ export default {
       // 是否默认地址
       // 删除逻辑
       // 1 默认地址处理，不删除，给提示框
-      // 2 开启商家配送，同时商家配送使用此地址（最新地址），删除时要同时关闭商家配送
+      // 2 开启同城配送，同时同城配送使用此地址（最新地址），删除时要同时关闭同城
       // 3 删除地址
       // 3 
       const id = row.id
       const addressType = row.addressType
       const isDefaultAddress = row.isDefaltReturnAddress === 1 || row.isDefaltSenderAddress === 1 // mock
       if (!isDefaultAddress) {
-          // 判断是否是商家配送地址// 
-        const p2 = this.isOpenMerchantDeliver() // 是否开启商家配送
-        const p1 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
-        Promise.all([p1, p2]).then((result) => {
-          const [ response, isOpen ] = result
-          console.log(response && +response.id === +id)
-          if (response && +response.id === +id) {
-              // 是否打开
-              if (isOpen) {
-                this.hanldeOpenDeliveryDelAddress(row)
-              } else {
-                this.handleDelAddress(row)
-              }
+        const p1 = this.isOpenCityDeliver() // 是否开启同城配送
+        const p2 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
+        const p3 = this.getTh3DeliverAddressById() // 获取三方配送默认地址
+        Promise.all([p1, p2, p3]).then((result) => {
+          const [ { isOpenMerchantDeliver, isOpenTh3Deliver }, merchantDeliver, th3Deliver ] = result
+          const merchantDeliverId = merchantDeliver && merchantDeliver.id
+          const th3DeliverId = th3Deliver && th3Deliver.id
+          const isOpen = (merchantDeliverId === +id && isOpenMerchantDeliver) || (th3DeliverId === +id && isOpenTh3Deliver)
+          
+          if (isOpen) {
+            this.hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId)
           } else {
             this.handleDelAddress(row)
           }
         }).catch((errors) => {
           console.log(errors)
         })
-        // if (!this.isMerchantDeliverAddressById(id)) {
-        //    this.handleDelAddress(row)
-        // } else {
-        //   const isOpenMerchantDeliver = this.isOpenMerchantDeliver()
-        //   isOpenMerchantDeliver.then((isOpen) => {
-        //     console.log('dev',isOpen)
-        //     // 是否打开
-        //     if (isOpen) {
-        //       this.hanldeOpenDeliveryDelAddress(id) // 
-        //     } else {
-        //        this.handleDelAddress(row)
-        //     }
-        //   })
-        // }
-        // this.handleDelAddress(row)
       } else {
         this.handleDelDefaultAddress(row)
       }
@@ -453,9 +472,6 @@ export default {
       }
       /deep/ th>.cell {
         line-height: 30px;
-      }
-      &::before {
-        height: 0;
       }
       .opeater {
         display: flex;

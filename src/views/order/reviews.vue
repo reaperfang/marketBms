@@ -95,7 +95,8 @@
 
                     <el-table-column
                         prop="orderCode"
-                        label="订单编号">
+                        label="订单编号"
+                        width="200">
                     </el-table-column>
                     <el-table-column
                         prop="memberName"
@@ -120,7 +121,8 @@
                     </el-table-column>
                     <el-table-column
                         prop="createTime"
-                        label="评价时间">
+                        label="评价时间"
+                        width="162">
                     </el-table-column>
                     <el-table-column label="操作" :width="computeWidth" fixed="right">
                         <template slot-scope="scope">
@@ -525,6 +527,15 @@ export default {
     padding-left: 0;
     padding-right: 20px;
 }
+/deep/.el-table td:nth-child(1){
+         padding-left:20px;
+         .cell {
+            text-overflow: clip;
+         }
+     }
+     /deep/ .el-table--small td, /deep/  .el-table--small th {
+        padding: 16px 0;
+    }
 </style>
 
 

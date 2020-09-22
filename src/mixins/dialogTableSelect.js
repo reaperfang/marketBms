@@ -9,8 +9,8 @@ let mixin = {
 			selectKeyArr: [
 				'id',
 				'activeId',
-				'activityId',
-				'spuId'
+				'spuId',
+				'activityId'
 			] //不同接口返回的唯一标识白名单数组
         }
     },

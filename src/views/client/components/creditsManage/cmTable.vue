@@ -30,13 +30,14 @@
     </el-table>
     <div class="page_styles">
       <el-pagination
+        :background="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="Number(startIndex) || 1"
         :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
         :page-size="pageSize*1"
         :total="total*1"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="prev, pager, next, sizes"
       ></el-pagination>
     </div>
     <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @refreshPage="refreshPage"></component>
@@ -103,19 +104,19 @@ export default {
             this.currentData.row = row;
             break;
           case 'Sign'://签到有礼            
-            this.$router.push({path:'/apply',query:{paths:'/application/customarket/checkin'}})
+            this.$router.push({path:'/apply',query:{paths:'/application/customarket/checkin',applyId:'6'}})
             this.SETCURRENT(8)
             break;
           case 'SuperPoster'://超级海报
-            this.$router.push({path:'/apply',query:{paths:'/application/feature/posterList'}})
+            this.$router.push({path:'/apply',query:{paths:'/application/feature/posterList',applyId:'5'}})
             this.SETCURRENT(8)
             break;
           case 'FullReduction'://满减/满折
-            this.$router.push({path:'/apply',query:{paths:'/application/promotion/fullreduce'}})
+            this.$router.push({path:'/apply',query:{paths:'/application/promotion/fullreduce',applyId:'4'}})
             this.SETCURRENT(8)
             break;
           case 'Holiday'://节日有礼
-            this.$router.push({path:'/apply',query:{paths:'/application/customarket/festival'}})
+            this.$router.push({path:'/apply',query:{paths:'/application/customarket/festival',applyId:'6'}})
             this.SETCURRENT(8)
             break;
           default:
@@ -178,6 +179,7 @@ export default {
 }
 .page_styles{
   text-align: center;
+  margin-top: 40px;
 }
 .yy{
   display: inline-block;

@@ -10,7 +10,8 @@
       >
       <el-table-column
         prop="importTime"
-        label="导入时间">
+        label="导入时间"
+        :width="200">
       </el-table-column>
       <el-table-column
         prop="channerlName"
@@ -35,24 +36,25 @@
         label="操作人"
       >
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" :width="200">
         <template slot-scope="scope">
             <div class="btns clearfix">
-                <span @click="addTag(scope.row)">添加标签</span>
-                <span @click="modify(scope.row)">修改身份等级</span>
+                <span @click="addTag(scope.row)" :class="scope.row.successNum == 0?'gray':''">添加标签</span>
+                <span @click="modify(scope.row)" :class="scope.row.successNum == 0?'gray':''">修改身份等级</span>
             </div>
         </template>
       </el-table-column>
     </el-table>
     <div class="page_styles">
       <el-pagination
+        :background="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="Number(startIndex) || 1"
         :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
         :page-size="pageSize*1"
         :total="total*1"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="prev, pager, next, sizes"
       ></el-pagination>
     </div>
     <component 
@@ -167,6 +169,9 @@ export default {
                       padding-right: 5px;
                       border-right: 1px solid #dadae3;
                     }
+                    &.gray{
+                      color: #c9c9c9;
+                    }
                 }
             }
         }
@@ -176,20 +181,35 @@ export default {
             text-align: left;
             padding-left: 20px;
         }
+        &:nth-child(1) {
+            text-align: left;
+            padding-left: 20px;
+        }
+        &:nth-child(3) {
+            text-align: right;
+        }
+        &:nth-child(4) {
+            text-align: right;
+        }
+        &:nth-child(5) {
+            text-align: right;
+        }
     }
 /deep/ .el-table td{
   &:nth-child(3) {
     text-align: right;
-    padding-right: 75px;
+    
   }
   &:nth-child(4) {
     text-align: right;
-    padding-right: 75px;
+    
   }
   &:nth-child(5) {
     text-align: right;
-    padding-right: 75px;
+    
   }
 }
-
+.page_styles{
+  margin: 40px 0 34px 0;
+}
 </style>

@@ -15,7 +15,7 @@
             </div>
             <div>
                 <div class="clearfix"><el-button class="fr" icon="el-icon-refresh" @click="getRealTimeOverview()">刷新</el-button></div>
-                <pp1Chart :title="'测试图表'" ref="pp1"></pp1Chart>
+                <pp1Chart :title="'测试图表'" ref="pp1" v-loading="loading1"></pp1Chart>
             </div>
         </div>
         <div class="p_block marT20">
@@ -53,7 +53,7 @@
 
             </div>
             <div>
-                <pp2Chart :title="'测试图表'" ref="pp2"></pp2Chart>
+                <pp2Chart :title="'测试图表'" ref="pp2" v-loading="loading2"></pp2Chart>
             </div>
         </div>
         <div class="p_block marT20">
@@ -63,6 +63,7 @@
       style="width: 100%"
       :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
+      v-loading="loading2"
       >
       <el-table-column
         prop="date"
@@ -91,9 +92,9 @@
           :current-page="index" 
           :page-sizes="[5, 10, 15]" 
           :page-size="size" 
-          layout="total, sizes, prev, pager, next, jumper" 
+          layout="prev, pager, next, sizes"
           :total="tableCopyTableList.length"
-          :background="background">
+          :background="true">
           </el-pagination>
     </div>
         </div>
@@ -129,7 +130,9 @@ export default {
             dialogVisible: false,
             currentData:{},
             totalNum:0,
-			classId:1
+			classId:1,
+            loading1: true,
+            loading2: true
         }
     },
     props: {
@@ -141,6 +144,7 @@ export default {
     methods: {
         // 实时概况
         getRealTimeOverview(){
+            this.loading1 = true;
             this._apis.data.realTimeOverview({}).then(response => {
                 let xyData = {
                     xAxisData : [],
@@ -152,8 +156,10 @@ export default {
                 }
             this.perPrice = response[response.length-1].value
             this.$refs.pp1.con(xyData)
+            this.loading1 = false;
         }).catch(error => {
           this.$message.error(error);
+            this.loading1 = false;
         });
         },
 		//更新chart
@@ -171,6 +177,7 @@ export default {
                 startIndex:this.startIndex,
                 pageSize:this.pageSize
             }
+            this.loading2 = true;
             this._apis.data.historyRecord(data).then(response => {
                 this.totalNum = response.totalSize || 0;
                 this.listObj = response;
@@ -189,8 +196,10 @@ export default {
                     this.threeData.push(arrList[i].averagePayment)
             }
                 this.chart()
+                this.loading2 = false;
         }).catch(error => {
           this.$message.error(error);
+            this.loading2 = false;
         });
         },
         // 重置
@@ -296,7 +305,7 @@ export default {
 }
 .p_block{
     background-color: #fff;
-    padding: 15px 20px;
+    padding: 20px;
     .res_export{
         position: relative;
 		margin-bottom: 39px;
@@ -416,6 +425,9 @@ line-height: 32px;
 margin-right: 10px;
 width: 84px;
 }
+}
+/deep/ .el-table--small td, /deep/.el-table--small th{
+  padding:8px 10px;
 }
 </style>
 

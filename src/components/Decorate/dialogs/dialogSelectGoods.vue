@@ -4,7 +4,9 @@
     <div class="select_dialog">
       <div class="head-wrapper">
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules"  :inline="true">
-          <div>
+              <el-form-item label="商品名称" prop="name">
+                <el-input v-model="ruleForm.name" placeholder="请输入商品名称" clearable style="width:300px"></el-input>
+              </el-form-item> 
               <el-form-item label="商品状态" prop="status">
                 <el-select label="商品状态" v-model="ruleForm.status" placeholder="请选择商品状态">
                   <el-option label="全部" :value="null"></el-option>
@@ -13,24 +15,20 @@
                   <el-option label="售罄" :value="-1"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="商品分类" prop="name">
+              <el-form-item label="商品分类" prop="name" v-if="!categoryName">
                 <treeselect
                   style="width:180px"
                   :multiple="false"
                   :options="categoryData"
+                  :normalizer="normalizer"
+                  :clearable="false"
                   placeholder="全部"
                   v-model="seletedClassify"></treeselect>
               </el-form-item>
-          </div>
-          <div>
-              <el-form-item label="商品名称" prop="name">
-                <el-input v-model="ruleForm.name" placeholder="请输入商品名称" clearable style="width:300px"></el-input>
-              </el-form-item> 
               <el-form-item label prop="name">
-                <el-button type="primary" @click="search">查 询</el-button>
-                <el-button @click="seletedClassify=null;refresh()">刷 新</el-button>
+                <el-button type="primary" @click="search">搜 索</el-button>
+                <el-button @click="seletedClassify=categoryId || '';refresh()">刷 新</el-button>
               </el-form-item>
-          </div>
         </el-form>
       </div>
       <el-table
@@ -88,13 +86,14 @@
       </div>
       <div class="pagination" v-if="tableData.length">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.pageNum) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
         ></el-pagination>
       </div>
     </div>
@@ -128,8 +127,17 @@ export default {
       disableStatus: [0, -1],  //不可选状态值
       goodsClassifyList: [],
       currentClassifyId: [],
-      categoryData: [],
-      seletedClassify: null
+      categoryData: [{
+          "id": "",
+          "name": "全部",
+      }],
+      seletedClassify: this.categoryId || '',
+      normalizer(node) {
+        return {
+          label: node.name,
+          children: node.childrenCatalogs,
+        }
+      },
     };
   },
   created() {
@@ -162,14 +170,29 @@ export default {
 
     /* 获取分类列表 */
     getGoodsClassifyList() {
-      this._apis.goods.fetchCategoryList({
+      this._apis.goods.fetchTreeCategoryList({
         enable: '1'
       }).then((response)=>{
-        let arr = this.transTreeData(response, 0)
-        this.categoryData = arr
+        this.filterEnableData(response);
+        response = [...this.categoryData, ...response];
+        this.categoryData = response
       }).catch((error)=>{
         console.error(error);
       });
+    },
+
+    //过滤掉禁用的数据
+    filterEnableData(data) {
+      data.forEach((item, index) => {
+        if(item.enable === 0){
+          data.splice(index, 1);
+        }else if(item.childrenCatalogs){
+          this.filterEnableData(item.childrenCatalogs)
+        }
+        if(!item.childrenCatalogs || item.childrenCatalogs.length == 0){
+          delete item.childrenCatalogs;
+        }
+      })
     },
 
     itemSelectable(row, index) {

@@ -28,10 +28,12 @@
             :data="list"
             :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
             style="margin-top:30px;width: 100%" 
+            v-loading="loading"
             >
             <el-table-column
                 type="index"
                 label="排行"
+                width="80"
                 align="left">
             </el-table-column>
             <el-table-column
@@ -73,9 +75,9 @@
                     :current-page.sync="startIndex"
                     :page-sizes="[10, 20, 30, 40]"
                     :page-size="pageSize"
-                    layout="sizes, prev, pager, next"
+                    layout="prev, pager, next, sizes"
                     :total="total"
-                    :background="background">
+                    :background="true">
                 </el-pagination>
             </div>
         </div>
@@ -93,6 +95,7 @@ export default {
             startIndex:1,
             pageSize:10,
             visitSourceType:0,
+            loading: true
         }
     },
     created(){
@@ -107,11 +110,14 @@ export default {
                 orderBy:this.order == '0' ? null : this.order,
                 memberPhone:this.memberPhone
             };
+            this.loading = true;
             this._apis.data.memberConsumption(data).then(response => {
                 this.list = response.list;
                 this.total = response.total
+                this.loading = false;
             }).catch(error => {
                 this.$message.error(error);
+                this.loading = false;
             });
         },
 
@@ -145,6 +151,7 @@ export default {
 .p_container{
     padding: 20px;
     background-color: #fff;
+    height:100%;
     .pane_container{
         color: #3D434A;
         .i_line{
@@ -158,6 +165,9 @@ export default {
 }
 .p_container .input_wrap{
     vertical-align: middle;
+}
+/deep/ .el-table--small td, /deep/.el-table--small th{
+  padding:8px 10px;
 }
 </style>
 
