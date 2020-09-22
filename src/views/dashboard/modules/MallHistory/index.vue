@@ -125,13 +125,13 @@ export default {
 					}
 				},
 				tooltip: {
-					formatter: function(params) {
+					formatter: params => {
 						let item = params[0],
 							list = item.data;
 						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${item.color}"></span>`;
 						return `${dotHtml}${list[0]} <br/>&nbsp&nbsp&nbsp${
 							item.seriesName == "金额" ? "支付金额" : "浏览次数"
-						}: &nbsp${list[1]}`;
+						}: &nbsp${this.toDecimal(list[1])}`;
 					}
 				}
 			},
@@ -206,6 +206,23 @@ export default {
 			}
 
 			return rows;
+		},
+		toDecimal(x) {
+			var f = parseFloat(x);
+			if (isNaN(f)) {
+				return false;
+			}
+			var f = Math.round(x * 100) / 100;
+			var s = f.toString();
+			var rs = s.indexOf(".");
+			if (rs < 0) {
+				rs = s.length;
+				s += ".";
+			}
+			while (s.length <= rs + 2) {
+				s += "0";
+			}
+			return s;
 		}
 	}
 };
