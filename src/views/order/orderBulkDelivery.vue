@@ -966,7 +966,7 @@ export default {
           
           res.forEach(item => {
             if(!item.sendAddress) {
-              if(item.deliveryWay == 1 || item.deliveryWay == 2) {
+              if(item.deliveryWay == 1 || item.deliveryWay == 2 || item.deliveryWay == 3) {
                 if(_orderItem) {
                   item.sendName = _orderItem.sendName;
                   item.sendPhone = _orderItem.sendPhone;

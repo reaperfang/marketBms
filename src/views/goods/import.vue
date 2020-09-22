@@ -69,8 +69,9 @@
                     align="left"
                     header-align="left"
                     label="序号"
-                    width="180"
-                    style="padding-left:20px;"
+                    width="120"
+                    fixed="left" 
+                    class-name="table-padding"
                     >
                 </el-table-column>
                 <el-table-column
@@ -84,12 +85,14 @@
                     align="right"
                     prop="importSuccessCount"
                     header-align="right"
+                    min-width="90"
                     label="导入成功数">
                 </el-table-column>
                 <el-table-column
                     align="right"
                     header-align="right"
                     prop="importFailCount"
+                    min-width="90"
                     label="导入失败数">
                 </el-table-column>
                 <el-table-column
@@ -102,7 +105,10 @@
                     align="center"
                     header-align="center"
                     prop="createTime"
-                    label="导入时间">
+                    label="导入时间"
+                    fixed="right"
+                    width="200"
+                    class-name="table-padding">
                 </el-table-column>
             </el-table>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
@@ -243,12 +249,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-     /deep/.el-table td:nth-child(1){
-         padding-left:10px;
-     }
-     /deep/.el-table th:nth-child(1){
-         padding-left:10px;
-     }
     .import {
         position: relative;
         background-color: #fff;

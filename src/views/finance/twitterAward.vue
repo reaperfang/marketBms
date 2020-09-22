@@ -139,7 +139,7 @@ export default {
 .top_part1{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 15px 20px;
     .title{
       height: 74px;

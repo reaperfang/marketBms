@@ -48,5 +48,6 @@ export default {
 .tabs{
   background:#fff; 
   padding:10px 20px;
+  border-radius: 4px 4px 0 0;
 }
 </style>
