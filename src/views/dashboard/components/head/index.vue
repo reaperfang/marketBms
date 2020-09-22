@@ -1,23 +1,20 @@
 <template>
 	<div class="head">
+		<div class="left-box">
+			<svg-icon iconClass="shop"></svg-icon>
+			<span>{{ shopName }}</span>
+			<svg-icon iconClass="time"></svg-icon>
+			<span> {{ currentTime }}</span>
+		</div>
 		<el-row class="row-1">
 			<el-col>
 				<el-row>
 					<el-col :xs="5" :sm="5" :md="5" :lg="5" :xl="5">
 						<div class="left">
-							<!-- <img
-								src="../../../../assets/images/dashboard/head/left/default.png"
-								alt
-							/> -->
-							<svg-icon iconClass="shop"></svg-icon>
+							<!-- <svg-icon iconClass="shop"></svg-icon>
 							<span>{{ shopName }}</span>
-							<!-- <img
-								src="../../../../assets/images/dashboard/head/time/default.png"
-								alt
-								style="margin:0 3px 0 10px"
-							/> -->
 							<svg-icon iconClass="time"></svg-icon>
-							<span> {{ currentTime }}</span>
+							<span> {{ currentTime }}</span> -->
 						</div>
 					</el-col>
 					<el-col
@@ -39,10 +36,6 @@
 						class="right"
 					>
 						<div class="refresh" @click="refresh">
-							<!-- <img
-								src="../../../../assets/images/dashboard/head/right/refresh/default.png"
-								alt
-							/> -->
 							<svg-icon iconClass="refresh"></svg-icon>
 							<span>刷 新</span>
 						</div>
@@ -51,12 +44,7 @@
 							@click="fullscreen"
 							ref="fullscreen"
 						>
-							<!-- <img
-								src="../../../../assets/images/dashboard/head/right/fullscreen/default.png"
-								alt
-							/> -->
 							<svg-icon iconClass="fullscreen"></svg-icon>
-							<!-- <svg-icon icon-class="time" /> -->
 							<span>全 屏</span>
 						</div>
 					</el-col>
@@ -196,7 +184,22 @@ export default {
 
 <style lang="scss">
 .head {
+	position: relative;
 	height: 80px;
+
+	.left-box {
+		position: absolute;
+		margin: 15px 0 0 35px;
+		display: flex;
+		align-items: center;
+		span {
+			font-size: 14px;
+			font-weight: 500;
+			color: rgba(255, 255, 255, 0.8);
+			margin-right: 5px;
+		}
+	}
+
 	.row-1 {
 		background: url("../../../../assets/images/dashboard/head/bg/default.png")
 			no-repeat;
