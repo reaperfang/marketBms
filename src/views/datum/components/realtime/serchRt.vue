@@ -71,7 +71,7 @@ export default {
         let d = date.getDate();
         d = d < 10 ? ('0' + d) : d;
         var day=y + '-' + MM + '-' + d
-        console.log(day)
+        // console.log(day)
         return day
     },
       getUnits(){
