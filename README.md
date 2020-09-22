@@ -738,6 +738,7 @@ set 设置<br/>
   ```
 ### 对象
 定义一个空对象
+
 ```js
 //bad
 const item = new Object();
@@ -745,7 +746,9 @@ const item = new Object();
 //good
 const item = {}
 ```
+
 * 使用对象方法的缩写
+
 ```js
 //bad
 const atom = {
@@ -762,7 +765,9 @@ const atom = {
   }
 };
 ```
+
 * 用对象扩展操作符代替Object.assign进行浅拷贝
+
 ```js
 //very bad
 const original = { a: 1, b: 2 };
@@ -779,9 +784,11 @@ const copy = { ...original, c: 3 }; // copy => { a: 1, b: 2, c: 3 }
 
 const { a, ...noA } = copy; // noA => { b: 2, c: 3 }
 ```
+
 ### 数组
 
 * 使用数组展开方法 ... 来拷贝数组。
+
 ```js
 // bad
 const len = items.length;
@@ -795,7 +802,9 @@ for (i = 0; i < len; i += 1) {
 // good
 const itemsCopy = [...items];
 ```
+
 * 将一个类数组对象转换成一个数组， 使用展开方法 ... 代替 Array.from
+
 ```js
 const foo = document.querySelectorAll('.foo');
 
@@ -805,8 +814,10 @@ const nodes = Array.from(foo);
 // best
 const nodes = [...foo];
 ```
+
 ### 解构
 * 在访问和使用对象的多个属性的时候使用对象的解构。
+
 ```js
 // bad
 function getFullName(user) {
@@ -827,7 +838,9 @@ function getFullName({ firstName, lastName }) {
   return `${firstName} ${lastName}`;
 }
 ```
+
 * 使用数组解构
+
 ```js
 const arr = [1, 2, 3, 4];
 
@@ -838,8 +851,10 @@ const second = arr[1];
 // good
 const [first, second] = arr;
 ```
+
 ### 方法
 * ECMA-262 将 block 定义为语句列表。 函数声明不是语句。
+
 ```js
 // bad
 if (currentUser) {
@@ -856,7 +871,9 @@ if (currentUser) {
   };
 }
 ```
+
 * 不要使用 arguments, 选择使用 rest 语法 ... 代替。... 明确了你想要拉取什么参数。 更甚, rest 参数是一个真正的数组，而不仅仅是类数组的 arguments 
+
 ```js
 // bad
 function concatenateAll() {
@@ -869,7 +886,9 @@ function concatenateAll(...args) {
   return args.join('');
 }
 ```
+
 * 使用默认的参数语法，而不是改变函数参数。
+
 ```js
 // really bad
 function handleThings(opts) {
@@ -893,7 +912,9 @@ function handleThings(opts = {}) {
   // ...
 }
 ```
+
 * 总是把默认参数放在最后
+
 ```js
 // bad
 function handleThings(opts = {}, name) {
@@ -905,7 +926,9 @@ function handleThings(name, opts = {}) {
   // ...
 }
 ```
+
 * 函数签名中的间距
+
 ```js
 // bad
 const f = function(){};
@@ -916,7 +939,9 @@ const h = function() {};
 const x = function () {};
 const y = function a() {};
 ```
+
 * 不要再赋值参数
+
 ```js
 // bad
 function f1(a) {
@@ -939,7 +964,9 @@ function f4(a = 1) {
   // ...
 }
 ```
+
 * 如果函数体包含一个单独的语句，返回一个没有副作用的 expression ， 省略括号并使用隐式返回。否则，保留括号并使用 return 语句。
+
 ```js
 // bad
 [1, 2, 3].map(number => {
@@ -979,7 +1006,9 @@ foo(() => {
   bool = true;
 });
 ```
+
 * 方法返回了 this 来供其内部方法调用。
+
 ```js
 // bad
 Jedi.prototype.jump = function () {
@@ -1013,10 +1042,12 @@ const luke = new Jedi();
 luke.jump()
   .setHeight(20);
 ```
+
 ### 迭代器和发生器
 * 不要使用迭代器。 你应该使用 JavaScript 的高阶函数代替 for-in 或者 for-of。
  拥有返回值的纯函数比这个更容易解释。
  使用 map() / every() / filter() / find() / findIndex() / reduce() / some() / ... 遍历数组， 和使用 Object.keys() / Object.values() / Object.entries() 迭代你的对象生成数组。
+
  ```js
 const numbers = [1, 2, 3, 4, 5];
 
@@ -1053,16 +1084,18 @@ numbers.forEach((num) => {
 // best (keeping it functional)
 const increasedByOne = numbers.map(num => num + 1);
  ```
+
 ### 比较运算符和等号
 * 使用 === 和 !== 而不是 == 和 !=
-* 条件语句，例如 if 语句使用 ToBoolean 的抽象方法来计算表达式的结果，并始终遵循以下简单的规则
-  **Objects 的取值为： true**
-  **Undefined 的取值为： false**
-  **Null 的取值为： false**
-  **Booleans 的取值为： 布尔值的取值**
-  **Numbers 的取值为：如果为 +0, -0, or NaN 值为 false 否则为 true**
-  **Strings 的取值为: 如果是一个空字符串 '' 值为 false 否则为 true**
+* 条件语句，例如 if 语句使用 ToBoolean 的抽象方法来计算表达式的结果，并始终遵循以下简单的规则<br/>
+  **Objects 的取值为： true**<br/>
+  **Undefined 的取值为： false**<br/>
+  **Null 的取值为： false**<br/>
+  **Booleans 的取值为： 布尔值的取值**<br/>
+  **Numbers 的取值为：如果为 +0, -0, or NaN 值为 false 否则为 true**<br/>
+  **Strings 的取值为: 如果是一个空字符串 '' 值为 false 否则为 true**<br/>
 * 对于布尔值使用简写，但是对于字符串和数字进行显式比较。
+
 ```js
 // bad
 if (isValid === true) {
@@ -1094,7 +1127,9 @@ if (collection.length > 0) {
   // ...
 }
 ```
+
 * 避免不必要的三目表达式
+
 ```js
 // bad
 const foo = a ? a : b;
@@ -1106,7 +1141,9 @@ const foo = a || b;
 const bar = !!c;
 const baz = !c;
 ```
+
 * 不要使用选择操作符代替控制语句。
+
 ```js
 // bad
 !isRunning && startRunning();
@@ -1116,8 +1153,10 @@ if (!isRunning) {
   startRunning();
 }
 ```
+
 ### 注释 
 * 使用 /** ... */ 来进行多行注释
+
 ```js
 // bad
 // make() returns a new element
@@ -1144,7 +1183,9 @@ function make(tag) {
   return element;
 }
 ```
+
 * 使用 // 进行单行注释。 将单行注释放在需要注释的行的上方新行。 在注释之前放一个空行，除非它在块的第一行。
+
 ```js
 // bad
 const active = true;  // is current tab
@@ -1180,7 +1221,9 @@ function getType() {
   return type;
 }
 ```
+
 * 用一个空格开始所有的注释，使它更容易阅读。
+
 ```js
 // bad
 //is current tab
@@ -1214,9 +1257,11 @@ function make(tag) {
   return element;
 }
 ```
+
 ### 类型转换和强制类型转换
 * 在语句开始前进行类型转换。
 * 字符类型转换
+
 ```js
 // => this.reviewScore = 9;
 
@@ -1232,7 +1277,9 @@ const totalScore = this.reviewScore.toString(); // isn’t guaranteed to return 
 // good
 const totalScore = String(this.reviewScore);
 ```
+
 * 数字类型：使用 Number 进行类型铸造和 parseInt 总是通过一个基数来解析一个字符串。
+
 ```js
 const inputValue = '4';
 
@@ -1254,7 +1301,9 @@ const val = Number(inputValue);
 // good
 const val = parseInt(inputValue, 10);
 ```
+
 * 布尔类型
+
 ```js
 const age = 0;
 
@@ -1267,6 +1316,7 @@ const hasAge = Boolean(age);
 // best
 const hasAge = !!age;
 ```
+
 
 
 
