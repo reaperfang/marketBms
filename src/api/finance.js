@@ -177,6 +177,16 @@ export function getListFs(data) {
   })
 }
 
+//三方配送 --------
+export function getListTd(data) {
+  return request({
+    target: 'THIRD-DELIVERY-RECORD-LIST-PROCESSOR',
+    method: 'post',
+    apiType: 'finance',
+    data
+  })
+}
+
 //电子面单与物流查询导出
 export function exportFs(data) {
   return request({
