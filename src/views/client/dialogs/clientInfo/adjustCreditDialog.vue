@@ -118,7 +118,7 @@ export default {
             this.visible = false;
             console.log(error);
           });
-      
+
     },
     handleBlur() {
       if (this.adjustScore == '2' && Number(this.data.score) < Number(this.adjustmentScore)) {
@@ -126,9 +126,9 @@ export default {
       }else{
         this.showError = false;
       }
-      if(Number(this.adjustmentScore) >= 100000000) {
+      if(Number(this.adjustmentAfterScore) >= 100000000) {
         this.$message({
-          message: '调整积分不能超过1亿',
+          message: '积分不可超过100,000,000(1亿)',
           type: 'warning'
         });
         this.adjustmentScore = "";
@@ -177,7 +177,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .star{
-  color:#FD4C2B; 
+  color:#FD4C2B;
   margin-right: 5px
 }
 .c_container {
@@ -201,7 +201,7 @@ export default {
         width: 38px;
         color: #B5BDCA;
         right: 0;
-        top: 33px;  
+        top: 33px;
       }
   }
   .dialog-footer {

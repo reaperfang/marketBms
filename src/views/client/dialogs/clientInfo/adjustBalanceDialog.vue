@@ -115,9 +115,9 @@ export default {
       }else{
         this.showError = false;
       }
-      if(Number(this.adjustmentBalance) >= 100000000) {
+      if(Number(this.adjustmentAfterBalance) >= 100000000) {
         this.$message({
-          message: '增加余额不能超过1亿',
+          message: '金额不可超过100,000,000(1亿)',
           type: 'warning'
         });
         this.adjustmentBalance = ""
@@ -169,7 +169,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .star{
-  color:#FD4C2B; 
+  color:#FD4C2B;
   margin-right: 5px;
 }
 .c_container {
@@ -193,7 +193,7 @@ export default {
         width: 38px;
         color: #B5BDCA;
         right: 0;
-        top: 33px;  
+        top: 33px;
       }
   }
   .errMsg{

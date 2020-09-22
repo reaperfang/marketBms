@@ -486,7 +486,7 @@
             <el-form-item label="快递运费" prop="isFreeFreight">
                 <div>
                     <el-radio :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isFreeFreight" :label="0">选择运费模板</el-radio>
-                    <el-select :disabled="!ruleForm.productCategoryInfoId || !ruleForm.deliveryWay.includes(1)" v-model="ruleForm.freightTemplateId" placeholder="请选择">
+                    <el-select :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.freightTemplateId" placeholder="请选择">
                         <el-option
                             v-for="item in shippingTemplates"
                             :key="item.id"
@@ -756,7 +756,7 @@ export default {
                 other: false,
                 otherUnit: '',
                 isCashOnDelivery: 0, // 是否支持货到付款
-		        deliveryWay: [1], //配送方式(默认普通快递选中，不可取消)
+		        deliveryWay: this.$route.query.id ? [] : [1], //配送方式(默认普通快递选中，不可取消)
                 isFreeFreight: '', // 是否包邮
                 isAfterSaleService: 1, // 是否支持售后服务
                 isShowRelationProduct: 0, // 是否显示关联商品
@@ -2389,7 +2389,11 @@ export default {
                 this.historyProductCategoryId = res.productCategoryInfoId;
                 this.specRadio = res.specsType;
 		//配送方式(根据选中去请求是否在店铺开启)
-                let deliveryWayArr = [1]; //默认选中普通快递，同时不可取消掉
+                let deliveryWayArr = []; //默认选中普通快递，同时不可取消掉
+				if(res.generalExpressType == 1){ //如果开启了商家配送
+					deliveryWayArr.push(1);
+					this.getExpressAndDeliverySet('express');
+				}
                 if(res.businessDispatchType == 1){ //如果开启了商家配送
                     deliveryWayArr.push(2);
                     this.getExpressAndDeliverySet('delivery');
@@ -2831,7 +2835,7 @@ export default {
                         })
                     }
 		            //处理配送方式参数  默认都未开启，下面判断如果是勾选则变为1开启状态
-                    params.generalExpressType = 1; //普通快递
+                    params.generalExpressType = 0; //普通快递
                     params.businessDispatchType = 0; //商家配送
                     params.shopExtractType = 0; // 上门自提
                     params.specsType = this.specRadio;//0：单一规格，1：多规格
@@ -2841,6 +2845,9 @@ export default {
                     if(this.ruleForm.deliveryWay.includes(4)){//勾选了上门自提
                         params.shopExtractType = 1;
                     }
+					if(this.ruleForm.deliveryWay.includes(1)){//勾选了普通快递
+						params.generalExpressType = 1;
+					}
                     delete params.deliveryWay;
                     if(!this.editor) {
                         this.addGoods(params)
