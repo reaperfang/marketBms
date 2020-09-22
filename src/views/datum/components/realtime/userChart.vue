@@ -5,7 +5,7 @@ export default {
   name: "durationChart",
   extends: chartBase,
   computed:{},
-  props: ['dataChart'],
+  props: ['dataChart','units'],
   data() {
     return {
       flow:{},
@@ -22,6 +22,10 @@ export default {
   methods: {
     // 数据显示控制
     con(){
+      var interval=0
+      if(this.units==0){
+        interval=2
+      }
       this.flow = {
         xAxis:this.n.xAxis,
         // yAxis1:this.n.yAxis1,
@@ -53,7 +57,7 @@ export default {
           boundaryGap: false,
           axisLabel:{
             showMaxLabel:true,
-            // interval:0,
+            interval:interval,
             formatter: function (params) {
               var newParamsName = "";
               var paramsNameNumber = params.length;

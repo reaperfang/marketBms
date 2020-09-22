@@ -179,7 +179,7 @@
                 </div>
                 </el-scrollbar>
                 </div>
-                <tradeChart :title="'测试图表'" ref="tradeChart" :dataChart="dataChart3" :checkList="checkList" height="420px" ></tradeChart>
+                <tradeChart :title="'测试图表'" ref="tradeChart" :dataChart="dataChart3" :checkList="checkList" :units="seachTimetrad.units" height="420px" ></tradeChart>
             </div>
         </el-aside>
         <el-main class="p_rtsiade" style="padding:0">
@@ -225,7 +225,7 @@
                     </div>
                 </div>
                 <div class="chartbox">
-                    <userChart :title="'测试图表'" ref="userChart" :dataChart="dataChart2" height="300px" ></userChart>
+                    <userChart :title="'测试图表'" ref="userChart" :dataChart="dataChart2" :units="seachTime.units" height="300px" ></userChart>
                 </div>
             </div>
         </el-aside>
