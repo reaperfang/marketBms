@@ -68,6 +68,7 @@ Vue.use(LightTimeline);
 目录路径： \src\api
 * 在目录下新建一个模块文件（例如订单模块order, 商品模块goods）
 * 在api文件里的index.js里添加此模块
+
 ```js
 // 添加api模块
 import * as demo from "./demo"; 
@@ -76,7 +77,9 @@ export default {
 };
 
 ```
+
 * 在新建的文件里面添加api接口，写法如下：(注：url即接口相对地址，target即接口唯一标识号，baseURL:基础url, data： post请求时传入的业务参数，params: get请求时传入的业务参数，apiType: system/request.js中setApiAddress方法对应的apiType)
+
 ```js
 // get请求
 export function getAllCoupons(data) {
@@ -107,6 +110,7 @@ export function getList(data) {
 * _apis后面接api模块名（即你起的文件名字）
 * 模块名后面接你的具体api名
 * 示例： this._apis.模块名.api名
+
 ```js
 //获取列表demo
 this._apis.demo.getList({}).then((response)=>{
@@ -122,6 +126,7 @@ this._apis.demo.getList({}).then((response)=>{
 目录路径： \src\api
 * 在目录下新建一个模块文件（例如订单模块order, 商品模块goods）
 * 在api文件里的index.js里添加此模块
+
 ```js
 // 添加api模块
 import * as demo2 from "./demo2"; 
@@ -130,7 +135,9 @@ export default {
 };
 
 ```
+
 * 在新建的文件里面添加websocket接口，写法如下：(注：url即接口相对地址，baseURL:基础url, data： 传入的业务参数， methods: 传入的业务回调函数，包含onopen、onmessage、onclose、onerror方法)
+
 ```js
 // 获取数据
 export function getData(data, methods) {
@@ -144,7 +151,6 @@ export function getData(data, methods) {
 }
 ```
 
-
 ## 在页面中获取websocket发来的数据
 目录路径： 你的vue页面文件
 备注：
@@ -152,6 +158,7 @@ export function getData(data, methods) {
 * _apis后面接websocket模块名（即你起的文件名字）
 * 模块名后面接你的具体websocket接口名
 * 示例： this._apis.模块名.websocket名
+
 ```js
 //长连接demo
 this._apis.websocketDemo.getData({aaa:1}, {
@@ -170,7 +177,6 @@ this._apis.websocketDemo.getData({aaa:1}, {
       }
 });
 ```
-
 
 ## 添加你的路由
 目录路径： \src\router
@@ -277,6 +283,7 @@ export default new Router({
 * Pagination 分页组件
 * 带base的组件是基础功能组件，使用此类功能的业务组件可从此类文件继承以获得基本能力，在各视图目录中的业务组件中去做具体的实现
 * static目录是导入第三方组件的入口，需求的话可以去添加
+
 ```js
 <script type='es6'>
 import mapBase from "@/components/MapBase";
@@ -316,6 +323,7 @@ export default {
 * 新建一个components文件夹
 * 新建你的业务子组件
 * 在你的页面vue里面引用即可使用
+
 ```html
 <template>
   <demoMap1 :width="'600px'" :height="'300px'" :zoom="11" :center="[39.9046900000,116.4071700000]"></demoMap1>
@@ -336,9 +344,9 @@ export default {
 </script>
 ```
 
-
 ## 添加系统配置项
 文件路径： \src\system\appConfig.js
+
 ```js
 export default {
       head: {
@@ -359,9 +367,9 @@ export default {
 }
 ```
 
-
 ## 添加常量
 文件路径： \src\system\constant.js
+
 ```js
 /* 常量 */
 export default {
@@ -371,11 +379,11 @@ export default {
 
 ```
 
-
 ## 添加工具方法
 目录路径： \src\utils
 * 对于单独的工具方法，可放在base.js中，使用时可直接在utils上调用添加的方法
 * 对于需要一个文件来承载的工具类，可添加对应的js文件，然后在index.js中注册此文件，使用时也可直接在utils上调用添加的方法（需注意名称对应）
+
 ```js
 base.js
 /**
@@ -388,6 +396,7 @@ export function percent(value, fmt) {
   return `${((value || 0) * 100).toFixed(fmt || 2)}%`;
 }
 ```
+
 ```js
 index.js
 import * as utils from "./base"; //基础工具方法
@@ -410,28 +419,31 @@ export default Object.assign(utils, dateTime, security, transform, {
 
 ```
 
-
 ## 在页面中使用工具方法
 路径：你的页面文件或js文件
+
 ```js
 import utils from "@/utils";
 let date = utils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss")
 let value = utils.percent(0.34546757, 3)
 ```
 
-
 ## 使用全局快捷公共方法
 * 路由快捷跳转
+
 ```html
   <button  @click="_routeTo('page1')">按钮</button>
   <button  @click="_routeTo('page2', {id: 123, name: 'hahaha'})">按钮</button>
 ```
+
 * 获取上面的路由参数
+
 ```js
 console.log(this.$route.params)  //{id:123, name: 'hahaha'}
 ```
 
 * 全局事件中心(观察者模式跨作用域消息通讯)
+
 ```js
   注册事件： this._globalEvent.$on('mapLoaded', ()=>{
                   this.init();
@@ -440,11 +452,11 @@ console.log(this.$route.params)  //{id:123, name: 'hahaha'}
   发送事件： this._globalEvent.$emit('mapLoaded');
 ```
 
-
 ## 使用地图（以腾讯地图为例）
 编写路径： 你的视图业务组件目录
 * 创建一个业务地图组件文件，放到对应的views组件中
 * 继承公共组件中的mapBase组件，获取基本能力
+
 ```js
 import mapBase from "@/components/MapBase";
 export default {
@@ -453,7 +465,9 @@ export default {
 };
 </script>
 ```
+
 * 编写inited的处理函数
+
 ```js
 //实例初始化结束
 inited() {
@@ -471,14 +485,18 @@ inited() {
       });
 },
 ```
+
 * 编写initEvent的处理函数(如有)
+
 ```js
 //初始化事件
     initEvent() {
        
     }
 ```
+
 * 编写search和searchCompleted方法的处理函数(如需要)
+
 ```js
  //执行搜索
 search() {
@@ -509,6 +527,7 @@ searchCompleted(results) {
 ```
 
 组件调用路径： 你的页面
+
 ```html
 <template>
   <demoMap1 :width="'600px'" :height="'300px'" :zoom="11" :center="[39.9046900000,116.4071700000]"></demoMap1>
@@ -528,7 +547,6 @@ export default {
 }
 </script>
 ```
-
 
 ## 使用图表（以echarts的折线图为例）
 
@@ -552,11 +570,11 @@ export default {
 </script>
 ```
 
-
 ## 过滤器添加和使用
 添加方法同工具方法，utils工具方法可和过滤器共用
 
 页面中使用：
+
 ```html
 <button>日期事件过滤器（{{new Date() | formatDate('yyyy-MM-dd hh:mm:ss')}}）</button>
 <button>颜色转换过滤器（{{'rgb(45,123,67)' | colorRGB2Hex()}}）</button>
@@ -564,10 +582,11 @@ export default {
 <button>百分比格式化过滤器（{{0.2398 | percent(2)}}）</button>
 ```
 
-##页面中多个弹窗使用
+## 页面中多个弹窗使用
 * 在你的views视图目录中新建dialogs文件夹
 * 新建你的弹窗组件文件
 * 继承公共组件中的dialogBase, 获取基本能力, 并编写你的具体业务
+
 ```js
 <script>
 demoDialog.vue
@@ -584,7 +603,9 @@ export default {
 }
 </script>
 ```
+
 * 在你的业务页面中调用动态组件，并动态设置弹窗组件名称以实现区分打开不同的弹窗，并添加你的props和methods
+
 ```html
 helloWorld.vue
 
@@ -592,10 +613,9 @@ helloWorld.vue
 <component :is="currentDialog" :data="editorData" @dialogClose="dialogClose" :refresh="fetch"></component>
 ```
 
-
 ## auth
 
-```
+```js
 // 新增
 {
   name: '设置',
