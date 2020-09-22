@@ -246,6 +246,7 @@ export default {
   background-color: #fff;
   padding: 20px;
   padding-right: 70px;
+  border-radius: 4px;
   .title {
     font-size: 16px;
     margin-bottom: 30px;

@@ -1,11 +1,11 @@
 <template>
-  <div class="tag">
+  <div class="tag mh">
     <div class="search">
       <div>
         <el-button v-permission="['商品', '商品标签', '默认页面', '新建标签']" @click="addTagHandler" type="primary">新建标签</el-button>
         <!-- <el-button class="border-button" @click="moreManageHandler">批量管理</el-button> -->
       </div>
-      <el-form :inline="true" :model="listQuery" ref="form" class="form-inline">
+      <el-form :inline="true" :model="listQuery" ref="form" class="form-inline input_style">
         <el-form-item label="搜索标签" prop="name">
           <el-input v-model="listQuery.name" placeholder="请输入标签名称..."></el-input>
         </el-form-item>
@@ -341,6 +341,7 @@ export default {
 .tag {
   background-color: #fff;
   padding: 20px;
+  border-radius: 4px;
   .dialog-container {
     text-align: left;
   }
@@ -360,7 +361,7 @@ export default {
 .table-footer {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 20px 20px 10px 20px;
   padding-left: 15px;
   button {
     margin-left: 0;

@@ -2,7 +2,7 @@
     <div class="app-content classify">
         <div class="search">
             <el-button v-permission="['商品', '商品分类', '默认页面', '新建分类']" @click="addLevel1Category" type="primary">新建一级分类</el-button>
-            <el-form ref="form" :inline="true" :model="formInline" class="form-inline">
+            <el-form ref="form" :inline="true" :model="formInline" class="form-inline input_style">
                 <el-form-item label="搜索分类">
                     <el-input v-model="formInline.name" placeholder="请输入分类名称..."></el-input>
                 </el-form-item>
@@ -427,6 +427,7 @@ export default {
 .classify {
     background: #fff;
     padding: 20px;
+    border-radius: 4px;
     .dialog-container {
         text-align: left;
     }

@@ -5,7 +5,7 @@
       <a href="javascript:;"  class="withdraw" @click="_routeTo('withdrawSet')">提现规则设置</a>
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="提现编号" style="width:124px;padding-right:4px;">
+          <el-select v-model="ruleForm.searchType" placeholder="提现编号" style="width:134px;padding-right:4px;">
             <el-option
               v-for="item in presentations"
               :key="item.value"
@@ -13,7 +13,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
         <el-form-item label="申请时间">
           <el-date-picker
@@ -38,7 +38,7 @@
           </el-select>
         </el-form-item>
          <el-form-item>
-          <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
+          <el-select v-model="ruleForm.userType" style="width:135px;padding-right:4px;">
             <el-option
               v-for="item in userTypes"
               :key="item.value"
@@ -46,7 +46,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '提现明细', '默认页面', '查询']">查询</el-button>
@@ -54,7 +54,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="293">
       <div class="total">
          <!-- <el-button type="primary" @click="_routeTo('withdrawSet')">提现规则设置</el-button> -->
           <!-- <el-button type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button> -->
@@ -147,12 +147,11 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="page_styles">
-      <div class="checkAudit" v-if="dataList.length != 0">
+      <div class="checkAudit" v-if="dataList.length != 0" style="margin: 20px 0 0 20px;">
         <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button  class="border-button" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
       </div>
-        
+      <div class="page_styles">
          <el-pagination
           v-if="dataList.length != 0"
           @size-change="handleSizeChange"
@@ -449,7 +448,7 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 20px;
   .withdraw{
     text-align: right;

@@ -151,7 +151,8 @@ export default {
 .p_container{
     padding: 20px;
     background-color: #fff;
-    height:100%;
+    min-height:100%;
+    border-radius: 4px;
     .pane_container{
         color: #3D434A;
         .i_line{
@@ -163,8 +164,16 @@ export default {
         }
     }
 }
+.page_styles {
+    margin: 40px 0 30px 0;
+}
 .p_container .input_wrap{
     vertical-align: middle;
+}
+/deep/.el-input{
+    .el-input__inner{
+        width: 210px;
+    }
 }
 /deep/ .el-table--small td, /deep/.el-table--small th{
   padding:8px 10px;

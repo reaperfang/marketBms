@@ -1,5 +1,5 @@
 <template>
-    <div class="add-goods">
+    <div class="add-goods mh">
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="商品信息" name="goodsDetails">
                 <component :is="current"></component>
@@ -92,5 +92,6 @@ export default {
         background-color: #fff;
         padding: 20px;
         padding-top:0;
+        border-radius: 4px;
     }
 </style>

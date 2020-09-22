@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head-wrapper">
-      <el-form ref="ruleForm" :model="ruleForm" :inline="true">
+      <el-form ref="ruleForm" :model="ruleForm" :inline="true" class="input_style">
         <el-form-item label="分类名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入分类名称" clearable></el-input>
         </el-form-item>
@@ -13,7 +13,7 @@
         <el-button type="primary" @click="_routeTo('m_classifyEditor')">新建分类</el-button>
       </div>
     </div>
-    <div class="table">
+    <div class="table" v-calcMinHeight="313">
       <p>微页面分类（共{{total || 0}}个）</p>
       <el-table :data="tableData" stripe v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column prop="name" label="分类名称">
@@ -152,6 +152,7 @@ export default {
   background:#fff;
   padding:20px;
   padding-top:0;
+  border-radius: 0 0 4px 4px;
 }
 /deep/ .table{
   // overflow-y: auto;
@@ -159,6 +160,7 @@ export default {
   background:#fff;
   padding:20px;
   padding-bottom:50px;
+  border-radius: 4px;
   p{
     margin-bottom:20px;
   }

@@ -104,6 +104,11 @@
                     <div v-if="orderInfo.deliveryWay == 4">
                        <el-button class="verifyBtn" @click="currentDialog = 'VerificationDialog'; currentData = orderInfo.id; dialogVisible = true">核销验证</el-button>
                     </div>
+                     <!-- 第三方配送且是异常订单时 -->
+                    <div class="button-box" v-if="orderInfo.deliveryWay == 3 && !!orderInfo.is_abnormal">
+                       <el-button @click="sendOrderAgain">重新发单</el-button>
+                       <el-button @click="closeThirdOrder">关闭订单</el-button>
+                    </div>
                 </div>
             </template>
             <template v-else-if="orderState == 6">
@@ -454,6 +459,11 @@
                     <div v-if="orderInfo.deliveryWay == 4">
                        <el-button class="verifyBtn" @click="currentDialog = 'VerificationDialog'; currentData = orderInfo.id; dialogVisible = true">核销验证</el-button>
                     </div>
+                    <!-- 第三方配送且是异常订单时 -->
+                    <div class="button-box" v-if="orderInfo.deliveryWay == 3 && !!orderInfo.is_abnormal">
+                       <el-button @click="sendOrderAgain(orderInfo)">重新发单</el-button>
+                       <el-button @click="closeThirdOrder">关闭订单</el-button>
+                    </div>
                 </div>
             </template>
             <template v-else-if="orderState == 6">
@@ -483,6 +493,7 @@
 import CloseOrderDialog from '@/views/order/dialogs/closeOrderDialog'
 import anotherAuth from '@/mixins/anotherAuth'
 import VerificationDialog from '@/views/order/dialogs/verificationDialog'
+import CloseThirdPartyOrderDialog from "@/views/order/dialogs/closeThirdPartyOrderDialog";
 
 export default {
     mixins: [anotherAuth],
@@ -583,7 +594,22 @@ export default {
         closeOrder() {
             this.currentDialog = 'CloseOrderDialog'; 
             this.dialogVisible = true
-        }
+        },
+        closeThirdOrder(){
+            this.currentDialog = 'CloseThirdPartyOrderDialog'; 
+            this.dialogVisible = true
+        },
+        sendOrderAgain(orderInfo){
+           
+            let a = true;
+            if(a){
+                 orderInfo.is_abnormal = 0;
+                this.$message.success('重新发单成功');
+            }else{
+                this.$message.error('重新发单失败，请再次重新发单');
+            }
+            
+        },
     },
     props: {
         orderState: {
@@ -602,7 +628,8 @@ export default {
     },
     components: {
         CloseOrderDialog,
-        VerificationDialog
+        VerificationDialog,
+        CloseThirdPartyOrderDialog
     }
 }
 </script>
@@ -620,6 +647,7 @@ export default {
         padding: 30px 50px;
         display: flex;
         justify-content: space-between;
+        border-radius: 4px;
         .item.righter {
             margin-left: 10px;
             p {

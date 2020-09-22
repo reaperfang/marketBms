@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head-wrapper">
-      <el-form :inline="true" :model="form" class="demo-form-inline">
+      <el-form :inline="true" :model="form" class="demo-form-inline input_style">
         <el-form-item label="创建时间">
           <el-date-picker
             v-model="form.timeValue"
@@ -25,7 +25,7 @@
       <el-button type="primary" plain @click="_routeTo('generalArticle')">新建图文素材</el-button>
       <el-button type="primary" plain @click="syncImage">同步图文</el-button>
     </div>
-    <div class="list">
+    <div class="list" v-calcMinHeight="273">
       <p class="list_top">图文素材<span>{{total*1}}</span>条</p>
       <div class="list_main">
         <div class="list_img">
@@ -314,7 +314,7 @@ export default {
 }
 .pages{
   width: 100%;
-  margin-top: 50px;
+  margin-top: -10px;
   text-align: center;
   .page_nav{
     display: inline-block;

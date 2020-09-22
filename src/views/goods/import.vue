@@ -1,5 +1,5 @@
 <template>
-    <div class="import">
+    <div class="import mh">
         <section class="header">
             <el-row type="flex" align="center">
                 <el-col :span="12">
@@ -63,7 +63,7 @@
                 v-loading="loading"
                 :data="tableData"
                 :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
-                style="width: 100%">
+                style="width: 100%;margin-bottom: 10px;">
                 <el-table-column
                     prop="number"
                     align="left"
@@ -254,10 +254,11 @@ export default {
         background-color: #fff;
         padding: 20px;
         font-size: 14px;
+        border-radius: 4px;
         section {
-            border-bottom: 1px dashed #d3d3d3;
+            // border-bottom: 1px dashed #d3d3d3;
             // padding-top: 15px;
-            padding-bottom: 22px;
+            padding-bottom: 0px;
         }
         .header {
             .header-righter {

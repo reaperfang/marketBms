@@ -1,6 +1,6 @@
 /*维权 */
 <template>
-    <div class="m_container">
+    <div class="m_container mh bor-radius">
         <div class="pane_container head-wrapper">
             <el-form class="clearfix">
                 <el-form-item label="交易时间">
@@ -83,7 +83,6 @@
             <p v-if="note ==6" class="proposal"><b>"卖家缺货":</b>建议针对此类用户免费调换商品。</p>
             <p v-if="note ==8" class="proposal"><b>"拍错了/订单信息错误":</b>建议针对此类用户补偿商品优惠券，发放现金红包，更换升级版商品。</p>
         </div>
-        <div class="contents"></div>
         <!-- <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div> -->
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
@@ -270,7 +269,6 @@ export default {
         }
         .input_wrap2{
             display: inline-block;
-            width: 140px;
         }
         .input_wrap3{
             display: inline-block;

@@ -1,5 +1,5 @@
 <template>
-   <div class="address">
+   <div class="address mh bor-radius">
      <div class="btn-area"><el-button type="primary" @click="goAddressNew()" v-permission="['设置','地址库', '默认页面', '新建地址']">新建地址</el-button></div>
      <div class="list-area">
        <div class="total">
@@ -191,7 +191,7 @@ export default {
     },
     hanldeOpenDelivery(id) {
       this.confirm({
-        title: "提示",
+        title: "",
         iconWarning: true,
         text: '此地址已设置为同城配送的发货地址，修改或删除后同城配送设置也将修改，您确定要修改吗？',
         confirmText: '确定',
@@ -227,20 +227,44 @@ export default {
         })
       })
     },
-    hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId) {
-      // 需要查看发货地址数量是否剩下1条？？？
-      const id = row.id
-      const addressType = row.addressType
+    getSendAddressList() {
       const req = Object.create(null)
       req.cid  = this.cid
       req.startIndex = 1
       req.pageSize = 20
-      req.addressType = addressType
-      this.ApiGetAddressList(req).then((res) => {
+      req.addressType = 0
+      const p1 = this.ApiGetAddressList(req)
+      req.addressType = 2
+      const p2 = this.ApiGetAddressList(req)
+      return new Promise((resolve, reject) => {
+        const res = {}
+        Promise.all([p1,p2]).then(([res1, res2]) => {
+          console.log(res1, res2)
+          const total1 = res1 ? parseInt(res1.total) : 0
+          const total2 = res2 ? parseInt(res2.total) : 0
+          res.total = total1 + total2
+          resolve(res)
+        }).catch((err) => {
+          // this.$message.error(err)
+          reject(err)
+        })
+      })
+    },
+    hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId) {
+      // 需要查看发货地址数量是否剩下1条？？？
+      const id = row.id
+      const isBindThirdsend = row.isBindThirdsend
+      // const req = Object.create(null)
+      // req.cid  = this.cid
+      // req.startIndex = 1
+      // req.pageSize = 20
+      // req.addressType = 0
+      this.getSendAddressList().then((res) => {
+        console.log('res',res)
         // 仅有一条发货地址信息，同时商家配送已开启，此时要删除该发货地址时，弹框提示如下
         if (res && res.total == 1) {
           this.confirm({
-            title: "提示",
+            title: "",
             iconWarning: true,
             text: '同城配送已开启并使用此地址为发货地址，删除后同城配送功能将自动关闭，您确定要删除吗？',
             confirmText: '确定',
@@ -250,10 +274,10 @@ export default {
             const isCloseMerchantDeliver = +merchantDeliverId === +id
             const isClostTh3DeliverId = +th3DeliverId === +id
             const p1 = this.closeCityDeliver(isCloseMerchantDeliver, isClostTh3DeliverId)
-            const p2 = this.ApiDelAddressById(id, addressType)
+            const p2 = this.ApiDelAddressById(id, isBindThirdsend)
             Promise.all([p1, p2]).then((arr) => {
               console.log('arr',arr)
-               this.ruleForm.pageNo = 1
+              this.ruleForm.pageNo = 1
               const req = this.getReqData(this.ruleForm)
               this.getAddressList(req)
               // if(arr && arr.length > 0) {
@@ -265,14 +289,14 @@ export default {
           });
         } else {
           this.confirm({
-            title: "提示",
+            title: "",
             iconWarning: true,
             text: '此地址已设置为同城配送的发货地址，修改或删除后同城配送设置也将修改，您确定要修改吗？',
             confirmText: '确定',
             showCancelButton: true,
             customClass: 'address-update'
           }).then(() => {
-            this.delAddressById(id, addressType)
+            this.delAddressById(id, isBindThirdsend)
           }).catch((err) => {
           });
         }
@@ -281,10 +305,10 @@ export default {
       })
       
     },
-    // 判断地址是否为商家配送地址
+    // 获取商家配送地址
     getMerchantDeliverAddressById(id) {
       return new Promise((resolve, reject) => {
-        this._apis.set.getAddressDefaultSender().then((response) => {
+        this._apis.set.getAddressDefaultSender({ isBindShopsend: 1 }).then((response) => {
           resolve(response)
         }).catch((err) => {
           reject(err)
@@ -293,7 +317,13 @@ export default {
     },
     // 获取三方配送发货地址
     getTh3DeliverAddressById() {
-      // 
+      return new Promise((resolve, reject) => {
+        this._apis.set.getAddressDefaultSender({ isBindThirdsend: 1 }).then((response) => {
+          resolve(response)
+        }).catch((err) => {
+          reject(err)
+        })
+      })
     },
     /**
      * 1 获取商家配送地址id和三方配送地址id
@@ -309,7 +339,8 @@ export default {
       const p3 = this.getTh3DeliverAddressById() // 获取三方配送默认地址
       Promise.all([p1, p2, p3]).then((result) => {
         const [ { isOpenMerchantDeliver, isOpenTh3Deliver }, merchantDeliver, th3Deliver ] = result
-        const isOpen = (merchantDeliver && merchantDeliver.id === +id && isOpenMerchantDeliver) || (th3Deliver && th3Deliver.id === +id && isOpenTh3Deliver)
+        console.log('------result-----',result)
+        const isOpen = (merchantDeliver && +merchantDeliver.id === +id && isOpenMerchantDeliver) || (th3Deliver && +th3Deliver.id === +id && isOpenTh3Deliver)
         if (isOpen) {
           this.hanldeOpenDelivery(id)
         } else {
@@ -333,37 +364,24 @@ export default {
         })
       })
     },
-    // 是否开启商家配送
-    isOpenMerchantDeliver() {
-      const id = this.cid
-      return new Promise((resolve, reject) => {
-        this._apis.set.getShopInfo({ id }).then(res => {
-          console.log("----",res)
-          const isOpenMerchantDeliver = res && res.isOpenMerchantDeliver === 1 ? true : false // 是否开启商家配送 0-否 1-是
-          resolve(isOpenMerchantDeliver)
-        }).catch(err => {
-          reject(err)
-        })
-      })
-    },
     // 删除操作，默认地址处理逻辑
     handleDelAddress(row) {
       this.confirm({
-        title: "提示",
-        icon: true,
+        title: "",
+        iconWarning: true,
         text: '确定要删除此地址信息吗？',
         confirmText: '确定',
         cancelButtonText: '取消'
       }).then(() => {
         // 调用删除接口方法
-        this.delAddressById(row.id, row.addressType)
+        this.delAddressById(row.id, row.isBindThirdsend)
       });
     },
     // 处理删除默认地址
     handleDelDefaultAddress() {
       this.confirm({
-        title: "提示",
-        icon: true,
+        title: "",
+        iconWarning: true,
         text: '默认地址不可删除',
         confirmText: '我知道了',
         customClass: 'address-disable-del',
@@ -371,18 +389,18 @@ export default {
       }).then(() => {
       });
     },
-    ApiDelAddressById(id, addressType) {
+    ApiDelAddressById(id, isBindThirdsend) {
       return new Promise((resolve, reject) => {
-        this._apis.set.delAddressById({ id, addressType }).then((res) => {
+        this._apis.set.delAddressById({ id, isBindThirdsend }).then((res) => {
           resolve(res)
         }).catch((err) => {
           reject(err)
         })
       })
     },
-    delAddressById(id, addressType) {
+    delAddressById(id, isBindThirdsend) {
       // 删除api
-      this.ApiDelAddressById(id, addressType).then(() => {
+      this.ApiDelAddressById(id, isBindThirdsend).then(() => {
         this.ruleForm.pageNo = 1
         const req = this.getReqData(this.ruleForm)
         this.getAddressList(req)
@@ -409,7 +427,7 @@ export default {
       // 3 
       const id = row.id
       const addressType = row.addressType
-      const isDefaultAddress = row.isDefaltReturnAddress === 1 || row.isDefaltSenderAddress === 1 // mock
+      const isDefaultAddress = row.isDefaltReturnAddress === 1 || row.isDefaltSenderAddress === 1
       if (!isDefaultAddress) {
         const p1 = this.isOpenCityDeliver() // 是否开启同城配送
         const p2 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
@@ -418,8 +436,8 @@ export default {
           const [ { isOpenMerchantDeliver, isOpenTh3Deliver }, merchantDeliver, th3Deliver ] = result
           const merchantDeliverId = merchantDeliver && merchantDeliver.id
           const th3DeliverId = th3Deliver && th3Deliver.id
-          const isOpen = (merchantDeliverId === +id && isOpenMerchantDeliver) || (th3DeliverId === +id && isOpenTh3Deliver)
-          
+          const isOpen = (+merchantDeliverId === +id && isOpenMerchantDeliver) || (+th3DeliverId === +id && isOpenTh3Deliver)
+          console.log('result',result, isOpen)
           if (isOpen) {
             this.hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId)
           } else {

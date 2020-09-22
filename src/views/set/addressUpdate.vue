@@ -1,5 +1,5 @@
 <template>
-   <div class="address" v-if="renderComponent">
+   <div class="address mh bor-radius" v-if="renderComponent">
      <h2>地址库/{{ setTitle }}</h2>
      <el-form class="ruleForm" ref="ruleForm" :model="ruleForm" :rules="rules" label-width="102px">
        <div class="form-area">
@@ -95,7 +95,9 @@ export default {
         addressCode: null, // code码
         province: null, // 省
         city: null, // 市
-        area: null // 区
+        area: null, // 区
+        isBindShopsend: 0,
+        isBindThirdsend: 0
       },
       rules: {
         contactPerson: [
@@ -176,10 +178,12 @@ export default {
       this.ruleForm.province = data.provinceName || null
       this.ruleForm.city = data.cityName || null
       this.ruleForm.area = data.areaName || null
+      this.ruleForm.isBindShopsend = data.isBindShopsend
+      this.ruleForm.isBindThirdsend = data.isBindThirdsend
     },
     init() {
       this.ruleForm.id = this.$route.query && this.$route.query.id
-      this.isDisabled = this.$route.query && this.$route.query.source === 1 ? true : false
+      this.isDisabled = this.$route.query && +this.$route.query.source === 1 ? true : false
       if (this.ruleForm.id) {
         this.getAddressById(this.ruleForm.id)
       } 
@@ -244,7 +248,7 @@ export default {
         obj.city_name = data.city // 市名称
         obj.city_code = data.addressCode[1] // 市编码
         obj.area_name = data.area // 地区名称
-        obj.area_code = data.addressCode[1] // 地区码
+        obj.area_code = data.addressCode[2] // 地区码
         obj.longitude = data.lng // 经度
         obj.latitude = data.lat // 纬度
         obj.address_type = data.type // 地址类型0:发货地址 1:退货地址 2:发货退货地址
@@ -252,26 +256,42 @@ export default {
         obj.is_defalt_return_address = data.defaultReturnAddress
         obj.address = data.sendAddress
         obj.address_detail = data.address
+        obj.isBindShopsend = data.isBindShopsend
+        obj.isBindThirdsend = data.isBindThirdsend
       }
       return obj
     },
     getReqData() {
       const data = JSON.parse(JSON.stringify(this.ruleForm))
       // 处理地址类型
-      const type = this.formateAddressType()
+      const obj = this.formateAddressType()
       delete data.type
-      return { ...data, ...type }
+      // 同城配送默认地址逻辑变更
+      const source = this.$route.query && +this.$route.query.source // 来源是否为同城配送
+      const sourceType = this.$route.query && this.$route.query.sourceType // 1 商家配送 2 三方配送
+      // 如果选择发货地址
+      if (obj.type === 0 || obj.type === 2) {
+        data.isBindShopsend = +source === 1 && +sourceType === 1 ? 1 : this.ruleForm.isBindShopsend
+        data.isBindThirdsend = +source === 1 && +sourceType === 2 ? 1 : this.ruleForm.isBindThirdsend
+      } else {
+        data.isBindShopsend = 0
+        data.isBindThirdsend = 0
+      }
+     
+
+      return { ...data, ...obj }
     },
     hasChecked(val) {
       return this.ruleForm.type.includes(val)
     },
     // 处理保存成功的逻辑
     handleSaveSuccess() {
-      
+      const html = '<span class="sucess">保存成功！</span>'
       this.confirm({
-        title: "提示",
-        iconSuccess: true,
-        text: '保存成功',
+        title: '', 
+        iconSuccess: true, 
+        text: html,
+        customClass: 'setting-custom',
         confirmText: '返回地址列表',
         cancelButtonText: '继续新建地址'
       }).then(() => {
@@ -285,7 +305,7 @@ export default {
     // 处理数据重复问题
     handleDataRepeatErr(id) {
       this.confirm({
-        title: "提示",
+        title: "",
         iconWarning: true,
         text: '地址信息重复，点击可直接查看或编辑已创建的地址信息。',
         confirmText: '查看',
@@ -307,14 +327,31 @@ export default {
       const newIsTrue1 = this.hasChecked(1)
       return !((oldIsTrue && newIsTrue) || (oldIsTrue1 && newIsTrue1))
     },
-    // 处理开启商家配送提醒
-    hanldeIsOpenDelivery(res) {
+    // 处理开启商家配送提醒 status 1 商家配送 2 三方配送
+    hanldeIsOpenDelivery(res, status) {
       // 是否是默认发货地址，如果是，并且 当前地址不是设置为默认发货地址，则 不提示，其他都提示
         // merchantDeliver 商家配送地址
         // res && res.isDefaltSenderAddress && (res.addressType === 0 || res.addressType === 2)  && (this.ruleForm.type === 1 || this.ruleForm.type === 2)
-      if (!this.isNotUpdateMerchantAddress(res)) {
+      // if (!this.isNotUpdateMerchantAddress(res)) {
+      //   this.confirm({
+      //     title: "提示",
+      //     iconWarning: true,
+      //     text: '保存后，此地址将成为商家配送的发货地址，商家配送规则将以最新发货地址为准，您确定要保存吗？',
+      //     confirmText: '确定',
+      //     showCancelButton: true,
+      //     customClass: 'address-update'
+      //   }).then(() => {
+      //     this.saveAddress()
+      //   }).catch(() => {
+      //     this.isLoading = false
+      //   });
+      // } else {
+      //   this.saveAddress()
+      // }
+      // 么有发货地址的情况
+      if (!res) {
         this.confirm({
-          title: "提示",
+          title: "",
           iconWarning: true,
           text: '保存后，此地址将成为商家配送的发货地址，商家配送规则将以最新发货地址为准，您确定要保存吗？',
           confirmText: '确定',
@@ -325,9 +362,139 @@ export default {
         }).catch(() => {
           this.isLoading = false
         });
-      } else {
-        this.saveAddress()
+        return false
       }
+      let req = this.getReqData()
+      req = this.formateReqData(req)
+      const isTrue = (req.id === res.id)
+      || (status === 1 && req.isBindShopsend === 1)
+      || (status === 1 && req.isDefaltSenderAddress === 1 && res.isBindShopsend !== 1)
+      || (status === 1 && res.isDefaltSenderAddress !== 1 && res.isBindShopsend !== 1)
+      || (status === 2 && req.isBindThirdsend === 1)
+      || (status === 2 && req.isDefaltSenderAddress === 1 && res.isBindThirdsend !== 1)
+      || (status === 2 && res.isDefaltSenderAddress !== 1 && res.isBindThirdsend !== 1)
+
+      if (isTrue) {
+        this.confirm({
+          title: "",
+          iconWarning: true,
+          text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
+          confirmText: '确定',
+          showCancelButton: true,
+          customClass: 'address-update'
+        }).then(() => {
+          this.saveAddress()
+        }).catch(() => {
+          this.isLoading = false
+        });
+        return false
+      }
+      // if (status === 1 && req.isBindShopsend === 1) {
+      //   this.confirm({
+      //     title: "提示",
+      //     iconWarning: true,
+      //     text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
+      //     confirmText: '确定',
+      //     showCancelButton: true,
+      //     customClass: 'address-update'
+      //   }).then(() => {
+      //     this.saveAddress()
+      //   }).catch(() => {
+      //     this.isLoading = false
+      //   });
+      //   return false
+      // }
+      // if (status === 1 && req.isDefaltSenderAddress === 1 && res.isBindShopsend !== 1) {
+      //   this.confirm({
+      //     title: "提示",
+      //     iconWarning: true,
+      //     text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
+      //     confirmText: '确定',
+      //     showCancelButton: true,
+      //     customClass: 'address-update'
+      //   }).then(() => {
+      //     this.saveAddress()
+      //   }).catch(() => {
+      //     this.isLoading = false
+      //   });
+      //   return false
+      // }
+      // if (status === 1 && res.isDefaltSenderAddress !== 1 && res.isBindShopsend !== 1) {
+      //   this.confirm({
+      //     title: "提示",
+      //     iconWarning: true,
+      //     text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
+      //     confirmText: '确定',
+      //     showCancelButton: true,
+      //     customClass: 'address-update'
+      //   }).then(() => {
+      //     this.saveAddress()
+      //   }).catch(() => {
+      //     this.isLoading = false
+      //   });
+      //   return false
+      // }
+      // if (status === 2 && req.isBindThirdsend === 1) {
+      //   this.confirm({
+      //     title: "提示",
+      //     iconWarning: true,
+      //     text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
+      //     confirmText: '确定',
+      //     showCancelButton: true,
+      //     customClass: 'address-update'
+      //   }).then(() => {
+      //     this.saveAddress()
+      //   }).catch(() => {
+      //     this.isLoading = false
+      //   });
+      //   return false
+      // }
+      // if (status === 2 && req.isDefaltSenderAddress === 1 && res.isBindThirdsend !== 1) {
+      //   this.confirm({
+      //     title: "提示",
+      //     iconWarning: true,
+      //     text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
+      //     confirmText: '确定',
+      //     showCancelButton: true,
+      //     customClass: 'address-update'
+      //   }).then(() => {
+      //     this.saveAddress()
+      //   }).catch(() => {
+      //     this.isLoading = false
+      //   });
+      //   return false
+      // }
+      // if (status === 2 && res.isDefaltSenderAddress !== 1 && res.isBindThirdsend !== 1) {
+      //   this.confirm({
+      //     title: "提示",
+      //     iconWarning: true,
+      //     text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
+      //     confirmText: '确定',
+      //     showCancelButton: true,
+      //     customClass: 'address-update'
+      //   }).then(() => {
+      //     this.saveAddress()
+      //   }).catch(() => {
+      //     this.isLoading = false
+      //   });
+      //   return false
+      // }
+      // // 是否最新地址
+      this.saveAddress()
+    },
+    // 是否开启同城配送
+    isOpenCityDeliver() {
+      const id = this.cid
+      return new Promise((resolve, reject) => {
+        this._apis.set.getShopInfo({ id }).then(res => {
+          console.log("----",res)
+          const isOpenMerchantDeliver = res && res.isOpenMerchantDeliver === 1 ? true : false // 是否开启商家配送 0-否 1-是
+          const isOpenTh3Deliver = res && res.isOpenTh3Deliver === 1 ? true : false // 是否开启三方配送 0-否 1-是
+          resolve({ isOpenMerchantDeliver, isOpenTh3Deliver })
+        }).catch(err => {
+          reject(err)
+        })
+      })
     },
     // 是否开启商家配送
     isOpenMerchantDeliver() {
@@ -389,10 +556,20 @@ export default {
       
       // this.handleAfterSave(res)
     },
-    // 判断地址是否为商家配送地址
+    // 获取商家配送地址
     getMerchantDeliverAddressById(id) {
       return new Promise((resolve, reject) => {
-        this._apis.set.getAddressDefaultSender().then((response) => {
+        this._apis.set.getAddressDefaultSender({ isBindShopsend: 1 }).then((response) => {
+          resolve(response)
+        }).catch((err) => {
+          reject(err)
+        })
+      })
+    },
+    // 获取三方配送发货地址
+    getTh3DeliverAddressById() {
+      return new Promise((resolve, reject) => {
+        this._apis.set.getAddressDefaultSender({ isBindThirdsend: 1 }).then((response) => {
           resolve(response)
         }).catch((err) => {
           reject(err)
@@ -409,14 +586,22 @@ export default {
             return false
           }
           this.isLoading = true
-          const p2 = this.isOpenMerchantDeliver()
-          const p1 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
+          const p1 = this.isOpenCityDeliver()
+          const p2 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
+          const p3 = this.getTh3DeliverAddressById() // 获取三方配送默认地址
           Promise.all([p1, p2]).then((result) => {
             console.log(result)
-            const [response, isOpen] = result
-            // 是否打开
-            if (isOpen) {
-              this.hanldeIsOpenDelivery(response)
+            const [{ isOpenMerchantDeliver, isOpenTh3Deliver }, res1, res2] = result
+            // 是否打开同城配送
+            const isOpen = isOpenMerchantDeliver || isOpenTh3Deliver
+            if (isOpenMerchantDeliver) {
+              // 没有地址， 新建提醒
+              // 有地址，是否为同城配送跳转过来设置过的地址
+              // 如果是
+
+              this.hanldeIsOpenDelivery(res1, 1)
+            } else if (isOpenTh3Deliver) {
+              this.hanldeIsOpenDelivery(res2, 2)
             } else {
               this.saveAddress()
             }

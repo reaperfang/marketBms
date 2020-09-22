@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head-wrapper">
-      <el-form ref="ruleForm" :model="ruleForm" :inline="true">
+      <el-form ref="ruleForm" :model="ruleForm" :inline="true" class="input_style">
         <el-form-item label="" prop="classify">
           <el-select v-if="classifyList.length" v-model="ruleForm.pageCategoryInfoId" placeholder="请选择分类">
             <el-option label="全部分类" value=""></el-option>
@@ -19,7 +19,7 @@
         <el-button type="primary" @click="_routeTo('m_templateManageIndex', {'tab':'myTemplate'})">新建页面</el-button>
       </div>
     </div>
-    <div class="table">
+    <div class="table" v-calcMinHeight="313">
       <p>草稿（共{{total || 0}}个）</p>
       <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
@@ -282,6 +282,7 @@ export default {
   background:#fff;
   padding:20px;
   padding-top:0;
+  border-radius: 0 0 4px 4px;
 }
 /deep/ .table{
   // overflow-y: auto;
@@ -289,6 +290,7 @@ export default {
   background:#fff;
   padding:20px;
   padding-bottom:50px;
+  border-radius: 4px;
   p{
     margin-bottom:20px;
   }

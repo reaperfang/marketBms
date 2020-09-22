@@ -280,18 +280,21 @@
 		// min-width:1650px;
 		background: #fff;
 		padding-bottom:50px;
+		border-radius: 0 0 4px 4px;
 		ul{
 			display:flex;
 			flex-direction: row;
 			justify-content: flex-start;
 			flex-wrap: wrap;
 			background: #fff;
-			padding: 20px 0 20px 20px;
+			padding: 10px 0 0 20px;
 			box-sizing: border-box;
+			min-height: 180px;
+			border-radius: 0 0 4px 4px;
 			li{
 				width:255px;
 				margin-right: 10px;
-				margin-bottom: 10px;
+				margin-top: 10px;
 				.inner{
 					width:255px!important;
 					height:421px!important;

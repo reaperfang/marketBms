@@ -1,6 +1,6 @@
 /*会员设置 */
 <template>
-  <div class="main">
+  <div class="main mh bor-radius">
     <h1>成为老会员条件：</h1>
     <el-form ref="form" :rules="rules" :model="form">
       <el-radio-group class="radio-group" label-position="right" v-model="form.oldMemberType" >
@@ -63,8 +63,8 @@ export default {
       if (value === '') {
         return callback(new Error('请输入交易金额'));
       }
-      const reg = /^\d{1,9}$/
-      if (!reg.test(value)) {
+      const reg = /^\d{0,9}$/
+      if (+value <= 0 || !reg.test(value)) {
         return callback(new Error('请输入正整数'));
       }
       return callback();

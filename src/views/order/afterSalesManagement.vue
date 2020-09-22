@@ -1,7 +1,7 @@
 <template>
     <div class="after-sales">
         <div class="search">
-            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline">
+            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline input_style">
                 <el-form-item>
                     <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
                         <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
@@ -53,7 +53,7 @@
             </el-form>
         </div>
         <div class="line"></div>
-        <div class="content">
+        <div class="content" v-calcMinHeight="211">
             <div class="export-header">
                 <p>已选择 <span>{{multipleSelection.length}}</span> 项，全部<span>{{total}}</span>项</p>
                 <el-tooltip class="item" effect="dark" content="当前最多支持导出1000条数据" placement="top">
@@ -508,6 +508,7 @@ export default {
 .after-sales {
     .search {
         background-color: #fff;
+        border-radius: 4px;
         .form-inline {
             padding: 20px;
         }
@@ -528,6 +529,7 @@ export default {
         background-color: #fff;
         padding: 20px;
         padding-top: 23px;
+        border-radius: 4px;
         p {
             font-size: 16px;
             color: #B6B5C8;
@@ -537,16 +539,10 @@ export default {
             }
         }
         .footer {
-            padding: 20px;
+            padding: 20px 20px 10px 20px;
             padding-left: 10px;
         }
     }
-}
-/deep/ .el-input {
-    width: auto;
-}
-/deep/ .input-with-select .el-input__inner {
-  width: 139px;
 }
 .export-header {
   display: flex;
@@ -598,7 +594,7 @@ export default {
 }
 /deep/ .el-table .cell {
     padding-left: 0;
-    padding-right: 20px;
+    padding-right: 10px;
 }
 /deep/ .input-with-select .el-input-group__prepend {
     background-color: #fff;

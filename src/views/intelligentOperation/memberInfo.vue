@@ -1,5 +1,5 @@
 <template>
-<div class="m_container">
+<div class="m_container mh">
         <div class="pane_container head-wrapper">
             <el-form ref="form" :model="form" class="clearfix">
                 <el-form-item label="交易时间">
@@ -109,7 +109,6 @@
             <p>运营建议：</p>
             <p class="proposal"><b>交易次数{{note.label}} ：</b>{{note.suggest}}</p>
         </div>
-            <div class="contents"></div>
             <!-- <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div> -->
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
         </div>
@@ -378,6 +377,7 @@ export default {
 .m_container{
     background-color: #fff;
     padding: 20px;
+    border-radius: 4px;
     .el-button--small{
         border: 1px solid #655EFF;
         color: #655EFF;
@@ -402,7 +402,6 @@ export default {
         }
         .input_wrap2{
             display: inline-block;
-            width: 140px;
         }
         .input_wrap3{
             display: inline-block;

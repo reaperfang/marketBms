@@ -4,10 +4,10 @@
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="交易流水号">
-          <el-input v-model="ruleForm.tradeDetailSn" placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.tradeDetailSn" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
         <el-form-item label="交易类型">
-          <el-select v-model="ruleForm.businessType" style="width:140px;" placeholder="全部">
+          <el-select v-model="ruleForm.businessType" placeholder="全部">
             <el-option
               v-for="item in transactionTypes"
               :key="item.value"
@@ -34,7 +34,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="211">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
@@ -60,13 +60,13 @@
           prop="relationSn"
           label="关联单据编号"
           :render-header="renderRelationSn"
-          width="220px">
+          width="230px">
         </el-table-column>
         <el-table-column
           prop="memberSn"
           label="用户ID"
           align="center"
-          width="110px">
+          width="120px">
         </el-table-column>
         <el-table-column
           prop="nickName"
@@ -264,7 +264,7 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 20px;
 }
 .under_part{

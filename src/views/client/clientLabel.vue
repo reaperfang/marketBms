@@ -1,11 +1,11 @@
 <template>
-    <div class="c_container clearfix">
+    <div class="c_container clearfix mh">
         <div class="c_top" v-permission="['用户', '用户标签', '默认页面', '添加标签']">
             <el-button type="primary" @click="_routeTo('batchImport')" v-permission="['用户', '用户标签', '默认页面', '添加标签']">添加标签</el-button>
         </div>
         <div class="c_line">
             <span>标签名称：</span>
-            <div class="input_wrap">
+            <div class="input_wrap w_210">
                 <el-input v-model="tagName" placeholder="请输入标签名称"></el-input>
             </div>
             <span class="marL20">标签类型：</span>
@@ -74,6 +74,7 @@ export default {
 .c_container{
     padding: 20px;
     background-color: #fff;
+    border-radius: 4px;
     .c_top{
         padding-bottom: 20px;
         border-bottom: 1px solid #D0D6E4;
@@ -94,7 +95,6 @@ export default {
             color: #3D434A;
         }
         .input_wrap{
-            width: 160px;
             display: inline-block;
         }
     }

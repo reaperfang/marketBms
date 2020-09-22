@@ -1,7 +1,7 @@
 <template>
     <div class="reviews">
         <div class="search">
-            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline">
+            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline input_style">
                 <el-form-item label="订单编号">
                     <el-input v-model="listQuery.orderCode" placeholder="请输入"></el-input>
                 </el-form-item>
@@ -48,7 +48,7 @@
                 <div style="clear: both;"></div>
             </el-form>
         </div>
-        <div class="content">
+        <div class="content" v-calcMinHeight="262">
             <div class="content-header">
                 <p class="statistics">已选择<span>{{multipleSelection.length}}</span>项，全部<span>{{total}}</span>项</p>
                 <el-button v-permission="['订单', '评价管理', '默认页面', '敏感词设置']" @click="$router.push('/order/sensitiveWords')" class="border-button">敏感词设置</el-button>
@@ -430,6 +430,7 @@ export default {
 .reviews {
     .search {
         background-color: #fff;
+        border-radius: 4px;
         .form-inline {
             padding: 20px;
         }
@@ -446,6 +447,7 @@ export default {
         background-color: #fff;
         padding: 20px;
         margin-top: 20px;
+        border-radius: 4px;
         p {
             font-size: 16px;
             color: #B6B5C8;
@@ -455,7 +457,7 @@ export default {
             }
         }
         .footer {
-            padding: 20px;
+            padding: 20px 20px 10px 20px;
             padding-left: 10px;
         }
     }
@@ -525,7 +527,7 @@ export default {
 }
 /deep/ .el-table .cell {
     padding-left: 0;
-    padding-right: 20px;
+    padding-right: 10px;
 }
 /deep/.el-table td:nth-child(1){
          padding-left:20px;

@@ -16,7 +16,7 @@
               <p>目前快递鸟电子面单仅支持以下快递公司：顺丰速运、EMS、宅急送、圆通速递、百世快递、中通快递、韵达速递、申通快递、德邦快递、优速快递、京东快递、信丰物流、安能快递、国通快递、天天快递、跨越速运、邮政快递包裹、中铁快运、邮政国内标快、远成快运、全一快递、速尔快递、品骏快递。</p>
           </el-popover>
       </p> -->
-      <el-form :inline="true" :model="formInline" class="form-inline">
+      <el-form :inline="true" :model="formInline" class="form-inline input_style">
         <div class="row justify-between">
           <div class="col">
             <el-form-item label="电子面单名称">
@@ -80,6 +80,7 @@
           </el-table-column>
         </el-table>
         <pagination
+          style="margin-top: 10px;"
           v-show="total>0"
           :total="total"
           :page.sync="listQuery.startIndex"
@@ -212,7 +213,7 @@ export default {
   color: $grayColor;
 }
 .table-box {
-  padding-bottom: 20px;
+  padding-bottom: 20px !important;
 }
 .table-box .table {
     margin-left: 0;

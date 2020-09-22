@@ -164,6 +164,9 @@ export default {
   /deep/ .el-form-item__label {
     padding-right: 0;
   }
+  /deep/ .el-input__inner {
+    width: 100%;
+  }
 
   .info {
     background: #f2f2f2;

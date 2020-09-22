@@ -15,7 +15,7 @@
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
-          <el-select v-model="ruleForm.businessType" style="width:210px;" placeholder="全部">
+          <el-select v-model="ruleForm.businessType" placeholder="全部">
             <el-option
               v-for="item in fsTypes"
               :key="item.value"
@@ -25,7 +25,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="快递公司">
-          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:120px;"></el-input>
+          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
         <el-form-item label="操作时间">
           <el-date-picker
@@ -45,7 +45,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="301">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
@@ -273,7 +273,7 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 20px;
 }
 .under_part{

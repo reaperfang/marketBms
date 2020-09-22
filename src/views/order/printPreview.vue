@@ -247,6 +247,7 @@ export default {
     padding: 20px;
     background: #fff;
     height: 100%;
+    border-radius: 4px;
     .print_preview_info{
         height: 100%;
         padding: 0px 10px 18px 0px;

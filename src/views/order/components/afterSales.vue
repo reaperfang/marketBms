@@ -2,7 +2,7 @@
     <div class="after-sales">
         <div class="search">
             <!-- <div class="top">说明：当前已开启订单自动发货，自动发货后请尽快补充物流信息，您也可以到</div> -->
-            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline">
+            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline input_style">
                 <el-form-item>
                     <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
                         <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
@@ -450,7 +450,7 @@ export default {
             }
         }
         .footer {
-            padding: 20px;
+            padding: 20px 20px 10px 20px;
             padding-left: 10px;
         }
     }

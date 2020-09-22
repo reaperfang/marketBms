@@ -2,7 +2,7 @@
     <div class="order-delivery">
         <div class="search">
             <div v-show="isOrderAutoSend" class="top">说明：当前已开启订单自动发货，自动发货后请尽快补充物流信息，您也可以到 <span @click="oderDeliver_decor" class="oderDeliver_decor">设置-交易设置</span> 中关闭自动发货 </div> 
-            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline">
+            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline input_style">
                 <el-form-item>
                     <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
                         <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
@@ -40,7 +40,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item class="searchTimeType">
-                    <el-select class="date-picker-select" v-model="listQuery.searchTimeType" placeholder>
+                    <el-select class="date-picker-select w_135" v-model="listQuery.searchTimeType" placeholder>
                         <el-option label="发货时间" value="send"></el-option>
                         <el-option label="下单时间" value="create"></el-option>
                     </el-select>
@@ -119,7 +119,7 @@
                     <template slot-scope="scope">
                         <div>
                             <span class="icon-store" v-if="scope.row.deliveryWay == 2"></span>
-                            <span class="icon-store-text">{{scope.row.deliveryWay | deliveryWayFilter}}</span>
+                            <span class="icon-store-text">{{scope.row | deliveryWayFilter}}</span>
                         </div>
                     </template>
                 </el-table-column>
@@ -185,7 +185,7 @@
                                     <span @click="verificationHandler(scope.row)">核销验证</span>
                                 </template>
                                 <template v-else-if="scope.row.deliveryWay == 3">
-                                    <span>重新发单</span>
+                                    <span class="reOrder(scope.row)">重新发单</span>
                                     <span @click="closeOrder(scope.row)">关闭订单</span>
                                 </template>
                             </template>
@@ -222,8 +222,10 @@ import DialogPrintList from '@/components/printListDialog'
 import utils from "@/utils";
 import VerificationDialog from "@/views/order/dialogs/verificationDialog";
 import CloseThirdPartyOrderDialog from "@/views/order/dialogs/closeThirdPartyOrderDialog";
+import { orderDeliveryMethods } from '@/views/order/mixins/orderDeliveryMixin'
 
 export default {
+    mixins: [orderDeliveryMethods],
     data() {
 
         return {
@@ -273,18 +275,6 @@ export default {
             title: ''
         }
     },
-    filters: {
-        deliveryWayFilter(code) {
-            switch(code) {
-                case 1:
-                    return '普通快递'
-                case 2:
-                    return '商家配送'
-                case 4:
-                    return '上门自提'
-            }
-        },
-    },
     created() {
         if(typeof this.$route.query.status != 'undefined') {
             this.listQuery = Object.assign({}, this.listQuery, {status: this.$route.query.status})
@@ -309,7 +299,7 @@ export default {
             return this.tableData.some(val => val.isAutoSend || (val.isUrge == 0))
         },
         computeWidth() {
-            if(this.tableData.some(item => item.status == 4 || (item.status == 5 && item.isFillUp) || (item.status == 3 && item.isFillUp))) {
+            if(this.tableData.some(item => item.status == 4 || (item.status == 5 && item.isFillUp) || (item.status == 5 && (item.deliveryWay == 4)) || (item.status == 3 && item.isFillUp))) {
                 return '118'
             } else {
                 return '100'
@@ -317,10 +307,6 @@ export default {
         }
     },
     methods: {
-        closeOrder(row) {
-            this.currentDialog = 'CloseThirdPartyOrderDialog'
-            this.dialogVisible = true
-        },
         importAndDelivery() {
             // this._apis.order
             // .getShopSendAddress({ cid: this.cid })
@@ -604,9 +590,7 @@ export default {
     }
     .content {
         background-color: #fff;
-        padding: 20px;
-        //margin: 0 20px;
-        padding-top: 0;
+        padding: 0 20px;
         p {
             font-size: 16px;
             color: #B6B5C8;
@@ -616,20 +600,10 @@ export default {
             }
         }
         .footer {
-            padding: 20px;
+            padding: 20px 20px 10px 20px;
             padding-left: 10px;
         }
     }
-}
-/deep/ .el-input {
-    width: auto;
-}
-/deep/ .input-with-select .el-input__inner {
-  width: 139px;
-}
-/deep/ .el-date-editor {
-  margin-left: -6px;
-  border-radius: 0 0 4px 4px;
 }
 /deep/ .date-picker-select .el-input__inner {
   border-radius: 4px 0 0 4px;
@@ -654,9 +628,6 @@ export default {
         position: relative;
         top: 3px;
         margin-right: 10px;
-    }
-    /deep/ .searchTimeType .date-picker-select .el-input {
-        width: 100px;
     }
     /deep/ .searchTimeType .el-form-item__content {
         display: flex;
@@ -738,7 +709,7 @@ export default {
     }
     /deep/ .el-table .cell {
         padding-left: 0;
-        padding-right: 20px;
+        padding-right: 10px;
     }
     /deep/ .input-with-select .el-input-group__prepend {
         background-color: #fff;

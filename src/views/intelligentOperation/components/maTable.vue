@@ -81,7 +81,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="page_styles">
+    <div class="page_styles" v-show="listObj.totalSize>0">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -163,5 +163,8 @@ export default {
 }
 /deep/ .el-table--small td, /deep/.el-table--small th{
   padding:8px 10px;
+}
+.page_styles {
+    margin: 40px 0 30px 0;
 }
 </style>

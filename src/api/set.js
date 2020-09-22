@@ -363,28 +363,55 @@ export function getRecharge(data) {
   })
 }
 
-/*  是否开启第三方 */
-export function isOpen(data) {
+/*  三方-达达-注册商户 */
+export function registerMerchants(data) {
   return request({
-    target: 'THIRD-SENDER-BIND-DETAIL-PROCESSOR',
+    target: 'THIRD-PART-MERCHANT-REGISTER-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data
   })
 }
-/*  达达- 达达-城市列表 */
-export function getCityList(data) {
+/*  三方-达达配送-注册门店 */
+export function registerStore(data) {
   return request({
-    target: 'DADA-CITY-CODE-PROCESSOR',
+    target: 'THIRD-PART-ADD-SHOP-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data
   })
 }
-/*  达达-注册 */
-export function registerUser(data) {
+/*  三方-第三方配送列表 */
+export function getTh3DeliverList(data) {
   return request({
-    target: 'THIRD-PART-BUSINESS-PROCESSOR',
+    target: 'THIRD-PART-LIST-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+/*  获取全量省市区数据 */
+export function getAddress(data) {
+  return request({
+    target: 'PUBLIC-CITY-ALLLIST-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+/*  三方-达达-注册详情 */
+export function getTh3DeliverDetail(data) {
+  return request({
+    target: 'THIRD-PART-DETAIL-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+/*  三方-达达--判断当前城市是否开通费配送 */
+export function isDaDaCoveredArea(data) {
+  return request({
+    target: 'THIRD-PART-IS-OPEN-DELIVERY-PROCESSOR',
     method: 'post',
     apiType: 'manager',
     data

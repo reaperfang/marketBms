@@ -17,7 +17,7 @@
           <div class="header-lefter">
             <div class="header-lefter-item number">{{index + 1}}</div>
             <div class="header-lefter-item fb">{{item | deliveryWayFilter}}</div>
-            <template v-if="item.deliveryWay == 1">
+            <template v-if="item.deliveryWay == 3">
             <div class="header-lefter-item">快递公司：{{item.shipperName}}</div>
             <div class="header-lefter-item">快递单号：{{item.expressNo}}</div>
             <div @click="showLogistics(item.expressNo, item.shipperName, item.id)" class="header-lefter-item blue pointer">查看物流</div>
@@ -26,6 +26,21 @@
             <div class="header-lefter-item">配送员：{{item.deliveryName}}</div>
             <div class="header-lefter-item">联系方式：{{item.phone}}</div>
             </template>
+            <template v-if="item.deliveryWay == 1">
+              <!-- 骑手正常接单 -->
+              <template v-if="!is_abnormal">
+                  <div class="header-lefter-item">配送员：达达配送员</div>
+                  <div class="header-lefter-item">联系方式：12000330000</div>
+                  <div @click="showLogistics(item.expressNo, item.shipperName, item.id)" class="header-lefter-item blue pointer">查看物流</div>
+              </template>
+              <!-- 骑手取消接单 -->
+              <div v-if="!is_abnormal" class="header-lefter-item">骑手取消接单，重新发单中</div>
+              <div v-if="!is_abnormal" class="header-lefter-item">发单中，等待骑手接单</div>
+              <!-- 异常订单 -->
+              <div v-if="is_abnormal" class="header-lefter-item">异常订单：达达取消订单/投妥异常</div>
+
+            </template>
+           
           </div>
           <div class="header-righter">
             <div class="header-righter-item">{{item.expressNo | goodsStatus(orderDetail)}}</div>
@@ -301,14 +316,46 @@ export default {
       if(this.orderDetail.orderSendItemMap && Object.keys(this.orderDetail.orderSendItemMap).length){
         for (let i in this.orderDetail.orderSendItemMap) {
           if (this.orderDetail.orderSendItemMap.hasOwnProperty(i)) {
-            Array.from(this.orderDetail.orderSendItemMap[i]).forEach(item=>{
-              if(item.sendReceivedAddressId&&!objTemp[item.sendReceivedAddressId]){
-                objTemp[item.sendReceivedAddressId]={sendReceivedAddressId:item.sendReceivedAddressId,datas:[]}
-                sendProductsArr.push(objTemp[item.sendReceivedAddressId])
+            let obj = Object.assign(
+              {},
+              {
+                goodsList: this.orderDetail.orderSendItemMap[i],
+                expressNo: i,
+                shipperName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].expressCompany || '',
+                showContent: true,
+                sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
+                sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendName || '',
+                sendProductName:this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5) && this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5).createUserName||'',
+                id: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].orderId || '',
+                createTime: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].createTime || '',
+                deliveryWay: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].deliveryWay || '',
+                deliveryName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorName || '',
+                phone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorPhone || '',
+                receiveAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receiveAddress || '',
+                receivedDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedDetail || '',
+                sendAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendAddress || '',
+                sendDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendDetail || '',
+                receivedName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedName || '',
+                receivedPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedPhone || '',
+                sendPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendPhone || '',
+                orderStatus: this.orderDetail.orderInfo.orderStatus,
+                deliveryDate:this.orderDetail.orderInfo.deliveryDate,
+                deliveryTime:this.orderDetail.orderInfo.deliveryTime,
+                complateTime:this.orderDetail.orderInfo.complateTime
               }
-              objTemp[item.sendReceivedAddressId].datas.push(item)
-           
+            );
+            arr.push(obj);
+
+            Array.from(this.orderDetail.orderSendItemMap[i]).forEach(item=>{
+              if(item.sendReceivedAddressId){
+                  if(!objTemp[item.sendReceivedAddressId]){
+                      objTemp[item.sendReceivedAddressId]={sendReceivedAddressId:item.sendReceivedAddressId,datas:[]}
+                      sendProductsArr.push(objTemp[item.sendReceivedAddressId])
+                   }
+                objTemp[item.sendReceivedAddressId].datas.push(item)
+              }
             }) 
+            
             // let obj = Object.assign(
             //   {},
             //   {
@@ -341,7 +388,10 @@ export default {
           }
         }
       }
+    if(sendProductsArr.length>0){
+      arr = [];
       sendProductsArr.forEach((item,index)=>{
+        debugger
         let obj = Object.assign(
               {},
               {
@@ -369,12 +419,15 @@ export default {
                 orderStatus: this.orderDetail.orderInfo.orderStatus,
                 deliveryDate:this.orderDetail.orderInfo.deliveryDate,
                 deliveryTime:this.orderDetail.orderInfo.deliveryTime,
-                complateTime:this.orderDetail.orderInfo.complateTime
+                complateTime:this.orderDetail.orderInfo.complateTime,
+                is_abnormal:!!this.orderDetail.orderInfo.is_abnormal,//is_abnormal:是否是异常单：0否1是
+
               }
               );
             arr.push(obj)
       })
-      arr.sort((a, b) => {
+    }
+    arr.sort((a, b) => {
         const thisTimeA = a.createTime.replace(/-/g, '/')
         const thisTimeB = b.createTime.replace(/-/g, '/')
         let timeA = new Date(thisTimeA).getTime()
@@ -391,14 +444,14 @@ export default {
       this.orderSendItems = arr;
     },
     showLogistics(expressNo, expressCompanys, id) {
-      if (this.isTrace == 0) {
+      if (this.isTrace == 0) {// 未开启物流轨迹
         this.currentDialog = "LogisticsDialog";
         this.currentData = [];
         this.reject = true;
         this.expressNo = expressNo
         this.expressCompanys = expressCompanys
         this.dialogVisible = true;
-      } else {
+      } else {  //开启
         this.reject = false;
         this.expressNo = expressNo
         this._apis.order

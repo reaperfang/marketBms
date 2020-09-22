@@ -5,7 +5,7 @@
     <div class="top_part head-wrapper">
       <el-form :model="ruleForm" ref="ruleForm" :inline="inline">
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:130px;padding-right:4px;">
+          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:135px;padding-right:4px;">
             <el-option
               v-for="item in revenueExpenditureTerms"
               :key="item.value"
@@ -16,7 +16,7 @@
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
-          <el-select v-model="ruleForm.businessType" style="width:210px;" placeholder="全部">
+          <el-select v-model="ruleForm.businessType" placeholder="全部">
             <el-option
               v-for="item in rebusinessTypes"
               :key="item.value"
@@ -27,7 +27,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="支付方式">
-          <el-select v-model="ruleForm.payWay" style="width:210px;" placeholder="全部">
+          <el-select v-model="ruleForm.payWay" placeholder="全部">
             <el-option
               v-for="item in payTypeList"
               :key="item.value"
@@ -37,7 +37,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="收支类型">
-          <el-select v-model="ruleForm.tradeType" style="width:150px;" placeholder="全部">
+          <el-select v-model="ruleForm.tradeType"  placeholder="全部">
             <el-option
               v-for="item in tradeTypes"
               :key="item.value"
@@ -69,7 +69,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="262">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
@@ -119,7 +119,7 @@
           label="关联单据编号"
           :render-header="renderRelationSn"
           align="center"
-          width="220px">
+          width="230px">
         </el-table-column>
         <el-table-column
           prop="payWay"
@@ -432,7 +432,7 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 20px;
 }
 .under_part{

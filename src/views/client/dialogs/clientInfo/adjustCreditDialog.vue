@@ -13,7 +13,7 @@
       <p class="marB20" style="margin-left: 9px">当前积分：{{ data.score }}</p>
       <div class="marB20">
         <div>
-          <span class="star">*</span><span>调整数值：</span>
+          <span class="star">*</span><span>调整类型：</span>
           <el-radio-group v-model="adjustScore" @change="handleAdjust">
             <el-radio label="1">增加积分</el-radio>
             <el-radio label="2" style="margin-left: 26px">减少积分</el-radio>
