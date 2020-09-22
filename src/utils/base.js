@@ -158,6 +158,20 @@ export function orderAfterSaleStatusFilter(status) {
       return '已完成'
     case 5:
       return '已关闭'
+    case 6:
+    case 7:
+      return '处理中'
+  }
+}
+
+//售后单类型过滤器
+export function orderAfterSaleType(code) {
+  if(code == 1) {
+      return '退货退款'
+  } else if(code == 2) {
+      return '换货'
+  } else if(code == 3) {
+      return '仅退款'
   }
 }
 

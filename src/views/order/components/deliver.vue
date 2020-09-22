@@ -630,6 +630,8 @@ export default {
                 //第三方配送
                 obj.deliveryWay = 3;
                 obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
+                obj.receivedLongitude = this.orderInfo.receivedLongitude
+                obj.receivedLatitude = this.orderInfo.receivedLatitude
               }
             }
           }else if(formName == 'ruleFormStore'){ //如果是商家配送
@@ -644,6 +646,9 @@ export default {
               obj
             ]
           };
+          if(this.orderInfo.deliveryWay == 3) {
+            params.thirdPartType = 1
+          }
           this.params = params
           if(this.orderInfo.deliveryWay == 1 && this.express != null && !this.express.sizeSpecs) {
             try {
@@ -679,7 +684,28 @@ export default {
       });
     },
     orderSendGoodsHander(params) {
-      this._apis.order
+      if(this.orderInfo.deliveryWay == 3) {
+        this._apis.order
+        .sendGoods3(params)
+        .then(res => {
+          this.$message.success('发货成功');
+          this.sending = false
+          this.$router.push({
+            path: '/order/deliverGoodsSuccess',
+            query: {
+              id: res.success[0].expressParameter.orderSendInfo.id,
+              orderId: res.success[0].expressParameter.orderSendInfo.orderId,
+              type: 'deliverGoods',
+              print: this.express + ''
+            }
+          })
+        })
+        .catch(error => {
+          this.$message.error(error);
+          this.sending = false
+        });
+      } else {
+        this._apis.order
         .orderSendGoods(params)
         .then(res => {
           this.$message.success('发货成功');
@@ -698,6 +724,7 @@ export default {
           this.$message.error(error);
           this.sending = false
         });
+      }
     },
     onSubmit(value) {
       this.orderInfo = Object.assign({}, this.orderInfo, value);

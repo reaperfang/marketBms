@@ -248,23 +248,6 @@ export default {
           return "取消精选";
       }
     },
-    goodsSpecsFilter(value) {
-      let str = ''
-      let _value
-
-      if(typeof value == 'string') {
-        _value = JSON.parse(value)
-      } else {
-        _value = value
-      }
-
-      for(let i in _value) {
-        str += i + ':' + _value[i] + ','
-      }
-      str = str.replace(/(^.*)\,$/, '$1')
-
-      return str
-    },
     starNumFilter(value) {
       switch (value) {
         case 1:

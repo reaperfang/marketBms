@@ -81,7 +81,7 @@
                     prop="type"
                     label="售后类型">
                     <template slot-scope="scope">
-                        <span>{{scope.row.type | typeFilter}}</span>
+                        <span>{{scope.row.type | orderAfterSaleType}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -137,9 +137,10 @@ import ExchangeGoodsDialog from '@/views/order/dialogs/exchangeGoodsDialog'
 import LogisticsDialog from '@/views/order/dialogs/logisticsDialog'
 import utils from "@/utils";
 import anotherAuth from '@/mixins/anotherAuth'
+import { afterSalesManagementMethods } from '@/views/order/mixins/afterSalesManagementMixin'
 
 export default {
-    mixins: [anotherAuth],
+    mixins: [anotherAuth, afterSalesManagementMethods],
     data() {
         return {
             orderNumberTypeList: [
@@ -202,7 +203,6 @@ export default {
             isIndeterminate: false,
             expressCompanys: '',
             expressNo: '',
-            updateStatusDisabled: false
         }
     },
     created() {
@@ -226,37 +226,6 @@ export default {
             }
         }
     },
-    filters: {
-        typeFilter(code) {
-            if(code == 1) {
-                return '退货退款'
-            } else if(code == 2) {
-                return '换货'
-            } else if(code == 3) {
-                return '仅退款'
-            }
-        },
-        orderAfterSaleStatusFilter(code) {
-            if(code == 0) {
-                return '待审核'
-            } else if(code == 1) {
-                return '待退货 '
-            } else if(code == 2) {
-                return '待处理'
-            }
-             else if(code == 3) {
-                return '待收货'
-            }
-             else if(code == 4) {
-                return '已完成'
-            }
-             else if(code == 5) {
-                return '已关闭'
-            } else if(code == 6 || code == 7) {
-                return '待处理'
-            }
-        }
-    },
     methods: {
         search() {
             this.listQuery = Object.assign({}, this.listQuery, {
@@ -275,17 +244,6 @@ export default {
             }
             this.isIndeterminate = true;
         },
-        confirmReceived(row) {
-            this._apis.order.orderConfirmReceived({id: row.id, isSellerReceived: 1}).then(res => {
-                //this.$message.success('确认收货成功');
-                this.confirm({title: '提示', iconSuccess: true, text: '确认收货成功', showCancelButton: false, confirmText: '我知道了'}).then(() => {
-                    
-                })
-                this.getList()
-            }).catch(error => {
-                this.$message.error(error);
-            }) 
-        },
         showLogistics(row) {
             this.expressNo = row.returnExpressNo
             this.expressCompanys = row.returnExpressName
@@ -296,18 +254,6 @@ export default {
             }).catch(error => {
                 this.$message.error(error);
             }) 
-        },
-        drawback(row) {
-            this._apis.order.orderAfterSaleDrawback({id: row.id, memberInfoId: row.memberInfoId}).then((res) => {
-                console.log(res)
-                this.$message.success('已发起退款，系统处理中。');
-                this.getList()
-            }).catch(error => {
-                this.$message.error(error);
-            }) 
-            // this.confirm({title: '提示', text: '微信账户余额不足，无法退款。'}).then(() => {
-                
-            // })
         },
         exportOrder() {
             var _param
@@ -387,49 +333,6 @@ export default {
                     console.log(res)
                     this.getList()
                     this.$message.success('拒绝审核成功！');
-                }).catch(error => {
-                    this.$message.error(error);
-                })
-            }
-        },
-        updateRejectStatus(row) {
-            this.currentDialog = 'RejectDialog'
-            this.currentData = row
-            this.title = '拒绝审核'
-            this.dialogVisible = true
-        },
-        rejectHandler(value) {
-            this._apis.order.orderAfterSaleUpdateStatus({id: this.currentData.id, orderAfterSaleStatus: 5, refuseReason: value}).then((res) => {
-                this.getList()
-                this.$message.success('拒绝审核成功！');
-            }).catch(error => {
-                this.$message.error(error);
-            })
-        },
-        updateStatus(row) {
-            if(!this.updateStatusDisabled) {
-                this.updateStatusDisabled = true
-
-                let _orderAfterSaleStatus
-
-                if(row.type == 3) {
-                    _orderAfterSaleStatus = 2
-                } else {
-                    _orderAfterSaleStatus = 1
-                }
-                if(row.type == 2) {
-                    let _row = JSON.parse(JSON.stringify(row))
-
-                    this.currentDialog = 'ExchangeGoodsDialog'
-                    this.currentData = _row;
-                    this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
-                    this.dialogVisible = true
-                    return
-                }
-                this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
-                    this.getList();
-                    this.$message.success('审核成功！');
-                    this.updateStatusDisabled = true
                 }).catch(error => {
                     this.$message.error(error);
                 })

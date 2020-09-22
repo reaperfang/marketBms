@@ -184,10 +184,14 @@
                                 <template v-else-if="scope.row.deliveryWay == 4">
                                     <span @click="verificationHandler(scope.row)">核销验证</span>
                                 </template>
-                                <template v-else-if="scope.row.deliveryWay == 3">
+                                <!-- <template v-else-if="scope.row.deliveryWay == 3">
                                     <span class="reOrder(scope.row)">重新发单</span>
                                     <span @click="closeOrder(scope.row)">关闭订单</span>
-                                </template>
+                                </template> -->
+                            </template>
+                            <template v-else-if="scope.row.deliveryWay == 3">
+                                <span class="reOrder(scope.row)">重新发单</span>
+                                <span @click="closeOrder(scope.row)">关闭订单</span>
                             </template>
                         </div>
                     </template>
@@ -221,7 +225,7 @@ import DeliveryMethod from "./deliveryMethod"; //配送方式组件
 import DialogPrintList from '@/components/printListDialog'
 import utils from "@/utils";
 import VerificationDialog from "@/views/order/dialogs/verificationDialog";
-import CloseThirdPartyOrderDialog from "@/views/order/dialogs/closeThirdPartyOrderDialog";
+import CloseOrderDialog from "@/views/order/dialogs/closeOrderDialog";
 import { orderDeliveryMethods } from '@/views/order/mixins/orderDeliveryMixin'
 
 export default {
@@ -474,8 +478,21 @@ export default {
         closeDialogVisible(){
             this.printDialogVisible=false
         },
-        onSubmit() {
-
+        onSubmit(value) {
+            let orderId = "";
+            if(Object.prototype.toString.call(this.currentData)=="[object Object]"){
+                orderId=this.currentData.id;
+            }else{
+                orderId=this.currentData;
+            }
+            this._apis.order.orderClose({...value, id: orderId}).then((res) => {
+                this.getList()
+                this.visible = false
+                this.$message.success('关闭成功！');
+            }).catch(error => {
+                this.visible = false
+                this.$message.error(error);
+            })
         },
         resetForm(formName) {
             this.listQuery = {
@@ -538,7 +555,7 @@ export default {
         DeliveryMethod,
         DialogPrintList,
         VerificationDialog,
-        CloseThirdPartyOrderDialog
+        CloseOrderDialog
     }
 }
 </script>

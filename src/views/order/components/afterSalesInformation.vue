@@ -491,22 +491,6 @@ export default {
                     return '赠品订单'
             }
         },
-        goodsSpecsFilter(value) {
-            let _value
-            if(!value) return ''
-            if(typeof value == 'string') {
-                _value = JSON.parse(value)
-            }
-            let str = ''
-            for(let i in _value) {
-                if(_value.hasOwnProperty(i)) {
-                    str += i + ':'
-                    str += _value[i] + ','
-                }
-            }
-
-            return str
-        }
     },
     methods: {
         changeHandler() {
