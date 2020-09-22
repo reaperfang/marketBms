@@ -806,6 +806,469 @@ const nodes = Array.from(foo);
 // best
 const nodes = [...foo];
 ```
+### 解构
+* 在访问和使用对象的多个属性的时候使用对象的解构。
+```js
+// bad
+function getFullName(user) {
+  const firstName = user.firstName;
+  const lastName = user.lastName;
+
+  return `${firstName} ${lastName}`;
+}
+
+// good
+function getFullName(user) {
+  const { firstName, lastName } = user;
+  return `${firstName} ${lastName}`;
+}
+
+// best
+function getFullName({ firstName, lastName }) {
+  return `${firstName} ${lastName}`;
+}
+```
+* 使用数组解构
+```js
+const arr = [1, 2, 3, 4];
+
+// bad
+const first = arr[0];
+const second = arr[1];
+
+// good
+const [first, second] = arr;
+```
+### 方法
+* ECMA-262 将 block 定义为语句列表。 函数声明不是语句。
+```js
+// bad
+if (currentUser) {
+  function test() {
+    console.log('Nope.');
+  }
+}
+
+// good
+let test;
+if (currentUser) {
+  test = () => {
+    console.log('Yup.');
+  };
+}
+```
+* 不要使用 arguments, 选择使用 rest 语法 ... 代替。... 明确了你想要拉取什么参数。 更甚, rest 参数是一个真正的数组，而不仅仅是类数组的 arguments 
+```js
+// bad
+function concatenateAll() {
+  const args = Array.prototype.slice.call(arguments);
+  return args.join('');
+}
+
+// good
+function concatenateAll(...args) {
+  return args.join('');
+}
+```
+* 使用默认的参数语法，而不是改变函数参数。
+```js
+// really bad
+function handleThings(opts) {
+  // No! We shouldn’t mutate function arguments.
+  // Double bad: if opts is falsy it'll be set to an object which may
+  // be what you want but it can introduce subtle bugs.
+  opts = opts || {};
+  // ...
+}
+
+// still bad
+function handleThings(opts) {
+  if (opts === void 0) {
+    opts = {};
+  }
+  // ...
+}
+
+// good
+function handleThings(opts = {}) {
+  // ...
+}
+```
+* 总是把默认参数放在最后
+```js
+// bad
+function handleThings(opts = {}, name) {
+  // ...
+}
+
+// good
+function handleThings(name, opts = {}) {
+  // ...
+}
+```
+* 函数签名中的间距
+```js
+// bad
+const f = function(){};
+const g = function (){};
+const h = function() {};
+
+// good
+const x = function () {};
+const y = function a() {};
+```
+* 不要再赋值参数
+```js
+// bad
+function f1(a) {
+  a = 1;
+  // ...
+}
+
+function f2(a) {
+  if (!a) { a = 1; }
+  // ...
+}
+
+// good
+function f3(a) {
+  const b = a || 1;
+  // ...
+}
+
+function f4(a = 1) {
+  // ...
+}
+```
+* 如果函数体包含一个单独的语句，返回一个没有副作用的 expression ， 省略括号并使用隐式返回。否则，保留括号并使用 return 语句。
+```js
+// bad
+[1, 2, 3].map(number => {
+  const nextNumber = number + 1;
+  `A string containing the ${nextNumber}.`;
+});
+
+// good
+[1, 2, 3].map(number => `A string containing the ${number}.`);
+
+// good
+[1, 2, 3].map((number) => {
+  const nextNumber = number + 1;
+  return `A string containing the ${nextNumber}.`;
+});
+
+// good
+[1, 2, 3].map((number, index) => ({
+  [index]: number,
+}));
+
+// 没有副作用的隐式返回
+function foo(callback) {
+  const val = callback();
+  if (val === true) {
+    // 如果回调返回 true 执行
+  }
+}
+
+let bool = false;
+
+// bad
+foo(() => bool = true);
+
+// good
+foo(() => {
+  bool = true;
+});
+```
+* 方法返回了 this 来供其内部方法调用。
+```js
+// bad
+Jedi.prototype.jump = function () {
+  this.jumping = true;
+  return true;
+};
+
+Jedi.prototype.setHeight = function (height) {
+  this.height = height;
+};
+
+const luke = new Jedi();
+luke.jump(); // => true
+luke.setHeight(20); // => undefined
+
+// good
+class Jedi {
+  jump() {
+    this.jumping = true;
+    return this;
+  }
+
+  setHeight(height) {
+    this.height = height;
+    return this;
+  }
+}
+
+const luke = new Jedi();
+
+luke.jump()
+  .setHeight(20);
+```
+### 迭代器和发生器
+* 不要使用迭代器。 你应该使用 JavaScript 的高阶函数代替 for-in 或者 for-of。
+ 拥有返回值的纯函数比这个更容易解释。
+ 使用 map() / every() / filter() / find() / findIndex() / reduce() / some() / ... 遍历数组， 和使用 Object.keys() / Object.values() / Object.entries() 迭代你的对象生成数组。
+ ```js
+const numbers = [1, 2, 3, 4, 5];
+
+// bad
+let sum = 0;
+for (let num of numbers) {
+  sum += num;
+}
+sum === 15;
+
+// good
+let sum = 0;
+numbers.forEach((num) => {
+  sum += num;
+});
+sum === 15;
+
+// best (use the functional force)
+const sum = numbers.reduce((total, num) => total + num, 0);
+sum === 15;
+
+// bad
+const increasedByOne = [];
+for (let i = 0; i < numbers.length; i++) {
+  increasedByOne.push(numbers[i] + 1);
+}
+
+// good
+const increasedByOne = [];
+numbers.forEach((num) => {
+  increasedByOne.push(num + 1);
+});
+
+// best (keeping it functional)
+const increasedByOne = numbers.map(num => num + 1);
+ ```
+### 比较运算符和等号
+* 使用 === 和 !== 而不是 == 和 !=
+* 条件语句，例如 if 语句使用 ToBoolean 的抽象方法来计算表达式的结果，并始终遵循以下简单的规则
+  **Objects 的取值为： true**
+  **Undefined 的取值为： false**
+  **Null 的取值为： false**
+  **Booleans 的取值为： 布尔值的取值**
+  **Numbers 的取值为：如果为 +0, -0, or NaN 值为 false 否则为 true**
+  **Strings 的取值为: 如果是一个空字符串 '' 值为 false 否则为 true**
+* 对于布尔值使用简写，但是对于字符串和数字进行显式比较。
+```js
+// bad
+if (isValid === true) {
+  // ...
+}
+
+// good
+if (isValid) {
+  // ...
+}
+
+// bad
+if (name) {
+  // ...
+}
+
+// good
+if (name !== '') {
+  // ...
+}
+
+// bad
+if (collection.length) {
+  // ...
+}
+
+// good
+if (collection.length > 0) {
+  // ...
+}
+```
+* 避免不必要的三目表达式
+```js
+// bad
+const foo = a ? a : b;
+const bar = c ? true : false;
+const baz = c ? false : true;
+
+// good
+const foo = a || b;
+const bar = !!c;
+const baz = !c;
+```
+* 不要使用选择操作符代替控制语句。
+```js
+// bad
+!isRunning && startRunning();
+
+// good
+if (!isRunning) {
+  startRunning();
+}
+```
+### 注释 
+* 使用 /** ... */ 来进行多行注释
+```js
+// bad
+// make() returns a new element
+// based on the passed in tag name
+//
+// @param {String} tag
+// @return {Element} element
+function make(tag) {
+
+  // ...
+
+  return element;
+}
+
+// good
+/**
+ * make() returns a new element
+ * based on the passed-in tag name
+ */
+function make(tag) {
+
+  // ...
+
+  return element;
+}
+```
+* 使用 // 进行单行注释。 将单行注释放在需要注释的行的上方新行。 在注释之前放一个空行，除非它在块的第一行。
+```js
+// bad
+const active = true;  // is current tab
+
+// good
+// is current tab
+const active = true;
+
+// bad
+function getType() {
+  console.log('fetching type...');
+  // set the default type to 'no type'
+  const type = this.type || 'no type';
+
+  return type;
+}
+
+// good
+function getType() {
+  console.log('fetching type...');
+
+  // set the default type to 'no type'
+  const type = this.type || 'no type';
+
+  return type;
+}
+
+// also good
+function getType() {
+  // set the default type to 'no type'
+  const type = this.type || 'no type';
+
+  return type;
+}
+```
+* 用一个空格开始所有的注释，使它更容易阅读。
+```js
+// bad
+//is current tab
+const active = true;
+
+// good
+// is current tab
+const active = true;
+
+// bad
+/**
+ *make() returns a new element
+ *based on the passed-in tag name
+ */
+function make(tag) {
+
+  // ...
+
+  return element;
+}
+
+// good
+/**
+ * make() returns a new element
+ * based on the passed-in tag name
+ */
+function make(tag) {
+
+  // ...
+
+  return element;
+}
+```
+### 类型转换和强制类型转换
+* 在语句开始前进行类型转换。
+* 字符类型转换
+```js
+// => this.reviewScore = 9;
+
+// bad
+const totalScore = new String(this.reviewScore); // typeof totalScore is "object" not "string"
+
+// bad
+const totalScore = this.reviewScore + ''; // invokes this.reviewScore.valueOf()
+
+// bad
+const totalScore = this.reviewScore.toString(); // isn’t guaranteed to return a string
+
+// good
+const totalScore = String(this.reviewScore);
+```
+* 数字类型：使用 Number 进行类型铸造和 parseInt 总是通过一个基数来解析一个字符串。
+```js
+const inputValue = '4';
+
+// bad
+const val = new Number(inputValue);
+
+// bad
+const val = +inputValue;
+
+// bad
+const val = inputValue >> 0;
+
+// bad
+const val = parseInt(inputValue);
+
+// good
+const val = Number(inputValue);
+
+// good
+const val = parseInt(inputValue, 10);
+```
+* 布尔类型
+```js
+const age = 0;
+
+// bad
+const hasAge = new Boolean(age);
+
+// good
+const hasAge = Boolean(age);
+
+// best
+const hasAge = !!age;
+```
+
 
 
 
