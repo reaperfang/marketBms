@@ -94,7 +94,7 @@ export default {
     }
   },
   created() {
-    this.showValue= `${this.year}年${this.monthcur}季度`
+    this.showValue= `${this.year}年第${this.monthcur}季度`
     
   },
   watch: {
@@ -129,7 +129,7 @@ export default {
       let arr = that.valueArr[i].split('-')
       that.getValue(that.year + arr[0] + '-' + that.year + arr[1])
       that.showSeason = false
-      this.showValue = `${this.year}年${this.season}季度`
+      this.showValue = `${this.year}年第${this.season}季度`
 
       // ['01-03', '04-06', '07-09', '10-12']  取选中季度的最后一天日期 时间戳
       var  lastday=''
