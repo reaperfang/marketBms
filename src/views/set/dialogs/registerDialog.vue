@@ -68,6 +68,7 @@
             placeholder="请输入企业全称"
             maxlength="100"
             :disabled="isEdit"
+            @input="handleText(ruleForm.enterpriseName, 'enterpriseName', 2)"
           ></el-input>
         </el-form-item>
         <el-form-item label="企业地址：" class="item" prop="enterpriseAddress">
@@ -76,6 +77,7 @@
             style="width: 470px;"
             placeholder="请输入企业地址"
             maxlength="400"
+            @input="handleText(ruleForm.enterpriseAddress, 'enterpriseAddress', 2)"
             :disabled="isEdit"
           ></el-input>
         </el-form-item>
@@ -85,15 +87,17 @@
             style="width: 470px;"
             placeholder="请输入联系人姓名"
             :disabled="isEdit"
+            @input="handleText(ruleForm.contactName, 'contactName', 2)"
             maxlength="30"
           ></el-input>
         </el-form-item>
         <el-form-item label="联系人电话：" class="item" prop="contactPhone">
           <el-input
-            v-model.number="ruleForm.contactPhone"
+            v-model="ruleForm.contactPhone"
             style="width: 470px;"
             placeholder="请输入联系人电话"
             :disabled="isEdit"
+            @input="handleText(ruleForm.contactPhone, 'contactPhone', 1)"
             maxlength="11"
           ></el-input>
         </el-form-item>
@@ -102,11 +106,12 @@
             v-model.trim="ruleForm.shopName"
             style="width: 470px;"
             placeholder="请输入店铺名称"
+            @input="handleText(ruleForm.shopName, 'shopName', 2)"
             maxlength="30"
           ></el-input>
         </el-form-item>
         <el-form-item label="邮箱地址：" class="item" prop="email">
-          <el-input v-model.trim="ruleForm.email" maxlength="320" style="width: 470px;" placeholder="请输入邮箱地址" :disabled="isEdit"></el-input>
+          <el-input v-model.trim="ruleForm.email" maxlength="320" style="width: 470px;" placeholder="请输入邮箱地址" :disabled="isEdit" @input="handleText(ruleForm.email, 'email', 2)"></el-input>
         </el-form-item>
         <el-form-item label="业务类型：" class="item" prop="businessType">
           <el-select v-model="ruleForm.businessType" placeholder="请选择业务类型" style="width: 470px;">
@@ -137,21 +142,23 @@ export default {
       const reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
 
       if (!reg.test(value)) {
-        return callback(new Error("邮箱格式不正确"));
+        return callback(new Error("格式错误，请重新输入"));
       } else {
         callback();
       }
     };
+    // 店铺名称
     const shopNameValidate = (rule, value, callback) => {
       const reg = /^[\u4e00-\u9fa5a-zA-Z0-9]{1,30}$/gi;
 
       if (!reg.test(value)) {
-        return callback(new Error("仅支持英文、汉字和数字，最多输入30个字符"));
+        return callback(new Error("最多输入30个字符"));
       } else {
         callback();
       }
     }
-    const validateEnterpriseAddress = (rule, value, callback) => {
+    // 企业全称校验规则 
+    const validateEnterpriseName = (rule, value, callback) => {
       const reg = /^[\u4e00-\u9fa5a-zA-Z0-9]{1,100}$/gi;
       if (!reg.test(value)) {
         return callback(new Error("仅支持英文和汉字，最多输入100个字符"));
@@ -159,6 +166,16 @@ export default {
         callback();
       }
     }
+    // 企业地址校验规则
+    const validateEnterpriseAddress = (rule, value, callback) => {
+      const reg = /^[\u4e00-\u9fa5a-zA-Z0-9]{1,400}$/gi;
+      if (!reg.test(value)) {
+        return callback(new Error("仅支持英文和汉字，最多输入400个字符"));
+      } else {
+        callback();
+      }
+    }
+    // 联系人
     const validateContactName = (rule, value, callback) => {
       const reg = /^[\u4e00-\u9fa5a-zA-Z0-9]{1,30}$/gi;
       if (!reg.test(value)) {
@@ -205,7 +222,8 @@ export default {
         areaCode: [{ required: true, message: "必选项", trigger: "change" }],
         enterpriseName: [
           { required: true, message: "请输入企业全称", trigger: "blur" },
-           { min: 1, max: 100, message: "仅支持英文和汉字，最多输入100个字符", trigger: "blur" }
+          { validator: validateEnterpriseName, trigger: "blur" }
+          //  { min: 1, max: 100, message: "仅支持英文和汉字，最多输入100个字符", trigger: "blur" }
         ],
         enterpriseAddress: [
           { required: true, message: "请输入企业地址", trigger: "blur" },
@@ -230,7 +248,8 @@ export default {
         ],
         shopName: [
           { required: true, message: "请输入店铺名称", trigger: "blur" },
-          { validator: shopNameValidate, trigger: "blur" }
+          { min: 1, max: 30, message: "最多输入30个字符", trigger: "blur" }
+          // { validator: shopNameValidate, trigger: "blur" }
         ],
         businessType: [{ required: true, message: "必选项", trigger: "change" }],
       },
