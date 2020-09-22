@@ -1,7 +1,6 @@
 <template>
 	<div class="realtime-user">
-		<el-table :data="newtable" :row-style="{ height: '20px' }">
-			<!-- <el-table-column prop="id" label="ID" width="45"> </el-table-column> -->
+		<!-- <el-table :data="newtable" :row-style="{ height: '20px' }">
 			<el-table-column label="用户名" width="120">
 				<template slot-scope="scope">
 					<span class="time-text">{{ scope.row.c_uv_name_rt }}</span>
@@ -14,6 +13,25 @@
 			</el-table-column>
 			<el-table-column prop="op_rt" label="操作"> </el-table-column>
 			<el-table-column label="商品" width="160">
+				<template slot-scope="scope">
+					<span class="time-text">{{ scope.row.pd_rt }}</span>
+				</template>
+			</el-table-column>
+		</el-table> -->
+
+		<el-table :data="newtable" :row-style="{ height: '20px' }">
+			<el-table-column label="用户名">
+				<template slot-scope="scope">
+					<span class="time-text">{{ scope.row.c_uv_name_rt }}</span>
+				</template>
+			</el-table-column>
+			<el-table-column label="时间">
+				<template slot-scope="scope">
+					<span class="time-text">{{ scope.row.time_rt }}</span>
+				</template>
+			</el-table-column>
+			<el-table-column prop="op_rt" label="操作"> </el-table-column>
+			<el-table-column label="商品">
 				<template slot-scope="scope">
 					<span class="time-text">{{ scope.row.pd_rt }}</span>
 				</template>
