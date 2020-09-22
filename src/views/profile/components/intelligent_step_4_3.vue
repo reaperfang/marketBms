@@ -4,7 +4,7 @@
 
     <el-form ref="form" :model="form" :rules="rules">
       <el-form-item label="1、店铺名称:" prop="shopName">
-        <el-input v-model.trim="form.shopName" style="width:283px;"></el-input>
+        <el-input v-model.trim="form.shopName" style="width:283px;" placeholder="请输入您的店铺名称"></el-input>
         <p class="shopInfo-show">
           用于展示给消费者的品牌形象
           <span @mouseover="showShopPreview = true">查看样例</span>
@@ -18,11 +18,11 @@
       </div>
 
       <el-form-item label="2、设置您的个性化短信群发签名/模板:">
-        <el-button class="button-link"  @click="linkToMessage"> 短信群发 </el-button>
+        <el-button class="button-link" @click="linkToMessage"> 短信群发</el-button>
       </el-form-item>
 
       <el-form-item label="3、预览并生效您的公众号首页菜单栏:">
-        <el-button class="button-link" @click="linkToGZH" :loading="isLoadingBindStatus"> 公众号菜单管理 </el-button>
+        <el-button class="button-link" @click="linkToGZH" :loading="isLoadingBindStatus"> 公众号菜单管理</el-button>
       </el-form-item>
 
       <el-form-item label="4、客服电话:" prop="phone">
@@ -30,16 +30,17 @@
       </el-form-item>
 
       <el-form-item label="5、联系地址:" prop="sendAddress">
-        <el-input v-model="form.sendAddress" @change="handleChangeAddress" style="width:283px;" placeholder="请输入和点击搜索图标确定联系地址" />
+        <el-input v-model="form.sendAddress" @change="handleChangeAddress" style="width:283px;"
+                  placeholder="请输入和点击搜索图标确定联系地址"/>
         <dialog-map-search @getMapClickPoi="getMapClickPoi" :sendAddress="form.sendAddress"></dialog-map-search>
       </el-form-item>
 
     </el-form>
 
-<!--    <div class="bottom_buttons">-->
-<!--      <el-button @click="$emit('base-step', 'base', 2)"> 上一步 </el-button>-->
-<!--      <el-button type="primary" @click="completed"> 完成 </el-button>-->
-<!--    </div>-->
+    <!--    <div class="bottom_buttons">-->
+    <!--      <el-button @click="$emit('base-step', 'base', 2)"> 上一步 </el-button>-->
+    <!--      <el-button type="primary" @click="completed"> 完成 </el-button>-->
+    <!--    </div>-->
   </div>
 </template>
 
@@ -48,7 +49,7 @@
 
   export default {
     name: "intelligent_base_shop",
-    components: { DialogMapSearch },
+    components: {DialogMapSearch},
     props: {
       wxAccount: 0,  // 是否绑定微信公众号  0 否  1 是
     },
@@ -64,13 +65,15 @@
         },
         isMapChoose: false,  // 是否打开了地图获取了经纬度, 由于可以不填，所以默认为true
         rules: {
-          shopName: { min: 1, max: 10, message: "长度在 1 到 10 个字符", trigger: "blur" },
-          phone: { validator: (rule, value, callback) => {
+          shopName: {min: 1, max: 10, message: "长度在 1 到 10 个字符", trigger: "blur"},
+          phone: {
+            validator: (rule, value, callback) => {
               const mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
               const tel = /^\d{3,4}-?\d{7,9}$/;
               if (value !== '' && !mobile.test(value) && !tel.test(value)) return callback(new Error("请填写联系电话(座机格式'区号-座机号码')"));
               else callback();
-            }, trigger: "blur" }
+            }, trigger: "blur"
+          }
         },
         showShopPreview: false, // 右侧店铺名预览区
         isLoadingBindStatus: false,
@@ -93,7 +96,7 @@
           this.$message.error("请正确填写表单");
           return
         }
-        if(this.form.sendAddress !== "" && !this.isMapChoose) {
+        if (this.form.sendAddress !== "" && !this.isMapChoose) {
           this.$message.error("保存失败");
           this.form.sendAddress = "";
           return
@@ -137,43 +140,60 @@
       isAllValueEmpty(obj) {
         let emptyCount = 0;
         for (const key in obj) {
-          if(obj[key] === "") {emptyCount ++}
+          if (obj[key] === "") {
+            emptyCount++
+          }
         }
-        if(Object.values(obj).length === emptyCount) return true;
+        if (Object.values(obj).length === emptyCount) return true;
         else return false;
       },
 
       /** 跳转到 '短信群发'页面 */
       linkToMessage() {
-        const routeData =  this.$router.resolve({path:'/apply',query:{paths:'/application/toolapp/paySms',applyId:'2'}});
+        const routeData = this.$router.resolve({
+          path: '/apply',
+          query: {paths: '/application/toolapp/paySms', applyId: '2'}
+        });
         window.open(routeData.href, '_blank');
       },
 
       /** 跳转到 '公众号设置' */
       async linkToGZH() {
         try {
-          if(this.wxAccount === 1) { // 已绑定，去 "自定义菜单" 应用
-            let routeData =  this.$router.resolve({path:'/apply',query:{paths:'/application/channelapp/custommenu',applyId:'3'}});
+          if (this.wxAccount === 1) { // 已绑定，去 "自定义菜单" 应用
+            let routeData = this.$router.resolve({
+              path: '/apply',
+              query: {paths: '/application/channelapp/custommenu', applyId: '3'}
+            });
             window.open(routeData.href, '_blank');
             return
           }
           this.isLoadingBindStatus = true;
           // 请求接口 获取最新的状态
-          let bindResult = await this._apis.profile.getwxBindStatus({ id: this.shopInfos.id });
+          let bindResult = await this._apis.profile.getwxBindStatus({id: this.shopInfos.id});
 
           // 更新父组件状态，达到同步兄弟组件状态
-          this.$emit('wechat-status', {bindWechatAccount: bindResult.bindWechatAccount, bindWechatApplet: bindResult.bindWechatApplet});
+          this.$emit('wechat-status', {
+            bindWechatAccount: bindResult.bindWechatAccount,
+            bindWechatApplet: bindResult.bindWechatApplet
+          });
 
           this.isLoadingBindStatus = false;
 
-          if(bindResult.bindWechatAccount === 0){ // 未绑定，去 "自定义菜单" 的上一级菜单
-            let routeData =  this.$router.resolve({path:'/apply',query:{paths:'/application/channelapp/wechat',applyId:'3'}});
+          if (bindResult.bindWechatAccount === 0) { // 未绑定，去 "自定义菜单" 的上一级菜单
+            let routeData = this.$router.resolve({
+              path: '/apply',
+              query: {paths: '/application/channelapp/wechat', applyId: '3'}
+            });
             window.open(routeData.href, '_blank');
           } else {  // 已绑定，去 "自定义菜单" 应用
-            let routeData =  this.$router.resolve({path:'/apply',query:{paths:'/application/channelapp/custommenu',applyId:'3'}});
+            let routeData = this.$router.resolve({
+              path: '/apply',
+              query: {paths: '/application/channelapp/custommenu', applyId: '3'}
+            });
             window.open(routeData.href, '_blank');
           }
-        }catch (e) {
+        } catch (e) {
           this.$message.error(e || "出错了，请稍后再试~");
           console.log(e);
         }
@@ -210,7 +230,7 @@
         // this.form.lng = this.shopInfos.longitude || "";
         try {
           let id = this.shopInfos.id;
-          let result = await this._apis.set.getShopInfo({ id });
+          let result = await this._apis.set.getShopInfo({id});
           this.form.shopName = result.shopName || "";
           this.form.phone = result.phone || "";
           this.form.sendAddress = result.sendAddress || "";
@@ -228,7 +248,7 @@
           this.form.lat = result.latitude;
           this.form.lng = result.longitude;
           this.isMapChoose = true;
-        }catch (e) {
+        } catch (e) {
           this.$message.error(e || '查询失败');
         }
 
@@ -247,12 +267,15 @@
   .sub_title {
     font-size: 16px;
     color: $contentColor;
-    margin-bottom:  20px;
+    margin-bottom: 20px;
   }
 
   .shopInfo-show {
     font-size: 12px;
     color: $grayColor;
+    margin-left: 94px;
+    line-height: 36px;
+
     span {
       color: $globalMainColor;
       font-size: 14px;
@@ -260,7 +283,8 @@
       cursor: pointer;
     }
   }
-    .el-form {
+
+  .el-form {
     position: relative;
 
     .preview_shop_pic {
@@ -269,10 +293,12 @@
       left: 395px;
       top: 0;
       z-index: 3;
+
       .bg_pic {
         width: 100%;
         z-index: 1;
       }
+
       .top {
         position: absolute;
         left: 50%;
@@ -282,6 +308,7 @@
         transform: translateX(-50%);
         font-weight: 400;
       }
+
       .center {
         position: absolute;
         left: 79px;
@@ -290,6 +317,7 @@
         color: #fff;
         font-weight: 600;
       }
+
       .close {
         position: absolute;
         right: 20px;
