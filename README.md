@@ -679,44 +679,43 @@ helloWorld.vue
 
 ## 文件命名规范
 
-* 文件夹名
+* 文件夹名<br/>
 小写或者小驼峰 如：goods, login, errorPage
 
-* 页面
+* 页面<br/>
 同文件夹
 
-* 组件
+* 组件<br/>
 基础组件以大驼峰命名 如：DialogBase.vue
 
-* 样式
+* 样式<br/>
 样式名单词之间用下划线拼接 如：first_one
 
-* class类
+* class类<br/>
 采用大驼峰法命名 如: class FirstOne() {}
 
-* 常量
+* 常量<br/>
 常量就是不能更改的变量，为了醒目所以都遵循全大写的蛇形命名法则，如：const FIRST_ONE = 3
 
-* 变量
+* 变量<br/>
 小写或者小驼峰
 
 * 根据类型定义变量，类型的首字母作为变量首字母
 
 ```js
-
 let aApple; //array
 let nApple; //number
 let sApple; //string
 let oApple; //object
 let fnApple; //function
 let bApple; //boolean
-
 ```
-* 函数专有的动词前辍
-has 有没有某个东西 
-is  是不是
-get 获取
-set 设置
+
+* 函数专有的动词前辍<br/>
+has 有没有某个东西 <br/>
+is  是不是<br/>
+get 获取<br/>
+set 设置<br/>
 
 ## JS规范
 
