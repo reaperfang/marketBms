@@ -19,7 +19,11 @@
 			</el-table-column>
 		</el-table> -->
 
-		<el-table :data="newtable" :row-style="{ height: '20px' }">
+		<el-table
+			:data="newtable"
+			:row-style="{ height: '10px' }"
+			:cell-style="{ padding: '3px 0' }"
+		>
 			<el-table-column label="用户名">
 				<template slot-scope="scope">
 					<span class="time-text">{{ scope.row.c_uv_name_rt }}</span>
@@ -74,10 +78,10 @@ export default {
 	methods: {
 		...mapActions(["hightlist"]),
 		setNewTable(val) {
-			return val.slice(0, 4).map(item => {
+			return val.slice(0, 5).map(item => {
 				return {
 					...item,
-					time_rt: item.time_rt.split(" ")[1]
+					time_rt: item.time_rt.split(" ")[1].substring(0, 8)
 				};
 			});
 		},
@@ -119,8 +123,6 @@ export default {
 						time_rt: item.time_rt.split(" ")[1]
 					};
 				});
-
-				console.log("this.newtable", this.newtable);
 			}, 1000);
 		}
 	}
@@ -177,6 +179,7 @@ export default {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+		font-size: 12px;
 	}
 }
 </style>
