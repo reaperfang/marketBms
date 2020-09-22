@@ -84,7 +84,11 @@
                     label="SPU编码"
                     width="124">
                     </el-table-column> -->
-            <el-table-column label="排序" width="100">
+            <el-table-column
+				label="排序"
+				sortable="custom"
+				prop="sortId"
+				width="100">
             <template slot-scope="scope">
               <template v-if="!scope.row.isEdit">
                 <div @mouseover="showEidtIcon(scope.row)" @mouseleave="hideEditIcon(scope.row)">
@@ -95,7 +99,7 @@
               <template v-if="scope.row.isEdit">
                 <!-- <el-tooltip popper-class="goodSortTip" class="item" effect="light" placement="top">
                 <div slot="content">输入框内只能输入≥1的有效数字，不能输入特殊字符、<br/>
-                    空格、中英文字符、负数、0等。  
+                    空格、中英文字符、负数、0等。
                 </div> -->
                 <el-input
                   ref='goodSort'
@@ -301,7 +305,7 @@
             }
         }
     }
-} 
+}
 .goods-list {
     background-color: #fff;
     padding: 20px;
@@ -584,7 +588,7 @@ export default {
         next(vm => {
             vm._apis.goods.fetchSpuGoodsList().then((res) => {
                 let total = +res.total
-                
+
                 if(!total) {
                     if(this.$route.name === 'goodsListOnly') {
                         vm.$router.replace('/goods/goodsListEmptyOnly')
@@ -741,20 +745,20 @@ export default {
     },
     methods: {
         editorPriceHandler(row) {
-            let _row = JSON.parse(JSON.stringify(row)); 
+            let _row = JSON.parse(JSON.stringify(row));
 
             _row.goodsInfos.forEach(item => {
                 item.isShowMsg = false
             })
-            this.currentData = JSON.parse(JSON.stringify(_row)); 
-            this.currentDialog = 'EditorPriceSpu'; 
+            this.currentData = JSON.parse(JSON.stringify(_row));
+            this.currentDialog = 'EditorPriceSpu';
             this.dialogVisible = true
         },
         changeEdit(item){
             item.isEdit = false;
         },
         showEidtIcon(item){
-            item.showIcon=true;          
+            item.showIcon=true;
         },
         hideEditIcon(item){
             item.showIcon=false;
@@ -765,7 +769,7 @@ export default {
                         id:data.id,
                         cid:+data.cid,
                         sortId:data.sortId
-                        }      
+                        }
             if (/^([1-9][0-9]*)$/.test(data.sortId) && data.sortId <= 999999) {
                 //保存修改后的商品序号
                 this._apis.goods.editGoodSortId(param)
@@ -776,7 +780,7 @@ export default {
                     message: "序号保存失败",
                     type: "error"
                     });
-                }) 
+                })
 
             } else {
                 this.getList();
@@ -831,7 +835,13 @@ export default {
                 } else if(order == 'ascending') {
                     this.listQuery.sortType = 7
                 }
-            }
+            } else if(prop == 'sortId') {
+				if(order == 'descending') {
+					this.listQuery.sortType = 9
+				} else if(order == 'ascending') {
+					this.listQuery.sortType = 10
+				}
+			}
             this.getList()
         },
         switchStatusChange(flag, id, activity) {
@@ -912,6 +922,11 @@ export default {
                 return 0
             }
         },
+		// 列表排序操作
+		/*orderNumber(a, b) {
+			console.log(a)
+			console.log(b)
+		},*/
 	clear() {
             this.$refs.table.clearSelection();
         },
@@ -1211,7 +1226,7 @@ export default {
                         message: error,
                         type: 'error'
                     });
-                    
+
                     // let text = ''
 
                     // text += '<p>批量上架失败！</p>'
@@ -1442,7 +1457,7 @@ export default {
                 this.getMarketActivity(res.list).then((activityRes) => {
                     activityRes.forEach((val, index) => {
                         let id = val.id
-                        let goods = res.list.find(val => val.id == id)                      
+                        let goods = res.list.find(val => val.id == id)
                         goods.activity = true
                         if(val.isParticipateActivity) {
                             goods.goodsInfos.forEach(val => {
@@ -1519,7 +1534,7 @@ export default {
                         //this.getAllList()
                         this._apis.goods.fetchSpuGoodsList().then((res) => {
                             let total = +res.total
-                            
+
                             if(!total) {
                                 if(this.$route.name === 'goodsListOnly') {
                                     vm.$router.replace('/goods/goodsListEmptyOnly')

@@ -459,7 +459,7 @@
             <el-form-item label="配送方式" prop="deliveryWay">
                 <el-checkbox-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.deliveryWay">
                     <div class='checkbox-item'>
-                        <el-checkbox disabled :label="1" @change="((val)=>{deliveryWayChange(val, '1')})" style="margin-right:30px;">普通快递</el-checkbox>
+                        <el-checkbox :label="1" @change="((val)=>{deliveryWayChange(val, '1')})" style="margin-right:30px;">普通快递</el-checkbox>
                     </div>
                     <div class='checkbox-item' >
                         <el-checkbox :label="4" @change="((val)=>{deliveryWayChange(val, '4')})" style="margin-right:30px;">上门自提</el-checkbox>
@@ -483,10 +483,10 @@
 
                 </div>
             </el-form-item>
-            <el-form-item label="快递运费" prop="isFreeFreight" v-show="ruleForm.deliveryWay.includes(1)">
+            <el-form-item label="快递运费" prop="isFreeFreight">
                 <div>
                     <el-radio :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isFreeFreight" :label="0">选择运费模板</el-radio>
-                    <el-select :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.freightTemplateId" placeholder="请选择">
+                    <el-select :disabled="!ruleForm.productCategoryInfoId || !ruleForm.deliveryWay.includes(1)" v-model="ruleForm.freightTemplateId" placeholder="请选择">
                         <el-option
                             v-for="item in shippingTemplates"
                             :key="item.id"
@@ -757,7 +757,7 @@ export default {
                 otherUnit: '',
                 isCashOnDelivery: 0, // 是否支持货到付款
 		        deliveryWay: [1], //配送方式(默认普通快递选中，不可取消)
-                isFreeFreight: 0, // 是否包邮
+                isFreeFreight: '', // 是否包邮
                 isAfterSaleService: 1, // 是否支持售后服务
                 isShowRelationProduct: 0, // 是否显示关联商品
                 relationProductInfoIds: [], // 关联商品
@@ -811,7 +811,7 @@ export default {
                     { required: true, message: '请选择', trigger: 'blur' },
               ],
                 deliveryWay: [
-                    { required: true, message: '请选择', trigger: 'change' },
+                    { required: true, message: '必选项，请您至少选用一种配送方式，否则商品将无法下单', trigger: 'change' },
                 ],
                 isFreeFreight: [
                     { validator: isFreeFreightValidator, trigger: 'blur' },
