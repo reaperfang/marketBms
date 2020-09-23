@@ -73,16 +73,19 @@
                 :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     type="selection"
-                    width="55">
+                    width="34">
                 </el-table-column>
                 <el-table-column
                     prop="orderAfterSaleCode"
                     label="售后单编号"
+                    fixed="left" 
+                    class-name="table-padding"
                     width="250">
                 </el-table-column>
                 <el-table-column
                     prop="memberName"
                     label="用户昵称"
+                    align="center"
                     width="120">
                 </el-table-column>
                 <!-- <el-table-column
@@ -109,14 +112,18 @@
                 </el-table-column> -->
                 <el-table-column
                     prop="receivedName"
+                    align="center"
                     label="收货人">
                 </el-table-column>
                 <el-table-column
                     prop="receivedPhone"
+                    align="center"
+                    width="110"
                     label="收货人电话">
                 </el-table-column>
                 <el-table-column
                     prop="status"
+                    align="center"
                     label="状态">
                     <template slot-scope="scope">
                         <span>{{scope.row.status | statusFilter}}</span>
@@ -124,18 +131,20 @@
                 </el-table-column>
                 <el-table-column
                     prop="updateTime"
+                    align="center"
+                    width="160"
                     label="最新发货时间">
                 </el-table-column>
-                <el-table-column label="操作" :width="computeWidth" fixed="right">
+                <el-table-column label="操作" :width="computeWidth" fixed="right" header-align="center" class-name="table-padding">
                     <template slot-scope="scope">
-                        <div class="operate-box">
-                            <span v-permission="['订单', '发货管理', '售后发货', '查看']" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.orderAfterSaleId)">查看</span>
-                            <span v-permission="['订单', '发货管理', '售后发货', '发货']" v-if="scope.row.status == 2" @click="$router.push(`/order/orderAfterDeliverGoods?ids=${scope.row.orderAfterSaleId}&afterSale=true&_ids=${scope.row.id}`)">发货</span>
+                        <div class="operate-box table-operate">
+                            <span class="table-btn" v-permission="['订单', '发货管理', '售后发货', '查看']" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.orderAfterSaleId)">查看</span>
+                            <span class="table-btn" v-permission="['订单', '发货管理', '售后发货', '发货']" v-if="scope.row.status == 2" @click="$router.push(`/order/orderAfterDeliverGoods?ids=${scope.row.orderAfterSaleId}&afterSale=true&_ids=${scope.row.id}`)">发货</span>
                         </div>
                     </template>
                 </el-table-column>
             </el-table>
-            <div v-show="!loading" class="footer">
+            <div v-show="!loading" class="footer table-select">
                 <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
                 <el-button v-permission="['订单', '发货管理', '售后发货', '批量导入发货']" @click="$router.push('/order/batchImportAndDelivery?afterSale=true')" class="border-button">批量导入发货</el-button>
                 <el-button v-permission="['订单', '发货管理', '售后发货', '批量发货']" @click="batchSendGoods" class="border-button">批量发货</el-button>
@@ -206,9 +215,9 @@ export default {
         },
         computeWidth() {
             if(this.tableData.some(item => item.status == 2)) {
-                return '100'
+                return '117'
             } else {
-                return '60'
+                return '72'
             }
         }
     },
@@ -451,7 +460,6 @@ export default {
         }
         .footer {
             padding: 20px 20px 10px 20px;
-            padding-left: 10px;
         }
     }
 }
@@ -534,21 +542,11 @@ export default {
             background-color: #fff;
         }
     }
-    /deep/ .el-table .cell {
-        padding-left: 0;
-        padding-right: 20px;
+    /deep/ .el-table--small td, /deep/  .el-table--small th {
+        padding: 16px 0;
     }
     /deep/ .input-with-select .el-input-group__prepend {
         background-color: #fff;
-    }
-    /deep/.el-table td:nth-child(1){
-         padding-left:20px;
-         .cell {
-            text-overflow: clip;
-         }
-     }
-     /deep/ .el-table--small td, /deep/  .el-table--small th {
-        padding: 16px 0;
     }
     /deep/ .el-form--inline .el-form-item {
         margin-bottom: 20px;

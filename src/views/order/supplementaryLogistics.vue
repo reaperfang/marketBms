@@ -23,14 +23,13 @@
                             :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                             <el-table-column
                                 label="序号"
-                                width="180">
+                                 width="100" fixed="left" class-name="table-padding">
                                 <template slot-scope="scope">
                                     <span>{{scope.$index + 1}}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                label="商品"
-                                width="380">
+                                label="商品">
                                 <template slot-scope="scope">
                                     <div class="goods-detail">
                                         <div class="goods-detail-item">
@@ -45,14 +44,16 @@
                             </el-table-column>
                             <el-table-column
                                 prop="goodsCount"
-                                label="应发数量">
+                                label="应发数量"
+                                width="120"
+                                 align="right">
                             </el-table-column>
                             <!-- <el-table-column
                                 prop="realityNumber"
                                 label="可发货数量">
                             </el-table-column> -->
                             <el-table-column
-                                prop="sendCount"
+                                prop="sendCount" fixed="right" align="center" class-name="table-padding"
                                 label="本次发货数量">
                                 <template slot-scope="scope">
                                     <el-input :disabled="true" v-model="scope.row.sendCount"></el-input>
@@ -700,12 +701,6 @@ export default {
 }
 /deep/ .el-table table thead th {
     font-weight: normal;
-}
-/deep/ .el-table td, /deep/ .el-table th {
-    text-align: center;
-    &:nth-child(2) {
-        text-align: left;
-    }
 }
 /deep/ .el-table table thead tr th {
     border-bottom: none;
