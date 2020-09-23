@@ -64,7 +64,7 @@ export default {
         });
         return;
       }
-      if(this.adjustmentBalance == null) {
+      if(!this.adjustmentBalance) {
         this.btnLoading = false;
         this.$message({
           message: '请输入调整数值',

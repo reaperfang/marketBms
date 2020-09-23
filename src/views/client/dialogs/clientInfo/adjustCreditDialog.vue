@@ -71,7 +71,7 @@ export default {
     },
     submit() {
       this.btnLoading = true;
-      if (this.adjustmentScore == null) {
+      if (!this.adjustmentScore) {
         this.btnLoading = false;
         this.$message({
           message: '请输入调整数值',
