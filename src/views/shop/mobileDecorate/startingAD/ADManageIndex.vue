@@ -6,7 +6,7 @@
         v-model="openAD"
         active-color="#13ce66"
         @change="switchStatusChange"
-        inactive-color="#ff4949">
+        inactive-color="#CACACF">
       </el-switch>
     </div>
     <div class="ad_head_wrapper head-wrapper">

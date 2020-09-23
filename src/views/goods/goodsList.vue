@@ -144,8 +144,7 @@
                                 <el-switch
                                     v-if="scope.row.status !== -1"
                                     v-model="scope.row.switchStatus"
-                                    active-color="#0cd4af"
-                                    inactive-color="#c8c8ca"
+                                    active-color="#13ce66" inactive-color="#CACACF"
                                     @change="(flag) => {
                                         switchStatusChange(flag, scope.row.id, scope.row.activity)
                                     }">

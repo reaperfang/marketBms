@@ -3,7 +3,7 @@
    <div v-if="!isInitLoading" class="th3Deliver">
      <div class="switch-area">
        <span>启用第三方配送：</span>
-       <el-switch class="btn" active-color="#13ce66" inactive-color="#cacfcb" v-model="isOpen"></el-switch>
+       <el-switch class="btn" active-color="#13ce66" inactive-color="#CACACF" v-model="isOpen"></el-switch>
        <span>开启后，将有第三方物流代您进行配送，配送产生的费用，开启后表示同意</span>
        <el-button class="agree" type="text" @click="onPprotocol()">《第三方配送协议》</el-button>
      </div>

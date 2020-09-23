@@ -13,8 +13,7 @@
             <el-switch
               v-model="wechatPay"
               @change="handleWechatPay"
-              active-color="#13ce66"
-              inactive-color="#eee"
+              active-color="#13ce66" inactive-color="#CACACF"
               v-permission="['设置', '支付方式', '默认页面', '开启/关闭']">
             </el-switch>
             <a class="wxinfo_set" @click="_routeTo('wxSet')" v-permission="['设置', '支付方式', '默认页面', '设置支付信息']">设置支付信息</a>
@@ -32,8 +31,7 @@
             <el-switch
               v-model="aliPay"
               @change="handleAliPay"
-              active-color="#13ce66"
-              inactive-color="#eee"
+              active-color="#13ce66" inactive-color="#CACACF"
               v-permission="['设置', '支付方式', '默认页面', '开启/关闭']">
             </el-switch>
             <a class="wxinfo_set" @click="_routeTo('zfbSet')" v-permission="['设置', '支付方式', '默认页面', '设置支付信息']">设置支付信息</a>
@@ -51,8 +49,7 @@
             <el-switch
               v-model="balanceOfAccountPay"
               @change="handleBalanceOfAccountPay"
-              active-color="#13ce66"
-              inactive-color="#eee"
+              active-color="#13ce66" inactive-color="#CACACF"
               v-permission="['设置', '支付方式', '默认页面', '开启/关闭']">
             </el-switch>
           </div>
@@ -69,8 +66,7 @@
             <el-switch
               v-model="payOnDelivery"
               @change="handlePayOnDelivery"
-              active-color="#13ce66"
-              inactive-color="#eee"
+              active-color="#13ce66" inactive-color="#CACACF"
               v-permission="['设置', '支付方式', '默认页面', '开启/关闭']">
             </el-switch>
           </div>
