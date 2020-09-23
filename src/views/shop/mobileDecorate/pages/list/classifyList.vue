@@ -25,20 +25,22 @@
         <el-table-column prop="createTime" label="创建时间" align="center" min-width="160"></el-table-column>
         <el-table-column prop="updateTime" sortable="custom" label="最后编辑时间" align="center" min-width="160"></el-table-column>
         <el-table-column prop="updateUserName" label="操作账号" align="center"></el-table-column>
-        <el-table-column prop="" label="操作" width="154" fixed="right" align="left" header-align="center" class-name="table-padding">
+        <el-table-column prop="" label="操作" width="156" fixed="right" align="left" header-align="center" class-name="table-padding">
           <template slot-scope="scope">
-            <span class="table-btn" @click="_routeTo('m_classifyEditor', {pageId: scope.row.id})">编辑</span>
-            <span class="table-btn table-warning" @click="deleteClassify(scope.row)">删除</span>
-            <el-popover
-              placement="right"
-              width="400"
-              trigger="click">
-              <div style="display:flex;">
-                <el-input :value="getPageLink(scope.row)" style="margin-right:10px"></el-input>
-                <el-button type="primary" v-clipboard:copy="getPageLink(scope.row)" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
-              </div>
-              <span class="table-btn" slot="reference" @click="link(scope.row)">链接</span>
-            </el-popover>
+            <div class="table-operate">
+              <span class="table-btn" @click="_routeTo('m_classifyEditor', {pageId: scope.row.id})">编辑</span>
+              <span class="table-btn table-warning" @click="deleteClassify(scope.row)">删除</span>
+              <el-popover
+                placement="right"
+                width="400"
+                trigger="click">
+                <div style="display:flex;">
+                  <el-input :value="getPageLink(scope.row)" style="margin-right:10px"></el-input>
+                  <el-button type="primary" v-clipboard:copy="getPageLink(scope.row)" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
+                </div>
+                <span class="table-btn" slot="reference" @click="link(scope.row)">链接</span>
+              </el-popover>
+            </div>
           </template>
         </el-table-column>
       </el-table>

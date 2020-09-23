@@ -374,3 +374,20 @@ export function isSafariBrowser() {
 export function unique(arr) {
   return Array.from(new Set(arr))
 }
+
+
+//列表操作列宽度动态计算
+export function getOperationColumnW() {
+  const numArr = []; //存放每一行中宽度
+  const w = 15; //单个文字宽度
+  const btnsBox = document.querySelectorAll('.table-operate'); //所有操作列中的行
+  btnsBox.forEach((item) => {
+      const spans = item.querySelectorAll('span'); //对应下的按钮
+      let num = (spans.length - 1) * 11 + 42; //按钮间有10px间距+1px边线，所以是11  最后一个按钮没有， 40为外框左右padding, 2是宽裕出来的
+      item.querySelectorAll('span').forEach((tag) => {
+          num += tag.innerHTML.length * w;
+        })
+      numArr.push(num);
+  })
+  return Math.max(...numArr)
+}
