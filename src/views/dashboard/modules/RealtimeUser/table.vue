@@ -1,24 +1,5 @@
 <template>
 	<div class="realtime-user">
-		<!-- <el-table :data="newtable" :row-style="{ height: '20px' }">
-			<el-table-column label="用户名" width="120">
-				<template slot-scope="scope">
-					<span class="time-text">{{ scope.row.c_uv_name_rt }}</span>
-				</template>
-			</el-table-column>
-			<el-table-column label="时间" width="120">
-				<template slot-scope="scope">
-					<span class="time-text">{{ scope.row.time_rt }}</span>
-				</template>
-			</el-table-column>
-			<el-table-column prop="op_rt" label="操作"> </el-table-column>
-			<el-table-column label="商品" width="160">
-				<template slot-scope="scope">
-					<span class="time-text">{{ scope.row.pd_rt }}</span>
-				</template>
-			</el-table-column>
-		</el-table> -->
-
 		<el-table
 			:data="newtable"
 			:row-style="{ height: '10px' }"
@@ -37,7 +18,13 @@
 			<el-table-column prop="op_rt" label="操作"> </el-table-column>
 			<el-table-column label="商品">
 				<template slot-scope="scope">
-					<span class="time-text">{{ scope.row.pd_rt }}</span>
+					<el-tooltip
+						:content="scope.row.pd_rt"
+						placement="top"
+						popper-class="atooltip"
+					>
+						<span class="time-text">{{ scope.row.pd_rt }}</span>
+					</el-tooltip>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -161,6 +148,16 @@ export default {
 	.el-table {
 		color: rgba(255, 255, 255, 1);
 		width: 100% !important;
+
+		// .atooltip.el-tooltip__popper[x-placement^="top"] .popper__arrow {
+		// 	border-top-color: pink;
+		// }
+		// .atooltip.el-tooltip__popper[x-placement^="top"] .popper__arrow:after {
+		// 	border-top-color: pink;
+		// }
+		// .atooltip {
+		// 	background: pink !important;
+		// }
 	}
 
 	.el-table td,
