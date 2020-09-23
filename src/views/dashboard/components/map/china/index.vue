@@ -265,16 +265,16 @@ export default {
 			this.chart.clear();
 			this.chart.setOption(this.option);
 
-			this.chart.on("mouseover", params => {
-				this.chart.dispatchAction({
-					type: "downplay"
-				});
-				// if (params.data.value == undefined) {
-				// 	this.chart.dispatchAction({
-				// 		type: "downplay"
-				// 	});
-				// }
-			});
+			// this.chart.on("mouseover", params => {
+			// 	this.chart.dispatchAction({
+			// 		type: "downplay"
+			// 	});
+			// 	// if (params.data.value == undefined) {
+			// 	// 	this.chart.dispatchAction({
+			// 	// 		type: "downplay"
+			// 	// 	});
+			// 	// }
+			// });
 
 			// if (this.interval) {
 			// 	this.clearInterval();

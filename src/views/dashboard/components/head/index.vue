@@ -45,7 +45,10 @@
 							ref="fullscreen"
 						>
 							<svg-icon iconClass="fullscreen"></svg-icon>
-							<span>全 屏</span>
+							<!-- <span>全 屏</span> -->
+							<span>{{
+								!this.fullscreenState ? "全 屏" : "退 出"
+							}}</span>
 						</div>
 					</el-col>
 				</el-row>
@@ -74,7 +77,8 @@ export default {
 		return {
 			shopName: JSON.parse(localStorage.getItem("shopInfos")).shopName,
 			timer: "", //定义一个定时器的变量
-			currentTime: new Date() // 获取当前时间
+			currentTime: new Date(), // 获取当前时间
+			fullscreenState: false
 		};
 	},
 	computed: {
@@ -83,19 +87,6 @@ export default {
 	mounted() {
 		var _this = this; //声明一个变量指向Vue实例this，保证作用域一致
 		this.timer = setInterval(function() {
-			// _this.currentTime = //修改数据date
-			//   new Date().getFullYear() +
-			//   "-" +
-			//   (new Date().getMonth() + 1) +
-			//   "-" +
-			//   new Date().getDate() +
-			//   " " +
-			//   new Date().getHours() +
-			//   ":" +
-			//   new Date().getMinutes() +
-			//   ": " +
-			//   new Date().getSeconds();
-
 			_this.currentTime = //修改数据date
 				new Date().getFullYear() +
 				"年" +
@@ -109,6 +100,18 @@ export default {
 				": " +
 				new Date().getSeconds();
 		}, 1000);
+
+		window.addEventListener("keydown", e => {
+			if (e && e.keyCode == 122) {
+				this.modifyfullscreenState();
+			}
+		});
+
+		// window.addEventListener("fullscreenchange", e => {
+		// 	if (e && e.keyCode == 122) {
+		// 		this.modifyfullscreenState();
+		// 	}
+		// });
 	},
 	beforeCreate() {
 		if (this.timer) {
@@ -123,6 +126,9 @@ export default {
 	destroyed: function() {},
 	methods: {
 		//...mapActions([""]),
+		modifyfullscreenState() {
+			this.fullscreenState = !this.fullscreenState;
+		},
 		fullscreen() {
 			// this.$toast({
 			// 	message:
@@ -174,6 +180,8 @@ export default {
 					document.msExitFullscreen();
 				}
 			}
+
+			this.modifyfullscreenState();
 		},
 		refresh() {
 			window.location.reload();
