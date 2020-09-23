@@ -631,6 +631,10 @@
         font-weight: bold;
       }
 
+      .el-dialog__footer {
+        padding: 10px 40px 20px;
+      }
+
       .confirm_enable_dialog_inner {
         position: relative;
         padding: 20px 40px 20px 86px;
