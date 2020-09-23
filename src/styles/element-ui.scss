@@ -254,6 +254,14 @@ input::-moz-placeholder, textarea::-moz-placeholder{
 }
 
 // 表格
+.el-table th {
+  height: 46px;
+  color: #44434B;
+  background: #F6F7FA;
+}
+.el-table td {
+  padding: 16px 0;
+}
 .table-padding {
   .cell {
     padding: 0 20px !important;
@@ -297,6 +305,7 @@ input::-moz-placeholder, textarea::-moz-placeholder{
   color: #FD4C2B !important;
 }
 .table-operate {
+  height: 23px;
   font-size: 0;
   .table-btn{
     font-size: 14px;

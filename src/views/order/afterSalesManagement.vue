@@ -464,12 +464,6 @@ export default {
 /deep/ input:-ms-input-placeholder{
   color:#92929B;
 }
-/deep/ .el-table td, /deep/ .el-table th {
-    text-align: center;
-    &:nth-child(2) {
-        text-align: left;
-    }
-}
 /deep/ .el-table tr th {
     border-bottom: none;
 }
@@ -496,9 +490,6 @@ export default {
 /deep/ .input-with-select .el-input-group__prepend {
     background-color: #fff;
 }
-     /deep/ .el-table--small td, /deep/  .el-table--small th {
-        padding: 16px 0;
-    }
 </style>
 
 

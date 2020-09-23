@@ -325,9 +325,6 @@ export default {
         }
     }
 }
-/deep/ .el-table--small td,.el-table--small th{
-      padding:16px 0;
-}
 /deep/ .el-table-column--selection .cell{
     padding-left:20px;
 }

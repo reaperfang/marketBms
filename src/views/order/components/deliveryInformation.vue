@@ -151,7 +151,7 @@
           </div>
           </template> 
           </template>
-          <el-table :data="item.goodsList" style="width: 100%" :header-cell-style="{color:'#655EFF', borderBottom: '1px solid #CACFCB', paddingTop: '30px', paddingBottom: '10px'}">
+          <el-table :data="item.goodsList" style="width: 100%" :header-cell-style="{color:'#655EFF', background: 'none', borderBottom: '1px solid #CACFCB', paddingTop: '30px', paddingBottom: '10px'}">
             <el-table-column label="商品" min-width="380">
               <template slot-scope="scope">
                 <div class="goods-detail">

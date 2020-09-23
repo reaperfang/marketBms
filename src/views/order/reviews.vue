@@ -543,9 +543,6 @@ export default {
         background-color: #fff;
     }
 }
-     /deep/ .el-table--small td, /deep/  .el-table--small th {
-        padding: 16px 0;
-    }
 </style>
 
 

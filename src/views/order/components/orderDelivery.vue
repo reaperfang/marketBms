@@ -749,9 +749,6 @@ export default {
      /deep/ .input-with-select .el-input-group__prepend {
         background-color: #fff;
     }
-     /deep/ .el-table--small td, /deep/  .el-table--small th {
-        padding: 16px 0;
-    }
     /deep/ .el-form--inline .el-form-item {
         margin-bottom: 20px;
     }
