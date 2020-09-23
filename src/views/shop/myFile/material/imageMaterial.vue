@@ -112,6 +112,7 @@ export default {
     //获取图片列表
     getList(id){
       id && (this.groupId = id)
+      this.currentPage = 1; // 查询前将条件页码置为1
       let query ={
         fileGroupInfoId:id || '',
         startIndex:this.currentPage,
