@@ -44,15 +44,19 @@
         >
         <el-table-column
           prop="orderCode"
-          label="订单编号">
+          label="订单编号"
+          fixed="left" class-name="table-padding"
+          width="200px">
         </el-table-column>
         <el-table-column
           prop="deliveryCompany"
+          align="center"
           label="配送公司">
         </el-table-column>
         <el-table-column
           prop="deliveryMoney"
           label="配送费"
+          align="right"
           width="150px">
         </el-table-column>
         <el-table-column
@@ -65,7 +69,9 @@
           label="发货时间"
           sortable = "custom"
           align="center"
-          width="200px">
+          class-name="table-padding"
+          width="190px"
+          fixed="right">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -251,8 +257,5 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
-}
-/deep/.el-table--small td{
-  padding:16px 0;
 }
 </style>

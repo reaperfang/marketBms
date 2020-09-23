@@ -75,13 +75,14 @@
         >
         <el-table-column
         type="selection"
-        width="55">
+        width="34">
         </el-table-column>
         <el-table-column
           prop="cashoutSn"
           label="提现编号"
           align="left"
-          width="200px">
+          fixed="left" class-name="table-padding"
+          width="220px">
         </el-table-column>
          <el-table-column
           prop="nickName"
@@ -109,45 +110,42 @@
         </el-table-column>
         <el-table-column
           prop="tradeDetailSn"
-          align="right"
+          align="center"
+          width="190"
           label="交易流水号">
         </el-table-column>
         <el-table-column
           prop="applyTime"
           label="申请时间"
           align="center"
-          width="200px"
+          width="160px"
           sortable = "custom">
         </el-table-column>
         <el-table-column
         label="操作"
-        align="center">
+        fixed="right" 
+        class-name="table-padding" :width="operationColumnW">
           <template slot-scope="scope">
-            <el-button 
-              @click="handleClick(scope.row)"  
-              type="text" size="small" 
-              v-permission="['财务', '提现明细', '默认页面', '查看']"
-              class="fsize"
-            >
-              查看
-            </el-button> 
-            <span v-if="scope.row.status == 0">
-              <span class="c_line">|</span>
-              <el-button 
-                type="text" 
-                size="small" 
-                @click="examine(scope.row)" 
-                v-permission="['财务', '提现明细', '默认页面', '审核']"
-                class="fsize"
-              >
-                审核
-              </el-button>
-            </span>
-            <span v-else class="placeholders"></span>
+            <div class="table-operate">
+              <span 
+                @click="handleClick(scope.row)"  
+                v-permission="['财务', '提现明细', '默认页面', '查看']"
+                class="fsize table-btn"
+              >查看</span> 
+                <span
+                  v-if="scope.row.status == 0"
+                  @click="examine(scope.row)" 
+                  v-permission="['财务', '提现明细', '默认页面', '审核']"
+                  class="fsize table-btn"
+                >
+                  审核
+                </span>
+              <!-- <span v-else class="placeholders"></span> -->
+            </div>
           </template>
         </el-table-column>
       </el-table>
-      <div class="checkAudit" v-if="dataList.length != 0" style="margin: 20px 0 0 20px;">
+      <div class="checkAudit table-select" v-if="dataList.length != 0" style="margin: 20px 0 0 20px;">
         <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button  class="border-button" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
       </div>
@@ -219,7 +217,8 @@ export default {
       dialogVisible: false,
       currentData:{},
       multipleSelection:[],
-      loading:true
+      loading:true,
+      operationColumnW: 72 //操作列宽度
     }
   },
   props: {
@@ -228,7 +227,16 @@ export default {
       default: true
     },
   },
-  watch: { },
+  watch: {
+    'dataList': {
+        handler(newVal, oldVal) { //计算操作栏宽度
+            this.$nextTick(() => {
+                this.operationColumnW = this.utils.getOperationColumnW();
+            })
+        },
+        deep: true
+    }
+  },
   computed:{
     presentations(){
       return financeCons.presentations;
@@ -514,9 +522,6 @@ export default {
 /deep/ .el-table-column--selection .cell {
     padding-left: 20px;
     padding-right: 10px;
-}
-/deep/.el-table--small td{
-  padding:16px 0;
 }
 
 .fsize{

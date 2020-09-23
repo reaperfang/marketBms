@@ -385,7 +385,7 @@ export function getOperationColumnW() {
       const spans = item.querySelectorAll('span'); //对应下的按钮
       let num = (spans.length - 1) * 11 + 42; //按钮间有10px间距+1px边线，所以是11  最后一个按钮没有， 40为外框左右padding, 2是宽裕出来的
       item.querySelectorAll('span').forEach((tag) => {
-          num += tag.innerHTML.length * w;
+          num += tag.innerHTML.trim().length * w;
         })
       numArr.push(num);
   })
