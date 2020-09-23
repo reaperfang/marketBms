@@ -198,9 +198,9 @@
                                     <span class="table-btn" @click="closeOrder(scope.row)">关闭订单</span>
                                 </template> -->
                             </template>
-                            <template v-else-if="scope.row.deliveryWay == 3">
-                                <span class="reOrder(scope.row) table-btn">重新发单</span>
-                                <span class="table-btn" @click="closeOrder(scope.row)">关闭订单</span>
+                            <template v-else-if="scope.row.deliveryWay == 3 && scope.row.isAbnormal">
+                                <span class="reOrder(scope.row)">重新发单</span>
+                                <span @click="closeOrder(scope.row)">关闭订单</span>
                             </template>
                         </div>
                     </template>
