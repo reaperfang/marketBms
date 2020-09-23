@@ -776,7 +776,7 @@ export default {
         font-size:12px;
         font-weight:500;
         color:rgba(101,94,255,1);
-        margin-left:-10px;
+        margin-left:1px;
         margin-right:5px;
     }
 </style>
