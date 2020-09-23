@@ -8,7 +8,7 @@
 				<div class="grid-title-end">
 					<span>
 						同比昨日
-						<span>增长{{ persent }}%</span>
+						<span>增长{{ persent }}%↑</span>
 					</span>
 				</div>
 			</el-col>

@@ -419,6 +419,7 @@ export default {
 					left: 0px;
 					right: 0px;
 					margin: auto;
+					z-index: -1111;
 				}
 			}
 		}
