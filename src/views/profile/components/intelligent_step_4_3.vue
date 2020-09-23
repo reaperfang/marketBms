@@ -68,8 +68,8 @@
           shopName: {min: 1, max: 10, message: "长度在 1 到 10 个字符", trigger: "blur"},
           phone: {
             validator: (rule, value, callback) => {
-              const mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
-              const tel = /^\d{3,4}-?\d{7,9}$/;
+              const mobile = /^1[34578][0-9]{9}$/;
+              const tel = /^\d{3,4}-\d{7,9}$/;
               if (value !== '' && !mobile.test(value) && !tel.test(value)) return callback(new Error("您输入的电话有误，请您重新输入"));
               else callback();
             }, trigger: "blur"
