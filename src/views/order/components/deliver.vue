@@ -551,12 +551,6 @@ export default {
         if (valid) {
           let params;
 
-          // if(true) {
-          //   this.confirm({title: '提示', text: '达达账户余额不足，请充值后再发货', confirmText: '去充值'}).then(() => {
-                //this.$router.push('/set/recharge')
-          //   })
-          //   return
-          // }
           //如果是普通快递
           if(formName == 'ruleForm'){
             if(this.orderInfo.deliveryWay != 4 && this.orderInfo.deliveryWay != 3) {
@@ -688,6 +682,12 @@ export default {
         this._apis.order
         .sendGoods3(params)
         .then(res => {
+          if(res.code == 2155) {
+            this.confirm({title: '提示', text: '达达账户余额不足，请充值后再发货', confirmText: '去充值'}).then(() => {
+                this.$router.push('/set/recharge')
+            })
+            return
+          }
           this.$message.success('发货成功');
           this.sending = false
           this.$router.push({
