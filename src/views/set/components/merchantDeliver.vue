@@ -1208,6 +1208,7 @@ export default {
   $color: rgba(68, 67, 75, 1);
   .shopExpress {
     color:$color;
+    min-height: 200px;
     .dashed {
       border-bottom: 1px dashed rgba(211, 211, 211, 1);
     }

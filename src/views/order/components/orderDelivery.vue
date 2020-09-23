@@ -105,6 +105,7 @@
                             <i class="urge"></i>
                         </el-tooltip>
                         <i class="unauto" v-if="!scope.row.isAutoSend && (scope.row.isUrge != 0) && haveAuto"></i>
+                        <span class="deliveryWay-icon">{{scope.row | deliveryWayIconFilter}}</span>
                         {{scope.row.orderCode}}
                     </template>
                 </el-table-column>
@@ -192,10 +193,14 @@
                                 <template v-else-if="scope.row.deliveryWay == 4">
                                     <span class="table-btn" @click="verificationHandler(scope.row)">核销验证</span>
                                 </template>
-                                <template v-else-if="scope.row.deliveryWay == 3">
+                                <!-- <template v-else-if="scope.row.deliveryWay == 3">
                                     <span class="reOrder(scope.row) table-btn">重新发单</span>
                                     <span class="table-btn" @click="closeOrder(scope.row)">关闭订单</span>
-                                </template>
+                                </template> -->
+                            </template>
+                            <template v-else-if="scope.row.deliveryWay == 3">
+                                <span class="reOrder(scope.row) table-btn">重新发单</span>
+                                <span class="table-btn" @click="closeOrder(scope.row)">关闭订单</span>
                             </template>
                         </div>
                     </template>
@@ -229,7 +234,7 @@ import DeliveryMethod from "./deliveryMethod"; //配送方式组件
 import DialogPrintList from '@/components/printListDialog'
 import utils from "@/utils";
 import VerificationDialog from "@/views/order/dialogs/verificationDialog";
-import CloseThirdPartyOrderDialog from "@/views/order/dialogs/closeThirdPartyOrderDialog";
+import CloseOrderDialog from "@/views/order/dialogs/closeOrderDialog";
 import { orderDeliveryMethods } from '@/views/order/mixins/orderDeliveryMixin'
 
 export default {
@@ -307,6 +312,26 @@ export default {
                 })
             },
             deep: true
+        }
+    },
+    filters: {
+        deliveryWayIconFilter(item) {
+            let  code = item.deliveryWay
+
+            switch(code) {
+                case 1:
+                    return "普快"
+                case 2:
+                    return "商配"
+                case 3:
+                    if(item.orderStatus==5||item.orderStatus==6){
+                        return "达达"
+                    }else{
+                        return "三方"
+                    }
+                case 4:
+                    return "自提"
+            }
         }
     },
     computed:{
@@ -486,8 +511,21 @@ export default {
         closeDialogVisible(){
             this.printDialogVisible=false
         },
-        onSubmit() {
-
+        onSubmit(value) {
+            let orderId = "";
+            if(Object.prototype.toString.call(this.currentData)=="[object Object]"){
+                orderId=this.currentData.id;
+            }else{
+                orderId=this.currentData;
+            }
+            this._apis.order.orderClose({...value, id: orderId}).then((res) => {
+                this.getList()
+                this.visible = false
+                this.$message.success('关闭成功！');
+            }).catch(error => {
+                this.visible = false
+                this.$message.error(error);
+            })
         },
         resetForm(formName) {
             this.listQuery = {
@@ -550,7 +588,7 @@ export default {
         DeliveryMethod,
         DialogPrintList,
         VerificationDialog,
-        CloseThirdPartyOrderDialog
+        CloseOrderDialog
     }
 }
 </script>
@@ -716,5 +754,19 @@ export default {
     }
     /deep/ .el-form--inline .el-form-item {
         margin-bottom: 20px;
+    }
+    .deliveryWay-icon{
+        display:inline-block;
+        width:32px;
+        height:18px;
+        background:rgba(230,230,250,1);
+        border-radius:3px;  
+        line-height:18px;
+        text-align: center;
+        font-size:12px;
+        font-weight:500;
+        color:rgba(101,94,255,1);
+        margin-left:1px;
+        margin-right:5px;
     }
 </style>

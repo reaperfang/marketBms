@@ -12,7 +12,8 @@ export const orderDeliveryMethods = {
 
     },
     closeOrder(row) {
-      this.currentDialog = 'CloseThirdPartyOrderDialog'
+      this.currentData = row
+      this.currentDialog = 'CloseOrderDialog'
       this.dialogVisible = true
   },
   },
