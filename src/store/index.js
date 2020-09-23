@@ -23,10 +23,10 @@ const vuexPersisted = new createPersistedState({
   key: "myVuex",
   storage: window.localStorage,
   reducer: state => ({
-    // PK: {
-    //   multipleSelection: state.pk.multipleSelection,
-    //   stepData: state.pk.stepData
-    // },
+    dashboard: {
+      // realtimeuser: state.dashboard.realtimeuser,
+      highlight:state.dashboard.highlight
+    }
   })
 });
 

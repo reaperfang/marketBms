@@ -11,6 +11,7 @@
 import echarts from "echarts";
 import chinaData from "../../../data/china.json";
 import { mapGetters, mapActions, mapState } from "vuex";
+import _ from "lodash";
 export default {
 	watch: {
 		// "dashboard.realtimeuser"(val) {
@@ -24,6 +25,10 @@ export default {
 		// 	this.$refs.chart.setSeriesData(result);
 		// }
 		"dashboard.highlight"(newVal, oldVal) {
+			let difference = _.difference(newOrder, oldOrder);
+			if (difference.length == 0) {
+				return;
+			}
 			this.setHightlight(newVal);
 		}
 	},
@@ -370,6 +375,7 @@ export default {
 			window.clearInterval(this.interval);
 		},
 		setHightlight(val) {
+			alert("setHightlight");
 			this.chart.clear();
 			this.chart.setOption(this.option);
 			if (val.length == 0) {

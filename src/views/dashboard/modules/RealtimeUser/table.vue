@@ -103,6 +103,10 @@ export default {
 				});
 
 			let difference = _.difference(newOrder, oldOrder);
+
+			if (difference.length == 0) {
+				return;
+			}
 			this.hightlist(difference);
 		},
 		scroll() {
