@@ -4,8 +4,8 @@
       <el-tab-pane
         v-for="(item, index) in authList"
         :key="index"
-        :label="item.title"
         :name="item.name" >
+        <span slot="label">{{ item.title }}</span>
         <component :is="currentTab"></component>
       </el-tab-pane>
     </el-tabs>
@@ -116,6 +116,9 @@ export default {
     font-size: 16px;
     font-weight: 400;
     color: #44434B;
+    &.is-active {
+      color: #655EFF;
+    }
   }
   >>> .el-tabs__header {
     margin:0;
