@@ -3,7 +3,7 @@
     <h2 class="sub_title">店铺基础信息建设</h2>
 
     <el-form ref="form" :model="form" :rules="rules">
-      <el-form-item label="1、店铺名称:" prop="shopName">
+      <el-form-item label="1、店铺名称:" prop="shopName" label-width="95px">
         <el-input v-model.trim="form.shopName" style="width:283px;" placeholder="请输入您的店铺名称"></el-input>
         <p class="shopInfo-show">
           用于展示给消费者的品牌形象
@@ -25,7 +25,7 @@
         <el-button class="button-link" @click="linkToGZH" :loading="isLoadingBindStatus"> 公众号菜单管理</el-button>
       </el-form-item>
 
-      <el-form-item label="4、客服电话:" prop="phone">
+      <el-form-item label="4、客服电话:" prop="phone" label-width="95px">
         <el-input v-model="form.phone" placeholder="请输入您的客服联系电话" style="width:283px;"></el-input>
       </el-form-item>
 
@@ -273,7 +273,7 @@
   .shopInfo-show {
     font-size: 12px;
     color: $grayColor;
-    margin-left: 94px;
+    /*margin-left: 94px;*/
     line-height: 36px;
 
     span {
