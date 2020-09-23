@@ -58,7 +58,7 @@
                 <div class="c_block">
                     <el-switch
                         v-model="isSwitch"
-                        active-color="#66CCAC"
+                        active-color="#13ce66" inactive-color="#CACACF"
                         @change="handleSwitch"
                     ></el-switch>
                     <span class="marR20">积分获取上限</span>

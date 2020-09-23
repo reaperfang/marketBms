@@ -7,7 +7,7 @@
         :rules="rules"
         label-position="right"
         :model="ruleForm"
-        label-width="107px"
+        label-width="97px"
         class="formBox"
       >
         <el-form-item label="手机号：" class="item" prop="mobile">
@@ -383,12 +383,14 @@ export default {
         .getTh3DeliverDetail(req)
         .then(response => {
           console.log('----response-:getTh3DeliverDetail---',response)
-          this.handleEchoData(response)
-          this.isEdit = true
+          if (response) {
+            this.handleEchoData(response)
+            this.isEdit = true
+          }
           return response
         })
         .catch(error => {
-          this.$message.error(err)
+          this.$message.error(error)
         });
     },
     setAddressName() {
@@ -601,8 +603,11 @@ export default {
   }
   .formBox {
     width: 590px;
-    height: 416px;
+    height: 423px;
     overflow-y: auto;
+    .el-form-item--small .el-form-item__label {
+      padding-right: 0;
+    }
     &::-webkit-scrollbar {
       width: 6px;
       height: 8px;
@@ -619,6 +624,7 @@ export default {
       margin-bottom: 20px;
     }
     .address {
+      width: 579px;
       margin-bottom: 0;
     }
   }

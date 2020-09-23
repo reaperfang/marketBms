@@ -7,8 +7,7 @@
         @change="handleSwitch"
         v-model="isOpen"
         v-permission="['设置', '上门自提', '默认页面', '新建自提点/从地址库选择/开启/关闭']"
-        active-color="#13ce66"
-        inactive-color="#cacfcb">
+        active-color="#13ce66" inactive-color="#CACACF">
       </el-switch>
       <span v-permission="['设置', '上门自提', '默认页面', '新建自提点/从地址库选择/开启/关闭']">开启后，用户下单时可选择上门自提的配送方式。</span>
     </div>

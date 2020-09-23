@@ -8,8 +8,7 @@
             <el-form-item label="买家物流签收" prop="memberAutoConfirmReceive">
               <el-switch
                 v-model="memberAutoReceive"
-                active-color="#13ce66"
-                inactive-color="#cacfcb"
+                active-color="#13ce66" inactive-color="#CACACF"
                 class="item-switch1"
                 >
               </el-switch>
@@ -29,8 +28,7 @@
             <el-form-item label="卖家物流签收" prop="shopAutoConfirmReceive">
               <el-switch
                 v-model="shopAutoReceive"
-                active-color="#13ce66"
-                inactive-color="#cacfcb"
+                active-color="#13ce66" inactive-color="#CACACF"
                 class="item-switch1"
                 >
               </el-switch>
@@ -52,8 +50,7 @@
             <el-form-item label="订单完成" prop="orderAutoFinished">
               <el-switch
                 v-model="autoFinished"
-                active-color="#13ce66"
-                inactive-color="#cacfcb"
+                active-color="#13ce66" inactive-color="#CACACF"
                 class="item-switch1"
                 >
               </el-switch>

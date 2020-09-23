@@ -1,7 +1,7 @@
 <template>
     <DialogBase :visible.sync="visible" @submit="submit" title="复购商品获取积分规则" :hasCancel="hasCancel">
         <div class="c_container">
-            <div class="clearfix"><span class="fl marR20">复购商品获取积分规则</span><el-switch class="fl" v-model="enable" active-color="#66CCAC"></el-switch></div>
+            <div class="clearfix"><span class="fl marR20">复购商品获取积分规则</span><el-switch class="fl" v-model="enable" active-color="#13ce66" inactive-color="#CACACF"></el-switch></div>
             <div v-if="enable" class="giveBottom">
             <div>复购商品，订单确认收货后，除按购买商品的金额奖励的积分外，可额外获得积分</div>
             <div>

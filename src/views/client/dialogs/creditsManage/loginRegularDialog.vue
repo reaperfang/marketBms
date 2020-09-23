@@ -1,7 +1,7 @@
 <template>
     <DialogBase :visible.sync="visible" @submit="submit" title="登录获取积分规则" :hasCancel="hasCancel">
         <div class="c_container">
-            <div class="clearfix"><span class="fl marR20">登录获取积分规则</span><el-switch class="fl" v-model="enable" active-color="#66CCAC"></el-switch></div>
+            <div class="clearfix"><span class="fl marR20">登录获取积分规则</span><el-switch class="fl" v-model="enable" active-color="#13ce66" inactive-color="#CACACF"></el-switch></div>
             <div class="giveBottom" v-if="enable"> 
             <div>每天首次进入小程序或微信公众号获取积分</div>
             <div>

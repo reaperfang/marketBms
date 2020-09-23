@@ -12,25 +12,25 @@
             <p>
                 <span>姓名</span>
                 <span>
-                    <el-switch v-model="info.name" active-color="#66CCAC" @change="handleSwitch('name',info.name)"></el-switch>
+                    <el-switch v-model="info.name" active-color="#13ce66" inactive-color="#CACACF" @change="handleSwitch('name',info.name)"></el-switch>
                 </span>
             </p>
             <p>
                 <span>性别</span>
                 <span>
-                    <el-switch v-model="info.gender" active-color="#66CCAC" @change="handleSwitch('gender',info.gender)"></el-switch>
+                    <el-switch v-model="info.gender" active-color="#13ce66" inactive-color="#CACACF" @change="handleSwitch('gender',info.gender)"></el-switch>
                 </span>
             </p>
             <p>
                 <span>生日</span>
                 <span>
-                    <el-switch v-model="info.birthday" active-color="#66CCAC" @change="handleSwitch('birthday',info.birthday)"></el-switch>
+                    <el-switch v-model="info.birthday" active-color="#13ce66" inactive-color="#CACACF" @change="handleSwitch('birthday',info.birthday)"></el-switch>
                 </span>
             </p>
             <p>
                 <span>邮箱</span>
                 <span>
-                    <el-switch v-model="info.email" active-color="#66CCAC" @change="handleSwitch('email',info.email)"></el-switch>
+                    <el-switch v-model="info.email" active-color="#13ce66" inactive-color="#CACACF" @change="handleSwitch('email',info.email)"></el-switch>
                 </span>
             </p>
             <!-- <p>
