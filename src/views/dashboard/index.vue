@@ -256,7 +256,7 @@ export default {
 	.mall {
 		overflow-y: auto;
 		// min-width: 1600px;
-		min-width: 1710px;
+		min-width: 1700px;
 	}
 }
 </style>

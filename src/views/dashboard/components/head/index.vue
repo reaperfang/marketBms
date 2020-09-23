@@ -77,7 +77,7 @@ export default {
 		return {
 			shopName: JSON.parse(localStorage.getItem("shopInfos")).shopName,
 			timer: "", //定义一个定时器的变量
-			currentTime: new Date(), // 获取当前时间
+			currentTime: this.setCurrentTime(), // 获取当前时间
 			fullscreenState: false
 		};
 	},
@@ -85,20 +85,8 @@ export default {
 		//...mapState([""])
 	},
 	mounted() {
-		var _this = this; //声明一个变量指向Vue实例this，保证作用域一致
-		this.timer = setInterval(function() {
-			_this.currentTime = //修改数据date
-				new Date().getFullYear() +
-				"年" +
-				(new Date().getMonth() + 1) +
-				"月" +
-				new Date().getDate() +
-				"日 " +
-				new Date().getHours() +
-				":" +
-				new Date().getMinutes() +
-				":" +
-				new Date().getSeconds();
+		this.timer = setInterval(() => {
+			this.currentTime = this.setCurrentTime();
 		}, 1000);
 
 		window.addEventListener("keydown", e => {
@@ -126,6 +114,22 @@ export default {
 	destroyed: function() {},
 	methods: {
 		//...mapActions([""]),
+		setCurrentTime() {
+			let result = //修改数据date
+				new Date().getFullYear() +
+				"年" +
+				(new Date().getMonth() + 1) +
+				"月" +
+				new Date().getDate() +
+				"日 " +
+				new Date().getHours() +
+				":" +
+				new Date().getMinutes() +
+				":" +
+				new Date().getSeconds();
+
+			return result;
+		},
 		modifyfullscreenState() {
 			this.fullscreenState = !this.fullscreenState;
 		},
