@@ -375,7 +375,6 @@ export default {
 			window.clearInterval(this.interval);
 		},
 		setHightlight(val) {
-			alert("setHightlight");
 			this.chart.clear();
 			this.chart.setOption(this.option);
 			if (val.length == 0) {
