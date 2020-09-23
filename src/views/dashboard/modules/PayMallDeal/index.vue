@@ -128,7 +128,10 @@ export default {
 			}
 			this.chartData = val.map(res => {
 				return {
-					progress: parseInt(res.place_order_am_s.toFixed(2) * 100),
+					// progress: parseInt(res.place_order_am_s.toFixed(2) * 100),
+					progress: (res.place_order_am_s.toFixed(2) * 100).toFixed(
+						2
+					),
 					barColor: "RGBA(255, 0, 139, 1)",
 					city: res.area_name
 				};
