@@ -145,19 +145,19 @@ export default {
 			margin-top: -20px;
 		}
 
-		// .circle-45:hover {
-		// 	background: #026dff;
-		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
-		// 	// transform: scale(2.2);
+		.circle-45:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			// transform: scale(2.2);
 
-		// 	width: 100px;
-		// 	height: 100px;
-		// 	margin-left: -50px;
-		// 	margin-top: -50px;
-		// 	span {
-		// 		font-size: 18px;
-		// 	}
-		// }
+			// width: 100px;
+			// height: 100px;
+			// margin-left: -50px;
+			// margin-top: -50px;
+			// span {
+			// 	font-size: 18px;
+			// }
+		}
 
 		.circle-55 {
 			position: absolute;
@@ -175,18 +175,18 @@ export default {
 			margin-top: -20px;
 		}
 
-		// .circle-55:hover {
-		// 	background: #026dff;
-		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
-		// 	//transform: scale(1.8);
-		// 	width: 100px;
-		// 	height: 100px;
-		// 	margin-left: -45px;
-		// 	margin-top: -45px;
-		// 	span {
-		// 		font-size: 18px;
-		// 	}
-		// }
+		.circle-55:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			//transform: scale(1.8);
+			// width: 100px;
+			// height: 100px;
+			// margin-left: -45px;
+			// margin-top: -45px;
+			// span {
+			// 	font-size: 18px;
+			// }
+		}
 
 		.circle-65 {
 			position: absolute;
@@ -205,18 +205,18 @@ export default {
 			margin-top: -20px;
 		}
 
-		// .circle-65:hover {
-		// 	background: #026dff;
-		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
-		// 	//transform: scale(1.8);
-		// 	width: 100px;
-		// 	height: 100px;
-		// 	margin-left: -45px;
-		// 	margin-top: -45px;
-		// 	span {
-		// 		font-size: 18px;
-		// 	}
-		// }
+		.circle-65:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			//transform: scale(1.8);
+			// width: 100px;
+			// height: 100px;
+			// margin-left: -45px;
+			// margin-top: -45px;
+			// span {
+			// 	font-size: 18px;
+			// }
+		}
 
 		.circle-70 {
 			position: absolute;
@@ -234,18 +234,18 @@ export default {
 			margin-top: -20px;
 		}
 
-		// .circle-70:hover {
-		// 	background: #026dff;
-		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
-		// 	//transform: scale(1.8);
-		// 	width: 100px;
-		// 	height: 100px;
-		// 	margin-left: -35px;
-		// 	margin-top: -35px;
-		// 	span {
-		// 		font-size: 18px;
-		// 	}
-		// }
+		.circle-70:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			//transform: scale(1.8);
+			// width: 100px;
+			// height: 100px;
+			// margin-left: -35px;
+			// margin-top: -35px;
+			// span {
+			// 	font-size: 18px;
+			// }
+		}
 
 		.circle-90 {
 			position: absolute;
@@ -264,18 +264,18 @@ export default {
 			margin-top: -20px;
 		}
 
-		// .circle-90:hover {
-		// 	background: #026dff;
-		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
-		// 	//transform: scale(1.8);
-		// 	width: 100px;
-		// 	height: 100px;
-		// 	margin-left: -25px;
-		// 	margin-top: -25px;
-		// 	span {
-		// 		font-size: 18px;
-		// 	}
-		// }
+		.circle-90:hover {
+			background: #026dff;
+			box-shadow: 0px 0px 12px 0px #026dff inset;
+			//transform: scale(1.8);
+			// width: 100px;
+			// height: 100px;
+			// margin-left: -25px;
+			// margin-top: -25px;
+			// span {
+			// 	font-size: 18px;
+			// }
+		}
 
 		span {
 			font-size: 14px;
