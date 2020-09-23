@@ -11,8 +11,8 @@
       v-loading="loading"
       @sort-change="changeSort"
     >
-      <el-table-column type="selection" :reserve-selection="true" fixed="left"></el-table-column>
-      <el-table-column prop="memberSn" label="用户ID" fixed="left" :width="110"></el-table-column>
+      <el-table-column type="selection" :reserve-selection="true" fixed="left" width="34"></el-table-column>
+      <el-table-column prop="memberSn" label="用户ID" fixed="left" width="110" class-name="table-padding"></el-table-column>
       <el-table-column label="用户信息" :width="163">
         <template slot-scope="scope">
           <div class="clearfix icon_cont">
@@ -22,7 +22,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="phone" label="手机号" :width="150"></el-table-column>
+      <el-table-column prop="phone" label="手机号" :width="150" align="center"></el-table-column>
       <el-table-column label="身份">
         <template slot-scope="scope">
           <div class="clearfix iden_cont">
@@ -34,37 +34,37 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="余额" sortable="custom" prop="balance" :width="150">
+      <el-table-column label="余额" sortable="custom" prop="balance" :width="150" align="right">
         <template slot-scope="scope">
           ¥{{scope.row.balance || '0.00'}}
         </template>
       </el-table-column>
-      <el-table-column prop="score" label="积分" sortable="custom" :width="150"></el-table-column>
-      <el-table-column label="累计消费金额" sortable="custom" prop="totalDealMoney" :width="150">
+      <el-table-column prop="score" label="积分" sortable="custom" :width="150" align="right"></el-table-column>
+      <el-table-column label="累计消费金额" sortable="custom" prop="totalDealMoney" :width="150" align="right">
         <template slot-scope="scope">
           ¥{{scope.row.totalDealMoney || 0.00}}
         </template>
       </el-table-column>
-      <el-table-column prop="dealTimes" label="购买次数" sortable="custom" ></el-table-column>
-      <el-table-column label="客单价（元）" prop="perUnitPrice" sortable="custom" >
+      <el-table-column prop="dealTimes" label="购买次数" min-width="150" sortable="custom" align="right"></el-table-column>
+      <el-table-column label="客单价（元）" prop="perUnitPrice" sortable="custom" min-width="150" align="right">
         <template slot-scope="scope">
           ¥{{scope.row.perUnitPrice || 0.00}}
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200" fixed="right">
+      <el-table-column label="操作" width="198" fixed="right" header-align="center" class-name="table-padding">
         <template slot-scope="scope">
-          <div class="btns clearfix">
-            <span class="s1" @click="_routeTo('clientInfo',{id: scope.row.id})" v-permission="['用户', '全部用户', '默认页面', '查看详情']">详情</span>
+          <div class="btns clearfix table-operate">
+            <span class="s1 table-btn" @click="_routeTo('clientInfo',{id: scope.row.id})" v-permission="['用户', '全部用户', '默认页面', '查看详情']">详情</span>
             <!-- <span class="s2" @click="handelDelete(scope.row.id)" v-permission="['用户', '全部客户', '默认页面', '删除']">删除</span> -->
-            <span class="s2" @click="addTag(scope.row)">标签</span>
-            <span class="s3" @click="addBlackList(scope.row)" v-if="scope.row.status == 0" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">加入黑名单</span>
-            <span class="s3" @click="removeBlack(scope.row)" v-if="scope.row.status == 1" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">解除黑名单</span>
+            <span class="s2 table-btn" @click="addTag(scope.row)">标签</span>
+            <span class="s3 table-btn table-warning" @click="addBlackList(scope.row)" v-if="scope.row.status == 0" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">加入黑名单</span>
+            <span class="s3 table-btn table-warning" @click="removeBlack(scope.row)" v-if="scope.row.status == 1" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">解除黑名单</span>
           </div>
         </template>
       </el-table-column>
     </el-table>
-    <div class="a_line">
-      <el-checkbox v-model="checkAll" @change="handleChange" style="margin-right: 20px">全选</el-checkbox>
+    <div class="a_line table-select">
+      <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
       <!-- <el-button type="primary" @click="batchDelete">批量删除</el-button> -->
       <el-button class="border_btn border-button" @click="batchAddTag" v-permission="['用户', '全部用户', '默认页面', '打标签']">打标签</el-button>
       <el-button class="border_btn border-button" @click="batchAddBlack" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
@@ -308,67 +308,8 @@ export default {
 /deep/.el-date-editor .el-range-input{
   width: 41%;
 }
-/deep/ .cell {
-  .btns {
-    span {
-      display: block;
-      float: left;
-      font-size: 14px;
-      text-align: center;
-      cursor: pointer;
-      &.s1 {
-        color: #655eff;
-        padding-right: 5px;
-        border-right: 1px solid #dadae3;
-      }
-      &.s2 {
-        color: #655eff;
-        padding: 0 5px;
-        border-right: 1px solid #dadae3;
-      }
-      &.s3 {
-        padding-left: 5px;
-        color: #fd4c2b;
-      }
-    }
-  }
-}
 /deep/ .el-table .cell{
   line-height: none;
-}
-/deep/ .el-table td, /deep/ .el-table th {
-        text-align: center;
-        &:nth-child(2) {
-            text-align: left;
-        }
-        &:nth-child(3) {
-            text-align: left;
-        }
-        &:nth-child(5) {
-            text-align: left;
-        }
-        &:nth-child(6) {
-            text-align: right;
-        }
-        &:nth-child(7) {
-            text-align: right;
-        }
-        &:nth-child(8) {
-            text-align: right;
-        }
-        &:nth-child(9) {
-            text-align: right;
-        }
-        &:nth-child(10) {
-            text-align: right;
-        }
-    }
-/deep/ .el-table-column--selection .cell {
-        padding-left: 20px;
-        padding-right: 10px;
-    }
-/deep/ .el-checkbox__label{
-  padding-left: 6px;
 }
 .acTable_container{
   position: relative;
