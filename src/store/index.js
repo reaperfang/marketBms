@@ -15,6 +15,21 @@ import getters from './getters'
 import api from '@/api';
 import dashboard from "./modules/dashboard";
 
+import createLogger from "@/plugins/logger";
+import createPersistedState from "vuex-persistedstate";
+const debug = process.env.NODE_ENV !== "production";
+
+const vuexPersisted = new createPersistedState({
+  key: "myVuex",
+  storage: window.localStorage,
+  reducer: state => ({
+    // PK: {
+    //   multipleSelection: state.pk.multipleSelection,
+    //   stepData: state.pk.stepData
+    // },
+  })
+});
+
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -32,7 +47,10 @@ const store = new Vuex.Store({
     order,
     dashboard
   },
-  getters
+  getters,
+  strict: debug,
+  plugins: debug ? [createLogger(), vuexPersisted] : [vuexPersisted]
+
 });
 store._apis = api;
 
