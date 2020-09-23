@@ -105,10 +105,17 @@ export default {
 <style lang="scss" scoped>
 .panel-content-cap {
 	height: 100%;
+	display: flex;
+	justify-content: center;
 
 	.chartContent {
 		height: 100%;
 		position: relative;
+		// background: red;
+		// margin: 0 130px;
+
+		// border: 1px solid red;
+		width: 275px;
 
 		.text-mult {
 			display: block;
@@ -124,8 +131,8 @@ export default {
 
 		.circle-45 {
 			position: absolute;
-			top: 70px;
-			right: 220px;
+			top: 65px;
+			right: 85px;
 			border-radius: 50%;
 			width: 45px;
 			height: 45px;
@@ -154,8 +161,8 @@ export default {
 
 		.circle-55 {
 			position: absolute;
-			top: 45px;
-			right: 280px;
+			top: 42px;
+			right: 140px;
 			border-radius: 50%;
 			width: 55px;
 			height: 55px;
@@ -184,7 +191,7 @@ export default {
 		.circle-65 {
 			position: absolute;
 			top: 55px;
-			left: 150px;
+			right: 200px;
 			border-radius: 50%;
 			width: 65px;
 			height: 65px;
@@ -214,7 +221,7 @@ export default {
 		.circle-70 {
 			position: absolute;
 			top: 105px;
-			right: 255px;
+			right: 120px;
 			border-radius: 50%;
 			width: 70px;
 			height: 70px;
@@ -243,7 +250,7 @@ export default {
 		.circle-90 {
 			position: absolute;
 			top: 85px;
-			right: 137px;
+			right: 0px;
 			border-radius: 50%;
 			width: 90px;
 			height: 90px;
