@@ -26,7 +26,7 @@
       </el-form-item>
 
       <el-form-item label="4、客服电话:" prop="phone">
-        <el-input v-model="form.phone" placeholder="请输入手机号，不填区号" style="width:283px;"></el-input>
+        <el-input v-model="form.phone" placeholder="请输入您的客服联系电话" style="width:283px;"></el-input>
       </el-form-item>
 
       <el-form-item label="5、联系地址:" prop="sendAddress">
@@ -70,7 +70,7 @@
             validator: (rule, value, callback) => {
               const mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
               const tel = /^\d{3,4}-?\d{7,9}$/;
-              if (value !== '' && !mobile.test(value) && !tel.test(value)) return callback(new Error("请填写联系电话(座机格式'区号-座机号码')"));
+              if (value !== '' && !mobile.test(value) && !tel.test(value)) return callback(new Error("您输入的电话有误，请您重新输入"));
               else callback();
             }, trigger: "blur"
           }
