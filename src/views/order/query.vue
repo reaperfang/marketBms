@@ -226,6 +226,13 @@ export default {
               orderStatus
           })
       }
+    if(this.$route.query.isPay) {
+          let isPay = +this.$route.query.isPay
+
+          this.listQuery = Object.assign({}, this.listQuery, {
+              isPay
+          })
+      }
     /**从分销跳转过来的 */
     if(this.$route.query.orderCode){
       this.listQuery.searchValue= this.$route.query.orderCode;

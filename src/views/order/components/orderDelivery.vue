@@ -304,7 +304,7 @@ export default {
             return this.tableData.some(val => val.isAutoSend || (val.isUrge == 0))
         },
         computeWidth() {
-            if(this.tableData.some(item => item.status == 4 || (item.status == 5 && item.isFillUp) || (item.status == 3 && item.isFillUp))) {
+            if(this.tableData.some(item => item.status == 4 || (item.status == 5 && item.isFillUp) || (item.status == 5 && (item.deliveryWay == 4)) || (item.status == 3 && item.isFillUp))) {
                 return '118'
             } else {
                 return '100'
