@@ -5,17 +5,18 @@
 			:row-style="{ height: '10px' }"
 			:cell-style="{ padding: '3px 0' }"
 		>
-			<el-table-column label="用户名">
+			<el-table-column label="用户名" width="100">
 				<template slot-scope="scope">
 					<span class="time-text">{{ scope.row.c_uv_name_rt }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="时间">
+			<el-table-column label="时间" width="100">
 				<template slot-scope="scope">
 					<span class="time-text">{{ scope.row.time_rt }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column prop="op_rt" label="操作"> </el-table-column>
+			<el-table-column prop="op_rt" label="操作" width="100">
+			</el-table-column>
 			<el-table-column label="商品">
 				<template slot-scope="scope">
 					<el-tooltip
