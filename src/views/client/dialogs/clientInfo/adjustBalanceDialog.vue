@@ -64,6 +64,13 @@ export default {
 			});
 			return false;
 		}
+		if(Number(this.adjustmentAfterBalance) > 100000000) {
+			this.$message({
+				message: '调整后余额不可超过1亿',
+				type: 'warning'
+			});
+			return false
+		}
       this.btnLoading = true;
       if(this.remark == "") {
         this.btnLoading = false;

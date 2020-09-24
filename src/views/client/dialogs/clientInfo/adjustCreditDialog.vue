@@ -80,6 +80,13 @@ export default {
         });
         return;
       }
+		if(Number(this.adjustmentAfterScore) > 100000000) {
+			this.$message({
+				message: '调整后积分不可超过1亿',
+				type: 'warning'
+			});
+			return false
+		}
       if (this.remark == "") {
         this.btnLoading = false;
         this.$message({
