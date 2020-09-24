@@ -605,7 +605,7 @@ export default {
     width: 590px;
     height: 423px;
     overflow-y: auto;
-    .el-form-item--small .el-form-item__label {
+    /deep/ .el-form-item--small .el-form-item__label {
       padding-right: 0;
     }
     &::-webkit-scrollbar {

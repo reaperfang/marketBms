@@ -22,8 +22,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '物流查询', '查询']">查询</el-button>
-          <!-- <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '三方配送', '查询']">查询</el-button> -->
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '三方配送', '查询']">查询</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -32,8 +31,7 @@
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '物流对账', '物流查询', '导出']">导出</el-button>
-          <!-- <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '物流对账', '三方配送', '导出']">导出</el-button> -->
+          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '物流对账', '三方配送', '导出']">导出</el-button>
         </el-tooltip>
       </div>
       <el-table
