@@ -85,6 +85,7 @@ export default {
 				message: '调整后积分不可超过1亿',
 				type: 'warning'
 			});
+			this.btnLoading = false;
 			return false
 		}
       if (this.remark == "") {
