@@ -252,11 +252,10 @@ export default {
 	}
 }
 
-// @media screen and (max-width: 1600px) {
-// 	.mall {
-// 		overflow-y: auto;
-// 		// min-width: 1600px;
-// 		min-width: 1700px;
-// 	}
-// }
+@media screen and (max-width: 1600px) {
+	.mall {
+		overflow-y: auto;
+		min-width: 1600px;
+	}
+}
 </style>

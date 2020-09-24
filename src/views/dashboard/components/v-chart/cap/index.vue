@@ -3,27 +3,62 @@
 		<div class="chartContent empty" v-show="isEmpty">
 			<span>暂无数据</span>
 		</div>
-		<!-- <div class="chartContent" v-show="!isEmpty">
-			<div class="circle-45 circle-hover" v-show="five">
-				<span class="time-text">{{ five }}</span>
-			</div>
-			<div class="circle-55 circle-hover" v-show="fourth">
-				<span class="time-text">{{ fourth }}</span>
-			</div>
-			<div class="circle-65 circle-hover" v-show="third">
-				<span class="time-text">{{ third }}</span>
-			</div>
-			<div class="circle-70 circle-hover" v-show="sec">
-				<span class="time-text">{{ sec }}</span>
-			</div>
-
-			<div class="circle-90 circle-hover" v-show="first">
-				<span class="time-text">{{ first }}</span>
-			</div>
-		</div> -->
-
 		<div class="chartContent" v-show="!isEmpty">
-			<!-- <div
+			<div
+				class="circle-45 circle-hover"
+				v-show="five"
+				@click.prevent
+				v-tooltip.right="{
+					ref: 'tooltipRef-45',
+					class: 'tooltip-custom tooltip-other-custom'
+				}"
+			>
+				<span class="time-text">{{ five }}</span>
+				<div ref="tooltipRef-45" class="tooltip-content">
+					<span
+						style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#5f5eff"
+					></span>
+					<span style="padding:15px 0">交易排名第五</span><br />
+					<p style="padding:5px 17px;">{{ five }}</p>
+				</div>
+			</div>
+			<div
+				class="circle-55 circle-hover"
+				v-show="fourth"
+				@click.prevent
+				v-tooltip.right="{
+					ref: 'tooltipRef-55',
+					class: 'tooltip-custom tooltip-other-custom'
+				}"
+			>
+				<span class="time-text">{{ fourth }}</span>
+				<div ref="tooltipRef-55" class="tooltip-content">
+					<span
+						style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#f59f00"
+					></span>
+					<span style="padding:15px 0">交易排名第四</span><br />
+					<p style="padding:5px 17px;">{{ fourth }}</p>
+				</div>
+			</div>
+			<div
+				class="circle-65 circle-hover"
+				v-show="third"
+				@click.prevent
+				v-tooltip.right="{
+					ref: 'tooltipRef-65',
+					class: 'tooltip-custom tooltip-other-custom'
+				}"
+			>
+				<span class="time-text">{{ third }}</span>
+				<div ref="tooltipRef-65" class="tooltip-content">
+					<span
+						style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#ff5c31"
+					></span>
+					<span style="padding:15px 0">交易排名第三</span><br />
+					<p style="padding:5px 17px;">{{ third }}</p>
+				</div>
+			</div>
+			<div
 				class="circle-70 circle-hover"
 				v-show="sec"
 				@click.prevent
@@ -35,7 +70,7 @@
 				<span class="time-text">{{ sec }}</span>
 				<div ref="tooltipRef-70" class="tooltip-content">
 					<span
-						style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#026dff"
+						style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#06c9dd"
 					></span>
 					<span style="padding:15px 0">交易排名第二</span><br />
 					<p style="padding:5px 17px;">{{ sec }}</p>
@@ -59,32 +94,7 @@
 					<span style="padding:15px 0">交易排名第一</span><br />
 					<p style="padding:5px 17px;">{{ first }}</p>
 				</div>
-			</div> -->
-
-			<div
-				v-for="(item, index) in chartData"
-				:key="index"
-				class="circle-" + item.size + " circle-hover"
-				v-show="item.name"
-				@click.prevent
-				v-tooltip.right="{
-					ref: 'tooltipRef-' + item.size,
-					class: 'tooltip-custom tooltip-other-custom'
-				}"
-			>
-				<span class="time-text">{{ item.name }}</span>
-				<div :ref="'tooltipRef-' + item.size" class="tooltip-content">
-					<span
-						style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:"+item.color+""
-					></span>
-					<span style="padding:15px 0">交易排名第{{item.top}}</span><br />
-					<p style="padding:5px 17px;">{{ item.name }}</p>
-				</div>
 			</div>
-<!-- 
-			<div v-for="(item, index) in chartData" :key="index">
-				{{ item.top }}
-			</div> -->
 		</div>
 	</div>
 </template>
@@ -189,13 +199,11 @@ export default {
 				if (index == 4) {
 					this.five = item.goods_type_name;
 				}
-
 			});
 
-			
-				this.chartData=[
+			this.chartData = [
 				{
-					size: 90,
+					size: "90",
 					top: "一",
 					name: this.first,
 					color: "#026dff"
@@ -224,7 +232,9 @@ export default {
 					name: this.five,
 					color: "#5f5eff"
 				}
-			]
+			];
+
+			console.log("this.chartData ", this.chartData);
 		}
 	},
 	components: {}
