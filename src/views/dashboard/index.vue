@@ -284,24 +284,26 @@ export default {
 	*::-webkit-scrollbar {
 		/*滚动条整体样式*/
 		width: 0px; /*定义纵向滚动条宽度*/
-		height: 5px; /*定义横向滚动条高度*/
+		height: 7px; /*定义横向滚动条高度*/
 	}
 
 	*::-webkit-scrollbar-thumb {
 		/*滚动条内部滑块*/
 		border-radius: 8px;
-		background-color: #292b30;
+		background-color: #000b23;
 		transition: background-color 0.3s;
+		opacity: 0.1;
 	}
 
 	*::-webkit-scrollbar-thumb:hover {
 		/*鼠标悬停滚动条内部滑块*/
-		// background: red;
+		background: #ffffff;
+		opacity: 0.5;
 	}
 
 	*::-webkit-scrollbar-track {
 		/*滚动条内部轨道*/
-		background: yellow;
+		background: #000b23;
 	}
 }
 </style>
