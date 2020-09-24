@@ -354,7 +354,7 @@ export default {
       this.isEmpower();
       this.getIsReleaseWX();
       this.getIsReleaseGZ();
-      this.$refs.intelligentBar.getIntelligent();
+      // this.$refs.intelligentBar.getIntelligent();
     });
     this.$message.closeAll();
     this.init();
@@ -370,6 +370,11 @@ export default {
     this.isEmpower();
     this.getIsReleaseWX();
     this.getIsReleaseGZ();
+  },
+  mounted() {
+    this._globalEvent.$on("refreshProfile", () => {
+      this.$refs.intelligentBar.getIntelligent();
+    });
   },
   methods: {
     ...mapMutations(["SETCURRENT"]),
