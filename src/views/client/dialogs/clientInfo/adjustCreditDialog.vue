@@ -71,7 +71,6 @@ export default {
       this[ele] = val;
     },
     submit() {
-		this.$message.closeAll()
       this.btnLoading = true;
       if (!this.adjustmentScore) {
         this.btnLoading = false;

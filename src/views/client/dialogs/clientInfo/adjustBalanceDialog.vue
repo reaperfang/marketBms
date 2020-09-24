@@ -56,7 +56,6 @@ export default {
       this[ele] = val;
     },
     submit() {
-    	this.$message.closeAll()
 		if(!this.adjustmentBalance) {
 			this.btnLoading = false;
 			this.$message({
