@@ -129,7 +129,7 @@
       <ul class="configure-text-list" style="height: 164px;">
         <template v-for="(item, index) in configureTextArray">
             <li class="configure-text show">
-              <p class="text-base">{{item.text}}数据配置{{configureTextItemStatusType[item.status]}}</p>
+              <p class="text-base">模板内的{{item.text}}数据配置{{configureTextItemStatusType[item.status]}}</p>
               <i class="el-icon-success" v-if="item.status === 1"></i>
               <i class="el-icon-error" v-if="item.status === 2"></i>
               <i class="el-icon-success" v-if="item.status === 3"></i>
@@ -168,7 +168,10 @@
           slidesPerView: 'auto',
           navigation: {
             nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev'
+            prevEl: '.swiper-button-prev',
+            hideOnClick: true,
+            disabledClass: "my-button-disabled",
+            hiddenClass: 'my-button-hidden',
           },
           observer: true
         },
@@ -306,17 +309,21 @@
           this.timer();
           let result = await this._apis.profile.intelligentEnableTemplate({tempCid: this.tempCid});
           clearInterval(this.timerConfigure);
-          this.getConfigureStatus(function () {
-            console.log(_this.configureTextArray.length);
-            /*  0 失败 1 成功  */
-            if(result === 0) {
-              let time = 750 * _this.configureTextArray.length || 1000;
-              setTimeout(() => { _this.isConfigureFail = true; }, time)
-            }else if(result === 1){
-              /* 通知父组件 更新到下一步的视图, 不用再调用更新步骤的接口 */
-              setTimeout(() => { _this.$emit('update-step', 3) }, 750*5)
-            }
-          });
+
+          setTimeout(() => {
+            this.getConfigureStatus(function () {
+              console.log(_this.configureTextArray.length);
+              /*  0 失败 1 成功  */
+              if(result === 0) {
+                let time = 750 * _this.configureTextArray.length || 1000;
+                setTimeout(() => { _this.isConfigureFail = true; }, time)
+              }else if(result === 1){
+                /* 通知父组件 更新到下一步的视图, 不用再调用更新步骤的接口 */
+                setTimeout(() => { _this.$emit('update-step', 3) }, 750*5)
+              }
+            });
+          }, 900)
+
         }catch (e) {
           this.$message.error(e || "网络错误~");
           clearInterval(this.timerConfigure)
@@ -598,12 +605,11 @@
 
         .view_button {
           width: 95px;
-          height: 28px;
           border-radius: 14px;
           border: 1px solid #D0D6E4;
           font-size: 14px;
           color: $contentColor;
-          line-height: 28px;
+          line-height: 26px;
           box-sizing: border-box;
           cursor: pointer;
 
@@ -614,6 +620,12 @@
           &.selected {
             color: $globalMainColor;
             border-color: $globalMainColor;
+          }
+
+          &:hover {
+            color: $globalMainColor;
+            border-color: #d1cfff;
+            background-color: #f0efff;
           }
         }
       }
@@ -673,12 +685,12 @@
     /deep/ .dialog_configure {
 
       .el-dialog__body {
-        padding: 25px 25px 30px 40px;
+        padding: 0 25px 30px 40px;
       }
 
-      .el-dialog__footer {
+      /*.el-dialog__footer {
         height: 64px;
-      }
+      }*/
 
       .configure-title {
         margin-bottom: 24px;
