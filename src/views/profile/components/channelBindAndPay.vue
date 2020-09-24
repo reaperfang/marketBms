@@ -219,6 +219,7 @@ export default {
       })
     },
     submit() {
+      if (!this.isOpenPay) return false
       this.updateStep().then(() => {
         this.$message.success("保存成功！");
       }).catch(() => {

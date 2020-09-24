@@ -22,8 +22,8 @@
       </swiper-slide>
     </swiper>
     <div class="btn">
-      <el-button class="prev" @click="goPrev">上一步</el-button>
-      <el-button class="next" type="primary" :loading="loading" @click="submit()" :disabled="isDisabled">完成</el-button>
+      <el-button class="prev" @click="goPrev" :disabled="isDisabled">上一步</el-button>
+      <el-button class="next" type="primary" :loading="loading" @click="submit()">完成</el-button>
     </div>
     <div class="big_preview animated fadeInDown faster" v-if="showBigPreview">
         <div class="img_wrapper">
@@ -139,11 +139,13 @@ export default {
 
   methods: {
     goPrev() {
+      if (this.isDisabled) return false
       this.$emit('getStep', 4)
     },
     // 处理用户已完成的情况返回页面弹窗提示
     handleCompleteStatus() {
       if (this.step === 6) {
+        this.isDisabled = true
         this.confirm({
           title: "提示",
           iconSuccess: true,
