@@ -179,7 +179,7 @@ export default {
   },
   data() {
     return {
-      uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
+      uploadUrl: `${process.env.DATA_API}/web-file/file-server/api_file_remote_upload.do`,
       fileList: [],
       ruleForm: {
         id: this.$route.query.id,
