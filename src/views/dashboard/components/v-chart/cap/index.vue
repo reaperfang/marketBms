@@ -3,7 +3,7 @@
 		<div class="chartContent empty" v-show="isEmpty">
 			<span>暂无数据</span>
 		</div>
-		<div class="chartContent" v-show="!isEmpty">
+		<!-- <div class="chartContent" v-show="!isEmpty">
 			<div class="circle-45 circle-hover" v-show="five">
 				<span class="time-text">{{ five }}</span>
 			</div>
@@ -18,6 +18,30 @@
 			</div>
 
 			<div class="circle-90 circle-hover" v-show="first">
+				<span class="time-text">{{ first }}</span>
+			</div>
+		</div> -->
+
+		<div class="chartContent" v-show="!isEmpty">
+			<div class="circle-45 circle-hover" v-show="five">
+				<span class="time-text">{{ five }}</span>
+			</div>
+			<div class="circle-55 circle-hover" v-show="fourth">
+				<span class="time-text">{{ fourth }}</span>
+			</div>
+			<div class="circle-65 circle-hover" v-show="third">
+				<span class="time-text">{{ third }}</span>
+			</div>
+			<div class="circle-70 circle-hover" v-show="sec">
+				<span class="time-text">{{ sec }}</span>
+			</div>
+
+			<div
+				class="circle-90 circle-hover"
+				v-show="first"
+				@click.prevent
+				v-tooltip.right="{ content: 'offset by 30px', offset: 30 }"
+			>
 				<span class="time-text">{{ first }}</span>
 			</div>
 		</div>

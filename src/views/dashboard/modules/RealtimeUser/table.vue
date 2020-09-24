@@ -19,13 +19,22 @@
 			</el-table-column>
 			<el-table-column label="商品">
 				<template slot-scope="scope">
-					<el-tooltip
+					<!-- <el-tooltip
 						:content="scope.row.pd_rt"
 						placement="top"
 						popper-class="atooltip"
 					>
 						<span class="time-text">{{ scope.row.pd_rt }}</span>
-					</el-tooltip>
+					</el-tooltip> -->
+
+					<span
+						class="time-text"
+						v-tooltip.left="{
+							content: scope.row.pd_rt,
+							class: 'tooltip-custom tooltip-other-custom'
+						}"
+						>{{ scope.row.pd_rt }}</span
+					>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -184,4 +193,13 @@ export default {
 		font-size: 12px;
 	}
 }
+
+/* custom CSS */
+// .vue-tooltip.tooltip-custom {
+// 	background-color: red;
+// }
+
+// .vue-tooltip.tooltip-custom .tooltip-arrow {
+// 	border-color: red;
+// }
 </style>

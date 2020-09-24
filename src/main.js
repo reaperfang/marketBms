@@ -100,6 +100,10 @@ import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 
 import "./icons";
+import Tooltip from 'vue-directive-tooltip';
+import 'vue-directive-tooltip/dist/vueDirectiveTooltip.css';
+
+Vue.use(Tooltip);
 
 
 /* ***************************** 导出vue实例 ******************************/
