@@ -1,16 +1,16 @@
 <template>
   <div class="head-wrapper">
-       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="65px" :inline="true" style="overflow-y: initial;">
+       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" :inline="true" style="overflow-y: initial;">
           <div class="inline-head">
             <el-form-item label="商品状态" prop="status">
-              <el-select label="商品状态" v-model="ruleForm.status" placeholder="请选择商品状态">
+              <el-select label="商品状态" v-model="ruleForm.status" placeholder="请选择商品状态" style="width:120px;">
                 <el-option label="全部" :value="null"></el-option>
                 <el-option label="上架" :value="1"></el-option>
                 <el-option label="下架" :value="0"></el-option>
                 <el-option label="售罄" :value="-1"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="" prop="name">
+            <el-form-item label="所属分类" prop="name">
               <treeselect
                 style="width:150px"
                 :multiple="false"
@@ -20,7 +20,7 @@
                 placeholder="请选择分类"
                 v-model="seletedClassify"></treeselect>
             </el-form-item>
-            <el-form-item label="" prop="name">
+            <el-form-item label="商品名称" prop="name">
               <el-input v-model="ruleForm.name" placeholder="请输入名称" clearable style="width:120px;"></el-input>
             </el-form-item>
             <!-- <el-form-item label="" prop="id">
@@ -272,10 +272,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/ thead th{
-  background: rgba(230,228,255,1)!important;
-  color:#837DFF!important;
-}
 .inline-head{
   justify-content: flex-start!important;
 }
@@ -293,6 +289,16 @@ export default {
   }
   p{
     width: calc(100% - 50px);
+  }
+}
+/deep/ .vue-treeselect__control {
+  height: 32px;
+  border-radius: 4px;
+  .vue-treeselect__placeholder, /deep/ .vue-treeselect__single-value {
+    line-height: 30px;
+  }
+  .vue-treeselect__input {
+    display: block;
   }
 }
 </style>
