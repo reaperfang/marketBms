@@ -453,7 +453,9 @@ export default {
 
 .vue-tooltip.tooltip-custom .tooltip-arrow {
 	opacity: 0.8;
-	background-color: #333333;
+	//background-color: #333333;
+	border-right-color: #333333;
+	border-left-color: #333333;
 	// background-color: red;
 }
 
