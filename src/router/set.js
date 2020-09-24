@@ -41,7 +41,7 @@ export default [
                 path: 'address',
                 component: () => import('@/views/set/address'),
                 name: 'address',
-                meta: { title: '地址库', noCache: true, tabTitle: '通用设置' , navType:2 }
+                meta: { title: '地址管理', noCache: true, tabTitle: '通用设置' , navType:2 }
             },
             {
                 path: 'addressAdd',
@@ -180,13 +180,13 @@ export default [
                 name: 'editSelfLift',
                 hidden: true,
                 meta: { title: '编辑', noCache: true, tabTitle: '配送设置' ,navType:5},
-            }
-            // {
-            //      path: 'authorize',
-            //      component: () => import('@/views/set/authorize'),
-            //      name: 'authorize',
-            //      meta: { title: '授权管理', noCache: true, tabTitle: '综合服务', navType:2  },
-            //  }
+            },
+            {
+                 path: 'authorize',
+                 component: () => import('@/views/set/authorize'),
+                 name: 'authorize',
+                 meta: { title: '授权管理', noCache: true, tabTitle: '综合服务', navType:2  },
+             }
         ]
     }
 ]
