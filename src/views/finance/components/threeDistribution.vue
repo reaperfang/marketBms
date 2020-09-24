@@ -22,7 +22,8 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '三方配送', '查询']">查询</el-button>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '物流查询', '查询']">查询</el-button>
+          <!-- <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '三方配送', '查询']">查询</el-button> -->
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -31,7 +32,8 @@
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '物流对账', '三方配送', '导出']">导出</el-button>
+          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '物流对账', '物流查询', '导出']">导出</el-button>
+          <!-- <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '物流对账', '三方配送', '导出']">导出</el-button> -->
         </el-tooltip>
       </div>
       <el-table
@@ -39,7 +41,7 @@
         :data="dataList"
         class="table"
         :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
-        :default-sort = "{prop: 'createTime', order: 'descending'}"
+        :default-sort = "{prop: 'sendTime', order: 'descending'}"
         @sort-change="changeSort"
         >
         <el-table-column
@@ -48,12 +50,17 @@
         </el-table-column>
         <el-table-column
           prop="deliveryCompany"
-          label="配送公司">
+          label="配送公司"
+          align="center">
+          <template slot-scope="scope">
+            {{scope.row.deliveryCompany == 1 ? '达达' : ' '}}
+          </template>  
         </el-table-column>
         <el-table-column
           prop="deliveryMoney"
           label="配送费"
-          width="150px">
+          width="150px"
+          align="right">
         </el-table-column>
         <el-table-column
           prop="operator"
@@ -187,9 +194,9 @@ export default {
       if(this.total >1000){
          this.dialogVisible = true;
          this.currentData.query = this.init()
-         this.currentData.api = "finance.exportFs"
+         this.currentData.api = "finance.exportTd"
       }else{
-        this._apis.finance.exportFs(query).then((response)=>{
+        this._apis.finance.exportTd(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
          this.$message.error(error);
