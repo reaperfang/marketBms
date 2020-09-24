@@ -25,7 +25,7 @@ export default {
 		// 	this.$refs.chart.setSeriesData(result);
 		// }
 		"dashboard.highlight"(newVal, oldVal) {
-			let difference = _.difference(newOrder, oldOrder);
+			let difference = _.difference(newVal, oldVal);
 			if (difference.length == 0) {
 				return;
 			}

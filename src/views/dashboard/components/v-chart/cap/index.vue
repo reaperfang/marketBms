@@ -23,50 +23,63 @@
 		</div> -->
 
 		<div class="chartContent" v-show="!isEmpty">
-			<div class="circle-45 circle-hover" v-show="five">
-				<span class="time-text">{{ five }}</span>
-			</div>
-			<div class="circle-55 circle-hover" v-show="fourth">
-				<span class="time-text">{{ fourth }}</span>
-			</div>
-			<div class="circle-65 circle-hover" v-show="third">
-				<span class="time-text">{{ third }}</span>
-			</div>
-			<div class="circle-70 circle-hover" v-show="sec">
-				<span class="time-text">{{ sec }}</span>
-			</div>
-
 			<!-- <div
-				class="circle-90 circle-hover"
-				v-show="first"
+				class="circle-70 circle-hover"
+				v-show="sec"
 				@click.prevent
 				v-tooltip.right="{
-					content: first,
+					ref: 'tooltipRef-70',
 					class: 'tooltip-custom tooltip-other-custom'
 				}"
 			>
-				<span class="time-text">{{ first }}</span>
-			</div> -->
+				<span class="time-text">{{ sec }}</span>
+				<div ref="tooltipRef-70" class="tooltip-content">
+					<span
+						style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#026dff"
+					></span>
+					<span style="padding:15px 0">交易排名第二</span><br />
+					<p style="padding:5px 17px;">{{ sec }}</p>
+				</div>
+			</div>
 
 			<div
 				class="circle-90 circle-hover"
 				v-show="first"
 				@click.prevent
 				v-tooltip.right="{
-					ref: 'tooltipRef',
+					ref: 'tooltipRef-90',
 					class: 'tooltip-custom tooltip-other-custom'
 				}"
 			>
 				<span class="time-text">{{ first }}</span>
-			</div>
+				<div ref="tooltipRef-90" class="tooltip-content">
+					<span
+						style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#026dff"
+					></span>
+					<span style="padding:15px 0">交易排名第一</span><br />
+					<p style="padding:5px 17px;">{{ first }}</p>
+				</div>
+			</div> -->
 
-			<div ref="tooltipRef" class="tooltip-content">
-				<span
-					style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#026dff"
-				></span>
-				<span style="padding:15px 0">交易排名第一</span><br />
-				<p style="padding:5px 17px;">{{ first }}</p>
-			</div>
+			<!-- <div
+				v-for="(item, index) in chartData"
+				:class="'circle-' + item.size + ' circle-hover'"
+				v-show="item.name"
+				@click.prevent
+				v-tooltip.right="{
+					ref: 'tooltipRef-' + item.size,
+					class: 'tooltip-custom tooltip-other-custom'
+				}"
+			>
+				<span class="time-text">{{ item.name }}</span>
+				<div :ref="'tooltipRef-' + item.size" class="tooltip-content">
+					<span
+						style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:"+item.color+""
+					></span>
+					<span style="padding:15px 0">交易排名第{{item.top}}</span><br />
+					<p style="padding:5px 17px;">{{ item.name }}</p>
+				</div>
+			</div> -->
 		</div>
 	</div>
 </template>
@@ -87,7 +100,38 @@ export default {
 	},
 	data() {
 		return {
-			chartData: "71.23",
+			chartData: [
+				{
+					size: 90,
+					top: "一",
+					name: this.first,
+					color: "#026dff"
+				},
+				{
+					size: 70,
+					top: "二",
+					name: this.sec,
+					color: "#06c9dd"
+				},
+				{
+					size: 65,
+					top: "三",
+					name: this.third,
+					color: "#ff5c31"
+				},
+				{
+					size: 55,
+					top: "四",
+					name: this.fourth,
+					color: "#f59f00"
+				},
+				{
+					size: 45,
+					top: "五",
+					name: this.five,
+					color: "#5f5eff"
+				}
+			],
 			chart: "",
 			first: "",
 			sec: "",
@@ -190,19 +234,19 @@ export default {
 			margin-top: -20px;
 		}
 
-		.circle-45:hover {
-			background: #026dff;
-			box-shadow: 0px 0px 12px 0px #026dff inset;
-			// transform: scale(2.2);
+		// .circle-45:hover {
+		// 	background: #026dff;
+		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
+		// 	transform: scale(2.2);
 
-			// width: 100px;
-			// height: 100px;
-			// margin-left: -50px;
-			// margin-top: -50px;
-			// span {
-			// 	font-size: 18px;
-			// }
-		}
+		// 	width: 100px;
+		// 	height: 100px;
+		// 	margin-left: -50px;
+		// 	margin-top: -50px;
+		// 	span {
+		// 		font-size: 18px;
+		// 	}
+		// }
 
 		.circle-55 {
 			position: absolute;
@@ -220,18 +264,18 @@ export default {
 			margin-top: -20px;
 		}
 
-		.circle-55:hover {
-			background: #026dff;
-			box-shadow: 0px 0px 12px 0px #026dff inset;
-			//transform: scale(1.8);
-			// width: 100px;
-			// height: 100px;
-			// margin-left: -45px;
-			// margin-top: -45px;
-			// span {
-			// 	font-size: 18px;
-			// }
-		}
+		// .circle-55:hover {
+		// 	background: #026dff;
+		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
+		// 	transform: scale(1.8);
+		// 	width: 100px;
+		// 	height: 100px;
+		// 	margin-left: -45px;
+		// 	margin-top: -45px;
+		// 	span {
+		// 		font-size: 18px;
+		// 	}
+		// }
 
 		.circle-65 {
 			position: absolute;
@@ -250,18 +294,18 @@ export default {
 			margin-top: -20px;
 		}
 
-		.circle-65:hover {
-			background: #026dff;
-			box-shadow: 0px 0px 12px 0px #026dff inset;
-			//transform: scale(1.8);
-			// width: 100px;
-			// height: 100px;
-			// margin-left: -45px;
-			// margin-top: -45px;
-			// span {
-			// 	font-size: 18px;
-			// }
-		}
+		// .circle-65:hover {
+		// 	background: #026dff;
+		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
+		// 	transform: scale(1.8);
+		// 	width: 100px;
+		// 	height: 100px;
+		// 	margin-left: -45px;
+		// 	margin-top: -45px;
+		// 	span {
+		// 		font-size: 18px;
+		// 	}
+		// }
 
 		.circle-70 {
 			position: absolute;
@@ -279,18 +323,18 @@ export default {
 			margin-top: -20px;
 		}
 
-		.circle-70:hover {
-			background: #026dff;
-			box-shadow: 0px 0px 12px 0px #026dff inset;
-			//transform: scale(1.8);
-			// width: 100px;
-			// height: 100px;
-			// margin-left: -35px;
-			// margin-top: -35px;
-			// span {
-			// 	font-size: 18px;
-			// }
-		}
+		// .circle-70:hover {
+		// 	background: #026dff;
+		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
+		// 	transform: scale(1.8);
+		// 	width: 100px;
+		// 	height: 100px;
+		// 	margin-left: -35px;
+		// 	margin-top: -35px;
+		// 	span {
+		// 		font-size: 18px;
+		// 	}
+		// }
 
 		.circle-90 {
 			position: absolute;
@@ -309,18 +353,18 @@ export default {
 			margin-top: -20px;
 		}
 
-		.circle-90:hover {
-			background: #026dff;
-			box-shadow: 0px 0px 12px 0px #026dff inset;
-			//transform: scale(1.8);
-			// width: 100px;
-			// height: 100px;
-			// margin-left: -25px;
-			// margin-top: -25px;
-			// span {
-			// 	font-size: 18px;
-			// }
-		}
+		// .circle-90:hover {
+		// 	background: #026dff;
+		// 	box-shadow: 0px 0px 12px 0px #026dff inset;
+		// 	transform: scale(1.8);
+		// 	width: 100px;
+		// 	height: 100px;
+		// 	margin-left: -25px;
+		// 	margin-top: -25px;
+		// 	span {
+		// 		font-size: 18px;
+		// 	}
+		// }
 
 		span {
 			font-size: 14px;
