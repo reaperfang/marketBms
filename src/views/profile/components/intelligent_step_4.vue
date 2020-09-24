@@ -307,4 +307,25 @@
     }
   }
 
+  /deep/ .el-button--default:focus {
+    background: #FFF;
+    border: 1px solid #DCDFE6;
+    color: $contentColor;
+  }
+
+  /deep/ .el-button--default:hover {
+    background: #FFF;
+    border-color: $globalMainColor;
+    color: $globalMainColor;
+  }
+  
+  /deep/ .el-button--primary:focus {
+    background-color: $globalMainColor;
+    border-color: $globalMainColor;
+  }
+  
+  /deep/ .el-button--primary:hover {
+    background-color: #847eff;
+    border-color: #847eff;
+  }
 </style>
