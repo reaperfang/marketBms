@@ -11,8 +11,8 @@
 			/>
 		</div>
 		<div class="end">
-			<span>{{ sexData && sexData.female }}%</span>
 			<span>{{ sexData && sexData.gender }}%</span>
+			<span>{{ sexData && sexData.female }}%</span>
 		</div>
 	</div>
 </template>
