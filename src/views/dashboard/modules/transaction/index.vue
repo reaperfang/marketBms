@@ -43,6 +43,7 @@
 import gridtitle from "../..//components/title/index";
 import vhistogram from "../../components/v-chart/histogram/index";
 import { mapGetters, mapActions, mapState } from "vuex";
+import { toDecimal } from "@/utils/util";
 
 export default {
 	watch: {
@@ -98,7 +99,8 @@ export default {
 			right: {
 				columns: ["日期", "客单价"],
 				rows: []
-			}
+			},
+			toDecimal: toDecimal
 		};
 	},
 	computed: {
@@ -161,7 +163,7 @@ export default {
 			for (var j = 0; j < y.length; j++) {
 				result.push({
 					日期: x[j],
-					客单价: parseFloat(y[j])
+					客单价: this.toDecimal(parseFloat(y[j]))
 				});
 			}
 
