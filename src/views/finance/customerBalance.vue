@@ -53,12 +53,13 @@
         <el-table-column
           prop="tradeDetailSn"
           label="交易流水号"
-          width="210px"
-          fixed>
+          fixed="left" class-name="table-padding"
+          width="210px">
         </el-table-column>
         <el-table-column
           prop="relationSn"
           label="关联单据编号"
+          align="center"
           :render-header="renderRelationSn"
           width="230px">
         </el-table-column>
@@ -71,14 +72,12 @@
         <el-table-column
           prop="nickName"
           label="用户昵称"
-          align="center"
-          width="100px">
+          align="center">
         </el-table-column>
         <el-table-column
           prop="businessType"
           label="交易类型"
-          align="center"
-          width="100px">
+          align="center">
           <template slot-scope="scope">
             {{transactionTypes[scope.row.businessType].label}}
           </template>
@@ -103,6 +102,7 @@
           label="交易时间"
           sortable = "custom"
           align="center"
+          class-name="table-padding"
           width="190px"
           fixed="right">
         </el-table-column>
@@ -170,7 +170,7 @@ export default {
   methods: {
     renderRelationSn(){
       return(
-        <div style="height:49px;line-height:49px;">
+        <p>
           <span style="font-weight:bold;vertical-align:middle;">关联单据编号</span>
           <el-popover
             placement="top-start"
@@ -180,7 +180,7 @@ export default {
             content="订单编号、售后单编号、提现编号">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
-        </div>
+        </p>
       )
     },
     init(){
@@ -296,11 +296,5 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
-}
-/deep/ .el-table--small td{
-  padding:16px 10px;
-}
-/deep/.el-table--small th{
-  padding:0px 10px;
 }
 </style>

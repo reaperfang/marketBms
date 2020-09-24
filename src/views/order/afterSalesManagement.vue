@@ -70,31 +70,37 @@
                 :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     type="selection"
-                    width="55">
+                    width="34">
                 </el-table-column>
                 <el-table-column
                     prop="code"
                     label="售后单编号"
+                    fixed="left"
+                    class-name="table-padding"
                     width="200">
                 </el-table-column>
                 <el-table-column
                     prop="type"
+                    align="center"
                     label="售后类型">
                     <template slot-scope="scope">
-                        <span>{{scope.row.type | typeFilter}}</span>
+                        <span>{{scope.row.type | orderAfterSaleType}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                     prop="orderCode"
                     label="订单编号"
+                    align="center"
                     width="200">
                 </el-table-column>
                 <el-table-column
                     prop="memberName"
+                    align="center"
                     label="用户昵称">
                 </el-table-column>
                 <el-table-column
                     prop="orderAfterSaleStatus"
+                    align="center"
                     label="状态">
                     <template slot-scope="scope">
                         <span>{{scope.row.orderAfterSaleStatus | orderAfterSaleStatusFilter}}</span>
@@ -103,23 +109,24 @@
                 <el-table-column
                     prop="createTime"
                     label="申请时间"
-                    width="162">
+                    align="center"
+                    width="160">
                 </el-table-column>
-                <el-table-column label="操作" :width="computeWidth" fixed="right">
+                <el-table-column label="操作" :width="operationColumnW" fixed="right" align="left" header-align="center" class-name="table-padding">
                     <template slot-scope="scope">
-                        <div class="operate-box">
-                            <span v-permission="['订单', '售后管理', '默认页', '查看']" class="blue pointer" @click="$router.push(`/order/afterSalesDetails?id=${scope.row.id}&afterSale=true`)">查看</span>
-                            <span v-permission="['订单', '售后管理', '默认页', '同意']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateStatus(scope.row)">同意</span>
-                            <span v-permission="['订单', '售后管理', '默认页', '拒绝']" class="blue pointer" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateRejectStatus(scope.row)">拒绝</span>
-                            <span v-permission="['订单', '售后管理', '默认页', '查看物流']" class="blue pointer" @click="showLogistics(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 3 && scope.row.exchangeConfirmation == 1 && scope.row.deliveryWay == 1">查看物流</span>
-                            <span v-show="!authHide" v-permission="['订单', '售后管理', '默认页', '确认收货']" class="blue pointer" @click="confirmReceived(scope.row)" v-if="scope.row.exchangeConfirmation ==1  &&  (scope.row.isSellerReceived == 0)">确认收货</span><!-- scope.row.orderAfterSaleStatus == 2 && !scope.row.isSellerReceived && scope.row.type != 3 && scope.row.exchangeConfirmation == 1 -->
-                            <span v-permission="['订单', '售后管理', '默认页', '退款']" class="blue pointer" @click="drawback(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 2">退款</span>
-                            <span v-show="!authHide" class="blue pointer" @click="$router.push(`/order/orderAfterDeliverGoods?id=${scope.row.id}&afterSale=true`)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type == 2">发货</span>
+                        <div class="operate-box table-operate">
+                            <span v-permission="['订单', '售后管理', '默认页', '查看']" class="table-btn" @click="$router.push(`/order/afterSalesDetails?id=${scope.row.id}&afterSale=true`)">查看</span>
+                            <span v-permission="['订单', '售后管理', '默认页', '同意']" class="table-btn" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateStatus(scope.row)">同意</span>
+                            <span v-permission="['订单', '售后管理', '默认页', '拒绝']" class="table-btn" v-if="scope.row.orderAfterSaleStatus == 0" @click="updateRejectStatus(scope.row)">拒绝</span>
+                            <span v-permission="['订单', '售后管理', '默认页', '查看物流']" class="table-btn" @click="showLogistics(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 3 && scope.row.exchangeConfirmation == 1 && scope.row.deliveryWay == 1">查看物流</span>
+                            <span v-show="!authHide" v-permission="['订单', '售后管理', '默认页', '确认收货']" class="table-btn" @click="confirmReceived(scope.row)" v-if="scope.row.exchangeConfirmation ==1  &&  (scope.row.isSellerReceived == 0)">确认收货</span><!-- scope.row.orderAfterSaleStatus == 2 && !scope.row.isSellerReceived && scope.row.type != 3 && scope.row.exchangeConfirmation == 1 -->
+                            <span v-permission="['订单', '售后管理', '默认页', '退款']" class="table-btn" @click="drawback(scope.row)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type != 2">退款</span>
+                            <span v-show="!authHide" class="table-btn" @click="$router.push(`/order/orderAfterDeliverGoods?id=${scope.row.id}&afterSale=true`)" v-if="scope.row.orderAfterSaleStatus == 2 && scope.row.type == 2">发货</span>
                         </div>
                     </template>
                 </el-table-column>
             </el-table>
-            <div v-show="!loading" class="footer">
+            <div v-show="!loading" class="footer table-select">
                 <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
                 <el-button v-permission="['订单', '售后管理', '默认页', '批量审核']" class="border-button" @click="batchUpdateStatus">批量审核</el-button>
             </div>
@@ -137,9 +144,10 @@ import ExchangeGoodsDialog from '@/views/order/dialogs/exchangeGoodsDialog'
 import LogisticsDialog from '@/views/order/dialogs/logisticsDialog'
 import utils from "@/utils";
 import anotherAuth from '@/mixins/anotherAuth'
+import { afterSalesManagementMethods } from '@/views/order/mixins/afterSalesManagementMixin'
 
 export default {
-    mixins: [anotherAuth],
+    mixins: [anotherAuth, afterSalesManagementMethods],
     data() {
         return {
             orderNumberTypeList: [
@@ -202,7 +210,7 @@ export default {
             isIndeterminate: false,
             expressCompanys: '',
             expressNo: '',
-            updateStatusDisabled: false
+            operationColumnW: 72 //操作列宽度
         }
     },
     created() {
@@ -211,50 +219,14 @@ export default {
         }
         this.getList()
     },
-    computed: {
-        computeWidth() {
-            if(this.tableData.some(item => item.orderAfterSaleStatus == 2 && item.type != 3 && item.exchangeConfirmation == 1 && item.deliveryWay == 1 && (item.exchangeConfirmation ==1  &&  (item.isSellerReceived == 0)) && item.orderAfterSaleStatus == 2)) {
-                return '232'
-            } else if(this.tableData.some(item => item.exchangeConfirmation ==1  &&  (item.isSellerReceived == 0))){
-                return '130'
-            } else if(this.tableData.some(item => item.orderAfterSaleStatus == 2 && item.type != 3 && item.exchangeConfirmation == 1 && item.deliveryWay == 1 && item.orderAfterSaleStatus == 2 && item.type != 2)) {
-                return '155'
-            } else if(this.tableData.some(item => item.orderAfterSaleStatus == 0 || item.orderAfterSaleStatus == 2)){
-                return '130'
-            } else {
-                return '60'
-            }
-        }
-    },
-    filters: {
-        typeFilter(code) {
-            if(code == 1) {
-                return '退货退款'
-            } else if(code == 2) {
-                return '换货'
-            } else if(code == 3) {
-                return '仅退款'
-            }
-        },
-        orderAfterSaleStatusFilter(code) {
-            if(code == 0) {
-                return '待审核'
-            } else if(code == 1) {
-                return '待退货 '
-            } else if(code == 2) {
-                return '待处理'
-            }
-             else if(code == 3) {
-                return '待收货'
-            }
-             else if(code == 4) {
-                return '已完成'
-            }
-             else if(code == 5) {
-                return '已关闭'
-            } else if(code == 6 || code == 7) {
-                return '待处理'
-            }
+    watch: {
+        'tableData': {
+            handler(newVal, oldVal) { //计算操作栏宽度
+                this.$nextTick(() => {
+                    this.operationColumnW = this.utils.getOperationColumnW();
+                })
+            },
+            deep: true
         }
     },
     methods: {
@@ -275,17 +247,6 @@ export default {
             }
             this.isIndeterminate = true;
         },
-        confirmReceived(row) {
-            this._apis.order.orderConfirmReceived({id: row.id, isSellerReceived: 1}).then(res => {
-                //this.$message.success('确认收货成功');
-                this.confirm({title: '提示', iconSuccess: true, text: '确认收货成功', showCancelButton: false, confirmText: '我知道了'}).then(() => {
-                    
-                })
-                this.getList()
-            }).catch(error => {
-                this.$message.error(error);
-            }) 
-        },
         showLogistics(row) {
             this.expressNo = row.returnExpressNo
             this.expressCompanys = row.returnExpressName
@@ -296,18 +257,6 @@ export default {
             }).catch(error => {
                 this.$message.error(error);
             }) 
-        },
-        drawback(row) {
-            this._apis.order.orderAfterSaleDrawback({id: row.id, memberInfoId: row.memberInfoId}).then((res) => {
-                console.log(res)
-                this.$message.success('已发起退款，系统处理中。');
-                this.getList()
-            }).catch(error => {
-                this.$message.error(error);
-            }) 
-            // this.confirm({title: '提示', text: '微信账户余额不足，无法退款。'}).then(() => {
-                
-            // })
         },
         exportOrder() {
             var _param
@@ -387,49 +336,6 @@ export default {
                     console.log(res)
                     this.getList()
                     this.$message.success('拒绝审核成功！');
-                }).catch(error => {
-                    this.$message.error(error);
-                })
-            }
-        },
-        updateRejectStatus(row) {
-            this.currentDialog = 'RejectDialog'
-            this.currentData = row
-            this.title = '拒绝审核'
-            this.dialogVisible = true
-        },
-        rejectHandler(value) {
-            this._apis.order.orderAfterSaleUpdateStatus({id: this.currentData.id, orderAfterSaleStatus: 5, refuseReason: value}).then((res) => {
-                this.getList()
-                this.$message.success('拒绝审核成功！');
-            }).catch(error => {
-                this.$message.error(error);
-            })
-        },
-        updateStatus(row) {
-            if(!this.updateStatusDisabled) {
-                this.updateStatusDisabled = true
-
-                let _orderAfterSaleStatus
-
-                if(row.type == 3) {
-                    _orderAfterSaleStatus = 2
-                } else {
-                    _orderAfterSaleStatus = 1
-                }
-                if(row.type == 2) {
-                    let _row = JSON.parse(JSON.stringify(row))
-
-                    this.currentDialog = 'ExchangeGoodsDialog'
-                    this.currentData = _row;
-                    this.currentData.orderAfterSaleStatus = _orderAfterSaleStatus;
-                    this.dialogVisible = true
-                    return
-                }
-                this._apis.order.orderAfterSaleUpdateStatus({id: row.id, orderAfterSaleStatus: _orderAfterSaleStatus}).then((res) => {
-                    this.getList();
-                    this.$message.success('审核成功！');
-                    this.updateStatusDisabled = true
                 }).catch(error => {
                     this.$message.error(error);
                 })
@@ -540,7 +446,6 @@ export default {
         }
         .footer {
             padding: 20px 20px 10px 20px;
-            padding-left: 10px;
         }
     }
 }
@@ -559,12 +464,6 @@ export default {
 /deep/ input:-ms-input-placeholder{
   color:#92929B;
 }
-/deep/ .el-table td, /deep/ .el-table th {
-    text-align: center;
-    &:nth-child(2) {
-        text-align: left;
-    }
-}
 /deep/ .el-table tr th {
     border-bottom: none;
 }
@@ -579,10 +478,6 @@ export default {
         }
     }
 }
-/deep/ .el-table-column--selection .cell {
-    padding-left: 20px;
-    padding-right: 10px;
-}
 .border-button {
     border:1px solid rgba(218,218,227,1)!important;
     color: #44434B!important;
@@ -592,22 +487,9 @@ export default {
         background-color: #fff;
     }
 }
-/deep/ .el-table .cell {
-    padding-left: 0;
-    padding-right: 10px;
-}
 /deep/ .input-with-select .el-input-group__prepend {
     background-color: #fff;
 }
-/deep/.el-table td:nth-child(1){
-         padding-left:20px;
-         .cell {
-            text-overflow: clip;
-         }
-     }
-     /deep/ .el-table--small td, /deep/  .el-table--small th {
-        padding: 16px 0;
-    }
 </style>
 
 

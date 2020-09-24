@@ -4,7 +4,7 @@
       <div class="c_container">
         <div class="clearfix">
           <span class="fl marR20 marB20">购买商品获取积分规则</span>
-          <el-switch class="fl" v-model="enable" active-color="#66CCAC"></el-switch>
+          <el-switch class="fl" v-model="enable" active-color="#13ce66" inactive-color="#CACACF"></el-switch>
         </div>
         <div v-if="enable" class="giveBottom">
           <div>购买获得积分，订单售后结束后按规则发放积分</div>

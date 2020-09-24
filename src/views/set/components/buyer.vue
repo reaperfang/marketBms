@@ -94,8 +94,7 @@
           v-if="!!scope.row.smsTemplateKey"
           v-model="scope.row.msgSms"
           @change="switchMessage3(scope.row.id,scope.row.msgSms)"
-          active-color="#13ce66"
-          inactive-color="#eee"
+          active-color="#13ce66" inactive-color="#CACACF"
           v-permission="['设置', '消息设置', '默认页面', '开启/关闭']">
           </el-switch>
           <el-tooltip

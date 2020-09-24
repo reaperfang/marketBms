@@ -1,6 +1,6 @@
 /* 会员分析列表 */
 <template>
-    <div class="m_container">
+    <div class="m_container mh bor-radius">
         <div class="chennelDetailHead">
             <p style="font-size: 16px">渠道转化订单具体信息：</p>
             <el-button class="yellow_btn" icon="el-icon-share" @click="exportExl">导出到Excel</el-button>
@@ -13,9 +13,9 @@
             v-loading="loading"
         >
             <el-table-column
-                width="180"
+                width="80"
                 type="index"
-                align="center"
+                fixed="left" class-name="table-padding"
                 label="排序">
             </el-table-column>
             <el-table-column
@@ -48,6 +48,9 @@
             <el-table-column
                 label="订单支付时间"
                 align="center"
+                fixed="right" class-name="table-padding"
+                width="160"
+
             >
                 <template slot-scope="scope">
                     <span>{{Number(scope.row.bookOrderTime) | time}}</span>
@@ -166,16 +169,7 @@ export default {
 .m_container{
     background-color: #fff;
     padding: 10px 20px;
-    height:100%;
 }
-/deep/ .cell{
-            .btns{
-                span{
-                    color: #655EFF;
-                    margin-right: 5px;
-                }
-            }
-        }
 .chennelDetailHead{
     padding: 20px;
     display: flex;

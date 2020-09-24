@@ -16,29 +16,31 @@
     <div class="table" v-calcMinHeight="313">
       <p>微页面分类（共{{total || 0}}个）</p>
       <el-table :data="tableData" stripe v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
-        <el-table-column prop="name" label="分类名称">
+        <el-table-column prop="name" label="分类名称" min-width="150" fixed="left" class-name="table-padding">
            <template slot-scope="scope">
             <span class="page_name" @click="_routeTo('m_decorateClassifyPreview', {pageId: scope.row.id})">{{scope.row.name}} </span>
           </template>
         </el-table-column>
-        <el-table-column prop="pageNum" label="页面数量"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
-        <el-table-column prop="updateTime" sortable="custom" label="最后编辑时间"></el-table-column>
-        <el-table-column prop="updateUserName" label="操作账号"></el-table-column>
-        <el-table-column prop="" label="操作" :width="'300px'" fixed="right">
+        <el-table-column prop="pageNum" label="页面数量" align="right"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" align="center" min-width="160"></el-table-column>
+        <el-table-column prop="updateTime" sortable="custom" label="最后编辑时间" align="center" min-width="160"></el-table-column>
+        <el-table-column prop="updateUserName" label="操作账号" align="center"></el-table-column>
+        <el-table-column prop="" label="操作" width="156" fixed="right" align="left" header-align="center" class-name="table-padding">
           <template slot-scope="scope">
-            <span class="table-btn" @click="_routeTo('m_classifyEditor', {pageId: scope.row.id})">编辑</span>
-            <span class="table-btn" @click="deleteClassify(scope.row)">删除</span>
-            <el-popover
-              placement="right"
-              width="400"
-              trigger="click">
-              <div style="display:flex;">
-                <el-input :value="getPageLink(scope.row)" style="margin-right:10px"></el-input>
-                <el-button type="primary" v-clipboard:copy="getPageLink(scope.row)" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
-              </div>
-              <span class="table-btn" slot="reference" @click="link(scope.row)">链接</span>
-            </el-popover>
+            <div class="table-operate">
+              <span class="table-btn" @click="_routeTo('m_classifyEditor', {pageId: scope.row.id})">编辑</span>
+              <span class="table-btn table-warning" @click="deleteClassify(scope.row)">删除</span>
+              <el-popover
+                placement="right"
+                width="400"
+                trigger="click">
+                <div style="display:flex;">
+                  <el-input :value="getPageLink(scope.row)" style="margin-right:10px"></el-input>
+                  <el-button type="primary" v-clipboard:copy="getPageLink(scope.row)" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</el-button>
+                </div>
+                <span class="table-btn" slot="reference" @click="link(scope.row)">链接</span>
+              </el-popover>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -168,19 +170,6 @@ export default {
 /deep/ thead th{
   background: #f6f7fa!important;
   color:#44434B!important;
-}
-/deep/ .el-table td, /deep/ .el-table th {
-  text-align: center;
-  &:nth-child(1) {
-      text-align: left;
-      padding-left: 10px;
-  }
-}
-/deep/ .el-table td{
-  &:nth-child(2) {
-    text-align: right;
-    padding-right: 94px;
-  }
 }
 .table-btn{
   padding-right: 5px;

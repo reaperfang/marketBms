@@ -16,6 +16,8 @@
           prop="address"
           label="地址"
           min-width="300"
+          fixed="left" 
+          class-name="table-padding"
           align="left">
           <template slot-scope="scope">
             {{scope.row.address}} {{scope.row.addressDetail}}
@@ -31,13 +33,13 @@
           prop='mobile'
           label="联系电话"
           align="center"
-          width="200">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="type"
           label="地址类型"
           align="center"
-          width="200">
+          min-width="200">
           <template slot-scope="scope">
             {{ getAddressTypeTxt(scope.row) }}
           </template>
@@ -46,18 +48,18 @@
           prop="updateTime"
           label="编辑时间"
           align="center"
-          width="200">
+          width="160">
         </el-table-column>
         <el-table-column
           label="操作"
-          align="center"
           fixed="right"
-          width="150">
+          header-align="center"
+          class-name="table-padding"
+          width="117">
           <template slot-scope="scope">
-            <div class="opeater">
-              <el-button class="btn" @click="goAddressEdit(scope.row.id)" type="text"  v-permission="['设置','地址库', '默认页面', '编辑']">编辑</el-button>
-              <span>|</span>
-              <el-button class="btn" v-permission="['设置','地址库', '默认页面', '删除']" :class="[getDefaultAddress(scope.row) ? 'disabled' : '']" @click="delAddress(scope.row)" type="text">删除</el-button>
+            <div class="opeater table-operate">
+              <span class="table-btn" @click="goAddressEdit(scope.row.id)" v-permission="['设置','地址库', '默认页面', '编辑']">编辑</span>
+              <span class="table-btn table-warning" v-permission="['设置','地址库', '默认页面', '删除']" :class="[getDefaultAddress(scope.row) ? 'disabled' : '']" @click="delAddress(scope.row)">删除</span>
             </div>
           </template>
         </el-table-column>
@@ -485,29 +487,9 @@ export default {
       }
     }
     .table {
-      /deep/ th.is-leaf {
-        border:0;
-      }
-      /deep/ th>.cell {
-        line-height: 30px;
-      }
       .opeater {
-        display: flex;
-        line-height:20px;
-        font-size:14px;
-        justify-content: center;
-        span {
-          width: 1px;
-          line-height: 20px;
-          padding: 0 5px;
-          color: #DADAE3;
-          padding: 9px 15px;
-        }
-        .btn {
-          color:rgba(101,94,255,1);
-        }
         .disabled {
-          color:rgba(101, 94, 255, .5)
+          color:rgba(101, 94, 255, .5) !important;
         }
       }
     }

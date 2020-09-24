@@ -40,11 +40,14 @@
           prop="accountDate"
           label="日期"
           align="left"
+          min-width="160"
+          fixed="left" class-name="table-padding"
           sortable = "custom">
         </el-table-column>
         <el-table-column
           prop="income"
           label="总收入（元）"
+          min-width="170"
           align="right">
           <template slot-scope="scope">
             {{scope.row.income}}
@@ -53,6 +56,7 @@
         <el-table-column
           prop="expend"
           label="总支出（元）"
+          min-width="170"
           align="right">
           <template slot-scope="scope">
             {{scope.row.expend}}
@@ -61,6 +65,8 @@
         <el-table-column
           prop="realIncome"
           label="实际收入（元）"
+          min-width="170"
+          fixed="right" class-name="table-padding"
           align="right">
         </el-table-column>
       </el-table>

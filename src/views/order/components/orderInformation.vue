@@ -205,7 +205,9 @@
                 :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     label="商品"
-                    width="380">
+                    fixed="left"
+                    class-name="table-padding"
+                    width="350">
                     <template slot-scope="scope">
                         <div class="goods-detail">
                             <div class="item image-box">
@@ -221,27 +223,33 @@
                 <el-table-column
                     prop="goodsUnit"
                     label="单位"
+                    align="center"
                     width="180">
                 </el-table-column>
                 <el-table-column
                     prop="goodsCount"
+                    align="right"
                     label="数量">
                 </el-table-column>
                 <el-table-column
                     prop="productCode"
+                    align="center"
                     label="SPU编码">
                 </el-table-column>
                 <el-table-column
                     prop="code"
+                    align="center"
                     label="SKU编码">
                 </el-table-column>
                 <el-table-column
+                    align="right"
                     label="商品单价">
                     <template slot-scope="scope">
                         ¥{{scope.row.salePrice}}
                     </template>
                 </el-table-column>
                 <el-table-column
+                    align="right"
                     label="商品小计">
                     <template slot-scope="scope">
                         ¥{{(+scope.row.salePrice * scope.row.goodsCount).toFixed(2)}}
@@ -249,7 +257,10 @@
                 </el-table-column>
                 <el-table-column
                     label="商品状态"
-                    class-name="goods-status">
+                    align="center"
+                    fixed="right"
+                    width="150"
+                    class-name="goods-status table-padding">
                     <template slot-scope="scope">
                         <template v-if="scope.row.afterSaleStatus && scope.row.afterSaleStatus != 0">
                             <router-link :to="{ path: '/order/afterSalesDetails', query: { id: scope.row.orderAfterSaleId }}">{{scope.row | orderStatusFilter}}</router-link>
@@ -1075,18 +1086,6 @@ export default {
 }
 .nowrap {
     white-space: nowrap;
-}
-/deep/ .el-table td, /deep/ .el-table th {
-    text-align: center;
-    &:nth-child(1) {
-        text-align: left;
-    }
-}
-/deep/ .el-table .cell {
-    text-align: center;
-    &:first-child {
-        text-align: left;
-    }
 }
 </style>
 

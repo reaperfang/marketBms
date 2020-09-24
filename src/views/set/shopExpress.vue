@@ -1,13 +1,12 @@
 <template>
   <div class="shopExpress mh bor-radius">
     <el-tabs v-model="currentTab" @tab-click="handleClick" class="tabs">
-      <el-tab-pane name="merchantDeliver" >
-        <span slot="label" v-permission="['设置','同城配送','商家配送']">商家配送</span>
-        <component v-if="currentTab === 'merchantDeliver'" v-permission="['设置','同城配送','商家配送']" :is="currentTab"></component>
-      </el-tab-pane>
-      <el-tab-pane name="th3Deliver">
-        <span slot="label" v-permission="['设置','同城配送','第三方配送']">第三方配送</span>
-        <component v-if="currentTab === 'th3Deliver'" v-permission="['设置','同城配送','第三方配送']" :is="currentTab"></component>
+      <el-tab-pane
+        v-for="(item, index) in authsList"
+        :key="index"
+        :name="item.name" >
+        <span slot="label">{{ item.title }}</span>
+        <component :is="currentTab"></component>
       </el-tab-pane>
     </el-tabs>
   </div>     
@@ -16,11 +15,23 @@
 <script>
 import merchantDeliver from './components/merchantDeliver'
 import th3Deliver from './components/th3Deliver'
+import { isExistAuth } from '@/utils/auth.js'
 export default {
   name: 'shopExpress',
   data() {
     return {
       currentTab: 'merchantDeliver',
+      authsList: [],
+      tabsList: [
+      {
+        name: 'merchantDeliver',
+        authList: ['设置','同城配送','商家配送'],
+        title: '商家配送'
+      },{
+        name: 'th3Deliver',
+        authList: ['设置','同城配送','第三方配送'],
+        title: '第三方配送'
+      }]
     }
   },
   components: {
@@ -39,47 +50,32 @@ export default {
   destroyed() {
   },
   methods: {
-    hasPermission(auth) {
-      const localMsfList = localStorage.getItem('shopInfos');
-      let msfList = [];
-      if(localMsfList && JSON.parse(localMsfList) && JSON.parse(localMsfList).data && JSON.parse(localMsfList).data.msfList) {
-        msfList = JSON.parse(localMsfList).data.msfList
+    setCurrentTab() {
+      const currentTab = this.$route.query.currentTab
+      console.log('--currentTab---', currentTab)
+      if (currentTab) {
+        this.currentTab = currentTab
+      } else {
+        this.currentTab = this.authsList && this.authsList.length > 0 ? this.authsList[0].name : null
       }
-      if(msfList){
-        if (auth) {
-          return msfList.some(item => auth == item.name ) || auth == '概况首页' || auth == '概况' || auth == '账号信息'
-        }else{
-          return true
+    },
+    filterAuth() {
+      const authsList = []
+      const tabsList = this.tabsList
+      for(let i = 0; i < tabsList.length; i++) {
+        if (isExistAuth(tabsList[i].authList)) {
+          authsList.push(tabsList[i])
         }
-      }else {
-        return auth == '概况首页' || auth == '概况' || auth == '账号信息' ? true : false
       }
+      this.authsList = authsList
     },
     init() {
       // this.currentTab = 'quickDelivery'
       // this.$nextTick(() => {
-        const currentTab = this.$route.query.currentTab
-        console.log('--currentTab---', currentTab)
-        if (currentTab) {
-          this.currentTab = currentTab
-        } else {
-          const auths = [
-          {
-            name: 'merchantDeliver',
-            title: '商家配送'
-          },{
-            name: 'th3Deliver',
-            title: '第三方配送'
-          }]
-          for(let i = 0; i < auths.length; i++) {
-            console.log(this.hasPermission(auths[i].title))
-            if (this.hasPermission(auths[i].title)) {
-            console.log(auths[i].name)
-              this.currentTab = auths[i].name
-              break
-            }
-          }
-        }
+      // 过滤掉未授权的
+      this.filterAuth()
+      // 设置默认值
+      this.setCurrentTab()
       // })
     },
     handleClick(comp) {
@@ -106,11 +102,18 @@ export default {
     font-size: 16px;
     font-weight: 400;
     color: #44434B;
+    &.is-active {
+      color: #655EFF;
+    }
   }
   >>> .el-tabs__header {
     margin:0;
     padding: 0 20px 0 20px;
   }
+  >>> .el-tabs--top .el-tabs__item.is-top:nth-child(2) {
+    padding-left: 0;
+  }
+
 }
 .main{
   width: 100%;

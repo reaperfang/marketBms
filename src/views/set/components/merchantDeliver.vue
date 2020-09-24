@@ -3,7 +3,7 @@
     <!-- 商家配送 -->
     <section v-if="!isInit" class="switch dashed">
       <span>商家配送</span>
-      <el-switch v-model="isOpen" @change="handleIsOpen"></el-switch>
+      <el-switch v-model="isOpen" active-color="#13ce66" inactive-color="#CACACF" @change="handleIsOpen"></el-switch>
       <span>{{ getSwitchTxt }}</span>
       <span class="prompt">启用后，买家下单可以选择商家配送，申请退换货售后时可以选择商家自取，由你提供上门配送服务</span>
     </section>
@@ -1208,6 +1208,7 @@ export default {
   $color: rgba(68, 67, 75, 1);
   .shopExpress {
     color:$color;
+    min-height: 200px;
     .dashed {
       border-bottom: 1px dashed rgba(211, 211, 211, 1);
     }

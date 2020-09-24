@@ -149,8 +149,8 @@
           </div>
           </template> 
           </template>
-          <el-table :data="item.goodsList" style="width: 100%" :header-cell-style="{color:'#655EFF', borderBottom: '1px solid #CACFCB', paddingTop: '30px', paddingBottom: '10px'}">
-            <el-table-column label="商品" width="400">
+          <el-table :data="item.goodsList" style="width: 100%" :header-cell-style="{color:'#655EFF', background: 'none', borderBottom: '1px solid #CACFCB', paddingTop: '30px', paddingBottom: '10px'}">
+            <el-table-column label="商品" min-width="380">
               <template slot-scope="scope">
                 <div class="goods-detail">
                   <div class="goods-detail-item">
@@ -163,8 +163,8 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="goodsUnit" label="单位" width="300"></el-table-column>
-            <el-table-column prop="sendCount" label="本次发货数量"></el-table-column>
+            <el-table-column prop="goodsUnit" align="center" label="单位" min-width="150"></el-table-column>
+            <el-table-column prop="sendCount" align="right" min-width="120" label="本次发货数量"></el-table-column>
           </el-table>
           <div class="remark">备注: {{item.sendRemark}}</div>
         </div>

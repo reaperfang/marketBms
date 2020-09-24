@@ -10,9 +10,11 @@
             v-loading="loading1"
         >
             <el-table-column
-                width="180"
                 type="index"
                 label="排序"
+                fixed="left"
+                min-width="120"
+                class-name="table-padding"
                 align="left">
             </el-table-column>
             <el-table-column
@@ -37,6 +39,9 @@
                 prop="changeRatio"
                 label="支付转化率"
                 align="right"
+                fixed="right"
+                min-width="140"
+                class-name="table-padding"
                 sortable
             >
             <template slot-scope="scope">
@@ -111,22 +116,11 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .cell{
-    .btns{
-        span{
-            color: #655EFF;
-            margin-right: 5px;
-        }
-    }
-}
 /deep/.el-table .descending .sort-caret.descending{
   border-top-color:#44434B;
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
-}
-/deep/ .el-table--small td, /deep/.el-table--small th{
-  padding:8px 10px;
 }
 .page_styles {
     margin: 40px 0 30px 0;

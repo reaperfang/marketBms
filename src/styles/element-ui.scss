@@ -163,7 +163,7 @@ input::-moz-placeholder, textarea::-moz-placeholder{
   line-height: 50px;
   padding: 0px;
   background: #F6F7FA;
-  border-radius: 10px 10px 0 0;
+  border-radius: 3px 3px 0 0;
   .el-dialog__title{
     padding-left: 20px;
     font-size: 16px;
@@ -251,4 +251,73 @@ input::-moz-placeholder, textarea::-moz-placeholder{
 // }
 .input_style .el-form-item__content>.el-input--small>.el-input__inner{
   width: 210px;
+}
+
+// 表格
+.el-table th {
+  height: 46px;
+  color: #44434B;
+  background: #F6F7FA;
+}
+.el-table td {
+  padding: 16px 0;
+}
+.table-padding {
+  .cell {
+    padding: 0 20px !important;
+  }
+}
+.el-table-column--selection .cell {
+  padding-left: 20px;
+  overflow: inherit;
+  .el-checkbox {
+    display: block;
+  }
+  .el-checkbox__input {
+    padding-right: 0;
+  }
+}
+// .el-table--scrollable-x .el-table__body-wrapper::-webkit-scrollbar {//滚动条的宽度
+//   height: 10px !important;
+// }
+// 全选
+.table-select {
+  font-size: 0;
+  .el-checkbox__label {
+    padding-left: 4px !important;
+    padding-right: 20px !important;
+  }
+  .el-button+.el-button {
+    margin-left: 12px !important;
+  }
+  .border-button {
+    color: #44434B !important;
+    border: 1px solid #DADAE3 !important;
+    &:hover {
+      color: #655EFF !important;
+      border-color: #655EFF !important;
+      background: #fff;
+    }
+  }
+}
+// 删除、停用文字颜色
+.table-warning {
+  color: #FD4C2B !important;
+}
+.table-operate {
+  height: 23px;
+  font-size: 0;
+  .table-btn{
+    font-size: 14px;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    border-right: 1px solid #dadae3;
+    &:first-child{
+      padding-left: 0 !important;
+    }
+    &:last-child{
+      padding-right: 0 !important;
+      border-right: none;
+    }
+  }
 }

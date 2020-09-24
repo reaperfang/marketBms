@@ -757,6 +757,12 @@ export function editorExpressSize(data) {
 export function getDistributorTrack(data) {
   return request({
     target: 'ORDER-DISTRIBUTION-INFO-LIST-PROCESSOR',
+  })
+}
+//第三方订单发货
+export function sendGoods3(data) {
+  return request({
+    target: 'ORDER-SENDINFO-BATCHV2-PROCESS',
     method: 'post',
     apiType: 'order',
     data

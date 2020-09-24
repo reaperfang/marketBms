@@ -4,7 +4,7 @@
             <el-row>
                 <el-col :span="12">
                     <span>售后单编号：{{orderAfterSale.code}}</span>
-                    <span>【{{orderAfterSale.type | typeFilter}}】</span>
+                    <span>【{{orderAfterSale.type | orderAfterSaleType}}】</span>
                 </el-col>
                 <el-col class="header-righter" :span="12">
                     <span>用户昵称：{{orderAfterSale.memberName}}</span>
@@ -13,7 +13,7 @@
             </el-row>
         </div>
         <section class="flow-path">
-            <afterSalesState :orderAfterSale="orderAfterSale" @auth="auth" @reject="reject" @confirmTakeOver="confirmTakeOver" @getDetail="onGetDetail"></afterSalesState>
+            <afterSalesState :orderAfterSale="orderAfterSale" @auth="auth" @reject="reject" @drawback="drawback" @confirmTakeOver="confirmTakeOver" @getDetail="onGetDetail"></afterSalesState>
         </section>
         <section class="container">
             <el-tabs class="tabs" v-model="activeName" @tab-click="handleClick">
@@ -22,7 +22,7 @@
             </el-tabs>
         </section>
         <component @submit="onSubmit" :is="currentView" :recordList="recordList" :orderAfterSale="orderAfterSale" :catchOrderAfterSale="catchOrderAfterSale" :orderAfterSaleSendInfo="orderAfterSaleSendInfo" :sendInfoMap="sendInfoMap" :itemList="itemList" :sendItemList="sendItemList" :orderType="orderType" :catchRealReturnWalletMoney="catchRealReturnWalletMoney" :catchRealReturnBalance="catchRealReturnBalance" :orderSendInfo="orderSendInfo"></component>
-        <component :is="currentDialog" :data="currentData" :dialogVisible.sync="dialogVisible" @reject="onReject" title="审核"></component>
+        <component :is="currentDialog" :data="currentData" :dialogVisible.sync="dialogVisible" @reject="onReject" title="审核" :updateStatusDisabled.sync="updateStatusDisabled"></component>
     </div>
 </template>
 <script>
@@ -31,8 +31,10 @@ import AftermarketDeliveryInformation from './components/aftermarketDeliveryInfo
 import AfterSalesState from './components/afterSalesState'
 import RejectDialog from '@/views/order/dialogs/rejectDialog'
 import ExchangeGoodsDialog from '@/views/order/dialogs/exchangeGoodsDialog'
+import { afterSalesManagementMethods } from '@/views/order/mixins/afterSalesManagementMixin'
 
 export default {
+    mixins: [afterSalesManagementMethods],
     data() {
         return {
             activeName: 'afterSalesInformation',
@@ -62,17 +64,6 @@ export default {
             return shopInfo.id;
         }
     },
-    filters: {
-        typeFilter(code) {
-            if(code == 1) {
-                return '退货退款'
-            } else  if(code == 2) {
-                return '换货'
-            } else if(code == 3) {
-                return '仅退款'
-            }
-        }
-    },
     methods: {
         onSubmit() {
             this.getDetail()
@@ -92,62 +83,15 @@ export default {
             }) 
         },
         reject() {
-            this.currentDialog = 'RejectDialog'
-            this.dialogVisible = true
+            this.updateRejectStatus(JSON.parse(JSON.stringify(this.orderAfterSale)))
         },
         onReject(value) {
-            this._apis.order.orderAfterSaleUpdateStatus({
-                id: this.orderAfterSale.id,
-                refuseReason: value,
-                orderAfterSaleStatus: 5
-            }).then((res) => {
-                this.getDetail()
-                this.visible = false
-                this.$message.success('拒绝审核成功！');
-            }).catch(error => {
-                this.visible = false
-                this.$message.error(error);
-            })
+            this.rejectHandler(value)
         },
         auth() {
-            let orderAfterSaleStatus
+            let row = JSON.parse(JSON.stringify(this.orderAfterSale))
 
-            if(this.orderAfterSale.type == 3) {
-                orderAfterSaleStatus = 2
-            } else {
-                orderAfterSaleStatus = 1
-            }
-
-            if(this.orderAfterSale.type == 2) {
-                // 换货确认
-                let _orderAfterSale = JSON.parse(JSON.stringify(this.orderAfterSale))
-
-                this.currentDialog = 'ExchangeGoodsDialog'
-                this.currentData = _orderAfterSale
-                this.currentData.orderAfterSaleStatus = orderAfterSaleStatus;
-                this.dialogVisible = true
-                return
-            }
-            let params = {
-                id: this.orderAfterSale.id,
-                //realReturnScore: this.orderAfterSale.realReturnScore,
-                //realReturnMoney: this.orderAfterSale.realReturnMoney,
-                //realReturnBalance: this.orderAfterSale.realReturnBalance,
-                //realReturnWalletMoney: this.orderAfterSale.realReturnWalletMoney,
-                orderAfterSaleStatus: orderAfterSaleStatus
-            }
-
-            // if(this.orderAfterSale.realReturnMoney != this.orderAfterSale.shouldReturnMoney) {
-            //     params.realReturnMoney = this.orderAfterSale.realReturnMoney
-            // }
-            this._apis.order.orderAfterSaleUpdateStatus(params).then((res) => {
-                this.getDetail()
-                this.visible = false
-                this.$message.success('审核成功！');
-            }).catch(error => {
-                this.visible = false
-                this.$message.error(error);
-            })
+            this.updateStatus(row)
         },
         getDetail() {
             this._apis.order.getOrderAfterSaleDetail({id: this.$route.query.id}).then((res) => {

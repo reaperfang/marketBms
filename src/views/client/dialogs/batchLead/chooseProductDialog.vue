@@ -290,7 +290,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 /deep/ .el-dialog{
-    border-radius: 10px;
+    border-radius: 3px;
 }
 /deep/.el-table__header{
   width: 100% !important;

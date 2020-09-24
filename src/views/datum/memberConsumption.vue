@@ -33,38 +33,49 @@
             <el-table-column
                 type="index"
                 label="排行"
-                width="80"
+                fixed="left"
+                class-name="table-padding"
+                width="100"
                 align="left">
             </el-table-column>
             <el-table-column
                 prop="name"
+                align="center"
                 label="会员昵称">
             </el-table-column>
             <el-table-column
                 prop="phone"
+                align="center"
+                min-width="140"
                 label="手机号">
             </el-table-column>
             <el-table-column
                 prop="levelName"
+                align="center"
                 label="等级"
             >
             </el-table-column>
             <el-table-column
                 prop="score"
+                min-width="140"
                 label="积分（余额）"
                 align="right"
             >
             </el-table-column>
             <el-table-column
                 prop="totalTradeMoney"
+                min-width="170"
                 label="消费金额（累计）"
                 align="right"
             >
             </el-table-column>
             <el-table-column
                 prop="orderCount"
+                min-width="160"
                 label="订单数（累计）"
                 align="right"
+                fixed="right"
+                class-name="table-padding"
             >
             </el-table-column>
             </el-table>
@@ -174,9 +185,6 @@ export default {
     .el-input__inner{
         width: 210px;
     }
-}
-/deep/ .el-table--small td, /deep/.el-table--small th{
-  padding:8px 10px;
 }
 </style>
 

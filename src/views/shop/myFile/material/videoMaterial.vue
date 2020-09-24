@@ -45,10 +45,10 @@
               <p class="img_name">{{item.fileName}}</p>
             </div>
            </div>
-           <p style="margin-top: -30px;">
+           <p style="margin-top: -30px;" class="table-select">
             <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
-            <el-button type="warning" plain class="ml10" @click="deleteImages">批量删除</el-button>
-            <el-button type="warning" plain class="ml10" @click="moveGroups">移动分组</el-button>
+            <el-button class="border-button" plain @click="deleteImages">批量删除</el-button>
+            <el-button class="border-button" plain @click="moveGroups">移动分组</el-button>
            </p>
            <p class="pages">
               <el-pagination

@@ -701,6 +701,11 @@ export default {
               //obj.distributorId = item.distributorId;
               obj.distributorPhone = item.phone;
             }
+            if(item.deliveryWay == 3) {
+              obj.deliveryWay = 3;
+              obj.receivedLongitude = item.receivedLongitude
+              obj.receivedLatitude = item.receivedLatitude
+            }
             if(item.deliveryWay == 4) {
               obj.deliveryWay = 4;
               obj.verifyCode = item.verifyCode
@@ -709,6 +714,9 @@ export default {
             return obj;
           })
         };
+        if(this.list[0] && this.list[0].deliveryWay == 3) {
+          params.thirdPartType = 1
+        }
         this.params = params
         let _arr = []
 
@@ -772,9 +780,16 @@ export default {
       }
     },
     orderSendGoodsHander(params) {
-      this._apis.order
-        .orderSendGoods(params)
+      if(this.list[0] && this.list[0].deliveryWay == 3) {
+        this._apis.order
+        .sendGoods3(params)
         .then(res => {
+          if(res.code == 2155) {
+            this.confirm({title: '提示', text: '达达账户余额不足，请充值后再发货', confirmText: '去充值'}).then(() => {
+                this.$router.push('/set/recharge')
+            })
+            return
+          }
           if(this.list[0] && this.list[0].deliveryWay == 3) {
             //本次批量发货100单，成功80单，失败20单 
             this.$message.success('发货成功');
@@ -782,17 +797,7 @@ export default {
             this.$message.success('发货成功');
           }
           this.sending = false
-          // this.$router.push(
-          //   "/order/deliverGoodsSuccess?ids=" +
-          //     this.list.map(val => val.id).join(",") +
-          //     "&type=orderBulkDelivery"
-          // );
-
-          // this.$router.push(
-          //   "/order/deliverGoodsSuccess?ids=" +
-          //     res.success.map(val => val.orderInfoId).join(",") +
-          //     "&type=orderBulkDelivery"
-          // );
+          
           let printIds = this.list.filter(val => !val.express).map(val => val.orderId).join(',')
 
           this.$router.push({
@@ -813,6 +818,39 @@ export default {
           this.$message.error(error);
           this.sending = false
         });
+      } else {
+        this._apis.order
+        .orderSendGoods(params)
+        .then(res => {
+          if(this.list[0] && this.list[0].deliveryWay == 3) {
+            //本次批量发货100单，成功80单，失败20单 
+            this.$message.success('发货成功');
+          } else {
+            this.$message.success('发货成功');
+          }
+          this.sending = false
+          
+          let printIds = this.list.filter(val => !val.express).map(val => val.orderId).join(',')
+
+          this.$router.push({
+            path: "/order/deliverGoodsSuccess",
+            query: {
+              ids: res.success
+                .map(val => val.expressParameter.orderSendInfo.id)
+                .join(","),
+              orderId: res.success
+                .map(val => val.expressParameter.orderSendInfo.orderId)
+                .join(","),
+              type: "orderBulkDelivery",
+              printIds
+            }
+          });
+        })
+        .catch(error => {
+          this.$message.error(error);
+          this.sending = false
+        });
+      }
     },
     select(index, i) {
       if(this.list[0].deliveryWay == 4 || this.list[index].orderItemList[i].goodsCount - this.list[index].orderItemList[i].cacheSendCount == 0) {

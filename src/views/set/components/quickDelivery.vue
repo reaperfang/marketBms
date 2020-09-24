@@ -79,30 +79,33 @@
           empty-text="暂无数据"
          :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '500'}"
         >
-          <el-table-column prop="name" label="模板名称" width="180"></el-table-column>
-          <el-table-column prop="calculationWay" label="计费方式" width="180">
+          <el-table-column prop="name" label="模板名称" min-width="180" fixed="left" 
+          class-name="table-padding"></el-table-column>
+          <el-table-column prop="calculationWay" label="计费方式" min-width="160" align="center">
             <template slot-scope="scope">
               <span>{{scope.row.calculationWay | calculationWayFilter}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="productCount" label="应用商品数量"></el-table-column>
-          <el-table-column prop="updateTime" sortable label="编辑时间"></el-table-column>
-          <el-table-column label="操作" fixed="right">
+          <el-table-column prop="productCount" min-width="160" label="应用商品数量" align="right"></el-table-column>
+          <el-table-column prop="updateTime" sortable label="编辑时间" min-width="160" align="center"></el-table-column>
+          <el-table-column label="操作" :width="operationColumnW" fixed="right"
+          header-align="center"
+          class-name="table-padding">
             <template slot-scope="scope">
-              <div class="operate-box">
-                <span
+              <div class="operate-box table-operate">
+                <span class="table-btn"
                   v-permission="['设置', '普通快递', '运费模版', '查看']"
                   @click="$router.push('/set/newTemplate?mode=look&id=' + scope.row.id)"
                 >查看</span>
-                <span
+                <span class="table-btn"
                   v-permission="['设置', '普通快递', '运费模版', '复制']"
                   @click="$router.push('/set/newTemplate?mode=copy&id=' + scope.row.id)"
                 >复制</span>
-                <span
+                <span class="table-btn"
                   v-permission="['设置', '普通快递', '运费模版', '编辑']"
                   @click="$router.push('/set/newTemplate?mode=change&id=' + scope.row.id)"
                 >编辑</span>
-                <span
+                <span class="table-btn table-warning"
                   v-if="!scope.row.productCount"
                   v-permission="['设置', '普通快递', '运费模版', '删除']"
                   @click="deletequickDelivery(scope.row.id)"
@@ -155,12 +158,23 @@ export default {
       },
       currentDialog: "",
       dialogVisible: false,
-      loading: false
+      loading: false,
+      operationColumnW: 72 //操作列宽度
     };
   },
   created() {
     this.getList();
     this.getShopInfo();
+  },
+  watch: {
+    'tableData': {
+        handler(newVal, oldVal) { //计算操作栏宽度
+            this.$nextTick(() => {
+                this.operationColumnW = this.utils.getOperationColumnW();
+            })
+        },
+        deep: true
+    }
   },
   filters: {
     calculationWayFilter(code) {

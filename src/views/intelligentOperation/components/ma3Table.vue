@@ -11,21 +11,26 @@
       <el-table-column
         type="index"
         label="排序"
-        width="80"
+        width="100"
+        fixed="left" class-name="table-padding"
         align="left">
       </el-table-column>
       <el-table-column
         prop="id"
+        align="center"
         label="用户ID">
       </el-table-column>
       <el-table-column
         prop="phone"
+        align="center"
+        width="150"
         label="手机号码">
         <template slot-scope="scope">
           {{scope.row.phone ? scope.row.phone : '-'}}
         </template>
       </el-table-column>
       <el-table-column
+      align="center"
         label="用户类型"
       >
       <template slot-scope="scope">
@@ -34,11 +39,15 @@
       </el-table-column>
       <el-table-column
         prop="name"
+        align="center"
+        min-width="140"
         label="会员昵称"
       >
       </el-table-column>
       <el-table-column
         prop="score"
+        align="right"
+        width="140"
         label="积分(余额)"
       >
         <template slot-scope="scope">
@@ -46,6 +55,8 @@
         </template>
       </el-table-column>
       <el-table-column
+      align="center"
+      width="160"
         label="入会时间"
       >
         <template slot-scope="scope">
@@ -57,7 +68,8 @@
         prop="scoreTradeCount"
         label="积分消耗次数（总）"
         align="right"
-        width="200px"
+        fixed="right" class-name="table-padding"
+        width="180px"
       >
       </el-table-column>
     </el-table>
@@ -141,17 +153,6 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .cell{
-            .btns{
-                span{
-                    color: #655EFF;
-                    margin-right: 5px;
-                }
-            }
-        }
-        /deep/ .el-table--small td, /deep/.el-table--small th{
-  padding:8px 10px;
-}
 .page_styles {
     margin: 40px 0 30px 0;
 }
