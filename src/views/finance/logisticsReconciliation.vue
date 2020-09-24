@@ -3,7 +3,7 @@
   <div>
     <el-tabs v-model="currentTab" @tab-click="handleClick" class="tabs">
       <el-tab-pane label="电子面单" name="faceSheet"></el-tab-pane>
-      <el-tab-pane label="物流查询" name="logisticsInquiry"></el-tab-pane>
+      <el-tab-pane v-if="showTab" label="物流查询" name="logisticsInquiry"></el-tab-pane>
       <el-tab-pane label="三方配送" name="threeDistribution"></el-tab-pane>
     </el-tabs>
     <component :is="currentTab"></component>
@@ -19,7 +19,8 @@ export default {
   components: {faceSheet, logisticsInquiry,threeDistribution},
   data() {
     return {
-      currentTab: 'faceSheet'
+      currentTab: 'faceSheet',
+      showTab: false,
     }
   },
   watch: {
@@ -27,7 +28,24 @@ export default {
   },
   created() {
     // window.addEventListener('hashchange', this.afterQRScan)
-    
+    this._apis.finance.getListFs({
+        version:0,
+        queryType:1,
+        relationSn:'',
+        expressSn:'',
+        expressCompany:'',
+        businessType:'',
+        startTime:'',
+        endTime:'',
+        startIndex:1,
+        pageSize:1,
+        sort:'desc'
+    }).then((response)=>{
+      if (response.total > 0) {
+        this.showTab = true
+      }
+    }).catch((error)=>{
+    })
   },
   destroyed() {
     // window.removeEventListener('hashchange', this.afterQRScan)

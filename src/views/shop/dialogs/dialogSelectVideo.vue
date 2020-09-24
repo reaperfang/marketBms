@@ -127,7 +127,7 @@ export default {
       uploadAble: true,  //上传是否可用(用来清上传器缓存)
 
       /* 本地上传 */
-      uploadUrl:`${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
+      uploadUrl:`${process.env.DATA_API}/web-file/file-server/api_file_remote_upload.do`,
       fileList: [],  //最终用来显示的文件列表
       addList: [],  //添加的文件列表（上传前）
       successList: [],  //上传成功的文件列表(上传后)

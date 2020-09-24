@@ -163,7 +163,7 @@ export default {
       isIE: false,  //是否是IE
 
       /* 本地上传 */
-      uploadUrl:`${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
+      uploadUrl:`${process.env.DATA_API}/web-file/file-server/api_file_remote_upload.do`,
       fileList: [],  //最终用来显示的文件列表
       addList: [],  //添加的文件列表（上传前）
       successList: [],  //上传成功的文件列表(上传后)
