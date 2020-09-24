@@ -79,7 +79,10 @@ export default {
             type: Boolean,
             default: false
         },
-        useHtmlTitle: false
+        useHtmlTitle: {
+            type: Boolean,
+            default: false
+        }
     }
 }
 </script>
