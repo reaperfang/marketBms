@@ -186,7 +186,7 @@ export default {
 	}
 }
 
-/* custom CSS */
+// /* custom CSS */
 // .vue-tooltip.tooltip-custom {
 // 	background-color: red;
 // }

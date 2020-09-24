@@ -41,11 +41,7 @@
 				v-show="first"
 				@click.prevent
 				v-tooltip.right="{
-					:content: tipHtml({
-						content:first,
-						top:"一",
-						barColor:"#026dff"
-					}),
+					content: first,
 					class: 'tooltip-custom tooltip-other-custom'
 				}"
 			>
@@ -68,7 +64,8 @@
 				<span
 					style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#026dff"
 				></span>
-				交易排名第一<br />
+				<span style="padding:15px 0">交易排名第一</span><br />
+				<p style="padding:5px 17px;">{{ first }}</p>
 			</div>
 		</div>
 	</div>
@@ -127,13 +124,6 @@ export default {
 			}
 
 			data.goods_type_name.forEach((item, index) => {
-				// console.log("item", item);
-				// console.log("index", index);
-				// console.log(item.goods_type_name);
-				// console.log(
-				// 	item.goods_type_name.match(/[\u4E00-\u9FA5]/g).length
-				// );
-
 				if (index == 0) {
 					this.first = item.goods_type_name;
 				}
@@ -157,7 +147,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .panel-content-cap {
 	height: 100%;
 	display: flex;
@@ -361,17 +351,23 @@ export default {
 }
 
 /* custom CSS */
-// .vue-tooltip.tooltip-custom {
-// 	opacity: 0.4;
-// 	//background-color: red;
-// }
+.vue-tooltip.tooltip-custom {
+	opacity: 0.8;
+	background-color: #333333;
+	border-radius: 4px;
+}
 
-// .vue-tooltip.tooltip-custom .tooltip-arrow {
-// 	opacity: 0.4;
-// 	//border-color: red;
-// }
+.vue-tooltip.tooltip-custom .tooltip-arrow {
+	opacity: 0.8;
+	background-color: #333333;
+	// background-color: red;
+}
 
 .tooltip-content {
-	// background-color: red;
+	// opacity: 0.8;
+	background-color: #333333;
+	p {
+		color: #ffffff;
+	}
 }
 </style>
