@@ -19,14 +19,6 @@
 			</el-table-column>
 			<el-table-column label="商品">
 				<template slot-scope="scope">
-					<!-- <el-tooltip
-						:content="scope.row.pd_rt"
-						placement="top"
-						popper-class="atooltip"
-					>
-						<span class="time-text">{{ scope.row.pd_rt }}</span>
-					</el-tooltip> -->
-
 					<span
 						class="time-text"
 						v-tooltip.left="{

@@ -36,13 +36,39 @@
 				<span class="time-text">{{ sec }}</span>
 			</div>
 
+			<!-- <div
+				class="circle-90 circle-hover"
+				v-show="first"
+				@click.prevent
+				v-tooltip.right="{
+					:content: tipHtml({
+						content:first,
+						top:"一",
+						barColor:"#026dff"
+					}),
+					class: 'tooltip-custom tooltip-other-custom'
+				}"
+			>
+				<span class="time-text">{{ first }}</span>
+			</div> -->
+
 			<div
 				class="circle-90 circle-hover"
 				v-show="first"
 				@click.prevent
-				v-tooltip.right="{ content: 'offset by 30px', offset: 30 }"
+				v-tooltip.right="{
+					ref: 'tooltipRef',
+					class: 'tooltip-custom tooltip-other-custom'
+				}"
 			>
 				<span class="time-text">{{ first }}</span>
+			</div>
+
+			<div ref="tooltipRef" class="tooltip-content">
+				<span
+					style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#026dff"
+				></span>
+				交易排名第一<br />
 			</div>
 		</div>
 	</div>
@@ -89,6 +115,11 @@ export default {
 		// });
 	},
 	methods: {
+		tipHtml: params => {
+			return "FDSFSDFDSFSDF";
+			var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.barColor}"></span>`;
+			return `${dotHtml}交易排名第${params.top}<br/> &nbsp&nbsp&nbsp${params.content}%`;
+		},
 		showChart(data) {
 			if (!data.goods_type_name) {
 				this.isEmpty = true;
@@ -327,5 +358,20 @@ export default {
 			color: #92929b;
 		}
 	}
+}
+
+/* custom CSS */
+// .vue-tooltip.tooltip-custom {
+// 	opacity: 0.4;
+// 	//background-color: red;
+// }
+
+// .vue-tooltip.tooltip-custom .tooltip-arrow {
+// 	opacity: 0.4;
+// 	//border-color: red;
+// }
+
+.tooltip-content {
+	// background-color: red;
 }
 </style>
