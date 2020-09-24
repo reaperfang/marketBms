@@ -1,5 +1,5 @@
 <template>
-	<div class="mall">
+	<div class="mall" id="mall">
 		<vhead></vhead>
 		<el-row class="row-2">
 			<el-col :span="7" class="el-col">
@@ -256,6 +256,52 @@ export default {
 	.mall {
 		overflow-y: auto;
 		min-width: 1600px;
+	}
+
+	// *::-webkit-scrollbar {
+	// 	/*滚动条整体样式*/
+	// 	width: 10px; /*定义纵向滚动条宽度*/
+	// 	height: 10px; /*定义横向滚动条高度*/
+	// }
+
+	// *::-webkit-scrollbar-thumb {
+	// 	/*滚动条内部滑块*/
+	// 	border-radius: 8px;
+	// 	background-color: green;
+	// 	transition: background-color 0.3s;
+	// }
+
+	// *::-webkit-scrollbar-thumb:hover {
+	// 	/*鼠标悬停滚动条内部滑块*/
+	// 	background: red;
+	// }
+
+	// *::-webkit-scrollbar-track {
+	// 	/*滚动条内部轨道*/
+	// 	background: yellow;
+	// }
+
+	*::-webkit-scrollbar {
+		/*滚动条整体样式*/
+		width: 0px; /*定义纵向滚动条宽度*/
+		height: 5px; /*定义横向滚动条高度*/
+	}
+
+	*::-webkit-scrollbar-thumb {
+		/*滚动条内部滑块*/
+		border-radius: 8px;
+		background-color: #292b30;
+		transition: background-color 0.3s;
+	}
+
+	*::-webkit-scrollbar-thumb:hover {
+		/*鼠标悬停滚动条内部滑块*/
+		// background: red;
+	}
+
+	*::-webkit-scrollbar-track {
+		/*滚动条内部轨道*/
+		background: yellow;
 	}
 }
 </style>

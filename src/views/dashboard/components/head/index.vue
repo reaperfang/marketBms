@@ -47,7 +47,7 @@
 							<svg-icon iconClass="fullscreen"></svg-icon>
 							<!-- <span>全 屏</span> -->
 							<span>{{
-								!this.fullscreenState ? "全 屏" : "退 出"
+								!this.fullscreenState ? "全 屏" : "退出全屏"
 							}}</span>
 						</div>
 					</el-col>
@@ -244,7 +244,7 @@ export default {
 			.refresh,
 			.fullscreen {
 				display: inline-block;
-				width: 75px;
+				width: 79px;
 				height: 25px;
 				background: rgba(71, 225, 255, 0.08);
 				border-radius: 2px;
