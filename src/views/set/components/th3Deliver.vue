@@ -8,7 +8,7 @@
        <el-button class="agree" type="text" @click="onPprotocol()">《第三方配送协议》</el-button>
      </div>
      <!-- 发货地址 -->
-     <div class="row">
+     <div class="row" v-show="isTableShow">
        <div class="label">
          发货地址：
        </div>
@@ -67,7 +67,7 @@
           </div>
        </div>
      </div>
-     <div class="row auto-call"  v-show="isTableShow && isHasOpenTh3Config">
+     <div class="row auto-call"  v-show="isHasOpenTh3Config">
        <div class="label">
          自动呼叫：
        </div>
@@ -132,7 +132,7 @@ export default {
       saveShow: true,
       isLoading: false,
       isInitLoading: true, // 初始化加载loading显示
-      isTableShow: false, // 是否显示列表
+      // isTableShow: false, // 是否显示列表
       dataList: [
         {
           thirdType:1,
@@ -142,7 +142,8 @@ export default {
       ],
       dialogVisible: true,
       currentDialog: "",
-      isOpenAutoCall: 0
+      isOpenAutoCall: 0,
+      isApplyOpen: false
     }
   },
 
@@ -157,12 +158,16 @@ export default {
     isHasOpenTh3Config() {
       const obj = this.dataList.find(item => item.status === 1)
       return obj ? true : false
+    },
+    isTableShow() {
+      if ((!this.isHasOpenTh3Config && !this.isOpen) || this.isApplyOpen) return false
+      return true
     }
   },
 
   watch: {
     isOpen(val) {
-      this.isTableShow = this.isOpen
+      // this.isTableShow = this.isOpen
       this.btnShow = false
       this.saveShow = true
     }
@@ -330,7 +335,8 @@ export default {
     },
     //注册成功
     submitForm() {
-      this.isTableShow = true;
+      // this.isTableShow = true;
+      this.isApplyOpen = false
       this.btnShow = false;
       this.saveShow = true;
       this.getTh3DeliverList()
@@ -381,7 +387,8 @@ export default {
       this.currTh3Deliver = row
       // 判断达达是否覆盖
       this.isDaDaCoveredArea(row).then(() => {
-        this.isTableShow = false;
+        // this.isTableShow = false;
+        this.isApplyOpen = true
         this.btnShow = true;
         this.saveShow = false;
       }).catch(() => {
