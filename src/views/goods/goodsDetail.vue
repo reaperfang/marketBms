@@ -861,7 +861,7 @@ export default {
                 ]
 
             },
-            uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
+            uploadUrl: `${process.env.DATA_API}/web-file/file-server/api_file_remote_upload.do`,
             optionsTypeList: [],
             imageVisible: false,
             currentDialog: '',
@@ -2641,7 +2641,19 @@ export default {
                 })
                 this.specsList = res
                 //this.specsLength = this.specsList.length
-                this.flatSpecsList = this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')
+                //this.flatSpecsList = this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')
+                let __obj = {}
+                let __result = []
+                let _flatSpecsList = [...this.flatSpecsList, ...this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')]
+                
+
+                this.flatSpecsList.forEach(item=>{
+                    if(!__obj[item.id]){
+                         __result.push(item);
+                         __obj[item.id] = true;
+                    }
+                })
+                this.flatSpecsList = __result
             }).catch(error => {
                 this.$message.error({
                     message: error,

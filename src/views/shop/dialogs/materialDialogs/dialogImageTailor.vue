@@ -104,7 +104,7 @@ export default {
       // 防止重复提交
       loading: false,
       uploadData: null,
-      uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server-base64/api_file_remote_upload.do`,
+      uploadUrl: `${process.env.DATA_API}/web-file/file-server-base64/api_file_remote_upload.do`,
     }
   },
   computed: {
