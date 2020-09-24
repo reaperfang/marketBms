@@ -128,7 +128,11 @@ export default {
           message: '金额不可超过100,000,000(1亿)',
           type: 'warning'
         });
-        this.adjustmentBalance = ""
+        // this.adjustmentBalance = ""
+		  this.btnLoading = true;
+		  setTimeout(() => {
+			  this.btnLoading = false;
+		  }, 1000)
       }
     },
     handleAdjust(val) {

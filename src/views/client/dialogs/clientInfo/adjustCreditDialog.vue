@@ -140,7 +140,11 @@ export default {
           message: '积分不可超过100,000,000(1亿)',
           type: 'warning'
         });
-        this.adjustmentScore = "";
+        // this.adjustmentScore = "";
+		  this.btnLoading = true;
+		  setTimeout(() => {
+			  this.btnLoading = false;
+		  }, 1000)
       }
     },
     handleAdjust(val) {
