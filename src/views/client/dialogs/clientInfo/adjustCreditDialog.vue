@@ -66,7 +66,8 @@ export default {
   },
   methods: {
     number(event, val, ele) {
-      val = val.replace(/[^\d]/g, "");
+      // val = val.replace(/[^\d]/g, "");
+		val = val.replace(/[^\d.]/g,'').replace(/\./g, '');
       this[ele] = val;
     },
     submit() {
@@ -126,7 +127,7 @@ export default {
       }else{
         this.showError = false;
       }
-      if(Number(this.adjustmentAfterScore) >= 100000000) {
+      if(Number(this.adjustmentAfterScore) > 100000000) {
         this.$message({
           message: '积分不可超过100,000,000(1亿)',
           type: 'warning'
