@@ -1,5 +1,5 @@
 <template>
-  <div v-calcHeight="60 + 60 + 20 + 20"  v-loading="isInitLoading" element-loading-background="rgba(255,255,255,1)" style="background-color:#fff;min-height: 300px;">
+  <div v-calcHeight="60 + 60 + 20 + 20"  v-loading="isInitLoading" element-loading-background="rgba(255,255,255,1)" style="background-color:#fff;min-height: 430px;">
    <div v-if="!isInitLoading" class="th3Deliver">
      <div class="switch-area">
        <span>启用第三方配送：</span>
@@ -402,7 +402,6 @@ export default {
 .th3Deliver {
   background: #fff;
   padding: 20px;
-  min-height: 300px;
   .switch-area {
     background: #F9F9F9;
     padding: 20px;
@@ -508,7 +507,6 @@ export default {
     bottom: 50px;
     width: 100%;
     text-align: center;
-    padding-top:40px;
     .register {
       width: 128px;
       height: 32px;

@@ -197,14 +197,15 @@ export function exportFs(data) {
   })
 }
 
-// export function getListLi(data) {
-//   return request({
-//     target: 'FINANCIAL-EXPRESS-QUERY-PROCESSOR',
-//     method: 'post',
-//     apiType: 'finance',
-//     data
-//   })
-// }
+//三方配送导出
+export function exportTd(data) {
+  return request({
+    target: 'THIRD-DELIVERY-RECORD-EXPORT-PROCESSOR',
+    method: 'post',
+    apiType: 'finance',
+    data
+  })
+}
 
 //短信成本 ------
 export function smsStatistics(data) {

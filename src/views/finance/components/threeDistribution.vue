@@ -39,7 +39,7 @@
         :data="dataList"
         class="table"
         :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
-        :default-sort = "{prop: 'createTime', order: 'descending'}"
+        :default-sort = "{prop: 'sendTime', order: 'descending'}"
         @sort-change="changeSort"
         >
         <el-table-column
@@ -50,14 +50,17 @@
         </el-table-column>
         <el-table-column
           prop="deliveryCompany"
-          align="center"
-          label="配送公司">
+          label="配送公司"
+          align="center">
+          <template slot-scope="scope">
+            {{scope.row.deliveryCompany == 1 ? '达达' : ' '}}
+          </template>  
         </el-table-column>
         <el-table-column
           prop="deliveryMoney"
           label="配送费"
-          align="right"
-          width="150px">
+          width="150px"
+          align="right">
         </el-table-column>
         <el-table-column
           prop="operator"
@@ -193,9 +196,9 @@ export default {
       if(this.total >1000){
          this.dialogVisible = true;
          this.currentData.query = this.init()
-         this.currentData.api = "finance.exportFs"
+         this.currentData.api = "finance.exportTd"
       }else{
-        this._apis.finance.exportFs(query).then((response)=>{
+        this._apis.finance.exportTd(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
          this.$message.error(error);
