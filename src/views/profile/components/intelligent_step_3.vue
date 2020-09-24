@@ -10,9 +10,9 @@
     <div class="gray_area">
       <h3 class="list_title">所含数据已预设置您的店铺内，请按需置换成您的个性化数据：</h3>
       <ol class="enable_list">
-        <li class="enable_item">①、管理店铺预置商品数据<span class="button-link" @click="linkToNewTab('goods')">商品列表  <i class="ce-icon-arrow-right"></i></span></li>
-        <li class="enable_item">②、编辑店铺个性化装修页面<span class="button-link" @click="linkToNewTab('design')">创意设计  <i class="ce-icon-arrow-right"></i></span></li>
-        <li class="enable_item">③、修改店铺交易配送运费模板<span class="button-link" @click="linkToNewTab('freight')">配送设置  <i class="ce-icon-arrow-right"></i></span></li>
+        <li class="enable_item">① &nbsp;管理店铺预置商品数据<span class="button-link" @click="linkToNewTab('goods')">商品列表  <i class="ce-icon-arrow-right"></i></span></li>
+        <li class="enable_item">② &nbsp;编辑店铺个性化装修页面<span class="button-link" @click="linkToNewTab('design')">创意设计  <i class="ce-icon-arrow-right"></i></span></li>
+        <li class="enable_item">③ &nbsp;修改店铺交易配送运费模板<span class="button-link" @click="linkToNewTab('freight')">配送设置  <i class="ce-icon-arrow-right"></i></span></li>
       </ol>
     </div>
 
