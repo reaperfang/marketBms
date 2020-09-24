@@ -757,7 +757,7 @@ export default {
                 otherUnit: '',
                 isCashOnDelivery: 0, // 是否支持货到付款
 		        deliveryWay: this.$route.query.id ? [] : [1], //配送方式(默认普通快递选中，不可取消)
-                isFreeFreight: '', // 是否包邮
+                isFreeFreight: 0, // 是否包邮
                 isAfterSaleService: 1, // 是否支持售后服务
                 isShowRelationProduct: 0, // 是否显示关联商品
                 relationProductInfoIds: [], // 关联商品
