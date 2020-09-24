@@ -753,7 +753,12 @@ export function editorExpressSize(data) {
     data
   })
 }
-
+//查看第三方配送时骑手轨迹 ORDER-EXPRESS-INFO-LIST-PROCESSOR
+export function getDistributorTrack(data) {
+  return request({
+    target: 'ORDER-DISTRIBUTION-INFO-LIST-PROCESSOR',
+  })
+}
 //第三方订单发货
 export function sendGoods3(data) {
   return request({

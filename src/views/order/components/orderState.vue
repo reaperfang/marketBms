@@ -593,6 +593,7 @@ export default {
         },
         closeOrder() {
             this.currentDialog = 'CloseOrderDialog'; 
+            this.currentData=this.orderInfo
             this.dialogVisible = true
         },
         closeThirdOrder(){

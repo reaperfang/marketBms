@@ -1,14 +1,14 @@
 <template>
   <div class="head-wrapper">
-     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
+     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" :inline="true">
           <div class="inline-head">
-            <el-form-item label="" prop="name">
+            <el-form-item label="所属分类" prop="name">
               <el-select v-if="classifyList.length" v-model="ruleForm.pageCategoryInfoId" placeholder="请选择分类">
                 <el-option label="全部分类" value=""></el-option>
                 <el-option v-for="(item, key) of classifyList" :key="key" :label="item.name" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="" prop="name">
+            <el-form-item label="页面名称" prop="name">
               <el-input v-model="ruleForm.name" placeholder="请输入页面名称" clearable></el-input>
             </el-form-item>
             <el-form-item label="" prop="">

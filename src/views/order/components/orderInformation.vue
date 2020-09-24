@@ -382,7 +382,7 @@ export default {
             currentData: '',
             dialogVisible: false,
             remarkVisible: false,
-            ajax: false,
+            ajax: true,
             sendGoods: 'received',
             goodsListMessage: {
                consultType: 1,

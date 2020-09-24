@@ -80,7 +80,7 @@
           </template>
         </el-table-column>
       </el-table>
-       <div class="multiple_selection table-select">
+       <div class="multiple_selection table-select" style="margin-left: 20px;">
         <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button class="border-button" @click="deleteAccount()">批量删除</el-button>
       </div>

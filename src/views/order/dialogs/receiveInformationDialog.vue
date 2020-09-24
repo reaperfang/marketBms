@@ -264,7 +264,6 @@ export default {
       this.$refs.mapSearch.handlePropSearch(this.ruleForm.address);
     },
     getDetail() {
-      console.log(this.data)
       //如果是发货，则回显对应发货的信息
       if (this.sendGoods == "send") {
         this.submitFlag = !!this.data.sendLongitude;
@@ -412,15 +411,23 @@ export default {
             [this.sendGoods == 'send' ? 'sendLatitude': 'receivedLatitude']: this.ruleForm.lat,
             [this.sendGoods == 'send' ? 'sendLongitude': 'receivedLongitude']: this.ruleForm.lng
           }
-          if(!this.$route.query.afterSale) {
-            params = Object.assign({}, params, {
-              orderIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
-              orderSendInfoIds: this.$route.query._ids ? this.$route.query._ids.split(',').map(id => id) : this._ids,
-            })
-          } else {
-            params = Object.assign({}, params, {
-              orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id)
-            })
+          if(this.$route.name == 'deliverGoods'){//发货页面
+            if(!this.$route.query.afterSale) {
+              params = Object.assign({}, params, {
+                orderIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
+                orderSendInfoIds: this.$route.query._ids ? this.$route.query._ids.split(',').map(id => id) : this._ids,
+              })
+            } else {
+               params = Object.assign({}, params, {
+                orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id)
+              })
+            }
+          }else if(this.$route.name == 'orderDetail'){//订单详情页
+              params = Object.assign({}, params, {
+                orderIds: [this.data.id],
+                orderId:this.data.id,
+                isSyncUpdateOrder:1
+              })
           }
           try {
             if(this.$refs.mapSearch.poi) {
@@ -434,12 +441,14 @@ export default {
           this._apis.order
             .updateReceiveAndSend(params)
             .then(res => {
-              if(this.list) {
-                this.$emit('getDetail', this.multipleSelection, JSON.parse(JSON.stringify(this.list)))
-              } else {
-                this.$emit('getDetail', this.multipleSelection)
-              }
-              this.$emit("submit");
+            if(this.$route.name == 'deliverGoods') {
+                if(this.list) {
+                    this.$emit('getDetail', this.multipleSelection, JSON.parse(JSON.stringify(this.list)))
+                  } else {
+                    this.$emit('getDetail', this.multipleSelection)
+                  }
+              } 
+              this.$emit('submit');
               this.visible = false;
               this.$message.success("修改成功！");
             })

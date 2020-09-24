@@ -17,7 +17,7 @@
           <div class="header-lefter">
             <div class="header-lefter-item number">{{index + 1}}</div>
             <div class="header-lefter-item fb">{{item | deliveryWayFilter}}</div>
-            <template v-if="item.deliveryWay == 3">
+            <template v-if="item.deliveryWay == 1">
             <div class="header-lefter-item">快递公司：{{item.shipperName}}</div>
             <div class="header-lefter-item">快递单号：{{item.expressNo}}</div>
             <div @click="showLogistics(item.expressNo, item.shipperName, item.id)" class="header-lefter-item blue pointer">查看物流</div>
@@ -26,19 +26,17 @@
             <div class="header-lefter-item">配送员：{{item.deliveryName}}</div>
             <div class="header-lefter-item">联系方式：{{item.phone}}</div>
             </template>
-            <template v-if="item.deliveryWay == 1">
+            <template v-if="item.deliveryWay == 3">
               <!-- 骑手正常接单 -->
-              <template v-if="!is_abnormal">
-                  <div class="header-lefter-item">配送员：达达配送员</div>
-                  <div class="header-lefter-item">联系方式：12000330000</div>
-                  <div @click="showLogistics(item.expressNo, item.shipperName, item.id)" class="header-lefter-item blue pointer">查看物流</div>
+              <template v-if="!item.isAbnormal && item.distributionInfoView.distributorName">
+                  <div class="header-lefter-item">配送员：{{item.distributionInfoView.distributorName}}</div>
+                  <div class="header-lefter-item">联系方式：{{item.distributionInfoView.distributorPhone}}</div>
               </template>
               <!-- 骑手取消接单 -->
-              <div v-if="!is_abnormal" class="header-lefter-item">骑手取消接单，重新发单中</div>
-              <div v-if="!is_abnormal" class="header-lefter-item">发单中，等待骑手接单</div>
+              <div v-if="!item.isAbnormal" class="header-lefter-item">{{item.distributionInfoView | distributionInfoFilter}}</div>
               <!-- 异常订单 -->
-              <div v-if="is_abnormal" class="header-lefter-item">异常订单：达达取消订单/投妥异常</div>
-
+              <div v-if="item.isAbnormal" class="header-lefter-item">{{item.distributionInfoView | distributionInfoFilter}}</div>
+              <div @click="showDistributorLogistics(item.id)" class="header-lefter-item blue pointer">查看物流</div>
             </template>
            
           </div>
@@ -260,7 +258,8 @@ export default {
                 return '商家配送'
             case 3:
               if(order.orderStatus==5||order.orderStatus==6){
-                    return "第三方配送-达达"
+                return '第三方配送-达达'
+                    // return `第三方配送-${this.thirdNameFunction(order.thirdType)}` 
                 }else{
                     return "第三方配送" 
                 }
@@ -269,6 +268,32 @@ export default {
                 return '上门自提'
         }
     },
+     
+    distributionInfoFilter(item){
+      switch(item.status){
+          case 1:
+              return '发单中，等待骑手接单'
+          case 2://待取货
+          case 3://配送中
+          case 4://已完成
+          case 8://指派单
+              break
+          case 5://取消
+              if(item.cancelFrom!=1){ //cancelFrom:1达达骑手取消，2商家取消，3系统或者客服取消，0默认值
+                  return '发单中，等待骑手接单'
+              }else if(item.cancelFrom ==1){
+                  return '骑手取消接单，重新发单中'
+              }
+          case 9:
+            return '妥投异常之物品返回中'
+          case 10:
+            return '妥投异常之物品返回完成 '
+          case 1000:
+            return '创建达达运单失败'
+      }
+
+    }
+
   },
   watch: {
     orderDetail: {
@@ -341,11 +366,14 @@ export default {
                 orderStatus: this.orderDetail.orderInfo.orderStatus,
                 deliveryDate:this.orderDetail.orderInfo.deliveryDate,
                 deliveryTime:this.orderDetail.orderInfo.deliveryTime,
-                complateTime:this.orderDetail.orderInfo.complateTime
+                complateTime:this.orderDetail.orderInfo.complateTime,
+                isAbnormal:!!this.orderDetail.orderInfo.isAbnormal,
+                distributionInfoView:this.orderDetail.distributionInfoViews&&this.orderDetail.distributionInfoViews[0],
+                thirdType:this.orderDetail.orderInfo.thirdType
+
               }
             );
             arr.push(obj);
-
             Array.from(this.orderDetail.orderSendItemMap[i]).forEach(item=>{
               if(item.sendReceivedAddressId){
                   if(!objTemp[item.sendReceivedAddressId]){
@@ -391,7 +419,6 @@ export default {
     if(sendProductsArr.length>0){
       arr = [];
       sendProductsArr.forEach((item,index)=>{
-        debugger
         let obj = Object.assign(
               {},
               {
@@ -420,7 +447,9 @@ export default {
                 deliveryDate:this.orderDetail.orderInfo.deliveryDate,
                 deliveryTime:this.orderDetail.orderInfo.deliveryTime,
                 complateTime:this.orderDetail.orderInfo.complateTime,
-                is_abnormal:!!this.orderDetail.orderInfo.is_abnormal,//is_abnormal:是否是异常单：0否1是
+                isAbnormal:!!this.orderDetail.orderInfo.isAbnormal,//is_abnormal:是否是异常单：0否1是
+                distributionInfoView:this.orderDetail.distributionInfoViews&&this.orderDetail.distributionInfoViews[0],
+                thirdType:this.orderDetail.orderInfo.thirdType
 
               }
               );
@@ -466,6 +495,23 @@ export default {
 
           });
       }
+    },
+    showDistributorLogistics(id){
+        this._apis.order
+          .getDistributorTrack({cid: this.cid,orderInfoId: id})
+          .then(res => {
+            let newDatas= {
+               tracks:res ||[],
+               deliveryWay:this.orderDetail.orderInfo.deliveryWay,
+               thirdType:this.orderDetail.orderInfo.thirdType
+            }
+            this.currentDialog = "LogisticsDialog";
+            this.currentData = newDatas || {}
+            this.dialogVisible = true;
+          })
+          .catch(error => {
+           this.$message.error(error);
+          });
     },
     showContent(index) {
       let _orderSendItems = [...this.orderSendItems];
