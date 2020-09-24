@@ -590,7 +590,7 @@ export default {
     left: -30px;
     top: -30px;
     line-height: 30px;
-    width: 640px;
+    width: 660px;
     text-align: center;
     height: 30px;
     background: #FFEDEA;
