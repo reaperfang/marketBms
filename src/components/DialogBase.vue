@@ -81,7 +81,7 @@ export default {
 </script>
 <style lang="scss" scoped>
     /deep/ .el-dialog {
-        border-radius: 10px;
+        border-radius: 3px;
     }
     /deep/ .el-dialog__title {
         color: #44434B;
