@@ -79,7 +79,7 @@
   .b_c_title {
     margin: 4px 0 10px;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 550;
   }
 
   .b_c_description {
