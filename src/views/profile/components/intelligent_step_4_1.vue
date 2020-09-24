@@ -115,7 +115,7 @@
     border: 1px solid #92929B;
     font-size: 12px;
     font-weight: 400;
-    color: #92929B;
+    color: $contentColor;
     line-height: 28px;
     text-align: center;
     cursor: pointer;
@@ -130,7 +130,7 @@
     border: 1px solid #DADAE3;
     font-size: 12px;
     font-weight: 400;
-    color: $contentColor;
+    color: #92929B;
     line-height: 28px;
     text-align: center;
     cursor: default;
