@@ -771,3 +771,12 @@ export function sendGoods3(data) {
     data
   })
 }
+//重新发单
+export function reOrder(data) {
+  return request({
+    target: 'REISSUE-ORDER0SENDINFO-PROCESS',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}
