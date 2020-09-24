@@ -61,9 +61,10 @@
 				</div>
 			</div> -->
 
-			<!-- <div
+			<div
 				v-for="(item, index) in chartData"
-				:class="'circle-' + item.size + ' circle-hover'"
+				:key="index"
+				class="circle-" + item.size + " circle-hover"
 				v-show="item.name"
 				@click.prevent
 				v-tooltip.right="{
@@ -79,6 +80,10 @@
 					<span style="padding:15px 0">交易排名第{{item.top}}</span><br />
 					<p style="padding:5px 17px;">{{ item.name }}</p>
 				</div>
+			</div>
+<!-- 
+			<div v-for="(item, index) in chartData" :key="index">
+				{{ item.top }}
 			</div> -->
 		</div>
 	</div>
@@ -101,36 +106,36 @@ export default {
 	data() {
 		return {
 			chartData: [
-				{
-					size: 90,
-					top: "一",
-					name: this.first,
-					color: "#026dff"
-				},
-				{
-					size: 70,
-					top: "二",
-					name: this.sec,
-					color: "#06c9dd"
-				},
-				{
-					size: 65,
-					top: "三",
-					name: this.third,
-					color: "#ff5c31"
-				},
-				{
-					size: 55,
-					top: "四",
-					name: this.fourth,
-					color: "#f59f00"
-				},
-				{
-					size: 45,
-					top: "五",
-					name: this.five,
-					color: "#5f5eff"
-				}
+				// {
+				// 	size: 90,
+				// 	top: "一",
+				// 	name: this.first,
+				// 	color: "#026dff"
+				// },
+				// {
+				// 	size: 70,
+				// 	top: "二",
+				// 	name: this.sec,
+				// 	color: "#06c9dd"
+				// },
+				// {
+				// 	size: 65,
+				// 	top: "三",
+				// 	name: this.third,
+				// 	color: "#ff5c31"
+				// },
+				// {
+				// 	size: 55,
+				// 	top: "四",
+				// 	name: this.fourth,
+				// 	color: "#f59f00"
+				// },
+				// {
+				// 	size: 45,
+				// 	top: "五",
+				// 	name: this.five,
+				// 	color: "#5f5eff"
+				// }
 			],
 			chart: "",
 			first: "",
@@ -184,7 +189,42 @@ export default {
 				if (index == 4) {
 					this.five = item.goods_type_name;
 				}
+
 			});
+
+			
+				this.chartData=[
+				{
+					size: 90,
+					top: "一",
+					name: this.first,
+					color: "#026dff"
+				},
+				{
+					size: 70,
+					top: "二",
+					name: this.sec,
+					color: "#06c9dd"
+				},
+				{
+					size: 65,
+					top: "三",
+					name: this.third,
+					color: "#ff5c31"
+				},
+				{
+					size: 55,
+					top: "四",
+					name: this.fourth,
+					color: "#f59f00"
+				},
+				{
+					size: 45,
+					top: "五",
+					name: this.five,
+					color: "#5f5eff"
+				}
+			]
 		}
 	},
 	components: {}
