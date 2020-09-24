@@ -63,6 +63,8 @@ import gridtitle from "../../components/title/index";
 import vline from "../../components/v-chart/line/index";
 import { mapGetters, mapActions, mapState } from "vuex";
 
+import { toDecimal } from "@/utils/util";
+
 export default {
 	watch: {
 		"dashboard.paymail"(val) {
@@ -136,7 +138,8 @@ export default {
 				}
 			},
 			left: {},
-			right: {}
+			right: {},
+			toDecimal: toDecimal
 		};
 	},
 	computed: {
@@ -206,24 +209,24 @@ export default {
 			}
 
 			return rows;
-		},
-		toDecimal(x) {
-			var f = parseFloat(x);
-			if (isNaN(f)) {
-				return false;
-			}
-			var f = Math.round(x * 100) / 100;
-			var s = f.toString();
-			var rs = s.indexOf(".");
-			if (rs < 0) {
-				rs = s.length;
-				s += ".";
-			}
-			while (s.length <= rs + 2) {
-				s += "0";
-			}
-			return s;
 		}
+		// toDecimal(x) {
+		// 	var f = parseFloat(x);
+		// 	if (isNaN(f)) {
+		// 		return false;
+		// 	}
+		// 	var f = Math.round(x * 100) / 100;
+		// 	var s = f.toString();
+		// 	var rs = s.indexOf(".");
+		// 	if (rs < 0) {
+		// 		rs = s.length;
+		// 		s += ".";
+		// 	}
+		// 	while (s.length <= rs + 2) {
+		// 		s += "0";
+		// 	}
+		// 	return s;
+		// }
 	}
 };
 </script>
