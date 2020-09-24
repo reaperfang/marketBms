@@ -258,8 +258,9 @@ export default {
                 return '商家配送'
             case 3:
               if(order.orderStatus==5||order.orderStatus==6){
-                return '第三方配送-达达'
-                    // return `第三方配送-${this.thirdNameFunction(order.thirdType)}` 
+                  if(order.thirdType==1){
+                     return '第三方配送-达达'
+                  }
                 }else{
                     return "第三方配送" 
                 }
@@ -510,6 +511,7 @@ export default {
             this.dialogVisible = true;
           })
           .catch(error => {
+            // debugger
            this.$message.error(error);
           });
     },

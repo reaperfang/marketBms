@@ -6,6 +6,7 @@
     :title="title"
     width="714px"
     :showFooter="showFooter"
+    :useHtmlTitle="useHtmlTitle"
   >
     <div class="container">
       <!-- 其他配送方式物流轨迹消息 -->
@@ -32,14 +33,7 @@
           </div>
         </template>
         <!-- 第三方配送时骑手轨迹 -->
-        <template v-else>
-          <p>
-            <span>物流信息</span>
-            <span v-if="activities[0].status!=1" style="margin-left: 15px;">第三方配送{{data.thirdType | thirdDeliveryWayNameFilter}}
-            </span>
-            <span v-if="activities[0].status==1" style="margin-left: 15px;">第三方配送
-            </span>
-          </p>
+        <template v-else>·  
           <el-timeline v-show="activities.length" :reverse="reverse">
                 <el-timeline-item
                   v-for="(activity, index) in activities"
@@ -54,6 +48,10 @@
               <Empty v-show="!activities.length"></Empty>
         </template>
     </div>
+    <div slot="title">
+      <span class="title">物流信息</span>
+      <span class="thirdType">{{activities[0] | thirdDeliveryWayNameFilter}}</span>
+    </div>
   </DialogBase>
 </template>
 <script>
@@ -67,14 +65,19 @@ export default {
       reverse: true,
       activities: [],
       deliveryWay:1,
-  
+      useHtmlTitle:true
+
     };
   },
   filters:{
-    thirdDeliveryWayNameFilter(type){
-      switch(type){
+    thirdDeliveryWayNameFilter(item){
+      switch(item.thirdType){
         case 1:
-          return '达达'
+          if(item.status ==1){
+            return '第三方配送'
+          }else{
+            return '第三方配送-达达'
+          }
       }
 
     }
@@ -89,7 +92,8 @@ export default {
           acceptStation: '等待骑手接单2',
           distributorName: "",
           distributorPhone: "",
-          status:1
+          status:1,
+          thirdType:1
       },
       {
           cid: "2",
@@ -122,7 +126,6 @@ export default {
       
     ]
      this.activities= this.data.tracks.map(item=>{
-  
        switch(item.status){
          case 1:
            item.acceptStation='等待骑手接单' 
@@ -155,7 +158,9 @@ export default {
         acceptTime:item.acceptTime,
         acceptStation: item.acceptStation,
         distributorName: item.distributorName,
-        distributorPhone:item.distributorPhone
+        distributorPhone:item.distributorPhone,
+        status:item.status,
+        thirdType:item.thirdType
       }
     })
     
@@ -220,6 +225,15 @@ export default {
     position: absolute;
     left: -130px;
     top: 0px;
+  }
+  .title{
+    margin-left:20px;
+    font-size:14px;
+  }
+  .thirdType{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
   }
 }
 </style>

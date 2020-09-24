@@ -691,7 +691,9 @@ export default {
                 return '商家配送'
             } else if(order.deliveryWay === 3){
                 if(order.orderStatus==5||order.orderStatus==6){
-                    return "第三方配送-达达"
+                    if(order.thirdType==1){
+                        return "第三方配送-达达"
+                    }
                 }else{
                     return "第三方配送"
                 }
