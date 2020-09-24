@@ -294,14 +294,46 @@ export default {
       if(this.orderDetail.orderSendItemMap && Object.keys(this.orderDetail.orderSendItemMap).length){
         for (let i in this.orderDetail.orderSendItemMap) {
           if (this.orderDetail.orderSendItemMap.hasOwnProperty(i)) {
-            Array.from(this.orderDetail.orderSendItemMap[i]).forEach(item=>{
-              if(item.sendReceivedAddressId&&!objTemp[item.sendReceivedAddressId]){
-                objTemp[item.sendReceivedAddressId]={sendReceivedAddressId:item.sendReceivedAddressId,datas:[]}
-                sendProductsArr.push(objTemp[item.sendReceivedAddressId])
+            let obj = Object.assign(
+              {},
+              {
+                goodsList: this.orderDetail.orderSendItemMap[i],
+                expressNo: i,
+                shipperName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].expressCompany || '',
+                showContent: true,
+                sendRemark: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].sendRemark || '',
+                sendName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendName || '',
+                sendProductName:this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5) && this.orderDetail.orderOperationRecordList.find(item=>item.operationType==5).createUserName||'',
+                id: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].orderId || '',
+                createTime: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].createTime || '',
+                deliveryWay: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].deliveryWay || '',
+                deliveryName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorName || '',
+                phone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorPhone || '',
+                receiveAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receiveAddress || '',
+                receivedDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedDetail || '',
+                sendAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendAddress || '',
+                sendDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendDetail || '',
+                receivedName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedName || '',
+                receivedPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedPhone || '',
+                sendPhone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendPhone || '',
+                orderStatus: this.orderDetail.orderInfo.orderStatus,
+                deliveryDate:this.orderDetail.orderInfo.deliveryDate,
+                deliveryTime:this.orderDetail.orderInfo.deliveryTime,
+                complateTime:this.orderDetail.orderInfo.complateTime
               }
-              objTemp[item.sendReceivedAddressId].datas.push(item)
-           
+            );
+            arr.push(obj);
+
+            Array.from(this.orderDetail.orderSendItemMap[i]).forEach(item=>{
+              if(item.sendReceivedAddressId){
+                  if(!objTemp[item.sendReceivedAddressId]){
+                      objTemp[item.sendReceivedAddressId]={sendReceivedAddressId:item.sendReceivedAddressId,datas:[]}
+                      sendProductsArr.push(objTemp[item.sendReceivedAddressId])
+                   }
+                objTemp[item.sendReceivedAddressId].datas.push(item)
+              }
             }) 
+            
             // let obj = Object.assign(
             //   {},
             //   {
@@ -334,6 +366,8 @@ export default {
           }
         }
       }
+    if(sendProductsArr.length>0){
+      arr = [];
       sendProductsArr.forEach((item,index)=>{
         let obj = Object.assign(
               {},
@@ -367,7 +401,8 @@ export default {
               );
             arr.push(obj)
       })
-      arr.sort((a, b) => {
+    }
+    arr.sort((a, b) => {
         const thisTimeA = a.createTime.replace(/-/g, '/')
         const thisTimeB = b.createTime.replace(/-/g, '/')
         let timeA = new Date(thisTimeA).getTime()

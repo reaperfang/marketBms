@@ -244,7 +244,7 @@ export default {
         obj.city_name = data.city // 市名称
         obj.city_code = data.addressCode[1] // 市编码
         obj.area_name = data.area // 地区名称
-        obj.area_code = data.addressCode[1] // 地区码
+        obj.area_code = data.addressCode[2] // 地区码
         obj.longitude = data.lng // 经度
         obj.latitude = data.lat // 纬度
         obj.address_type = data.type // 地址类型0:发货地址 1:退货地址 2:发货退货地址
