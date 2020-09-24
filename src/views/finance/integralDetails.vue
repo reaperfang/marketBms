@@ -61,18 +61,22 @@
         <el-table-column
           prop="scoreDetailSn"
           label="积分流水号"
+          fixed="left" class-name="table-padding"
           width="200px">
         </el-table-column>
         <el-table-column
           prop="memberSn"
+          align="center"
           label="用户ID">
         </el-table-column>
         <el-table-column
           prop='nickName'
+          align="center"
           label="用户昵称">
         </el-table-column>
         <el-table-column
           prop="businessTypeId"
+          align="center"
           label="业务类型">
           <template slot-scope="scope">
             {{idbusinessTypes[scope.row.businessTypeId] && idbusinessTypes[scope.row.businessTypeId].label}}
@@ -98,12 +102,15 @@
           label="交易时间"
           sortable = "custom"
           align="center"
-          width="200px">
+          width="160px">
         </el-table-column>
         <el-table-column
           prop="remarks"
           label="备注"
-          align="right">
+          class-name="table-padding"
+          width="190px"
+          fixed="right"
+          align="center">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -304,8 +311,5 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
-}
-/deep/ .el-table--small td, /deep/.el-table--small th{
-  padding:16px 10px;
 }
 </style>

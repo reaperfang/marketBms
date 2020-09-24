@@ -12,8 +12,9 @@
         type="index"
         label="排序"
         width="80"
-        align="left"
-        fixed>
+        fixed="left"
+        class-name="table-padding"
+        align="left">
       </el-table-column>
       <el-table-column
         prop="id"
@@ -26,7 +27,7 @@
         align="center"
         width="150px">
         <template slot-scope="scope">
-          <span style="line-height:60px; display:inline-block">{{{0:'非会员',1:'新会员',2:'老会员'}[scope.row.memberType]}}</span>
+          <span style="display:inline-block">{{{0:'非会员',1:'新会员',2:'老会员'}[scope.row.memberType]}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -47,7 +48,7 @@
       <el-table-column
         prop="score"
         label="积分"
-      align="center">
+      align="right">
       </el-table-column>
       <el-table-column
         label="(会员)入会时间"
@@ -62,18 +63,20 @@
       <el-table-column
         prop="tradeCount"
         label="交易(总)次数"
-        align="center"
+        align="right"
         width="150px">
       </el-table-column>
       <el-table-column
         prop="orderPaymentCount"
         label="订单(总)金额"
         align="center"
-        width="150px">
+        min-width="150px"
+        width="right">
       </el-table-column>
       <el-table-column
         label="最后交易时间"
-        width="200"
+        width="180"
+        class-name="table-padding"
       align="right"
       fixed="right">
         <template slot-scope="scope" style="width:171px;">
@@ -148,22 +151,12 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .cell{
-            .btns{
-                span{
-                    color: #655EFF;
-                    margin-right: 5px;
-                }
-            }
-        }
 .txtCenter{
   text-align:center; 
   width:80%;
   display:inline-block
 }
-/deep/ .el-table--small td, /deep/.el-table--small th{
-  padding:8px 10px;
-}
+
 .page_styles {
     margin: 40px 0 30px 0;
 }

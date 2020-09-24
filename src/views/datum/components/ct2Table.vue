@@ -10,6 +10,9 @@
       <el-table-column
         prop="productName"
         label="商品名称"
+        min-width="260" 
+        fixed="left" 
+        class-name="table-padding"
         width="200px">        
         <template slot-scope="scope">
           <div  style="height:60px; width:180px; display:flex">
@@ -61,6 +64,9 @@
       <el-table-column
         prop="rateRepurchase"
         label="复购率"
+        fixed="right"
+        min-width="100"
+        class-name="table-padding"
         align="right"
         >
         <template slot-scope="scope">
@@ -115,16 +121,4 @@ export default {
   components: {}
 };
 </script>
-<style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .cell{
-            .btns{
-                span{
-                    color: #655EFF;
-                    margin-right: 5px;
-                }
-            }
-        }
-/deep/ .el-table--small td, /deep/.el-table--small th{
-  padding:8px 10px;
-}
-</style>
+

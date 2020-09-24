@@ -3,7 +3,7 @@
         <el-dialog
         title=""
         :visible.sync="showShopsDialog"
-        width="740px"
+        width="760px"
         :before-close="handleClose"
         :close-on-click-modal="false"
         :close-on-press-escape="false"

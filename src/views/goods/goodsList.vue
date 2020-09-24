@@ -77,7 +77,7 @@
                     :empty-text="emptyText">
                     <el-table-column
                         type="selection"
-                        width="55">
+                        width="34">
                     </el-table-column>
                     <!-- <el-table-column
                     prop="code"
@@ -144,8 +144,7 @@
                                 <el-switch
                                     v-if="scope.row.status !== -1"
                                     v-model="scope.row.switchStatus"
-                                    active-color="#0cd4af"
-                                    inactive-color="#c8c8ca"
+                                    active-color="#13ce66" inactive-color="#CACACF"
                                     @change="(flag) => {
                                         switchStatusChange(flag, scope.row.id, scope.row.activity)
                                     }">
@@ -197,11 +196,13 @@
                             <span class="store">{{scope.row.saleCount}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="操作" width="154" fixed="right" header-align="center" class-name="table-padding" v-if="$route.name !== 'goodsListOnly'">
+                    <el-table-column label="操作" width="156" fixed="right" header-align="center" class-name="table-padding" v-if="$route.name !== 'goodsListOnly'">
                         <template slot-scope="scope">
-                            <span v-permission="['商品', '商品列表', '默认页面', '修改商品信息']" @click="$router.push('/goods/addGoods?id=' + scope.row.id + '&goodsInfoId=' + scope.row.id)" class="table-btn">编辑</span>
-                            <span @click="shareHandler(scope.row)" class="table-btn">分享</span>
-                            <span v-permission="['商品', '商品列表', '默认页面', '删除商品']" @click="deleleHandler(scope.row)" class="table-btn table-warning">删除</span>
+                            <div class="table-operate">
+                                <span v-permission="['商品', '商品列表', '默认页面', '修改商品信息']" @click="$router.push('/goods/addGoods?id=' + scope.row.id + '&goodsInfoId=' + scope.row.id)" class="table-btn">编辑</span>
+                                <span @click="shareHandler(scope.row)" class="table-btn">分享</span>
+                                <span v-permission="['商品', '商品列表', '默认页面', '删除商品']" @click="deleleHandler(scope.row)" class="table-btn table-warning">删除</span>
+                            </div>
                         </template>
                     </el-table-column>
                 </el-table>

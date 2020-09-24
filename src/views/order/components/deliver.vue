@@ -28,16 +28,16 @@
              >
               <el-table-column 
                 type="selection" 
-                width="51"
+                width="34"
                 :selectable="selectable"
                 :reserve-selection="true"
               ></el-table-column>
-              <el-table-column label="序号" width="180">
+              <el-table-column label="序号" width="100" fixed="left" class-name="table-padding">
                 <template slot-scope="scope">
                   <span>{{scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column label="商品" width="380">
+              <el-table-column label="商品">
                 <template slot-scope="scope">
                   <div class="goods-detail">
                     <div class="goods-detail-item">
@@ -50,10 +50,10 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="goodsCount" label="应发数量">
+              <el-table-column prop="goodsCount" label="应发数量" align="right" width="120">
                 <template slot-scope="scope">{{scope.row.goodsCount - scope.row.cacheSendCount}}</template>
               </el-table-column>
-              <el-table-column prop="sendCount" label="本次发货数量">
+              <el-table-column prop="sendCount" label="本次发货数量" fixed="right" align="center" class-name="table-padding">
                 <template slot-scope="scope">
                   <el-input
                     :class="{'send-input': scope.row.errorMessage}"
@@ -551,12 +551,6 @@ export default {
         if (valid) {
           let params;
 
-          // if(true) {
-          //   this.confirm({title: '提示', text: '达达账户余额不足，请充值后再发货', confirmText: '去充值'}).then(() => {
-                //this.$router.push('/set/recharge')
-          //   })
-          //   return
-          // }
           //如果是普通快递
           if(formName == 'ruleForm'){
             if(this.orderInfo.deliveryWay != 4 && this.orderInfo.deliveryWay != 3) {
@@ -688,6 +682,12 @@ export default {
         this._apis.order
         .sendGoods3(params)
         .then(res => {
+          if(res.code == 2155) {
+            this.confirm({title: '提示', text: '达达账户余额不足，请充值后再发货', confirmText: '去充值'}).then(() => {
+                this.$router.push('/set/recharge')
+            })
+            return
+          }
           this.$message.success('发货成功');
           this.sending = false
           this.$router.push({
@@ -1035,25 +1035,9 @@ export default {
     color: #444a51;
     text-decoration: underline;
 }
-/deep/ .el-table td, /deep/ .el-table th {
-    text-align: center;
-    &:nth-child(2) {
-        text-align: left;
-    }
-    &:nth-child(3) {
-        text-align: left;
-    }
-}
 .el-table-column--selection .cell {
     padding-left: 20px;
     padding-right: 15px;
-}
-/deep/ .el-table table .cell {
-  padding-left: 0;
-  padding-right: 0;
-}
-/deep/ .el-table table tbody tr td:nth-child(2) {
-  padding-left: 10px;
 }
 /deep/ .el-table thead tr th {
   border-bottom: none;

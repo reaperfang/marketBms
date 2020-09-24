@@ -9,6 +9,8 @@
       v-loading="loading"
       >
       <el-table-column
+       fixed="left" class-name="table-padding"
+       min-width="300"
         label="获取积分场景">
         <template slot-scope="scope">
           <span>{{scope.row.sceneName}}</span>
@@ -17,9 +19,10 @@
       </el-table-column>
       <el-table-column
         prop="enable"
+        align="center"
         label="状态">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="116" fixed="right" header-align="center" class-name="table-padding">
         <template slot-scope="scope">
             <span class="edit_span" @click="editCredit(scope.row)" v-permission="['用户', '积分管理', '获取积分规则', '查看']">
                 <!-- <i class="edit_i"></i> -->
@@ -159,13 +162,6 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .el-table td, /deep/ .el-table th {
-        text-align: center;
-        &:nth-child(1) {
-            text-align: left;
-            padding-left: 20px;
-        }
-    }
 .edit_span{
     color: #655EFF;
     cursor: pointer;

@@ -68,6 +68,8 @@
       <el-table-column
         prop="date"
         label="时间"
+        min-width="120"
+        fixed="left" class-name="table-padding"
         align="left">
       </el-table-column>
       <el-table-column
@@ -83,6 +85,8 @@
       <el-table-column
         prop="averagePayment"
         label="人均消费金额（元）"
+        min-width="150"
+        fixed="right" class-name="table-padding"
         align="right">
       </el-table-column>
     </el-table>
@@ -426,9 +430,6 @@ line-height: 32px;
 margin-right: 10px;
 width: 84px;
 }
-}
-/deep/ .el-table--small td, /deep/.el-table--small th{
-  padding:8px 10px;
 }
 .page_styles {
     margin: 40px 0 30px 0;

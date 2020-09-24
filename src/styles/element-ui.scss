@@ -254,11 +254,32 @@ input::-moz-placeholder, textarea::-moz-placeholder{
 }
 
 // 表格
+.el-table th {
+  height: 46px;
+  color: #44434B;
+  background: #F6F7FA;
+}
+.el-table td {
+  padding: 16px 0;
+}
 .table-padding {
   .cell {
     padding: 0 20px !important;
   }
 }
+.el-table-column--selection .cell {
+  padding-left: 20px;
+  overflow: inherit;
+  .el-checkbox {
+    display: block;
+  }
+  .el-checkbox__input {
+    padding-right: 0;
+  }
+}
+// .el-table--scrollable-x .el-table__body-wrapper::-webkit-scrollbar {//滚动条的宽度
+//   height: 10px !important;
+// }
 // 全选
 .table-select {
   font-size: 0;
@@ -275,6 +296,7 @@ input::-moz-placeholder, textarea::-moz-placeholder{
     &:hover {
       color: #655EFF !important;
       border-color: #655EFF !important;
+      background: #fff;
     }
   }
 }
@@ -282,10 +304,20 @@ input::-moz-placeholder, textarea::-moz-placeholder{
 .table-warning {
   color: #FD4C2B !important;
 }
-.table-btn{
-  padding-right: 5px !important;
-  border-right: 1px solid #dadae3;
-  &:last-child{
-    border-right: none;
+.table-operate {
+  height: 23px;
+  font-size: 0;
+  .table-btn{
+    font-size: 14px;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    border-right: 1px solid #dadae3;
+    &:first-child{
+      padding-left: 0 !important;
+    }
+    &:last-child{
+      padding-right: 0 !important;
+      border-right: none;
+    }
   }
 }

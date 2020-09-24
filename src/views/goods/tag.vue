@@ -33,7 +33,7 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column type="selection" width="34"></el-table-column>
       <el-table-column prop="name" label="标签名称" min-width="150" fixed="left" class-name="table-padding"></el-table-column>
       <el-table-column prop="productCount" label="绑定商品数量" align="right"></el-table-column>
       <el-table-column label="状态" align="center">
@@ -41,9 +41,9 @@
           <span>{{scope.row.enable | enableFilter}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="154" align="left" fixed="right" header-align="center" class-name="table-padding">
+      <el-table-column label="操作" :width="operationColumnW" align="left" fixed="right" header-align="center" class-name="table-padding">
         <template slot-scope="scope" >
-          <div class="operate-box">
+          <div class="operate-box table-operate">
           <span v-permission="['商品', '商品标签', '默认页面', '修改']" class="table-btn" @click="change(scope.row)">修改</span>
           <span v-permission="['商品', '商品标签', '默认页面', '显示/隐藏']" class="table-btn" @click="hide(scope.row)">{{scope.row.enable | operateEnable}}</span>
           <span v-permission="['商品', '商品标签', '默认页面', '删除']" class="table-btn table-warning" @click="deleteTag(scope.row)">删除</span>
@@ -113,7 +113,18 @@ export default {
       loading: false,
       checkedAll: false,
       isIndeterminate: false,
+      operationColumnW: 72 //操作列宽度
     };
+  },
+  watch: {
+    'list': {
+        handler(newVal, oldVal) { //计算操作栏宽度
+            this.$nextTick(() => {
+                this.operationColumnW = this.utils.getOperationColumnW();
+            })
+        },
+        deep: true
+    }
   },
   created() {
     this.getList()
@@ -313,9 +324,6 @@ export default {
             margin-left: 16px;
         }
     }
-}
-/deep/ .el-table--small td,.el-table--small th{
-      padding:16px 0;
 }
 /deep/ .el-table-column--selection .cell{
     padding-left:20px;

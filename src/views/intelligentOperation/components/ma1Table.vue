@@ -9,47 +9,63 @@
       >
       <el-table-column
         type="index"
-        label="排序">
+        label="排序"
+        width="80"
+        fixed="left" class-name="table-padding">
       </el-table-column>
       <el-table-column
         prop="id"
-        label="用户ID">
+        label="用户ID"
+        align="center">
       </el-table-column>
       <el-table-column
         prop="name"
-        label="会员昵称">
+        label="会员昵称"
+        align="center">
       </el-table-column>
       <el-table-column
-        label="用户类型">
+        label="用户类型"
+        align="center">
        <template slot-scope="scope">
              <span style="line-height:60px;display:inline-block">{{{1:'非会员',2:'老会员',3:'新会员'}[scope.row.memberType]}}</span>
         </template>
       </el-table-column>
       <el-table-column
         prop="phone"
-        label="手机号">
+        label="手机号"
+        width="150"
+        align="center">
       </el-table-column>
       <el-table-column
         prop="niceGoodsCount"
-        label="满意商品数">
+        label="满意商品数"
+        min-width="120"
+        align="right">
       </el-table-column>
       <el-table-column
         prop="niceRatio"
-        label="满意率">
+        label="满意率"
+        align="right">
       </el-table-column>
       <el-table-column
         prop="badGoodsCount"
         label="差评商品数"
+        min-width="120"
+        align="right"
         >
       </el-table-column>
       <el-table-column
         prop="badRatio"
         label="差评率"
+        align="right"
         >
       </el-table-column>
       <el-table-column
         prop="goodsCount"
         label="订单商品（总）数"
+        align="right"
+        fixed="right" class-name="table-padding"
+        width="170px"
         >
       </el-table-column>
     </el-table>
@@ -100,15 +116,3 @@ export default {
   components: {}
 };
 </script>
-<style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .cell{
-            .btns{
-                span{
-                    color: #655EFF;
-                    margin-right: 5px;
-                }
-            }
-        }
-
-
-</style>

@@ -52,15 +52,19 @@
         >
         <el-table-column
           prop="expressSn"
-          label="快递单号">
+          label="快递单号"
+          fixed="left" class-name="table-padding"
+          width="200px">
         </el-table-column>
         <el-table-column
           prop="expressCompany"
+          align="center"
           label="快递公司">
         </el-table-column>
         <el-table-column
           prop="relationSn"
           label="关联单据编号"
+          align="center"
           :render-header="renderRelationSn"
           width="230px">
         </el-table-column>
@@ -72,9 +76,10 @@
         <el-table-column
           prop="createTime"
           label="查询时间"
-          sortable = "custom"
-          align="right"
-          width="200px">
+          align="center"
+          class-name="table-padding"
+          width="190px"
+          fixed="right">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -140,7 +145,7 @@ export default {
   methods: {
     renderRelationSn(){
       return(
-        <div style="height:49px;line-height:49px;">
+        <p>
           <span style="font-weight:bold;vertical-align:middle;">关联单据编号</span>
           <el-popover
             placement="top-start"
@@ -150,7 +155,7 @@ export default {
             content="订单编号、售后单编号、提现编号">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
-        </div>
+        </p>
       )
     },
     init(){
@@ -280,11 +285,5 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
-}
-/deep/.el-table--small td{
-  padding:16px 10px;
-}
-/deep/.el-table--small th{
-  padding:0px 0px 0px 10px;
 }
 </style>
