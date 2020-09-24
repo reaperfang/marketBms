@@ -171,7 +171,9 @@ export default {
                             break;
                         case 3:
                             if(item.orderStatus==5||item.orderStatus==6){
-                                item.deliveryWayIcon = "达达"
+                                if(item.thirdType==1){
+                                    item.deliveryWayIcon = "达达"
+                                }
                             }else{
                                 item.deliveryWayIcon = "三方"
                             }
@@ -179,9 +181,6 @@ export default {
                         case 4:
                             item.deliveryWayIcon = "自提"
                             break;
-                    }
-                    if(item.deliveryWay==1){
-
                     }
                 })
                 //如果当前列表中包含商家配送方式，则配送方式标题需要加宽
