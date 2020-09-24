@@ -117,12 +117,12 @@
                             <span> <strong>{{dataType.paid_order_am | tofix2}}</strong> </span>
                         </div>
                         <div class="choosebot">
-                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_am_rg_pct!='-9999'" :class="dataType.paid_order_am_rg_pct>0?'up':'down'">
+                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_am_rg_pct!='-9999'&&dataType.paid_order_am_rg_pct!=0" :class="dataType.paid_order_am_rg_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_am_rg_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_am_rg_pct*100).toFixed(2)}}%</span><span v-else>--</span></p>
-                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.paid_order_am_up_pct!='-9999'" :class="dataType.paid_order_am_up_pct>0?'up':'down'">
+                                {{Math.abs(dataType.paid_order_am_rg_pct*100) | tofix2}}%</span><span v-else>--</span></p>
+                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.paid_order_am_up_pct!='-9999'&&dataType.paid_order_am_up_pct!=0" :class="dataType.paid_order_am_up_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_am_up_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_am_up_pct*100).toFixed(2)}}%</span><span v-else>--</span></p>
+                                {{Math.abs(dataType.paid_order_am_up_pct*100) | tofix2}}%</span><span v-else>--</span></p>
                         </div>
                     </div>
                     <div class="choose_item" :class="checkList[1]?'active':''">
@@ -131,14 +131,14 @@
                             <span> <strong>{{dataType.paid_order_cq}}</strong> </span>
                         </div>
                         <div class="choosebot">
-                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_cq_rg_pct!='-9999'" :class="dataType.paid_order_cq_rg_pct>0?'up':'down'">
+                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_cq_rg_pct!='-9999'&&dataType.paid_order_cq_rg_pct!=0" :class="dataType.paid_order_cq_rg_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_cq_rg_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_cq_rg_pct*100).toFixed(2)}}%</span>
+                                {{Math.abs(dataType.paid_order_cq_rg_pct*100) | tofix2}}%</span>
                                 <span v-else>--</span>
                                 </p>
-                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.paid_order_cq_up_pct!='-9999'" :class="dataType.paid_order_cq_up_pct>0?'up':'down'">
+                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.paid_order_cq_up_pct!='-9999'&&dataType.paid_order_cq_up_pct!=0" :class="dataType.paid_order_cq_up_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_cq_up_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_cq_up_pct*100).toFixed(2)}}%</span>
+                                {{Math.abs(dataType.paid_order_cq_up_pct*100) | tofix2}}%</span>
                                 <span v-else>--</span>
                                 </p>
                         </div>
@@ -149,12 +149,12 @@
                             <span> <strong>{{dataType.paid_order_nu}}</strong> </span>
                         </div>
                         <div class="choosebot">
-                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_nu_rg_pct!='-9999'" :class="dataType.paid_order_nu_rg_pct>0?'up':'down'">
+                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_nu_rg_pct!='-9999'&&dataType.paid_order_nu_rg_pct!=0" :class="dataType.paid_order_nu_rg_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_nu_rg_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_nu_rg_pct*100).toFixed(2)}}%</span><span v-else>--</span></p>
-                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.paid_order_nu_up_pct!='-9999'" :class="dataType.paid_order_nu_up_pct>0?'up':'down'">
+                                {{Math.abs(dataType.paid_order_nu_rg_pct*100) | tofix2}}%</span><span v-else>--</span></p>
+                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.paid_order_nu_up_pct!='-9999'&&dataType.paid_order_nu_up_pct!=0" :class="dataType.paid_order_nu_up_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_nu_up_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_nu_up_pct*100).toFixed(2)}}%</span><span v-else>--</span></p>
+                                {{Math.abs(dataType.paid_order_nu_up_pct*100) | tofix2}}%</span><span v-else>--</span></p>
                         </div>
                     </div>
                     <div class="choose_item" :class="checkList[3]?'active':''">
@@ -168,12 +168,12 @@
                             <span> <strong>{{dataType.atv | tofix2}}</strong> </span>
                         </div>
                         <div class="choosebot">
-                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.atv_rg_pct!='-9999'" :class="dataType.atv_rg_pct>0?'up':'down'">
+                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.atv_rg_pct!='-9999'&&dataType.atv_rg_pct!=0" :class="dataType.atv_rg_pct>0?'up':'down'">
                                 <img :src="dataType.atv_rg_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.atv_rg_pct*100).toFixed(2)}}%</span><span v-else>--</span></p>
-                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.atv_up_pct!='-9999'" :class="dataType.atv_up_pct>0?'up':'down'">
+                                {{Math.abs(dataType.atv_rg_pct*100) | tofix2}}%</span><span v-else>--</span></p>
+                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.atv_up_pct!='-9999'&&dataType.atv_up_pct!=0" :class="dataType.atv_up_pct>0?'up':'down'">
                                 <img :src="dataType.atv_up_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.atv_up_pct*100).toFixed(2)}}%</span><span v-else>--</span></p>
+                                {{Math.abs(dataType.atv_up_pct*100) | tofix2}}%</span><span v-else>--</span></p>
                         </div>
                     </div>
                 </div>
