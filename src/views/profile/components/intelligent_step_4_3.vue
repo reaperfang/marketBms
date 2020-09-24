@@ -333,6 +333,7 @@
       font-size: 14px;
       border-color: $globalMainColor;
       color: $globalMainColor;
+      padding: 7px 11px;
     }
   }
 </style>
