@@ -25,9 +25,10 @@
       :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '500'}"
       >
       <el-table-column
-        class-name="pickUpId"
+        class-name="pickUpId table-padding"
         prop="pickUpId"
         label="自提点编号"
+        fixed="left"
         width="150"
         align="left">
       </el-table-column>
@@ -43,7 +44,7 @@
       <el-table-column
         prop='name'
         label="联系人"
-        align="left"
+        align="center"
         width="118">
          <template slot-scope="scope">
           <div class="name" :title="scope.row.name">{{scope.row.name}}</div>
@@ -53,7 +54,7 @@
         prop="mobile"
         label="联系电话"
         align="center"
-        width="142">
+        width="150">
       </el-table-column>
       <el-table-column
         prop="address"
@@ -65,7 +66,7 @@
         prop="pickUpStatus"
         label="状态"
         align="center"
-        width="60">
+        width="80">
         <template slot-scope="scope">
           <span v-if="scope.row.pickUpStatus === 1">启用</span>
           <span v-if="scope.row.pickUpStatus === 0">禁用</span>
@@ -75,18 +76,18 @@
         prop="updateTime"
         label="编辑时间"
         align="center"
-        width="220">
+        width="160">
       </el-table-column>
       <el-table-column
         label="操作"
-        align="center"
         fixed="right"
-        width="150">
+        header-align="center"
+        class-name="table-padding"
+        width="117">
         <template slot-scope="scope">
-          <div class="opeater">
-            <el-button class="btn" @click="goEdit(scope.row.id)" type="text" v-permission="['设置', '上门自提','默认页面', '编辑']">编辑</el-button>
-            <span>|</span>
-            <el-button class="btn" type="text" v-permission="['设置', '上门自提','默认页面', '启用/禁用']" @click="handleEnableSelfLift(scope.row)">{{ getStatusTxt(scope.row) }}</el-button>
+          <div class="opeater table-operate">
+            <span class="table-btn" @click="goEdit(scope.row.id)" v-permission="['设置', '上门自提','默认页面', '编辑']">编辑</span>
+            <span class="table-btn" :class="{'table-warning': scope.row.pickUpStatus !== 0}" v-permission="['设置', '上门自提','默认页面', '启用/禁用']" @click="handleEnableSelfLift(scope.row)">{{ getStatusTxt(scope.row) }}</span>
           </div>
         </template>
       </el-table-column>
@@ -558,36 +559,11 @@ export default {
         color: #44434B;
       }
     }
-    /deep/ th>.cell {
-      line-height: 30px;
-    }
-    /deep/ .pickUpId {
-      padding-left: 10px;
-    }
     .pickUpName, .name {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       cursor: pointer;
-    }
-    .opeater {
-      display: flex;
-      line-height:20px;
-      font-size:14px;
-      justify-content: center;
-      span {
-        width: 1px;
-        line-height: 20px;
-        padding: 0 5px;
-        color: #DADAE3;
-        padding: 9px 15px;
-      }
-      .btn {
-        color:rgba(101,94,255,1);
-      }
-      .disabled {
-        color:rgba(101, 94, 255, .5)
-      }
     }
   }
 }
