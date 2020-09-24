@@ -161,10 +161,9 @@ export default {
 			this.sexageData = {
 				ageData: result,
 				sexData: {
-					female: parseInt(
-						val.c_uv_share_sex_female.toFixed(2) * 100
-					), //c_uv_sex_female
-					gender: parseInt(val.c_uv_share_sex_gender.toFixed(2) * 100)
+					female: (val.c_uv_share_sex_female * 100).toFixed(2), //c_uv_sex_female
+					// gender: parseInt(val.c_uv_share_sex_gender.toFixed(2) * 100)
+					gender: (val.c_uv_share_sex_gender * 100).toFixed(2)
 				}
 			};
 		},
@@ -172,7 +171,8 @@ export default {
 			let result = val.c_uv_share_phone.toFixed(2);
 			this.phoneData = {
 				...this.mobile,
-				progress: parseInt(parseFloat(result) * 100)
+				// progress: parseInt(parseFloat(result) * 100)
+				progress: (result * 100).toFixed(2)
 			};
 		}
 	}
