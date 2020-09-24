@@ -56,6 +56,7 @@ export default {
       this[ele] = val;
     },
     submit() {
+    	this.$message.closeAll()
 		if(!this.adjustmentBalance) {
 			this.btnLoading = false;
 			this.$message({
@@ -81,7 +82,7 @@ export default {
         });
         return;
       }
-      if(Number(this.adjustmentBalance) >= 100000000) {
+      if(Number(this.adjustmentBalance) > 100000000) {
         this.btnLoading = false;
         this.$message({
           message: '调整余额不能超过1亿',
