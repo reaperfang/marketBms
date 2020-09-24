@@ -693,10 +693,10 @@ export default {
           this.$router.push({
             path: '/order/deliverGoodsSuccess',
             query: {
-              id: res.success[0].expressParameter.orderSendInfo.id,
-              orderId: res.success[0].expressParameter.orderSendInfo.orderId,
+              id: this.$route.query._ids,
+              orderId: this.$route.query.ids,
               type: 'deliverGoods',
-              print: this.express + ''
+              deliveryWay: 3
             }
           })
         })

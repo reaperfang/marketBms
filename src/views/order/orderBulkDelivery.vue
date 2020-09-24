@@ -803,14 +803,11 @@ export default {
           this.$router.push({
             path: "/order/deliverGoodsSuccess",
             query: {
-              ids: res.success
-                .map(val => val.expressParameter.orderSendInfo.id)
-                .join(","),
-              orderId: res.success
-                .map(val => val.expressParameter.orderSendInfo.orderId)
-                .join(","),
+              ids: this.$route.query._ids,
+              orderId: this.$route.query.ids,
               type: "orderBulkDelivery",
-              printIds
+              printIds,
+              deliveryWay: 3
             }
           });
         })
@@ -822,12 +819,6 @@ export default {
         this._apis.order
         .orderSendGoods(params)
         .then(res => {
-          if(this.list[0] && this.list[0].deliveryWay == 3) {
-            //本次批量发货100单，成功80单，失败20单 
-            this.$message.success('发货成功');
-          } else {
-            this.$message.success('发货成功');
-          }
           this.sending = false
           
           let printIds = this.list.filter(val => !val.express).map(val => val.orderId).join(',')
