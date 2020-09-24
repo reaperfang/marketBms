@@ -31,7 +31,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="414">
       <div class="total">
         <span>全部 <em>{{total*1}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
@@ -48,7 +48,9 @@
       >
         <el-table-column
           prop="content"
-          label="消息内容">
+          label="消息内容"
+          fixed="left" class-name="table-padding"
+          width="300px">
         </el-table-column>
         <el-table-column
           prop="smsType"
@@ -69,7 +71,7 @@
         <el-table-column
           prop="acceptSmsCountDisplay"
           label="消息数量"
-          align="center">
+          align="right">
         </el-table-column>
         <el-table-column
           prop="acceptStatus"
@@ -83,7 +85,10 @@
           prop="sendTime"
           label="发送时间"
           sortable = "custom"
-          align="right">
+          align="center"
+          class-name="table-padding"
+          width="190px"
+          fixed="right">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -230,7 +235,7 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
+  border-radius: 4px;
   margin-top: 20px;
   padding: 20px;
 }
@@ -259,12 +264,6 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
-}
-/deep/.el-table--small td{
-  padding:16px 10px;
-}
-/deep/.el-table--small th{
-  padding:8px 0px 8px 10px;
 }
 </style>
 

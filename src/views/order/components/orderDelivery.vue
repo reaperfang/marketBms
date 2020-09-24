@@ -79,7 +79,7 @@
                 :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     type="selection"
-                    width="50">
+                    width="34">
                 </el-table-column>
                 <!-- <el-table-column
                     prop="isAutoSend"
@@ -94,8 +94,9 @@
                 <el-table-column
                     prop="orderCode"
                     label="订单编号"
-                    width="228"
-                    :class-name="haveAuto ? 'orderCode haveAuto' : 'orderCode'">
+                    width="240"
+                    fixed="left"
+                    :class-name="haveAuto ? 'orderCode table-padding haveAuto' : 'orderCode table-padding'">
                     <template slot-scope="scope">
                         <el-tooltip v-if="scope.row.isAutoSend" content="自动发货" placement="bottom" effect="dark">
                             <i class="auto"></i>
@@ -104,17 +105,20 @@
                             <i class="urge"></i>
                         </el-tooltip>
                         <i class="unauto" v-if="!scope.row.isAutoSend && (scope.row.isUrge != 0) && haveAuto"></i>
+                        <span class="deliveryWay-icon">{{scope.row | deliveryWayIconFilter}}</span>
                         {{scope.row.orderCode}}
                     </template>
                 </el-table-column>
                 <el-table-column
                     prop="memberName"
                     label="用户昵称"
+                    align="center"
                     width="105">
                 </el-table-column>
                 <el-table-column
                     prop="deliveryWay"
                     label="配送方式"
+                    align="center"
                     width="105">
                     <template slot-scope="scope">
                         <div>
@@ -126,7 +130,8 @@
                 <el-table-column
                     prop="updateTime"
                     label="预约时间"
-                    width="110">
+                    align="center"
+                    width="160">
                     <template slot-scope="scope">
                         <div>
                             <div>{{scope.row.deliveryDate | formatDateRemoveZero}}</div> 
@@ -136,16 +141,19 @@
                 </el-table-column>
                 <el-table-column
                     prop="receivedName"
+                    align="center"
                     label="收货人">
                 </el-table-column>
                 <el-table-column
                     prop="receivedPhone"
                     label="收货人电话"
+                    align="center"
                     width="110">
                 </el-table-column>
                 <el-table-column
                     prop="status"
                     label="状态"
+                    align="center"
                     >
                     <template slot-scope="scope">
                         <span>{{scope.row.status | orderStatusFilter}}</span>
@@ -154,6 +162,7 @@
                 <el-table-column
                     prop="sendTime"
                     label="最新发货时间"
+                    align="center"
                     width="160">
                     <template slot-scope="scope">
                         <div>
@@ -166,34 +175,38 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" :width="computeWidth" fixed="right">
+                <el-table-column label="操作" :width="operationColumnW" fixed="right" align="left" header-align="center" class-name="table-padding">
                     <template slot-scope="scope">
-                        <div class="operate-box">
-                            <span v-permission="['订单', '发货管理', '订单发货', '查看']" @click="$router.push(`/order/orderDetail?id=${scope.row.orderId}&_ids=${scope.row.id}`)">查看</span>
+                        <div class="operate-box table-operate">
+                            <span class="table-btn" v-permission="['订单', '发货管理', '订单发货', '查看']" @click="$router.push(`/order/orderDetail?id=${scope.row.orderId}&_ids=${scope.row.id}`)">查看</span>
                             <template v-if="scope.row.status == 4">
-                                <span v-permission="['订单', '发货管理', '订单发货', '继续发货']" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${scope.row.orderId}&_ids=${scope.row.id}`)">继续发货</span>
+                                <span class="table-btn" v-permission="['订单', '发货管理', '订单发货', '继续发货']" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${scope.row.orderId}&_ids=${scope.row.id}`)">继续发货</span>
                             </template>
                             <template v-else-if="scope.row.status == 3">
-                                <span v-permission="['订单', '发货管理', '订单发货', '发货']" v-if="!scope.row.isFillUp" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${scope.row.orderId}&_ids=${scope.row.id}`)">发货</span>
-                                <span v-if="scope.row.isFillUp && scope.row.deliveryWay != 4" @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
+                                <span class="table-btn" v-permission="['订单', '发货管理', '订单发货', '发货']" v-if="!scope.row.isFillUp" @click="$router.push(`/order/deliverGoods?orderType=order&sendType=one&ids=${scope.row.orderId}&_ids=${scope.row.id}`)">发货</span>
+                                <span class="table-btn" v-if="scope.row.isFillUp && scope.row.deliveryWay != 4" @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
                             </template>
                             <template v-if="scope.row.status == 5">
                                 <template v-if="scope.row.deliveryWay == 1">
-                                    <span v-if="scope.row.isFillUp" @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
+                                    <span class="table-btn" v-if="scope.row.isFillUp" @click="$router.push(`/order/supplementaryLogistics?ids=${scope.row.orderId}&_ids=${scope.row.id}`)">补填物流</span>
                                 </template>
                                 <template v-else-if="scope.row.deliveryWay == 4">
-                                    <span @click="verificationHandler(scope.row)">核销验证</span>
+                                    <span class="table-btn" @click="verificationHandler(scope.row)">核销验证</span>
                                 </template>
-                                <template v-else-if="scope.row.deliveryWay == 3">
-                                    <span class="reOrder(scope.row)">重新发单</span>
-                                    <span @click="closeOrder(scope.row)">关闭订单</span>
-                                </template>
+                                <!-- <template v-else-if="scope.row.deliveryWay == 3">
+                                    <span class="reOrder(scope.row) table-btn">重新发单</span>
+                                    <span class="table-btn" @click="closeOrder(scope.row)">关闭订单</span>
+                                </template> -->
+                            </template>
+                            <template v-else-if="scope.row.deliveryWay == 3 && scope.row.isAbnormal">
+                                <span class="reOrder(scope.row)">重新发单</span>
+                                <span @click="closeOrder(scope.row)">关闭订单</span>
                             </template>
                         </div>
                     </template>
                 </el-table-column>
             </el-table>
-            <div v-show="!loading" class="footer">
+            <div v-show="!loading" class="footer table-select">
                 <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量导入发货']" class="border-button" @click="importAndDelivery">批量导入发货</el-button>
                 <el-button v-permission="['订单', '发货管理', '订单发货', '批量发货']" class="border-button" @click="batchSendGoods">批量发货</el-button>
@@ -221,7 +234,7 @@ import DeliveryMethod from "./deliveryMethod"; //配送方式组件
 import DialogPrintList from '@/components/printListDialog'
 import utils from "@/utils";
 import VerificationDialog from "@/views/order/dialogs/verificationDialog";
-import CloseThirdPartyOrderDialog from "@/views/order/dialogs/closeThirdPartyOrderDialog";
+import CloseOrderDialog from "@/views/order/dialogs/closeOrderDialog";
 import { orderDeliveryMethods } from '@/views/order/mixins/orderDeliveryMixin'
 
 export default {
@@ -272,7 +285,8 @@ export default {
             currentDialog: '',
             dialogVisible: false,
             currentData: {},
-            title: ''
+            title: '',
+            operationColumnW: 72 //操作列宽度
         }
     },
     created() {
@@ -290,6 +304,36 @@ export default {
     //this.checkExpress()
     this.getShopInfo()
     },
+    watch: {
+        'tableData': {
+            handler(newVal, oldVal) { //计算操作栏宽度
+                this.$nextTick(() => {
+                    this.operationColumnW = this.utils.getOperationColumnW();
+                })
+            },
+            deep: true
+        }
+    },
+    filters: {
+        deliveryWayIconFilter(item) {
+            let  code = item.deliveryWay
+
+            switch(code) {
+                case 1:
+                    return "普快"
+                case 2:
+                    return "商配"
+                case 3:
+                    if(item.orderStatus==5||item.orderStatus==6){
+                        return "达达"
+                    }else{
+                        return "三方"
+                    }
+                case 4:
+                    return "自提"
+            }
+        }
+    },
     computed:{
         cid(){
             let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
@@ -297,13 +341,6 @@ export default {
         },
         haveAuto() {
             return this.tableData.some(val => val.isAutoSend || (val.isUrge == 0))
-        },
-        computeWidth() {
-            if(this.tableData.some(item => item.status == 4 || (item.status == 5 && item.isFillUp) || (item.status == 5 && (item.deliveryWay == 4)) || (item.status == 3 && item.isFillUp))) {
-                return '118'
-            } else {
-                return '100'
-            }
         }
     },
     methods: {
@@ -474,8 +511,21 @@ export default {
         closeDialogVisible(){
             this.printDialogVisible=false
         },
-        onSubmit() {
-
+        onSubmit(value) {
+            let orderId = "";
+            if(Object.prototype.toString.call(this.currentData)=="[object Object]"){
+                orderId=this.currentData.id;
+            }else{
+                orderId=this.currentData;
+            }
+            this._apis.order.orderClose({...value, id: orderId}).then((res) => {
+                this.getList()
+                this.visible = false
+                this.$message.success('关闭成功！');
+            }).catch(error => {
+                this.visible = false
+                this.$message.error(error);
+            })
         },
         resetForm(formName) {
             this.listQuery = {
@@ -538,7 +588,7 @@ export default {
         DeliveryMethod,
         DialogPrintList,
         VerificationDialog,
-        CloseThirdPartyOrderDialog
+        CloseOrderDialog
     }
 }
 </script>
@@ -601,7 +651,6 @@ export default {
         }
         .footer {
             padding: 20px 20px 10px 20px;
-            padding-left: 10px;
         }
     }
 }
@@ -658,16 +707,6 @@ export default {
     .icon-store-text{
         vertical-align: middle;
     }
-    /deep/ .el-table td, /deep/ .el-table th {
-        text-align: center;
-        &:nth-child(2) {
-            text-align: left;
-        }
-    }
-    /deep/ .el-table-column--selection .cell {
-        padding-left: 20px;
-        padding-right: 10px;
-    }
     /deep/ .el-table thead .orderCode {
         &.haveAuto {
             padding-left: 32px;
@@ -707,24 +746,24 @@ export default {
             background-color: #fff;
         }
     }
-    /deep/ .el-table .cell {
-        padding-left: 0;
-        padding-right: 10px;
-    }
-    /deep/ .input-with-select .el-input-group__prepend {
+     /deep/ .input-with-select .el-input-group__prepend {
         background-color: #fff;
-    }
-
-     /deep/.el-table td:nth-child(1){
-         padding-left:20px;
-         .cell {
-            text-overflow: clip;
-         }
-     }
-     /deep/ .el-table--small td, /deep/  .el-table--small th {
-        padding: 16px 0;
     }
     /deep/ .el-form--inline .el-form-item {
         margin-bottom: 20px;
+    }
+    .deliveryWay-icon{
+        display:inline-block;
+        width:32px;
+        height:18px;
+        background:rgba(230,230,250,1);
+        border-radius:3px;  
+        line-height:18px;
+        text-align: center;
+        font-size:12px;
+        font-weight:500;
+        color:rgba(101,94,255,1);
+        margin-left:1px;
+        margin-right:5px;
     }
 </style>

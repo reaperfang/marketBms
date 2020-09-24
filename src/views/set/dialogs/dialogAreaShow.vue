@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="visible"
-    width="500"
+    width="520"
     title="配送到"
     :close-on-click-modal="false"
     :close-on-press-escape="false"

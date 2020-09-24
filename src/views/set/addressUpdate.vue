@@ -1,5 +1,5 @@
 <template>
-   <div class="address" v-if="renderComponent">
+   <div class="address mh bor-radius" v-if="renderComponent">
      <h2>地址库/{{ setTitle }}</h2>
      <el-form class="ruleForm" ref="ruleForm" :model="ruleForm" :rules="rules" label-width="102px">
        <div class="form-area">
@@ -183,7 +183,7 @@ export default {
     },
     init() {
       this.ruleForm.id = this.$route.query && this.$route.query.id
-      this.isDisabled = this.$route.query && this.$route.query.source === 1 ? true : false
+      this.isDisabled = this.$route.query && +this.$route.query.source === 1 ? true : false
       if (this.ruleForm.id) {
         this.getAddressById(this.ruleForm.id)
       } 
@@ -267,7 +267,7 @@ export default {
       const obj = this.formateAddressType()
       delete data.type
       // 同城配送默认地址逻辑变更
-      const source = this.$route.query && this.$route.query.source // 来源是否为同城配送
+      const source = this.$route.query && +this.$route.query.source // 来源是否为同城配送
       const sourceType = this.$route.query && this.$route.query.sourceType // 1 商家配送 2 三方配送
       // 如果选择发货地址
       if (obj.type === 0 || obj.type === 2) {
@@ -286,11 +286,12 @@ export default {
     },
     // 处理保存成功的逻辑
     handleSaveSuccess() {
-      
+      const html = '<span class="sucess">保存成功！</span>'
       this.confirm({
-        title: "提示",
-        iconSuccess: true,
-        text: '保存成功',
+        title: '', 
+        iconSuccess: true, 
+        text: html,
+        customClass: 'setting-custom',
         confirmText: '返回地址列表',
         cancelButtonText: '继续新建地址'
       }).then(() => {
@@ -304,7 +305,7 @@ export default {
     // 处理数据重复问题
     handleDataRepeatErr(id) {
       this.confirm({
-        title: "提示",
+        title: "",
         iconWarning: true,
         text: '地址信息重复，点击可直接查看或编辑已创建的地址信息。',
         confirmText: '查看',
@@ -350,7 +351,7 @@ export default {
       // 么有发货地址的情况
       if (!res) {
         this.confirm({
-          title: "提示",
+          title: "",
           iconWarning: true,
           text: '保存后，此地址将成为商家配送的发货地址，商家配送规则将以最新发货地址为准，您确定要保存吗？',
           confirmText: '确定',
@@ -375,7 +376,7 @@ export default {
 
       if (isTrue) {
         this.confirm({
-          title: "提示",
+          title: "",
           iconWarning: true,
           text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
           confirmText: '确定',

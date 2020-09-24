@@ -1,14 +1,14 @@
 <template>
-  <div  v-loading="isInitLoading" element-loading-background="rgba(255,255,255,1)" style="min-height:200px;background-color:#fff;">
+  <div v-calcHeight="60 + 60 + 20 + 20"  v-loading="isInitLoading" element-loading-background="rgba(255,255,255,1)" style="background-color:#fff;min-height: 430px;">
    <div v-if="!isInitLoading" class="th3Deliver">
      <div class="switch-area">
        <span>启用第三方配送：</span>
-       <el-switch active-color="#13ce66" inactive-color="#cacfcb" v-model="isOpen" @change="handleIsOpen"></el-switch>
+       <el-switch class="btn" active-color="#13ce66" inactive-color="#CACACF" v-model="isOpen"></el-switch>
        <span>开启后，将有第三方物流代您进行配送，配送产生的费用，开启后表示同意</span>
        <el-button class="agree" type="text" @click="onPprotocol()">《第三方配送协议》</el-button>
      </div>
      <!-- 发货地址 -->
-     <div class="row">
+     <div class="row" v-show="isTableShow">
        <div class="label">
          发货地址：
        </div>
@@ -67,7 +67,7 @@
           </div>
        </div>
      </div>
-     <div class="row auto-call"  v-show="isTableShow">
+     <div class="row auto-call"  v-show="isHasOpenTh3Config">
        <div class="label">
          自动呼叫：
        </div>
@@ -82,14 +82,13 @@
      <div class="btn btn-register" v-show="btnShow">
       <el-button class="register" @click="handleClickRegister" type="primary" size="small">注册新的达达账号</el-button>
      </div>
-     <div class="btn">
+     <div class="btn" v-show="saveShow">
       <el-button
         type="primary"
         class="submit"
         @click="handleSubmit('ruleForm')"
         v-permission="['设置','同城配送','第三方配送', '保存']"
         :loading="isLoading"
-        v-show="saveShow"
       >保 存</el-button>
     </div>
     <component
@@ -133,17 +132,18 @@ export default {
       saveShow: true,
       isLoading: false,
       isInitLoading: true, // 初始化加载loading显示
-      isTableShow: false, // 是否显示列表
+      // isTableShow: false, // 是否显示列表
       dataList: [
         {
-          thirdType: 1,
+          thirdType:1,
           name: "达达",
           status: 0,
         }
       ],
       dialogVisible: true,
       currentDialog: "",
-      isOpenAutoCall: 0
+      isOpenAutoCall: 0,
+      isApplyOpen: false
     }
   },
 
@@ -154,12 +154,20 @@ export default {
     cid() {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
+    },
+    isHasOpenTh3Config() {
+      const obj = this.dataList.find(item => item.status === 1)
+      return obj ? true : false
+    },
+    isTableShow() {
+      if ((!this.isHasOpenTh3Config && !this.isOpen) || this.isApplyOpen) return false
+      return true
     }
   },
 
   watch: {
     isOpen(val) {
-      this.isTableShow = this.isOpen
+      // this.isTableShow = this.isOpen
       this.btnShow = false
       this.saveShow = true
     }
@@ -223,28 +231,13 @@ export default {
     },
     handleToTh3Info() {
       if (this.addressId) {
-        // this.confirm({
-        //   title: "提示",
-        //   icon: true,
-        //   text: '修改发货地址后请重新确认其它商家配送设置项，如无修改将以新的发货地址为中心按原配送规则执行',
-        //   confirmText: '去修改'
-        // }).then(() => {
-          // source 1 商家配送
         this.$router.push({ path:'/set/addressUpdate', query: {id: this.addressId, source: 1, sourceType: 2 } })
-        // }).catch(()=> {
-        // });
       } else {
         this.$router.push({ path:'/set/addressAdd', query: { source: 1, sourceType: 2 } })
       }
     },
     getTh3DeliverAddress() {
       return this._apis.set.getAddressDefaultSender({ isBindThirdsend: 1}).then((response) => {
-        // if (response) {
-        //   this.address = `${response.address} ${response.addressDetail}`
-        //   this.ruleForm.lng = response.longitude
-        //   this.ruleForm.lat = response.latitude
-        //   this.addressId = response.id
-        // }
         return response
       }).catch((err) => {
         // console.log('err',err)
@@ -271,15 +264,35 @@ export default {
       const isOpenTh3 = this.dataList.find(item => item.status === 1)
       return isFullAddress && isOpenTh3
     },
+    // 设置绑定三方配送
+    setBindThirdsend() {
+      if (!this.addressInfo) return Promise.resolve()
+      const req = {
+        id: this.addressInfo.id,
+        isBindThirdsend: 1,
+        addressType: this.addressInfo.addressType,
+        is_defalt_sender_address: this.addressInfo.isDefaltSenderAddress,
+        is_defalt_return_address: this.addressInfo.isDefaltReturnAddress
+      }
+      return this._apis.set.editAddressById(req)
+    },
+    updateShopInfo() {
+      const req = Object.create(null)
+      req.autoCall = this.isOpenAutoCall
+      req.isOpenTh3Deliver = this.isOpen ? 1 : 0
+      req.id = this.cid
+      return this._apis.set.updateShopInfo(req)
+    },
     handleSubmit() {
       if (this.isLoading) return false
       // 判断是否设置发货地址和开通达达设置
       if (this.isOpen && !this.hasSetting()) {
         this.confirm({
-          title: '提示', 
-          iconWarning: true, 
+          title: '',
+          iconWarning: true,
           text: '您未完成发货地址或开通第三方等配置项设置，设置成功后，才能成功开启第三方配送开关。',
           confirmText: '我知道了',
+          customClass: 'setting-custom',
           showCancelButton: false
         }).finally(() => {
           this.isOpen = false
@@ -288,18 +301,15 @@ export default {
         return false
       }
       this.isLoading = true
-
-      const req = Object.create(null)
-      req.autoCall = this.isOpenAutoCall
-      req.isOpenTh3Deliver = this.isOpen ? 1 : 0
-      req.id = this.cid
-      this._apis.set.updateShopInfo(req).then(response =>{
-        const html = '<p style="font-size: 16px;font-weight: 500;color: #44434B;line-height: 22px;">保存成功</p><p style="font-size: 12px;font-weight: 400;color: #44434B;line-height: 20px;">第三方配送-达达配送已开启。</p>'
+      const p1 = this.setBindThirdsend()
+      const p2 = this.updateShopInfo()
+      Promise.all([p1, p2]).then(response =>{
+        const html = '<span class="sucess">保存成功！</span><span class="prompt" style="">第三方配送-达达配送已开启。</span>'
         this.confirm({
-          title: '提示', 
-          iconSuccess: true, 
+          title: '',
+          iconSuccess: true,
           text: html,
-          customClass: 'goods-custom',
+          customClass: 'setting-custom',
           confirmText: '确定',
           showCancelButton: false
         });
@@ -318,12 +328,6 @@ export default {
     goPay() {
       this.$router.push({ path: '/set/recharge'})
     },
-    handleIsOpen() {
-      console.log('isOpen',this.isOpen)
-      // this.isTableShow = this.isOpen
-      // this.btnShow = false
-      // this.saveShow = true
-    },
     //第三放协议
     onPprotocol() {
       this.currentDialog = "protocolDialog";
@@ -331,37 +335,15 @@ export default {
     },
     //注册成功
     submitForm() {
-      // this.dataList = [
-      //   {
-      //     name: "达达",
-      //     isOpen: "预计3个工作日审核完成",
-      //     explanation: "配费说明",
-      //     adopt: "申请中"
-      //   }
-      // ];
-      this.isTableShow = true;
+      // this.isTableShow = true;
+      this.isApplyOpen = false
       this.btnShow = false;
       this.saveShow = true;
       this.getTh3DeliverList()
-      // this.rechargeShow = false;
-
     },
     //注册新的达达账号
     handleClickRegister() {
-      // this.rechargeShow = true;
-      //   this.sourceId=78117
-      // this.status=2
-
-      // this.isTableShow = true;
-      //  this.btnShow = false;
-      //  this.saveShow = true;
-      //    this.rechargeShow= true
       this.currentDialog = "registerDialog";
-      this.dialogVisible = true;
-    },
-    //同步
-    onSyncAddress() {
-      this.currentDialog = "syncAddressDialog";
       this.dialogVisible = true;
     },
     //充值
@@ -385,7 +367,7 @@ export default {
         cid: this.cid,
         cityCode: this.cityCode,
         areaCode: this.areaCode,
-        thirdType: curr.thirdType
+        thirdType: curr.thirdType || 1
       }
       return this._apis.set.isDaDaCoveredArea(req)
     },
@@ -393,9 +375,10 @@ export default {
     handleClickIsopen(row) {
       if (!this.isFullAddress()) {
         this.confirm({
-          title: '提示', 
+          title: '', 
           iconWarning: true, 
           text: '请先将发货地址补充完成，再申请开通。',
+          customClass: 'setting-custom',
           confirmText: '我知道了',
           showCancelButton: false
         });
@@ -404,19 +387,20 @@ export default {
       this.currTh3Deliver = row
       // 判断达达是否覆盖
       this.isDaDaCoveredArea(row).then(() => {
-        this.isTableShow = false;
+        // this.isTableShow = false;
+        this.isApplyOpen = true
         this.btnShow = true;
         this.saveShow = false;
       }).catch(() => {
         this.confirm({
-          title: '提示', 
+          title: '', 
           iconWarning: true, 
           text: '非常抱歉，发货地所在的城市尚未开通达达同城配送，暂无法使用，敬请期待。',
           confirmText: '我知道了',
+          customClass: 'setting-custom',
           showCancelButton: false
         });
       })
-      
     },
   }
 }
@@ -428,14 +412,21 @@ export default {
   .switch-area {
     background: #F9F9F9;
     padding: 20px;
-    >span, .argee {
+    display: flex;
+    justify-content: flex-start;
+    >span, .agree {
       font-size: 14px;
       font-weight: 400;
       color: #44434B;
-      line-height: 20px;
     }
-    .argee {
+    .agree {
       color:#655EFF;
+      padding: 0;
+      margin: 0;
+      border: 0;
+    }
+    .btn {
+      padding: 0 10px;
     }
   }
   .row {
@@ -469,7 +460,7 @@ export default {
       line-height: 20px;
     }
     .label {
-      width: 152px;
+      width: 132px;
       text-align: right;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -481,6 +472,8 @@ export default {
       >.address-btn {
         padding: 0 0 0 20px;
         font-size:14px;
+        font-weight: 400;
+        color: #655EFF;
       }
     }
   }
@@ -500,6 +493,9 @@ export default {
       font-weight: 400;
       color: #13CE66;
     }
+    td {
+      padding: 15px 0;
+    }
   }
   .tableBox-btn {
     padding:0;
@@ -512,12 +508,12 @@ export default {
       border-right: 0;
     }
   }
-  .btn {
+  >.btn {
+    position: absolute;
+    left: 0;
+    bottom: 50px;
+    width: 100%;
     text-align: center;
-    padding-top:40px;
-    &-register {
-      padding-top: 400px;
-    }
     .register {
       width: 128px;
       height: 32px;

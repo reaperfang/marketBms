@@ -10,33 +10,43 @@
       >
       <el-table-column
         prop="name"
+        fixed="left"
+        min-width="100"
+        class-name="table-padding"
         label="会员卡名称">
       </el-table-column>
       <el-table-column
         prop="enable"
+        align="center"
         label="状态">
       </el-table-column>
       <el-table-column
         prop="cardSn"
+        align="center"
         label="卡号">
       </el-table-column>
       <el-table-column
         prop="memberSn"
+        align="center"
         label="用户ID"
       >
       </el-table-column>
       <el-table-column
         prop="createTime"
+        align="center"
+        width="160"
         label="领取时间"
       >
       </el-table-column>
       <el-table-column
         prop="receiveWay"
+        align="center"
         label="获取方式"
       >
       </el-table-column>
       <el-table-column
         prop="createUserName"
+        align="center"
         label="发放人"
       >
       </el-table-column>
@@ -118,20 +128,5 @@ export default {
 .page_styles {
   margin: 40px 0 30px 0;
 }
-/deep/ .el-table td, /deep/ .el-table th {
-        text-align: center;
-        &:nth-child(1) {
-            text-align: left;
-            padding-left: 20px;
-        }
-    }
-/deep/ .cell{
-            .btns{
-                span{
-                    color: #655EFF;
-                    margin-right: 5px;
-                }
-            }
-        }
 
 </style>

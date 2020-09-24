@@ -753,3 +753,13 @@ export function editorExpressSize(data) {
     data
   })
 }
+
+//第三方订单发货
+export function sendGoods3(data) {
+  return request({
+    target: 'ORDER-SENDINFO-BATCHV2-PROCESS',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}

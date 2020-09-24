@@ -1,5 +1,5 @@
 <template>
-  <div class="new-electronic-faceSheet">
+  <div class="new-electronic-faceSheet mh bor-radius">
     <div v-if="!$route.query.detail" class="title">{{$route.query.id ? '编辑' : '新建'}}电子面单</div>
     <div class="content">
       <div class="row justify-between">

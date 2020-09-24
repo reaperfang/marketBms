@@ -11,7 +11,8 @@
       <el-table-column
         type="index"
         label="排序"
-        align="center">
+        width="80"
+        fixed="left" class-name="table-padding">
       </el-table-column>
       <el-table-column
         prop="orderNumber"
@@ -45,6 +46,7 @@
       <el-table-column
         prop="phone"
         label="手机号"
+        width="150"
         align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.phone ? scope.row.phone : '-'}}</span>
@@ -52,7 +54,7 @@
       </el-table-column>
       <el-table-column
         label="维权时间"
-        width="150"
+        width="160"
         align="center">
         <template slot-scope="scope">
           <span>{{scope.row.tradeTime && Number(scope.row.tradeTime) | time}}</span>
@@ -61,7 +63,8 @@
       <el-table-column
         prop="protectionGoodsCount"
         label="维权商品数"
-        align="center">
+        min-width="120"
+        align="right">
       </el-table-column>
       <el-table-column
         label="维权类型"
@@ -73,6 +76,8 @@
       </el-table-column>
       <el-table-column
         label="维权原因"
+        fixed="right" class-name="table-padding"
+        width="150"
         align="center">
         <template slot-scope="scope">
              <span style="line-height:60px;display:inline-block" v-if="scope.row.protectionReason">{{{5:'不想要了',6:'卖家缺货',7:'发票问题',8:'拍错了/订单信息错误',9:'其他'}[scope.row.protectionReason]}}</span>
@@ -153,22 +158,3 @@ export default {
   components: {}
 };
 </script>
-<style rel="stylesheet/scss" lang="scss" scoped>
-
-/**
-*
-* @Author zpw
-* @Update 2020/4/17
-* @Description  产研-电商中台  bugID: CYDSZT-3506
-*
-*/
-
-/deep/ .cell{
-            .btns{
-                span{
-                    color: #655EFF;
-                    margin-right: 5px;
-                }
-            }
-        }
-</style>

@@ -64,7 +64,7 @@
                     :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                     <el-table-column
                         type="selection"
-                        width="55">
+                        width="34">
                     </el-table-column>
                     <!-- <el-table-column
                         prop="isChoiceness"
@@ -80,11 +80,14 @@
                     <el-table-column
                         prop="goodsName"
                         label="商品名称"
+                        fixed="left"
+                        class-name="table-padding"
                         width="180">
                     </el-table-column>
                     <el-table-column
                         prop="starNum"
                         label="评价星级"
+                        align="center"
                         :filters="[{ text: '1星', value: 1 }, { text: '2星', value: 2 }, { text: '3星', value: 3 }, { text: '4星', value: 4 }, { text: '5星', value: 5 }]"
                         :filter-method="filterStar"
                         filter-placement="bottom-end">
@@ -96,14 +99,17 @@
                     <el-table-column
                         prop="orderCode"
                         label="订单编号"
+                        align="center"
                         width="200">
                     </el-table-column>
                     <el-table-column
                         prop="memberName"
+                        align="center"
                         label="用户昵称">
                     </el-table-column>
                     <el-table-column
                         prop="auditStatus"
+                        align="center"
                         label="状态">
                         <template slot-scope="scope">
                             <span>{{scope.row.auditStatus | auditStatusFilter}}</span>
@@ -112,6 +118,7 @@
                     <el-table-column
                         prop="isReply"
                         label="回复"
+                        align="center"
                         :filters="[{ text: '是', value: 1 }, { text: '否', value: 0 }]"
                         :filter-method="replyFilterTag"
                         filter-placement="bottom-end">
@@ -122,26 +129,27 @@
                     <el-table-column
                         prop="createTime"
                         label="评价时间"
-                        width="162">
+                        align="center"
+                        width="160">
                     </el-table-column>
-                    <el-table-column label="操作" :width="computeWidth" fixed="right">
+                    <el-table-column label="操作" :width="operationColumnW" fixed="right" header-align="center" class-name="table-padding">
                         <template slot-scope="scope">
-                            <div class="operate-box">
-                                <span v-permission="['订单', '评价管理', '默认页面', '审核']" v-if="scope.row.auditStatus == 0" class="blue" @click="currentDialog = 'AuditDialog'; title='审核'; batch = false; currentData = scope.row; dialogVisible = true">审核</span>
+                            <div class="operate-box table-operate">
+                                <span v-permission="['订单', '评价管理', '默认页面', '审核']" v-if="scope.row.auditStatus == 0" class="table-btn" @click="currentDialog = 'AuditDialog'; title='审核'; batch = false; currentData = scope.row; dialogVisible = true">审核</span>
                             <!-- <span class="blue" @click="setChoiceness(scope.row)">{{scope.row.isChoiceness == 1 ? '取消精选' : '设为精选'}}</span> -->
                             <template v-if="scope.row.auditStatus == 1 && scope.row.isChoiceness == 1">
-                                <span v-permission="['订单', '评价管理', '默认页面', '取消精选']" class="blue" @click="setChoiceness(scope.row)">取消精选</span>
+                                <span v-permission="['订单', '评价管理', '默认页面', '取消精选']" class="table-btn" @click="setChoiceness(scope.row)">取消精选</span>
                             </template>
                             <template v-if="scope.row.auditStatus == 1 && !scope.row.isChoiceness">
-                                <span v-permission="['订单', '评价管理', '默认页面', '设为精选']" class="blue" @click="setChoiceness(scope.row)">设为精选</span>
+                                <span v-permission="['订单', '评价管理', '默认页面', '设为精选']" class="table-btn" @click="setChoiceness(scope.row)">设为精选</span>
                             </template>
-                            <span v-permission="['订单', '评价管理', '默认页面', '查看']" @click="$router.push({ path: '/order/reviewsDetail?id=' +  scope.row.id})" class="blue">查看</span>
+                            <span v-permission="['订单', '评价管理', '默认页面', '查看']" @click="$router.push({ path: '/order/reviewsDetail?id=' +  scope.row.id})" class="table-btn">查看</span>
                             </div>
                         </template>
                     </el-table-column>
                 </el-table>
             </div>
-            <div v-show="!loading" class="footer">
+            <div v-show="!loading" class="footer table-select">
                 <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
                 <el-button v-permission="['订单', '评价管理', '默认页面', '批量审核']" @click="batchAudit" class="border-button">批量审核</el-button>
                 <el-button v-permission="['订单', '评价管理', '默认页面', '批量回复']" @click="batchReply" class="border-button">批量回复</el-button>
@@ -217,7 +225,18 @@ export default {
             batch: false,
             loading: false,
             checkedAll: false,
-            isIndeterminate: false
+            isIndeterminate: false,
+            operationColumnW: 72 //操作列宽度
+        }
+    },
+    watch: {
+        'tableData': {
+            handler(newVal, oldVal) { //计算操作栏宽度
+                this.$nextTick(() => {
+                    this.operationColumnW = this.utils.getOperationColumnW();
+                })
+            },
+            deep: true
         }
     },
     created() {
@@ -458,7 +477,6 @@ export default {
         }
         .footer {
             padding: 20px 20px 10px 20px;
-            padding-left: 10px;
         }
     }
 }
@@ -525,19 +543,6 @@ export default {
         background-color: #fff;
     }
 }
-/deep/ .el-table .cell {
-    padding-left: 0;
-    padding-right: 10px;
-}
-/deep/.el-table td:nth-child(1){
-         padding-left:20px;
-         .cell {
-            text-overflow: clip;
-         }
-     }
-     /deep/ .el-table--small td, /deep/  .el-table--small th {
-        padding: 16px 0;
-    }
 </style>
 
 

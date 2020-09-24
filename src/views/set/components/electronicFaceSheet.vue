@@ -66,20 +66,21 @@
           style="width: 100%"
           :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '500'}"
         >
-          <el-table-column prop="name" label="电子面单名称" width="180"></el-table-column>
-          <el-table-column prop="expressCompany" label="快递公司" width="180"></el-table-column>
-          <el-table-column prop="updateTime" sortable label="编辑时间"></el-table-column>
-          <el-table-column label="操作" fixed="right">
+          <el-table-column prop="name" label="电子面单名称" min-width="180" fixed="left" class-name="table-padding"></el-table-column>
+          <el-table-column prop="expressCompany" label="快递公司" min-width="160" align="center"></el-table-column>
+          <el-table-column prop="updateTime" sortable label="编辑时间" min-width="160" align="center"></el-table-column>
+          <el-table-column label="操作" :width="operationColumnW" fixed="right" header-align="center" class-name="table-padding">
             <template slot-scope="scope">
-              <div class="operate-box">
-                <span v-permission="['设置', '普通快递', '电子面单', '查看']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode + '&detail=' + true)">查看</span>
-                <span  v-if="!authHide" v-permission="['设置', '普通快递', '电子面单', '编辑']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode)">编辑</span>
-                <span v-if="!authHide"  v-permission="['设置', '普通快递', '电子面单', '删除']" @click="deleteElectronicFaceSheet(scope.row)">删除</span>
+              <div class="operate-box table-operate">
+                <span class="table-btn" v-permission="['设置', '普通快递', '电子面单', '查看']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode + '&detail=' + true)">查看</span>
+                <span class="table-btn"  v-if="!authHide" v-permission="['设置', '普通快递', '电子面单', '编辑']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode)">编辑</span>
+                <span class="table-btn table-warning" v-if="!authHide"  v-permission="['设置', '普通快递', '电子面单', '删除']" @click="deleteElectronicFaceSheet(scope.row)">删除</span>
               </div>
             </template>
           </el-table-column>
         </el-table>
         <pagination
+          style="margin-top: 10px;"
           v-show="total>0"
           :total="total"
           :page.sync="listQuery.startIndex"
@@ -114,8 +115,19 @@ export default {
         endTime: ''
       },
       loading: false,
-      popVisible: false
+      popVisible: false,
+      operationColumnW: 72 //操作列宽度
     };
+  },
+  watch: {
+    'tableData': {
+        handler(newVal, oldVal) { //计算操作栏宽度
+            this.$nextTick(() => {
+                this.operationColumnW = this.utils.getOperationColumnW();
+            })
+        },
+        deep: true
+    }
   },
   created() {
     this.getList();
@@ -212,7 +224,7 @@ export default {
   color: $grayColor;
 }
 .table-box {
-  padding-bottom: 20px;
+  padding-bottom: 20px !important;
 }
 .table-box .table {
     margin-left: 0;

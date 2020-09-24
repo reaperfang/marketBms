@@ -4,10 +4,10 @@
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="订单编号">
-          <el-input v-model="ruleForm.relationSn" placeholder="请输入" style="width:210px;"></el-input>
+          <el-input v-model="ruleForm.order_code" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
         <el-form-item label="配送公司">
-          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:210px;"></el-input>
+          <el-input v-model="ruleForm.delivery_company" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
          <el-form-item label="发货时间">
           <el-date-picker
@@ -21,77 +21,60 @@
             :picker-options="utils.globalTimePickerOption.call(this)">
           </el-date-picker>
         </el-form-item>
-        <!-- <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="订单编号" style="width:124px;paddinig-right:4px;">
-            <el-option
-              v-for="item in fsTerms"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-          <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
-        </el-form-item>
-        <el-form-item label="查询时间">
-          <el-date-picker
-            v-model="ruleForm.timeValue"
-            type="datetimerange"
-            align="right"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            :picker-options="utils.globalTimePickerOption.call(this)">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="快递公司">
-          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:200px;"></el-input>
-        </el-form-item> -->
         <el-form-item>
-          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '物流查询', '查询']">查询</el-button>
+          <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '三方配送', '查询']">查询</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="301">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
-          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '物流对账', '物流查询', '导出']">导出</el-button>
+          <el-button class="border_btn"  @click='exportToExcel()' v-permission="['财务', '物流对账', '三方配送', '导出']">导出</el-button>
         </el-tooltip>
       </div>
       <el-table
-      v-loading="loading"
+        v-loading="loading"
         :data="dataList"
         class="table"
         :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
-        :default-sort = "{prop: 'createTime', order: 'descending'}"
+        :default-sort = "{prop: 'sendTime', order: 'descending'}"
         @sort-change="changeSort"
         >
         <el-table-column
-          prop="expressSn"
-          label="订单编号">
+          prop="orderCode"
+          label="订单编号"
+          fixed="left" class-name="table-padding"
+          width="200px">
         </el-table-column>
         <el-table-column
-          prop="expressCompany"
-          label="配送公司">
+          prop="deliveryCompany"
+          label="配送公司"
+          align="center">
+          <template slot-scope="scope">
+            {{scope.row.deliveryCompany == 1 ? '达达' : ' '}}
+          </template>  
         </el-table-column>
         <el-table-column
-          prop="relationSn"
+          prop="deliveryMoney"
           label="配送费"
-          width="150px">
+          width="150px"
+          align="right">
         </el-table-column>
         <el-table-column
-          prop="createUserName"
+          prop="operator"
           label="操作人"
           align="center">
         </el-table-column>
         <el-table-column
-          prop="createTime"
+          prop="sendTime"
           label="发货时间"
           sortable = "custom"
           align="center"
-          width="200px">
+          class-name="table-padding"
+          width="190px"
+          fixed="right">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -115,22 +98,20 @@
 <script>
 import utils from "@/utils";
 import TableBase from "@/components/TableBase";
-import financeCons from '@/system/constant/finance'
 import exportTipDialog from '@/components/dialogs/exportTipDialog'
 export default {
   name: 'logisticsInquiry',
   extends: TableBase,
-  components:{
-    exportTipDialog
-  },
+  components:{ exportTipDialog },
   data() {
     return {
       inline:true,
       ruleForm:{
-        relationSn:'',
-        expressCompany:'',
-        timeValue:'',
-        searchType:'relationSn',
+        order_code:'',//订单号
+        delivery_company:'',//配送公司
+        delivery_money:'',//配送费
+        operator:'',//操作人
+        timeValue:'',//发货时间
         startIndex:1,
         pageSize:10,
         sort:'desc'
@@ -149,30 +130,22 @@ export default {
     },
   },
   watch: { },
-  computed:{
-    fsTerms(){
-      return financeCons.fsTerms;
-    },
-  },
+  computed:{ },
   created() { },
   methods: {
     init(){
       let query = {
-        queryType:1,
-        relationSn:'',
-        expressSn:'',
-        expressCompany:'',
-        businessType:'',
-        startTime:'',
-        endTime:'',
+        order_code:'',//订单号
+        delivery_company:'',//配送公司
+        delivery_money:'',//配送费
+        operator:'',//操作人
+        startCreateTime:'',//发货开始日期
+        endCreateTime:'',//发货结束日期
         startIndex:this.ruleForm.startIndex,
         pageSize:this.ruleForm.pageSize,
         sort:'desc'
       }
       for(let key  in query){
-        // if(this.ruleForm.searchType == key){
-        //   query[key] = this.ruleForm.searchValue
-        // }
         for(let item in this.ruleForm){
           if(item == key){
             query[key] = this.ruleForm[item]
@@ -181,8 +154,8 @@ export default {
       }
       let timeValue = this.ruleForm.timeValue
       if(timeValue){
-        query.startTime = timeValue[0]
-        query.endTime = timeValue[1]
+        query.startCreateTime = timeValue[0]
+        query.endCreateTime = timeValue[1]
       }
       return query;
     },
@@ -190,7 +163,7 @@ export default {
     fetch(num){
       this.ruleForm.startIndex = num || this.ruleForm.startIndex
       let query = this.init();
-      this._apis.finance.getListFs(query).then((response)=>{
+      this._apis.finance.getListTd(query).then((response)=>{
         this.dataList = response.list
         this.total = response.total || 0
         this.loading = false
@@ -206,12 +179,15 @@ export default {
     //重置
     resetForm(){
       this.ruleForm = {
-        // searchType:'relationSn',
-        relationSn:'',
-        timeValue:'',
-        expressCompany:'',
+        order_code:'',//订单号
+        delivery_company:'',//配送公司
+        delivery_money:'',//配送费
+        operator:'',//操作人
+        timeValue:'',//发货时间
+        startIndex:1,
+        pageSize:10,
         sort:'desc'
-      }
+      },
       this.fetch()
     },
     //导出
@@ -220,9 +196,9 @@ export default {
       if(this.total >1000){
          this.dialogVisible = true;
          this.currentData.query = this.init()
-         this.currentData.api = "finance.exportFs"
+         this.currentData.api = "finance.exportTd"
       }else{
-        this._apis.finance.exportFs(query).then((response)=>{
+        this._apis.finance.exportTd(query).then((response)=>{
         window.location.href = response
       }).catch((error)=>{
          this.$message.error(error);
@@ -252,7 +228,7 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 20px;
 }
 .under_part{
@@ -284,8 +260,5 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
-}
-/deep/.el-table--small td{
-  padding:16px 0;
 }
 </style>

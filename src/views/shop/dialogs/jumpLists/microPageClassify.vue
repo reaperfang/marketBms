@@ -1,8 +1,8 @@
 <template>
   <div class="head-wrapper">
-     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
+     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" :inline="true">
           <div class="inline-head">
-            <el-form-item label="" prop="name">
+            <el-form-item label="分类名称" prop="name">
               <el-input v-model="ruleForm.name" placeholder="请输入微页面分类名称" clearable></el-input>
             </el-form-item>
             <el-form-item label="" prop="">

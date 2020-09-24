@@ -91,6 +91,7 @@
           :render-header="renderTradeDetailSn"
           align="left"
           width="220px"
+          class-name="table-padding"
           fixed="left"
           >
         </el-table-column>
@@ -158,7 +159,8 @@
           label="交易时间"
           sortable="custom"
           align="center"
-          width="200px"
+          width="180px"
+          class-name="table-padding"
           fixed="right"
           >
         </el-table-column>
@@ -252,7 +254,7 @@ export default {
   methods: {
     renderTradeDetailSn(){
       return(
-        <div style="height:49px;line-height:49px;">
+        <p>
           <span style="font-weight:bold;vertical-align:middle;">交易流水号</span>
           <el-popover
             placement="top-start"
@@ -262,12 +264,12 @@ export default {
             content="本系统所有收入和支出相应的交易流水号">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
-        </div>
+        </p>
       )
     },
     renderBusinessType(){
       return(
-        <div style="height:49px;line-height:49px;">
+        <p>
           <span style="font-weight:bold;vertical-align:middle;">业务类型</span>
           <el-popover
             placement="top-start"
@@ -277,12 +279,12 @@ export default {
             content="本系统所有产生收入和支出相应的操作">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
-        </div>
+        </p>
       )
     },
     renderRelationSn(){
       return(
-        <div style="height:49px;line-height:49px;">
+        <p>
           <span style="font-weight:bold;vertical-align:middle;">关联单据编号</span>
           <el-popover
             placement="top-start"
@@ -292,14 +294,14 @@ export default {
             content="订单编号、售后单编号、提现编号">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
-        </div>
+        </p>
       )
     },
     renderTradeTypen(){
        return(
-        <div>
+        <p>
           <span style="font-weight:bold;vertical-align:middle;">收支类型</span>
-        </div>
+        </p>
       )
     },
 
@@ -464,11 +466,5 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
-}
-/deep/ .el-table--small td{
-  padding:16px 10px;
-}
-/deep/.el-table--small th{
-  padding:0px;
 }
 </style>

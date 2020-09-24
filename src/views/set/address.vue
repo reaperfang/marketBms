@@ -1,5 +1,5 @@
 <template>
-   <div class="address">
+   <div class="address mh bor-radius">
      <div class="btn-area"><el-button type="primary" @click="goAddressNew()" v-permission="['设置','地址库', '默认页面', '新建地址']">新建地址</el-button></div>
      <div class="list-area">
        <div class="total">
@@ -16,6 +16,8 @@
           prop="address"
           label="地址"
           min-width="300"
+          fixed="left" 
+          class-name="table-padding"
           align="left">
           <template slot-scope="scope">
             {{scope.row.address}} {{scope.row.addressDetail}}
@@ -31,13 +33,13 @@
           prop='mobile'
           label="联系电话"
           align="center"
-          width="200">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="type"
           label="地址类型"
           align="center"
-          width="200">
+          min-width="200">
           <template slot-scope="scope">
             {{ getAddressTypeTxt(scope.row) }}
           </template>
@@ -46,18 +48,18 @@
           prop="updateTime"
           label="编辑时间"
           align="center"
-          width="200">
+          width="160">
         </el-table-column>
         <el-table-column
           label="操作"
-          align="center"
           fixed="right"
-          width="150">
+          header-align="center"
+          class-name="table-padding"
+          width="117">
           <template slot-scope="scope">
-            <div class="opeater">
-              <el-button class="btn" @click="goAddressEdit(scope.row.id)" type="text"  v-permission="['设置','地址库', '默认页面', '编辑']">编辑</el-button>
-              <span>|</span>
-              <el-button class="btn" v-permission="['设置','地址库', '默认页面', '删除']" :class="[getDefaultAddress(scope.row) ? 'disabled' : '']" @click="delAddress(scope.row)" type="text">删除</el-button>
+            <div class="opeater table-operate">
+              <span class="table-btn" @click="goAddressEdit(scope.row.id)" v-permission="['设置','地址库', '默认页面', '编辑']">编辑</span>
+              <span class="table-btn table-warning" v-permission="['设置','地址库', '默认页面', '删除']" :class="[getDefaultAddress(scope.row) ? 'disabled' : '']" @click="delAddress(scope.row)">删除</span>
             </div>
           </template>
         </el-table-column>
@@ -191,7 +193,7 @@ export default {
     },
     hanldeOpenDelivery(id) {
       this.confirm({
-        title: "提示",
+        title: "",
         iconWarning: true,
         text: '此地址已设置为同城配送的发货地址，修改或删除后同城配送设置也将修改，您确定要修改吗？',
         confirmText: '确定',
@@ -253,7 +255,7 @@ export default {
     hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId) {
       // 需要查看发货地址数量是否剩下1条？？？
       const id = row.id
-      const addressType = row.addressType
+      const isBindThirdsend = row.isBindThirdsend
       // const req = Object.create(null)
       // req.cid  = this.cid
       // req.startIndex = 1
@@ -264,7 +266,7 @@ export default {
         // 仅有一条发货地址信息，同时商家配送已开启，此时要删除该发货地址时，弹框提示如下
         if (res && res.total == 1) {
           this.confirm({
-            title: "提示",
+            title: "",
             iconWarning: true,
             text: '同城配送已开启并使用此地址为发货地址，删除后同城配送功能将自动关闭，您确定要删除吗？',
             confirmText: '确定',
@@ -274,7 +276,7 @@ export default {
             const isCloseMerchantDeliver = +merchantDeliverId === +id
             const isClostTh3DeliverId = +th3DeliverId === +id
             const p1 = this.closeCityDeliver(isCloseMerchantDeliver, isClostTh3DeliverId)
-            const p2 = this.ApiDelAddressById(id, addressType)
+            const p2 = this.ApiDelAddressById(id, isBindThirdsend)
             Promise.all([p1, p2]).then((arr) => {
               console.log('arr',arr)
               this.ruleForm.pageNo = 1
@@ -289,14 +291,14 @@ export default {
           });
         } else {
           this.confirm({
-            title: "提示",
+            title: "",
             iconWarning: true,
             text: '此地址已设置为同城配送的发货地址，修改或删除后同城配送设置也将修改，您确定要修改吗？',
             confirmText: '确定',
             showCancelButton: true,
             customClass: 'address-update'
           }).then(() => {
-            this.delAddressById(id, addressType)
+            this.delAddressById(id, isBindThirdsend)
           }).catch((err) => {
           });
         }
@@ -367,21 +369,21 @@ export default {
     // 删除操作，默认地址处理逻辑
     handleDelAddress(row) {
       this.confirm({
-        title: "提示",
-        icon: true,
+        title: "",
+        iconWarning: true,
         text: '确定要删除此地址信息吗？',
         confirmText: '确定',
         cancelButtonText: '取消'
       }).then(() => {
         // 调用删除接口方法
-        this.delAddressById(row.id, row.addressType)
+        this.delAddressById(row.id, row.isBindThirdsend)
       });
     },
     // 处理删除默认地址
     handleDelDefaultAddress() {
       this.confirm({
-        title: "提示",
-        icon: true,
+        title: "",
+        iconWarning: true,
         text: '默认地址不可删除',
         confirmText: '我知道了',
         customClass: 'address-disable-del',
@@ -389,18 +391,18 @@ export default {
       }).then(() => {
       });
     },
-    ApiDelAddressById(id, addressType) {
+    ApiDelAddressById(id, isBindThirdsend) {
       return new Promise((resolve, reject) => {
-        this._apis.set.delAddressById({ id, addressType }).then((res) => {
+        this._apis.set.delAddressById({ id, isBindThirdsend }).then((res) => {
           resolve(res)
         }).catch((err) => {
           reject(err)
         })
       })
     },
-    delAddressById(id, addressType) {
+    delAddressById(id, isBindThirdsend) {
       // 删除api
-      this.ApiDelAddressById(id, addressType).then(() => {
+      this.ApiDelAddressById(id, isBindThirdsend).then(() => {
         this.ruleForm.pageNo = 1
         const req = this.getReqData(this.ruleForm)
         this.getAddressList(req)
@@ -437,7 +439,7 @@ export default {
           const merchantDeliverId = merchantDeliver && merchantDeliver.id
           const th3DeliverId = th3Deliver && th3Deliver.id
           const isOpen = (+merchantDeliverId === +id && isOpenMerchantDeliver) || (+th3DeliverId === +id && isOpenTh3Deliver)
-          
+          console.log('result',result, isOpen)
           if (isOpen) {
             this.hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId)
           } else {
@@ -485,29 +487,9 @@ export default {
       }
     }
     .table {
-      /deep/ th.is-leaf {
-        border:0;
-      }
-      /deep/ th>.cell {
-        line-height: 30px;
-      }
       .opeater {
-        display: flex;
-        line-height:20px;
-        font-size:14px;
-        justify-content: center;
-        span {
-          width: 1px;
-          line-height: 20px;
-          padding: 0 5px;
-          color: #DADAE3;
-          padding: 9px 15px;
-        }
-        .btn {
-          color:rgba(101,94,255,1);
-        }
         .disabled {
-          color:rgba(101, 94, 255, .5)
+          color:rgba(101, 94, 255, .5) !important;
         }
       }
     }

@@ -1,5 +1,5 @@
 <template>
-  <DialogBase :visible.sync="visible" :showFooter="showFooter" width="640px" title="申请达达账号">
+  <DialogBase :visible.sync="visible" :showFooter="showFooter" width="660px" title="申请达达账号">
     <div class="registerDialog">
       <p class="error" v-if="submitPromptMessage" v-html="submitPromptMessage"></p>
       <el-form
@@ -7,7 +7,7 @@
         :rules="rules"
         label-position="right"
         :model="ruleForm"
-        label-width="107px"
+        label-width="97px"
         class="formBox"
       >
         <el-form-item label="手机号：" class="item" prop="mobile">
@@ -68,6 +68,7 @@
             placeholder="请输入企业全称"
             maxlength="100"
             :disabled="isEdit"
+            @input="handleText(ruleForm.enterpriseName, 'enterpriseName', 2)"
           ></el-input>
         </el-form-item>
         <el-form-item label="企业地址：" class="item" prop="enterpriseAddress">
@@ -76,6 +77,7 @@
             style="width: 470px;"
             placeholder="请输入企业地址"
             maxlength="400"
+            @input="handleText(ruleForm.enterpriseAddress, 'enterpriseAddress', 2)"
             :disabled="isEdit"
           ></el-input>
         </el-form-item>
@@ -85,15 +87,17 @@
             style="width: 470px;"
             placeholder="请输入联系人姓名"
             :disabled="isEdit"
+            @input="handleText(ruleForm.contactName, 'contactName', 2)"
             maxlength="30"
           ></el-input>
         </el-form-item>
         <el-form-item label="联系人电话：" class="item" prop="contactPhone">
           <el-input
-            v-model.number="ruleForm.contactPhone"
+            v-model="ruleForm.contactPhone"
             style="width: 470px;"
             placeholder="请输入联系人电话"
             :disabled="isEdit"
+            @input="handleText(ruleForm.contactPhone, 'contactPhone', 1)"
             maxlength="11"
           ></el-input>
         </el-form-item>
@@ -102,11 +106,12 @@
             v-model.trim="ruleForm.shopName"
             style="width: 470px;"
             placeholder="请输入店铺名称"
+            @input="handleText(ruleForm.shopName, 'shopName', 2)"
             maxlength="30"
           ></el-input>
         </el-form-item>
         <el-form-item label="邮箱地址：" class="item" prop="email">
-          <el-input v-model.trim="ruleForm.email" maxlength="320" style="width: 470px;" placeholder="请输入邮箱地址" :disabled="isEdit"></el-input>
+          <el-input v-model.trim="ruleForm.email" maxlength="320" style="width: 470px;" placeholder="请输入邮箱地址" :disabled="isEdit" @input="handleText(ruleForm.email, 'email', 2)"></el-input>
         </el-form-item>
         <el-form-item label="业务类型：" class="item" prop="businessType">
           <el-select v-model="ruleForm.businessType" placeholder="请选择业务类型" style="width: 470px;">
@@ -137,21 +142,23 @@ export default {
       const reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
 
       if (!reg.test(value)) {
-        return callback(new Error("邮箱格式不正确"));
+        return callback(new Error("格式错误，请重新输入"));
       } else {
         callback();
       }
     };
+    // 店铺名称
     const shopNameValidate = (rule, value, callback) => {
       const reg = /^[\u4e00-\u9fa5a-zA-Z0-9]{1,30}$/gi;
 
       if (!reg.test(value)) {
-        return callback(new Error("仅支持英文、汉字和数字，最多输入30个字符"));
+        return callback(new Error("最多输入30个字符"));
       } else {
         callback();
       }
     }
-    const validateEnterpriseAddress = (rule, value, callback) => {
+    // 企业全称校验规则 
+    const validateEnterpriseName = (rule, value, callback) => {
       const reg = /^[\u4e00-\u9fa5a-zA-Z0-9]{1,100}$/gi;
       if (!reg.test(value)) {
         return callback(new Error("仅支持英文和汉字，最多输入100个字符"));
@@ -159,6 +166,16 @@ export default {
         callback();
       }
     }
+    // 企业地址校验规则
+    const validateEnterpriseAddress = (rule, value, callback) => {
+      const reg = /^[\u4e00-\u9fa5a-zA-Z0-9]{1,400}$/gi;
+      if (!reg.test(value)) {
+        return callback(new Error("仅支持英文和汉字，最多输入400个字符"));
+      } else {
+        callback();
+      }
+    }
+    // 联系人
     const validateContactName = (rule, value, callback) => {
       const reg = /^[\u4e00-\u9fa5a-zA-Z0-9]{1,30}$/gi;
       if (!reg.test(value)) {
@@ -205,7 +222,8 @@ export default {
         areaCode: [{ required: true, message: "必选项", trigger: "change" }],
         enterpriseName: [
           { required: true, message: "请输入企业全称", trigger: "blur" },
-           { min: 1, max: 100, message: "仅支持英文和汉字，最多输入100个字符", trigger: "blur" }
+          { validator: validateEnterpriseName, trigger: "blur" }
+          //  { min: 1, max: 100, message: "仅支持英文和汉字，最多输入100个字符", trigger: "blur" }
         ],
         enterpriseAddress: [
           { required: true, message: "请输入企业地址", trigger: "blur" },
@@ -230,7 +248,8 @@ export default {
         ],
         shopName: [
           { required: true, message: "请输入店铺名称", trigger: "blur" },
-          { validator: shopNameValidate, trigger: "blur" }
+          { min: 1, max: 30, message: "最多输入30个字符", trigger: "blur" }
+          // { validator: shopNameValidate, trigger: "blur" }
         ],
         businessType: [{ required: true, message: "必选项", trigger: "change" }],
       },
@@ -364,12 +383,14 @@ export default {
         .getTh3DeliverDetail(req)
         .then(response => {
           console.log('----response-:getTh3DeliverDetail---',response)
-          this.handleEchoData(response)
-          this.isEdit = true
+          if (response) {
+            this.handleEchoData(response)
+            this.isEdit = true
+          }
           return response
         })
         .catch(error => {
-          this.$message.error(err)
+          this.$message.error(error)
         });
     },
     setAddressName() {
@@ -511,9 +532,22 @@ export default {
       const req = this.getReqRegisterStoreData()
       return this._apis.set.registerStore(req)
     },
+    // 设置绑定三方配送
+    setBindThirdsend() {
+      const req = {
+        id: this.addressInfo.id,
+        isBindThirdsend: 1,
+        addressType: this.addressInfo.addressType,
+        is_defalt_sender_address: this.addressInfo.isDefaltSenderAddress,
+        is_defalt_return_address: this.addressInfo.isDefaltReturnAddress
+      }
+      return this._apis.set.editAddressById(req)
+    },
     add() {
       this.registerMerchants().then((res) => {
-        this.registerStore(res).then(() => {
+        const p1 = this.setBindThirdsend()
+        const p2 = this.registerStore(res)
+        Promise.all([p1, p2]).then(() => {
           this.$message({
             message: '注册成功',
             type: 'success'
@@ -525,34 +559,12 @@ export default {
           this.getSubmitPromptMessage(2, err)
           this.isEdit = true
         })
-      }).catch(() => {
+      }).catch((err) => {
         this.getSubmitPromptMessage(1, err)
       }).finally(() => {
         // this.visible = false;
         this.isSubmit = false
       })
-      // this._apis.set
-      //   .registerUser(this.ruleForm)
-      //   .then(response => {
-      //     console.log("zhuce ", response);
-      //     this.sourceId=response
-      //     this.$message({
-      //       message: "提交成功！",
-      //       type: "success"
-      //     });
-         
-      //     this.$emit("submitForm",this.sourceId);
-      //     this.visible = false;
-      //     this.resetForm(this.ruleForm)
-      //   })
-      //   .catch(error => {
-      //    // this.visible = false;
-      //    // this.resetForm("ruleForm");
-      //     this.$message.error({
-      //       message: error,
-      //       type: "error"
-      //     });
-      //   });
     }
   }
 };
@@ -578,7 +590,7 @@ export default {
     left: -30px;
     top: -30px;
     line-height: 30px;
-    width: 640px;
+    width: 660px;
     text-align: center;
     height: 30px;
     background: #FFEDEA;
@@ -590,12 +602,29 @@ export default {
     align-items: center;
   }
   .formBox {
-    height: 416px;
-    overflow: auto;
+    width: 590px;
+    height: 423px;
+    overflow-y: auto;
+    /deep/ .el-form-item--small .el-form-item__label {
+      padding-right: 0;
+    }
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 8px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 2px !important;
+        background: #D0D6E4 !important;
+    }
+    &::-webkit-scrollbar-track {
+        border-radius: 0 !important;
+        background: #D0D6E4 !important;
+    }
     .item {
       margin-bottom: 20px;
     }
     .address {
+      width: 579px;
       margin-bottom: 0;
     }
   }
