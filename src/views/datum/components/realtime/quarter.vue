@@ -89,7 +89,7 @@ export default {
       season: '',
       year: new Date().getFullYear(),
       yearcur: new Date().getFullYear(),
-      monthcur:(Math.ceil((new Date().getMonth()+1)/3)-1),//当前季度前一季度
+      monthcur:Math.ceil((new Date().getMonth()+1)/3),//当前一季度
       showValue:''
     }
   },
