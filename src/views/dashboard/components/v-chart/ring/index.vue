@@ -48,8 +48,9 @@ export default {
 				// 		}
 				// 	}
 				// },
-				radius: [60, 70],
-				offsetY: 89,
+				//radius: [60, 70],
+				radius: [50, 60],
+				offsetY: 90,
 				labelLine: {
 					normal: {
 						length: 5,

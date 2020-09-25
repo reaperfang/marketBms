@@ -148,6 +148,16 @@ export default {
 			};
 		},
 		setSexage(val) {
+			// let result = {
+			// 	columns: ["类别", "数量"],
+			// 	rows: [
+			// 		{ 类别: "未知", 数量: val.c_uv_age_0 },
+			// 		{ 类别: "< 25", 数量: val.c_uv_age_25 },
+			// 		{ 类别: "25-50", 数量: val.c_uv_age_25_50 },
+			// 		{ 类别: "> 50 ", 数量: val.c_uv_age_50 }
+			// 	]
+			// };
+
 			let result = {
 				columns: ["类别", "数量"],
 				rows: [
@@ -156,6 +166,15 @@ export default {
 					{ 类别: "25-50", 数量: val.c_uv_age_25_50 },
 					{ 类别: "> 50 ", 数量: val.c_uv_age_50 }
 				]
+			};
+
+			let rows = result.rows;
+
+			result = {
+				...result,
+				rows: rows.filter(item => {
+					return item["数量"] > 0;
+				})
 			};
 
 			this.sexageData = {

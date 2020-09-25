@@ -86,8 +86,8 @@ export default {
 						name: this.city,
 						type: "pie",
 						// clockWise: true,
-						//radius: ['55', '65'],//设置圆环的半径
-						radius: ["60", "70"], //设置圆环的半径
+						//radius: ['60', '70'],//设置圆环的半径
+						radius: ["50", "60"], //设置圆环的半径
 						itemStyle: {
 							normal: {
 								label: {

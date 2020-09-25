@@ -47,7 +47,7 @@ export default {
 	width: 100px;
 	text-align: center;
 	.p-start {
-		font-size: 26px;
+		font-size: 24px;
 		font-weight: 600;
 		color: rgba(255, 255, 255, 1);
 		line-height: 35px;
