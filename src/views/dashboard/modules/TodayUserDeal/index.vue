@@ -8,10 +8,9 @@
 				<div class="grid-title-end">
 					<span>
 						同比昨日
+						<!-- <span>{{ persent }}%{{ persent == 0 ? "" : "↑" }}</span> -->
 						<span
-							>增长{{ persent }}%{{
-								persent == 0 ? "" : "↑"
-							}}</span
+							>{{ persent }}%{{ persent <= 0 ? "↓" : "↑" }}</span
 						>
 					</span>
 				</div>
