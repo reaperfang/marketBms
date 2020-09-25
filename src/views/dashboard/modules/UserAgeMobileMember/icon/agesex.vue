@@ -76,7 +76,15 @@ export default {
 			font-weight: 400;
 			color: #ffffff;
 			line-height: 17px;
-			margin: 0 5px;
+			margin: 0 3px;
+		}
+
+		&:nth-child(1) {
+			padding-left: 5px;
+		}
+
+		&:nth-child(2) {
+			padding-left: 5px;
 		}
 	}
 }
