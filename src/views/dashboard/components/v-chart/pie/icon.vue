@@ -1,5 +1,5 @@
 <template>
-	<div class="icon-pie">
+	<div class="icon-pie-t">
 		<p class="p-start">{{ progress }}%</p>
 		<p class="p-end">{{ city }}</p>
 	</div>
@@ -36,14 +36,14 @@ export default {
 </script>
 
 <style lang="scss">
-.icon-pie {
+.icon-pie-t {
 	position: absolute;
 	margin: auto;
 	top: 0;
 	left: 0;
 	bottom: 0;
 	right: 0;
-	height: 70px;
+	height: 53px;
 	width: 100px;
 	text-align: center;
 	.p-start {
@@ -51,7 +51,7 @@ export default {
 		font-weight: 600;
 		color: rgba(255, 255, 255, 1);
 		line-height: 35px;
-		padding: 3px 0;
+		// padding: 3px 0;
 	}
 
 	.p-end {
