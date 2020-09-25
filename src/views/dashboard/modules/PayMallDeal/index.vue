@@ -126,15 +126,16 @@ export default {
 				this.chartData = this.defaultChart;
 				return;
 			}
-			this.chartData = val.map(res => {
+			this.chartData = val.map((item, index) => {
 				return {
 					// progress: parseInt(res.place_order_am_s.toFixed(2) * 100),
 					// progress: (res.place_order_am_s.toFixed(2) * 100).toFixed(
 					// 	2
 					// ),
-					progress: (res.place_order_am_s * 100).toFixed(2),
-					barColor: "RGBA(255, 0, 139, 1)",
-					city: res.area_name
+					progress: (item.place_order_am_s * 100).toFixed(2),
+					//barColor: "RGBA(255, 0, 139, 1)",
+					barColor: this.setbarColor(index),
+					city: item.area_name
 				};
 			});
 		},
@@ -158,6 +159,23 @@ export default {
 					]
 				}
 			];
+		},
+		setbarColor(val) {
+			let result = "";
+			switch (val) {
+				case 0:
+					result = "#FF008B";
+					break;
+				case 1:
+					result = "#FF5C31";
+					break;
+				case 2:
+					result = "#F59f00";
+					break;
+				default:
+			}
+
+			return result;
 		}
 	}
 };
