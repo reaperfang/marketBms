@@ -1,17 +1,5 @@
 <template>
 	<div class="row-3-grid-content middle-grid-margin flex-box">
-		<!-- <el-row type="flex" justify="space-between" class="item-title">
-			<el-col :span="24">
-				<gridtitle :title="'商城访客(最近七天)'"></gridtitle>
-			</el-col>
-		</el-row>
-		<el-row class="item-content">
-			<vline
-				:chartData="chartData"
-				:chartSettings="chartSettings"
-				:chartExtend="chartExtend"
-			></vline>
-		</el-row> -->
 		<div class="titile">
 			<el-row type="flex" justify="space-between" class="item-title">
 				<el-col :span="12">
@@ -75,11 +63,12 @@ export default {
 							[
 								{
 									offset: 0,
-									color: "rgba(43,193,145,0.3)"
+									color: "#023851"
 								},
 								{
 									offset: 1,
-									color: "rgba(43,193,145,0)"
+
+									color: "#000B23"
 								}
 							],
 							false
@@ -95,7 +84,15 @@ export default {
 					bottom: "7px"
 				},
 				series: {
-					smooth: false //平滑曲线
+					smooth: false, //平滑曲线
+					itemStyle: {
+						normal: {
+							color: "#47E1FF",
+							lineStyle: {
+								color: "#47E1FF"
+							}
+						}
+					}
 				},
 				xAxis: {
 					axisLine: {
