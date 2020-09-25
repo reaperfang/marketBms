@@ -624,8 +624,8 @@ export default {
                 //第三方配送
                 obj.deliveryWay = 3;
                 obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
-                obj.receivedLongitude = this.orderInfo.receivedLongitude
-                obj.receivedLatitude = this.orderInfo.receivedLatitude
+                obj.receivedLongitude = this.orderInfo.receivedLongitude || this.orderInfo.receivedLng
+                obj.receivedLatitude = this.orderInfo.receivedLatitude || this.orderInfo.receivedLat
               }
             }
           }else if(formName == 'ruleFormStore'){ //如果是商家配送

@@ -703,8 +703,8 @@ export default {
             }
             if(item.deliveryWay == 3) {
               obj.deliveryWay = 3;
-              obj.receivedLongitude = item.receivedLongitude
-              obj.receivedLatitude = item.receivedLatitude
+              obj.receivedLongitude = item.receivedLongitude || item.receivedLng
+              obj.receivedLatitude = item.receivedLatitude || item.receivedLat
             }
             if(item.deliveryWay == 4) {
               obj.deliveryWay = 4;
