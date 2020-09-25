@@ -146,7 +146,7 @@ export default {
     search(){
       this.currentPage = 1; // 查询前将条件页码置为1
       let query ={
-        fileGroupInfoId:'',
+        fileGroupInfoId:this.groupId || '',
         startIndex:this.currentPage,
         pageSize:this.pageSize,
         sourceMaterialType:'2',
