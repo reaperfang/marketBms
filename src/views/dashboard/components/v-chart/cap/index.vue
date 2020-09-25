@@ -13,7 +13,9 @@
 					class: 'tooltip-custom tooltip-other-custom'
 				}"
 			>
-				<span class="time-text">{{ five }}</span>
+				<span class="time-text">{{
+					getLength(five) > 4 ? five.substring(0, 4) : five
+				}}</span>
 				<div ref="tooltipRef-45" class="tooltip-content">
 					<span
 						style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#5f5eff"
@@ -31,7 +33,10 @@
 					class: 'tooltip-custom tooltip-other-custom'
 				}"
 			>
-				<span class="time-text">{{ fourth }}</span>
+				<!-- <span class="time-text">{{ fourth }}</span> -->
+				<span class="time-text">{{
+					getLength(fourth) > 4 ? fourth.substring(0, 4) : fourth
+				}}</span>
 				<div ref="tooltipRef-55" class="tooltip-content">
 					<span
 						style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#f59f00"
@@ -49,7 +54,10 @@
 					class: 'tooltip-custom tooltip-other-custom'
 				}"
 			>
-				<span class="time-text">{{ third }}</span>
+				<!-- <span class="time-text">{{ third }}</span> -->
+				<span class="time-text">{{
+					getLength(third) > 4 ? third.substring(0, 4) : third
+				}}</span>
 				<div ref="tooltipRef-65" class="tooltip-content">
 					<span
 						style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#ff5c31"
@@ -67,7 +75,10 @@
 					class: 'tooltip-custom tooltip-other-custom'
 				}"
 			>
-				<span class="time-text">{{ sec }}</span>
+				<!-- <span class="time-text">{{ sec }}</span> -->
+				<span class="time-text">{{
+					getLength(sec) > 4 ? sec.substring(0, 4) : sec
+				}}</span>
 				<div ref="tooltipRef-70" class="tooltip-content">
 					<span
 						style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#06c9dd"
@@ -86,7 +97,10 @@
 					class: 'tooltip-custom tooltip-other-custom'
 				}"
 			>
-				<span class="time-text">{{ first }}</span>
+				<!-- <span class="time-text">{{ first }}</span> -->
+				<span class="time-text">{{
+					getLength(first) > 4 ? first.substring(0, 4) : first
+				}}</span>
 				<div ref="tooltipRef-90" class="tooltip-content">
 					<span
 						style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#026dff"
@@ -171,6 +185,9 @@ export default {
 		// });
 	},
 	methods: {
+		getLength(val) {
+			return val && val.match(/[\u4E00-\u9FA5]/g).length;
+		},
 		tipHtml: params => {
 			return "FDSFSDFDSFSDF";
 			var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.barColor}"></span>`;
