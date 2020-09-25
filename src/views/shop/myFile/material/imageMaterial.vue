@@ -110,9 +110,9 @@ export default {
   },
   methods: {
     //获取图片列表
-    getList(id){
+    getList(id, cPage){
       id && (this.groupId = id)
-      this.currentPage = 1; // 查询前将条件页码置为1
+      cPage && (this.currentPage = cPage)
       let query ={
         fileGroupInfoId:id || '',
         startIndex:this.currentPage,
@@ -188,7 +188,7 @@ export default {
       for(let key in data){
         switch (key) {
           case 'getGroupImage':
-            this.getList(data.getGroupImage.groupId)
+            this.getList(data.getGroupImage.groupId, 1)
           break;
           case 'moveGroup':
             this.handleMoveGroup(data.moveGroup.imageId,data.moveGroup.groupId)
