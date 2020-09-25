@@ -1,21 +1,5 @@
 <template>
 	<div class="row-3-grid-content  flex-box">
-		<!-- <el-row type="flex" justify="space-between" class="item-title">
-			<el-col :span="12">
-				<gridtitle :title="'总交易金额分布'"></gridtitle>
-			</el-col>
-			<el-col :span="12">
-				<gridtitle :title="'客单价(最近七天)'"></gridtitle>
-			</el-col>
-		</el-row>
-		<el-row class="item-content">
-			<el-col :span="12" class="v-el-col">
-				<vhistogram :chartData="left"></vhistogram>
-			</el-col>
-			<el-col :span="12" class="v-el-col">
-				<vhistogram :chartData="right"></vhistogram>
-			</el-col>
-		</el-row> -->
 		<div class="titile">
 			<el-row type="flex" justify="space-between">
 				<el-col :span="12">

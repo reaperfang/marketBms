@@ -1,12 +1,5 @@
 <template>
 	<div class="v-chart-histogram">
-		<!-- <ve-histogram
-			:extend="chartExtend"
-			:data="chartData"
-			v-bind="pubSetting"
-			:legend-visible="false"
-		></ve-histogram> -->
-
 		<ve-histogram
 			:extend="chartExtend"
 			:data="chartData"
@@ -99,6 +92,27 @@ export default {
 								? "交易数量"
 								: "客单价金额"
 						}: &nbsp${item.value}`;
+					}
+				},
+				series: {
+					itemStyle: {
+						normal: {
+							color: new echarts.graphic.LinearGradient(
+								0,
+								0,
+								0,
+								1,
+								// [
+								// 	{ offset: 0, color: "#06B5D7" }, //柱图渐变色
+								// 	{ offset: 0.5, color: "#44C0C1" }, //柱图渐变色
+								// 	{ offset: 1, color: "#71C8B1" } //柱图渐变色
+								// ]
+								[
+									{ offset: 0, color: "#6AEEFF" }, //柱图渐变色
+									{ offset: 1, color: "#009FD7" } //柱图渐变色
+								]
+							)
+						}
 					}
 				}
 			}
