@@ -98,7 +98,7 @@ export default {
             lastday=timeEnd
         }else if(this.value==3){
             var year=new Date().getFullYear()
-            var monthcur=Math.ceil((new Date().getMonth()+1)/3)//当前季度
+            var monthcur=(Math.ceil((new Date().getMonth()+1)/3)-1)//当前季度前一季度
             if(monthcur==1){
                 lastday=(new Date(year+'-03-31 00:00:00')).getTime()
             }
