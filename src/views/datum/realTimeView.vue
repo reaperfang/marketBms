@@ -1,7 +1,7 @@
 <template>
 <div>
     <!-- 悬浮按钮 数据大屏 -->
-    <router-link v-permission="['数据', '实时概况','默认页面', '数据大屏']" class="viewBut" tag="a" target="_blank" :to="{ name: 'dashboard'}">
+    <router-link v-permission="['数据', '实时概况','默认页面', '查看']" class="viewBut" tag="a" target="_blank" :to="{ name: 'dashboard'}">
         <img src="@/assets/images/realtime/curtime.png" alt="">
     </router-link>
     <!-- 数据总览 -->
@@ -689,7 +689,7 @@ height:0px;
         width: 100%;
         overflow-x: scroll;
         .choose-type{
-            min-width: 745px;
+            min-width: 760px;
             padding: 20px 0 10px;
         }
     }
@@ -855,7 +855,7 @@ height:0px;
                     }
                 }
                 span:nth-child(2){
-                    width: 60%;
+                    max-width: 50%;
                     text-align: left;
                     padding-left: 40px;
                     img{
@@ -872,7 +872,8 @@ height:0px;
                     }
                 }
                 span:nth-child(3){
-                    width: calc(40% - 36px);
+                    // width: calc(40% - 36px);
+                    float: right;
                     text-align: right;
                     p{
                         line-height: 42px;
