@@ -193,15 +193,15 @@
                                 <template v-else-if="scope.row.deliveryWay == 4">
                                     <span class="table-btn" @click="verificationHandler(scope.row)">核销验证</span>
                                 </template>
-                                <!-- <template v-else-if="scope.row.deliveryWay == 3">
-                                    <span class="reOrder(scope.row) table-btn">重新发单</span>
+                                <template v-else-if="scope.row.deliveryWay == 3 && (!!scope.row.isAbnormal)">
+                                    <span class="table-btn" @click="reOrder(scope.row)">重新发单</span>
                                     <span class="table-btn" @click="closeOrder(scope.row)">关闭订单</span>
-                                </template> -->
+                                </template>
                             </template>
-                            <template v-else-if="scope.row.deliveryWay == 3 && scope.row.isAbnormal">
+                            <!-- <template v-else-if="scope.row.deliveryWay == 3 && scope.row.isAbnormal">
                                 <span @click="reOrder(scope.row)">重新发单</span>
                                 <span @click="closeOrder(scope.row)">关闭订单</span>
-                            </template>
+                            </template> -->
                         </div>
                     </template>
                 </el-table-column>
@@ -514,7 +514,7 @@ export default {
         onSubmit(value) {
             let orderId = "";
             if(Object.prototype.toString.call(this.currentData)=="[object Object]"){
-                orderId=this.currentData.id;
+                orderId=this.currentData.orderId;
             }else{
                 orderId=this.currentData;
             }
