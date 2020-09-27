@@ -121,7 +121,7 @@
           const stepResult = await this._apis.profile.intelligentUpdateStep({changeStep: 4, status: 1});
           // 店铺名更新
           let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-          if (shopInfo.shopName !== this.form.shopName) shopInfo.shopName = this.form.shopName;
+          shopInfo.shopName = this.form.shopName;
           let setRes = await this.$store.dispatch("setShopInfos", shopInfo);
           await this.$store.dispatch('getShopInfo');
           // 跳转到概况页

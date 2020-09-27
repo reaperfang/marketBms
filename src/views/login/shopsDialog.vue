@@ -84,7 +84,7 @@ export default {
   methods: {
     //获取店铺列表
     getShopList(){
-      let userInfo = JSON.parse(localStorage.getItem('userInfo')) 
+      let userInfo = JSON.parse(localStorage.getItem('userInfo'))
       let tid = '',id = '',type = ''
       if(userInfo){
         tid = userInfo.tenantInfoId
@@ -108,14 +108,14 @@ export default {
       })
     },
 
-    //进入店铺 
+    //进入店铺
     toShop(shop){
       if(shop.shopExpire !== 1){
         let shopIds = []
         this.shopList.map(item =>{
           shopIds.push(item.id)
         })
-        
+
         if(shopIds.includes(shop.id*1)){// 登录之后没有新开的店铺
           this.newShopList = this.shopList
           this.saveShop(shop)
@@ -133,7 +133,7 @@ export default {
               //获取新的店铺列表
               let shopObj = shopInfoMap[key]
               this.newShopList.push(shopObj)
-            } 
+            }
             localStorage.setItem('userInfo',JSON.stringify(info));//更新本地存储的账号信息
             this.saveShop(shop)
           }).catch(error =>{
@@ -144,15 +144,17 @@ export default {
         this.$message.warning('该店铺已过期！');
       }
     },
-    
+
     //保存当前选择店铺的信息
     saveShop(shop){
       this._apis.set.getShopInfo({cid:shop.id,id:shop.id}).then(response =>{
-          let shopInfo = {}
-          this.newShopList.map(item =>{
+          let shopInfo;
+          /*this.newShopList.map(item =>{ // 切换店铺时，有bug,店铺名更新不过来
             item.id == shop.id && (shopInfo = item)
-          })
-          this.$store.dispatch('setShopInfos',shopInfo).then(() => {
+          })*/
+        shopInfo = response;
+        // console.log("切换店铺后的店铺信息 ：", response);
+        this.$store.dispatch('setShopInfos',shopInfo).then(() => {
             this.$store.dispatch('getShopInfo')
             this._globalEvent.$emit('refreshProfile')
             this.getShopAuthList()
@@ -182,7 +184,7 @@ export default {
       this.showDialog = false
       this.$emit('handleClose')
     },
-    
+
     handleCurrentChange(val){
       this.startIndex = val
       this.getShopList()

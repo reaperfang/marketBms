@@ -1,5 +1,5 @@
 <template>
-  <section v-loading="isLoading" v-if="!(currentStep === 4 && stepStatus === 1)">
+  <section v-show="!isLoading" v-if="!(currentStep === 4 && stepStatus === 1)">
   <!--   (currentStep:4,  stepStatus: 1, 代表最后一步完成，也就是整体完成了) -->
     <div class="profile_intelligent">
       <p class="p_i_title">
