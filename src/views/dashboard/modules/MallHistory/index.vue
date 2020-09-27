@@ -114,7 +114,7 @@ export default {
 						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${item.color}"></span>`;
 						return `${dotHtml}${list[0]} <br/>&nbsp&nbsp&nbsp${
 							item.seriesName == "金额" ? "支付金额" : "浏览次数"
-						}: &nbsp${this.toDecimal(list[1])}`;
+						}: &nbsp${list[1]}`;
 					}
 				}
 			},
