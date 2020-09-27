@@ -114,8 +114,8 @@
                             <p v-permission="['订单', '订单查询', '商城订单', '发货信息']" @click="$router.push('/order/orderDetail?id=' + order.id + '&tab=2')">发货信息</p>
                             <p v-show="!authHide" v-permission="['订单', '订单查询', '商城订单', '补填物流']" v-if="order.isFillUp == 1" @click="$router.push('/order/supplementaryLogistics?id=' + order.id)">补填物流</p>
                             <!-- 第三方配送的异常订单 -->
-                            <p v-if="order.deliveryWay== 3" @click="sendOrderAgain">重新发单</p>
-                            <p v-if="order.deliveryWay== 3" @click="currentDialog = 'CloseOrderDialog'; currentData = order; dialogVisible = true">关闭订单</p>
+                            <p v-if="order.deliveryWay== 3 && (!!order.isAbnormal)" @click="sendOrderAgain(order)">重新发单</p>
+                            <p v-if="order.deliveryWay== 3 &&(!!order.isAbnormal)" @click="currentDialog = 'CloseOrderDialog'; currentData = order; dialogVisible = true">关闭订单</p>
 
                             <p v-if="order.deliveryWay== 4" @click="currentDialog = 'VerificationDialog'; currentData = order.id; dialogVisible = true">核销验证</p>
                         </template>
@@ -173,6 +173,8 @@ export default {
                             if(item.orderStatus==5||item.orderStatus==6){
                                 if(item.thirdType==1){
                                     item.deliveryWayIcon = "达达"
+                                }else if(!order.thirdType){
+                                    item.deliveryWayIcon ="三方"
                                 }
                             }else{
                                 item.deliveryWayIcon = "三方"
@@ -217,7 +219,9 @@ export default {
                     if(order.orderStatus==5||order.orderStatus == 6){
                         if(order.thirdType==1){
                             return '第三方配送-达达'
-                        }
+                        }else if(!order.thirdType){
+                            return "第三方配送"
+                    }
                     }else{
                         return '第三方配送'
                     }
@@ -337,13 +341,15 @@ export default {
             this.currentDialog = 'CloseOrderDialog'
             this.dialogVisible = true
         },
-        sendOrderAgain(){
-            let a = true;
-            if(a){
-                this.$message.success('重新发单成功');
-            }else{
+        sendOrderAgain(order){
+             this._apis.order.reOrder({cid:order.cid,id:order.id})
+            .then(res=>{
+                 this.$emit('getList');
+                 this.$message.success('重新发单成功');
+            }).catch(error=>{
                 this.$message.error('重新发单失败，请再次重新发单');
-            }
+            })
+               
             
         },
         submit(value) {

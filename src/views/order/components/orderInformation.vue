@@ -693,6 +693,8 @@ export default {
                 if(order.orderStatus==5||order.orderStatus==6){
                     if(order.thirdType==1){
                         return "第三方配送-达达"
+                    }else if(!order.thirdType){
+                        return "第三方配送"
                     }
                 }else{
                     return "第三方配送"

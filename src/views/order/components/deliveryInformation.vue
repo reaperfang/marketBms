@@ -28,14 +28,10 @@
             </template>
             <template v-if="item.deliveryWay == 3">
               <!-- 骑手正常接单 -->
-              <template v-if="!item.isAbnormal && item.distributionInfoView.distributorName">
-                  <div class="header-lefter-item">配送员：{{item.distributionInfoView.distributorName}}</div>
-                  <div class="header-lefter-item">联系方式：{{item.distributionInfoView.distributorPhone}}</div>
-              </template>
-              <!-- 骑手取消接单 -->
-              <div v-if="!item.isAbnormal" class="header-lefter-item">{{item.distributionInfoView | distributionInfoFilter}}</div>
+              <!-- <div v-if="!item.isAbnormal" class="header-lefter-item" v-html="distributionOrderInfo(item.distributionInfoView)"></div> -->
+              <div v-if="!item.isAbnormal"  :class="textColorObject(item.distributionInfoView)" class="header-lefter-item" >{{item.distributionInfoView | distributionOrderInfoFilter}}</div>
               <!-- 异常订单 -->
-              <div v-if="item.isAbnormal" class="header-lefter-item">{{item.distributionInfoView | distributionInfoFilter}}</div>
+              <div v-if="item.isAbnormal" class="header-lefter-item" v-html="distributionOrderInfo(item.distributionInfoView)"></div>
               <div @click="showDistributorLogistics(item.id)" class="header-lefter-item blue pointer">查看物流</div>
             </template>
            
@@ -186,6 +182,7 @@
 import StatisticsDialog from "@/views/order/dialogs/statisticsDialog";
 import LogisticsDialog from "@/views/order/dialogs/logisticsDialog";
 import Empty from "@/components/Empty";
+import { sortCreateTime } from "@/utils/base.js";
 
 export default {
   data() {
@@ -260,6 +257,8 @@ export default {
               if(order.orderStatus==5||order.orderStatus==6){
                   if(order.thirdType==1){
                      return '第三方配送-达达'
+                  }else if(!order.thirdType){
+                     return "第三方配送"
                   }
                 }else{
                     return "第三方配送" 
@@ -269,28 +268,29 @@ export default {
                 return '上门自提'
         }
     },
-     
-    distributionInfoFilter(item){
+    //订单当先状态展示
+    distributionOrderInfoFilter(item){
       switch(item.status){
           case 1:
               return '发单中，等待骑手接单'
           case 2://待取货
           case 3://配送中
           case 4://已完成
-          case 8://指派单
-              break
+              return `配送员：${item.distributorName} 联系方式：${item.distributorPhone}`
           case 5://取消
               if(item.cancelFrom!=1){ //cancelFrom:1达达骑手取消，2商家取消，3系统或者客服取消，0默认值
-                  return '发单中，等待骑手接单'
+                  return '异常订单：发单中，等待骑手接单'
               }else if(item.cancelFrom ==1){
-                  return '骑手取消接单，重新发单中'
+                  return '异常订单：骑手取消接单，重新发单中'
               }
+          case 8://指派单
+              return `异常订单：系统重新指派订单`
           case 9:
-            return '妥投异常之物品返回中'
+            return '异常订单：妥投异常之物品返回中'
           case 10:
-            return '妥投异常之物品返回完成 '
+            return '异常订单：妥投异常之物品返回完成'
           case 1000:
-            return '创建达达运单失败'
+            return '异常订单：创建达达运单失败'
       }
 
     }
@@ -318,9 +318,43 @@ export default {
     cid() {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
-    }
+    },
+    
   },
   methods: {
+    distributionOrderInfo(item) { 
+      switch(item.status){
+          case 1:
+              return '<span class="text-warning">发单中，等待骑手接单</span>'
+          case 2://待取货
+          case 3://配送中
+          case 4://已完成
+          case 8://指派单
+              return `<span class="text-normal">配送员：${item.distributorName} 联系方式：${item.distributorPhone}</span>`
+          case 5://取消
+              if(item.cancelFrom!=1){ //cancelFrom:1达达骑手取消，2商家取消，3系统或者客服取消，0默认值
+                  return '<span class="text-danger">发单中，等待骑手接单</span>'
+              }else if(item.cancelFrom ==1){
+                  return '<span class="text-danger">异常订单：骑手取消接单，重新发单中</span>'
+              }
+          case 8://指派单
+            return '<span class="text-danger">异常订单：系统重新指派单</span>'
+          case 9:
+            return '<span class="text-danger">异常订单：妥投异常之物品返回中</span>'
+          case 10:
+            return '<span class="text-danger">异常订单：妥投异常之物品返回完成</span>'
+          case 1000:
+            return '<span class="text-danger">异常订单：创建达达运单失败</span>'
+      }
+
+  },
+  textColorObject(item){
+      return {
+        'text-normal':item.status==2||item.status==3||item.status==4||item.status==8,
+        'text-warning':item.status==1,
+        'text-danger':item.status==5||item.status==9||item.status==10||item.status==1000
+      }
+    },
     getIsTrace() {
       this._apis.order
         .getIsTrace({ cid: this.cid })
@@ -336,6 +370,19 @@ export default {
         });
     },
     getOrderSendItems() {
+      let distributionInfoViews= []
+      if(this.orderDetail.distributionInfoViews){
+           distributionInfoViews= this.orderDetail.distributionInfoViews.map(item=>{
+            return{
+              createTime:item.createTime,
+              distributorName: item.distributorName,
+              distributorPhone:item.distributorPhone,
+              status:item.status,
+              thirdType:item.thirdType,
+              cancelFrom:item.cancelFrom
+            }
+        })
+     }
       let arr = [];
       let sendProductsArr = [];
       let objTemp={}
@@ -369,7 +416,7 @@ export default {
                 deliveryTime:this.orderDetail.orderInfo.deliveryTime,
                 complateTime:this.orderDetail.orderInfo.complateTime,
                 isAbnormal:!!this.orderDetail.orderInfo.isAbnormal,
-                distributionInfoView:this.orderDetail.distributionInfoViews&&this.orderDetail.distributionInfoViews[0],
+                distributionInfoView:distributionInfoViews.length>0?sortCreateTime(distributionInfoViews).reverse()[0]:{},
                 thirdType:this.orderDetail.orderInfo.thirdType
 
               }
@@ -419,6 +466,8 @@ export default {
       }
     if(sendProductsArr.length>0){
       arr = [];
+    
+    // let arr = sortCreateTime(distributionInfoViews)
       sendProductsArr.forEach((item,index)=>{
         let obj = Object.assign(
               {},
@@ -448,30 +497,31 @@ export default {
                 deliveryDate:this.orderDetail.orderInfo.deliveryDate,
                 deliveryTime:this.orderDetail.orderInfo.deliveryTime,
                 complateTime:this.orderDetail.orderInfo.complateTime,
-                isAbnormal:!!this.orderDetail.orderInfo.isAbnormal,//is_abnormal:是否是异常单：0否1是
-                distributionInfoView:this.orderDetail.distributionInfoViews&&this.orderDetail.distributionInfoViews[0],
+                isAbnormal:!!this.orderDetail.orderInfo.isAbnormal,//isAbnormal:是否是异常单：0否1是
+                distributionInfoView:distributionInfoViews.length>0?sortCreateTime(distributionInfoViews).reverse()[0]:{},
                 thirdType:this.orderDetail.orderInfo.thirdType
-
               }
               );
             arr.push(obj)
       })
     }
-    arr.sort((a, b) => {
-        const thisTimeA = a.createTime.replace(/-/g, '/')
-        const thisTimeB = b.createTime.replace(/-/g, '/')
-        let timeA = new Date(thisTimeA).getTime()
-        let timeB = new Date(thisTimeB).getTime()
+    // arr.sort((a, b) => {
+    //     const thisTimeA = a.createTime.replace(/-/g, '/')
+    //     const thisTimeB = b.createTime.replace(/-/g, '/')
+    //     let timeA = new Date(thisTimeA).getTime()
+    //     let timeB = new Date(thisTimeB).getTime()
 
-        if(timeA > timeB) {
-          return 1
-        } else if(timeA < timeB) {
-          return -1
-        } else if(timeA == timeB) {
-          return 0
-        } 
-      })
-      this.orderSendItems = arr;
+    //     if(timeA > timeB) {
+    //       return 1
+    //     } else if(timeA < timeB) {
+    //       return -1
+    //     } else if(timeA == timeB) {
+    //       return 0
+    //     } 
+    //   })
+    //   this.orderSendItems = arr;
+
+      this.orderSendItems = sortCreateTime(arr);
     },
     showLogistics(expressNo, expressCompanys, id) {
       if (this.isTrace == 0) {// 未开启物流轨迹
@@ -544,12 +594,34 @@ export default {
   }
 };
 </script>
+<style lang="scss">
+  .delivery-information {
+    .text-normal{
+      color:#44434B;
+    }
+    .text-warning{
+      color:#FD932B;
+    }
+    .text-danger{
+      color:#FD4C2B;
+    }
+  }
+</style>
 <style lang="scss" scoped>
 .fb{
   font-weight: 500;
   font-family:PingFangSC-Medium,PingFang SC;
 }
 .delivery-information {
+    .text-normal{
+      color:#44434B;
+    }
+    .text-warning{
+      color:#FD932B;
+    }
+    .text-danger{
+      color:#FD4C2B;
+    }
   .blue {
     color: $globalMainColor;
   }

@@ -33,14 +33,14 @@
           </div>
         </template>
         <!-- 第三方配送时骑手轨迹 -->
-        <template v-else>·  
+        <template v-else>  
           <el-timeline v-show="activities.length" :reverse="reverse">
                 <el-timeline-item
                   v-for="(activity, index) in activities"
                   :key="index"
-                  :timestamp="activity.acceptTime"
+                  :timestamp="activity.createTime"
                 >{{activity.acceptStation}}
-                <p>
+                <p class="distributionInfo">
                   {{activity.distributorName}}  {{activity.distributorPhone}}
                 </p>
                 </el-timeline-item>
@@ -49,14 +49,14 @@
         </template>
     </div>
     <div slot="title">
-      <span class="title">物流信息</span>
-      <span class="thirdType">{{activities[0] | thirdDeliveryWayNameFilter}}</span>
+      <span class="title">物流信息( {{activities[0] | thirdDeliveryWayNameFilter}} )</span>
     </div>
   </DialogBase>
 </template>
 <script>
 import DialogBase from "@/components/DialogBase";
 import Empty from "@/components/Empty";
+import { sortCreateTime } from "@/utils/base.js";
 
 export default {
   data() {
@@ -73,58 +73,58 @@ export default {
     thirdDeliveryWayNameFilter(item){
       switch(item.thirdType){
         case 1:
-          if(item.status ==1){
-            return '第三方配送'
-          }else{
-            return '第三方配送-达达'
-          }
+            return "第三方配送-达达"
+        default:
+            return "第三方配送"
       }
-
     }
   },
   created() {
     this.deliveryWay = this.data.deliveryWay
-    this.data.tracks=this.activities = [
-        {
-          cid: "2",
-          acceptTime:"2020-09-23 19:50:54",
-          createUserId: '2',
-          acceptStation: '等待骑手接单2',
-          distributorName: "",
-          distributorPhone: "",
-          status:1,
-          thirdType:1
-      },
-      {
-          cid: "2",
-          acceptTime:"2020-09-23 19:50:54",
-          createUserId: '3',
-          acceptStation: '等待骑手接单3',
-          distributorName: "222",
-          distributorPhone: "2222",
-          status:2
+    // this.data.tracks=this.activities = [
+    //    {
+    //       cid: "2",
+    //       acceptTime:"2020-09-23 18:54:54",
+    //       createUserId: '3',
+    //       acceptStation: '待取货',
+    //       distributorName: "王哈哈",
+    //       distributorPhone: "13261312539",
+    //       status:2,
+    //       thirdType:1
 
-      },
-      {
-          cid: "2",
-          acceptTime:"2020-09-23 19:50:54",
-          createUserId: '4',
-          acceptStation: '等待骑手接单4',
-          distributorName: "222",
-          distributorPhone: "2222",
-          status:3
-      },
-      {
-          cid: "2",
-          acceptTime:"2020-09-23 19:50:54",
-          createUserId: '4',
-          acceptStation: '等待骑手接单5',
-          distributorName: "222",
-          distributorPhone: "2222",
-          status:1
-      },
-      
-    ]
+    //   },
+    //     {
+    //       cid: "2",
+    //       acceptTime:"2020-09-23 18:50:54",
+    //       createUserId: '2',
+    //       acceptStation: '等待骑手接单',
+    //       distributorName: "",
+    //       distributorPhone: "",
+    //       status:1,
+    //       thirdType:1
+    //   },
+     
+    //   {
+    //       cid: "2",
+    //       acceptTime:"2020-09-23 19:50:54",
+    //       createUserId: '4',
+    //       acceptStation: '已完成',
+    //       distributorName: "王哈哈",
+    //       distributorPhone: "13261312539",
+    //       status:9,
+    //       thirdType:1
+    //   },
+    //   {
+    //       cid: "2",
+    //       acceptTime:"2020-09-23 19:10:54",
+    //       createUserId: '4',
+    //       acceptStation: '配送中',
+    //       distributorName: "王哈哈",
+    //       distributorPhone: "13261312539",
+    //       status:3,
+    //       thirdType:1
+    //   },    
+    // ]
      this.activities= this.data.tracks.map(item=>{
        switch(item.status){
          case 1:
@@ -155,18 +155,19 @@ export default {
        }
       return{
         cid: "2",
-        acceptTime:item.acceptTime,
+        createTime:item.createTime,
         acceptStation: item.acceptStation,
         distributorName: item.distributorName,
         distributorPhone:item.distributorPhone,
         status:item.status,
-        thirdType:item.thirdType
+        thirdType:this.data.thirdType
       }
     })
-    
+    this.activities = sortCreateTime(this.activities)
   },
   methods: {
-    submit() {}
+    submit() {},
+    
   },
   computed: {
     visible: {
@@ -202,7 +203,22 @@ export default {
 <style lang="scss" scoped>
 .reject {
     margin-top: 50px;
+    
 }
+/deep/ .el-timeline{
+  transform: translateX(60px);
+}
+/deep/ .el-timeline-item{
+    .el-timeline-item__content,.el-timeline-item__timestamp{
+        color:#92929B!important;
+      }
+}
+/deep/.el-timeline-item:first-child{
+      .el-timeline-item__content,.el-timeline-item__timestamp{
+        color:#44434B!important;
+      }
+      
+  }
 </style>
 <style lang="scss">
 .logistics {
@@ -224,17 +240,21 @@ export default {
   /deep/.el-timeline-item__timestamp.is-bottom{
     position: absolute;
     left: -130px;
-    top: 0px;
+    top: -4px;
+    color:#92929B;
+    font-size:12px;
   }
   .title{
     margin-left:20px;
-    font-size:14px;
+    font-size:16px;
+    color:#44434B;
+    font-weight:bold;
   }
-  .thirdType{
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);
+  .distributionInfo{
+    margin-top:8px;
   }
+  
+  
 }
 </style>
 

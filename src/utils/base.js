@@ -391,3 +391,22 @@ export function getOperationColumnW() {
   })
   return Math.max(...numArr)
 }
+//按照创建时间正序排序
+export function sortCreateTime(arr){
+  arr.sort((a, b) => {
+    const thisTimeA = a.createTime.replace(/-/g, '/')
+    const thisTimeB = b.createTime.replace(/-/g, '/')
+    let timeA = new Date(thisTimeA).getTime()
+    let timeB = new Date(thisTimeB).getTime()
+
+    if(timeA > timeB) {
+      return 1
+    } else if(timeA < timeB) {
+      return -1
+    } else if(timeA == timeB) {
+      return 0
+    } 
+  })
+  return arr
+
+}
