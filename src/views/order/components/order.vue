@@ -14,7 +14,7 @@
             <div class="item">操作</div>
         </div>
         <div v-if="list.length" class="order-container" v-loading="loading">
-            <div class="container-item" v-for="(order, index) in list" :key="index">
+            <div class="container-item"  v-for="(order, index) in list" :key="index">
                 <div class="container-item-header">
                     <div class="item">
                         <el-checkbox v-if="!authHide" @change="checkedChange" v-model="order.checked"></el-checkbox>
@@ -37,7 +37,7 @@
                         <!-- <i v-permission="['订单', '订单查询', '商城订单', '删除订单']" @click="closeOrder(order.id)" v-if="order.orderStatus == 2" class="el-icon-delete"></i> -->
                     </div>
                 </div>
-                <div class="container-item-content">
+                <div class="container-item-content" :class="{deliveryWay3: order.deliveryWay == 3}">
                     <div class="item goods">
                         <ul>
                             <li class="goods-li" v-for="(goods, index) in order.orderItems" :key="index">
@@ -53,7 +53,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col" style="margin-right: 26px;">
+                                    <div class="col goodsCount" style="margin-right: 26px;">
                                         {{goods.goodsCount}}
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
                         <p>{{order.receivedName}}</p>
                         <p>{{order.receivedPhone}}</p>
                     </div>
-                    <div class="item" :class="{'item-storew': storeMark, 'item-indent': storeMark && order.deliveryWay == 1}">
+                    <div class="item" :class="{'item-storew': storeMark, 'item-indent': storeMark && order.deliveryWay == 1, deliveryWay3: order.deliveryWay == 3}">
                         <span class="icon-store" v-if="storeMark  && order.deliveryWay == 2"></span><span class="icon-store-text">{{order | deliveryWayFilter}}</span>
                         <div class="store-time" v-if="storeMark && order.deliveryWay == 2">
                             <p>{{order.deliveryDate | formatDateRemoveZero}}</p>
@@ -516,9 +516,30 @@ export default {
                         text-align: center;
                         padding-top: 2px;
                     }
+                    &.deliveryWay3 {
+                        >.item {
+                            &:nth-child(2) {
+                                margin-right: 72px!important;
+                            }
+                            &:nth-child(3) {
+                                margin-right: 65px!important;
+                            }
+                            &:nth-child(4) {
+                                margin-right: 17px;
+                            }
+                            .goods-box {
+                                .goodsCount {
+                                    margin-right: -1px!important;
+                                }
+                            }
+                        }
+                    }
                     >.item {
                         width: 80px;
                         margin-right: 27px;
+                        &.deliveryWay3 {
+                            width: 98px;
+                        }
                         &:nth-child(2) {
                             padding-left: 5px;
                             p {
@@ -557,6 +578,9 @@ export default {
                                 width: 100%;
                                 .image-box {
                                     margin-right: 10px;
+                                }
+                                .goodsCount {
+                                    margin-right: -1px!important;
                                 }
                             }
                             .goods-li {
