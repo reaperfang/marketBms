@@ -34,6 +34,13 @@
 					:city="phoneData.city"
 					:barColor="phoneData.barColor"
 				></pchart>
+
+				<!-- <vitem
+					:title="'性别年龄分布'"
+					:chartData="sexageData.ageData"
+					:sexData="sexageData.sexData"
+					:icon="'2'"
+				></vitem> -->
 			</el-col>
 		</el-row>
 	</div>

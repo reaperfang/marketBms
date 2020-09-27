@@ -37,9 +37,9 @@ export default {
 
 <style lang="scss">
 .icon-pie {
-	// position: absolute;
+	position: absolute;
 	margin: auto;
-	top: 0;
+	top: -15px;
 	left: 0;
 	bottom: 0;
 	right: 0;
@@ -47,7 +47,7 @@ export default {
 	width: 100px;
 	text-align: center;
 	.p-start {
-		font-size: 26px;
+		font-size: 24px;
 		font-weight: 600;
 		color: rgba(255, 255, 255, 1);
 		line-height: 40px;

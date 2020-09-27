@@ -1,6 +1,9 @@
 <template>
 	<div class="v-chart-progress">
-		<div style="width:100%;height:100%;" ref="chartContentPie"></div>
+		<div
+			style="width:100%;height:100%;	position: absolute;"
+			ref="chartContentPie"
+		></div>
 
 		<icon :progress="progress" :city="city"></icon>
 	</div>
