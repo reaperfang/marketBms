@@ -1,5 +1,5 @@
 <template>
-<div class="fr clearfix" >
+<div class="fr clearfix" style="position:relative;">
                         <el-select class="dayselect" :popper-append-to-body="false"  v-model="value" placeholder="请选择" @change="getUnits">
                             <el-option label="日" prop="ri" value="0"></el-option>
                             <el-option label="周" prop="zhou" value="1"></el-option>
@@ -33,9 +33,7 @@
                         format="yyyy-MM"
                         placeholder="选择月" :picker-options="pickerMonth">
                         </el-date-picker>
-                        <div style="position:relative; float:left">
-                            <quarter class="fl" v-show="value==3" @change="getquar" />
-                        </div>
+                        <quarter class="fl" v-show="value==3" @change="getquar" />
                     </div>
 </template>
 <script>

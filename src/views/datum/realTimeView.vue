@@ -99,8 +99,8 @@
       </div>
     </div>
     <!-- 交易看板 -->
-    <el-container class="pb12 clearfix">
-        <el-aside class="asideBox" width="65%">
+    <div class="pb12 bgfff clearfix" style="min-height:660px">
+        <div class="asideBox" width="65%" >
             <div class="p_container p_ltsiade" v-loading="dataTypeload">
                 <div class="p_title clearfix">
                     <h2>交易看板</h2>
@@ -181,8 +181,8 @@
                 </div>
                 <tradeChart :title="'测试图表'" ref="tradeChart" :dataChart="dataChart3" :checkList="checkList" :units="seachTimetrad.units" height="420px" ></tradeChart>
             </div>
-        </el-aside>
-        <el-main class="p_rtsiade" style="padding:0">
+        </div>
+        <div class="p_rtsiade" style="padding:0;">
             <div class="clearfix ">
                 <div class="p_container">
                 <div class="p_title clearfix">
@@ -207,11 +207,11 @@
                     </div>
                 </div>
             </div>
-        </el-main>
-    </el-container>
+        </div>
+    </div>
     <!-- 用户概览 -->
-    <el-container class="pb12 clearfix">
-        <el-aside class="asideBox" width="65%">
+    <div class="pb12 bgfff clearfix" style="min-height:395px">
+        <div class="asideBox" width="65%">
             <div class="p_container p_ltsiade">
                 <div class="p_title clearfix">
                     <h2>用户概览</h2>
@@ -228,8 +228,8 @@
                     <userChart :title="'测试图表'" ref="userChart" :dataChart="dataChart2" :units="seachTime.units" height="300px" ></userChart>
                 </div>
             </div>
-        </el-aside>
-        <el-main class="p_rtsiade" style="padding:0">
+        </div>
+        <div class="p_rtsiade" style="padding:0">
             <div class="clearfix ">
                 <div class="p_container">
                 <div class="p_title clearfix">
@@ -249,8 +249,8 @@
                     <pieChart :title="'测试图表'" ref="pieChart" :dataChart="dataChart" height="300px"></pieChart>
                 </div>
             </div>
-        </el-main>
-    </el-container>
+        </div>
+    </div>
     <!-- 商品看板 -->
     <div class="clearfix">
         <div class="p_container">
@@ -676,8 +676,15 @@ margin-left: 12px;
 width:0px;
 height:0px;
 }
+.bgfff{
+background: #fff; 
+}
 .asideBox{
-    background: #fff; margin-right:12px;
+    width: 65%;
+    float: left;
+    background: #fff; 
+    // margin-right:12px;
+    border-right: 12px solid #f2f2f9;
 }
 .chartbox{
         width: 100%;
@@ -763,8 +770,9 @@ height:0px;
     }
 }
 .p_rtsiade{
+    float: left;
     background: #fff;
-    // width: calc(35% - 0px);
+    width: calc(35% - 12px);
     .chartbox{
         .lengebox{
             width: 160px;
