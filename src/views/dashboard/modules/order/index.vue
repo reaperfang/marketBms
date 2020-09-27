@@ -1,25 +1,9 @@
 <template>
-	<!-- <div class="row-3-grid-content flex-column">
-		<el-row type="flex" justify="space-between" class="item-title">
-			<el-col :span="24">
-				<gridtitle :title="'下单转换漏斗(最近七天)'"></gridtitle>
-			</el-col>
-		</el-row>
-		<el-row class="item-content">
-			<vfunnel
-				:chartData="lineargroup"
-				:chartSettings="chartSettings"
-				:chartExtend="chartExtend"
-				ref="vfunnel"
-			></vfunnel>
-		</el-row>
-	</div> -->
-
 	<div class="row-3-grid-content flex-box">
 		<div class="titile">
 			<el-row type="flex" justify="space-between" class="item-title">
 				<el-col :span="12">
-					<gridtitle :title="'下单转换漏斗(最近七天)'"></gridtitle>
+					<gridtitle :title="'下单转化漏斗(最近七天)'"></gridtitle>
 				</el-col>
 				<el-col :span="12"> </el-col>
 			</el-row>
