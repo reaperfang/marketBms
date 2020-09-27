@@ -710,6 +710,19 @@ export default {
                 }
             }
         };
+        const validSpecialChar = (rule, value, callback) => {
+            const reg = /[～！@#¥%……&*（）——+|」「：“？》《~!$^()_{}":>?<]+/g
+            let str = value&& value.replace(reg, '')
+            if (!str) return callback();
+            const reg2 = /[\u4e00-\u9fa5]/gm
+            str = str&& str.replace(reg2, '')
+            if (!str) return callback();
+            const reg3 = /\w+/gi
+            str = str&& str.replace(reg3, '')
+            if (!str) return callback();
+            console.log('str', str)
+            return callback(new Error('当前输入有误，请您重新输入'));
+        }
         return {
             specRadio:0,//商品规格信息，0:单一规格，1:多规格
             singleSpec:{
@@ -782,6 +795,10 @@ export default {
                 ],
                 name: [
                     { required: true, message: '请输入商品名称', trigger: 'blur' },
+                    {validator: validSpecialChar, trigger: 'blur' }
+                ],
+                description: [
+                    {validator: validSpecialChar, trigger: 'blur' }
                 ],
                 images: [
                     { required: true, message: '请上传商品图片', trigger: 'blur' },
