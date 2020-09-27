@@ -28,7 +28,7 @@
 				class="circle-55 circle-hover"
 				v-show="fourth"
 				@click.prevent
-				v-tooltip.right="{
+				v-tooltip.left="{
 					ref: 'tooltipRef-55',
 					class: 'tooltip-custom tooltip-other-custom'
 				}"
@@ -49,7 +49,7 @@
 				class="circle-65 circle-hover"
 				v-show="third"
 				@click.prevent
-				v-tooltip.right="{
+				v-tooltip.left="{
 					ref: 'tooltipRef-65',
 					class: 'tooltip-custom tooltip-other-custom'
 				}"
