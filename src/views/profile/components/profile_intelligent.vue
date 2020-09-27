@@ -1,5 +1,5 @@
 <template>
-  <section v-show="!isLoading" v-if="!(currentStep === 4 && stepStatus === 1)">
+  <section v-show="!(currentStep === 4 && stepStatus === 1)">
   <!--   (currentStep:4,  stepStatus: 1, 代表最后一步完成，也就是整体完成了) -->
     <div class="profile_intelligent">
       <p class="p_i_title">
@@ -32,9 +32,6 @@
           </el-steps>
         </el-col>
       </el-row>
-      <!-- <router-link to="/profile/intelligent" class="to_intelligent">立即体验</router-link> -->
-      <!-- <router-link :to="{name: 'intelligent', query: {isShowGuide: isFirst, stepStatus: stepStatus}}" class="to_intelligent">立即体验</router-link> -->
-
     </div>
   </section>
 </template>
@@ -42,45 +39,26 @@
 <script>
 export default {
     name: 'profile_intelligent',
-    data() {
-      return {
-        isLoading: false,
-        currentStep: null, // 当前步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
-        stepStatus: null, // 步骤状态 0 未完成 1 已完成
-      }
+    props: {
+      // 当前步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
+      currentStep: {
+        type: Number,
+        default: null
+      },
+      // 步骤状态 0 未完成 1 已完成
+      stepStatus: {
+        type: Number,
+        default: null
+      },
     },
     created() {
       this.getIntelligent();
     },
     methods:{
-      /** 获取智能开店信息 */
-      async getIntelligent() {
-        try {
-          this.isLoading = true;
-          const result = await this._apis.profile.getIntelligentProgress();
-          if(result){
-            this.currentStep = result.currentStep ? result.currentStep : 1;
-            this.stepStatus = result.status || 0;
-          }else {
-            this.currentStep =  1;
-            this.stepStatus =  0;
-          }
-
-        } catch (err) {
-          console.error(err);
-          this.$message.error(err);
-        } finally {
-          this.isLoading = false;
-        }
-      },
-
       /** 智能开店体验引导 */
       toIntelligent() {
-        // this.$router.push({ path: '/profile/intelligentGuide' });
         this.$router.push({ path: '/profile/intelligent' });
-        // this._routeTo('intelligent', {isShowGuide: this.isFirst, stepStatus: this.stepStatus});
-      },
-
+      }
     }
 }
 </script>

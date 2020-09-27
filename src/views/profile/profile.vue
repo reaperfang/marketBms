@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      <profileIntelligent ref="intelligentBar"></profileIntelligent>
+      <profileIntelligent :current-step="currentStep" :step-status="stepStatus"></profileIntelligent>
       <div class="p_l_main">
         <div class="p_l_item dealt">
           <p class="title1">待办提醒：</p>
@@ -322,6 +322,9 @@ export default {
       cid:'',
       isGetWXstatus:true,//是否获取到小程序状态数据
       isGetGZstatus:true,//是否获取到公众号状态数据
+      currentStep: null, // 智能开店：当前步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
+      stepStatus: null, // 智能开店： 步骤状态 0 未完成 1 已完成
+
     };
   },
 
@@ -343,6 +346,7 @@ export default {
     this._globalEvent.$on("refreshProfile", () => {
       this.init();
       this.getLink();
+      this.getIntelligent();
       this.getQrcode();
       this.getOverviewDetails();
       this.getOerviewRemind();
@@ -354,11 +358,11 @@ export default {
       this.isEmpower();
       this.getIsReleaseWX();
       this.getIsReleaseGZ();
-      // this.$refs.intelligentBar.getIntelligent();
     });
     this.$message.closeAll();
     this.init();
     this.getLink();
+    this.getIntelligent();
     this.getQrcode();
     this.getOverviewDetails();
     this.getOerviewRemind();
@@ -370,11 +374,6 @@ export default {
     this.isEmpower();
     this.getIsReleaseWX();
     this.getIsReleaseGZ();
-  },
-  mounted() {
-    this._globalEvent.$on("refreshProfile", () => {
-      this.$refs.intelligentBar.getIntelligent();
-    });
   },
   methods: {
     ...mapMutations(["SETCURRENT"]),
@@ -401,6 +400,23 @@ export default {
     getLink(){
       this.pageLink = process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9002` : location.origin + "/bh" //客户工作台地址
       this.gzLink = process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9001` : location.origin + "/cp/?cid=" + this.cid //公众号商城地址
+    },
+
+    // 获取智能开店信息
+    async getIntelligent() {
+      try {
+        const result = await this._apis.profile.getIntelligentProgress();
+        if(result){
+          this.currentStep = result.currentStep ? result.currentStep : 1;
+          this.stepStatus = result.status || 0;
+        }else {
+          this.currentStep =  1;
+          this.stepStatus =  0;
+        }
+      } catch (err) {
+        console.error("智能开店接口 err :", err);
+        this.$message.error(err);
+      }
     },
 
     //获取客户工作台二维码
