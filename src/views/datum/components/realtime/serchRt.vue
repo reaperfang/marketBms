@@ -50,6 +50,9 @@ export default {
         pickerWeek: {//周  https://www.cnblogs.com/lvsige/p/13474932.html
             disabledDate(time) {
                 let wk = new Date().getDay()
+                if (wk == 0) {// 如果今天是周日
+                    wk = 7;
+                };
                 return time.getTime() > Date.now() - 8.64e7*wk;
             },
             firstDayOfWeek: 1
@@ -88,11 +91,13 @@ export default {
             lastday=this.value2
         }else if(this.value==1){//选中周的 周日 日期 时间戳 到秒
             var today = new Date().getDay();// 今天是这周的第几天
-            var stepSunDay = -today + 1;//上周日距离今天的天数（负数表示）
+            console.log(today)
+            var stepSunDay = -today+1 ;//上周日距离今天的天数（负数表示）
+            stepSunDay=stepSunDay-1
             if (today == 0) {// 如果今天是周日
                 stepSunDay = -7;
             };
-            stepSunDay=stepSunDay-1
+            
             this.value2=new Date().getTime()+(8.64e7*stepSunDay)//上周日的时间戳
             lastday=new Date().getTime()+(8.64e7*stepSunDay)
         }else if(this.value==2){//选中月的最后一天时间戳 到秒
