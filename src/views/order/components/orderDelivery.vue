@@ -199,7 +199,7 @@
                                 </template> -->
                             </template>
                             <template v-else-if="scope.row.deliveryWay == 3 && scope.row.isAbnormal">
-                                <span class="reOrder(scope.row)">重新发单</span>
+                                <span @click="reOrder(scope.row)">重新发单</span>
                                 <span @click="closeOrder(scope.row)">关闭订单</span>
                             </template>
                         </div>
