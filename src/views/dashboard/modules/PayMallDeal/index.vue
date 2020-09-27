@@ -48,6 +48,8 @@ import pchart from "../../components/v-chart/pie/index"; //v-chart
 import echartprogress from "../../components/echart/progress/index";
 import { mapGetters, mapActions, mapState } from "vuex";
 
+import { toDecimal } from "@/utils/util";
+
 export default {
 	watch: {
 		"dashboard.top3"(val) {
@@ -91,7 +93,8 @@ export default {
 					barColor: "RGBA(245, 159, 0, 1)",
 					city: "深圳"
 				}
-			]
+			],
+			toDecimal:toDecimal
 		};
 	},
 	computed: {
@@ -144,10 +147,10 @@ export default {
 				{
 					children: [
 						{ title: "支付人数", content: val.paid_order_nu_rt },
-						{ title: "支付金额", content: val.paid_order_am_rt },
+						{ title: "支付金额", content: this.toDecimal(val.paid_order_am_rt) },
 						{
 							title: "客单价",
-							content: val.atv_rt.toFixed(2)
+							content: this.toDecimal(val.atv_rt)
 						}
 					]
 				},
