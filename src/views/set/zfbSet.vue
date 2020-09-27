@@ -46,7 +46,7 @@ export default {
       id:'',
       imageUrl: '',
       area: [],
-      uploadUrl:`${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
+      uploadUrl:`${process.env.DATA_API}/web-file/file-server/api_file_remote_upload.do`,
       loading2:false,
       loading3:false,
       keyFileUrlOk:true,

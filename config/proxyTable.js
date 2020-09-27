@@ -3,10 +3,10 @@
  */
 
 module.exports = {
+    
+    /* 电商服务 */
     '/data-server/**': {
-      target: 'https://test2-omo.aiyouyi.cn',//https://test-omo.aiyouyi.cn
-      // target: 'http://172.22.146.1:8082',// 梅志文
-      // target: 'http://172.22.146.129:8082',// 李文飞
+      target: 'https://test2-omo.aiyouyi.cn',
       changeOrigin: true,
       pathRewrite: {
         '^/data-server': ''
@@ -21,15 +21,10 @@ module.exports = {
         '^/sale_server': ''
       }
     },
-    '/upload_server/**': {
-      target: 'http://test2-omo.aiyouyi.cn',//https://test-omo.aiyouyi.cn
-      changeOrigin: true,
-      pathRewrite: {
-        '^/upload_server': ''
-      }
-    },
+    
+    /* 300官网 */
     '/zx_server/**': {
-      target: 'https://test2-cms-api.300.cn',
+      target: 'https://test2-cms-api.300.cn',  //此地址不分test几，只有test/pre和空前缀
       changeOrigin: true,
       pathRewrite: {
         '^/zx_server': ''

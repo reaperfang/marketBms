@@ -26,7 +26,7 @@
                         <a href="javascript:void(0)" @click="handlePrintListOpen('/order/printDistributionSheet',{ids: $route.query.ids,orderIds:$route.query.orderId,printType:0})">打印配送单</a>
                     </template>
                     <template v-else>
-                        批量发货成功，您可以
+                        本次批量发货{{$route.query.length}}单，成功{{$route.query.successNumber}}单，失败{{+$route.query.length - +$route.query.successNumber}}单，您可以
                         <a href="javascript:void(0)" @click="handlePrintListOpen('/order/printDistributionSheet',{ids: $route.query.ids,orderIds:$route.query.orderId,printType:0})">打印配送单</a>
                     </template>
                 </template>

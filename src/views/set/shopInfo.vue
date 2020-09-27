@@ -227,8 +227,8 @@ export default {
       city: "",
       area: "",
       loading: false,
-      uploadUrl: `${process.env.UPLOAD_SERVER}/web-file/file-server/api_file_remote_upload.do`,
-      uploadUrlBase64: `${process.env.UPLOAD_SERVER}/web-file/file-server-base64/api_file_remote_upload.do`,
+      uploadUrl: `${process.env.DATA_API}/web-file/file-server/api_file_remote_upload.do`,
+      uploadUrlBase64: `${process.env.DATA_API}/web-file/file-server-base64/api_file_remote_upload.do`,
       mapStyle: {
         zoom: 4,
         zoomControl: true,

@@ -184,7 +184,11 @@ export function deliveryWayFilter(order) {
           return '商家配送'
       case 3:
           if(order.status==5||order.status == 6){
-              return '第三方配送-达达'
+              if(order.thirdType == 1) {
+                return '第三方配送-达达'
+              } else {
+                return '第三方配送'
+              }
           }else{
               return '第三方配送'
           }

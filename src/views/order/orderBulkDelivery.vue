@@ -703,8 +703,8 @@ export default {
             }
             if(item.deliveryWay == 3) {
               obj.deliveryWay = 3;
-              obj.receivedLongitude = item.receivedLongitude
-              obj.receivedLatitude = item.receivedLatitude
+              obj.receivedLongitude = item.receivedLongitude || item.receivedLng
+              obj.receivedLatitude = item.receivedLatitude || item.receivedLat
             }
             if(item.deliveryWay == 4) {
               obj.deliveryWay = 4;
@@ -770,7 +770,7 @@ export default {
             this.title = '提示'
             this.dialogVisible = true
           } else {
-            this.orderSendGoodsHander(params)
+            this.orderSendGoodsHander(params, _list.length)
           }
         });
 
@@ -779,7 +779,7 @@ export default {
         console.error(e);
       }
     },
-    orderSendGoodsHander(params) {
+    orderSendGoodsHander(params, _length) {
       if(this.list[0] && this.list[0].deliveryWay == 3) {
         this._apis.order
         .sendGoods3(params)
@@ -807,7 +807,9 @@ export default {
               orderId: this.$route.query.ids,
               type: "orderBulkDelivery",
               printIds,
-              deliveryWay: 3
+              deliveryWay: 3,
+              length: _length,
+              successNumber: res.success
             }
           });
         })

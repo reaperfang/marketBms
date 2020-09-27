@@ -159,7 +159,7 @@ export default {
     }
     // 企业全称校验规则 
     const validateEnterpriseName = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5a-zA-Z0-9]{1,100}$/gi;
+      const reg = /^[\u4e00-\u9fa5a-zA-Z]{1,100}$/gi;
       if (!reg.test(value)) {
         return callback(new Error("仅支持英文和汉字，最多输入100个字符"));
       } else {
@@ -168,7 +168,7 @@ export default {
     }
     // 企业地址校验规则
     const validateEnterpriseAddress = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5a-zA-Z0-9]{1,400}$/gi;
+      const reg = /^[\u4e00-\u9fa5a-zA-Z]{1,400}$/gi;
       if (!reg.test(value)) {
         return callback(new Error("仅支持英文和汉字，最多输入400个字符"));
       } else {
@@ -177,7 +177,7 @@ export default {
     }
     // 联系人
     const validateContactName = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5a-zA-Z0-9]{1,30}$/gi;
+      const reg = /^[\u4e00-\u9fa5a-zA-Z]{1,30}$/gi;
       if (!reg.test(value)) {
         return callback(new Error("仅支持英文和汉字，最多输入30个字符"));
       } else {
@@ -512,8 +512,7 @@ export default {
       req.cityCode = this.addressInfo.cityCode || ''
       req.areaName = this.addressInfo.areaName || ''
       req.areaCode = this.addressInfo.areaCode || ''
-
-      req.stationAddress = `${this.addressInfo.address} ${this.addressInfo.addressDetail}`
+      req.stationAddress = (this.addressInfo.address || this.addressInfo.addressDetail) ?  `${this.addressInfo.address} ${this.addressInfo.addressDetail}` : ''
       req.lng = this.addressInfo.longitude
       req.lat = this.addressInfo.latitude
 

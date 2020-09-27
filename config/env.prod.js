@@ -6,7 +6,6 @@ module.exports = merge(baseConfig, {
   NODE_ENV: '"prod"',
   DATA_API: '"//omo.aiyouyi.cn"',
   SALE_API: '"/mkt-api"',
-  UPLOAD_SERVER: '"//omo.aiyouyi.cn"',
   ZX_API: '"/cms-api"',
   ZX_HELP: '"//www.300.cn"',
 
