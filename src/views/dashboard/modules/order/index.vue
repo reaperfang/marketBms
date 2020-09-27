@@ -1,25 +1,9 @@
 <template>
-	<!-- <div class="row-3-grid-content flex-column">
-		<el-row type="flex" justify="space-between" class="item-title">
-			<el-col :span="24">
-				<gridtitle :title="'下单转换漏斗(最近七天)'"></gridtitle>
-			</el-col>
-		</el-row>
-		<el-row class="item-content">
-			<vfunnel
-				:chartData="lineargroup"
-				:chartSettings="chartSettings"
-				:chartExtend="chartExtend"
-				ref="vfunnel"
-			></vfunnel>
-		</el-row>
-	</div> -->
-
 	<div class="row-3-grid-content flex-box">
 		<div class="titile">
 			<el-row type="flex" justify="space-between" class="item-title">
 				<el-col :span="12">
-					<gridtitle :title="'下单转换漏斗(最近七天)'"></gridtitle>
+					<gridtitle :title="'下单转化漏斗(最近七天)'"></gridtitle>
 				</el-col>
 				<el-col :span="12"> </el-col>
 			</el-row>
@@ -129,36 +113,40 @@ export default {
 			// paid_order_number_7d 支付人数 integer(int32) integer(int32)
 			// uv_7d 访问人数 integer(int32) integer(int32)
 
-			// let youcejiantouData = [
-			// 	{
-			// 		value: 361,
-			// 		itemValue: "100%",
-			// 		show: true,
-			// 		label: markLineSetting
-			// 	},
-			// 	{
-			// 		value: 351,
-			// 		itemValue: "70%",
-			// 		label: markLineSetting
+
+
+			// this.orderlist({
+			// 	chart: chart,
+			// 	youcejiantouData: {
+			// 		order_c_uv_7dco: parseInt(
+			// 			res.order_c_uv_7dco.toFixed(2) * 100
+			// 		),
+			// 		paid_c_order_7dco: parseInt(
+			// 			res.paid_c_order_7dco == -9999
+			// 				? 0
+			// 				: res.paid_c_order_7dco.toFixed(2) * 100
+			// 		),
+			// 		paid_c_uv_7dco: parseInt(
+			// 			res.paid_c_uv_7dco.toFixed(2) * 100
+			// 		)
 			// 	}
-			// ];
+			// });
 
-			console.log("res.paid_c_order_7dco", res.paid_c_order_7dco);
 
-			this.orderlist({
+					this.orderlist({
 				chart: chart,
 				youcejiantouData: {
-					order_c_uv_7dco: parseInt(
-						res.order_c_uv_7dco.toFixed(2) * 100
-					),
-					paid_c_order_7dco: parseInt(
+					order_c_uv_7dco:
+						(res.order_c_uv_7dco*100).toFixed(2)
+					,
+					paid_c_order_7dco: 
 						res.paid_c_order_7dco == -9999
 							? 0
-							: res.paid_c_order_7dco.toFixed(2) * 100
-					),
-					paid_c_uv_7dco: parseInt(
-						res.paid_c_uv_7dco.toFixed(2) * 100
-					)
+							: (res.paid_c_order_7dco*100).toFixed(2)
+					,
+					paid_c_uv_7dco: 
+						(res.paid_c_uv_7dco*100).toFixed(2)
+					
 				}
 			});
 		}

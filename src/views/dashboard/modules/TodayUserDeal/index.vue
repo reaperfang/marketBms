@@ -10,7 +10,9 @@
 						同比昨日
 						<!-- <span>{{ persent }}%{{ persent == 0 ? "" : "↑" }}</span> -->
 						<span
-							>{{ persent }}%{{ persent <= 0 ? "↓" : "↑" }}</span
+							>{{ persent }}%{{
+								persent < 0 ? "↓" : persent > 0 ? "↑" : ""
+							}}</span
 						>
 					</span>
 				</div>
