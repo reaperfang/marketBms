@@ -149,11 +149,11 @@ export default {
     saveShop(shop){
       this._apis.set.getShopInfo({cid:shop.id,id:shop.id}).then(response =>{
           let shopInfo;
-          /*this.newShopList.map(item =>{ // 切换店铺时，有bug,店铺名更新不过来
+          this.newShopList.map(item =>{
             item.id == shop.id && (shopInfo = item)
-          })*/
-        shopInfo = response;
-        // console.log("切换店铺后的店铺信息 ：", response);
+          })
+        shopInfo.shopName = response.shopName; // 切换店铺时，有bug,店铺名更新不过来
+        // console.log("切换店铺后的店铺信息 ：", shopInfo);
         this.$store.dispatch('setShopInfos',shopInfo).then(() => {
             this.$store.dispatch('getShopInfo')
             this._globalEvent.$emit('refreshProfile')
