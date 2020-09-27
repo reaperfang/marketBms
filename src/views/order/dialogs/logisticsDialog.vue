@@ -21,14 +21,16 @@
                 <div class="reject">未开启轨迹查询服务</div>
             </template>
             <template v-else>
-              <el-timeline v-show="data.length" :reverse="reverse">
+              <el-timeline v-show="data.traces.length" :reverse="reverse">
                 <el-timeline-item
-                  v-for="(activity, index) in data"
+                  v-for="(activity, index) in data.traces"
                   :key="index"
+                  :icon="activity.icon"
+                  :type="activity.type"
                   :timestamp="activity.acceptTime"
                 >{{activity.acceptStation}}</el-timeline-item>
               </el-timeline>
-              <Empty v-show="!data.length"></Empty>
+              <Empty v-show="!data.traces.length"></Empty>
             </template>
           </div>
         </template>
@@ -39,6 +41,8 @@
                   v-for="(activity, index) in activities"
                   :key="index"
                   :timestamp="activity.createTime"
+                  :icon="activity.icon"
+                  :type="activity.type"
                 >{{activity.acceptStation}}
                 <p class="distributionInfo">
                   {{activity.distributorName}}  {{activity.distributorPhone}}
@@ -47,9 +51,10 @@
               </el-timeline>
               <Empty v-show="!activities.length"></Empty>
         </template>
+        
     </div>
     <div slot="title">
-      <span class="title">物流信息( {{activities[0] | thirdDeliveryWayNameFilter}} )</span>
+        <span class="title">物流信息{{this.data | thirdDeliveryWayNameFilter}}</span>
     </div>
   </DialogBase>
 </template>
@@ -71,61 +76,22 @@ export default {
   },
   filters:{
     thirdDeliveryWayNameFilter(item){
-      switch(item.thirdType){
-        case 1:
-            return "第三方配送-达达"
-        default:
-            return "第三方配送"
+      if(item.deliveryWay==3){
+          switch(item.thirdType){
+            case 1:
+                return "（第三方配送-达达）"
+            default:
+                return "（第三方配送）"
+          }
+      }else{
+         return ""
       }
     }
   },
   created() {
     this.deliveryWay = this.data.deliveryWay
-    // this.data.tracks=this.activities = [
-    //    {
-    //       cid: "2",
-    //       acceptTime:"2020-09-23 18:54:54",
-    //       createUserId: '3',
-    //       acceptStation: '待取货',
-    //       distributorName: "王哈哈",
-    //       distributorPhone: "13261312539",
-    //       status:2,
-    //       thirdType:1
-
-    //   },
-    //     {
-    //       cid: "2",
-    //       acceptTime:"2020-09-23 18:50:54",
-    //       createUserId: '2',
-    //       acceptStation: '等待骑手接单',
-    //       distributorName: "",
-    //       distributorPhone: "",
-    //       status:1,
-    //       thirdType:1
-    //   },
-     
-    //   {
-    //       cid: "2",
-    //       acceptTime:"2020-09-23 19:50:54",
-    //       createUserId: '4',
-    //       acceptStation: '已完成',
-    //       distributorName: "王哈哈",
-    //       distributorPhone: "13261312539",
-    //       status:9,
-    //       thirdType:1
-    //   },
-    //   {
-    //       cid: "2",
-    //       acceptTime:"2020-09-23 19:10:54",
-    //       createUserId: '4',
-    //       acceptStation: '配送中',
-    //       distributorName: "王哈哈",
-    //       distributorPhone: "13261312539",
-    //       status:3,
-    //       thirdType:1
-    //   },    
-    // ]
-     this.activities= this.data.tracks.map(item=>{
+    if(this.deliveryWay==3){
+     this.activities= this.data.traces.map((item,index)=>{
        switch(item.status){
          case 1:
            item.acceptStation='等待骑手接单' 
@@ -151,19 +117,25 @@ export default {
           case 1000:
             item.acceptStation= '创建达达运单失败'
             break
-
        }
       return{
-        cid: "2",
         createTime:item.createTime,
         acceptStation: item.acceptStation,
         distributorName: item.distributorName,
         distributorPhone:item.distributorPhone,
         status:item.status,
-        thirdType:this.data.thirdType
+        thirdType:this.data.thirdType,
+        type: index==0?'primary':'',
+        icon: 'el-icon-check',
       }
     })
-    this.activities = sortCreateTime(this.activities)
+      this.activities = sortCreateTime(this.activities)
+    }else{
+        this.data.traces.forEach(item=>{
+             item.type = index==0 ?'primary':'';
+             item.icon ='el-icon-check';
+        })
+    }
   },
   methods: {
     submit() {},
@@ -218,7 +190,7 @@ export default {
         color:#44434B!important;
       }
       
-  }
+  } 
 </style>
 <style lang="scss">
 .logistics {
@@ -253,8 +225,7 @@ export default {
   .distributionInfo{
     margin-top:8px;
   }
-  
-  
+
 }
 </style>
 
