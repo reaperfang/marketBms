@@ -113,36 +113,40 @@ export default {
 			// paid_order_number_7d 支付人数 integer(int32) integer(int32)
 			// uv_7d 访问人数 integer(int32) integer(int32)
 
-			// let youcejiantouData = [
-			// 	{
-			// 		value: 361,
-			// 		itemValue: "100%",
-			// 		show: true,
-			// 		label: markLineSetting
-			// 	},
-			// 	{
-			// 		value: 351,
-			// 		itemValue: "70%",
-			// 		label: markLineSetting
+
+
+			// this.orderlist({
+			// 	chart: chart,
+			// 	youcejiantouData: {
+			// 		order_c_uv_7dco: parseInt(
+			// 			res.order_c_uv_7dco.toFixed(2) * 100
+			// 		),
+			// 		paid_c_order_7dco: parseInt(
+			// 			res.paid_c_order_7dco == -9999
+			// 				? 0
+			// 				: res.paid_c_order_7dco.toFixed(2) * 100
+			// 		),
+			// 		paid_c_uv_7dco: parseInt(
+			// 			res.paid_c_uv_7dco.toFixed(2) * 100
+			// 		)
 			// 	}
-			// ];
+			// });
 
-			console.log("res.paid_c_order_7dco", res.paid_c_order_7dco);
 
-			this.orderlist({
+					this.orderlist({
 				chart: chart,
 				youcejiantouData: {
-					order_c_uv_7dco: parseInt(
-						res.order_c_uv_7dco.toFixed(2) * 100
-					),
-					paid_c_order_7dco: parseInt(
+					order_c_uv_7dco:
+						(res.order_c_uv_7dco*100).toFixed(2)
+					,
+					paid_c_order_7dco: 
 						res.paid_c_order_7dco == -9999
 							? 0
-							: res.paid_c_order_7dco.toFixed(2) * 100
-					),
-					paid_c_uv_7dco: parseInt(
-						res.paid_c_uv_7dco.toFixed(2) * 100
-					)
+							: (res.paid_c_order_7dco*100).toFixed(2)
+					,
+					paid_c_uv_7dco: 
+						(res.paid_c_uv_7dco*100).toFixed(2)
+					
 				}
 			});
 		}
