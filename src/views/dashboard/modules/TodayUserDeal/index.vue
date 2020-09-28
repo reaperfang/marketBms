@@ -47,6 +47,7 @@ import gridtitle from "../../components/title/index";
 import chinamap from "../../components/map/china/index";
 import countTo from "../../components/CountTo/index";
 import { mapGetters, mapActions, mapState } from "vuex";
+import { keepTwoDecimalFull } from "@/utils/util";
 
 export default {
 	watch: {
@@ -54,13 +55,21 @@ export default {
 			this.$refs.chart.showChart(this.initMapData(this.mapData, val));
 		},
 		"dashboard.amount"(val) {
+			// this.persent =
+			// 	val.place_order_amount_rgrt == "-9999"
+			// 		? 0
+			// 		: parseInt(
+			// 				parseFloat(val.place_order_amount_rgrt).toFixed(2)
+			// 		  ) * 100;
+
+			//Math.round(110.115*100)/100
 			this.persent =
 				val.place_order_amount_rgrt == "-9999"
 					? 0
-					: parseInt(
-							parseFloat(val.place_order_amount_rgrt).toFixed(2)
-					  ) * 100;
-			this.endVal = parseFloat(val.place_order_amount_rt);
+					: keepTwoDecimalFull(
+							parseFloat(val.place_order_am_rgrt) * 100
+					  );
+			this.endVal = parseFloat(val.place_order_am_rt);
 
 			this.$refs.countTo.start();
 		}
