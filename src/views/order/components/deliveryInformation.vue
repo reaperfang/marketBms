@@ -210,8 +210,17 @@ export default {
   },
   filters: {
     goodsStatus(value, orderDetail) {
-      if(orderDetail.orderInfo.deliveryWay==4 || orderDetail.orderInfo.deliveryWay==3){
-          let orderStatus = orderDetail.orderInfo.orderStatus;
+      if(orderDetail.orderInfo.deliveryWay==1){
+          let  status= orderDetail.expressNoStatusMap[value]
+          if(status == 3) {
+            return '【用户签收】'
+          } else if(status == 0 || status == 1 || status == 2 || status == 4) {
+            return '【商户发货】'
+          } else {
+            return ''
+        }
+      }else{
+        let orderStatus = orderDetail.orderInfo.orderStatus;
           if(orderStatus ==6){
             return '【用户签收】'
           }else if(orderStatus == 3|| orderStatus ==4 || orderStatus ==5){
@@ -219,15 +228,6 @@ export default {
           }else{
             return ''
           }
-      }else{
-        let  status= orderDetail.expressNoStatusMap[value]
-        if(status == 3) {
-            return '【用户签收】'
-          } else if(status == 0 || status == 1 || status == 2 || status == 4) {
-            return '【商户发货】'
-          } else {
-            return ''
-        }
       }
     },
     goodsSpecsFilter(value) {
