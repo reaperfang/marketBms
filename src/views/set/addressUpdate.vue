@@ -92,10 +92,10 @@ export default {
         type: [], // 地址类型
         lat: null,
         lng: null,
-        addressCode: null, // code码
-        province: null, // 省
-        city: null, // 市
-        area: null, // 区
+        addressCode: [], // code码
+        province: '', // 省
+        city: '', // 市
+        area: '', // 区
         isBindShopsend: 0,
         isBindThirdsend: 0
       },
@@ -175,9 +175,9 @@ export default {
       this.ruleForm.lat = data.latitude || null
       this.ruleForm.lng = data.longitude || null
       this.ruleForm.addressCode =  [data.provinceCode, data.cityCode, data.areaCode] || []
-      this.ruleForm.province = data.provinceName || null
-      this.ruleForm.city = data.cityName || null
-      this.ruleForm.area = data.areaName || null
+      this.ruleForm.province = data.provinceName || ''
+      this.ruleForm.city = data.cityName || ''
+      this.ruleForm.area = data.areaName || ''
       this.ruleForm.isBindShopsend = data.isBindShopsend
       this.ruleForm.isBindThirdsend = data.isBindThirdsend
     },
@@ -243,11 +243,11 @@ export default {
         obj.id = data.id || null
         obj.name = data.contactPerson // 联系人姓名
         obj.mobile = data.mobile // 联系人电话
-        obj.province_name = data.province  // 省名称
+        obj.province_name = data.province || ''  // 省名称
         obj.province_code = data.addressCode[0] || ''// 省编码
-        obj.city_name = data.city // 市名称
+        obj.city_name = data.city || '' // 市名称
         obj.city_code = data.addressCode[1] || '' // 市编码
-        obj.area_name = data.area // 地区名称
+        obj.area_name = data.area || '' // 地区名称
         obj.area_code = data.addressCode[2] || '' // 地区码
         obj.longitude = data.lng // 经度
         obj.latitude = data.lat // 纬度
