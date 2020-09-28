@@ -82,8 +82,8 @@
               </swiper-slide>
             </template>
           </swiper>
-          <div class="swiper-button-prev" slot="button-prev" @click="prev"></div>
-          <div class="swiper-button-next" slot="button-next" @click="next"></div>
+          <div class="swiper-button-prev" :class="{'myswiper-button-disabled': swiperIsBegining}" slot="button-prev" @click="prev"></div>
+          <div class="swiper-button-next" :class="{'myswiper-button-disabled': swiperIsEnd}" ref="swiper-button-next" slot="button-next" @click="next"></div>
         </template>
       </template>
     </div>
@@ -168,13 +168,12 @@
           slidesPerView: 'auto',
           navigation: {
             nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-            hideOnClick: true,
-            disabledClass: "my-button-disabled",
-            hiddenClass: 'my-button-hidden',
+            prevEl: '.swiper-button-prev'
           },
           observer: true
         },
+        swiperIsBegining: true, // 是否是第一张
+        swiperIsEnd: false, // 是否是最后一张轮播
         listData: [],
         isLoading: false,
         prevStepLoading: false, // 上一步loading
@@ -340,10 +339,22 @@
       /** 上一张模板 */
       prev() {
         this.$refs.mySwiper.$swiper.slidePrev();
+        if(this.$refs.mySwiper.$swiper.isBeginning) {
+          this.swiperIsEnd = false;
+          this.swiperIsBegining = true;
+        }else {
+          this.swiperIsBegining = false;
+        }
       },
       /** 下一张模板 */
       next() {
         this.$refs.mySwiper.$swiper.slideNext();
+        if(this.$refs.mySwiper.$swiper.isEnd) {
+          this.swiperIsEnd = true;
+          this.swiperIsBegining = false;
+        }else {
+          this.swiperIsEnd = false;
+        }
       },
 
       /** 设置是否启用swiper */
@@ -454,6 +465,10 @@
     .swiper-button-prev:after, .swiper-button-next:after {
       opacity: 0;
       display: none;
+    }
+    .swiper-button-prev.myswiper-button-disabled, .swiper-button-next.myswiper-button-disabled {
+      pointer-events: none;
+      opacity: 0;
     }
 
     .swiper-button-prev {
