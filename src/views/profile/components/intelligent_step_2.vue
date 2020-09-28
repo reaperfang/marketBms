@@ -467,6 +467,7 @@
       display: none;
     }
     .swiper-button-prev.myswiper-button-disabled, .swiper-button-next.myswiper-button-disabled {
+      cursor: auto;
       pointer-events: none;
       opacity: 0;
     }
