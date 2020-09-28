@@ -1,6 +1,6 @@
 <template>
    <div class="address" v-if="renderComponent">
-     <h2>地址库/{{ setTitle }}</h2>
+     <h2>地址管理/{{ setTitle }}</h2>
      <el-form class="ruleForm" ref="ruleForm" :model="ruleForm" :rules="rules" label-width="102px">
        <div class="form-area">
         <el-form-item label="联系人" prop="contactPerson">
