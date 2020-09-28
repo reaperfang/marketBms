@@ -711,13 +711,13 @@ export default {
             }
         };
         const validSpecialChar = (rule, value, callback) => {
-            const reg = /[～！@#¥%……&*（）——+|」「：“？》《~!$^()_{}":\\\/>?<\[\]]+/g
+            const reg = /[～！@#¥%……&*（）——+|」「：“？》《~!$^()_{}"-:\\\/>?<\[\]]+/g
             let str = value&& value.replace(reg, '')
             if (!str) return callback();
             const reg2 = /[\u4e00-\u9fa5]/gm
             str = str&& str.replace(reg2, '')
             if (!str) return callback();
-            const reg3 = /\w+/gi
+            const reg3 = /[\s\w]+/gi
             str = str&& str.replace(reg3, '')
             if (!str) return callback();
             console.log('str', str)
