@@ -210,7 +210,7 @@ export default {
   },
   filters: {
     goodsStatus(value, orderDetail) {
-      if(orderDetail.orderInfo.deliveryWay==4){
+      if(orderDetail.orderInfo.deliveryWay==4 || orderDetail.orderInfo.deliveryWay==3){
           let orderStatus = orderDetail.orderInfo.orderStatus;
           if(orderStatus ==6){
             return '【用户签收】'

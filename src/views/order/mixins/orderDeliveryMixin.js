@@ -13,7 +13,7 @@ export const orderDeliveryMethods = {
           this.getList()
           this.$message.success('重新发单成功！');
       }).catch(error => {
-          this.$message.error(error);
+          this.$message.error('重新发单失败，请再次重新发单');
       })
     },
     closeOrder(row) {
