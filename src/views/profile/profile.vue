@@ -451,7 +451,7 @@ export default {
           this.$message({
             showClose: true,
             dangerouslyUseHTMLString: true,
-            message:'<p>您有'+ num +'条异常订单需要处理，<a href="/order/query?isAbnormal=1">请查看</a></p>',
+            message:'<p>您有'+ num +'条异常订单需要处理，<a href="/bp/order/query?isAbnormal=1">请查看</a></p>',
             type: "warning",
             duration: 0
           });
