@@ -33,18 +33,19 @@ export default {
         tooltip: {
           trigger: "axis",
           // formatter:'0：00：{c}人<br/>'+'占比：{d}%'
-          formatter: function (params) {
-            let html='0:00-'+params[0].name+":00<br>";
-            for(let i=0;i<params.length;i++){
-              html+='<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:'+params[i].color+';"></span>'
-              if(params[i].seriesName=="今日"){
-                html+=params[i].value+"<br>";
-              }else{
-                html+=params[i].value+"<br>";
+            formatter: function (params) {
+              console.log(params)
+              let html='0:00-'+params[0].name+":00<br>";
+              for(let i=0;i<params.length;i++){
+                html+='<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:'+params[i].color+';"></span>'
+                if(params[i].seriesName=="今日"){
+                  html+=params[i].seriesName+":"+params[i].value+"<br>";
+                }else{
+                  html+=params[i].seriesName+":"+params[i].value+"<br>";
+                }
               }
+              return html;
             }
-            return html;
-          }
         },
         legend: {  
           x:'right',      //可设定图例在左、右、居中
