@@ -291,7 +291,7 @@ export default {
           case 8://指派单
               return '异常订单：系统重新指派订单'
           case 9:
-            return '异常订单：妥投异常之物品返回中'
+            return '妥投异常之物品返回中'
           case 10:
             return '异常订单：妥投异常之物品返回完成'
           case 1000:
