@@ -277,9 +277,16 @@ input::-moz-placeholder, textarea::-moz-placeholder{
     padding-right: 0;
   }
 }
-// .el-table--scrollable-x .el-table__body-wrapper::-webkit-scrollbar {//滚动条的宽度
-//   height: 10px !important;
-// }
+
+// 解决el-table左右固定块遮挡滚动条样式
+.el-table--scrollable-x  {
+  .el-table__fixed, .el-table__fixed-right {
+    height: auto !important;
+    bottom: 5px;
+  }
+}
+
+
 // 全选
 .table-select {
   font-size: 0;

@@ -431,7 +431,7 @@ export default {
             margin-top: 20px;
             width: 100%;
             min-width: 1000px;
-            overflow-x: scroll;
+            overflow-x: auto;
             &::-webkit-scrollbar {
                 width: 8px;
                 height: 8px;
@@ -606,6 +606,9 @@ export default {
                         }
                     }
                 }
+            }
+            .container-item:last-child {
+                margin-bottom: 10px;
             }
         }
         .item-storew{

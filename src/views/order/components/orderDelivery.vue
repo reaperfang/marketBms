@@ -119,7 +119,7 @@
                     prop="deliveryWay"
                     label="配送方式"
                     align="center"
-                    width="105">
+                    width="125">
                     <template slot-scope="scope">
                         <div>
                             <span class="icon-store" v-if="scope.row.deliveryWay == 2"></span>
