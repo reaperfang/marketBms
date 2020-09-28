@@ -12,33 +12,33 @@
                 class="item-switch1"
                 >
               </el-switch>
-                <el-input-number 
-                v-model="form.autoCancelUnpayOrder" 
-                controls-position="right" 
-                style="width:260px;" 
+                <el-input-number
+                v-model="form.autoCancelUnpayOrder"
+                controls-position="right"
+                style="width:260px;"
                 placeholder="请输入整数"
-                :min="1" 
+                :min="1"
                 :precision="0"
                 :disabled="!autoOrder"
-                :step="1" 
+                :step="1"
                 step-strictly
                 v-if="form.acuoType == 1">
                 </el-input-number>
-                <el-input-number 
-                v-model="form.autoCancelUnpayOrder" 
-                controls-position="right" 
-                style="width:260px;" 
+                <el-input-number
+                v-model="form.autoCancelUnpayOrder"
+                controls-position="right"
+                style="width:260px;"
                 placeholder="请输入整数"
-                :min="1" 
+                :min="1"
                 :precision="0"
-                :step="1" 
+                :step="1"
                 step-strictly
                 :disabled="!autoOrder"
                 v-else>
                 </el-input-number>
-                <el-select 
-                v-model="form.acuoType" 
-                placeholder="请选择" 
+                <el-select
+                v-model="form.acuoType"
+                placeholder="请选择"
                 style="width:100px;">
                     <el-option
                     v-for="item in options"
@@ -86,14 +86,14 @@
                     <el-radio :label="0">组合运费（推荐）</el-radio>
                     <el-radio :label="1">按商品累计运费</el-radio>
                 </el-radio-group>
-                <el-checkbox  
-                disabled 
-                v-model="form.name5" 
+                <el-checkbox
+                disabled
+                v-model="form.name5"
                 style="display:block;">
                 自提店自提（本期暂不支持）
                 </el-checkbox>
-                <el-checkbox  
-                disabled 
+                <el-checkbox
+                disabled
                 v-model="form.name6"
                 style="display:block;">
                 商家自送（本期暂不支持）
@@ -110,33 +110,33 @@
                 class="item-switch2"
                 >
               </el-switch>
-                <el-input-number 
-                v-model="form.orderAutoSend" 
-                controls-position="right" 
-                style="width:260px;" 
+                <el-input-number
+                v-model="form.orderAutoSend"
+                controls-position="right"
+                style="width:260px;"
                 placeholder="请输入整数"
-                :min="1" 
+                :min="1"
                 :precision="0"
                 :disabled="!sendOrder"
-                :step="1" 
+                :step="1"
                 step-strictly
                 v-if="form.oasType == 1">
                 </el-input-number>
-                <el-input-number 
-                v-model="form.orderAutoSend" 
-                controls-position="right" 
-                style="width:260px;" 
+                <el-input-number
+                v-model="form.orderAutoSend"
+                controls-position="right"
+                style="width:260px;"
                 placeholder="请输入整数"
-                :min="1" 
+                :min="1"
                 :precision="0"
                 :disabled="!sendOrder"
-                :step="1" 
+                :step="1"
                 step-strictly
                 v-else>
                 </el-input-number>
-                <el-select 
-                v-model="form.oasType" 
-                placeholder="请选择" 
+                <el-select
+                v-model="form.oasType"
+                placeholder="请选择"
                 style="width:100px;">
                     <el-option
                     v-for="item in options"
@@ -152,7 +152,7 @@
             <el-button type="primary" @click="onSubmit('form')" v-permission="['设置', '交易设置', '售前相关', '保存']" v-loading="loading">保存</el-button>
         </el-form-item>
     </el-form>
-  </div>     
+  </div>
 </template>
 
 <script>
@@ -211,11 +211,11 @@ export default {
         {
           value: 1,
           label: '小时'
-        }, 
+        },
         {
           value: 2,
           label: '分钟'
-        }, 
+        },
      ]
     }
   },
@@ -244,13 +244,13 @@ export default {
    },
   mounted(){
 
-   
+
   },
   created() {
       this.getShopInfo()
   },
   destroyed() {
-    
+
   },
   methods: {
     getShopInfo(){

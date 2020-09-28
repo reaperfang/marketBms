@@ -39,7 +39,7 @@
             </el-upload>
           </div>
           <div class="col">
-            <p>说明：请按下载模板格式上传文件，最大支持1M的EXCEL文件</p>
+            <p>说明：请按模板内容仔细填写快递公司及快递单号，发货成功后不可修改，支持 csv、xls、xlsx，文件大小需控制在 1MB 以内</p>
             <p @click="downloadTemplate" class="blue pointer">下载批量发货模板</p>
           </div>
         </div>
@@ -91,6 +91,23 @@
       </section>
     </div>
     <component :is="currentDialog" :dialogVisible.sync="dialogVisible" @submit="onSubmit"></component>
+	  <el-dialog
+		  class="dia_Box"
+		  :visible.sync="dialogVisible1"
+		  width="30%">
+		  <div class="diaBox">
+			  <div>
+				  <i class="el-icon-warning" style="color: #FD932B"></i>
+			  </div>
+			  <div class="center">
+				  您未完成发货地址设置，请到地址库设置发货地址。
+			  </div>
+		  </div>
+		  <span slot="footer" class="dialog-footer">
+				<el-button type="primary" @click="goSetAddress">去设置</el-button>
+			  <el-button @click="dialogVisible1 = false">取消</el-button>
+			</span>
+	  </el-dialog>
   </div>
 </template>
 <script>
@@ -108,7 +125,8 @@ export default {
       status: 0, // 0 全部成功 1 部分成功 2 全部失败
       successNumber: 0,
       errorNumber: 0,
-      ids: ""
+      ids: "",
+		dialogVisible1: false
     };
   },
   computed:{
@@ -147,7 +165,7 @@ export default {
           this.active = 3;
           let successLength = res.success && res.success.length || 0
           let errorLength = res.error && res.error.length || 0
-          
+
           if (successLength != 0 && errorLength == 0) {
             this.status = 0;
             this.successNumber = res.success.length;
@@ -165,7 +183,11 @@ export default {
           }
         })
         .catch(error => {
-          this.$message.error(error);
+        	if (error == '您未完成发货地址设置，请到地址库设置发货地址。') {
+				this.dialogVisible1 = true
+			} else {
+				this.$message.error(error);
+			}
         });
     },
     afterSaleImport() {
@@ -176,7 +198,7 @@ export default {
           this.active = 3;
           let successLength = res.success && res.success.length || 0
           let errorLength = res.error && res.error.length || 0
-          
+
           if (successLength != 0 && errorLength == 0) {
             this.status = 0;
             this.successNumber = res.success.length;
@@ -204,6 +226,12 @@ export default {
         this.import();
       }
     },
+	  goSetAddress() {
+    	// this.$router.push({path: '/set/addressAdd', query: { orderType: 1 }})
+		  let routeData = this.$router.resolve({ path: '/set/addressAdd', query: { orderType: 1 } });
+		  window.open(routeData.href, '_blank');
+		  this.dialogVisible1 = false
+	  },
     onSubmit() {},
     cancelImport() {
       this.currentDialog = "CancelImportDialog";
@@ -221,6 +249,13 @@ export default {
     },
     beforeUpload(file) {
       console.log(file);
+      if (file.name) {
+		  let name=file.name.substring(file.name.lastIndexOf(".")+1);
+		  if (name != 'csv' && name != 'xls' && name != 'xlsx') {
+			  this.$message.error('上传的文件仅支持 csv、xls、xlsx格式！');
+			  return false
+		  }
+	  }
       if (file.size > 1048576) {
         this.confirm({
           title: "提示",
@@ -329,6 +364,19 @@ export default {
   margin-left: 50px;
   margin-bottom: 20px;
 }
+	.diaBox{
+		display: flex;
+		justify-content: flex-start;
+		i{
+			font-size: 30px;
+			margin-top: -7px;
+		}
+		.center{
+			color: #44434B;
+			font-size: 16px;
+			margin-left: 5px;
+		}
+	}
 </style>
 
 
