@@ -220,7 +220,7 @@ export default {
             return ''
           }
       }else{
-        let  status= orderDetail.expressNoStatusMap[value]
+        let  status= orderDetail.expressNoStatusMap && orderDetail.expressNoStatusMap[value] || null
         if(status == 3) {
             return '【用户签收】'
           } else if(status == 0 || status == 1 || status == 2 || status == 4) {
