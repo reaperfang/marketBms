@@ -5,7 +5,7 @@
             <h2>基本信息</h2>
             <el-form-item label="商品类目" prop="productCategoryInfoId">
                 <!-- currentDialog = 'chooseGoodCategoryDialog';dialogVisible = true -->
-                 <span class="goodCategory" @click="addGoodCategory"> 
+                 <span class="goodCategory" @click="addGoodCategory">
                      {{goodCategoryNames}}
                      <i class="el-icon-caret-bottom"></i>
                  </span>
@@ -155,26 +155,26 @@
                 </el-tooltip>
                 <el-input :disabled="!ruleForm.productCategoryInfoId || (ruleForm.productCategoryInfoId && (ruleForm.isSyncProduct == 1 && authHide))" v-model="ruleForm.code" minlength="6" maxlength="18" placeholder="请输入商品编码"></el-input>
             </el-form-item>
-           
+
         </section>
         <section class="form-section spec-form-section">
             <h2>销售信息<span v-if="editor && ruleForm.activity" class="activity-message">当前商品正在参与营销活动、待活动结束/失效才能编辑商品销售信息</span></h2>
-            
+
             <!-- <el-form-item label="规格信息" prop="goodsInfos">
-               
+
             </el-form-item> -->
-            <el-form-item >  
+            <el-form-item >
                 <el-radio-group v-model="specRadio">
                     <template v-if="!editor">
                         <el-radio :label="0" >单一规格</el-radio>
                         <el-radio :label="1">多规格</el-radio>
-                    </template>  
+                    </template>
                    <template v-else>
                        <el-radio :label="0" :disabled="specRadio!==0">单一规格</el-radio>
                       <el-radio :label="1" :disabled="specRadio!==1">多规格</el-radio>
                    </template>
                 </el-radio-group>
-            </el-form-item> 
+            </el-form-item>
             <template v-if="specRadio===0">
              <div class="sku-template" >
                 <el-form-item label="SKU编码" prop="code">
@@ -382,7 +382,7 @@
             </el-form-item> -->
             <el-form-item label="已售出数量" prop="selfSaleCount">
                 <el-input min="0" :max="ruleForm.stock" :disabled="!ruleForm.productCategoryInfoId" type="number" v-model="ruleForm.selfSaleCount"></el-input>
-                <el-checkbox :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isShowSaleCount">商品详情显示已售出数量</el-checkbox>
+                <el-checkbox :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isShowSaleCount">商品详情/列表显示已售出数量</el-checkbox>
                     <span class="prompt">库存为0时，商品会自动放到“已售罄"列表里，保存有效库存数字后，买家看到的商品可售库存同步更新</span>
             </el-form-item>
             <el-form-item label="单位计量" prop="productUnit">
@@ -459,11 +459,11 @@
             <el-form-item label="配送方式" prop="deliveryWay">
                 <el-checkbox-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.deliveryWay">
                     <div class='checkbox-item'>
-                        <el-checkbox disabled :label="1" @change="((val)=>{deliveryWayChange(val, '1')})" style="margin-right:30px;">普通快递</el-checkbox>
+                        <el-checkbox :label="1" disabled @change="((val)=>{deliveryWayChange(val, '1')})" style="margin-right:30px;">普通快递</el-checkbox>
                     </div>
                     <div class='checkbox-item' >
                         <el-checkbox :label="4" @change="((val)=>{deliveryWayChange(val, '4')})" style="margin-right:30px;">上门自提</el-checkbox>
-                        <div> 
+                        <div>
                             <span class="prompt" v-show="!isSelfLiftSet" >“上门自提”需在设置-配送设置中开启后生效，</span><span class="set-btn blue pointer font12" v-show="!isSelfLiftSet" @click="gotoSelfLiftSet">去设置</span>
                         </div>
                     </div>
@@ -483,7 +483,7 @@
 
                 </div>
             </el-form-item>
-            <el-form-item label="快递运费" prop="isFreeFreight" v-show="ruleForm.deliveryWay.includes(1)">
+            <el-form-item label="快递运费" prop="isFreeFreight">
                 <div>
                     <el-radio :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isFreeFreight" :label="0">选择运费模板</el-radio>
                     <el-select :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.freightTemplateId" placeholder="请选择">
@@ -600,18 +600,18 @@ export default {
             switch(rule.field){
                 case "costPrice":
                      if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(this.singleSpec[rule.field])){
-                        callback(new Error('请输入正确的数字')); 
+                        callback(new Error('请输入正确的数字'));
                      }else if(+this.singleSpec[rule.field]> 10000000){
-                        callback(new Error('当前成本价最大限制为10000000，请您重新输入'));   
+                        callback(new Error('当前成本价最大限制为10000000，请您重新输入'));
                      }else{
                         callback();
                      }
                      break;
                 case "salePrice":
                     if(+this.singleSpec[rule.field]<0 ||!/[\d+\.\d+|\d+]/.test(+this.singleSpec[rule.field])){
-                        callback(new Error('请输入正确的数字'));  
+                        callback(new Error('请输入正确的数字'));
                     }else if(+this.singleSpec[rule.field]> 10000000){
-                        callback(new Error('当前售卖价最大限制为10000000，请您重新输入'));  
+                        callback(new Error('当前售卖价最大限制为10000000，请您重新输入'));
                     }else if(+this.singleSpec.costPrice > +this.singleSpec.salePrice){
                         callback(new Error('售卖价不得低于成本价'));
                     }else{
@@ -641,10 +641,10 @@ export default {
                         callback();
                     }
                     break;
-                
+
             }
-            
-        }; 
+
+        };
         var productUnitValidator = (rule, value, callback) => {
             // if(value === '') {
             //     callback(new Error('请选择优惠方式'));
@@ -710,6 +710,34 @@ export default {
                 }
             }
         };
+        const validSpecialChar = (rule, value, callback) => {
+            const reg5 = /[§]/g
+            let str = value && value.replace(reg5, '')
+            console.log('str5', typeof str,str)
+            if (reg5.test(value)) {
+                return callback(new Error('当前输入有误，请您重新输入'));
+            }
+            const reg = /[，。？！：；·…~&@#,?!:;、……～＆＠＃“”‘’〝〞 "'＂＇´.＇()【】《》＜＞<>〈〉{}［］()()_¯＿￣`ˋ/／\\＼ˊ¨­ˇ．ˉ〃—-‖∶-]|[！$@#￥%……&*（）——+=-·，。、；‘《》？：“【】{}|、\v\f\n\r\t]/g
+            str = str.replace(reg, '')
+            console.log('str', typeof str,str)
+            if (!str) return callback();
+            const reg2 = /[\u4e00-\u9fa5]/g
+            str = str.replace(reg2, '')
+            console.log('str2', typeof str,str)
+            if (!str) return callback();
+            const reg3 = /[\s\w]+/gi
+            str = str.replace(reg3, '')
+            console.log('str3', typeof str,str)
+            // console.log('str2', str === '', !(str === ''))
+            if (!str) return callback();
+            for (let s of str ) {
+                if(s.codePointAt() == '8236' || s.codePointAt() == '8203'){
+                    str = str.replace(new RegExp(s), '');
+                }
+            }
+            if (!str) return callback();
+            return callback(new Error('当前输入有误，请您重新输入'));
+        }
         return {
             specRadio:0,//商品规格信息，0:单一规格，1:多规格
             singleSpec:{
@@ -782,6 +810,10 @@ export default {
                 ],
                 name: [
                     { required: true, message: '请输入商品名称', trigger: 'blur' },
+                    {validator: validSpecialChar, trigger: 'blur' }
+                ],
+                description: [
+                    {validator: validSpecialChar, trigger: 'blur' }
                 ],
                 images: [
                     { required: true, message: '请上传商品图片', trigger: 'blur' },
@@ -1231,7 +1263,7 @@ export default {
             if(data&&data.child){
                 this.leimuMessage = false;
                 this.ruleForm.productCategoryInfoId=data.child.id;
-                this.goodCategoryNames = data.name + ' / '+data.child.name; 
+                this.goodCategoryNames = data.name + ' / '+data.child.name;
                 this.getSpecsList(this.ruleForm.productCategoryInfoId);
             }
         },
@@ -2203,7 +2235,7 @@ export default {
                     arr.unshift(id)
                     if(parentId && parentId != 0) {
                      this.getCategoryIds(arr, parentId)
-                    }   
+                    }
                 }
 
             } catch(e) {
@@ -2220,7 +2252,7 @@ export default {
                         if(parentId && parentId != 0) {
                         this.getCategoryInfoIds(arr, parentId)
                         }
-                    }        
+                    }
             } catch(e) {
                 console.error(e)
             }
@@ -2387,7 +2419,7 @@ export default {
             var that = this
             this._apis.goods.getGoodsDetail({id}).then(res => {
                 this.historyProductCategoryId = res.productCategoryInfoId;
-                this.specRadio = res.specsType;       
+                this.specRadio = res.specsType;
 		//配送方式(根据选中去请求是否在店铺开启)
                 let deliveryWayArr = [1]; //默认选中普通快递，同时不可取消掉
                 if(res.businessDispatchType == 1){ //如果开启了商家配送
@@ -2419,14 +2451,14 @@ export default {
                     }
                 }
                 this.specsLabel = Object.keys(JSON.parse(res.productSpecs)).join(',')
-                if(res.specsType===1){//多规格   
+                if(res.specsType===1){//多规格
                     res.goodsInfos.forEach(val => {
                         let label = Object.values(JSON.parse(val.specs)).join(',')
                         val.label = label
                         val.editorDisabled = true
                         val.showCodeSpan = false
                     })
-                     res.goodsInfos = this.sortGoodsInfos(res)    
+                     res.goodsInfos = this.sortGoodsInfos(res)
                     this.computedAddSpecs(res.productSpecs)
                     __goodsInfos = this.computedList(res.goodsInfos)
                     this.setGoodsImage(__goodsInfos)
@@ -2436,7 +2468,7 @@ export default {
                             //goodsInfos: [res.goodsInfo]
                         })
                     }
-                
+
                 res.productCatalogInfoIds.forEach((id, index) => {
                     let _arr = []
                     this.getCategoryIds(_arr, id)
@@ -2631,20 +2663,20 @@ export default {
                 })
                 this.specsList = res
                 //this.specsLength = this.specsList.length
-                //this.flatSpecsList = this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')
-                let __obj = {}
-                let __result = []
-                let _flatSpecsList = [...this.flatSpecsList, ...this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')]
-                
+                // this.flatSpecsList = this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')
+				let __obj = {}
+				let __result = []
+				let _flatSpecsList = [...this.flatSpecsList, ...this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')]
 
-                this.flatSpecsList.forEach(item=>{
-                    if(!__obj[item.id]){
-                         __result.push(item);
-                         __obj[item.id] = true;
-                    }
-                })
-                this.flatSpecsList = __result
-            }).catch(error => {
+
+				this.flatSpecsList.forEach(item=>{
+					if(!__obj[item.id]){
+						__result.push(item);
+						__obj[item.id] = true;
+					}
+				})
+				this.flatSpecsList = __result
+			}).catch(error => {
                 this.$message.error({
                     message: error,
                     type: 'error'
@@ -2748,7 +2780,7 @@ export default {
                                 return
                             }
                         }
-                        
+
                     }
                     } catch(e) {
                         console.error(e)
@@ -2777,7 +2809,7 @@ export default {
                                     message:'规格信息中体积不能为空',
                                     type:'warning'
                                 });
-                                return 
+                                return
                             }
                         } else if(calculationWay == 2) {
                             if(this.specRadio===1 && this.ruleForm.goodsInfos.some(val => !val.weight)) {
@@ -2819,13 +2851,13 @@ export default {
                             val.fileList = []
                             return val
                         })
-                        
+
                             obj.goodsInfos = _goodsInfos
                         }else{
                             this.singleSpec.specs={"规格":"默认规格"};
                             obj.goodsInfos = [this.singleSpec];
                         }
-                        
+
                     params = Object.assign({}, this.ruleForm, obj, {
                         productDetail: window.escape(this.ruleForm.productDetail),
                         productCatalogInfoId: ''
@@ -3342,7 +3374,7 @@ $blue: #655EFF;
 }
 
 /deep/.el-form-item--small .el-form-item__error{
-    padding-left:15px;   
+    padding-left:15px;
 }
 
 .add-goods {
@@ -3541,7 +3573,7 @@ $blue: #655EFF;
     margin-right: 4px;
 }
 /deep/ label[for="code"] {
-    position: relative;   
+    position: relative;
 }
 /deep/ .el-icon-warning-outline{
         position:absolute;
@@ -3550,8 +3582,8 @@ $blue: #655EFF;
     }
    i.sku-code{
        left:-20px;
-   } 
-    
+   }
+
 
 .autoSaleTime {
     font-size: 12px;
