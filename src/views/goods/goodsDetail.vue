@@ -711,16 +711,26 @@ export default {
             }
         };
         const validSpecialChar = (rule, value, callback) => {
-            const reg = /[:：：：！!_—]+/g
-            let str = value&& value.replace(reg, '')
+            const reg = /[，。？！：；·…~&@#,?!:;、……～＆＠＃“”‘’〝〞 "'＂＇´＇()【】《》＜＞<>〈〉{}［］()()_¯＿￣`ˋ/／\\＼ˊ¨­ˇ．ˉ〃—-‖∶-]|[！@#￥%……&*（）——+=-·，。、；‘《》？：“【】{}|、\v\f\n\r\t]/g
+            let str = value && value.replace(reg, '')
+            console.log('str', typeof str,str)
             if (!str) return callback();
-            const reg2 = /[\u4e00-\u9fa5]/gm
-            str = str&& str.replace(reg2, '')
+            const reg2 = /[\u4e00-\u9fa5]/g
+            str = str.replace(reg2, '')
+            console.log('str2', typeof str,str)
             if (!str) return callback();
             const reg3 = /[\s\w]+/gi
-            str = str&& str.replace(reg3, '')
+            str = str.replace(reg3, '')
+            console.log('str3', typeof str,str)
+            // console.log('str2', str === '', !(str === ''))
             if (!str) return callback();
-            console.log('str', str)
+            for (let s of str ) {
+                console.log(s.codePointAt())
+                if(s.codePointAt() == '8236'){ // &#8236;为空格
+                    str = str.replace(new RegExp(s), '');
+                }
+            }
+            if (!str) return callback();
             return callback(new Error('当前输入有误，请您重新输入'));
         }
         return {
