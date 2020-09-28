@@ -279,15 +279,17 @@ export default {
           case 4://已完成
               return `配送员：${item.distributorName} 联系方式：${item.distributorPhone}`
           case 5://取消
-              if(item.cancelFrom!=1){ //cancelFrom:1达达骑手取消，2商家取消，3系统或者客服取消，0默认值
-                  return '异常订单：发单中，等待骑手接单'
-              }else if(item.cancelFrom ==1){
+              if(item.cancelFrom==1){ //cancelFrom:1达达骑手取消，2商家取消，3系统或者客服取消，0默认值
                   return '异常订单：骑手取消接单，重新发单中'
+              }else if(item.cancelFrom ==2){
+                  return '异常订单：商家取消订单'
+              }else if(item.cancelFrom ==3){
+                  return '异常订单：系统或客服取消订单'
               }
           case 7://
               return "异常订单：订单超时"
           case 8://指派单
-              return `异常订单：系统重新指派订单`
+              return '异常订单：系统重新指派订单'
           case 9:
             return '异常订单：妥投异常之物品返回中'
           case 10:
