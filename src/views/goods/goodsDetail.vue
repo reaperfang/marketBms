@@ -711,8 +711,14 @@ export default {
             }
         };
         const validSpecialChar = (rule, value, callback) => {
-            const reg = /[，。？！：；·…~&@#,?!:;、……～＆＠＃“”‘’〝〞 "'＂＇´.＇()【】《》＜＞<>〈〉{}［］()()_¯＿￣`ˋ/／\\＼ˊ¨­ˇ．ˉ〃—-‖∶-]|[！@#￥%……&*（）——+=-·，。、；‘《》？：“【】{}|、\v\f\n\r\t]/g
-            let str = value && value.replace(reg, '')
+            const reg5 = /[§]/g
+            let str = value && value.replace(reg5, '')
+            console.log('str5', typeof str,str)
+            if (reg5.test(value)) {
+                return callback(new Error('当前输入有误，请您重新输入'));
+            }
+            const reg = /[，。？！：；·…~&@#,?!:;、……～＆＠＃“”‘’〝〞 "'＂＇´.＇()【】《》＜＞<>〈〉{}［］()()_¯＿￣`ˋ/／\\＼ˊ¨­ˇ．ˉ〃—-‖∶-]|[！$@#￥%……&*（）——+=-·，。、；‘《》？：“【】{}|、\v\f\n\r\t]/g
+            str = str.replace(reg, '')
             console.log('str', typeof str,str)
             if (!str) return callback();
             const reg2 = /[\u4e00-\u9fa5]/g
