@@ -598,7 +598,7 @@ export default {
         },
        
         sendOrderAgain(order){
-            this._apis.order.reOrder({cid:order.cid,id:order.id})
+            this._apis.order.reOrder({cid:order.cid,orderId:order.id})
             .then(res=>{
                  this.$emit('getDetail');
                  this.$message.success('重新发单成功');

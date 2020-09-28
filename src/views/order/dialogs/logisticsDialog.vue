@@ -108,6 +108,12 @@ export default {
           case 5:
             item.acceptStation='取消订单'
               break
+          case 7:
+            item.acceptStation='订单超时'
+              break
+          case 8:
+            item.acceptStation='系统重新指派'
+              break
           case 9:
             item.acceptStation= '妥投异常之物品返回中'
              break

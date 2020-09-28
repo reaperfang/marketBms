@@ -31,7 +31,8 @@
               <!-- <div v-if="!item.isAbnormal" class="header-lefter-item" v-html="distributionOrderInfo(item.distributionInfoView)"></div> -->
               <div v-if="!item.isAbnormal"  :class="textColorObject(item.distributionInfoView)" class="header-lefter-item" >{{item.distributionInfoView | distributionOrderInfoFilter}}</div>
               <!-- 异常订单 -->
-              <div v-if="item.isAbnormal" class="header-lefter-item" v-html="distributionOrderInfo(item.distributionInfoView)"></div>
+              <!-- <div v-if="item.isAbnormal" class="header-lefter-item" v-html="distributionOrderInfo(item.distributionInfoView)"></div> -->
+              <div v-if="item.isAbnormal" :class="textColorObject(item.distributionInfoView)" class="header-lefter-item" >{{item.distributionInfoView | distributionOrderInfoFilter}}</div>
               <div @click="showDistributorLogistics(item.id)" class="header-lefter-item blue pointer">查看物流</div>
             </template>
            
@@ -283,6 +284,8 @@ export default {
               }else if(item.cancelFrom ==1){
                   return '异常订单：骑手取消接单，重新发单中'
               }
+          case 7://
+              return "异常订单：订单超时"
           case 8://指派单
               return `异常订单：系统重新指派订单`
           case 9:
@@ -329,7 +332,6 @@ export default {
           case 2://待取货
           case 3://配送中
           case 4://已完成
-          case 8://指派单
               return `<span class="text-normal">配送员：${item.distributorName} 联系方式：${item.distributorPhone}</span>`
           case 5://取消
               if(item.cancelFrom!=1){ //cancelFrom:1达达骑手取消，2商家取消，3系统或者客服取消，0默认值
@@ -337,6 +339,8 @@ export default {
               }else if(item.cancelFrom ==1){
                   return '<span class="text-danger">异常订单：骑手取消接单，重新发单中</span>'
               }
+          case 7://订单超时
+            return '<span class="text-danger">异常订单：订单超时</span>'
           case 8://指派单
             return '<span class="text-danger">异常订单：系统重新指派单</span>'
           case 9:
@@ -352,7 +356,7 @@ export default {
       return {
         'text-normal':item.status==2||item.status==3||item.status==4||item.status==8,
         'text-warning':item.status==1,
-        'text-danger':item.status==5||item.status==9||item.status==10||item.status==1000
+        'text-danger':item.status==5||item.status==7||item.status==9||item.status==10||item.status==1000
       }
     },
     getIsTrace() {

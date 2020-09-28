@@ -342,7 +342,7 @@ export default {
             this.dialogVisible = true
         },
         sendOrderAgain(order){
-             this._apis.order.reOrder({cid:order.cid,id:order.id})
+             this._apis.order.reOrder({cid:order.cid,orderId:order.id})
             .then(res=>{
                  this.$emit('getList');
                  this.$message.success('重新发单成功');
