@@ -91,10 +91,10 @@ export default {
 				{
 					progress: 0,
 					barColor: "RGBA(245, 159, 0, 1)",
-					city: "深圳"
+					city: "广州"
 				}
 			],
-			toDecimal:toDecimal
+			toDecimal: toDecimal
 		};
 	},
 	computed: {
@@ -147,7 +147,10 @@ export default {
 				{
 					children: [
 						{ title: "支付人数", content: val.paid_order_nu_rt },
-						{ title: "支付金额", content: this.toDecimal(val.paid_order_am_rt) },
+						{
+							title: "支付金额",
+							content: this.toDecimal(val.paid_order_am_rt)
+						},
 						{
 							title: "客单价",
 							content: this.toDecimal(val.atv_rt)

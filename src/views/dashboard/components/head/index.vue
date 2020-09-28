@@ -59,7 +59,8 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
-const Base64 = require("js-base64").Base64;
+// const Base64 = require("js-base64").Base64;
+// import { formatDate } from "@/utils/util";
 
 export default {
 	watch: {
@@ -115,6 +116,25 @@ export default {
 	methods: {
 		//...mapActions([""]),
 		setCurrentTime() {
+			var D = [
+				"00",
+				"01",
+				"02",
+				"03",
+				"04",
+				"05",
+				"06",
+				"07",
+				"08",
+				"09"
+			];
+			let h = new Date().getHours();
+			let m = new Date().getMinutes();
+			let s = new Date().getSeconds();
+
+			let format_h = D[h] ? D[h] : h;
+			let format_m = D[m] ? D[m] : m;
+			let format_s = D[s] ? D[s] : s;
 			let result = //修改数据date
 				new Date().getFullYear() +
 				"年" +
@@ -122,11 +142,24 @@ export default {
 				"月" +
 				new Date().getDate() +
 				"日 " +
-				new Date().getHours() +
+				format_h +
 				":" +
-				new Date().getMinutes() +
+				format_m +
 				":" +
-				new Date().getSeconds();
+				format_s;
+
+			// let result = //修改数据date
+			// 	new Date().getFullYear() +
+			// 	"年" +
+			// 	(new Date().getMonth() + 1) +
+			// 	"月" +
+			// 	new Date().getDate() +
+			// 	"日 " +
+			// 	new Date().getHours() +
+			// 	":" +
+			// 	new D[Date().getMinutes()]() +
+			// 	":" +
+			// 	new Date().getSeconds();
 
 			return result;
 		},
