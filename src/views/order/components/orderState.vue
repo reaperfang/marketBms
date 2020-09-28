@@ -600,7 +600,7 @@ export default {
         sendOrderAgain(order){
             this._apis.order.reOrder({cid:order.cid,orderId:order.id})
             .then(res=>{
-                 this.$emit('getDetail');
+                 this.$emit('orderStatusSuccess');
                  this.$message.success('重新发单成功');
             }).catch(error=>{
                 this.$message.error('重新发单失败，请再次重新发单');
