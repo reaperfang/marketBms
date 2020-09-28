@@ -51,9 +51,6 @@ export default {
         default: null
       },
     },
-    created() {
-      this.getIntelligent();
-    },
     methods:{
       /** 智能开店体验引导 */
       toIntelligent() {
