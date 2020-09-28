@@ -304,7 +304,7 @@ export default {
       const p1 = this.setBindThirdsend()
       const p2 = this.updateShopInfo()
       Promise.all([p1, p2]).then(response =>{
-        const html = '<span class="sucess">保存成功！</span><span class="prompt" style="">第三方配送-达达配送已开启。</span>'
+        const html = `<span class="sucess">保存成功！</span><span class="prompt" style="">第三方配送-达达配送已${this.isOpen ? '开启' : '关闭'}。</span>`
         this.confirm({
           title: '',
           iconSuccess: true,
