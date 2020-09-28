@@ -184,11 +184,22 @@ export default {
 				})
 			};
 
+			if (result.rows.length == 0) {
+				result = {
+					...result,
+					rows: [
+						{ 类别: "未知", 数量: 0 },
+						{ 类别: "< 25", 数量: 0 },
+						{ 类别: "25-50", 数量: 0 },
+						{ 类别: "> 50 ", 数量: 0 }
+					]
+				};
+			}
+
 			this.sexageData = {
 				ageData: result,
 				sexData: {
 					female: (val.c_uv_share_sex_female * 100).toFixed(2), //c_uv_sex_female
-					// gender: parseInt(val.c_uv_share_sex_gender.toFixed(2) * 100)
 					gender: (val.c_uv_share_sex_gender * 100).toFixed(2)
 				}
 			};

@@ -52,7 +52,9 @@ import { keepTwoDecimalFull } from "@/utils/util";
 export default {
 	watch: {
 		"dashboard.chinamap"(val) {
-			this.$refs.chart.showChart(this.initMapData(this.mapData, val));
+			this.$refs.chart.showChart(
+				this.initMapData(this.mapData, val ? val : [])
+			);
 		},
 		"dashboard.amount"(val) {
 			// this.persent =
