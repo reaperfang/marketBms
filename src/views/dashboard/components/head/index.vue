@@ -3,7 +3,7 @@
 		<div class="left-box">
 			<svg-icon iconClass="shop"></svg-icon>
 			<span>{{ shopName }}</span>
-			<svg-icon iconClass="time"></svg-icon>
+			<svg-icon iconClass="time" style="margin-left:20px"></svg-icon>
 			<span> {{ currentTime }}</span>
 		</div>
 		<el-row class="row-1">

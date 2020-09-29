@@ -179,7 +179,8 @@ export default {
 	}
 
 	.middle-grid-margin {
-		margin: 0 10px;
+		// margin: 0 10px;
+		margin: 0 20px;
 	}
 
 	.grid-map {
