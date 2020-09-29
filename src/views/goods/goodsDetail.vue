@@ -382,7 +382,7 @@
             </el-form-item> -->
             <el-form-item label="已售出数量" prop="selfSaleCount">
                 <el-input min="0" :max="ruleForm.stock" :disabled="!ruleForm.productCategoryInfoId" type="number" v-model="ruleForm.selfSaleCount"></el-input>
-                <el-checkbox :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isShowSaleCount">商品详情显示已售出数量</el-checkbox>
+                <el-checkbox :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isShowSaleCount">商品详情/列表显示已售出数量</el-checkbox>
                     <span class="prompt">库存为0时，商品会自动放到“已售罄"列表里，保存有效库存数字后，买家看到的商品可售库存同步更新</span>
             </el-form-item>
             <el-form-item label="单位计量" prop="productUnit">
@@ -459,7 +459,7 @@
             <el-form-item label="配送方式" prop="deliveryWay">
                 <el-checkbox-group :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.deliveryWay">
                     <div class='checkbox-item'>
-                        <el-checkbox disabled :label="1" @change="((val)=>{deliveryWayChange(val, '1')})" style="margin-right:30px;">普通快递</el-checkbox>
+                        <el-checkbox :label="1" disabled @change="((val)=>{deliveryWayChange(val, '1')})" style="margin-right:30px;">普通快递</el-checkbox>
                     </div>
                     <div class='checkbox-item' >
                         <el-checkbox :label="4" @change="((val)=>{deliveryWayChange(val, '4')})" style="margin-right:30px;">上门自提</el-checkbox>
@@ -483,7 +483,7 @@
 
                 </div>
             </el-form-item>
-            <el-form-item label="快递运费" prop="isFreeFreight" v-show="ruleForm.deliveryWay.includes(1)">
+            <el-form-item label="快递运费" prop="isFreeFreight">
                 <div>
                     <el-radio :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isFreeFreight" :label="0">选择运费模板</el-radio>
                     <el-select :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.freightTemplateId" placeholder="请选择">
@@ -710,15 +710,34 @@ export default {
                 }
             }
         };
-      var goodsNameValidator = (rule, value, callback) => {
-        if(value === "") {
-          callback(new Error('请输入商品名称'));
-        } else if(value.length > 60){
-          callback(new Error('商品名称过长，最大60个字符'));
-        }else {
-          callback();
+        const validSpecialChar = (rule, value, callback) => {
+            const reg5 = /[§]/g
+            let str = value && value.replace(reg5, '')
+            console.log('str5', typeof str,str)
+            if (reg5.test(value)) {
+                return callback(new Error('当前输入有误，请您重新输入'));
+            }
+            const reg = /[，。？！：；·…~&@#,?!:;、……～＆＠＃“”‘’〝〞 "'＂＇´.＇()【】《》＜＞<>〈〉{}［］()()_¯＿￣`ˋ/／\\＼ˊ¨­ˇ．ˉ〃—-‖∶-]|[！$@#￥%……&*（）——+=-·，。、；‘《》？：“【】{}|、\v\f\n\r\t]/g
+            str = str.replace(reg, '')
+            console.log('str', typeof str,str)
+            if (!str) return callback();
+            const reg2 = /[\u4e00-\u9fa5]/g
+            str = str.replace(reg2, '')
+            console.log('str2', typeof str,str)
+            if (!str) return callback();
+            const reg3 = /[\s\w]+/gi
+            str = str.replace(reg3, '')
+            console.log('str3', typeof str,str)
+            // console.log('str2', str === '', !(str === ''))
+            if (!str) return callback();
+            for (let s of str ) {
+                if(s.codePointAt() == '8236' || s.codePointAt() == '8203'){
+                    str = str.replace(new RegExp(s), '');
+                }
+            }
+            if (!str) return callback();
+            return callback(new Error('当前输入有误，请您重新输入'));
         }
-      };
         return {
             specRadio:0,//商品规格信息，0:单一规格，1:多规格
             singleSpec:{
@@ -790,8 +809,11 @@ export default {
                     { required: true, message: '请选择商品类目', trigger: 'blur' },
                 ],
                 name: [
-                    // { required: true, message: '请输入商品名称', trigger: 'blur' },
-                    { validator: goodsNameValidator, trigger: 'blur' },
+                    { required: true, message: '请输入商品名称', trigger: 'blur' },
+                    {validator: validSpecialChar, trigger: 'blur' }
+                ],
+                description: [
+                    {validator: validSpecialChar, trigger: 'blur' }
                 ],
                 images: [
                     { required: true, message: '请上传商品图片', trigger: 'blur' },
@@ -2641,20 +2663,20 @@ export default {
                 })
                 this.specsList = res
                 //this.specsLength = this.specsList.length
-                //this.flatSpecsList = this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')
-                let __obj = {}
-                let __result = []
-                let _flatSpecsList = [...this.flatSpecsList, ...this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')]
-                
+                // this.flatSpecsList = this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')
+				let __obj = {}
+				let __result = []
+				let _flatSpecsList = [...this.flatSpecsList, ...this.flatTreeArray(JSON.parse(JSON.stringify(res)), 'list')]
 
-                this.flatSpecsList.forEach(item=>{
-                    if(!__obj[item.id]){
-                         __result.push(item);
-                         __obj[item.id] = true;
-                    }
-                })
-                this.flatSpecsList = __result
-            }).catch(error => {
+
+				this.flatSpecsList.forEach(item=>{
+					if(!__obj[item.id]){
+						__result.push(item);
+						__obj[item.id] = true;
+					}
+				})
+				this.flatSpecsList = __result
+			}).catch(error => {
                 this.$message.error({
                     message: error,
                     type: 'error'
@@ -2870,10 +2892,6 @@ export default {
                         this.editorGoods(params)
                     }
                 } else {
-                  if(this.ruleForm.name.length > 60) {
-                    // this.$refs.ruleForm.validateField('name');
-                    this.$message.error("商品名称过长")
-                  }
                     console.log('error submit!!');
                     return false;
                 }

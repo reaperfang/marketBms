@@ -51,10 +51,26 @@ export default {
   },
   methods: {
     number(event,val,ele) {
-      val = val.replace(/[^\.\d]/g,'');
+      // val = val.replace(/[^\.\d]/g,'');
+		val = val.replace(/[^\d.]/g,'').replace(/\./g, '');
       this[ele] = val;
     },
     submit() {
+		if(!this.adjustmentBalance) {
+			this.btnLoading = false;
+			this.$message({
+				message: '请输入调整数值',
+				type: 'warning'
+			});
+			return false;
+		}
+		if(Number(this.adjustmentAfterBalance) > 100000000) {
+			this.$message({
+				message: '调整后余额不可超过1亿',
+				type: 'warning'
+			});
+			return false
+		}
       this.btnLoading = true;
       if(this.remark == "") {
         this.btnLoading = false;
@@ -62,15 +78,7 @@ export default {
           message: '请输入变更原因',
           type: 'warning'
         });
-        return;
-      }
-      if(this.adjustmentBalance == null) {
-        this.btnLoading = false;
-        this.$message({
-          message: '请输入调整数值',
-          type: 'warning'
-        });
-        return;
+        return false;
       }
       if(this.adjustBalance == '2' && Number(this.data.balance) < Number(this.adjustmentBalance)) {
         this.btnLoading = false;
@@ -80,7 +88,7 @@ export default {
         });
         return;
       }
-      if(Number(this.adjustmentBalance) >= 100000000) {
+      if(Number(this.adjustmentBalance) > 100000000) {
         this.btnLoading = false;
         this.$message({
           message: '调整余额不能超过1亿',
@@ -115,12 +123,16 @@ export default {
       }else{
         this.showError = false;
       }
-      if(Number(this.adjustmentBalance) >= 100000000) {
+      if(Number(this.adjustmentAfterBalance) > 100000000) {
         this.$message({
-          message: '增加余额不能超过1亿',
+          message: '金额不可超过100,000,000(1亿)',
           type: 'warning'
         });
-        this.adjustmentBalance = ""
+        // this.adjustmentBalance = ""
+		  this.btnLoading = true;
+		  setTimeout(() => {
+			  this.btnLoading = false;
+		  }, 1000)
       }
     },
     handleAdjust(val) {
@@ -169,7 +181,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .star{
-  color:#FD4C2B; 
+  color:#FD4C2B;
   margin-right: 5px;
 }
 .c_container {
@@ -193,7 +205,7 @@ export default {
         width: 38px;
         color: #B5BDCA;
         right: 0;
-        top: 33px;  
+        top: 33px;
       }
   }
   .errMsg{
