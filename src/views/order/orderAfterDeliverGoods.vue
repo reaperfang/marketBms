@@ -113,7 +113,7 @@
             </div>
             <div class="container-item">
                 <p>3.填写物流信息</p>
-                <div class="logistics deliver-goods-logistics" v-if="orderAfterSaleSendInfo.deliveryWay == 1 || orderAfterSaleSendInfo.deliveryWay == 4">
+                <div class="logistics deliver-goods-logistics" v-if="orderAfterSaleSendInfo.deliveryWay == 1 || orderAfterSaleSendInfo.deliveryWay == 3 || orderAfterSaleSendInfo.deliveryWay == 4">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                         <el-form-item label="配送方式">
                             <span>普通快递</span>
@@ -424,7 +424,7 @@ export default {
                     //如果是普通快递
                     if(formName == 'ruleForm'){
                         if(this.orderAfterSaleSendInfo.deliveryWay != 4) {
-                            if(this.orderAfterSaleSendInfo.deliveryWay == 1) {
+                            if(this.orderAfterSaleSendInfo.deliveryWay == 1 || this.orderAfterSaleSendInfo.deliveryWay == 3) {
                                 obj.deliveryWay = 1;
                                 obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
                                 obj.expressNos = this.ruleForm.expressNos; // 快递单号

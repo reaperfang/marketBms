@@ -428,6 +428,17 @@ export default {
                 orderId:this.data.id,
                 isSyncUpdateOrder:1
               })
+          } else {
+            if(!this.$route.query.afterSale) {
+              params = Object.assign({}, params, {
+                orderIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
+                orderSendInfoIds: this.$route.query._ids ? this.$route.query._ids.split(',').map(id => id) : this._ids,
+              })
+            } else {
+               params = Object.assign({}, params, {
+                orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id)
+              })
+            }
           }
           try {
             if(this.$refs.mapSearch.poi) {
