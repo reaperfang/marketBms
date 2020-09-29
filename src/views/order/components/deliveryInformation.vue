@@ -504,7 +504,11 @@ export default {
     showLogistics(expressNo, expressCompanys, id) {
       if (this.isTrace == 0) {// 未开启物流轨迹
         this.currentDialog = "LogisticsDialog";
-        this.currentData = {};
+        this.currentData = {
+            traces: [],
+            deliveryWay:this.orderDetail.orderInfo.deliveryWay,
+            thirdType:this.orderDetail.orderInfo.thirdType
+                    }
         this.reject = true;
         this.expressNo = expressNo
         this.expressCompanys = expressCompanys
@@ -520,7 +524,7 @@ export default {
                     traces:res.traces || [],
                     deliveryWay:this.orderDetail.orderInfo.deliveryWay ,
                     thirdType:this.orderDetail.orderInfo.thirdType
-                    }|| {};
+                    };
             this.expressCompanys = res.shipperName
             this.dialogVisible = true;
           })

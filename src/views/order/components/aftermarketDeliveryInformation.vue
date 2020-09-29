@@ -431,7 +431,11 @@ export default {
 
             if (this.isTrace == 0) {
                 this.currentDialog = "LogisticsDialog";
-                this.currentData = [];
+                this.currentData = {
+                        traces: [],
+                        deliveryWay:this.orderAfterSale.deliveryWay,
+                        thirdType: this.orderAfterSale.thirdType?this.orderAfterSale.thirdType:''
+                    }
                 this.reject = true;
                 this.expressNo = expressNo
                 this.expressCompanys = this.expressCompanys
@@ -443,7 +447,11 @@ export default {
                 .orderLogistics({ expressNo, id: id, isOrderAfter: 1 })
                 .then(res => {
                     this.currentDialog = "LogisticsDialog";
-                    this.currentData = res.traces || [];
+                    this.currentData = {
+                        traces:res.traces || [],
+                        deliveryWay:this.orderAfterSale.deliveryWay,
+                        thirdType: this.orderAfterSale.thirdType?this.orderAfterSale.thirdType:''
+                    }
                     this.expressCompanys = this.expressCompanys
                     this.dialogVisible = true;
                 })
