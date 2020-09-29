@@ -90,6 +90,7 @@ export default {
   },
   created() {
     this.deliveryWay = this.data.deliveryWay
+    debugger
     if(this.deliveryWay==3){
      this.activities= this.data.traces.map((item,index)=>{
        switch(item.status){
@@ -137,10 +138,12 @@ export default {
     })
       this.activities = sortCreateTime(this.activities)
     }else{
+      if(this.data.traces.length>0){
         this.data.traces.forEach(item=>{
              item.type = index==0 ?'primary':'';
              item.icon ='el-icon-check';
         })
+      }
     }
   },
   methods: {
