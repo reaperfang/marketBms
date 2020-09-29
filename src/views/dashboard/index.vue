@@ -123,11 +123,13 @@ export default {
 
 	.row-2,
 	.row-3 {
-		margin: 20px 35px;
+		// margin: 20px 35px;
+		margin: 20px;
 	}
 
 	.row-4 {
-		margin: 20px 35px 0 35px;
+		// margin: 20px 35px 0 35px;
+		margin: 20px 20px 0 20px;
 	}
 
 	.row-3 {
