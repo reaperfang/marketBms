@@ -50,7 +50,7 @@ export default {
 		font-size: 24px;
 		font-weight: 600;
 		color: rgba(255, 255, 255, 1);
-		line-height: 40px;
+		line-height: 35px;
 	}
 
 	.p-end {

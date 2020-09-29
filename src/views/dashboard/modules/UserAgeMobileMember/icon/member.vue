@@ -1,7 +1,7 @@
 <template>
 	<div class="icon-member">
-		<div class="row start">会员</div>
-		<div class="row end">{{ total }}人</div>
+		<div class="row start">会员(人)</div>
+		<div class="row end">{{ total }}</div>
 	</div>
 </template>
 
@@ -62,6 +62,7 @@ export default {
 		font-size: 12px;
 		font-weight: 400;
 		color: rgba(255, 255, 255, 1);
+		margin-top: 5px;
 	}
 
 	.end {

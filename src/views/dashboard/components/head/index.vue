@@ -234,13 +234,13 @@ export default {
 
 	.left-box {
 		position: absolute;
-		margin: 15px 0 0 35px;
+		margin: 15px 0 0 20px;
 		display: flex;
 		align-items: center;
 		span {
 			font-size: 14px;
 			font-weight: 500;
-			color: rgba(255, 255, 255, 0.8);
+			color: #ffffff;
 			margin-right: 5px;
 		}
 	}
@@ -260,13 +260,13 @@ export default {
 			span {
 				font-size: 14px;
 				font-weight: 500;
-				color: rgba(255, 255, 255, 0.8);
+				color: #ffffff;
 				margin-right: 5px;
 			}
 		}
 		.content {
 			font-size: 42px;
-			color: rgba(255, 255, 255, 1);
+			color: #ffffff;
 			text-align: center;
 			padding: 17px 0;
 		}
@@ -289,7 +289,7 @@ export default {
 				}
 				span {
 					font-size: 12px;
-					color: rgba(255, 255, 255, 0.8);
+					color: #ffffff;
 				}
 				cursor: pointer;
 			}

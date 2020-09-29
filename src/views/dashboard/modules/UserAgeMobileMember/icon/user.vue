@@ -1,10 +1,10 @@
 <template>
 	<div class="icon-user">
 		<div class="row start">
-			<span>总用户</span>
+			<span>总用户(人)</span>
 		</div>
 		<div class="row end">
-			<span>{{ total }}人</span>
+			<span>{{ total }}</span>
 		</div>
 	</div>
 </template>
@@ -66,6 +66,7 @@ export default {
 		font-size: 12px;
 		font-weight: 400;
 		color: rgba(255, 255, 255, 1);
+		margin-top: 5px;
 	}
 
 	.end {

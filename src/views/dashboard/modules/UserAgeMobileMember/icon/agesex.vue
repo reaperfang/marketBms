@@ -65,7 +65,7 @@ export default {
 	width: 100px;
 	text-align: center;
 	img {
-		height: 45px;
+		height: 40px;
 		margin: 0 5px;
 	}
 
