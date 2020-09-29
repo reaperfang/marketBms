@@ -214,7 +214,7 @@ export default {
 					//right
 
 					{
-						top: "50%",
+						top: "70%",
 						name: "youcejiantou",
 						type: "pictorialBar",
 						symbolPosition: "center",

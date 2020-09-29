@@ -5,10 +5,17 @@
 				<gridtitle :title="title"></gridtitle>
 			</el-col>
 		</el-row>
-		<el-row class="item-content"> 
-            <vring :chartData="chartData" :title="title":icon="icon" :total="total" :sexData="sexData"></vring>
+		<el-row class="item-content">
+			<vring
+				:chartData="chartData"
+				:title="title"
+				:icon="icon"
+				:total="total"
+				:sexData="sexData"
+				:barColor="barColor"
+			></vring>
 			<!-- <component :is="isIcon" :data="{key:title,value:'8445566'}"></component> -->
-        </el-row>
+		</el-row>
 	</div>
 </template>
 
@@ -17,17 +24,15 @@ import gridtitle from "../../components/title/index";
 import vring from "../../components/v-chart/ring/index";
 import { mapGetters, mapActions, mapState } from "vuex";
 
-
 export default {
 	watch: {
 		// flowData(val) {
 		// }
 	},
-	props: ["title","chartData","icon","total","sexData"],
-	components: { gridtitle ,vring},
+	props: ["title", "chartData", "icon", "total", "sexData", "barColor"],
+	components: { gridtitle, vring },
 	data: function() {
-		return {
-		};
+		return {};
 	},
 	computed: {
 		//...mapState([""])
