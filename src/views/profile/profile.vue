@@ -336,7 +336,6 @@ export default {
       return newValue;
     }
   },
-
   created() {
     this._globalEvent.$on("refreshProfile", () => {
       this.init();
@@ -442,6 +441,7 @@ export default {
     },
     // 待办提醒
     getOerviewRemind() {
+      this.closeTodo()
       this._apis.overview.overviewRemind({}).then(response => {
         this.stayProcessedCount = response.stayProcessedCount;
         this.staySendCount = response.staySendCount;
@@ -628,13 +628,14 @@ export default {
           console.error(error);
         });
     },
-
+    closeTodo() {
+      if (this.todo && 'close' in this.todo) {
+        this.todo.close()
+      }
+    }
   },
   beforeDestroy() {
-    if (this.todo && 'close' in this.todo) {
-      this.todo.close()
-    }
-    console.log('beforeDestroy', this.todo)
+    this.closeTodo()
   }
 };
 </script>
