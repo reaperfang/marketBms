@@ -1,7 +1,7 @@
 <template>
 	<div class="panel-content">
 		<div class="chartContentPie" ref="chartContentPie"></div>
-		<icon :progress="progress" :city="city"></icon>
+		<icon :progress="progress" :city="city" class="icon"></icon>
 	</div>
 </template>
 
@@ -158,6 +158,12 @@ export default {
 		width: 150px;
 		height: 150px;
 	}
+
+	// .chartContentPie:hover {
+	// 	transform: scale(1.2);
+	// 	-webkit-transform: scale(1.2); /*兼容-webkit-引擎浏览器*/
+	// 	-moz-transform: scale(1.2); /*兼容-moz-引擎浏览器*/
+	// }
 
 	// .chartContentPie {
 	// 	width: 100px;
