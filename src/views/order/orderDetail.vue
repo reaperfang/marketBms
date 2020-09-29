@@ -155,6 +155,8 @@ export default {
                     return '自动发货'
                 case 12:
                     return '核销验证'
+                case 13:
+                    return '重新发单'
             }
         },
         channelInfoIdFilter(code) {
