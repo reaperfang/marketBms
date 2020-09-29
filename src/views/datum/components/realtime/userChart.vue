@@ -37,11 +37,14 @@ export default {
           trigger: "axis",
         },
         legend: {  
-          x:'right',      //可设定图例在左、右、居中
-          y:'top',
+          top:'0%',
+          right: "3.5%",
           data: ['用户总数','新增用户', '新增会员'],
           icon: "circle",
           itemWidth:8,
+          textStyle:{//图例文字的样式
+            color:'#92929B',
+          }
         }, 
         // color:['#0077FF','#2FC25B','#FF8615'], 
         color:['#2FC25B','#FF8615'],
@@ -55,7 +58,16 @@ export default {
         xAxis: {//X轴
           type: "category",
           boundaryGap: false,
+          axisLine:{ 
+            lineStyle: {
+                color: '#EDEDED',
+                width: 1, //这里是为了突出显示加上的  
+            }
+          },
           axisLabel:{
+            textStyle: {
+              color: '#92929B', 
+            },
             showMaxLabel:true,
             interval:interval,
             formatter: function (params) {
@@ -87,8 +99,17 @@ export default {
         yAxis: {//Y轴
           type: "value",
           minInterval: 1,
+          axisLabel:{
+            textStyle: {
+              color: '#92929B', 
+            },
+          },
           axisLine:{       //y轴
-            show:false
+            show:false,
+            lineStyle: {
+                color: '#EDEDED',
+                width: 1, //这里是为了突出显示加上的  
+            }
           },
           splitLine :{    //网格线
             lineStyle:{

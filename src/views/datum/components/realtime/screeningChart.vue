@@ -48,11 +48,14 @@ export default {
             }
         },
         legend: {  
-          x:'right',      //可设定图例在左、右、居中
-          y:'top',
+          top:'0%',
+          right: "3.5%",
           data: ['今日', '昨日'],
           icon: "circle",
           itemWidth:8,
+          textStyle:{//图例文字的样式
+            color:'#92929B',
+          }
         },  
         color:['#0077FF','#2FC25B'],
         grid: {
@@ -65,9 +68,18 @@ export default {
         xAxis: {//X轴
           type: "category",
           boundaryGap: false,
+          axisLine:{ 
+            lineStyle: {
+                color: '#EDEDED',
+                width: 1, //这里是为了突出显示加上的  
+            }
+          },
           axisLabel:{
             showMaxLabel:true,
             interval: 5,
+            textStyle: {
+              color: '#92929B', 
+            },
           },
           data: this.flow['xAxis']
         },
@@ -77,8 +89,17 @@ export default {
           minInterval: 1,
           // max:leftY.max,
           // min:leftY.min,
+          axisLabel:{
+            textStyle: {
+              color: '#92929B', 
+            },
+          },
           axisLine:{       //y轴
-            show:false
+            show:false,
+            lineStyle: {
+                color: '#EDEDED',
+                width: 1, //这里是为了突出显示加上的  
+            }
           },
           splitLine :{    //网格线
             lineStyle:{

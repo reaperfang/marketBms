@@ -8,7 +8,7 @@
     <div class="p_container pb12">
        <div class="p_title clearfix">
            <h2>数据总览</h2>
-           <span @click="refreshData()" class="refresh"><img src="@/assets/images/realtime/refresh.png" alt=""></span>
+           <span @click="refreshData()" class="refresh"><img width="16px" height="16px" src="@/assets/images/realtime/refresh.png" alt=""></span>
           <div class="fr fr_channel">
           </div>
       </div>
@@ -17,7 +17,7 @@
             <div class="clearfix pt">
                 <p class="fl">支付金额（元）</p>
                 <el-tooltip class="item" effect="dark" content="统计时间内，所有支付订单金额之和" placement="top-start">
-                <img class="fl" src="@/assets/images/realtime/hoverTips.png" alt="">
+                <img class="fl" width="16px" src="@/assets/images/realtime/hoverTips.png" alt="">
                 </el-tooltip>
             </div>
             <div class="clearfix pt">
@@ -161,7 +161,7 @@
                         <div class="choosetop">
                             <p class="clearfix"> <span class="fl">客单价（元）</span> 
                                 <el-tooltip class="item" effect="dark" content="统计时间内，用户平均消费金额" placement="top-start">
-                                <img class="fl" style="margin-top:5px" src="@/assets/images/realtime/hoverTips.png" alt="">
+                                <img class="fl" width="16px" style="margin-top:5px" src="@/assets/images/realtime/hoverTips.png" alt="">
                                 </el-tooltip>
                                 <span class="chooseBut" @click="chooseType(3)"></span>
                             </p>
@@ -188,7 +188,7 @@
                 <div class="p_title clearfix">
                     <h2>交易分布</h2>
                     <el-tooltip class="item" effect="dark" content="商城所有订单省级区域分布" placement="top-start">
-                    <img class="fl" src="@/assets/images/realtime/hoverTips.png" alt="">
+                    <img class="fl" width="16px" src="@/assets/images/realtime/hoverTips.png" alt="">
                     </el-tooltip>
                 </div>
                 </div>
@@ -235,7 +235,7 @@
                 <div class="p_title clearfix">
                     <h2>渠道转化</h2>
                     <el-tooltip class="item" effect="dark" content="渠道会员数量占比" placement="top-start">
-                    <img class="fl" src="@/assets/images/realtime/hoverTips.png" alt="">
+                    <img class="fl" width="16px" src="@/assets/images/realtime/hoverTips.png" alt="">
                     </el-tooltip>
                     <div class="fr clearfix">
                         <el-radio-group class="fr radioBox" v-model="visitSourceType" @change="all">
