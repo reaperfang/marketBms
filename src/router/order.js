@@ -169,6 +169,18 @@ export default [
         hidden: true,
         meta: { title: '打印配送单小票', noCache: true, tabTitle: '订单处理' , navType:5},
       },
+		{
+			path: 'tradeSet',
+			component: () => import('@/views/set/tradeSet'),
+			name: 'tradeSet',
+			meta: { title: '交易设置', noCache: true, tabTitle: '分割线' ,navType:2},
+		},
+		{
+			path: 'ordinaryExpress',
+			component: () => import('@/views/set/ordinaryExpress'),
+			name: 'ordinaryExpress',
+			meta: { title: '配送设置', noCache: true, tabTitle: '分割线' ,navType:2},
+		},
       // {
       //   path: 'quickDelivery',
       //   component: () => import('@/views/order/quickDelivery'),
