@@ -292,8 +292,8 @@
                             <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
                             <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
-                            <span v-if="index==3"><span>04</span></span>
-                            <span v-if="index==4"><span>04</span></span>
+                            <span v-if="index==3"><span>4</span></span>
+                            <span v-if="index==4"><span>5</span></span>
                             <span><img class="fl" :src="(item.goods_image).split(',')[0]" alt=""><p>{{item.goods_name}}</p></span>
                             <span><p>{{item.paid_order_am_pr.toFixed(2)}}</p></span>
                         </li>
@@ -310,8 +310,8 @@
                             <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
                             <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
-                            <span v-if="index==3"><span>04</span></span>
-                            <span v-if="index==4"><span>04</span></span>
+                            <span v-if="index==3"><span>4</span></span>
+                            <span v-if="index==4"><span>5</span></span>
                             <span><img class="fl" :src="(item.goods_image).split(',')[0]" alt=""><p>{{item.goods_name}}</p></span>
                             <span><p>{{item.product_nu}}</p></span>
                         </li>
@@ -328,8 +328,8 @@
                             <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
                             <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
-                            <span v-if="index==3"><span>04</span></span>
-                            <span v-if="index==4"><span>04</span></span>
+                            <span v-if="index==3"><span>4</span></span>
+                            <span v-if="index==4"><span>5</span></span>
                             <span><img class="fl" :src="(item.goods_image).split(',')[0]" alt=""><p>{{item.goods_name}}</p></span>
                             <span><p>{{item.pv_pr}}</p></span>
                         </li>
