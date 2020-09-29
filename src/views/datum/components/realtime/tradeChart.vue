@@ -73,6 +73,9 @@ export default {
           data: ['支付金额','支付订单数', '支付人数','客单价'],
           icon: "circle",
           itemWidth:8,
+          textStyle:{//图例文字的样式
+            color:'#92929B',
+          }
         }, 
         color:['#FF8615','#0077FF','#2FC25B','#655EFF'],
         grid: {
@@ -85,6 +88,12 @@ export default {
         xAxis: {//X轴
           type: "category",
           boundaryGap: false,
+          axisLine:{ 
+            lineStyle: {
+                color: '#EDEDED',
+                width: 1, //这里是为了突出显示加上的  
+            }
+          },
           axisLabel:{
             textStyle: {
               color: '#92929B', 
@@ -132,7 +141,11 @@ export default {
             },
           },
           axisLine:{       //y轴
-            show:false
+            show:false,
+            lineStyle: {
+                color: '#EDEDED',
+                width: 1, //这里是为了突出显示加上的  
+            }
           },
           splitLine :{    //网格线
             lineStyle:{
