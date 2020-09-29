@@ -300,6 +300,7 @@ export default {
   components: { flowPath },
   data() {
     return {
+      todo: '',
       profileData: "",
       toBeSoldOut: "",
       stayProcessedCount: "",
@@ -448,7 +449,7 @@ export default {
         //判断是否有异常订单
         let num = response.abnormalCount
         if(num>0){
-          this.$message({
+          this.todo = this.$message({
             showClose: true,
             dangerouslyUseHTMLString: true,
             message:'<p>您有'+ num +'条异常订单需要处理，<a href="/bp/order/query?isAbnormal=1">请查看</a></p>',
@@ -628,6 +629,12 @@ export default {
         });
     },
 
+  },
+  beforeDestroy() {
+    if (this.todo && 'close' in this.todo) {
+      this.todo.close()
+    }
+    console.log('beforeDestroy', this.todo)
   }
 };
 </script>
