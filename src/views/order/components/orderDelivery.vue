@@ -166,7 +166,7 @@
                     width="160">
                     <template slot-scope="scope">
                         <div>
-                            <template v-if="scope.row.isAutoSend && (scope.row.status == 3) && scope.row.isFillUp || scope.row.deliveryWay == 3">
+                            <template v-if="scope.row.isAutoSend && (scope.row.status == 3) && scope.row.isFillUp">
                                 {{scope.row.updateTime}}
                             </template>
                             <template v-else>
