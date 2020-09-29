@@ -31,7 +31,7 @@ import iconagesex from "../../../modules/UserAgeMobileMember/icon/agesex";
 import color from "../../../../../components/Wxcolor/color.js";
 export default {
 	// props: ["chartData", "chartSettings", "chartExtend"],
-	props: ["chartData", "title", "icon", "total", "sexData"],
+	props: ["chartData", "title", "icon", "total", "sexData", "barColor"],
 	mixins: [list],
 	data() {
 		return {
@@ -92,7 +92,8 @@ export default {
 				}
 			},
 			chartExtend: {
-				color: ["#026DFF", "#F59F00"],
+				//color: ["#026DFF", "#F59F00"],
+				color: this.barColor,
 				tooltip: {
 					formatter: function(params) {
 						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.color}"></span>`;

@@ -7,6 +7,7 @@
 					:chartData="userData.chartData"
 					:total="userData.total"
 					:icon="'0'"
+					:barColor="barColorUser"
 				></vitem>
 			</el-col>
 			<el-col :span="12">
@@ -15,6 +16,7 @@
 					:chartData="memberData.chartData"
 					:total="memberData.total"
 					:icon="'1'"
+					:barColor="barColorUser"
 				></vitem>
 			</el-col>
 		</el-row>
@@ -25,6 +27,7 @@
 					:chartData="sexageData.ageData"
 					:sexData="sexageData.sexData"
 					:icon="'2'"
+					:barColor="barColorSexAge"
 				></vitem>
 			</el-col>
 			<el-col :span="12">
@@ -34,13 +37,6 @@
 					:city="phoneData.city"
 					:barColor="phoneData.barColor"
 				></pchart>
-
-				<!-- <vitem
-					:title="'性别年龄分布'"
-					:chartData="sexageData.ageData"
-					:sexData="sexageData.sexData"
-					:icon="'2'"
-				></vitem> -->
 			</el-col>
 		</el-row>
 	</div>
@@ -93,7 +89,9 @@ export default {
 			memberData: {},
 			userData: {},
 			sexageData: {},
-			phoneData: {}
+			phoneData: {},
+			barColorUser: ["#026DFF", "#F59F00"],
+			barColorSexAge: ["#6D7896", "#026DFFF", "#06C9DD", "#FFF5C31"]
 		};
 	},
 	computed: {
