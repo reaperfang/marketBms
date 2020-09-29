@@ -1,5 +1,5 @@
 <template>
-  <DialogBase :visible.sync="visible" :showFooter="showFooter" width="660px" title="申请达达账号">
+  <DialogBase :visible.sync="visible" @close="close" :showFooter="showFooter" width="660px" title="申请达达账号">
     <div class="registerDialog">
       <p class="error" v-if="submitPromptMessage" v-html="submitPromptMessage"></p>
       <el-form
@@ -126,7 +126,7 @@
       </el-form>
       <div class="footer">
         <el-button @click="submit('ruleForm')" :loading="isSubmit" type="primary">提 交</el-button>
-        <el-button @click="visible = false">取 消</el-button>
+        <el-button @click="close">取 消</el-button>
       </div>
     </div>
   </DialogBase>
@@ -321,6 +321,12 @@ export default {
     this.init()
   },
   methods: {
+    close() {
+      if ('ruleForm' in this.$refs && 'clearValidate' in this.$refs.ruleForm) this.$refs.ruleForm.clearValidate()
+      this.$emit('close');
+
+      this.visible = false
+    },
     getSubmitPromptMessage(status, err) {
       this.submitPromptMessage = ''
       // 1 达达商户注册失败，达达门店注册失败

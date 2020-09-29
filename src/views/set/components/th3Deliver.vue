@@ -3,7 +3,7 @@
    <div v-if="!isInitLoading" class="th3Deliver">
      <div class="switch-area">
        <span>启用第三方配送：</span>
-       <el-switch class="btn" active-color="#13ce66" inactive-color="#CACACF" v-model="isOpen"></el-switch>
+       <el-switch class="btn" active-color="#13ce66" inactive-color="#CACACF" v-model="isOpenTh3Deliver"></el-switch>
        <span>开启后，将有第三方物流代您进行配送，配送产生的费用，开启后表示同意</span>
        <el-button class="agree" type="text" @click="onPprotocol()">《第三方配送协议》</el-button>
      </div>
@@ -125,7 +125,7 @@ export default {
       lng: null,
       lat: null,
       addressId: null,
-      isOpen: false,
+      isOpenTh3Deliver: false,
       status: 1,
       rechargeShow: false,
       btnShow: false,
@@ -160,14 +160,17 @@ export default {
       return obj ? true : false
     },
     isTableShow() {
-      if ((!this.isHasOpenTh3Config && !this.isOpen) || this.isApplyOpen) return false
+      console.log('this.isHasOpenTh3Config:',this.isHasOpenTh3Config, 'isOpenTh3Deliver:',this.isOpenTh3Deliver, 'isApplyOpen:',this.isApplyOpen)
+      if ((!this.isHasOpenTh3Config && !this.isOpenTh3Deliver) || this.isApplyOpen) return false
       return true
     }
   },
 
   watch: {
-    isOpen(val) {
+    isOpenTh3Deliver(val) {
+      console.log('isOpenTh3Deliver',val)
       // this.isTableShow = this.isOpen
+      if (!val) this.isApplyOpen = false
       this.btnShow = false
       this.saveShow = true
     }
@@ -250,7 +253,7 @@ export default {
         .getShopInfo({ id: id })
         .then(response => {
           if (!response) return false
-          this.isOpen = response.isOpenTh3Deliver === 1 ? true : false
+          this.isOpenTh3Deliver = response.isOpenTh3Deliver === 1 ? true : false
           this.isOpenAutoCall = response.autoCall === 1 ? 1 : 0
           // 自动呼叫 isOpenAutoCall
         })
@@ -279,14 +282,14 @@ export default {
     updateShopInfo() {
       const req = Object.create(null)
       req.autoCall = this.isOpenAutoCall
-      req.isOpenTh3Deliver = this.isOpen ? 1 : 0
+      req.isOpenTh3Deliver = this.isOpenTh3Deliver ? 1 : 0
       req.id = this.cid
       return this._apis.set.updateShopInfo(req)
     },
     handleSubmit() {
       if (this.isLoading) return false
       // 判断是否设置发货地址和开通达达设置
-      if (this.isOpen && !this.hasSetting()) {
+      if (this.isOpenTh3Deliver && !this.hasSetting()) {
         this.confirm({
           title: '',
           iconWarning: true,
@@ -295,7 +298,7 @@ export default {
           customClass: 'setting-custom',
           showCancelButton: false
         }).finally(() => {
-          this.isOpen = false
+          this.isOpenTh3Deliver = false
         });
         
         return false
@@ -304,7 +307,7 @@ export default {
       const p1 = this.setBindThirdsend()
       const p2 = this.updateShopInfo()
       Promise.all([p1, p2]).then(response =>{
-        const html = `<span class="sucess">保存成功！</span><span class="prompt" style="">第三方配送-达达配送已${this.isOpen ? '开启' : '关闭'}。</span>`
+        const html = `<span class="sucess">保存成功！</span><span class="prompt" style="">第三方配送-达达配送已${this.isOpenTh3Deliver ? '开启' : '关闭'}。</span>`
         this.confirm({
           title: '',
           iconSuccess: true,
