@@ -1,24 +1,59 @@
 <template>
 	<div class="head">
-		<div class="left">
+		<div class="left-box">
 			<svg-icon iconClass="shop"></svg-icon>
 			<span>{{ shopName }}</span>
 			<svg-icon iconClass="time" style="margin-left:20px"></svg-icon>
 			<span> {{ currentTime }}</span>
 		</div>
-		<div class="content">交 易 数 据 大 屏</div>
-
-		<div class="right">
-			<div class="refresh" @click="refresh">
-				<svg-icon iconClass="refresh"></svg-icon>
-				<span>刷 新</span>
-			</div>
-			<div class="fullscreen" @click="fullscreen" ref="fullscreen">
-				<svg-icon iconClass="fullscreen"></svg-icon>
-				<!-- <span>全 屏</span> -->
-				<span>{{ !this.fullscreenState ? "全 屏" : "退出全屏" }}</span>
-			</div>
-		</div>
+		<el-row class="row-1">
+			<el-col>
+				<el-row>
+					<el-col :xs="5" :sm="5" :md="5" :lg="5" :xl="5">
+						<div class="left">
+							<!-- <svg-icon iconClass="shop"></svg-icon>
+							<span>{{ shopName }}</span>
+							<svg-icon iconClass="time"></svg-icon>
+							<span> {{ currentTime }}</span> -->
+						</div>
+					</el-col>
+					<el-col
+						:xs="11"
+						:sm="13"
+						:md="13"
+						:lg="13"
+						:xl="15"
+						class="content"
+					>
+						<div>交 易 数 据 大 屏</div>
+					</el-col>
+					<el-col
+						:xs="8"
+						:sm="6"
+						:md="6"
+						:lg="6"
+						:xl="4"
+						class="right"
+					>
+						<div class="refresh" @click="refresh">
+							<svg-icon iconClass="refresh"></svg-icon>
+							<span>刷 新</span>
+						</div>
+						<div
+							class="fullscreen"
+							@click="fullscreen"
+							ref="fullscreen"
+						>
+							<svg-icon iconClass="fullscreen"></svg-icon>
+							<!-- <span>全 屏</span> -->
+							<span>{{
+								!this.fullscreenState ? "全 屏" : "退出全屏"
+							}}</span>
+						</div>
+					</el-col>
+				</el-row>
+			</el-col>
+		</el-row>
 	</div>
 </template>
 
@@ -197,21 +232,11 @@ export default {
 	position: relative;
 	height: 80px;
 
-	padding: 20px;
-
-	background: url("../../../../assets/images/dashboard/head/bg/default.png")
-		no-repeat;
-	background-size: cover;
-	-webkit-background-size: cover;
-	-o-background-size: cover;
-	background-position: center 0;
-
-	display: flex;
-	//justify-content: space-around;
-	justify-content: space-between;
-
-	.left {
-		align-self: flex-start;
+	.left-box {
+		position: absolute;
+		margin: 15px 0 0 20px;
+		display: flex;
+		align-items: center;
 		span {
 			font-size: 14px;
 			font-weight: 500;
@@ -220,38 +245,54 @@ export default {
 		}
 	}
 
-	.content {
-		font-size: 42px;
-		color: #ffffff;
-		// text-align: center;
-		align-self: center;
-		position: absolute;
-		left: 0;
-		right: 0;
-		margin: 0 auto;
-		width: 350px;
-		height: 40px;
-	}
-
-	.right {
-		align-self: flex-start;
-		.refresh,
-		.fullscreen {
-			display: inline-block;
-			width: 79px;
-			height: 25px;
-			background: rgba(71, 225, 255, 0.08);
-			border-radius: 2px;
-			text-align: center;
-			padding: 5px;
-			img {
-				margin-right: 6px;
-			}
+	.row-1 {
+		background: url("../../../../assets/images/dashboard/head/bg/default.png")
+			no-repeat;
+		background-size: cover;
+		-webkit-background-size: cover;
+		-o-background-size: cover;
+		background-position: center 0;
+		height: 100%;
+		.left {
+			margin: 15px 0 0 35px;
+			display: flex;
+			align-items: center;
 			span {
-				font-size: 12px;
+				font-size: 14px;
+				font-weight: 500;
 				color: #ffffff;
+				margin-right: 5px;
 			}
-			cursor: pointer;
+		}
+		.content {
+			font-size: 42px;
+			color: #ffffff;
+			text-align: center;
+			padding: 17px 0;
+		}
+
+		.right {
+			padding: 15px 40px 0 0;
+			text-align: right;
+			.refresh,
+			.fullscreen {
+				display: inline-block;
+				width: 79px;
+				height: 25px;
+				background: rgba(71, 225, 255, 0.08);
+				border-radius: 2px;
+				text-align: center;
+				margin: 0 10px 0 0;
+				padding: 5px;
+				img {
+					margin-right: 6px;
+				}
+				span {
+					font-size: 12px;
+					color: #ffffff;
+				}
+				cursor: pointer;
+			}
 		}
 	}
 }
