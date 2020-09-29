@@ -48,7 +48,7 @@ export default {
         },
         legend: {  
           top:'0%',
-          right: "3.5%",
+          right: "1%",
           data: ['今日', '昨日'],
           icon: "circle",
           itemWidth:8,
