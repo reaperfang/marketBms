@@ -41,7 +41,7 @@ export default [
                 path: 'address',
                 component: () => import('@/views/set/address'),
                 name: 'address',
-                meta: { title: '地址库', noCache: true, tabTitle: '通用设置' , navType:2 }
+                meta: { title: '地址管理', noCache: true, tabTitle: '通用设置' , navType:2 }
             },
             {
                 path: 'addressAdd',

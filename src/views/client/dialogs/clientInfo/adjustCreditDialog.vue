@@ -66,12 +66,13 @@ export default {
   },
   methods: {
     number(event, val, ele) {
-      val = val.replace(/[^\d]/g, "");
+      // val = val.replace(/[^\d]/g, "");
+		val = val.replace(/[^\d.]/g,'').replace(/\./g, '');
       this[ele] = val;
     },
     submit() {
       this.btnLoading = true;
-      if (this.adjustmentScore == null) {
+      if (!this.adjustmentScore) {
         this.btnLoading = false;
         this.$message({
           message: '请输入调整数值',
@@ -79,6 +80,14 @@ export default {
         });
         return;
       }
+		if(Number(this.adjustmentAfterScore) > 100000000) {
+			this.$message({
+				message: '调整后积分不可超过1亿',
+				type: 'warning'
+			});
+			this.btnLoading = false;
+			return false
+		}
       if (this.remark == "") {
         this.btnLoading = false;
         this.$message({
@@ -118,7 +127,7 @@ export default {
             this.visible = false;
             console.log(error);
           });
-      
+
     },
     handleBlur() {
       if (this.adjustScore == '2' && Number(this.data.score) < Number(this.adjustmentScore)) {
@@ -126,12 +135,16 @@ export default {
       }else{
         this.showError = false;
       }
-      if(Number(this.adjustmentScore) >= 100000000) {
+      if(Number(this.adjustmentAfterScore) > 100000000) {
         this.$message({
-          message: '调整积分不能超过1亿',
+          message: '积分不可超过100,000,000(1亿)',
           type: 'warning'
         });
-        this.adjustmentScore = "";
+        // this.adjustmentScore = "";
+		  this.btnLoading = true;
+		  setTimeout(() => {
+			  this.btnLoading = false;
+		  }, 1000)
       }
     },
     handleAdjust(val) {
@@ -177,7 +190,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .star{
-  color:#FD4C2B; 
+  color:#FD4C2B;
   margin-right: 5px
 }
 .c_container {
@@ -201,7 +214,7 @@ export default {
         width: 38px;
         color: #B5BDCA;
         right: 0;
-        top: 33px;  
+        top: 33px;
       }
   }
   .dialog-footer {
