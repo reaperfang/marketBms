@@ -117,12 +117,18 @@
                             <span> <strong>{{dataType.paid_order_am | tofix2}}</strong> </span>
                         </div>
                         <div class="choosebot">
-                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_am_rg_pct!='-9999'&&dataType.paid_order_am_rg_pct!=0" :class="dataType.paid_order_am_rg_pct>0?'up':'down'">
+                            <dl class="fl">
+                                <dd>较前一{{unitsList[seachTimetrad.units]}}：</dd>
+                                <dd>较上{{unitsbt[seachTimetrad.units]}}同期：</dd>
+                            </dl>
+                            <dl class="fr">
+                                <dd><span v-if="dataType.paid_order_am_rg_pct!='-9999'&&dataType.paid_order_am_rg_pct!=0" :class="dataType.paid_order_am_rg_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_am_rg_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_am_rg_pct*100) | tofix2}}%</span><span v-else>--</span></p>
-                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.paid_order_am_up_pct!='-9999'&&dataType.paid_order_am_up_pct!=0" :class="dataType.paid_order_am_up_pct>0?'up':'down'">
+                                {{Math.abs(dataType.paid_order_am_rg_pct*100) | tofix2}}%</span><span v-else>--</span></dd>
+                                <dd><span v-if="dataType.paid_order_am_up_pct!='-9999'&&dataType.paid_order_am_up_pct!=0" :class="dataType.paid_order_am_up_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_am_up_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_am_up_pct*100) | tofix2}}%</span><span v-else>--</span></p>
+                                {{Math.abs(dataType.paid_order_am_up_pct*100) | tofix2}}%</span><span v-else>--</span></dd>
+                            </dl>
                         </div>
                     </div>
                     <div class="choose_item" :class="checkList[1]?'active':''">
@@ -131,16 +137,20 @@
                             <span> <strong>{{dataType.paid_order_cq}}</strong> </span>
                         </div>
                         <div class="choosebot">
-                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_cq_rg_pct!='-9999'&&dataType.paid_order_cq_rg_pct!=0" :class="dataType.paid_order_cq_rg_pct>0?'up':'down'">
+                            <dl class="fl">
+                                <dd>较前一{{unitsList[seachTimetrad.units]}}：</dd>
+                                <dd>较上{{unitsbt[seachTimetrad.units]}}同期：</dd>
+                            </dl>
+                            <dl class="fr">
+                                <dd><span v-if="dataType.paid_order_cq_rg_pct!='-9999'&&dataType.paid_order_cq_rg_pct!=0" :class="dataType.paid_order_cq_rg_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_cq_rg_pct>0?imgup:imgdown" alt="">
                                 {{Math.abs(dataType.paid_order_cq_rg_pct*100) | tofix2}}%</span>
-                                <span v-else>--</span>
-                                </p>
-                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.paid_order_cq_up_pct!='-9999'&&dataType.paid_order_cq_up_pct!=0" :class="dataType.paid_order_cq_up_pct>0?'up':'down'">
+                                <span v-else>--</span></dd>
+                                <dd><span v-if="dataType.paid_order_cq_up_pct!='-9999'&&dataType.paid_order_cq_up_pct!=0" :class="dataType.paid_order_cq_up_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_cq_up_pct>0?imgup:imgdown" alt="">
                                 {{Math.abs(dataType.paid_order_cq_up_pct*100) | tofix2}}%</span>
-                                <span v-else>--</span>
-                                </p>
+                                <span v-else>--</span></dd>
+                            </dl>
                         </div>
                     </div>
                     <div class="choose_item" :class="checkList[2]?'active':''">
@@ -149,12 +159,18 @@
                             <span> <strong>{{dataType.paid_order_nu}}</strong> </span>
                         </div>
                         <div class="choosebot">
-                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.paid_order_nu_rg_pct!='-9999'&&dataType.paid_order_nu_rg_pct!=0" :class="dataType.paid_order_nu_rg_pct>0?'up':'down'">
+                            <dl class="fl">
+                                <dd>较前一{{unitsList[seachTimetrad.units]}}：</dd>
+                                <dd>较上{{unitsbt[seachTimetrad.units]}}同期：</dd>
+                            </dl>
+                            <dl class="fr">
+                                <dd><span v-if="dataType.paid_order_nu_rg_pct!='-9999'&&dataType.paid_order_nu_rg_pct!=0" :class="dataType.paid_order_nu_rg_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_nu_rg_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_nu_rg_pct*100) | tofix2}}%</span><span v-else>--</span></p>
-                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.paid_order_nu_up_pct!='-9999'&&dataType.paid_order_nu_up_pct!=0" :class="dataType.paid_order_nu_up_pct>0?'up':'down'">
+                                {{Math.abs(dataType.paid_order_nu_rg_pct*100) | tofix2}}%</span><span v-else>--</span></dd>
+                                <dd><span v-if="dataType.paid_order_nu_up_pct!='-9999'&&dataType.paid_order_nu_up_pct!=0" :class="dataType.paid_order_nu_up_pct>0?'up':'down'">
                                 <img :src="dataType.paid_order_nu_up_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.paid_order_nu_up_pct*100) | tofix2}}%</span><span v-else>--</span></p>
+                                {{Math.abs(dataType.paid_order_nu_up_pct*100) | tofix2}}%</span><span v-else>--</span></dd>
+                            </dl>
                         </div>
                     </div>
                     <div class="choose_item" :class="checkList[3]?'active':''">
@@ -168,12 +184,18 @@
                             <span> <strong>{{dataType.atv | tofix2}}</strong> </span>
                         </div>
                         <div class="choosebot">
-                            <p>较前一{{unitsList[seachTimetrad.units]}}：<span v-if="dataType.atv_rg_pct!='-9999'&&dataType.atv_rg_pct!=0" :class="dataType.atv_rg_pct>0?'up':'down'">
+                            <dl class="fl">
+                                <dd>较前一{{unitsList[seachTimetrad.units]}}：</dd>
+                                <dd>较上{{unitsbt[seachTimetrad.units]}}同期：</dd>
+                            </dl>
+                            <dl class="fr">
+                                <dd><span v-if="dataType.atv_rg_pct!='-9999'&&dataType.atv_rg_pct!=0" :class="dataType.atv_rg_pct>0?'up':'down'">
                                 <img :src="dataType.atv_rg_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.atv_rg_pct*100) | tofix2}}%</span><span v-else>--</span></p>
-                            <p>较上{{unitsbt[seachTimetrad.units]}}同期：<span v-if="dataType.atv_up_pct!='-9999'&&dataType.atv_up_pct!=0" :class="dataType.atv_up_pct>0?'up':'down'">
+                                {{Math.abs(dataType.atv_rg_pct*100) | tofix2}}%</span><span v-else>--</span></dd>
+                                <dd><span v-if="dataType.atv_up_pct!='-9999'&&dataType.atv_up_pct!=0" :class="dataType.atv_up_pct>0?'up':'down'">
                                 <img :src="dataType.atv_up_pct>0?imgup:imgdown" alt="">
-                                {{Math.abs(dataType.atv_up_pct*100) | tofix2}}%</span><span v-else>--</span></p>
+                                {{Math.abs(dataType.atv_up_pct*100) | tofix2}}%</span><span v-else>--</span></dd>
+                            </dl>
                         </div>
                     </div>
                 </div>
@@ -246,7 +268,8 @@
                 </div>
                 </div>
                 <div class="chartbox">
-                    <pieChart :title="'测试图表'" ref="pieChart" :dataChart="dataChart" height="300px"></pieChart>
+                    <!-- <pieChart :title="'测试图表'" ref="pieChart" :dataChart="dataChart" height="300px"></pieChart> -->
+                    <pieChannl :title="'测试图表'" ref="pieChart" :dataChart="dataChart" height="300px"></pieChannl>
                 </div>
             </div>
         </div>
@@ -269,8 +292,8 @@
                             <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
                             <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
-                            <span v-if="index==3">04</span>
-                            <span v-if="index==4">05</span>
+                            <span v-if="index==3"><span>04</span></span>
+                            <span v-if="index==4"><span>04</span></span>
                             <span><img class="fl" :src="(item.goods_image).split(',')[0]" alt=""><p>{{item.goods_name}}</p></span>
                             <span><p>{{item.paid_order_am_pr.toFixed(2)}}</p></span>
                         </li>
@@ -287,8 +310,8 @@
                             <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
                             <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
-                            <span v-if="index==3">04</span>
-                            <span v-if="index==4">05</span>
+                            <span v-if="index==3"><span>04</span></span>
+                            <span v-if="index==4"><span>04</span></span>
                             <span><img class="fl" :src="(item.goods_image).split(',')[0]" alt=""><p>{{item.goods_name}}</p></span>
                             <span><p>{{item.product_nu}}</p></span>
                         </li>
@@ -305,8 +328,8 @@
                             <span v-if="index==0"><img class="fl" src="@/assets/images/realtime/top1.png" alt=""></span>
                             <span v-if="index==1"><img class="fl" src="@/assets/images/realtime/top2.png" alt=""></span>
                             <span v-if="index==2"><img class="fl" src="@/assets/images/realtime/top3.png" alt=""></span>
-                            <span v-if="index==3">04</span>
-                            <span v-if="index==4">05</span>
+                            <span v-if="index==3"><span>04</span></span>
+                            <span v-if="index==4"><span>04</span></span>
                             <span><img class="fl" :src="(item.goods_image).split(',')[0]" alt=""><p>{{item.goods_name}}</p></span>
                             <span><p>{{item.pv_pr}}</p></span>
                         </li>
@@ -337,9 +360,10 @@ import mapChart from "./components/realtime/mapChart";
 import pieChart from "./components/realtime/pieChart";
 import tradeChart from "./components/realtime/tradeChart";
 import userChart from "./components/realtime/userChart";
+import pieChannl from "./components/realtime/pieChannl";
 export default {
   name: "realTimeView",
-  components: { pfChart,screeningChart,mapChart,pieChart,tradeChart,userChart,serchRt },
+  components: { pfChart,screeningChart,mapChart,pieChart,tradeChart,userChart,serchRt,pieChannl },
   filters: {
     tofix2: function(num) {
         var  dd=1;  
@@ -741,10 +765,10 @@ background: #fff;
             height: 49px;
             background:#F8F8F8;
             border-top:1px solid #EDEDED;
-            p{
+            dl,p{
                 span{
-                    float: right;
-                    width: 60px;
+                    // float: right;
+                    // width: 60px;
                     text-align: left;
                     img{
                         width: 9px;
@@ -858,6 +882,7 @@ background: #fff;
                 padding: 10px 0;
                 height: 62px;
                 color: #3D434A;
+                position: relative;
                 span{
                     float: left;
                 }
@@ -875,9 +900,14 @@ background: #fff;
                     }
                 }
                 span:nth-child(2){
+                    float: none;
+                    display: block;
                     max-width: 50%;
                     text-align: left;
-                    padding-left: 40px;
+                    // padding-left: 40px;
+                    padding-right: 20px;
+                    margin: 0 auto;
+                    
                     img{
                         width: 42px;
                         height: 42px;
@@ -892,6 +922,9 @@ background: #fff;
                     }
                 }
                 span:nth-child(3){
+                    position: absolute;
+                    top: 10px;
+                    right: 0;
                     // width: calc(40% - 36px);
                     float: right;
                     text-align: right;
