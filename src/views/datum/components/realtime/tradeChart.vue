@@ -68,8 +68,8 @@ export default {
           trigger: "axis",
         },
         legend: {  
-          x:'right',      //可设定图例在左、右、居中
-          y:'top',
+          top:'0%',
+          right: "3.5%",
           data: ['支付金额','支付订单数', '支付人数','客单价'],
           icon: "circle",
           itemWidth:8,
@@ -86,6 +86,9 @@ export default {
           type: "category",
           boundaryGap: false,
           axisLabel:{
+            textStyle: {
+              color: '#92929B', 
+            },
             showMaxLabel:true,
             interval:interval,
             formatter: function (params) {
@@ -123,6 +126,11 @@ export default {
           // interval: maxY/5,
           // splitNumber : 5,
           // boundaryGap : [ 0, 1],
+          axisLabel:{
+            textStyle: {
+              color: '#92929B', 
+            },
+          },
           axisLine:{       //y轴
             show:false
           },

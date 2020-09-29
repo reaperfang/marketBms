@@ -37,8 +37,8 @@ export default {
           trigger: "axis",
         },
         legend: {  
-          x:'right',      //可设定图例在左、右、居中
-          y:'top',
+          top:'0%',
+          right: "3.5%",
           data: ['用户总数','新增用户', '新增会员'],
           icon: "circle",
           itemWidth:8,
@@ -56,6 +56,9 @@ export default {
           type: "category",
           boundaryGap: false,
           axisLabel:{
+            textStyle: {
+              color: '#92929B', 
+            },
             showMaxLabel:true,
             interval:interval,
             formatter: function (params) {
@@ -87,6 +90,11 @@ export default {
         yAxis: {//Y轴
           type: "value",
           minInterval: 1,
+          axisLabel:{
+            textStyle: {
+              color: '#92929B', 
+            },
+          },
           axisLine:{       //y轴
             show:false
           },

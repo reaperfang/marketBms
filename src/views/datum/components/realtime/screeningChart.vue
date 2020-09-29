@@ -48,8 +48,8 @@ export default {
             }
         },
         legend: {  
-          x:'right',      //可设定图例在左、右、居中
-          y:'top',
+          top:'0%',
+          right: "3.5%",
           data: ['今日', '昨日'],
           icon: "circle",
           itemWidth:8,
@@ -68,6 +68,9 @@ export default {
           axisLabel:{
             showMaxLabel:true,
             interval: 5,
+            textStyle: {
+              color: '#92929B', 
+            },
           },
           data: this.flow['xAxis']
         },
@@ -77,6 +80,11 @@ export default {
           minInterval: 1,
           // max:leftY.max,
           // min:leftY.min,
+          axisLabel:{
+            textStyle: {
+              color: '#92929B', 
+            },
+          },
           axisLine:{       //y轴
             show:false
           },
