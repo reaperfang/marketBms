@@ -19,7 +19,7 @@
             :rows="5"
             placeholder="请输入内容"
             v-model="ruleForm.address"
-            style="width:360px;" 
+            style="width:360px;"
             maxlength="50"
             show-word-limit
           ></el-input>
@@ -146,6 +146,11 @@ export default {
 
   mounted() {
     this.init()
+	  console.log(this.$route.query.orderType)
+	  if (this.$route.query.orderType == 1) {
+		  this.ruleForm.type = [1]
+		  this.isDisabled = true
+	  }
   },
 
   methods: {
@@ -182,7 +187,7 @@ export default {
       this.isDisabled = this.$route.query && this.$route.query.source === 1 ? true : false
       if (this.ruleForm.id) {
         this.getAddressById(this.ruleForm.id)
-      } 
+      }
       // 如果没有id 则为新建，如果商家配送页面点击新建跳转过来，需要默认选中发货地址
       if (this.isDisabled && !this.ruleForm.id) {
         this.ruleForm.type.push(1)
@@ -267,7 +272,7 @@ export default {
     },
     // 处理保存成功的逻辑
     handleSaveSuccess() {
-      
+
       this.confirm({
         title: "提示",
         iconSuccess: true,
@@ -279,7 +284,7 @@ export default {
       }).catch(()=> {
         this.$router.push({ path: '/set/addressUpdate' })
         location.reload()
-        
+
       });
     },
     // 处理数据重复问题
@@ -386,7 +391,7 @@ export default {
           this.isLoading = false
         })
       // 保存后
-      
+
       // this.handleAfterSave(res)
     },
     // 判断地址是否为商家配送地址
@@ -437,7 +442,7 @@ export default {
     getMapClickPoi(poi) {
       console.log('poi----getMapClickPoi', poi)
       if (!poi) {
-        return false 
+        return false
       }
       this.ruleForm.sendAddress = poi.address
       this.ruleForm.lat = poi.location.lat

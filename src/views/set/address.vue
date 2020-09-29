@@ -1,6 +1,6 @@
 <template>
    <div class="address">
-     <div class="btn-area"><el-button type="primary" @click="goAddressNew()" v-permission="['设置','地址库', '默认页面', '新建地址']">新建地址</el-button></div>
+     <div class="btn-area"><el-button type="primary" @click="goAddressNew()" v-permission="['设置','地址管理', '默认页面', '新建地址']">新建地址</el-button></div>
      <div class="list-area">
        <div class="total">
         <span>全部 <em>{{ total }}</em> 项</span>
@@ -55,9 +55,9 @@
           width="150">
           <template slot-scope="scope">
             <div class="opeater">
-              <el-button class="btn" @click="goAddressEdit(scope.row.id)" type="text"  v-permission="['设置','地址库', '默认页面', '编辑']">编辑</el-button>
+              <el-button class="btn" @click="goAddressEdit(scope.row.id)" type="text"  v-permission="['设置','地址管理', '默认页面', '编辑']">编辑</el-button>
               <span>|</span>
-              <el-button class="btn" v-permission="['设置','地址库', '默认页面', '删除']" :class="[getDefaultAddress(scope.row) ? 'disabled' : '']" @click="delAddress(scope.row)" type="text">删除</el-button>
+              <el-button class="btn" v-permission="['设置','地址管理', '默认页面', '删除']" :class="[getDefaultAddress(scope.row) ? 'disabled' : '']" @click="delAddress(scope.row)" type="text">删除</el-button>
             </div>
           </template>
         </el-table-column>
@@ -67,7 +67,7 @@
           </div>
           <p>
             暂无数据，去
-            <router-link :to="{ path: '/set/addressAdd'}" v-permission="['设置','地址库', '默认页面', '新建地址']">新建地址</router-link>
+            <router-link :to="{ path: '/set/addressAdd'}" v-permission="['设置','地址管理', '默认页面', '新建地址']">新建地址</router-link>
           </p>
         </div>
       </el-table>
@@ -187,7 +187,7 @@ export default {
       this.getAddressList(req)
     },
     goAddressNew() {
-      this.$router.push({ path: '/set/addressAdd' }) 
+      this.$router.push({ path: '/set/addressAdd' })
     },
     hanldeOpenDelivery(id) {
       this.confirm({
@@ -198,7 +198,7 @@ export default {
         showCancelButton: true,
         customClass: 'address-update'
       }).then(() => {
-        this.$router.push({ path: '/set/addressUpdate', query: { id, source: 1  } }) 
+        this.$router.push({ path: '/set/addressUpdate', query: { id, source: 1  } })
       }).catch(() => {
       });
     },
@@ -206,7 +206,7 @@ export default {
       const id = this.cid
       return new Promise((resolve, reject) => {
         this._apis.set.updateShopInfo({...data, id }).then(response =>{
-          this.$store.dispatch('getShopInfo');    
+          this.$store.dispatch('getShopInfo');
           resolve(response)
         }).catch(error =>{
           reject(error)
@@ -298,7 +298,7 @@ export default {
       }).catch((err) => {
         console.log(err)
       })
-      
+
     },
     // 判断地址是否为商家配送地址
     getMerchantDeliverAddressById(id) {
@@ -311,7 +311,7 @@ export default {
       })
     },
     goAddressEdit(id) {
-      // 判断是否是商家配送地址// 
+      // 判断是否是商家配送地址//
       const p2 = this.isOpenMerchantDeliver() // 是否开启商家配送
       const p1 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
       Promise.all([p1, p2]).then((result) => {
@@ -321,10 +321,10 @@ export default {
             if (isOpen) {
               this.hanldeOpenDelivery(id)
             } else {
-              this.$router.push({ path: '/set/addressUpdate', query: { id } }) 
+              this.$router.push({ path: '/set/addressUpdate', query: { id } })
             }
         } else {
-          this.$router.push({ path: '/set/addressUpdate', query: { id } }) 
+          this.$router.push({ path: '/set/addressUpdate', query: { id } })
         }
       }).catch((errors) => {
         console.log(errors)
@@ -395,7 +395,7 @@ export default {
       }).catch((error) => {
         this.$message.error(error || '保存失败')
       })
-      
+
     },
     delAddress(row) {
       // 是否默认地址
@@ -403,12 +403,12 @@ export default {
       // 1 默认地址处理，不删除，给提示框
       // 2 开启商家配送，同时商家配送使用此地址（最新地址），删除时要同时关闭商家配送
       // 3 删除地址
-      // 3 
+      // 3
       const id = row.id
       const addressType = row.addressType
       const isDefaultAddress = row.isDefaltReturnAddress === 1 || row.isDefaltSenderAddress === 1 // mock
       if (!isDefaultAddress) {
-          // 判断是否是商家配送地址// 
+          // 判断是否是商家配送地址//
         const p2 = this.isOpenMerchantDeliver() // 是否开启商家配送
         const p1 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
         Promise.all([p1, p2]).then((result) => {
@@ -435,7 +435,7 @@ export default {
         //     console.log('dev',isOpen)
         //     // 是否打开
         //     if (isOpen) {
-        //       this.hanldeOpenDeliveryDelAddress(id) // 
+        //       this.hanldeOpenDeliveryDelAddress(id) //
         //     } else {
         //        this.handleDelAddress(row)
         //     }
