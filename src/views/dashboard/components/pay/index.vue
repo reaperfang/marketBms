@@ -84,8 +84,10 @@ export default {
 		}
 
 		.item-col:hover {
-			background: rgba(71, 225, 255, 0.05);
-			border: 1px solid rgba(6, 201, 221, 1);
+			// background: rgba(71, 225, 255, 0.05);
+			//border: 1px solid rgba(6, 201, 221, 1);
+			box-shadow: 0 0 0 1px rgba(6, 201, 221, 1);
+			outline: 1px solid rgba(6, 201, 221, 1);
 		}
 	}
 }
