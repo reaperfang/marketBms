@@ -61,7 +61,7 @@ export default {
         grid: {
           top:'11%',
           left: "0%",
-          right: "4%",
+          right: "2%",
           bottom: "3%",
           containLabel: true
         },
@@ -103,6 +103,7 @@ export default {
           },
           splitLine :{    //网格线
             lineStyle:{
+              color: '#EDEDED',
               type:'dashed'    //设置网格线类型 dotted：虚线   solid:实线
             },
             show:true, //隐藏或显示

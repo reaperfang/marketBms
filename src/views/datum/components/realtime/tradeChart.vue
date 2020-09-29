@@ -68,7 +68,7 @@ export default {
           trigger: "axis",
         },
         legend: {  
-          top:'0%',
+          top:'2%',
           right: "3.5%",
           data: ['支付金额','支付订单数', '支付人数','客单价'],
           icon: "circle",
@@ -79,7 +79,7 @@ export default {
         }, 
         color:['#FF8615','#0077FF','#2FC25B','#655EFF'],
         grid: {
-          top:'11%',
+          top:'10%',
           left: "0%",
           right: "4%",
           bottom: "3%",
@@ -149,6 +149,7 @@ export default {
           },
           splitLine :{    //网格线
             lineStyle:{
+              color: '#EDEDED',
               type:'dashed'    //设置网格线类型 dotted：虚线   solid:实线
             },
             show:true, //隐藏或显示
