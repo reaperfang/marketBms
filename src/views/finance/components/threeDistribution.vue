@@ -4,10 +4,10 @@
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="订单编号">
-          <el-input v-model="ruleForm.order_code" placeholder="请输入" style="width:210px;"></el-input>
+          <el-input v-model="ruleForm.orderCode" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
         <el-form-item label="配送公司">
-          <el-input v-model="ruleForm.delivery_company" placeholder="请输入" style="width:210px;"></el-input>
+          <el-input v-model="ruleForm.deliveryCompany" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
          <el-form-item label="发货时间">
           <el-date-picker
@@ -53,7 +53,7 @@
           label="配送公司"
           align="center">
           <template slot-scope="scope">
-            {{scope.row.deliveryCompany == 1 ? '达达' : ' '}}
+            {{scope.row.deliveryCompany}}
           </template>  
         </el-table-column>
         <el-table-column
@@ -107,9 +107,9 @@ export default {
     return {
       inline:true,
       ruleForm:{
-        order_code:'',//订单号
-        delivery_company:'',//配送公司
-        delivery_money:'',//配送费
+        orderCode:'',//订单号
+        deliveryCompany:'',//配送公司
+        deliveryMoney:'',//配送费
         operator:'',//操作人
         timeValue:'',//发货时间
         startIndex:1,
@@ -135,9 +135,9 @@ export default {
   methods: {
     init(){
       let query = {
-        order_code:'',//订单号
-        delivery_company:'',//配送公司
-        delivery_money:'',//配送费
+        orderCode:'',//订单号
+        deliveryCompany:'',//配送公司
+        deliveryMoney:'',//配送费
         operator:'',//操作人
         startCreateTime:'',//发货开始日期
         endCreateTime:'',//发货结束日期
@@ -179,9 +179,9 @@ export default {
     //重置
     resetForm(){
       this.ruleForm = {
-        order_code:'',//订单号
-        delivery_company:'',//配送公司
-        delivery_money:'',//配送费
+        orderCode:'',//订单号
+        deliveryCompany:'',//配送公司
+        deliveryMoney:'',//配送费
         operator:'',//操作人
         timeValue:'',//发货时间
         startIndex:1,
