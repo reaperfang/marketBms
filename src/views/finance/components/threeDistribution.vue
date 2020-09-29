@@ -58,7 +58,7 @@
         </el-table-column>
         <el-table-column
           prop="deliveryMoney"
-          label="配送费"
+          label="费用"
           width="150px"
           align="right">
         </el-table-column>
