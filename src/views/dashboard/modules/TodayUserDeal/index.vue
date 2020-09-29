@@ -66,7 +66,7 @@ export default {
 
 			//Math.round(110.115*100)/100
 			this.persent =
-				val.place_order_amount_rgrt == "-9999"
+				val.place_order_am_rgrt == "-9999"
 					? 0
 					: keepTwoDecimalFull(
 							parseFloat(val.place_order_am_rgrt) * 100

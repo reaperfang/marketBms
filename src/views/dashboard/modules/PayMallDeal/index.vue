@@ -160,7 +160,10 @@ export default {
 				{
 					children: [
 						{ title: "支付订单数", content: val.paid_order_cq_rt },
-						{ title: "退款金额", content: val.refund_am_rt },
+						{
+							title: "退款金额",
+							content: this.toDecimal(val.refund_am_rt)
+						},
 						{ title: "退款订单数", content: val.refund_cq_rt }
 					]
 				}
