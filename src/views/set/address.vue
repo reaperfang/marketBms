@@ -1,6 +1,6 @@
 <template>
    <div class="address mh bor-radius">
-     <div class="btn-area"><el-button type="primary" @click="goAddressNew()" v-permission="['设置','地址库', '默认页面', '新建地址']">新建地址</el-button></div>
+     <div class="btn-area"><el-button type="primary" @click="goAddressNew()" v-permission="['设置','地址管理', '默认页面', '新建地址']">新建地址</el-button></div>
      <div class="list-area">
        <div class="total">
         <span>全部 <em>{{ total }}</em> 项</span>
@@ -58,8 +58,8 @@
           width="117">
           <template slot-scope="scope">
             <div class="opeater table-operate">
-              <span class="table-btn" @click="goAddressEdit(scope.row.id)" v-permission="['设置','地址库', '默认页面', '编辑']">编辑</span>
-              <span class="table-btn table-warning" v-permission="['设置','地址库', '默认页面', '删除']" :class="[getDefaultAddress(scope.row) ? 'disabled' : '']" @click="delAddress(scope.row)">删除</span>
+              <span class="table-btn" @click="goAddressEdit(scope.row.id)" v-permission="['设置','地址管理', '默认页面', '编辑']">编辑</span>
+              <span class="table-btn table-warning" v-permission="['设置','地址管理', '默认页面', '删除']" :class="[getDefaultAddress(scope.row) ? 'disabled' : '']" @click="delAddress(scope.row)">删除</span>
             </div>
           </template>
         </el-table-column>
