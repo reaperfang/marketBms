@@ -2,7 +2,7 @@
 <div>
     <!-- 悬浮按钮 数据大屏 -->
     <router-link v-permission="['数据', '实时概况','默认页面', '数据大屏']" class="viewBut" tag="a" target="_blank" :to="{ name: 'dashboard'}">
-        <img src="@/assets/images/realtime/curtime.png" alt="">
+        <img width="77" src="@/assets/images/realtime/curtime.png" alt="">
     </router-link>
     <!-- 数据总览 -->
     <div class="p_container pb12">
@@ -603,7 +603,7 @@ margin-left: 12px;
 	  position: relative;
       padding: 14px 0;
       .p_screening{
-          width: calc(100% - 570px);
+          width: calc(100% - 560px);
         // width: 50%;
           color: #92929B;
           font-size: 14px;
@@ -619,6 +619,7 @@ margin-left: 12px;
               padding-bottom: 10px;
               span{
                   font-size: 12px;
+                  line-height: 22px;
                   span{
                       color: #161617;
                       font-weight: 500;
@@ -716,7 +717,8 @@ background: #fff;
             height: 18px;
             margin-top: 4px;
             cursor: pointer;
-            background-image: url(../../assets/images/realtime/choose.png)
+            background-image: url(../../assets/images/realtime/choose.png);
+            background-size: 100% 100%;
         }
         .choosetop{
             height: 75px;
@@ -742,7 +744,11 @@ background: #fff;
             p{
                 span{
                     float: right;
+                    width: 60px;
+                    text-align: left;
                     img{
+                        width: 9px;
+                        height: 10px;
                         padding-right: 3px;
                     }
                 }
@@ -766,6 +772,7 @@ background: #fff;
         }
         .chooseBut{
             background-image: url(../../assets/images/realtime/choosecur.png);
+            background-size: 100% 100%;
         }
     }
 }
@@ -829,12 +836,15 @@ background: #fff;
         }
         .tle1{
             background-image: url(../../assets/images/realtime/title1.png);
+            background-size: 100% 100%;
         }
         .tle2{
             background-image: url(../../assets/images/realtime/title2.png);
+            background-size: 100% 100%;
         }
         .tle3{
             background-image: url(../../assets/images/realtime/title3.png);
+            background-size: 100% 100%;
         }
         .datanull{
             padding: 20px;
@@ -855,6 +865,8 @@ background: #fff;
                     width: 36px;
                     text-align: center;
                     img{
+                        width: 36px;
+                        // height: 30px;
                         padding-top: 6px;
                     }
                     span{
