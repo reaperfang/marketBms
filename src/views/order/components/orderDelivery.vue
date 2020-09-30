@@ -94,7 +94,7 @@
                 <el-table-column
                     prop="orderCode"
                     label="订单编号"
-                    width="275"
+                    width="290"
                     fixed="left"
                     :class-name="haveAuto ? 'orderCode table-padding haveAuto' : 'orderCode table-padding'">
                     <template slot-scope="scope">
