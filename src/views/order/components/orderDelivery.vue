@@ -98,7 +98,7 @@
                     fixed="left"
                     :class-name="haveAuto ? 'orderCode table-padding haveAuto' : 'orderCode table-padding'">
                     <template slot-scope="scope">
-                        <el-tooltip v-if="scope.row.isAutoSend" content="自动发货" placement="bottom" effect="dark">
+                        <el-tooltip v-if="scope.row.isAutoSend && (scope.row.deliveryWay != 3)" content="自动发货" placement="bottom" effect="dark">
                             <i class="auto"></i>
                         </el-tooltip>
                         <el-tooltip v-if="scope.row.isUrge == 0" content="用户催发货，请尽快发货" placement="bottom" effect="dark">
@@ -340,7 +340,7 @@ export default {
             return shopInfo.id
         },
         haveAuto() {
-            return this.tableData.some(val => val.isAutoSend || (val.isUrge == 0))
+            return this.tableData.some(val => (val.isAutoSend || (val.isUrge == 0)) && (val.deliveryWay != 3))
         }
     },
     methods: {
