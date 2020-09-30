@@ -275,7 +275,17 @@ export default {
         isBindThirdsend: 1,
         addressType: this.addressInfo.addressType,
         is_defalt_sender_address: this.addressInfo.isDefaltSenderAddress,
-        is_defalt_return_address: this.addressInfo.isDefaltReturnAddress
+        is_defalt_return_address: this.addressInfo.isDefaltReturnAddress,
+        address: this.addressInfo.address,
+        addressDetail: this.addressInfo.addressDetail,
+        areaCode: this.addressInfo.areaCode,
+        areaName: this.addressInfo.areaName,
+        cityCode: this.addressInfo.cityCode,
+        cityName: this.addressInfo.cityName,
+        latitude: this.addressInfo.latitude,
+        longitude: this.addressInfo.longitude,
+        provinceCode: this.addressInfo.provinceCode,
+        provinceName: this.addressInfo.provinceName
       }
       return this._apis.set.editAddressById(req)
     },
