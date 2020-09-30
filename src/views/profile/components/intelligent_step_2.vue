@@ -703,10 +703,6 @@
       .el-dialog__body {
         padding: 0 25px 30px 40px;
       }
-      
-      .el-dialog__footer {
-        padding: 0 20px 35px;
-      }
 
       /*.el-dialog__footer {
         height: 64px;
