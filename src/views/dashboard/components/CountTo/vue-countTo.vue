@@ -17,7 +17,7 @@
 				</div>
 			</div>
 			<div class="box-item flex-end" style="width:5px">
-				<img src="./icon/split.png" width="12px" height="20px" alt="" />
+				<img src="./icon/split.png" width="10" height="18" alt="" />
 				<!-- <span class="semicolon"></span> -->
 				<!-- <svg-icon iconClass="semicolon"></svg-icon> -->
 			</div>
@@ -45,7 +45,7 @@
 				</div>
 			</div>
 			<div class="box-item flex-end" style="width:5px">
-				<img src="./icon/split.png" width="12px" height="20px" alt="" />
+				<img src="./icon/split.png" width="10" height="18" alt="" />
 				<!-- <span class="semicolon"></span> -->
 				<!-- <svg-icon iconClass="semicolon"></svg-icon> -->
 			</div>
@@ -71,7 +71,7 @@
 				</div>
 			</div>
 			<div class="box-item flex-end" style="width:5px">
-				<img src="./icon/point.png" width="12" height="12" alt="" />
+				<img src="./icon/point.png" width="10" height="10" alt="" />
 				<!-- <span class="point">.</span> -->
 				<!-- <svg-icon iconClass="point"></svg-icon> -->
 			</div>
@@ -433,8 +433,8 @@ export default {
 			-webkit-background-size: cover;
 			-o-background-size: cover;
 			background-position: center 0;
-			width: 12px;
-			height: 12px;
+			width: 10px;
+			height: 10px;
 		}
 
 		.semicolon {
@@ -444,8 +444,8 @@ export default {
 			-webkit-background-size: cover;
 			-o-background-size: cover;
 			background-position: center 0;
-			width: 12px;
-			height: 20px;
+			width: 10px;
+			height: 18px;
 		}
 	}
 }

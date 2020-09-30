@@ -68,7 +68,10 @@ export default {
 				tooltip: {
 					show: this.progress != 0,
 					formatter: params => {
-						console.log("formatter: params => {", params);
+						//console.log("formatter: params => {", params);
+						if (!params.name) {
+							return;
+						}
 						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${
 							params.data.progress == 0
 								? "#1A273D"
