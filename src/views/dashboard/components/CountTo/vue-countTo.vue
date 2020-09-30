@@ -17,8 +17,9 @@
 				</div>
 			</div>
 			<div class="box-item flex-end" style="width:5px">
-				<!-- <span class="semicolon">,</span> -->
-				<svg-icon iconClass="semicolon"></svg-icon>
+				<img src="./icon/split.png" width="12px" height="20px" alt="" />
+				<!-- <span class="semicolon"></span> -->
+				<!-- <svg-icon iconClass="semicolon"></svg-icon> -->
 			</div>
 
 			<div class="box-item">
@@ -44,8 +45,9 @@
 				</div>
 			</div>
 			<div class="box-item flex-end" style="width:5px">
-				<!-- <span class="semicolon">,</span> -->
-				<svg-icon iconClass="semicolon"></svg-icon>
+				<img src="./icon/split.png" width="12px" height="20px" alt="" />
+				<!-- <span class="semicolon"></span> -->
+				<!-- <svg-icon iconClass="semicolon"></svg-icon> -->
 			</div>
 			<div class="box-item">
 				<div class="box-item-start"></div>
@@ -69,8 +71,9 @@
 				</div>
 			</div>
 			<div class="box-item flex-end" style="width:5px">
+				<img src="./icon/point.png" width="12" height="12" alt="" />
 				<!-- <span class="point">.</span> -->
-				<svg-icon iconClass="point"></svg-icon>
+				<!-- <svg-icon iconClass="point"></svg-icon> -->
 			</div>
 
 			<div class="box-item">
@@ -425,17 +428,24 @@ export default {
 		}
 
 		.point {
-			width: 7px;
-			height: 7px;
-			background: linear-gradient(180deg, #dafffd 0%, #14e1fc 100%);
-			border-radius: 50%;
+			background: url("./icon/point.png") no-repeat;
+			background-size: cover;
+			-webkit-background-size: cover;
+			-o-background-size: cover;
+			background-position: center 0;
+			width: 12px;
+			height: 12px;
 		}
 
 		.semicolon {
 			// width: 10px;
-			height: 10px;
-			justify-self: end;
-			background: linear-gradient(180deg, #dafffd 0%, #14e1fc 100%);
+			background: url("./icon/split.png") no-repeat;
+			background-size: cover;
+			-webkit-background-size: cover;
+			-o-background-size: cover;
+			background-position: center 0;
+			width: 12px;
+			height: 20px;
 		}
 	}
 }

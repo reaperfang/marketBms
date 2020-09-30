@@ -106,7 +106,7 @@ export default {
 								}
 							}
 						},
-						hoverAnimation: false,
+						hoverAnimation: true,
 						data: [
 							{
 								value: data.value,

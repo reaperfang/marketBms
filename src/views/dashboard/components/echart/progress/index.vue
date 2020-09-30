@@ -55,7 +55,7 @@ export default {
 						type: "pie",
 						clockWise: false,
 						radius: ["38%", "62%"],
-						hoverAnimation: false,
+						hoverAnimation: true,
 						silent: true,
 						startAngle: 55,
 						center: ["50%", "40%"],
@@ -110,7 +110,7 @@ export default {
 						type: "pie",
 						clockWise: false,
 						radius: ["45%", "54%"],
-						hoverAnimation: false,
+						hoverAnimation: true,
 						silent: true,
 						center: ["50%", "40%"],
 						itemStyle: {
