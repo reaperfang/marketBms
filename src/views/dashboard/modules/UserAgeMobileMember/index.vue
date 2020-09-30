@@ -197,13 +197,22 @@ export default {
 			this.sexageData = {
 				ageData: result,
 				sexData: {
-					female: (val.c_uv_share_sex_female * 100).toFixed(2), //c_uv_sex_female
-					gender: (val.c_uv_share_sex_gender * 100).toFixed(2)
+					female:
+						val.c_uv_share_sex_female == -9999
+							? "0.00"
+							: (val.c_uv_share_sex_female * 100).toFixed(2), //c_uv_sex_female
+					gender:
+						val.c_uv_share_sex_gender == -9999
+							? "0.00"
+							: (val.c_uv_share_sex_gender * 100).toFixed(2)
 				}
 			};
 		},
 		setPhone(val) {
-			let result = val.c_uv_share_phone.toFixed(2);
+			let result =
+				val.c_uv_share_phone == -9999
+					? 0
+					: val.c_uv_share_phone.toFixed(2);
 			this.phoneData = {
 				...this.mobile,
 				// progress: parseInt(parseFloat(result) * 100)
