@@ -694,7 +694,7 @@ export default {
             path: '/order/deliverGoodsSuccess',
             query: {
               id: this.$route.query._ids,
-              orderId: this.$route.query.ids,
+              orderId: this.$route.query.ids || this.$route.query.id,
               type: 'deliverGoods',
               deliveryWay: 3
             }
