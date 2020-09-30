@@ -197,7 +197,7 @@ export default {
 	position: relative;
 	height: 80px;
 
-	padding: 20px;
+	padding: 15px 20px 20px 20px;
 
 	background: url("../../../../assets/images/dashboard/head/bg/default.png")
 		no-repeat;
