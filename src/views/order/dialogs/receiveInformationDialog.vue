@@ -458,6 +458,12 @@ export default {
                   } else {
                     this.$emit('getDetail', this.multipleSelection)
                   }
+              } else {
+                if(this.list) {
+                    this.$emit('getDetail', this.multipleSelection, JSON.parse(JSON.stringify(this.list)))
+                  } else {
+                    this.$emit('getDetail', this.multipleSelection)
+                  }
               } 
               this.$emit('submit');
               this.visible = false;
