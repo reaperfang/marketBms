@@ -1,7 +1,7 @@
 <template>
     <div class="aftermarketDeliveryInformation">
         <!-- 普通快递 -->
-        <template v-if="orderAfterSale.deliveryWay == 1 || orderAfterSale.deliveryWay == 4">
+        <template v-if="orderAfterSale.deliveryWay == 1 || orderAfterSale.deliveryWay == 3 || orderAfterSale.deliveryWay == 4">
         <div v-if="orderAfterSale.returnExpressNo" class="delivery-information-header">
             用户退货
         </div>
@@ -361,7 +361,7 @@ export default {
             if(value.memberReceiveGoodsTime) {
                 return '【用户签收】'
             } else if(expressNos) {
-                return '【用户发货】'
+                return '【商户发货】'
             } else {
                 return ''
             }
