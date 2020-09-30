@@ -252,10 +252,10 @@ export default {
         })
       })
     },
-    hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId) {
+    hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId, isOpenTh3Deliver) {
       // 需要查看发货地址数量是否剩下1条？？？
       const id = row.id
-      const isBindThirdsend = row.isBindThirdsend
+      const isBindThirdsend = isOpenTh3Deliver ? row.isBindThirdsend : 0
       // const req = Object.create(null)
       // req.cid  = this.cid
       // req.startIndex = 1
@@ -367,7 +367,9 @@ export default {
       })
     },
     // 删除操作，默认地址处理逻辑
-    handleDelAddress(row) {
+    handleDelAddress(row, isOpenTh3Deliver) {
+      // 如果三方配送开启则传人isBindThirdsend，否则设为0；
+      const isBindThirdsend = isOpenTh3Deliver ? row.isBindThirdsend : 0
       this.confirm({
         title: "",
         iconWarning: true,
@@ -376,7 +378,7 @@ export default {
         cancelButtonText: '取消'
       }).then(() => {
         // 调用删除接口方法
-        this.delAddressById(row.id, row.isBindThirdsend)
+        this.delAddressById(row.id, isBindThirdsend)
       });
     },
     // 处理删除默认地址
@@ -441,9 +443,9 @@ export default {
           const isOpen = (+merchantDeliverId === +id && isOpenMerchantDeliver) || (+th3DeliverId === +id && isOpenTh3Deliver)
           console.log('result',result, isOpen)
           if (isOpen) {
-            this.hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId)
+            this.hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId, isOpenTh3Deliver)
           } else {
-            this.handleDelAddress(row)
+            this.handleDelAddress(row, isOpenTh3Deliver)
           }
         }).catch((errors) => {
           console.log(errors)
