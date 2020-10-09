@@ -49,7 +49,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item prop="areaCode" class="item">
+            <el-form-item prop="areaCode" v-if="areaList.length > 0" class="item">
               <el-select v-model="ruleForm.areaCode" @change="handleArea" placeholder="选择区域" style="width: 150px;" :disabled="isEdit">
                 <el-option
                   v-for="(item,index) in areaList"
