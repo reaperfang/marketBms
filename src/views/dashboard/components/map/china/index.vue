@@ -25,6 +25,11 @@ export default {
 		// 	this.$refs.chart.setSeriesData(result);
 		// }
 		"dashboard.highlight"(newVal, oldVal) {
+			console.log(
+				'	"dashboard.highlight"(newVal, oldVal) {',
+				newVal,
+				oldVal
+			);
 			let difference = _.difference(newVal, oldVal);
 			if (difference.length == 0) {
 				return;
