@@ -22,6 +22,9 @@ export default {
   methods: {
     // 数据显示控制
     con(){
+      //获取当前小时
+      var curdata=new Date();
+      var curhours=curdata.getHours()+2;
       this.flow = {
         xAxis:this.n.xAxis,
         yAxis1:this.n.data_rt && this.n.data_rt.map(item => { return (item*1).toFixed(2)}),
@@ -29,6 +32,7 @@ export default {
         // yAxis1:this.n.data_rt,
         // yAxis2:this.n.data_rd,
       }
+      this.flow.yAxis1=this.flow.yAxis1.slice(0,curhours)
       this.option = {
         tooltip: {
           trigger: "axis",
