@@ -91,7 +91,8 @@ export default {
 			sexageData: {},
 			phoneData: {},
 			barColorUser: ["#026DFF", "#F59F00"],
-			barColorSexAge: ["#6D7896", "#026DFFF", "#06C9DD", "#FFF5C31"]
+			// barColorSexAge: ["#6D7896", "#026DFFF", "#06C9DD", "#FFF5C31"]
+			barColorSexAge: ["#6D7986", "#026DFF", "#06C9DD", "#FF5C31"]
 		};
 	},
 	computed: {
