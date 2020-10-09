@@ -1,7 +1,7 @@
 <template>
   <div class="batch-import-and-delivery">
     <div class="title">批量导入发货</div>
-    <p class="import-explain">说明：批量导入发货仅支持配送方式为普通快递的订单，且批量导入发货前您需要到地址库完成发货地址的设置，否则会导致您的批量导入发货失败。</p>
+    <p class="import-explain">说明：批量导入发货仅支持配送方式为普通快递的订单，且批量导入发货前您需要到地址库完成发货地址的设置，否则会导致您的批量导入发货失败。当前最多支持1000条发货信息数据.</p>
     <div class="content">
       <!-- <el-steps class="steps" :space="500" :active="1" finish-status="success">
                 <el-step title="上传模板"></el-step>
@@ -39,7 +39,7 @@
             </el-upload>
           </div>
           <div class="col">
-            <p>说明：请按模板内容仔细填写快递公司及快递单号，发货成功后不可修改，支持 csv、xls、xlsx，文件大小需控制在 1MB 以内</p>
+            <p>说明：请按模板内容仔细填写快递公司及快递单号，发货成功后不可修改，支持 csv、xls、xlsx。</p>
             <p @click="downloadTemplate" class="blue pointer">下载批量发货模板</p>
           </div>
         </div>
