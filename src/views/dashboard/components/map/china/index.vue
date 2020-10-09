@@ -277,13 +277,13 @@ export default {
 			this.chart.clear();
 			this.chart.setOption(this.option);
 
-			this.setHightlight([
-				JSON.stringify({ pro_name_rt: "北京", value: 1 }),
-				JSON.stringify({ pro_name_rt: "北京", value: 1 }),
-				JSON.stringify({ pro_name_rt: "北京", value: 1 }),
-				JSON.stringify({ pro_name_rt: "北京", value: 1 }),
-				JSON.stringify({ pro_name_rt: "北京", value: 1 })
-			]);
+			// this.setHightlight([
+			// 	JSON.stringify({ pro_name_rt: "北京", value: 1 }),
+			// 	JSON.stringify({ pro_name_rt: "北京", value: 1 }),
+			// 	JSON.stringify({ pro_name_rt: "北京", value: 1 }),
+			// 	JSON.stringify({ pro_name_rt: "北京", value: 1 }),
+			// 	JSON.stringify({ pro_name_rt: "北京", value: 1 })
+			// ]);
 
 			// this.chart.on("mouseover", params => {
 			// 	this.chart.dispatchAction({
