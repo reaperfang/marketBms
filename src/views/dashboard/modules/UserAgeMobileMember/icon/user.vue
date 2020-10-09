@@ -74,7 +74,7 @@ export default {
 		font-weight: 600;
 		color: rgba(255, 255, 255, 1);
 		line-height: 33px;
-		margin-top: 10px;
+		margin-top: 5px;
 	}
 
 	// background: yellow;

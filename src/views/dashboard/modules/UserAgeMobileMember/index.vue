@@ -91,7 +91,8 @@ export default {
 			sexageData: {},
 			phoneData: {},
 			barColorUser: ["#026DFF", "#F59F00"],
-			barColorSexAge: ["#6D7896", "#026DFFF", "#06C9DD", "#FFF5C31"]
+			// barColorSexAge: ["#6D7896", "#026DFFF", "#06C9DD", "#FFF5C31"]
+			barColorSexAge: ["#6D7986", "#026DFF", "#06C9DD", "#FF5C31"]
 		};
 	},
 	computed: {
@@ -167,9 +168,9 @@ export default {
 				columns: ["类别", "数量"],
 				rows: [
 					{ 类别: "未知", 数量: val.c_uv_age_0 },
-					{ 类别: "< 25", 数量: val.c_uv_age_25 },
-					{ 类别: "25-50", 数量: val.c_uv_age_25_50 },
-					{ 类别: "> 50 ", 数量: val.c_uv_age_50 }
+					{ 类别: "< 25岁", 数量: val.c_uv_age_25 },
+					{ 类别: "25-50岁", 数量: val.c_uv_age_25_50 },
+					{ 类别: "> 50岁 ", 数量: val.c_uv_age_50 }
 				]
 			};
 

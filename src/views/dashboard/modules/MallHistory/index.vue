@@ -162,7 +162,7 @@ export default {
 			for (var j = 0; j < y.length; j++) {
 				rows.push({
 					日期: x[j],
-					金额: y[j]
+					金额: toDecimal(y[j])
 				});
 			}
 
