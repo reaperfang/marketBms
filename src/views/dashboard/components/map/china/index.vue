@@ -12,6 +12,7 @@ import echarts from "echarts";
 import chinaData from "../../../data/china.json";
 import { mapGetters, mapActions, mapState } from "vuex";
 import _ from "lodash";
+import moment from "moment";
 export default {
 	watch: {
 		// "dashboard.realtimeuser"(val) {
@@ -25,16 +26,24 @@ export default {
 		// 	this.$refs.chart.setSeriesData(result);
 		// }
 		"dashboard.highlight"(newVal, oldVal) {
-			console.log(
-				'	"dashboard.highlight"(newVal, oldVal) {',
-				newVal,
-				oldVal
-			);
+			// let difference = _.difference(newVal, oldVal);
+			// if (difference.length == 0) {
+			// 	return;
+			// }
+			// this.setHightlight(newVal);
+
+			let beforeTime = moment().subtract(10, "seconds");
 			let difference = _.difference(newVal, oldVal);
 			if (difference.length == 0) {
 				return;
 			}
-			this.setHightlight(newVal);
+
+			let result = newVal.filter(item => {
+				let row = JSON.parse(item);
+				return moment(row.time_rt) > beforeTime;
+			});
+
+			this.setHightlight(result);
 		}
 	},
 	computed: {
