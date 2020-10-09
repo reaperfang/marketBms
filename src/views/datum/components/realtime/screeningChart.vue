@@ -38,7 +38,7 @@ export default {
           trigger: "axis",
           // formatter:'0：00：{c}人<br/>'+'占比：{d}%'
             formatter: function (params) {
-              let html='0:00-'+params[0].name+":00<br>";
+              let html='0:00-'+(params[0].name-1)+":59<br>";
               for(let i=0;i<params.length;i++){
                 html+='<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:'+params[i].color+';"></span>'
                 if(params[i].seriesName=="今日"){
