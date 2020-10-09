@@ -401,7 +401,7 @@ export default {
     },
     setAddressName() {
       if (this.provinceList.length <= 0) return false
-      if (!this.ruleForm.provinceCode || !this.ruleForm.cityCode || !this.ruleForm.areaCode) return false
+      if (!this.ruleForm.provinceCode || !this.ruleForm.cityCode) return false
       const province = this.provinceList.find(item => {
         return +item.code === +this.ruleForm.provinceCode
       })
