@@ -283,10 +283,10 @@ export default {
               const req = this.getReqData(this.ruleForm)
               this.getAddressList(req)
               // if(arr && arr.length > 0) {
-                this.$message.success('保存成功')
+                this.$message.success('删除成功')
               // }
             }).catch((err) => {
-              this.$message.error(err || '保存失败')
+              this.$message.error(err || '删除失败')
             })
           });
         } else {
@@ -408,7 +408,7 @@ export default {
         this.ruleForm.pageNo = 1
         const req = this.getReqData(this.ruleForm)
         this.getAddressList(req)
-        this.$message.success('保存成功')
+        this.$message.success('删除成功')
         // this.confirm({
         //   title: "提示",
         //   iconSuccess: true,
@@ -418,7 +418,7 @@ export default {
         // }).then(() => {
         // })
       }).catch((error) => {
-        this.$message.error(error || '保存失败')
+        this.$message.error(error || '删除失败')
       })
 
     },
