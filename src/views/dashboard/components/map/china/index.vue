@@ -133,10 +133,17 @@ export default {
 							} = data;
 							var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${val.color};"></span>`;
 							// const tip = `<b>${name}</b><br />${getTextForKey('现存确诊：')}${insick}<br />${getTextForKey('累计确诊：')}${confirmed}<br />${getTextForKey('治愈人数：')}${cured}<br />${getTextForKey('死亡人数：')}${dead}<br />${getTextForKey('新增确诊：')}${increased}`;
-							const tip = `${dotHtml}<b>${name}</b><br /> &nbsp&nbsp&nbsp${"订单总数："}${
-								data.value[2]
-							}<br />`;
-							return tip;
+							// const tip = `${dotHtml}<b>${name}</b><br /> &nbsp&nbsp&nbsp${"订单总数："}${
+							// 	data.value[2]
+							// }<br />`;
+
+							if (val.color == "#FFFF00") {
+								return `${dotHtml}<b>${name}</b>`;
+							} else {
+								return `${dotHtml}<b>${name}</b><br /> &nbsp&nbsp&nbsp${"订单总数："}${
+									data.value[2]
+								}<br />`;
+							}
 						}
 						return `<b>${name}</b><br />${"暂无数据"}`;
 					}
@@ -269,6 +276,14 @@ export default {
 			};
 			this.chart.clear();
 			this.chart.setOption(this.option);
+
+			this.setHightlight([
+				JSON.stringify({ pro_name_rt: "北京", value: 1 }),
+				JSON.stringify({ pro_name_rt: "北京", value: 1 }),
+				JSON.stringify({ pro_name_rt: "北京", value: 1 }),
+				JSON.stringify({ pro_name_rt: "北京", value: 1 }),
+				JSON.stringify({ pro_name_rt: "北京", value: 1 })
+			]);
 
 			// this.chart.on("mouseover", params => {
 			// 	this.chart.dispatchAction({
