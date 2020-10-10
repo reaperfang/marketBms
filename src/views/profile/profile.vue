@@ -322,8 +322,8 @@ export default {
       cid:'',
       isGetWXstatus:true,//是否获取到小程序状态数据
       isGetGZstatus:true,//是否获取到公众号状态数据
-      currentStep: null, // 智能开店：当前步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
-      stepStatus: null, // 智能开店： 步骤状态 0 未完成 1 已完成
+      currentStep: 4, // 智能开店：当前步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
+      stepStatus: 1, // 智能开店： 步骤状态 0 未完成 1 已完成
 
     };
   },
