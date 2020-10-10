@@ -179,7 +179,19 @@ export default [
 			path: 'ordinaryExpress',
 			component: () => import('@/views/set/ordinaryExpress'),
 			name: 'ordinaryExpress',
-			meta: { title: '配送设置', noCache: true, tabTitle: '分割线' ,navType:2},
+			meta: { title: '普通快递', noCache: true, tabTitle: '配送设置', navType:2  }
+		},
+		{
+			path: 'shopExpress',
+			component: () => import('@/views/set/shopExpress'),
+			name: 'shopExpress',
+			meta: { title: '同城配送', noCache: true, tabTitle: '配送设置', navType:2  }
+		},
+		{
+			path: 'selfLift',
+			component: () => import('@/views/set/selfLift'),
+			name: 'selfLift',
+			meta: { title: '上门自提', noCache: true, tabTitle: '配送设置' ,navType:2},
 		},
       // {
       //   path: 'quickDelivery',
