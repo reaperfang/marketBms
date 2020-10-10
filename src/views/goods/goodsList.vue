@@ -1459,8 +1459,10 @@ export default {
             let checkedCount = val.length;
             if(this.list.length == this.multipleSelection.length) {
                 this.checkedAll = true
+            }else{
+                this.checkedAll = false
             }
-             this.isIndeterminate = checkedCount > 0 && checkedCount < this.list.length;
+            this.isIndeterminate = checkedCount > 0 && checkedCount < this.list.length;
         },
         stateHandler(val) {
             if(this.listQuery.status === val) {

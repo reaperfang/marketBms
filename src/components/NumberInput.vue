@@ -4,7 +4,7 @@
 
 <script>
 /*
-** @type {integer:正整数   float:两位小数}
+** @type {integer:正整数   float:两位小数     intLength：限制可输入的整数长度}
 */
 export default {
   props: {
@@ -26,6 +26,9 @@ export default {
         type:String,
         default:''
     },
+    intLength: {
+        type: Number
+    }
   },
   methods: {
       inputHandler(val) {
@@ -39,6 +42,17 @@ export default {
             value = value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
             value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');
           }
+
+          //限制整数可输入的长度
+        if(this.intLength && !!value){
+            const arr = value.split('.');
+            if(arr[0].length > this.intLength){
+                arr[0] = arr[0].substring(0, this.intLength);
+                value = arr.join('.')
+            }
+        }
+          
+          //最大值
           if(this.max && !!value){
               if(parseFloat(value) > this.max){
                   value = this.max;
@@ -48,7 +62,6 @@ export default {
       },
       blurHandler() {
           if(!!this.value){
-              console.log(this.value)
               this.$emit('input', parseFloat(this.value));
           }
       }

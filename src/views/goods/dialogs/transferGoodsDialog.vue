@@ -73,16 +73,16 @@ export default {
                         type: 'success'
                     });
                     this.onSubmit()
-                    this.dialogVisible = false
+                    this.visible = false
                 }).catch(error => {
-                    this.dialogVisible = false
+                    this.visible = false
                 })
             }).catch(error => {
                 this.$message.error({
                     message: error,
                     type: 'error'
                 });
-                this.dialogVisible = false
+                this.visible = false
             })
         },
         handleChange(value) {

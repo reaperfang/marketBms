@@ -162,6 +162,7 @@ export default {
           let data = Object.assign({checked:false}, item)
           this.list.push(data)
         })
+        this.checkedAll = false
         this.total = response.total
       }).catch((error)=>{
         this.$message.error(error);
