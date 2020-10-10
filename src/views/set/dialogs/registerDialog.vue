@@ -49,7 +49,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item prop="areaCode" class="item">
+            <el-form-item prop="areaCode" v-if="areaList.length > 0" class="item">
               <el-select v-model="ruleForm.areaCode" @change="handleArea" placeholder="选择区域" style="width: 150px;" :disabled="isEdit">
                 <el-option
                   v-for="(item,index) in areaList"
@@ -401,7 +401,7 @@ export default {
     },
     setAddressName() {
       if (this.provinceList.length <= 0) return false
-      if (!this.ruleForm.provinceCode || !this.ruleForm.cityCode || !this.ruleForm.areaCode) return false
+      if (!this.ruleForm.provinceCode || !this.ruleForm.cityCode) return false
       const province = this.provinceList.find(item => {
         return +item.code === +this.ruleForm.provinceCode
       })
