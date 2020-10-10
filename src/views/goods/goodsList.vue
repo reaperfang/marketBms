@@ -1481,6 +1481,7 @@ export default {
             })
         },
         getList(param) {
+            this.checkedAll = false;
             this.loading = true
             let _param
             _param = Object.assign({}, this.listQuery, param)
