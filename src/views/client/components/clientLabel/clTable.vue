@@ -8,6 +8,7 @@
       :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}"
       :default-sort="{prop: 'date', order: 'descending'}"
       v-loading="loading"
+      @select-all="handleSelectAll"
     >
       <el-table-column type="selection" width="34"></el-table-column>
       <el-table-column prop="tagName" label="标签名称" min-width="200" fixed="left" class-name="table-padding"></el-table-column>
@@ -82,6 +83,13 @@ export default {
   computed: {},
   created() {},
   methods: {
+    handleSelectAll(val) {
+      if(!val.length) {
+        this.checkAll = false
+      }else{
+        this.checkAll = true;
+      }
+    },
     deleteRow(row) {
       this.confirm({
         title: "提示",

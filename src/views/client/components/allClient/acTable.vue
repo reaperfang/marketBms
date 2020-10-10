@@ -10,6 +10,7 @@
       :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
       v-loading="loading"
       @sort-change="changeSort"
+      @select-all="handleSelectAll"
     >
       <el-table-column type="selection" :reserve-selection="true" fixed="left" width="34"></el-table-column>
       <el-table-column prop="memberSn" label="用户ID" fixed="left" width="110" class-name="table-padding"></el-table-column>
@@ -26,7 +27,7 @@
       <el-table-column label="身份">
         <template slot-scope="scope">
           <div class="clearfix iden_cont">
-            <span class="fl">{{scope.row?scope.row.memberType:""}}</span>
+            <span class="fl">{{scope.row?scope.row.memberTypeText:""}}</span>
             <div class="fl" style="margin-left: 5px">
               <span>{{scope.row?scope.row.levelName:""}}</span>
               <span>{{scope.row?scope.row.cardLevelName:""}}</span>
@@ -136,6 +137,13 @@ export default {
     //this.getMembers(1, this.pageSize);
   },
   methods: {
+    handleSelectAll(val) {
+      if(!val.length) {
+        this.checkAll = false
+      }else{
+        this.checkAll = true;
+      }
+    },
     changeSort(val) {
       let tOrder = null;
       switch(val.prop) {
@@ -268,7 +276,7 @@ export default {
           let list = response.list;
           if(list.length > 0) {
             list.map((v) => {
-              v.memberType = v.memberType == 0 ? '用户':'会员'
+              v.memberTypeText = v.memberType === 0 ? '用户':'会员'
             })
           }
           this.memberList = [].concat(list);
