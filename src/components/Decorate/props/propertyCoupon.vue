@@ -13,7 +13,7 @@
             <i class="el-icon-plus"></i>
             <span>添加优惠券</span>
           </div>
-          <p class="prop-message" v-if="ruleForm.addType === 1">建议最多添加10张优惠券</p>  
+          <p class="prop-message" v-if="ruleForm.addType === 1">最多添加20张优惠券</p>  
         </div>
         <div class="tag_wrapper" v-loading="loading">
           <el-tag
@@ -40,7 +40,7 @@
             ></numberInput>
           </el-radio>
         </el-radio-group>
-        <p class="prop-message" v-if="ruleForm.addType === 2">最大设置为20个</p>  
+        <p class="prop-message" v-if="ruleForm.addType === 2">最多添加20张优惠券</p>  
       </el-form-item>
       <el-form-item label="排列样式" prop="listStyle">
         <el-radio-group class="radio-block" v-model="ruleForm.listStyle">
