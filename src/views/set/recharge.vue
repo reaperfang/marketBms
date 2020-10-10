@@ -24,7 +24,7 @@
           <numberInput
             style="width: 193px;"
             v-model="ruleForm.price"
-            :intLength="8"
+            :intLength="7"
             placeholder="请输入充值金额"
           ></numberInput>
           <span>元</span>
