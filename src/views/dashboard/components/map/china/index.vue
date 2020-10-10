@@ -32,7 +32,7 @@ export default {
 			// }
 			// this.setHightlight(newVal);
 
-			let beforeTime = moment().subtract(10, "seconds");
+			let beforeTime = moment().subtract(15, "seconds");
 			let difference = _.difference(newVal, oldVal);
 			if (difference.length == 0) {
 				return;
