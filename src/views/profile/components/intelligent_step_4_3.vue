@@ -289,9 +289,9 @@
 
     .preview_shop_pic {
       position: absolute;
-      width: 342px;
+      width: 300px;
       left: 395px;
-      top: 0;
+      top: -118px;
       z-index: 3;
 
       .bg_pic {
@@ -302,7 +302,7 @@
       .top {
         position: absolute;
         left: 50%;
-        top: 76px;
+        top: 68px;
         font-size: 16px;
         color: #000000;
         transform: translateX(-50%);
@@ -311,8 +311,8 @@
 
       .center {
         position: absolute;
-        left: 79px;
-        top: 223px;
+        left: 70px;
+        top: 190px;
         font-size: 16px;
         color: #fff;
         font-weight: 600;
