@@ -295,6 +295,7 @@ export default {
     async getList() {
       try {
         this.loading = true
+        this.checkedAll = false
         let res = await fetchTagsList(this.listQuery)
 
         if(res) {
