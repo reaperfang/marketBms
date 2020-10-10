@@ -258,6 +258,8 @@ export default {
       let checkedCount = val.length;
       if(this.list.length == this.multipleSelection.length) {
           this.checkedAll = true
+      }else{
+         this.checkedAll = false
       }
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.list.length;
     },
@@ -295,6 +297,7 @@ export default {
     async getList() {
       try {
         this.loading = true
+        this.checkedAll = false
         let res = await fetchTagsList(this.listQuery)
 
         if(res) {

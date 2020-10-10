@@ -143,6 +143,7 @@ export default {
             this.list.push(data)
           })
         }
+        this.checkedAll = false
         this.total = response.total
       }).catch((error)=>{
         this.$message.error(error);
