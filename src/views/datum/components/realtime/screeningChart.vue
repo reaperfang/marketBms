@@ -58,7 +58,8 @@ export default {
           itemWidth:8,
           textStyle:{//图例文字的样式
             color:'#92929B',
-          }
+          },
+          // selectedMode:false,
         },  
         color:['#0077FF','#2FC25B'],
         grid: {
