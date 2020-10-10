@@ -109,7 +109,7 @@
                     </div>
                 </div>
                 <div class="choosebox">
-                    <el-scrollbar>
+                    <el-scrollbar noresize="true">
                 <div class="choose-type clearfix" >
                     <div class="choose_item" :class="checkList[0]?'active':''">
                         <div class="choosetop">
@@ -732,8 +732,8 @@ background: #fff;
         width: 100%;
         overflow-x: scroll;
         .choose-type{
-            // min-width: 760px;
-            width: auto;
+            min-width: 760px;
+            // width: auto;
             white-space:nowrap;
             padding: 20px 0 10px;
         }
