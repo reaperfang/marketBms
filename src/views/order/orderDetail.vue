@@ -157,6 +157,8 @@ export default {
                     return '核销验证'
                 case 13:
                     return '重新发单'
+                case 14:
+                    return '自动发单'
             }
         },
         channelInfoIdFilter(code) {

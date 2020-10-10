@@ -524,7 +524,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .address-disable-del.confirm.no-cancel {
    .el-button {
-    letter-spacing: 0;
+    letter-spacing: 0; 
   }
 }
 </style>

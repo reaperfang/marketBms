@@ -186,10 +186,14 @@ export default {
     handleCurrentChange(val) {
       this.getMembers(val, this.pageSize);
       this.startIndex = val;
+      this.checkAll = false;
+      this.$refs.allClientTable.clearSelection();
     },
     handleSizeChange(val) {
       this.getMembers(1, val);
       this.pageSize = val;
+      this.checkAll = false;
+      this.$refs.allClientTable.clearSelection();
     },
     handelDelete(id) {
       this.dialogVisible = true;
