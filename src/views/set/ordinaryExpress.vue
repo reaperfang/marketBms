@@ -17,7 +17,7 @@
 import courierSettings from './components/courierSettings'
 import quickDelivery from './components/quickDelivery'
 import electronicFaceSheet from './components/electronicFaceSheet'
-import { isExistAuth } from '@/utils/auth.js'
+import { isExistAuth } from '@/system/user.js'
 export default {
   name: 'ordinaryExpress',
   data() {

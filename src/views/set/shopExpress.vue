@@ -15,7 +15,7 @@
 <script>
 import merchantDeliver from './components/merchantDeliver'
 import th3Deliver from './components/th3Deliver'
-import { isExistAuth } from '@/utils/auth.js'
+import { isExistAuth } from '@/system/user.js'
 export default {
   name: 'shopExpress',
   data() {

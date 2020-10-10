@@ -1,4 +1,4 @@
-import { getToken } from '@/system/auth'
+import { getToken } from "@/system/auth.js";
 /**
  * 合并对象
  * 
@@ -238,20 +238,31 @@ export function addNewApply(path, access) {
   let newWindow = window.open("about:blank");
   newWindow.location.href = newUrl;
 }
-
-
-
+/**
+ * 判断此类型是否是Object类型
+ * @param {Object} {}
+ */
+export function isObject(obj){
+  return Object.prototype.toString.call(obj)==='[object Object]';
+};
+/**
+ * 判断此类型是否是Array类型
+ * @param {Array} arr 
+ */
+export  function isArray(arr){
+  return Object.prototype.toString.call(arr)==='[object Array]';
+};
 export function equalsObj(oldData,newData){
-  function  isObject(obj){
-      return Object.prototype.toString.call(obj)==='[object Object]';
-  };
+  // function  isObject(obj){
+  //     return Object.prototype.toString.call(obj)==='[object Object]';
+  // };
   /**
    * 判断此类型是否是Array类型
    * @param {Array} arr 
    */
-  function isArray(arr){
-      return Object.prototype.toString.call(arr)==='[object Array]';
-  };
+  // function isArray(arr){
+  //     return Object.prototype.toString.call(arr)==='[object Array]';
+  // };
   // 类型为基本类型时,如果相同,则返回true
   if(oldData === newData) return true;
   if(isObject(oldData)&&isObject(newData)&&Object.keys(oldData).length === Object.keys(newData).length){
@@ -413,4 +424,21 @@ export function sortCreateTime(arr){
   })
   return arr
 
+}
+
+// 判断是否为json字符串
+export function isJsonStr(str) {
+  if (typeof str == 'string') {
+    try {
+      const obj = JSON.parse(str);
+      if (typeof obj == 'object' && obj) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+  return false;
 }

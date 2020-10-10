@@ -4,7 +4,8 @@ import store from '@/store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
-import { getToken } from '@/system/auth' // getToken from cookie
+import { isLogin, getAuthList } from '@/system/user.js' // getToken from cookie
+// import { getShopInfo } from '@/system/shop.js' // getToken from cookie
 
 
 
@@ -23,17 +24,18 @@ const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
 
 let flag = 0
 router.beforeEach((to, from, next) => {
+  console.log('enter: beforeEach')
   NProgress.start() // start progress bar
   //  if (true) { // determine if there has token  
-  if(store.getters.token){
-    const localMsfList = localStorage.getItem('shopInfos');
-    let msfList = [];
+  if(isLogin()){
+    // const localMsfList = getShopInfo();
+    let msfList = getAuthList()
     let enable = 0
 
-    enable = +localStorage.getItem('anotherAuthEnable')
-    if(localMsfList && JSON.parse(localMsfList) && JSON.parse(localMsfList).data && JSON.parse(localMsfList).data.msfList) {
-      msfList = JSON.parse(localMsfList).data.msfList
-    }
+    enable = +localStorage.getItem('anotherAuthEnable') // 订单导入权限
+    // if(localMsfList && JSON.parse(localMsfList) && JSON.parse(localMsfList).data && JSON.parse(localMsfList).data.msfList) {
+    //   msfList = JSON.parse(localMsfList).data.msfList
+    // }
     /* has token*/
     if (to.path === '/login') {
       if(msfList.length) {
@@ -88,4 +90,5 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach(() => {
   NProgress.done() // finish progress bar
+  console.log('enter: afterEach')
 })
