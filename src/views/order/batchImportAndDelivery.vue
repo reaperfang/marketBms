@@ -1,7 +1,7 @@
 <template>
   <div class="batch-import-and-delivery">
     <div class="title">批量导入发货</div>
-    <p class="import-explain">说明：批量导入发货仅支持配送方式为普通快递的订单，且批量导入发货前您需要到地址库完成发货地址的设置，否则会导致您的批量导入发货失败。当前最多支持1000条发货信息数据.</p>
+    <p class="import-explain">说明：批量导入发货仅支持配送方式为普通快递的订单，且批量导入发货前您需要到地址库完成发货地址的设置，否则会导致您的批量导入发货失败，当前最多支持1000条发货信息数据。</p>
     <div class="content">
       <!-- <el-steps class="steps" :space="500" :active="1" finish-status="success">
                 <el-step title="上传模板"></el-step>
