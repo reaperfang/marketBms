@@ -13,7 +13,7 @@
                 type="index"
                 label="排序"
                 fixed="left"
-                min-width="120"
+                width="120"
                 class-name="table-padding"
                 align="left">
             </el-table-column>
