@@ -10,7 +10,7 @@
 						同比昨日
 						<!-- <span>{{ persent }}%{{ persent == 0 ? "" : "↑" }}</span> -->
 						<span
-							>{{ persent }}%{{
+							>{{ abs(persent) }}%{{
 								persent < 0 ? "↓" : persent > 0 ? "↑" : ""
 							}}</span
 						>
@@ -176,6 +176,9 @@ export default {
 				return item.area_name === key;
 			});
 			return result;
+		},
+		abs(val) {
+			return Math.abs(val);
 		}
 	}
 };
