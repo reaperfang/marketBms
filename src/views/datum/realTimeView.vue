@@ -729,7 +729,8 @@ background: #fff;
 .p_ltsiade{
     padding-bottom: 10px;
     .choosebox{
-        width: 100%;
+        // width: 100%;
+        min-width: 760px;
         overflow-x: scroll;
         .choose-type{
             min-width: 760px;
@@ -742,7 +743,7 @@ background: #fff;
     .choose_item{
         // float: left;
         display: inline-block;
-        min-width:176px;
+        min-width:200px;
         height:125px;
         border-radius:4px;
         border:1px solid #EDEDED;
