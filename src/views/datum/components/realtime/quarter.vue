@@ -111,7 +111,7 @@ export default {
         this.monthcur=12
       }
       if(this.year==this.yearcur){
-        this.monthcur=Math.ceil((new Date().getMonth()+1)/3)
+        this.monthcur=Math.ceil((new Date().getMonth()+1)/3)-1
       }
     },
     next() {
@@ -120,7 +120,7 @@ export default {
         this.monthcur=0
       }
       if(this.year==this.yearcur){
-        this.monthcur=Math.ceil((new Date().getMonth()+1)/3)
+        this.monthcur=Math.ceil((new Date().getMonth()+1)/3)-1
       }
     },
     selectSeason(i) {

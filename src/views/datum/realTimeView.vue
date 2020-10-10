@@ -506,8 +506,8 @@ export default {
         this.dataTypeload=false
         var allData=[]
         allData.push(this.dataType.pay_amounts.map(item => { return this.fix2(item)}))
-        allData.push(this.dataType.pay_order_nums.map(item => { return this.fix2(item)}))
-        allData.push(this.dataType.pay_people_nums.map(item => { return this.fix2(item)}))
+        allData.push(this.dataType.pay_order_nums)
+        allData.push(this.dataType.pay_people_nums)
         allData.push(this.dataType.per_customer_transactions.map(item => { return this.fix2(item)}))
         this.dataChart3 = {
             xAxis:JSON.parse(response).x,
@@ -532,8 +532,8 @@ export default {
             this.dataChart2 = {
                 xAxis:JSON.parse(response).x,
                 yAxis1:JSON.parse(response).c_uv_sh_channel,//总数
-                yAxis2:JSON.parse(response).new_c_uv.map(item => { return this.fix2(item)}),//新增用户
-                yAxis3:JSON.parse(response).new_cmember.map(item => { return this.fix2(item)}),//新增会员
+                yAxis2:JSON.parse(response).new_c_uv,//新增用户
+                yAxis3:JSON.parse(response).new_cmember,//新增会员
             }
         }).catch(error => {
             this.$message.error(error);
