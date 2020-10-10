@@ -26,23 +26,27 @@ export default {
 		// 	this.$refs.chart.setSeriesData(result);
 		// }
 		"dashboard.highlight"(newVal, oldVal) {
+			// console.log(
+			// 	'"dashboard.highlight"(newVal, oldVal) {',
+			// 	newVal,
+			// 	oldVal
+			// );
 			// let difference = _.difference(newVal, oldVal);
 			// if (difference.length == 0) {
 			// 	return;
 			// }
 			// this.setHightlight(newVal);
-
-			let beforeTime = moment().subtract(25, "seconds");
+			let beforeTime = moment().subtract(60, "seconds");
 			let difference = _.difference(newVal, oldVal);
 			if (difference.length == 0) {
 				return;
 			}
-
+			// console.log("newVal", newVal);
 			let result = newVal.filter(item => {
 				let row = JSON.parse(item);
 				return moment(row.time_rt) > beforeTime;
 			});
-
+			//console.log("result", result);
 			this.setHightlight(result);
 		}
 	},
