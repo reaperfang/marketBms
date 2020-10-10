@@ -169,7 +169,7 @@ export default [
         hidden: true,
         meta: { title: '打印配送单小票', noCache: true, tabTitle: '订单处理' , navType:5},
       },
-		{
+		/*{
 			path: 'tradeSet',
 			component: () => import('@/views/set/tradeSet'),
 			name: 'tradeSet',
@@ -192,7 +192,7 @@ export default [
 			component: () => import('@/views/set/selfLift'),
 			name: 'selfLift',
 			meta: { title: '上门自提', noCache: true, tabTitle: '配送设置' ,navType:2},
-		},
+		},*/
       // {
       //   path: 'quickDelivery',
       //   component: () => import('@/views/order/quickDelivery'),
