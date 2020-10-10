@@ -256,10 +256,13 @@ export default {
 }
 
 @media screen and (max-width: 1600px) {
-	.mall {
-		overflow-y: auto;
-		min-width: 1850px;
+	html {
+		zoom: 80%;
 	}
+	// .mall {
+	// 	overflow-y: auto;
+	// 	min-width: 1850px;
+	// }
 
 	// *::-webkit-scrollbar {
 	// 	/*滚动条整体样式*/
