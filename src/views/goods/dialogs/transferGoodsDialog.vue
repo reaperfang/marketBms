@@ -34,8 +34,8 @@ export default {
             var result = [], temp;
             for (var i = 0; i < data.length; i++) {
                 if (data[i].parentId == pid) {
-                    var obj = {"categoryName": data[i].name,"id": data[i].id, 
-                        parentId: data[i].parentId, level: data[i].level, sort: data[i].sort, 
+                    var obj = {"categoryName": data[i].name,"id": data[i].id,
+                        parentId: data[i].parentId, level: data[i].level, sort: data[i].sort,
                         image: data[i].image, enable: data[i].enable, label: data[i].name, value: data[i].id};
                     temp = this.transTreeData(data, data[i].id);
                     if (temp.length > 0) {
@@ -49,7 +49,7 @@ export default {
         getCategoryList() {
             this._apis.goods.fetchCategoryList().then((res) => {
                 let arr = this.transTreeData(res, 0)
-                
+
                 this.categoryOptions = arr
             }).catch(error => {
 
@@ -73,16 +73,16 @@ export default {
                         type: 'success'
                     });
                     this.onSubmit()
-                    this.dialogVisible = false
+                    this.visible = false
                 }).catch(error => {
-                    this.dialogVisible = false
+                    this.visible = false
                 })
             }).catch(error => {
                 this.$message.error({
                     message: error,
                     type: 'error'
                 });
-                this.dialogVisible = false
+                this.visible = false
             })
         },
         handleChange(value) {
