@@ -449,6 +449,17 @@ export default {
         this.$message.error(error);
       });
     },
+    fix2(num) {
+        var  dd=1;  
+        var  tempnum;  
+        for(var i=0;i<2;i++){
+            dd*=10;  
+        }  
+        tempnum = (num?num:0) *dd;
+        tempnum = Math.round(tempnum); 
+        var endNum = Number(tempnum/dd).toFixed(2)
+        return endNum
+    },
     timer() {
       var _this = this;
       var time = window.setInterval(function() {
@@ -465,8 +476,8 @@ export default {
         this.dataRtload=false 
         this.dataChart1 = {
             xAxis:JSON.parse(response).x,
-            data_rt:JSON.parse(response).data_rt,
-            data_rd:JSON.parse(response).data_rd,//昨日
+            data_rt:JSON.parse(response).data_rt.map(item => { return this.fix2(item)}),
+            data_rd:JSON.parse(response).data_rd.map(item => { return this.fix2(item)}),//昨日
         }
       }).catch(error => {
         this.$message.error(error);
@@ -494,10 +505,10 @@ export default {
         this.dataType = JSON.parse(response)
         this.dataTypeload=false
         var allData=[]
-        allData.push(this.dataType.pay_amounts)
-        allData.push(this.dataType.pay_order_nums)
-        allData.push(this.dataType.pay_people_nums)
-        allData.push(this.dataType.per_customer_transactions)
+        allData.push(this.dataType.pay_amounts.map(item => { return this.fix2(item)}))
+        allData.push(this.dataType.pay_order_nums.map(item => { return this.fix2(item)}))
+        allData.push(this.dataType.pay_people_nums.map(item => { return this.fix2(item)}))
+        allData.push(this.dataType.per_customer_transactions.map(item => { return this.fix2(item)}))
         this.dataChart3 = {
             xAxis:JSON.parse(response).x,
             data:allData,
@@ -521,8 +532,8 @@ export default {
             this.dataChart2 = {
                 xAxis:JSON.parse(response).x,
                 yAxis1:JSON.parse(response).c_uv_sh_channel,//总数
-                yAxis2:JSON.parse(response).new_c_uv,//新增用户
-                yAxis3:JSON.parse(response).new_cmember,//新增会员
+                yAxis2:JSON.parse(response).new_c_uv.map(item => { return this.fix2(item)}),//新增用户
+                yAxis3:JSON.parse(response).new_cmember.map(item => { return this.fix2(item)}),//新增会员
             }
         }).catch(error => {
             this.$message.error(error);
