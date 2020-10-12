@@ -15,7 +15,7 @@
       </div>-->
       <div class="content">
         <template v-if="reject">
-            <div class="reject">未开启轨迹查询服务</div>
+            <!-- <div class="reject">未开启轨迹查询服务</div> -->
         </template>
         <template v-else>
           <el-timeline v-show="data.length" :reverse="reverse">

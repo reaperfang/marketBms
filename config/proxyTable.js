@@ -6,7 +6,7 @@ module.exports = {
     
     /* 电商服务 */
     '/data-server/**': {
-      target: 'https://test-omo.aiyouyi.cn',
+      target: 'https://test5-omo.aiyouyi.cn',
       changeOrigin: true,
       pathRewrite: {
         '^/data-server': ''
@@ -15,7 +15,7 @@ module.exports = {
 
     /* 营销服务 */
     '/sale_server/**': {
-      target: 'https://test-omo.aiyouyi.cn/mkt-api/',
+      target: 'https://test5-omo.aiyouyi.cn/mkt-api/',
       changeOrigin: true,
       pathRewrite: {
         '^/sale_server': ''
