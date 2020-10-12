@@ -10,6 +10,8 @@
       :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
       v-loading="loading"
       @sort-change="changeSort"
+      @select-all="handleSelectAll"
+      @selection-change="handleSelectChange"
     >
       <el-table-column type="selection" :reserve-selection="true" fixed="left" width="34"></el-table-column>
       <el-table-column prop="memberSn" label="用户ID" fixed="left" width="110" class-name="table-padding"></el-table-column>
@@ -26,7 +28,7 @@
       <el-table-column label="身份">
         <template slot-scope="scope">
           <div class="clearfix iden_cont">
-            <span class="fl">{{scope.row?scope.row.memberType:""}}</span>
+            <span class="fl">{{scope.row?scope.row.memberTypeText:""}}</span>
             <div class="fl" style="margin-left: 5px">
               <span>{{scope.row?scope.row.levelName:""}}</span>
               <span>{{scope.row?scope.row.cardLevelName:""}}</span>
@@ -64,7 +66,7 @@
       </el-table-column>
     </el-table>
     <div class="a_line table-select">
-      <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
+      <el-checkbox v-model="checkAll" @change="handleChange" :indeterminate="isIndeterminate">全选</el-checkbox>
       <!-- <el-button type="primary" @click="batchDelete">批量删除</el-button> -->
       <el-button class="border_btn border-button" @click="batchAddTag" v-permission="['用户', '全部用户', '默认页面', '打标签']">打标签</el-button>
       <el-button class="border_btn border-button" @click="batchAddBlack" v-permission="['用户', '全部用户', '默认页面', '加入/取消黑名单']">加入黑名单</el-button>
@@ -124,7 +126,8 @@ export default {
       currentData: {},
       loading: false,
       couponList:[],
-      codeList:[]
+      codeList:[],
+      isIndeterminate: false
     };
   },
   computed: {
@@ -136,6 +139,18 @@ export default {
     //this.getMembers(1, this.pageSize);
   },
   methods: {
+    handleSelectChange(val) {
+      let checkedCount = val.length;
+      this.checkAll = checkedCount === this.memberList.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.memberList.length;
+    },
+    handleSelectAll(val) {
+      if(!val.length) {
+        this.checkAll = false
+      }else{
+        this.checkAll = true;
+      }
+    },
     changeSort(val) {
       let tOrder = null;
       switch(val.prop) {
@@ -268,7 +283,7 @@ export default {
           let list = response.list;
           if(list.length > 0) {
             list.map((v) => {
-              v.memberType = v.memberType == 0 ? '用户':'会员'
+              v.memberTypeText = v.memberType === 0 ? '用户':'会员'
             })
           }
           this.memberList = [].concat(list);

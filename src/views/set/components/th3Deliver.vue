@@ -13,7 +13,7 @@
          发货地址：
        </div>
        <div class="content">
-        <span v-if="address"> {{ address }}</span><el-button class="address-btn" @click="handleToTh3Info" type="text">{{ btnTxt }}</el-button>
+        <span v-if="address"> {{ address }}</span><el-button class="address-btn" @click="handleToTh3Info" v-if="isHasAuth()" type="text">{{ btnTxt }}</el-button>
        </div>
      </div>
      <!-- 第三方列表 -->
@@ -52,6 +52,7 @@
                     type="text"
                     size="medium"
                     @click="goPay"
+                    v-permission="['设置','同城配送', '第三方配送', '充值']"
                     v-if="scope.row.status === 1"
                   >充值</el-button>
                   <el-button
@@ -59,6 +60,7 @@
                     type="text"
                     size="medium"
                     @click="viewBalance"
+                    v-permission="['设置','同城配送', '第三方配送', '查看余额']"
                     v-if="scope.row.status === 1"
                   >查看余额</el-button>
                 </template>
@@ -105,7 +107,7 @@
 <script>
 import protocolDialog from "@/views/set/dialogs/protocolDialog";
 import registerDialog from "@/views/set/dialogs/registerDialog";
-
+import { isExistAuth } from '@/utils/auth.js'
 export default {
   components: {
     registerDialog,
@@ -183,6 +185,12 @@ export default {
   mounted() {},
 
   methods: {
+    isHasAuth() {
+      let permission = []
+      if (this.address) permission = ['设置','地址管理', '默认页面', '编辑']
+      else permission = ['设置','地址管理', '默认页面', '新建地址']
+      return isExistAuth(permission)
+    },
     init() {
       this.isInitLoading = true
       const p1 = this.getTh3DeliverAddress()

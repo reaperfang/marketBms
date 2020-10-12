@@ -24,7 +24,7 @@
           <numberInput
             style="width: 193px;"
             v-model="ruleForm.price"
-            :max="99999999.99"
+            :intLength="7"
             placeholder="请输入充值金额"
           ></numberInput>
           <span>元</span>
@@ -46,7 +46,7 @@ export default {
       if (value === "" || value === 0) {
         callback(
           new Error(
-            "请输入有效的金额值，充值金额不能为0，小数点前不能超过8位数字，小数点后不能超过2位数字。"
+            "请输入有效的金额值，充值金额不能为0，小数点前不能超过7位数字，小数点后不能超过2位数字。"
           )
         );
       } else {
