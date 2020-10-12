@@ -94,6 +94,12 @@ export default {
 			// 	// item.style.zoom = "zoom: 80%";
 			// 	// item.style.transfrom = "scale(" + 0.8 + ")";
 			// 	// item.style.transformOrigin = "0%0%";
+			// 	// let size = 0.8;
+			// 	// document.body.style.zoom = size;
+			// 	// document.body.style.cssText +=
+			// 	// 	"; -moz-transform: scale(" +
+			// 	// 	size +
+			// 	// 	");-moz-transform-origin: 0 0; "; //
 			// } else {
 			// 	// 窗口大于1600px
 			// 	//console.log("} else {");

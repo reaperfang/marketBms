@@ -254,31 +254,34 @@ export default {
 		}
 	}
 }
-
-body {
-	z-index: -1;
-}
+// html {
+// 	zoom: 80%;
+// }
 
 @media screen and (max-width: 1600px) {
-	html {
-		zoom: 80%;
+	// html {
+	// 	// zoom: 0.8;
 
-		// transform: scale(0.8333333333333, 0.8333333333333);
+	// 	// transform: scale(0.8333333333333, 0.8333333333333);
 
-		// height: 100%;
-		// width: 100%;
-		// transform: scale(0.86, 0.93);
-	}
+	// 	// height: 100%;
+	// 	// width: 100%;
+	// 	// transform: scale(0.86, 0.93);
+
+	// 	// transform: scale(0.8, 0.8);
+	// 	zoom: 0.8;
+	// 	zoom: 80%;
+	// }
 
 	// body {
 	// 	zoom: 80%;
 	// 	z-index: -2;
 	// }
 
-	// .mall {
-	// 	overflow-y: auto;
-	// 	min-width: 1850px;
-	// }
+	.mall {
+		overflow-y: auto;
+		min-width: 1850px;
+	}
 
 	// *::-webkit-scrollbar {
 	// 	/*滚动条整体样式*/
