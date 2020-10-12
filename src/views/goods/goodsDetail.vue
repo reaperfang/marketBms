@@ -181,7 +181,7 @@
                     <el-tooltip class="item" effect="light" placement="top">
                         <div slot="content">SKU编码：SKU(Stock Keeping Unit)库存量单元 --- <br/>
                             SKU是商品下的一个分类属性（商品下一个颜色或者尺<br/>
-                            码），单的说： SPU就是一个iPhone6s, SKU就是银色<br/>
+                            码），简单的说： SPU就是一个iPhone6s, SKU就是银色<br/>
                             iPhone6s、粉色iPhone6s。
                         </div>
                         <i class="el-icon-warning-outline sku-code"></i>
