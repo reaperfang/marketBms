@@ -261,9 +261,9 @@ body {
 
 @media screen and (max-width: 1600px) {
 	html {
-		//zoom: 80%;
+		zoom: 80%;
 
-		transform: scale(0.8333333333333, 0.8333333333333);
+		// transform: scale(0.8333333333333, 0.8333333333333);
 
 		// height: 100%;
 		// width: 100%;
