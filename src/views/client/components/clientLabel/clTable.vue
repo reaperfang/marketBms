@@ -126,9 +126,11 @@ export default {
       });
     },
     handleSizeChange(val) {
+      this.$nextTick(() => {
+        this.checkAll = false;
+      });
       this.getLabelList(1, val);
       this.pageSize = val;
-      this.checkAll = false;
       this.$refs.clientLabelTable.clearSelection();
     },
     handleCurrentChange(val) {
