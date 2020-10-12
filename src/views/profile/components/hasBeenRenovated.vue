@@ -141,7 +141,7 @@ export default {
     },
     getwxBindStatus() {
       const id = this.cid
-      return this._apis.profile.getwxBindStatus({ id }).then(response => {
+      return this._apis.shopInfo.getwxBindStatus({ id }).then(response => {
         console.log('getwxBindStatus',response)
         this.isBindGzh = response && response.bindWechatAccount === 1 || false
         this.isBindXcx = response && response.bindWechatApplet === 1 || false
@@ -152,7 +152,7 @@ export default {
     },
     getSmallQRcode() {
       const id = this.cid
-      return this._apis.profile.getSmallQRcode({ id }).then(response => {
+      return this._apis.shopInfo.getSmallQRcode({ id }).then(response => {
         // console.log('getSmallQRcode',response)
         this.smallQRcode = response ? `data:image/png;base64,${response}` : ''
       }).catch((err) => {
@@ -162,9 +162,7 @@ export default {
     },
     getShopInfo() {
       let id = this.cid;
-      return this._apis.set
-        .getShopInfo({ id: id })
-        .then(response => {
+      return this.$store.dispatch('getShopInfo').then(response => {
          console.log('----response--', response)
          this.businessChannel = response && response.businessChannel
         })
@@ -183,7 +181,7 @@ export default {
         storeGuide
       }
       return new Promise((resolve, reject) => {
-        this._apis.set.updateShopInfo(data).then(response =>{
+        this._apis.shopInfo.updateShopInfo(data).then(response =>{
           this.$store.dispatch('getShopInfo');
           this.$store.commit('setStoreGuide', storeGuide)
           resolve(response)

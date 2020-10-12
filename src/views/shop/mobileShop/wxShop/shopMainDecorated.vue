@@ -239,7 +239,7 @@ export default {
     //获取小程序太阳码
     getMiniAppQrcode(){
       this.openMiniAppcodeLoading = true;
-      this._apis.profile
+      this._apis.shopInfo
         .getSmallQRcode({id:this.cid}).then(response => {
           this.miniAppcode = `data:image/png;base64,${response}`;
           this.openMiniAppcodeLoading = false;

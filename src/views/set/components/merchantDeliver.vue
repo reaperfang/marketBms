@@ -807,7 +807,7 @@ export default {
     updateShopInfo(data) {
       const id = this.cid
       return new Promise((resolve, reject) => {
-        this._apis.set.updateShopInfo({...data, id }).then(response =>{
+        this._apis.shopInfo.updateShopInfo({...data, id }).then(response =>{
           this.$store.dispatch('getShopInfo');    
           resolve(response)
         }).catch(error =>{
@@ -903,7 +903,7 @@ export default {
         id,
         isOpenMerchantDeliver: 1
       }
-      this._apis.set.updateShopInfo(data).then(response =>{  
+      this._apis.shopInfo.updateShopInfo(data).then(response =>{  
         this.$store.dispatch('getShopInfo');
         const html = '<span class="sucess">已成功开启商家配送！</span>'
         this.confirm({
@@ -925,8 +925,7 @@ export default {
     },
     //  店铺查询 api
     getShopInfo(res) {
-      const id = this.cid
-      return this._apis.set.getShopInfo({ id }).then(res => {
+      return this.$store.dispatch('getShopInfo').then(res => {
         
         if (res && res.hasOwnProperty('id')) {
           this.isOpen = res.isOpenMerchantDeliver === 1 ? true : false // 是否开启商家配送 0-否 1-是
@@ -1157,7 +1156,7 @@ export default {
         latitude: this.ruleForm.latitude
       }
       // 更新店铺经度、纬度、配送半径
-      const p2 = this._apis.set.updateShopInfo(data)
+      const p2 = this._apis.shopInfo.updateShopInfo(data)
       // const p2 = this._apis.set.
       Promise.all([p1, p2]).then(res => {
         this.$store.dispatch('getShopInfo'); 

@@ -831,7 +831,7 @@ export default {
     },
     async fetchAddress(list) {
         try {
-          let res = await this._apis.order.fetchOrderAddress({ id: this.cid, cid: this.cid })
+          let res = await this.$store.dispatch('getShopInfo')
 
           if(res) {
             list.forEach(item => {

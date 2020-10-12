@@ -151,9 +151,7 @@ const mixin = {
     },
 
     getShopInfo() {
-      let id = this.cid;
-      this._apis.set
-        .getShopInfo({ id: id })
+      this.$store.dispatch('getShopInfo')
         .then(response => {
           this.form = Object.assign({}, this.form, response);
           if (response.provinceCode) {
@@ -232,7 +230,7 @@ const mixin = {
       //   deliverServiceRadius = ''
       // }
       const data = this.getReqData()
-      this._apis.set.updateShopInfo(data).then(response =>{
+      this._apis.shopInfo.updateShopInfo(data).then(response =>{
         this.setShopName()    
         this.$store.dispatch('getShopInfo');    
         // this.$nextTick(()=> {

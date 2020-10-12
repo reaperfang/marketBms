@@ -383,25 +383,25 @@ export function getPagesByTemplateId(data) {
   })
 }
 
-//获取店铺信息
-export function getShopInfo(data) {
-  return request({
-    target: 'SHOP-API-100-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// //获取店铺信息
+// export function getShopInfo(data) {
+//   return request({
+//     target: 'SHOP-API-100-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
-//改变店铺切换状态
-export function changeSwitchStatus(data) {
-  return request({
-    target: 'SHOP-API-102-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// //改变店铺切换状态
+// export function changeSwitchStatus(data) {
+//   return request({
+//     target: 'SHOP-API-102-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
   //优惠券B端选择
   export function getCouponList(data) {

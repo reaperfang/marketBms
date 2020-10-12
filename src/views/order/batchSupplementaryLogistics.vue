@@ -903,9 +903,7 @@ export default {
 
           
 
-          // this._apis.order
-          //   .fetchOrderAddress({ id: this.cid, cid: this.cid })
-          //   .then(response => {
+          // this.$store.dispatch('getShopInfo').then(response => {
           //     this.list.forEach(res => {
           //       if(!res.sendAddress) {
           //         res.sendName = response.senderName

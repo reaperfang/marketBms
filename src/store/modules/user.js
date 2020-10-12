@@ -72,7 +72,7 @@ const user = {
     //根据店铺cid，查询店铺信息，并更新缓存
     // getShopInfos({commit},cid){
     //   return new Promise((resolve, reject) => {
-    //     this._apis.set.getShopInfo({id:cid}).then(response =>{
+    //     this.$store.dispatch('getShopInfo').then(response =>{
     //       commit('SET_SHOP_INFO',response)
     //       window.eventHub.$emit('onShopInfos')        
     //       resolve()

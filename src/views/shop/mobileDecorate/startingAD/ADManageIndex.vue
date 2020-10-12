@@ -243,7 +243,7 @@ export default {
 
     /* 开关状态切换 */
     switchStatusChange(value) {
-      this._apis.shop.changeSwitchStatus({id:this.cid, adOpenType: value === true ? 1 : 0})
+      this._apis.shopInfo.updateShopInfo({id:this.cid, adOpenType: value === true ? 1 : 0})
       .then((response)=>{
         this.$message.success('修改成功！')
       }).catch((error)=>{

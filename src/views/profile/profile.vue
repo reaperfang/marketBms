@@ -370,10 +370,7 @@ export default {
   methods: {
     ...mapMutations(["SETCURRENT"]),
     init() {
-      this.cid = JSON.parse(localStorage.getItem("shopInfos")).id
-      this._apis.shop
-        .getShopInfo({ id: this.cid })
-        .then(response => {
+      this.$store.dispatch('getShopInfo').then(response => {
           if (response.shopExpire == 2) {
             this.$message({
               showClose: true,
@@ -566,7 +563,7 @@ export default {
 
     //判断是否授权
     isEmpower(){
-      this._apis.profile
+      this._apis.shopInfo
         .getwxBindStatus({id:this.cid}).then(response => {
           this.isEmpowerWX = response.bindWechatApplet ? false : 'true'
           this.isEmpowerGZ = response.bindWechatAccount ? false : 'true'
@@ -604,7 +601,7 @@ export default {
 
     //获取小程序二维码
     getWXQrcode(){
-      this._apis.profile
+      this._apis.shopInfo
         .getSmallQRcode({id:this.cid}).then(response => {
           this.wxQrcode = `data:image/png;base64,${response}`;
         })

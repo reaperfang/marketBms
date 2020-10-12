@@ -104,8 +104,7 @@ export default {
       form.sum = form.oldMemberType === 2 ? data.oldMemberSet : ''
     },
     getShopInfo(){
-      let id = this.cid
-      this._apis.set.getShopInfo({ id }).then(response =>{
+      this.$store.dispatch('getShopInfo').then(response =>{
         this.handleEchoData(response)
       }).catch(error =>{
         // this.$message.error(error);
@@ -128,7 +127,7 @@ export default {
         if (valid) {
           this.loading = true
           const data = this.getReqData()
-          this._apis.set.updateShopInfo(data).then(response =>{
+          this._apis.shopInfo.updateShopInfo(data).then(response =>{
             this.$message.success('保存成功！');
           }).catch(error =>{
             this.$message.error(error);

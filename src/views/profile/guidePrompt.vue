@@ -53,7 +53,7 @@ export default {
         id,
         storeGuide
       }
-      this._apis.set.updateShopInfo(data).then(response =>{
+      this._apis.shopInfo.updateShopInfo(data).then(response =>{
         this.$store.dispatch('getShopInfo');
         const storeGuide = response && response.storeGuide || storeGuide
         this.$store.commit('setStoreGuide', storeGuide)
@@ -88,10 +88,7 @@ export default {
         })
     },
     getShopInfo() {
-      let id = this.cid;
-      this._apis.set
-        .getShopInfo({ id: id })
-        .then(response => {
+      this.$store.dispatch('getShopInfo').then(response => {
           // this.storeGuide = response && response.storeGuide
           this.init()
         })

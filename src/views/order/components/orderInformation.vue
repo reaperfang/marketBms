@@ -540,9 +540,7 @@ export default {
             this.dialogVisible = true
         },
         getShopInfo(){
-          let id = this.cid
-
-          this._apis.set.getShopInfo({id:id}).then(response =>{
+          this.$store.dispatch('getShopInfo').then(response =>{
             this.invoiceOpen = response.invoiceOpen
           }).catch(error =>{
             console.log(error)

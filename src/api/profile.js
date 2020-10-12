@@ -49,25 +49,25 @@ export function getSignatureList (params) {
   })
 }
 
-//获取小程序和公众号的绑定状态
-export function getwxBindStatus (data) {
-  return request({
-    target: 'SHOP-API-WXBIND-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// //获取小程序和公众号的绑定状态
+// export function getwxBindStatus (data) {
+//   return request({
+//     target: 'SHOP-API-WXBIND-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
-//获取小程序太阳码
-export function getSmallQRcode (data) {
-  return request({
-    target: 'SHOP-API-APPMAURL-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// //获取小程序太阳码
+// export function getSmallQRcode (data) {
+//   return request({
+//     target: 'SHOP-API-APPMAURL-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
 //判断小程序是否发布 
 export function getSmallRelease (data) {
@@ -79,16 +79,16 @@ export function getSmallRelease (data) {
   })
 }
 
-//获取店铺列表
-export function getShopList (data) {
-  return request({
-    target: 'SHOP-API-115-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    noCid:'true',
-    data
-  })
-}
+// //获取店铺列表
+// export function getShopList (data) {
+//   return request({
+//     target: 'SHOP-API-115-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     noCid:'true',
+//     data
+//   })
+// }
 
 //获取实时最新店铺列表
 export function getNewShopList (data) {

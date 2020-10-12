@@ -356,10 +356,7 @@ export default {
     },
 
     getShopInfo() {
-      let id = this.cid;
-      this._apis.set
-        .getShopInfo({ id: id })
-        .then(response => {
+      this.$store.dispatch('getShopInfo').then(response => {
           let itemCatAr = [];
 
           this.getCategoryInfoIds(itemCatAr, response.sellCategoryId);
@@ -441,7 +438,7 @@ export default {
         longitude: this.form.lng,
         latitude: this.form.lat
       }
-      this._apis.set.updateShopInfo(data).then(response =>{
+      this._apis.shopInfo.updateShopInfo(data).then(response =>{
         this.setShopName()
         this.$store.dispatch('getShopInfo');
         // this.$nextTick(()=> {
@@ -481,7 +478,7 @@ export default {
               this.updateShopInfo()
             // }
 
-            // this._apis.set.updateShopInfo(data).then(response =>{
+            // this._apis.shopInfo.updateShopInfo(data).then(response =>{
             //   this.setShopName()
             //   this.$store.dispatch('getShopInfo');
             // }).catch(error =>{

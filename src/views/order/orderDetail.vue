@@ -114,7 +114,7 @@ export default {
         })
 
         // 获取分销商设置
-        this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+        this.$store.dispatch('getShopInfo').then( data => {
             if(data.isOpenResell == 1) this.resellConfigInfo = data.resellConfigInfo ? JSON.parse(data.resellConfigInfo) : null;
         }).catch((error) => {
             console.error(error);

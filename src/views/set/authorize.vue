@@ -173,7 +173,7 @@ export default {
       }
 
       this.confirm({title: '解除授权', icon: true, customClass: 'auth-manage cancel-auth', text, width: '500px'}).then(() => {
-        this._apis.set.cancelAuth({
+        this._apis.shopInfo.cancelAuth({
           id: row.id,
           cid: this.cid,
           enable
@@ -196,7 +196,7 @@ export default {
         return
       }
       this.showCodeDialog = true
-      this._apis.set.getShopCode().then((res) => {
+      this._apis.shopInfo.getShopCode().then((res) => {
           this.shopCode = res
           let text = `${this.shopCode}<br/><span class="message">用户绑定授权平台、数据对接，一经授权不得修改</span>`
           let beforeClose = (action, instance, done) => {
@@ -253,7 +253,7 @@ export default {
     },
     getList() {
       this.loading = true
-      this._apis.set.getAuthPageList().then((res) => {
+      this._apis.shopInfo.getAuthPageList().then((res) => {
         this.loading = false
         this.total = +res.total
         res.list.forEach(val => {
@@ -270,8 +270,7 @@ export default {
       })
     },
     getShopInfo(){
-      let id = this.cid
-      this._apis.set.getShopInfo({id:id}).then(response =>{
+      this.$store.dispatch('getShopInfo').then(response =>{
         this.shopName = response.shopName
         this.getList()
       }).catch(error =>{

@@ -207,7 +207,7 @@ export default {
     updateShopInfo(data) {
       const id = this.cid
       return new Promise((resolve, reject) => {
-        this._apis.set.updateShopInfo({...data, id }).then(response =>{
+        this._apis.shopInfo.updateShopInfo({...data, id }).then(response =>{
           this.$store.dispatch('getShopInfo');
           resolve(response)
         }).catch(error =>{
@@ -354,9 +354,8 @@ export default {
     },
     // 是否开启同城配送
     isOpenCityDeliver() {
-      const id = this.cid
       return new Promise((resolve, reject) => {
-        this._apis.set.getShopInfo({ id }).then(res => {
+        this.$store.dispatch('getShopInfo').then(res => {
           console.log("----",res)
           const isOpenMerchantDeliver = res && res.isOpenMerchantDeliver === 1 ? true : false // 是否开启商家配送 0-否 1-是
           const isOpenTh3Deliver = res && res.isOpenTh3Deliver === 1 ? true : false // 是否开启三方配送 0-否 1-是

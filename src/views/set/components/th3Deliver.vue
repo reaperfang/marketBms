@@ -248,10 +248,7 @@ export default {
       })
     },
     getShopInfo() {
-      let id = this.cid;
-      return this._apis.set
-        .getShopInfo({ id: id })
-        .then(response => {
+      return this.$store.dispatch('getShopInfo').then(response => {
           if (!response) return false
           this.isOpenTh3Deliver = response.isOpenTh3Deliver === 1 ? true : false
           this.isOpenAutoCall = response.autoCall === 1 ? 1 : 0
@@ -294,7 +291,7 @@ export default {
       req.autoCall = this.isOpenAutoCall
       req.isOpenTh3Deliver = this.isOpenTh3Deliver ? 1 : 0
       req.id = this.cid
-      return this._apis.set.updateShopInfo(req)
+      return this._apis.shopInfo.updateShopInfo(req)
     },
     handleSubmit() {
       if (this.isLoading) return false

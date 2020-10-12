@@ -154,7 +154,7 @@ export default {
   },
   methods: {
     getShopMessage(){
-      this._apis.set.getShopMessage({msgReceiver:'1'}).then(response =>{
+      this._apis.shopInfo.getShopMessage({msgReceiver:'1'}).then(response =>{
         this.tableData = []
         response.map(item => {
           if(item.tcShopInfoMsgTemplateId != 21){
@@ -171,8 +171,7 @@ export default {
     },
 
     getShopInfo(){
-      let id = this.cid;
-      this._apis.set.getShopInfo({ id: id }).then(response => {
+      this.$store.dispatch('getShopInfo').then(response => {
         this.ruleForm.msgReceivePhone = response.msgReceivePhone
       }).catch(error =>{
         console.log(error)
@@ -208,7 +207,7 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       }).then(() => {
-        this._apis.set.setShopMessage(query).then(response =>{
+        this._apis.shopInfo.setShopMessage(query).then(response =>{
           this.$message({
             type: 'success',
             message: '操作成功！'
@@ -230,7 +229,7 @@ export default {
             id:this.cid,
             msgReceivePhone:this.ruleForm.msgReceivePhone
           }
-          this._apis.set.updateShopInfo(data).then(response =>{
+          this._apis.shopInfo.updateShopInfo(data).then(response =>{
             this.$message({
               type: 'success',
               message: '操作成功！'
