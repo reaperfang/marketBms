@@ -260,15 +260,15 @@ body {
 }
 
 @media screen and (max-width: 1600px) {
-	// html {
-	// 	zoom: 80%;
+	html {
+		//zoom: 80%;
 
-	// 	// transform: scale(0.9999);
+		transform: scale(0.8333333333333, 0.8333333333333);
 
-	// 	// height: 100%;
-	// 	// width: 100%;
-	// 	// transform: scale(0.86, 0.93);
-	// }
+		// height: 100%;
+		// width: 100%;
+		// transform: scale(0.86, 0.93);
+	}
 
 	// body {
 	// 	zoom: 80%;
