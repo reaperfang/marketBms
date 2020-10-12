@@ -9,6 +9,7 @@
       :default-sort="{prop: 'date', order: 'descending'}"
       v-loading="loading"
       @select-all="handleSelectAll"
+      @selection-change="handleSelectChange"
     >
       <el-table-column type="selection" width="34"></el-table-column>
       <el-table-column prop="tagName" label="标签名称" min-width="200" fixed="left" class-name="table-padding"></el-table-column>
@@ -83,6 +84,13 @@ export default {
   computed: {},
   created() {},
   methods: {
+    handleSelectChange(val) {
+      if(val.length == this.tagList.length) {
+        this.checkAll = true;
+      }else{
+        this.checkAll = false;
+      }
+    },
     handleSelectAll(val) {
       if(!val.length) {
         this.checkAll = false

@@ -11,6 +11,7 @@
       v-loading="loading"
       @sort-change="changeSort"
       @select-all="handleSelectAll"
+      @selection-change="handleSelectChange"
     >
       <el-table-column type="selection" :reserve-selection="true" fixed="left" width="34"></el-table-column>
       <el-table-column prop="memberSn" label="用户ID" fixed="left" width="110" class-name="table-padding"></el-table-column>
@@ -137,6 +138,13 @@ export default {
     //this.getMembers(1, this.pageSize);
   },
   methods: {
+    handleSelectChange(val) {
+      if(val.length == this.memberList.length) {
+        this.checkAll = true;
+      }else{
+        this.checkAll = false;
+      }
+    },
     handleSelectAll(val) {
       if(!val.length) {
         this.checkAll = false
