@@ -48,7 +48,7 @@
       </el-table-column>
     </el-table>
     <div class="a_line table-select">
-      <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
+      <el-checkbox v-model="checkAll" @change="handleChange" :indeterminate="isIndeterminate">全选</el-checkbox>
       <el-button @click="batchDelete" class="border-button">批量删除</el-button>
     </div>
     <div class="page_styles">
@@ -78,18 +78,17 @@ export default {
       checkAll: false,
       tagList: [],
       loading: false,
-      canDelete: true
+      canDelete: true,
+      isIndeterminate: false
     };
   },
   computed: {},
   created() {},
   methods: {
     handleSelectChange(val) {
-      if(val.length == this.tagList.length) {
-        this.checkAll = true;
-      }else{
-        this.checkAll = false;
-      }
+      let checkedCount = val.length;
+      this.checkAll = checkedCount === this.tagList.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.tagList.length;
     },
     handleSelectAll(val) {
       if(!val.length) {
