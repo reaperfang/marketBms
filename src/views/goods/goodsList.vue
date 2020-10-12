@@ -577,7 +577,7 @@ export default {
         next(vm => {
             vm.loading = true
             
-            vm._apis.goods.fetchSpuGoodsList().then((res) => {
+            vm._apis.goods.fetchSpuGoodsList({pageSize: 20}).then((res) => {
                 let total = +res.total
 
                 if(!total) {
