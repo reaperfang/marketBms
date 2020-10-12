@@ -126,15 +126,19 @@ export default {
       });
     },
     handleSizeChange(val) {
+      this.$nextTick(() => {
+        this.checkAll = false;
+      });
       this.getLabelList(1, val);
       this.pageSize = val;
-      this.checkAll = false;
       this.$refs.clientLabelTable.clearSelection();
     },
     handleCurrentChange(val) {
+      this.$nextTick(() => {
+        this.checkAll = false;
+      })
       this.getLabelList(val, this.pageSize);
       this.startIndex = val;
-      this.checkAll = false;
       this.$refs.clientLabelTable.clearSelection();
     },
     handleChange(val) {

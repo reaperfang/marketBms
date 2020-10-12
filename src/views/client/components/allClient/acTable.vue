@@ -199,15 +199,19 @@ export default {
       }
     },
     handleCurrentChange(val) {
+      this.$nextTick(() => {
+        this.checkAll = false;
+      })
       this.getMembers(val, this.pageSize);
       this.startIndex = val;
-      this.checkAll = false;
       this.$refs.allClientTable.clearSelection();
     },
     handleSizeChange(val) {
+      this.$nextTick(() => {
+        this.checkAll = false;
+      })
       this.getMembers(1, val);
       this.pageSize = val;
-      this.checkAll = false;
       this.$refs.allClientTable.clearSelection();
     },
     handelDelete(id) {
