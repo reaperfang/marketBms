@@ -70,6 +70,7 @@ export default {
 		//this.test();
 
 		window.addEventListener("resize", ev => {
+			//console.log('window.addEventListener("resize", ev => {', ev);
 			//   this.$dt.start({
 			//     type: "debounce",
 			//     immediate: true,
@@ -78,6 +79,39 @@ export default {
 			//       this.chart.resize();
 			//     },
 			//   });
+
+			// console.log(
+			// 	"document.body.clientWidth winWidth",
+			// 	window.document.body.getAttribute("class")
+			// );
+
+			// var mq = window.matchMedia("(max-width: 1600px)");
+			// if (mq.matches) {
+			// 	// 窗口小于等于1600px
+			// 	// console.log("if (mq.matches) {");
+			// 	// console.log(this.$refs.chartContentPietest);
+			// 	// let item = this.$refs.chartContentPietest;
+			// 	// item.style.zoom = "zoom: 80%";
+			// 	// item.style.transfrom = "scale(" + 0.8 + ")";
+			// 	// item.style.transformOrigin = "0%0%";
+			// } else {
+			// 	// 窗口大于1600px
+			// 	//console.log("} else {");
+			// }
+
+			// let index=document.getElementsByClassName("index")[0];
+			// index.style.zoom=inde.clientwidth/1654;
+			// let strip=document.getElementsByClassName("line")[0];
+			// let proportion=1/index.style.zoom;
+
+			// domlist=[stirp]
+
+			//domlist.forEach(itme=>{
+			// item.style.zoom=proportion
+			//item.style.transfrom="scale("+index.style.zomm+")";
+			//item.style.transformOrigin="0%0%"
+			//item.style.width=proportion*100+"%"
+			//})
 
 			this.chart.resize();
 		});

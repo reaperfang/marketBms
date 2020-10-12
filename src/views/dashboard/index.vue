@@ -255,10 +255,26 @@ export default {
 	}
 }
 
+body {
+	z-index: -1;
+}
+
 @media screen and (max-width: 1600px) {
 	html {
 		zoom: 80%;
+
+		// transform: scale(0.9999);
+
+		// height: 100%;
+		// width: 100%;
+		// transform: scale(0.86, 0.93);
 	}
+
+	// body {
+	// 	zoom: 80%;
+	// 	z-index: -2;
+	// }
+
 	// .mall {
 	// 	overflow-y: auto;
 	// 	min-width: 1850px;
