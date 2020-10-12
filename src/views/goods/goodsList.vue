@@ -1483,7 +1483,6 @@ export default {
             })
         },
         getList(param) {
-            alert('1111')
             this.checkedAll = false;
             this.loading = true
             let _param
