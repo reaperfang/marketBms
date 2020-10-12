@@ -256,7 +256,7 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
       let checkedCount = val.length;
-      if(this.list.length == this.multipleSelection.length) {
+      if(this.list.length == this.multipleSelection.length && checkedCount!=0) {
           this.checkedAll = true
       }else{
          this.checkedAll = false

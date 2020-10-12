@@ -1457,7 +1457,7 @@ export default {
         handleSelectionChange(val) {
             this.multipleSelection = val;
             let checkedCount = val.length;
-            if(this.list.length == this.multipleSelection.length) {
+            if(this.list.length == this.multipleSelection.length && checkedCount!=0) {
                 this.checkedAll = true
             }else{
                 this.checkedAll = false
@@ -1483,6 +1483,7 @@ export default {
             })
         },
         getList(param) {
+            alert('1111')
             this.checkedAll = false;
             this.loading = true
             let _param
