@@ -48,6 +48,7 @@
           </div>
         </div>
       </div>
+      <profileIntelligent :current-step="currentStep" :step-status="stepStatus"></profileIntelligent>
       <div class="p_l_main">
         <div class="p_l_item dealt">
           <p class="title1">待办提醒：</p>
@@ -151,7 +152,7 @@
               <p class="title3">微信小程序商城</p>
               <div style="position:relative;">
                 <div class="el-loading-mask profile-wxsc-loading"><div class="el-loading-spinner"><svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg><!----></div></div>
-                
+
                 <div v-if="!isReleaseWX && !isEmpowerWX && wxQrcode" class="profile-wxsc-item">
                   <img  class="erweima" :src="wxQrcode" alt/>
                   <p class="opt">
@@ -202,7 +203,7 @@
                 </div>
               </div>
             </div>
-          </div>  
+          </div>
         </div>
       </div>
     </div>
@@ -295,9 +296,10 @@ import { mapMutations } from "vuex";
 import profileCont from "@/system/constant/profile";
 import Clipboard from "clipboard";
 import flowPath from "./flowPath";
+import profileIntelligent from "./components/profile_intelligent";
 export default {
   name: "profile",
-  components: { flowPath },
+  components: { flowPath, profileIntelligent },
   data() {
     return {
       profileData: "",
@@ -320,6 +322,9 @@ export default {
       cid:'',
       isGetWXstatus:true,//是否获取到小程序状态数据
       isGetGZstatus:true,//是否获取到公众号状态数据
+      currentStep: 4, // 智能开店：当前步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
+      stepStatus: 1, // 智能开店： 步骤状态 0 未完成 1 已完成
+
     };
   },
 
@@ -341,6 +346,7 @@ export default {
     this._globalEvent.$on("refreshProfile", () => {
       this.init();
       this.getLink();
+      this.getIntelligent();
       this.getQrcode();
       this.getOverviewDetails();
       this.getOerviewRemind();
@@ -356,6 +362,7 @@ export default {
     this.$message.closeAll();
     this.init();
     this.getLink();
+    this.getIntelligent();
     this.getQrcode();
     this.getOverviewDetails();
     this.getOerviewRemind();
@@ -393,6 +400,23 @@ export default {
     getLink(){
       this.pageLink = process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9002` : location.origin + "/bh" //客户工作台地址
       this.gzLink = process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9001` : location.origin + "/cp/?cid=" + this.cid //公众号商城地址
+    },
+
+    // 获取智能开店信息
+    async getIntelligent() {
+      try {
+        const result = await this._apis.profile.getIntelligentProgress();
+        if(result){
+          this.currentStep = result.currentStep ? result.currentStep : 1;
+          this.stepStatus = result.status || 0;
+        }else {
+          this.currentStep =  1;
+          this.stepStatus =  0;
+        }
+      } catch (err) {
+        console.error("智能开店接口 err :", err);
+        this.$message.error(err);
+      }
     },
 
     //获取客户工作台二维码
@@ -596,7 +620,7 @@ export default {
           console.error(error);
         });
     },
-    
+
     //获取公众号二维码
     getGZQrcode(){
       this._apis.shop
@@ -621,7 +645,7 @@ export default {
   display: flex;
   width:100%;
   .title1{
-    font-size:16px; 
+    font-size:16px;
     font-weight:500;
     color:rgba(22,22,23,1);
   }
@@ -699,7 +723,7 @@ export default {
               display: block;
             }
           }
-          .dealt_list_l{  
+          .dealt_list_l{
             .dealt_item_1{
               width: 94px;
               height: 110px;

@@ -197,7 +197,8 @@ export default {
               this.getShopAuthList()
               this.$store.commit('setStoreGuide', this.shopList[0].storeGuide)
               if (this.isAdminUser && this.shopList.length > 0 && this.shopList[0].storeGuide === -1) {
-                this.$router.push({ path: '/profile/guidePrompt' })
+                // this.$router.push({ path: '/profile/guidePrompt' })
+                this.$router.push({ path: '/profile/intelligentGuide' })
               } else {
                 this.$router.push({ path: '/profile/profile' })
               }

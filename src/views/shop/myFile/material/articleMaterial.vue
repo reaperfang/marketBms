@@ -17,7 +17,7 @@
           <el-input v-model="form.name" placeholder="请填写标题、描述或作者"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="getList">查询</el-button>
+          <el-button type="primary" @click="search">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -130,6 +130,12 @@ export default {
         this.$message.error(error);
       })
     },
+
+    search(){
+      this.currentPage = 1; // 查询前将条件页码置为1
+      this.getList();
+    },
+
     //弹窗反馈
     handleSubmit(data){
       for(let key in data){
