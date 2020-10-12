@@ -419,6 +419,9 @@ export default {
     /deep/ .el-tree-node__content>.el-tree-node__expand-icon {
         padding: 3px!important;
     }
+    /deep/ .el-tooltip.delete {
+      outline: none;
+    }
 </style>
 <style lang="scss">
 .content-main-classify {
