@@ -112,7 +112,8 @@ export default {
 							color: "rgba(255,255,255,0.8)"
 						},
 						show: false
-					}
+					},
+					minInterval: 1
 				},
 				tooltip: {
 					formatter: function(params) {
@@ -151,6 +152,8 @@ export default {
 				...this.chartData,
 				rows: this.getRows(val)
 			};
+
+			console.log("this.chartData test", this.chartData);
 		},
 		getRows(val) {
 			let result = [];
