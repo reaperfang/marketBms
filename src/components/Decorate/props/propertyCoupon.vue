@@ -13,7 +13,7 @@
             <i class="el-icon-plus"></i>
             <span>添加优惠券</span>
           </div>
-          <p class="prop-message" v-if="ruleForm.addType === 1">建议最多添加10张优惠券</p>  
+          <p class="prop-message" v-if="ruleForm.addType === 1">最多添加20张优惠券</p>  
         </div>
         <div class="tag_wrapper" v-loading="loading">
           <el-tag
@@ -30,14 +30,17 @@
         <el-radio-group v-model="ruleForm.couponNumberType">
           <el-radio :label="1">全部</el-radio>
           <el-radio :label="2" style="margin-bottom:4px;">
-            <el-input
-              style="width:200px;"
+            <numberInput
+              style="width: 200px;"
               placeholder="请输入显示的券活动数"
-              v-model="ruleForm.showNumber" :disabled="ruleForm.couponNumberType === 1">
-            </el-input>
+              v-model="ruleForm.showNumber"
+              :disabled="ruleForm.couponNumberType === 1"
+              :max="maxShowNumber"
+              type="integer"
+            ></numberInput>
           </el-radio>
         </el-radio-group>
-        <p class="prop-message" v-if="ruleForm.addType === 2">建议最大设置为10个</p>  
+        <p class="prop-message" v-if="ruleForm.addType === 2">最多添加20张优惠券</p>  
       </el-form-item>
       <el-form-item label="排列样式" prop="listStyle">
         <el-radio-group class="radio-block" v-model="ruleForm.listStyle">
@@ -78,13 +81,15 @@
 </template>
 
 <script>
+import utils from '@/utils';
 import mixinPropsData from '../mixins/mixinPropsData';
 import dialogSelectCoupon from '@/components/Decorate/dialogs/dialogSelectCoupon';
 import wxColor from '@/components/Wxcolor';
+import numberInput from "@/components/NumberInput";
 export default {
   name: 'propertyCoupon',
   mixins: [mixinPropsData],
-  components: {dialogSelectCoupon, wxColor},
+  components: {dialogSelectCoupon, wxColor, numberInput},
   data () {
     return {
       ruleForm: {
@@ -97,7 +102,13 @@ export default {
         hideScrambled: false,//隐藏已抢完券
         ids: []//优惠券id列表
       },
+      maxShowNumber: 20, //优惠券最大显示数量
       displayList: [],
+      initRules: {
+        showNumber: [
+          { required: true, message: "请输入显示的券活动数", trigger: "change", validator: this.utils.ruleValidator.validateRequired },
+        ]
+      },
       rules: {
 
       },
@@ -108,6 +119,17 @@ export default {
     }
   },
    watch: {
+     ruleForm: {
+      handler(newValue) {
+        if(newValue.addType == 2 && newValue.couponNumberType == 2 && newValue.showNumber == ''){
+          this.rules = this.initRules;
+        }else {
+          this.rules = {};
+        }
+      },
+      deep: true
+    },
+
     'items': {
       handler(newValue) {
         this.ruleForm.ids = [];
@@ -141,7 +163,7 @@ export default {
 
     /* 监听显示个数 */
     'ruleForm.showNumber'(newValue, oldValue) {
-      if(newValue === oldValue) {
+      if(parseFloat(newValue) == parseFloat(oldValue)) {
           return;
       }
       this.fetch();
@@ -178,12 +200,13 @@ export default {
             if(componentData.addType == 2) {
               if(componentData.couponNumberType === 1) {
                 params = {
-                  couponType: 0
+                  couponType: 0,
+                  limitedQuantity: this.maxShowNumber
                 };
               }else {
                 params = {
                   couponType: 0,
-                  limitedQuantity: componentData.showNumber
+                  limitedQuantity: componentData.showNumber === '' ? this.maxShowNumber : componentData.showNumber
                 };
               }
             }else{

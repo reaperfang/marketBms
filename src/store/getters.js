@@ -5,6 +5,13 @@ const getters = {
   userInfo: state => state.userInfo || localStorage.getItem('userInfo'),
   roles: state => state.user.roles,
   shopInfos: state => state.user.shopInfos,
+  shopName: state => {
+    if(state.user.shopInfos && state.user.shopInfos.shopName) return state.user.shopInfos.shopName
+    else {
+      let shopInfos = JSON.parse(localStorage.getItem('shopInfos'))
+      return shopInfos.shopName
+    }
+  },
   permission_routers: state => state.permission.routers,
   permission_routers_tree: state => state.permission.routers && state.permission.routers.filter(val => !val.hidden && val.children),
   addRouters: state => state.permission.addRouters,
@@ -13,7 +20,7 @@ const getters = {
 
   shopInfo: state => state.shop.shopInfo,   //店铺信息
   colorStyle: state => state.shop.colorStyle,   //店铺风格
-  
+
   currentComponentId: state => state.decorate.currentComponentId,   //当前装修组件id
   componentDataIds: state => state.decorate.componentDataIds,   //装修组件顺序列表
   componentDataMap: state => state.decorate.componentDataMap,   //装修组件数据映射
