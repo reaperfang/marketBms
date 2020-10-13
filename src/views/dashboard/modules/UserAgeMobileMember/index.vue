@@ -211,9 +211,7 @@ export default {
 		},
 		setPhone(val) {
 			let result =
-				val.c_uv_share_phone == -9999
-					? 0
-					: val.c_uv_share_phone.toFixed(2);
+				val.c_uv_share_phone == -9999 ? 0 : val.c_uv_share_phone;
 			this.phoneData = {
 				...this.mobile,
 				// progress: parseInt(parseFloat(result) * 100)
