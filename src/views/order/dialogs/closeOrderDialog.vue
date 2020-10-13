@@ -27,7 +27,7 @@
                 <template v-else>
                     <div class="thirdOrder">
                     <el-radio v-model="operationType" label="8" @change="thirdAbnormalDelivery">第三方配送异常</el-radio>
-                    <el-select :disabled="thirdDisabled" v-model="value" @change="change" placeholder="请选择">
+                    <el-select :disabled="thirdDisabled" v-model="value" :class="{error: showError}"  @change="change" placeholder="请选择">
                         <el-option
                         v-for="item in options"
                         :key="item.value"
@@ -35,6 +35,7 @@
                         :value="item.value">
                         </el-option>
                     </el-select>
+                     <p class="chooseThirdReason"  v-if="showError">请选择配送异常原因，必选项</p>
                     </div>
                 <el-input
                     v-if="showTextarea"
@@ -66,6 +67,7 @@ export default {
             showTextarea: false,
             deliveryWay:'',
             thirdDisabled:true,
+            showError:false,
             options: [{
                 value: '1',
                 label: '没有配送员接单'
@@ -102,13 +104,17 @@ export default {
     },
     created(){
         this.deliveryWay = this.data.deliveryWay
-        debugger
        
     },
     methods: {
         thirdAbnormalDelivery(){
-            this.operationType==8 ? this.thirdDisabled = false : this.thirdDisabled = true
-            
+            this.showError = false
+           if(this.operationType==8) {
+              this.thirdDisabled = false
+           }else{
+               this.thirdDisabled = true
+               this.value=''
+           }
         },
         submit() {
             let operationRemark = ''
@@ -141,7 +147,14 @@ export default {
                             return
                         }
                  }else if(this.deliveryWay==3 && this.operationType == 8){
-                     operationRemark = "第三方配送异常"
+                     if(this.value){
+                         this.showError= false;
+                         operationRemark = "第三方配送异常"
+                     }else{
+                         this.showError= true;
+                         return
+                     }
+                     
 
                  }
             this.$emit('submit', {
@@ -204,5 +217,16 @@ export default {
    }
    /deep/ .el-radio__label {
        font-size: 16px;
+   }
+   .chooseThirdReason{
+       font-size:12px;
+       color:#FD4C2B;
+       margin-left:143px;
+       margin-top:5px;
+   }
+   .error{
+       /deep/ .el-input--small .el-input__inner {
+          border-color:  #FD4C2B
+       }
    }
 </style>
