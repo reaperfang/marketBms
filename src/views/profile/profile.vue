@@ -449,13 +449,56 @@ export default {
         //判断是否有异常订单
         let num = response.abnormalCount
         if(num>0){
-          this.todo = this.$message({
-            showClose: true,
-            dangerouslyUseHTMLString: true,
-            message:'<p>您有'+ num +'条异常订单需要处理，<a href="/bp/order/query?isAbnormal=1&orderStatus=5">请查看</a></p>',
-            type: "warning",
-            duration: 0
-          });
+          let _message = ''
+          let _list = []
+          let _shopInfos = localStorage.getItem('shopInfos')
+          let showNotice = false
+          let showJumpNotice = false
+
+          if(_shopInfos) {
+            _shopInfos = JSON.parse(_shopInfos)
+            if(_shopInfos.data && _shopInfos.data.functions && _shopInfos.data.functions[0] && _shopInfos.data.functions[0].children) {
+              _list = _shopInfos.data.functions[0].children
+
+              _list.forEach(item => {
+                if(item.name == '订单') {
+                  let _children = item.children
+
+                  _children.forEach(_item => {
+                    if(_item.name == '订单查询') {
+                      showJumpNotice = true
+                    }
+                    if(_item.name == '发货管理') {
+                      showNotice = true
+                    }
+                  })
+                }
+              })
+            }
+          }
+
+          if(showJumpNotice) {
+            _message = '<p>您有'+ num +'条异常订单需要处理，<a href="/bp/order/query?isAbnormal=1&orderStatus=5">请查看</a></p>'
+          } else if(showNotice) {
+            _message = '<p>您有'+ num +'条异常订单需要处理</p>'
+          }
+          
+          if(showJumpNotice || showNotice) {
+            this.todo = this.$message({
+              showClose: true,
+              dangerouslyUseHTMLString: true,
+              message:_message,
+              type: "warning",
+              duration: 0
+            });
+          }
+          // this.todo = this.$message({
+          //     showClose: true,
+          //     dangerouslyUseHTMLString: true,
+          //     message:'<p>您有'+ num +'条异常订单需要处理，<a href="/bp/order/query?isAbnormal=1&orderStatus=5">请查看</a></p>',
+          //     type: "warning",
+          //     duration: 0
+          //   });
         }
       });
     },
