@@ -1,7 +1,7 @@
 <template>
     <div class="order-delivery">
         <div class="search">
-            <div v-show="isOrderAutoSend" class="top">说明：当前已开启订单自动发货，自动发货后请尽快补充物流信息，您也可以到 <span @click="oderDeliver_decor" class="oderDeliver_decor">设置-交易设置</span> 中关闭自动发货 </div> 
+            <div v-show="isOrderAutoSend" class="top">说明：当前已开启订单自动发货，自动发货后请尽快补充物流信息，您也可以到 <span @click="oderDeliver_decor" class="oderDeliver_decor">设置-交易设置</span> 中关闭自动发货 </div>
             <el-form ref="form" :inline="true" :model="listQuery" class="form-inline">
                 <el-form-item>
                     <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
@@ -129,7 +129,7 @@
                     width="110">
                     <template slot-scope="scope">
                         <div>
-                            <div>{{scope.row.deliveryDate | formatDateRemoveZero}}</div> 
+                            <div>{{scope.row.deliveryDate | formatDateRemoveZero}}</div>
                             <div>{{scope.row.deliveryTime}}</div>
                         </div>
                     </template>
@@ -224,7 +224,7 @@ export default {
         return {
             multipleSelection: [],
             multipleTable: [
-                
+
             ],
             total: 0,
             listQuery: {
@@ -232,7 +232,7 @@ export default {
                 pageSize: 20,
                 searchType: 'orderCode',
                 searchValue: '',
-                status: '',
+                status: '3',
                 isAutosend: '',
                 searchType2: 'orderProductNames',
                 searchValue2: '',
@@ -347,7 +347,7 @@ export default {
                 startIndex: 1,
                 pageSize: 20,
             })
-            
+
             this.getList()
         },
         batchSupplementaryLogistics() {
@@ -390,7 +390,7 @@ export default {
             });
         },
         pickerBeginDateBefore (time) {
-            
+
         },
         batchSendGoods() {
             if(!this.multipleSelection.length) {
