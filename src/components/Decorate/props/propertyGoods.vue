@@ -11,8 +11,8 @@
         <div class="goods_list" v-if="ruleForm.source === 1" prop="goods" v-loading="loading">
           <ul>
             <li v-for="(item, key) of displayList" :key="key" :title="item.name">
-              <img :src="item.mainImage" alt="">
-              <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+              <el-image :src="item.mainImage" alt="" lazy></el-image>
+              <i class="delete_btn" v-show="deleteShow" @click.stop="deleteItem(item)"></i>
             </li>
             <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectGoods'">
               <i class="inner"></i>
@@ -296,7 +296,7 @@ export default {
     },
 
     //根据ids拉取数据
-    fetch(bNeedUpdateMiddle = true) {
+    async fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
         if(componentData) {
           bNeedUpdateMiddle && this.syncToMiddle();
@@ -336,13 +336,32 @@ export default {
             }
 
             this.loading = true;
+
+            //优先加载前几条数据出来
+            //商品来源为1，预加载；商品来源为2，商品分类获取时接口不支持分页
+            if(componentData.source === 1 && params.ids.length > this.preloadLength) {
+                const paramsLoad = this.utils.deepClone(params);
+                paramsLoad.ids.splice(this.preloadLength);
+                paramsLoad.pageSize = this.preloadLength;
+                await this._apis.goods.fetchAllSpuGoodsList(paramsLoad).then((response)=>{
+                    this.createList(response);
+                    this.loading = false;
+                    this.deleteShow = false;
+                }).catch((error)=>{
+                    console.error(error);
+                    this.displayList = [];
+                });
+            }
+
             this._apis.goods.fetchAllSpuGoodsList(params).then((response)=>{
                 this.createList(response);
                 this.loading = false;
+                this.deleteShow = true;
             }).catch((error)=>{
                 console.error(error);
                 this.displayList = [];
                 this.loading = false;
+                this.deleteShow = true;
             });
         }
     },

@@ -8,7 +8,7 @@
                         <li :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                             <div class="img_box">
                                 <p class="label" v-if="showContents.indexOf('6')!=-1">{{item.joinedActivityPeopleNum > -1 ? item.joinedActivityPeopleNum : 0}}人已团</p>
-                                <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
+                                <el-image :key="listStyle" :scroll-container="listStyle == 6 ? null : '.phone-body'" :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}" lazy></el-image>
                             </div>
                             <div class="countdown_Bar" v-if="showContents.indexOf('5')!=-1">
                                 <!-- <h1 class="title">{{item.activeName || '多人拼团'}}</h1> -->
@@ -205,7 +205,7 @@ export default {
         },
 
         //根据ids拉取数据
-        fetch(componentData = this.currentComponentData.data) {
+        async fetch(componentData = this.currentComponentData.data) {
             if(componentData) {
                 let params = {};
 
@@ -254,6 +254,23 @@ export default {
                 }
 
                 this.loading = true;
+                //优先加载
+                if((componentData.addType == 1 && params.activityList.length > this.preloadLength) || (componentData.addType == 2 && params.num > this.preloadLength)) {
+                    const paramsLoad = this.utils.deepClone(params);
+                    if(componentData.addType == 1){
+                        paramsLoad.activityList.splice(this.preloadLength);
+                    }else{
+                        paramsLoad.num = this.preloadLength;
+                    }
+                    await this._apis.shop.getMultiPersonListByIds(paramsLoad).then((response)=>{
+                        this.createList(response);
+                        this.loading = false;
+                    }).catch((error)=>{
+                        console.error(error);
+                        this.displayList = [];
+                    });
+                }
+
                 this._apis.shop.getMultiPersonListByIds(params).then((response)=>{
                     this.createList(response);
                     this.loading = false;
@@ -274,7 +291,6 @@ export default {
 
         /* 检查真数据 */
         checkRealData(newValue) {
-            console.log(newValue)
             this.hasRealData = !!newValue.length;
             this.upadteComponentData();
         },
@@ -1134,6 +1150,25 @@ export default {
             }
             img.goodsFill{
                 object-fit:contain;
+            }
+            /deep/ .el-image {
+                z-index: 0;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                img{
+                    width:100%;
+                    height:100%;
+                    left:0;
+                    top:0;
+                    position:absolute;
+                    object-fit:cover;
+                }
+            }
+            /deep/ .goodsFill{
+                img{
+                    object-fit: contain;
+                }
             }
         }
         .countdown_Bar{

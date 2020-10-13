@@ -7,7 +7,7 @@
                     <li v-for="(item,key) in displayList" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                         <div class="img" >
                             <div class="imgAbsolute">
-                                <img :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}">
+                                <el-image :key="listStyle" :scroll-container="listStyle == 6 ? null : '.phone-body'" :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}" lazy></el-image>
                             </div>
                             <div class="label" v-if="item.productLabelInfo&&item.productLabelInfo.enable==1" :style="{background:color2}">{{item.productLabelInfo.name}}</div>
                             <p class="nothing" v-if="item.status ===0">下架</p>
@@ -72,7 +72,8 @@ export default {
             goodListLoading: false,
             goodListFinished: false,
             displayList: [],
-            loading: false
+            loading: false,
+            firstLoad: true
         }
     },
     created() {
@@ -213,7 +214,7 @@ export default {
         },
 
         //根据ids拉取数据
-        fetch(componentData = this.currentComponentData.data) {
+        async fetch(componentData = this.currentComponentData.data) {
             if(componentData) {
                 let params = {};
                 if(!componentData.source || (componentData.source === 1)) {
@@ -257,6 +258,20 @@ export default {
                 }
 
                 this.loading = true;
+                //优先加载前几条数据出来
+                if(params.ids && params.ids.length > this.preloadLength && componentData.source === 1) {
+                    const paramsLoad = this.utils.deepClone(params);
+                    paramsLoad.ids.splice(this.preloadLength);
+                    paramsLoad.pageSize = this.preloadLength;
+                    await this._apis.goods.fetchAllSpuGoodsList(paramsLoad).then((response)=>{
+                        this.createList(response, componentData);
+                        this.loading = false;
+                    }).catch((error)=>{
+                        console.error(error);
+                        this.displayList = [];
+                    });
+                }
+            
                 this._apis.goods.fetchAllSpuGoodsList(params).then((response)=>{
                     this.createList(response, componentData);
                     this.loading = false;
@@ -374,6 +389,24 @@ export default {
                     }
                     img.goodsFill{
                         object-fit: contain;
+                    }
+                    /deep/ .el-image {
+                        position:absolute;
+                        top:0;
+                        right:0;
+                        bottom:0;
+                        left:0;
+                        @extend .flexCenterMiddle;
+                        img{
+                            width:100%;
+                            height:100%;
+                            object-fit: cover;
+                        }
+                    }
+                    /deep/ .goodsFill{
+                        img{
+                            object-fit: contain;
+                        }
                     }
                 }
                 .label{
