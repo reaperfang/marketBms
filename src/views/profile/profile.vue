@@ -297,6 +297,7 @@ import profileCont from "@/system/constant/profile";
 import Clipboard from "clipboard";
 import flowPath from "./flowPath";
 import profileIntelligent from "./components/profile_intelligent";
+import { isExistAuth } from '@/utils/auth'
 export default {
   name: "profile",
   components: { flowPath, profileIntelligent },
@@ -463,8 +464,31 @@ export default {
       this.getOerviewRemind();
       this.getOverviewSelling();
     },
+    getMessageAuth() {
+      const authlist1 = ['订单','订单查询']
+      const authlist2 = ['订单', '发货管理']
+      
+      if (isExistAuth(authlist1)) {
+        return 1
+      }
+      if (isExistAuth(authlist2)) {
+        return 2
+      }
+      return 0
+    },
     // 待办提醒
     getOerviewRemind() {
+      const authCode = this.getMessageAuth()
+      let prompt = ''
+      switch(authCode) {
+        case 1:
+          prompt = '<a href="/bp/order/query?isAbnormal=1&orderStatus=5">请查看</a>'
+          break;
+        case 2:
+          prompt = '请查看'
+          break;
+      }
+      if (!prompt) return false
       this.closeTodo()
       this._apis.overview.overviewRemind({}).then(response => {
         this.stayProcessedCount = response.stayProcessedCount;
@@ -476,7 +500,7 @@ export default {
           this.todo = this.$message({
             showClose: true,
             dangerouslyUseHTMLString: true,
-            message:'<p>您有'+ num +'条异常订单需要处理，<a href="/bp/order/query?isAbnormal=1&orderStatus=5">请查看</a></p>',
+            message:`<p>您有${num}条异常订单需要处理，${prompt}</p>`,
             type: "warning",
             duration: 0
           });
