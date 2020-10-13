@@ -128,6 +128,7 @@ export default {
           this.loading = true
           const data = this.getReqData()
           this._apis.shopInfo.updateShopInfo(data).then(response =>{
+            this.$store.dispatch('getShopInfo');
             this.$message.success('保存成功！');
           }).catch(error =>{
             this.$message.error(error);

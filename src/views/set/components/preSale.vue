@@ -280,6 +280,7 @@ export default {
               isOrderAutoSend:this.form.isOrderAutoSend
             }
             this._apis.shopInfo.updateShopInfo(data).then(response =>{
+              this.$store.dispatch('getShopInfo');
               this.loading = false
               this.$message.success('保存成功！');
             }).catch(error =>{

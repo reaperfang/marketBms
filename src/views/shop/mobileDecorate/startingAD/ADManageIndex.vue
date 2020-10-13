@@ -245,6 +245,7 @@ export default {
     switchStatusChange(value) {
       this._apis.shopInfo.updateShopInfo({id:this.cid, adOpenType: value === true ? 1 : 0})
       .then((response)=>{
+        this.$store.dispatch('getShopInfo');
         this.$message.success('修改成功！')
       }).catch((error)=>{
         this.$message.error(error);

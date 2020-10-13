@@ -189,7 +189,8 @@ export default {
                     type: 'warning'
                 });
             }else{
-                this._apis.shopInfo.updateShopInfo({scoreUpper: this.isSwitch?'1':'0', scoreUpperCount: this.ruleForm.scoreUpperCount, id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {                 
+                this._apis.shopInfo.updateShopInfo({scoreUpper: this.isSwitch?'1':'0', scoreUpperCount: this.ruleForm.scoreUpperCount, id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {            
+                    this.$store.dispatch('getShopInfo');     
                     this.$message({
                         message: "每日最高获得积分数保存成功",
                         type: 'success'
@@ -203,6 +204,7 @@ export default {
             if(!val) {
                 this.ruleForm.scoreUpperCount = "";
                 this._apis.shopInfo.updateShopInfo({scoreUpper: this.isSwitch?'1':'0', id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
+                    this.$store.dispatch('getShopInfo');
                     this.$message({
                         message: "关闭成功",
                         type: 'success'

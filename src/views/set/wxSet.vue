@@ -301,7 +301,7 @@ export default {
         wechatBinding:1
       }
       this._apis.shopInfo.updateShopInfo(query).then(response =>{
-        
+        this.$store.dispatch('getShopInfo');
       }).catch(error =>{
         this.$message.error(error);
       })

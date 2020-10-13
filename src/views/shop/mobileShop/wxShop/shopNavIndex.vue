@@ -69,6 +69,7 @@ export default {
         id:this.cid, 
         shopNavigation: value === true ? 1 : 0
       }).then((response)=>{
+        this.$store.dispatch('getShopInfo');
         this.$message.success('修改成功！')
       }).catch((error)=>{
         this.$message.error(error);

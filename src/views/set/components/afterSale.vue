@@ -298,6 +298,7 @@ export default {
           isOrderAutoFinished : this.form.isOrderAutoFinished 
         }
         this._apis.shopInfo.updateShopInfo(data).then(response =>{
+          this.$store.dispatch('getShopInfo'); 
           this.loading = false
           this.$message.success('保存成功！');
           // this.logistics()
