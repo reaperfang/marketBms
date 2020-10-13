@@ -17,7 +17,7 @@
               <p v-if="item.tel"> {{ item.tel }}</p>
             </li>
           </ol>
-          <el-pagination 
+          <el-pagination
             v-if="pois.length > 0"
             class="pagination"
             :background="true"
@@ -290,7 +290,7 @@ export default {
       let position = new qq.maps.LatLng(poi.location.lat, poi.location.lng);
       info.setPosition(position);
     },
-    
+
     addMarkers(results) {
       const self = this
       const pois = results.data
@@ -308,10 +308,10 @@ export default {
           'map': self.mapObj
         }))
         console.log('makerAdd', makerAdd)
-        qq.maps.event.addListener(makerAdd, 'click', function(e) {    
+        qq.maps.event.addListener(makerAdd, 'click', function(e) {
           self.info.close();
           console.log('-----item-----', poi)
-          
+
           const tencentCode = poi && poi.ad_info && poi.ad_info.adcode
           if (tencentCode) {
             self.openInfoWindow(self.info, makerAdd, self.mapObj, poi)
@@ -453,7 +453,7 @@ export default {
       &:hover, &.curred {
         background: #f3f1f1;
       }
-      
+
       p {
         color:#999999;font-size:12px;
       }

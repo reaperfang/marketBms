@@ -186,6 +186,8 @@ import goods from "@/views/shop/dialogs/jumpLists/goods";
 import goodsGroup from "@/views/shop/dialogs/jumpLists/goodsGroup";
 
 import utils from "@/utils";
+let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+const cid = shopInfo && shopInfo.id || ''
 export default {
   name: 'shopNav',
   components: {dialogSelectImageMaterial, dialogSelectNavTemplate, DialogBase, microPage, microPageClassify, marketCampaign, goods, goodsGroup},
@@ -247,7 +249,8 @@ export default {
               id: 'index',
               name: 'index',
               title: '首页'
-            }
+            },
+            cid: cid
           };
           break;
         case '2':
@@ -259,7 +262,8 @@ export default {
               id: 'shoppingCart',
               name: 'shoppingCart',
               title: '购物车',
-            }
+            },
+            cid: cid
           };
           break;
         case '3':
@@ -271,7 +275,8 @@ export default {
               id: 'userCenter',
               name: 'userCenter',
               title: '个人中心',
-            }
+            },
+            cid: cid
           };
           break;
         case '4':
@@ -283,7 +288,8 @@ export default {
               id: 'allGoods',
               name: 'allGoods',
               title: '全部商品',
-            }
+            },
+            cid: cid
           };
           break;
         case '5':
@@ -295,7 +301,8 @@ export default {
               id: 'allClassify',
               name: 'allClassify',
               title: '全部分类',
-            }
+            },
+            cid: cid
           };
           break;
       }
@@ -387,7 +394,8 @@ export default {
             id: 'index',
             name: 'index',
             title: '首页'
-          }
+          },
+          cid: cid
         }
       };
     },

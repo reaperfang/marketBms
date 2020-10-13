@@ -48,6 +48,20 @@ export default [
         meta: { title: '修改密码', noCache: true, tabTitle: '概况',navType:2 }
       },
       {
+        path: 'intelligent',
+        component: () => import('@/views/profile/intelligent'),
+        name: 'intelligent',
+        hidden: false,
+        meta: {title: '智能开店', noCache: true, tabTitle: '概况', navType: 2}
+      },
+      {
+        path: 'intelligentGuide',
+        component: () => import('@/views/profile/intelligentGuide'),
+        name: 'intelligentGuide',
+        hidden: false,
+        meta: {title: '智能开店引导', noCache: true, tabTitle: '概况', navType: 2}
+      },
+      {
         path: 'shopGuide',
         component: () => import('@/views/profile/shopGuide'),
         name: 'shopGuide',
