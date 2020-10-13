@@ -16,14 +16,14 @@
 					<vline
 						:chartData="left"
 						:chartSettings="chartSettings"
-						:chartExtend="chartExtend"
+						:chartExtend="leftchartExtend"
 					></vline>
 				</el-col>
 				<el-col :span="12" class="v-el-col">
 					<vline
 						:chartData="right"
 						:chartSettings="chartSettings"
-						:chartExtend="chartExtend"
+						:chartExtend="rightchartExtend"
 					></vline>
 				</el-col>
 			</el-row>
@@ -69,7 +69,7 @@ export default {
 			chartSettings: {
 				// area: false
 			},
-			chartExtend: {
+			leftchartExtend: {
 				tooltip: "test",
 				color: "rgba(71, 225, 255, 0.15)",
 				grid: {
@@ -106,6 +106,57 @@ export default {
 						},
 						show: false
 					}
+					// minInterval: 1
+				},
+				tooltip: {
+					formatter: params => {
+						let item = params[0],
+							list = item.data;
+						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${item.color}"></span>`;
+						return `${dotHtml}${list[0]} <br/>&nbsp&nbsp&nbsp${
+							item.seriesName == "金额" ? "支付金额" : "浏览次数"
+						}: &nbsp${list[1]}`;
+					}
+				}
+			},
+			rightchartExtend: {
+				tooltip: "test",
+				color: "rgba(71, 225, 255, 0.15)",
+				grid: {
+					top: "30px",
+					bottom: "7px"
+				},
+				series: {
+					smooth: false, //平滑曲线
+					itemStyle: {
+						normal: {
+							color: "#47E1FF",
+							lineStyle: {
+								color: "#47E1FF"
+							}
+						}
+					}
+				},
+				xAxis: {
+					axisLine: {
+						lineStyle: {
+							color: "rgba(255,255,255,0.8)"
+						}
+					}
+				},
+				yAxis: {
+					splitLine: {
+						lineStyle: {
+							color: "#26353a"
+						}
+					},
+					axisLine: {
+						lineStyle: {
+							color: "rgba(255,255,255,0.8)"
+						},
+						show: false
+					},
+					minInterval: 1
 				},
 				tooltip: {
 					formatter: params => {
