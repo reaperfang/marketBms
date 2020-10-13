@@ -7,7 +7,7 @@
                     <li v-for="(item,key) of displayList" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                         <div class="img_box">
                             <div class="label" v-if="showContents.indexOf('6')!=-1">已售{{item.packageNum}}件</div>
-                            <img :src="item.activityPic" alt="" :class="{goodsFill:goodsFill!=1}">
+                            <el-image :key="listStyle" :scroll-container="listStyle == 6 ? null : '.phone-body'" :src="item.activityPic" alt="" :class="{goodsFill:goodsFill!=1}" lazy></el-image>
                         </div>
                         <div class="countdown_Bar" v-if="showContents.indexOf('3')!=-1">
                             <h1 class="title">N元N件</h1>
@@ -149,11 +149,26 @@ export default {
         },
 
         //根据ids拉取数据
-        fetch(componentData = this.currentComponentData.data) {
+        async fetch(componentData = this.currentComponentData.data) {
             if(componentData) {
                 const ids = componentData.ids;
                 if(Array.isArray(ids) && ids.length){
                     this.loading = true;
+
+                    //优先加载
+                    if(ids.length > this.preloadLength) {
+                        const paramsLoad = this.utils.deepClone(ids);
+                        paramsLoad.splice(this.preloadLength);
+                        await this._apis.shop.getNyuanListByIds({
+                            baleIds: paramsLoad.join(',')
+                        }).then((response)=>{
+                            this.createList(response);
+                            this.loading = false;
+                        }).catch((error)=>{
+                            this.displayList = [];
+                        });
+                    }
+
                     this._apis.shop.getNyuanListByIds({
                         baleIds : ids.join(',')
                     }).then((response)=>{
@@ -900,6 +915,25 @@ export default {
             }
             img.goodsFill{
                 object-fit:contain;
+            }
+            /deep/ .el-image {
+                z-index: 0;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                img{
+                    width:100%;
+                    height:100%;
+                    left:0;
+                    top:0;
+                    position:absolute;
+                    object-fit:cover;
+                }
+            }
+            /deep/ .goodsFill{
+                img{
+                    object-fit: contain;
+                }
             }
         }
         .countdown_Bar{
