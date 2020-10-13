@@ -21,7 +21,8 @@ const app = {
   actions: {
 
     // 获取店铺信息
-    getShopInfo({ commit }, params) {
+    getShopInfo({ commit, state }, params) {
+      // debugger
       params = params || {}
       return new Promise((resolve, reject) => {
         const loalShopInfo = localStorage.getItem('shopInfos');

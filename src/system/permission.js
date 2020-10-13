@@ -5,7 +5,7 @@ import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 import { isLogin, getAuthList } from '@/system/user.js' // getToken from cookie
-// import { getShopInfo } from '@/system/shop.js' // getToken from cookie
+// import { getShopInfos } from '@/system/shop.js' // getToken from cookie
 
 
 

@@ -370,6 +370,8 @@ export default {
   methods: {
     ...mapMutations(["SETCURRENT"]),
     init() {
+      const shopInfo = this.$store.getters.shopInfos
+      this.cid = shopInfo && shopInfo.id
       this.$store.dispatch('getShopInfo').then(response => {
           if (response.shopExpire == 2) {
             this.$message({

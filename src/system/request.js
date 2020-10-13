@@ -3,6 +3,7 @@ import { Message, MessageBox } from "element-ui";
 import store from "@/store";
 import utils from "@/utils";
 import { getToken } from '@/system/auth'
+import { getShopInfos } from '@/system/shop'
 import md5 from 'md5'
 import appConfig from '@/system/appConfig';
 class Ajax {
@@ -20,7 +21,8 @@ class Ajax {
 
   // request拦截器
   requestGlobal(config) {
-    let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+    let shopInfo = getShopInfos()
+    console.log('getShopInfo',getShopInfos())
     let cid = shopInfo && shopInfo.id || ''
     let headers = Object.assign({
           businessId: 1,
@@ -119,6 +121,7 @@ class Ajax {
     } else {
       this.requestGlobal(config);
     }
+    console.log('config',config)
     return this.service(config);
   }
 
@@ -147,7 +150,8 @@ class Ajax {
 
     //获取cid和shopInfoId
     // let cid = store.getters.userInfo && store.getters.userInfo.cid ? store.getters.userInfo.cid : '';
-    let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+    let shopInfo = getShopInfos()
+    console.log('---getshopinfo----', getShopInfos())
     let cid = shopInfo && shopInfo.id || ''
     let shopInfoId = store.getters.userInfo && store.getters.userInfo.shopInfoId ? store.getters.userInfo.shopInfoId
       : '';

@@ -1,5 +1,5 @@
 import { isJsonStr, isObject } from "@/utils/base.js";
-import { getShopInfo } from "@/system/shop.js";
+import { getShopInfos } from "@/system/shop.js";
 import { getToken } from "@/system/auth.js";
 import store from '@/store'
 // 获取用户信息
@@ -14,7 +14,7 @@ export function getUserInfo() {
 // 是否登录
 export function isLogin() {
   const user = getUserInfo()
-  const shopInfo = getShopInfo()
+  const shopInfo = getShopInfos()
   console.log('shopInfo:user',user)
   console.log('shopInfo:shopInfo',shopInfo)
   const token = getToken()
@@ -56,7 +56,7 @@ export function isExistAuthInData(data = [], authList = [], index = 0) {
 // 获取权限列表
 export function getAuthList() {
   let authList = []
-  const shopInfo = getShopInfo()
+  const shopInfo = getShopInfos()
   if(shopInfo && shopInfo.data && shopInfo.data.msfList) {
     authList = shopInfo.data.msfList
   }
@@ -65,7 +65,7 @@ export function getAuthList() {
 // 获取层级权限列表
 export function getLevelAuthList() {
   let authList = []
-  const shopInfo = getShopInfo()
+  const shopInfo = getShopInfos()
   if(shopInfo && shopInfo.data && shopInfo.data.functions) {
     authList = shopInfo.data.functions
   }
