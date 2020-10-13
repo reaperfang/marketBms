@@ -65,7 +65,7 @@ export default {
 
     /* 开关状态切换 */
     switchStatusChange(value) {
-      this._apis.shop.changeSwitchStatus({
+      this._apis.shopInfo.updateShopInfo({
         id:this.cid, 
         shopNavigation: value === true ? 1 : 0
       }).then((response)=>{

@@ -132,7 +132,7 @@ export default {
     },
     // getShopInfo() {
     //   let id = this.cid;
-    //   this._apis.set
+    //   this._apis.shopInfo
     //     .getShopInfo({ id: id })
     //     .then(response => {
     //       console.log('21212',  response.storeGuide, response)
@@ -206,7 +206,7 @@ export default {
 
     //获取版本类型
      getGuide(){
-       this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+       this.$store.dispatch('getShopInfo').then( data => {
           if(data.isOpenResell == 1){
             this.guideType = '专业版'
           }else{

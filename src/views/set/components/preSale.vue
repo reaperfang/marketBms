@@ -254,8 +254,7 @@ export default {
   },
   methods: {
     getShopInfo(){
-      let id = this.cid
-      this._apis.set.getShopInfo({id:id}).then(response =>{
+      this.$store.dispatch('getShopInfo').then(response =>{
         this.form = response
         this.autoOrder = Boolean(response.isAutoCancelUnpayOrder)
         this.sendOrder = Boolean(response.isOrderAutoSend)
@@ -280,7 +279,7 @@ export default {
               isAutoCancelUnpayOrder:this.form.isAutoCancelUnpayOrder,
               isOrderAutoSend:this.form.isOrderAutoSend
             }
-            this._apis.set.updateShopInfo(data).then(response =>{
+            this._apis.shopInfo.updateShopInfo(data).then(response =>{
               this.loading = false
               this.$message.success('保存成功！');
             }).catch(error =>{

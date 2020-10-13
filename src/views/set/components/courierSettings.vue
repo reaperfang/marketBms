@@ -67,10 +67,7 @@ export default {
 
   methods: {
     init() {
-      let id = this.cid;
-      this._apis.set
-        .getShopInfo({ id })
-        .then(response => {
+      this.$store.dispatch('getShopInfo').then(response => {
           console.log('----response-', response.isOpenOrdinaryExpress, typeof response.isOpenOrdinaryExpress)
           this.form.isOpen = response.isOpenOrdinaryExpress === 1 ? true : false
           isHasOtherWay = response.isOpenMerchantDeliver === 1 || response.isOpenTh3Deliver === 1 || response.isOpenSelfLift === 1
@@ -95,7 +92,7 @@ export default {
       const id = this.cid
 
       return new Promise((resolve, reject) => {
-        this._apis.set.updateShopInfo({...data, id }).then(response =>{
+        this._apis.shopInfo.updateShopInfo({...data, id }).then(response =>{
           this.$store.dispatch('getShopInfo');    
           resolve(response)
         }).catch(error =>{

@@ -166,7 +166,7 @@ export default {
         storeGuide
       }
       return new Promise((resolve, reject) => {
-        this._apis.set.updateShopInfo(data).then(response =>{
+        this._apis.shopInfo.updateShopInfo(data).then(response =>{
           this.$store.dispatch('getShopInfo');
           this.$store.commit('setStoreGuide', storeGuide)
           resolve(response)

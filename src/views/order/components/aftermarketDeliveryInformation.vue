@@ -401,9 +401,7 @@ export default {
     methods: {
         getShopInfo() {
             let id = this.cid;
-            this._apis.set
-                .getShopInfo({ id: id })
-                .then(response => {
+            this.$store.dispatch('getShopInfo').then(response => {
                     console.log(response)
                     this.tenantName = response.tenantName
                 })

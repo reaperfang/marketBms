@@ -198,7 +198,7 @@ export default {
         id:this.cid,
         transportationExpenseType:this.mode
       }
-      this._apis.set.updateShopInfo(data).then(response =>{
+      this._apis.shopInfo.updateShopInfo(data).then(response =>{
       }).catch(error =>{
         console.log('-----err-----', error)
       })
@@ -232,13 +232,7 @@ export default {
       });
     },
     getShopInfo() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-
-      this._apis.set
-        .getShopInfo({
-          id: shopInfo.id
-        })
-        .then(res => {
+      this.$store.dispatch('getShopInfo').then(res => {
           this.mode = res.transportationExpenseType;
         })
         .catch(error => {});

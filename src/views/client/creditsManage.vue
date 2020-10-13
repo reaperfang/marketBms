@@ -171,7 +171,7 @@ export default {
                 // formObj.scoreToCashOrderRate = formObj.scoreToCashOrderRate == "" ? -1:formObj.scoreToCashOrderRate;
                 formObj.scoreToCashOrderRate = formObj.scoreEnableOrderHighCash == "1" ? formObj.scoreToCashOrderRate:-1;
                 formObj.id = JSON.parse(localStorage.getItem('shopInfos')).id;
-                this._apis.client.saveCreditRule(formObj).then((response) => {
+                this._apis.shopInfo.updateShopInfo(formObj).then((response) => {
                     this.$message({
                         message: "保存积分规则成功",
                         type: 'success'
@@ -189,7 +189,7 @@ export default {
                     type: 'warning'
                 });
             }else{
-                this._apis.client.saveCreditRule({scoreUpper: this.isSwitch?'1':'0', scoreUpperCount: this.ruleForm.scoreUpperCount, id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {                 
+                this._apis.shopInfo.updateShopInfo({scoreUpper: this.isSwitch?'1':'0', scoreUpperCount: this.ruleForm.scoreUpperCount, id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {                 
                     this.$message({
                         message: "每日最高获得积分数保存成功",
                         type: 'success'
@@ -202,7 +202,7 @@ export default {
         handleSwitch(val) {
             if(!val) {
                 this.ruleForm.scoreUpperCount = "";
-                this._apis.client.saveCreditRule({scoreUpper: this.isSwitch?'1':'0', id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
+                this._apis.shopInfo.updateShopInfo({scoreUpper: this.isSwitch?'1':'0', id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
                     this.$message({
                         message: "关闭成功",
                         type: 'success'
@@ -213,7 +213,7 @@ export default {
             }
         },
         checkCreditRule() {
-            this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
+            this.$store.dispatch('getShopInfo').then((response) => {
                 this.ruleForm.scoreToCash = response.scoreToCash.toString();
                 this.ruleForm.scorePercentage = response.scoreToCash == 1 ? response.scorePercentage:'';
                 this.ruleForm.scorePercentageMoney = response.scoreToCash == 1 ? response.scorePercentageMoney:'';

@@ -300,7 +300,7 @@ export default {
         id:id,
         wechatBinding:1
       }
-      this._apis.set.updateShopInfo(query).then(response =>{
+      this._apis.shopInfo.updateShopInfo(query).then(response =>{
         
       }).catch(error =>{
         this.$message.error(error);

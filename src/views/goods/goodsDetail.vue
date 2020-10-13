@@ -1950,12 +1950,7 @@ export default {
         },
         //获取普通快递在店铺是否设置开启状态
         getExpressAndDeliverySet(name){
-            const params = {
-                "id": this.cid
-            };
-            this._apis.goods
-            .getExpressAndDeliverySet(params)
-            .then(res => {
+            this.$store.dispatch('getShopInfo').then(res => {
                 //如果普通快递未开启则提示去设置
                 if(name == 'express' && res.isOpenOrdinaryExpress == 0){
                     this.isExpressSet = false;

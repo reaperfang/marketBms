@@ -21,14 +21,21 @@ const app = {
   actions: {
 
     // 获取店铺信息
-    getShopInfo({ commit }) {
+    getShopInfo({ commit }, params) {
+      params = params || {}
       return new Promise((resolve, reject) => {
-        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        const loalShopInfo = localStorage.getItem('shopInfos');
+        const hasShopInfo = loalShopInfo && JSON.parse(loalShopInfo) && Object.prototype.toString.call(JSON.parse(loalShopInfo)) === '[object Object]';
+        if(!hasShopInfo) {
+          reject('未找到店铺信息!')
+          return;
+        }
+        let shopInfo = JSON.parse(loalShopInfo);
         let cid = shopInfo.id || '';
-        this._apis.shop.getShopInfo({id: cid}).then((response)=>{
+        this._apis.shopInfo.getShopInfo(Object.assign({id: cid}, params)).then((response)=>{
           commit('setShopInfo', response);
           commit('setStoreGuide', response.storeGuide);
-          resolve()
+          resolve(response)
         }).catch((error)=>{
           commit('setShopInfo', {});
           commit('setStoreGuide', null);

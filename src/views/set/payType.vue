@@ -128,8 +128,7 @@ export default {
     //   return false
     // },
     getShopInfo(){
-      let id = this.cid
-      this._apis.set.getShopInfo({id:id}).then(response =>{
+      this.$store.dispatch('getShopInfo').then(response =>{
         let count = 0
         if (response.wechatPay) count++
         if (response.alipayPay) count++
@@ -407,7 +406,7 @@ export default {
       let id = this.cid
       let query = Object.assign({id:id},data)
       const isOpen = this.isOpenPrompt(query)
-      this._apis.set.updateShopInfo(query).then(response =>{
+      this._apis.shopInfo.updateShopInfo(query).then(response =>{
         console.log(123213131321, isOpen)
         if (isOpen) this.$message.success('开启成功')
         else this.$message.success('关闭成功');

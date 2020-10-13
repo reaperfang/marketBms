@@ -108,7 +108,7 @@ export default {
     getIsAuth() {
       // 需要调用微信是否授权接口
       const id = this.cid
-      return this._apis.profile.getwxBindStatus({ id }).then(response => {
+      return this._apis.shopInfo.getwxBindStatus({ id }).then(response => {
         console.log('getwxBindStatus',response)
         this.isBindGzh = response && response.bindWechatAccount === 1 || false
         this.isBindXcx = response && response.bindWechatApplet === 1 || false
@@ -189,9 +189,7 @@ export default {
     },
     getShopInfo() {
       let id = this.cid;
-      return this._apis.set
-        .getShopInfo({ id: id })
-        .then(response => {
+      return this.$store.dispatch('getShopInfo').then(response => {
          console.log('----response--', response)
          this.businessChannel = response && response.businessChannel
         })

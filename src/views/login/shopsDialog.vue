@@ -98,7 +98,7 @@ export default {
         tenantInfoId:tid,
         shopUserId: type == 'admin' ? '' : id
       }
-      this._apis.profile.getShopList(obj).then(response => {
+      this._apis.shopInfo.getShopList(obj).then(response => {
         this.total = response.total
         this.shopLists = response.list
         this.loading = false
@@ -147,7 +147,7 @@ export default {
     
     //保存当前选择店铺的信息
     saveShop(shop){
-      this._apis.set.getShopInfo({cid:shop.id,id:shop.id}).then(response =>{
+      this._apis.shopInfo.getShopInfo({cid:shop.id,id:shop.id}).then(response =>{
           let shopInfo = {}
           this.newShopList.map(item =>{
             item.id == shop.id && (shopInfo = item)

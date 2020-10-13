@@ -180,8 +180,7 @@ export default {
       
     },
     getShopInfo() {
-      const id = this.cid
-      this._apis.set.getShopInfo({ id }).then(response =>{
+      this.$store.dispatch('getShopInfo').then(response =>{
         this.isOpen = response.isOpenSelfLift === 1 ? true : false
       }).catch(error =>{
         this.$message.error(error);
@@ -355,7 +354,7 @@ export default {
       const req = { id, ...data }
       console.log('--req---',req)
       return new Promise((resolve, reject) => {
-        this._apis.set.updateShopInfo(req).then((data) => {
+        this._apis.shopInfo.updateShopInfo(req).then((data) => {
           this.$store.dispatch('getShopInfo');
           resolve(data)
           
