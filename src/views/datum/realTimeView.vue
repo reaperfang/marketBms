@@ -818,7 +818,7 @@ background: #fff;
 .p_rtsiade{
     float: left;
     background: #fff;
-    width: calc(35% - 12px);
+    width: 35%;
     .chartbox{
         .lengebox{
             width: 160px;
