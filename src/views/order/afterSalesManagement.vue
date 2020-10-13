@@ -245,7 +245,7 @@ export default {
             } else {
                 this.$refs.multipleTable.clearSelection();
             }
-            this.isIndeterminate = true;
+            this.isIndeterminate = false;
         },
         showLogistics(row) {
             this.expressNo = row.returnExpressNo
