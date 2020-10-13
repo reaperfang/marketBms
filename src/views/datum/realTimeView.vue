@@ -730,7 +730,7 @@ background: #fff;
     padding-bottom: 10px;
     .choosebox{
         width: 100%;
-        min-width: 760px;
+        // min-width: 760px;
         overflow-x: scroll;
         .choose-type{
             min-width: 760px;
