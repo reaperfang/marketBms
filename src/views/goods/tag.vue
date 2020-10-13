@@ -370,7 +370,6 @@ export default {
   display: flex;
   align-items: center;
   padding: 20px 20px 10px 20px;
-  padding-left: 15px;
   button {
     margin-left: 0;
     //margin-right: 28px;

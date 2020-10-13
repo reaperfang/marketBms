@@ -146,7 +146,7 @@
         </el-table-column>
       </el-table>
       <div class="checkAudit table-select" v-if="dataList.length != 0" style="margin: 20px 0 0 20px;">
-        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+        <el-checkbox :indeterminate="isIndeterminate" class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button  class="border-button" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
       </div>
       <div class="page_styles">
@@ -366,9 +366,15 @@ export default {
     handleSelectionChange(val){
       this.multipleSelection = val;
       if(val.length !=0 && val.length == this.dataList.length ){
-        this.selectStatus = true; 
+        this.selectStatus = true;
+        this.isIndeterminate = false; 
       }else{
         this.selectStatus = false;
+        if(val.length !=0){
+					this.isIndeterminate = true;
+				}else{
+					this.isIndeterminate = false;
+				}
       }
     },
     //批量审核
