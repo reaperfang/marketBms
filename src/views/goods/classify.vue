@@ -86,7 +86,7 @@ export default {
             }).then((res) => {
                 this.onoff = res.onoff
             }).catch(error => {
-                
+
             })
         },
         resetForm(formName) {
@@ -344,11 +344,17 @@ export default {
             this.confirm({title: '立即删除', icon: true, text: '删除后此分类无法展示，确认删除吗？'}).then(() => {
                 this._apis.goods.deleteCategory({id: node.data.id}).then((res) => {
                     if(res && res.msg == 'existProduct') {
-                        this.confirm({title: '转移商品', icon: false, text: '是否将此分类其下的全部商品转移到其他分类中？'}).then(() => {
-                            this.currentData = node.data.id
-                            this.currentDialog = 'TransferGoodsDialog'
-                            this.dialogVisible = true
-                        })
+                        // this.confirm({title: '转移商品', icon: false, text: '是否将此分类其下的全部商品转移到其他分类中？'}).then(() => {
+                        //     this.currentData = node.data.id
+                        //     this.currentDialog = 'TransferGoodsDialog'
+                        //     this.dialogVisible = true
+                        // })
+                      this.confirm({
+                        title: '提示',
+                        icon: true,
+                        showCancelButton: false,
+                        text: '当前商品分类无法删除，请您去商品列表转移该分类下的所有商品，再尝试删除。'
+                      }).then(() => {})
                     } else {
                         this.$message({
                             message: '删除成功！',
@@ -380,7 +386,7 @@ export default {
             }
             this._apis.goods.fetchCategoryList(params).then((res) => {
                 let arr = this.transTreeData(res, 0)
-                
+
                 this.categoryData = arr
                 this.flatArr = this.flatTreeArray(JSON.parse(JSON.stringify(arr)))
                 this.loading = false
@@ -412,6 +418,9 @@ export default {
     }
     /deep/ .el-tree-node__content>.el-tree-node__expand-icon {
         padding: 3px!important;
+    }
+    /deep/ .el-tooltip.delete {
+      outline: none;
     }
 </style>
 <style lang="scss">

@@ -74,7 +74,7 @@ export default {
         type:type,
       }
       this._apis.file.getGroup(query).then((response)=>{
-        this.options = response
+        this.options = this.getOptionsData(response)
         //获取当前分组名称
         let groupIdArr = []
         this.getCategoryInfoIds(groupIdArr,this.fromGroupId)
@@ -82,6 +82,18 @@ export default {
       }).catch(error => {
         this.$message.error(error);
       })
+    },
+
+    getOptionsData(data){
+      for(let i = 0; i < data.length; i++){
+        if(data[i].childFileGroupInfoList.length < 1){
+          data[i].childFileGroupInfoList = null;
+        } else {
+          this.getOptionsData(data[i].childFileGroupInfoList);
+        }
+      }
+      console.log('data:', data);
+      return data;
     },
 
     // 获取类目
