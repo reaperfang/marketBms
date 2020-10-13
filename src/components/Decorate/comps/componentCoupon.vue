@@ -58,6 +58,7 @@ export default {
   data () {
     return {
       displayList: [],
+      maxShowNumber: 20, //优惠券最大显示数量
       loading: false
     }
   },
@@ -125,8 +126,8 @@ export default {
 
     /* 监听显示个数 */
     'currentComponentData.data.showNumber'(newValue, oldValue) {
-      if(newValue === oldValue) {
-        return;
+      if(parseFloat(newValue) == parseFloat(oldValue)) {
+          return;
       }
       this.fetch();
     },
@@ -154,12 +155,13 @@ export default {
             if(componentData.addType == 2) {
               if(componentData.couponNumberType === 1) {
                 params = {
-                  couponType: 0
+                  couponType: 0,
+                  limitedQuantity: this.maxShowNumber
                 };
               }else {
                 params = {
                   couponType: 0,
-                  limitedQuantity: componentData.showNumber
+                  limitedQuantity: componentData.showNumber === '' ? this.maxShowNumber : componentData.showNumber
                 };
               }
             }else{

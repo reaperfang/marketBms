@@ -8,12 +8,12 @@ import { asyncRouterMap, syncRouterMap } from '@/router'
 function hasPermission(msfList, route) {
   if(msfList){
     if (route && route.meta.title) {
-      return msfList.some(item => route.meta.title == item.name && route.meta.navType == item.navType ) || route.meta.title == '概况首页' || route.meta.title == '概况' || route.meta.title == '账号信息' || route.meta.title == '修改密码' || route.meta.title == '发货成功' || route.meta.title == '开店引导入口' || route.meta.title == '开店引导'
+      return msfList.some(item => route.meta.title == item.name && route.meta.navType == item.navType ) || route.meta.title == '概况首页' || route.meta.title == '概况' || route.meta.title == '账号信息' || route.meta.title == '修改密码' || route.meta.title == '发货成功' || route.meta.title == '智能开店' ||route.meta.title == '开店引导入口' || route.meta.title == '开店引导'
     }else{
       return true
     }
   }else {
-    return route.meta.title == '概况首页' || route.meta.title == '概况' || route.meta.title == '账号信息' || route.meta.title == '修改密码' || route.meta.title == '发货成功' || route.meta.title == '开店引导入口' || route.meta.title == '开店引导' ? true : false
+    return route.meta.title == '概况首页' || route.meta.title == '概况' || route.meta.title == '账号信息' || route.meta.title == '修改密码' || route.meta.title == '发货成功' || route.meta.title == '开店引导入口' ||route.meta.title == '智能开店' || route.meta.title == '开店引导' ? true : false
   }
 }
 
@@ -39,12 +39,12 @@ function filterAsyncRouter(routes, msfList) {
 
 function filterAnotherAuthAsyncRouter(routes, enable) {
   if(typeof enable == 'undefined') return routes
-  
+
   let hasPermission = (item) => {
     if(!item.meta) {
       return true
     } else {
-      
+
       if(item.meta.anotherAuth) {
         if(enable == 1) {
           return false

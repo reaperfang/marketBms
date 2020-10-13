@@ -738,6 +738,15 @@ export default {
             if (!str) return callback();
             return callback(new Error('当前输入有误，请您重新输入'));
         }
+        var goodsNameValidator = (rule, value, callback) => {
+            if(value === "") {
+            callback(new Error('请输入商品名称'));
+            } else if(value.length > 60){
+            callback(new Error('商品名称过长，最大60个字符'));
+            }else {
+            callback();
+            }
+        };
         return {
             specRadio:0,//商品规格信息，0:单一规格，1:多规格
             singleSpec:{
@@ -810,7 +819,8 @@ export default {
                 ],
                 name: [
                     { required: true, message: '请输入商品名称', trigger: 'blur' },
-                    {validator: validSpecialChar, trigger: 'blur' }
+                    {validator: validSpecialChar, trigger: 'blur' },
+                    { validator: goodsNameValidator, trigger: 'blur' }
                 ],
                 description: [
                     {validator: validSpecialChar, trigger: 'blur' }
@@ -2892,6 +2902,10 @@ export default {
                         this.editorGoods(params)
                     }
                 } else {
+                  if(this.ruleForm.name.length > 60) {
+                    // this.$refs.ruleForm.validateField('name');
+                    this.$message.error("商品名称过长")
+                  }
                     console.log('error submit!!');
                     return false;
                 }

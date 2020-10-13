@@ -30,6 +30,75 @@ export function getProductNews(data) {
   })
 }
 
+// 获取智能开店的进度步骤
+export function getIntelligentProgress(data) {
+  return request({
+    target: 'DECORATION_SMART_STORE_OPEN_STEPS_FIND_PROCESSOR',
+    method: 'post',
+    apiType: 'decorate',
+    data
+  })
+}
+// 获取行业列表
+export function getIntelligentIndustry(data) {
+  return request({
+    target: 'PUBLIC-SMART-STORE-INDUSTRY-LIST-PROCESSOR',
+    method: 'post',
+    apiType: 'goodsOperate',
+    data
+  })
+}
+
+// 获取预览步骤的店铺模板列表
+export function getIntelligentPreViewTemplate(data) {
+  return request({
+    target: 'PUBLIC-SMART-STORE-TEMPLATE-FIND-PROCESSOR',
+    method: 'post',
+    apiType: 'goodsOperate',
+    data
+  })
+}
+
+// 启用模板 / 再次加载
+export function intelligentEnableTemplate(data) {
+  return request({
+    target: 'DECORATION_SMART_STORE_TEMPLATE_ENABLE_PROCESSOR',
+    method: 'post',
+    apiType: 'decorate',
+    data
+  })
+}
+
+// 数据配置实时查询进度的接口
+export function intelligentConfigurationStatus(data) {
+  return request({
+    target: 'DECORATION_STORE_SYNCHRO_RECORD_FIND_PROCESSOR',
+    method: 'post',
+    apiType: 'decorate',
+    data
+  })
+}
+
+//获取小程序和公众号的绑定状态
+export function getwxBindStatus (data) {
+  return request({
+    target: 'SHOP-API-WXBIND-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
+
+// 保存当前步骤状态
+export function intelligentUpdateStep (data = {}) {
+  return request({
+    target: 'DECORATION_SMART_STORE_OPEN_STEPS_UPDATE_PROCESSOR',
+    method: 'post',
+    apiType: 'decorate',
+    data
+  })
+}
+
 // 帮助中心
 export function getHelpNews(data) {
   return request({
@@ -46,16 +115,6 @@ export function getSignatureList (params) {
     baseURL: process.env.SALE_API,
     method: 'get',
     params
-  })
-}
-
-//获取小程序和公众号的绑定状态
-export function getwxBindStatus (data) {
-  return request({
-    target: 'SHOP-API-WXBIND-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
   })
 }
 
