@@ -84,7 +84,7 @@ export default {
               if (url) {
                 window.open(url);
                 this.confirm({
-                  title: "请确认支持状态",
+                  title: "请确认支付状态",
                   text: "请在新开页面中完成支付",
                   showCancelButton: false,
                   customClass: "recharge-confirm",
