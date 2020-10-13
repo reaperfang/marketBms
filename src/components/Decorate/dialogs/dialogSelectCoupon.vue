@@ -1,6 +1,6 @@
 /* 选择优惠券弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="'选择优惠券'" @submit="submit">
+  <DialogBase :visible.sync="visible" width="816px" :title="'选择优惠券'" :showFooter="false">
     <div class="select_dialog">
       <div class="head-wrapper">
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px" :inline="true">
@@ -81,6 +81,10 @@
           </el-pagination>
         </div>
       </div>
+      <span class="dialog-footer fcc">
+          <el-button type="primary" @click="submit">确 认</el-button>
+          <el-button @click="visible = false">取 消</el-button>
+      </span>
   </DialogBase>
 </template>
 
@@ -102,6 +106,16 @@ export default {
     };
   },
   methods: {
+    /* 向父组件提交选中的数据 */
+    submit() {
+
+      if(this.multipleSelection.length > 20) {
+        this.$message.warning('最多添加20张优惠券')
+        return;
+      }
+      this.visible = false;
+      this.$emit('dialogDataSelected',  this.multipleSelection);
+    },
     fetch() {
       this.loading = true;
       this._apis.shop.getCouponList(this.ruleForm).then((response)=>{
@@ -139,4 +153,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dialog-footer {
+    margin-top:40px;
+  }
+  .dialog-footer .el-button{
+    padding: 9px 20px;
+    margin-left: 30px;
+    span{
+      letter-spacing: 5px;
+      margin-right: -4px;
+    }
+  }
+  .el-button:first-child {
+      display: block;
+      margin-left: 0;
+  }
 </style>

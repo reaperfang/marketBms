@@ -364,7 +364,7 @@ export default {
         handleSelectionChange(val) {
             this.multipleSelection = val;
             let checkedCount = val.length;
-            this.checkedAll = checkedCount === this.tableData.length;
+            this.checkedAll = (checkedCount === this.tableData.length) && (checkedCount !== 0);
             this.isIndeterminate = checkedCount > 0 && checkedCount < this.tableData.length;
         },
         getList(param) {

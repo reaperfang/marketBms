@@ -130,21 +130,24 @@ export default {
   },
   methods: {
     //获取视频列表
-    getList(id){
+    getList(id, cPage){
       id && (this.groupId = id)
+      cPage && (this.currentPage = cPage)
       let query ={
         fileGroupInfoId:id || '',
         startIndex:this.currentPage,
         pageSize:this.pageSize,
-        sourceMaterialType:'2'
+        sourceMaterialType:'2',
+        fileName:this.searchWord
       }
       this.getData(query)
     },
 
     //查询
     search(){
+      this.currentPage = 1; // 查询前将条件页码置为1
       let query ={
-        fileGroupInfoId:'',
+        fileGroupInfoId:this.groupId || '',
         startIndex:this.currentPage,
         pageSize:this.pageSize,
         sourceMaterialType:'2',
@@ -182,7 +185,7 @@ export default {
       for(let key in data){
         switch (key) {
           case 'getGroupVideo':
-            this.getList(data.getGroupVideo.groupId)
+            this.getList(data.getGroupVideo.groupId, 1)
           break;
           case 'moveGroup':
             this.handleMoveGroup(data.moveGroup.imageId,data.moveGroup.groupId)

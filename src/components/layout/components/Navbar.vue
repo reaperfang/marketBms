@@ -85,7 +85,7 @@ export default {
       showShopsDialog: false,
       shopList: [],
       route: "index",
-      shopName: "",
+      // shopName: "",
       searchName: "", //搜索名称
       helpLink: "",
       zxLink: `${process.env.ZX_HELP}`, //链接
@@ -102,7 +102,7 @@ export default {
       let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
       return shopInfo.id;
     },
-    ...mapGetters(["sidebar", "device"]),
+    ...mapGetters(["sidebar", "device", "shopName"]),
     userInfo() {
       return JSON.parse(localStorage.getItem("userInfo"));
     },
@@ -122,7 +122,7 @@ export default {
     }
   },
   created() {
-    this.getShopName();
+    // this.getShopName();
     this.getGuide();
     // this.getShopInfo()
   },
@@ -136,7 +136,7 @@ export default {
     //     .getShopInfo({ id: id })
     //     .then(response => {
     //       console.log('21212',  response.storeGuide, response)
-          
+
     //       this.isCompleteGuide = this.userType && response && response.storeGuide !== 1
     //     })
     // },
@@ -172,7 +172,7 @@ export default {
     //监听弹窗关闭
     handleClose() {
       this.showShopsDialog = false;
-      this.getShopName();
+      // this.getShopName();
       this.getGuide();
     },
 

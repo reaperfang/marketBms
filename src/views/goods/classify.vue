@@ -86,7 +86,7 @@ export default {
             }).then((res) => {
                 this.onoff = res.onoff
             }).catch(error => {
-                
+
             })
         },
         resetForm(formName) {
@@ -383,7 +383,7 @@ export default {
             }
             this._apis.goods.fetchCategoryList(params).then((res) => {
                 let arr = this.transTreeData(res, 0)
-                
+
                 this.categoryData = arr
                 this.flatArr = this.flatTreeArray(JSON.parse(JSON.stringify(arr)))
                 this.loading = false
@@ -415,6 +415,9 @@ export default {
     }
     /deep/ .el-tree-node__content>.el-tree-node__expand-icon {
         padding: 3px!important;
+    }
+    /deep/ .el-tooltip.delete {
+      outline: none;
     }
 </style>
 <style lang="scss">
