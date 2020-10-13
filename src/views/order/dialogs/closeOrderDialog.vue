@@ -149,13 +149,19 @@ export default {
                  }else if(this.deliveryWay==3 && this.operationType == 8){
                      if(this.value){
                          this.showError= false;
+                         if(this.value == 10 && !this.operationRemark){ 
+                            this.$message({
+                                message: '请输入关闭原因',
+                                type: 'warning'
+                                });
+                                return
+                         }
                          operationRemark = "第三方配送异常"
+                         
                      }else{
                          this.showError= true;
                          return
                      }
-                     
-
                  }
             this.$emit('submit', {
                 operationType: +this.operationType,
@@ -166,9 +172,17 @@ export default {
         },
         change() {
             // operationRemark
-            if(this.value == '10') {
-                this.showTextarea = true
+            if(this.value){
+                this.showError=false
+                if(this.value == '10'){
+                    this.showTextarea=true
+                }else{
+                    this.showTextarea=false
+                }
+            }else{
+                this.showError=true
             }
+            
         },
     },
     
