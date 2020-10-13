@@ -226,7 +226,7 @@ export default {
 
 					seriesIndex: [1],
 					pieces: [
-						{ min: 3000, label: "> 3000 ", color: "#003C87" },
+						{ min: 3000, label: "> 3000 ", color: "#012352" },
 						{
 							min: 2001,
 							max: 3000,
