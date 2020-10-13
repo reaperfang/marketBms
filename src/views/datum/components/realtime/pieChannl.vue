@@ -44,7 +44,7 @@ export default {
         name: "",
         type: "pie",
         hoverAnimation:false,
-        radius: ['35%', '55%'], 
+        radius: ['25%', '42%'], 
         center: ["50%", "50%"],
         labelLine: {//设置延长线的长度
             normal: {
@@ -53,7 +53,7 @@ export default {
         },
         label: { //  饼图图形上的文本标签
             normal: { // normal 是图形在默认状态下的样式
-                formatter: '{a|{b}：}{per|{c}人}\n{a|占比：}{per|{d}%}',
+                formatter: '{b|{b}：}{perb|{c}人}\n{a|占比：}{per|{d}%}',
                 rich: {
                     a: {
                         // width: 50,
@@ -62,12 +62,26 @@ export default {
                         lineHeight: 20,
                         align: 'left'
                     },
+                    b: {
+                        // width: 50,
+                        color: '#92929B',
+                        fontSize: 12,
+                        lineHeight: 20,
+                        align: 'right'
+                    },
                     per: {
                         color: '#161617',
                         align: 'left',
                         fontSize: 12,
                         fontWeight: 'bold',
-                        width: 50,
+                        // width: 50,
+                    },
+                    perb: {
+                        color: '#161617',
+                        align: 'right',
+                        fontSize: 12,
+                        fontWeight: 'bold',
+                        // width: 50,
                     }
                 },
                 show: true,

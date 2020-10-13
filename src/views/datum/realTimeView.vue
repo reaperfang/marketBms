@@ -109,7 +109,7 @@
                     </div>
                 </div>
                 <div class="choosebox">
-                    <el-scrollbar noresize="true">
+                    <el-scrollbar>
                 <div class="choose-type clearfix" >
                     <div class="choose_item" :class="checkList[0]?'active':''">
                         <div class="choosetop">
@@ -818,7 +818,7 @@ background: #fff;
 .p_rtsiade{
     float: left;
     background: #fff;
-    width: calc(35% - 12px);
+    width: 35%;
     .chartbox{
         .lengebox{
             width: 160px;

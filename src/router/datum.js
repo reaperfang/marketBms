@@ -16,7 +16,8 @@ export default [
           path: 'realTimeView',
           component: () => import('@/views/datum/realTimeView'),
           name: 'realTimeView',
-          meta: { title: '实时概况', noCache: true, tabTitle: '实时概况', navType:2}
+          meta: { title: '实时概况', noCache: true, tabTitle: '实时概况', navType:2},
+          hidden:true
         },
         {
           path: 'purchaseOrder',
