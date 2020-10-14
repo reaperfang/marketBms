@@ -84,6 +84,7 @@ export default {
     getList(){
       let query ={
         startIndex:this.currentPage,
+        pageSize: this.pageSize
       }
       this._apis.file.getWxArticle(query).then((response)=>{
         this.list = []

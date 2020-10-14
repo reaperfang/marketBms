@@ -92,6 +92,7 @@ export default {
     getList(){
       let query ={
         startIndex:this.currentPage,
+        pageSize: this.pageSize
       }
       this._apis.file.getWxVideo(query).then((response)=>{
         this.list = []
