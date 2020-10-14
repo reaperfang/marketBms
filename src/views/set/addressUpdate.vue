@@ -332,16 +332,40 @@ export default {
       const newIsTrue1 = this.hasChecked(1)
       return !((oldIsTrue && newIsTrue) || (oldIsTrue1 && newIsTrue1))
     },
+    // 达达是否覆盖
+    isDaDaCoveredArea(params) {
+      const req = {
+        // cid: this.cid,
+        // cityCode: this.cityCode,
+        // areaCode: this.areaCode,
+        ...params,
+        thirdType: 1 // 达达
+      }
+      return this._apis.set.isDaDaCoveredArea(req)
+    },
+    // 处理达达没有覆盖的逻辑
+    handleNoDaDaCoveredArea(){
+      this.confirm({
+        title: '', 
+        iconWarning: true, 
+        text: '非常抱歉，发货地所在的城市尚未开通达达同城配送，暂无法使用，敬请期待。',
+        confirmText: '我知道了',
+        customClass: 'setting-custom',
+        showCancelButton: false
+      });
+    },
+    // 处理达达已经覆盖的逻辑
+    handleHasDaDaCoveredArea() {
+
+    },
     // 处理开启商家配送提醒 status 1 商家配送 2 三方配送
     hanldeIsOpenDelivery(res, status) {
-      // 是否是默认发货地址，如果是，并且 当前地址不是设置为默认发货地址，则 不提示，其他都提示
-        // merchantDeliver 商家配送地址
-        // res && res.isDefaltSenderAddress && (res.addressType === 0 || res.addressType === 2)  && (this.ruleForm.type === 1 || this.ruleForm.type === 2)
-      // if (!this.isNotUpdateMerchantAddress(res)) {
+      // 么有发货地址的情况???
+      // if (!res) {
       //   this.confirm({
-      //     title: "提示",
+      //     title: "",
       //     iconWarning: true,
-      //     text: '保存后，此地址将成为商家配送的发货地址，商家配送规则将以最新发货地址为准，您确定要保存吗？',
+      //     text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
       //     confirmText: '确定',
       //     showCancelButton: true,
       //     customClass: 'address-update'
@@ -350,25 +374,8 @@ export default {
       //   }).catch(() => {
       //     this.isLoading = false
       //   });
-      // } else {
-      //   this.saveAddress()
+      //   return false
       // }
-      // 么有发货地址的情况
-      if (!res) {
-        this.confirm({
-          title: "",
-          iconWarning: true,
-          text: '保存后，此地址将成为商家配送的发货地址，商家配送规则将以最新发货地址为准，您确定要保存吗？',
-          confirmText: '确定',
-          showCancelButton: true,
-          customClass: 'address-update'
-        }).then(() => {
-          this.saveAddress()
-        }).catch(() => {
-          this.isLoading = false
-        });
-        return false
-      }
       let req = this.getReqData()
       req = this.formateReqData(req)
       const isTrue = (req.id === res.id)
@@ -388,102 +395,23 @@ export default {
           showCancelButton: true,
           customClass: 'address-update'
         }).then(() => {
-          this.saveAddress()
+          const params = {
+            cid: req.cid,
+            cityCode: req.city_code,
+            areaCode: req.area_code
+          }
+          this.isDaDaCoveredArea(params).then(() => {
+            this.saveAddress()
+          }).catch(() => {
+            this.isLoading = false
+            this.handleNoDaDaCoveredArea()
+          })
+          
         }).catch(() => {
           this.isLoading = false
         });
         return false
       }
-      // if (status === 1 && req.isBindShopsend === 1) {
-      //   this.confirm({
-      //     title: "提示",
-      //     iconWarning: true,
-      //     text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
-      //     confirmText: '确定',
-      //     showCancelButton: true,
-      //     customClass: 'address-update'
-      //   }).then(() => {
-      //     this.saveAddress()
-      //   }).catch(() => {
-      //     this.isLoading = false
-      //   });
-      //   return false
-      // }
-      // if (status === 1 && req.isDefaltSenderAddress === 1 && res.isBindShopsend !== 1) {
-      //   this.confirm({
-      //     title: "提示",
-      //     iconWarning: true,
-      //     text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
-      //     confirmText: '确定',
-      //     showCancelButton: true,
-      //     customClass: 'address-update'
-      //   }).then(() => {
-      //     this.saveAddress()
-      //   }).catch(() => {
-      //     this.isLoading = false
-      //   });
-      //   return false
-      // }
-      // if (status === 1 && res.isDefaltSenderAddress !== 1 && res.isBindShopsend !== 1) {
-      //   this.confirm({
-      //     title: "提示",
-      //     iconWarning: true,
-      //     text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
-      //     confirmText: '确定',
-      //     showCancelButton: true,
-      //     customClass: 'address-update'
-      //   }).then(() => {
-      //     this.saveAddress()
-      //   }).catch(() => {
-      //     this.isLoading = false
-      //   });
-      //   return false
-      // }
-      // if (status === 2 && req.isBindThirdsend === 1) {
-      //   this.confirm({
-      //     title: "提示",
-      //     iconWarning: true,
-      //     text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
-      //     confirmText: '确定',
-      //     showCancelButton: true,
-      //     customClass: 'address-update'
-      //   }).then(() => {
-      //     this.saveAddress()
-      //   }).catch(() => {
-      //     this.isLoading = false
-      //   });
-      //   return false
-      // }
-      // if (status === 2 && req.isDefaltSenderAddress === 1 && res.isBindThirdsend !== 1) {
-      //   this.confirm({
-      //     title: "提示",
-      //     iconWarning: true,
-      //     text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
-      //     confirmText: '确定',
-      //     showCancelButton: true,
-      //     customClass: 'address-update'
-      //   }).then(() => {
-      //     this.saveAddress()
-      //   }).catch(() => {
-      //     this.isLoading = false
-      //   });
-      //   return false
-      // }
-      // if (status === 2 && res.isDefaltSenderAddress !== 1 && res.isBindThirdsend !== 1) {
-      //   this.confirm({
-      //     title: "提示",
-      //     iconWarning: true,
-      //     text: '保存后，此地址将成为同城配送的发货地址，同城配送规则将以最新发货地址为准，您确定要保存吗？',
-      //     confirmText: '确定',
-      //     showCancelButton: true,
-      //     customClass: 'address-update'
-      //   }).then(() => {
-      //     this.saveAddress()
-      //   }).catch(() => {
-      //     this.isLoading = false
-      //   });
-      //   return false
-      // }
       // // 是否最新地址
       this.saveAddress()
     },
@@ -594,16 +522,11 @@ export default {
           const p1 = this.isOpenCityDeliver()
           const p2 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
           const p3 = this.getTh3DeliverAddressById() // 获取三方配送默认地址
-          Promise.all([p1, p2]).then((result) => {
-            console.log(result)
+          Promise.all([p1, p2, p3]).then((result) => {
+            console.log('--onSubmit:result--',result)
             const [{ isOpenMerchantDeliver, isOpenTh3Deliver }, res1, res2] = result
             // 是否打开同城配送
-            const isOpen = isOpenMerchantDeliver || isOpenTh3Deliver
             if (isOpenMerchantDeliver) {
-              // 没有地址， 新建提醒
-              // 有地址，是否为同城配送跳转过来设置过的地址
-              // 如果是
-
               this.hanldeIsOpenDelivery(res1, 1)
             } else if (isOpenTh3Deliver) {
               this.hanldeIsOpenDelivery(res2, 2)

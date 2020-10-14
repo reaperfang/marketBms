@@ -304,24 +304,7 @@ export default {
       req.id = this.cid
       return this._apis.set.updateShopInfo(req)
     },
-    handleSubmit() {
-      if (this.isLoading) return false
-      // 判断是否设置发货地址和开通达达设置
-      if (this.isOpenTh3Deliver && !this.hasSetting()) {
-        this.confirm({
-          title: '',
-          iconWarning: true,
-          text: '您未完成发货地址或开通第三方等配置项设置，设置成功后，才能成功开启第三方配送开关。',
-          confirmText: '我知道了',
-          customClass: 'setting-custom',
-          showCancelButton: false
-        }).finally(() => {
-          this.isOpenTh3Deliver = false
-        });
-        
-        return false
-      }
-      this.isLoading = true
+    save() {
       const p1 = this.setBindThirdsend()
       const p2 = this.updateShopInfo()
       Promise.all([p1, p2]).then(response =>{
@@ -341,6 +324,51 @@ export default {
         this.isLoading = false
         this.getShopInfo()
       })
+    },
+    handleSubmit() {
+      if (this.isLoading) return false
+      // 判断是否设置发货地址和开通达达设置
+      if (this.isOpenTh3Deliver && !this.hasSetting()) {
+        this.confirm({
+          title: '',
+          iconWarning: true,
+          text: '您未完成发货地址或开通第三方等配置项设置，设置成功后，才能成功开启第三方配送开关。',
+          confirmText: '我知道了',
+          customClass: 'setting-custom',
+          showCancelButton: false
+        }).finally(() => {
+          this.isOpenTh3Deliver = false
+        });
+        
+        return false
+      }
+      this.isLoading = true
+      // 地址是否为达达覆盖范围
+      this.isDaDaCoveredArea().then(() => {
+        this.save()
+      }).catch(() => {
+        this.isLoading = false
+        this.handleNoDaDaCoveredArea()
+      })
+      // const p1 = this.setBindThirdsend()
+      // const p2 = this.updateShopInfo()
+      // Promise.all([p1, p2]).then(response =>{
+      //   let html = `<span class="sucess">保存成功！</span>`
+      //   if (this.isOpenTh3Deliver) html += `<span class="prompt" style="">第三方配送-达达配送已开启。</span>`
+      //   this.confirm({
+      //     title: '',
+      //     iconSuccess: true,
+      //     text: html,
+      //     customClass: 'setting-custom',
+      //     confirmText: '确定',
+      //     showCancelButton: false
+      //   });
+      // }).catch(error =>{
+      //   this.$message.error(error || '保存失败');
+      // }).finally(() => {
+      //   this.isLoading = false
+      //   this.getShopInfo()
+      // })
     },
     viewBalance() {
       // 查看余额
@@ -384,14 +412,26 @@ export default {
     isFullAddress() {
       return this.address && this.provinceCode && this.cityCode && this.areaCode && this.lat && this.lng
     },
+    // 达达是否覆盖
     isDaDaCoveredArea(curr) {
       const req = {
         cid: this.cid,
         cityCode: this.cityCode,
         areaCode: this.areaCode,
-        thirdType: curr.thirdType || 1
+        thirdType: curr && curr.thirdType || 1
       }
       return this._apis.set.isDaDaCoveredArea(req)
+    },
+    // 处理达达没有覆盖的逻辑
+    handleNoDaDaCoveredArea(){
+      this.confirm({
+        title: '', 
+        iconWarning: true, 
+        text: '非常抱歉，发货地所在的城市尚未开通达达同城配送，暂无法使用，敬请期待。',
+        confirmText: '我知道了',
+        customClass: 'setting-custom',
+        showCancelButton: false
+      });
     },
     //申请开通
     handleClickIsopen(row) {
@@ -414,14 +454,7 @@ export default {
         this.btnShow = true;
         this.saveShow = false;
       }).catch(() => {
-        this.confirm({
-          title: '', 
-          iconWarning: true, 
-          text: '非常抱歉，发货地所在的城市尚未开通达达同城配送，暂无法使用，敬请期待。',
-          confirmText: '我知道了',
-          customClass: 'setting-custom',
-          showCancelButton: false
-        });
+        this.handleNoDaDaCoveredArea()
       })
     },
   }
@@ -521,10 +554,11 @@ export default {
   }
   .tableBox-btn {
     padding:0;
-    padding-right: 8px;
+    padding-right: 10px;
     padding-left: 8px;
     border-right: 1px solid rgba(218, 218, 227, 1);
     margin-left:0;
+    border-radius: 0;
     &:last-of-type {
       padding-right: 0;
       border-right: 0;
