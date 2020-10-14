@@ -53,7 +53,7 @@
           <li v-for="(item, key) of ruleForm.itemList" :key="key">
             <div class="left">
               <div v-if="item.url" class="img_preview">
-                <img :src="item.url" alt="">
+                <el-image scroll-container=".props_form" :src="item.url" alt="" lazy></el-image>
                 <i class="delete_btn" @click.stop="deleteImage(item)"></i>
                 <span @click="dialogVisible=true; currentAD=item; currentDialog='dialogSelectImageMaterial'">更换图片</span>
               </div>
