@@ -47,6 +47,7 @@ import gridtitle from "../../components/title/index";
 import vitem from "./item";
 import pchart from "./mobile/item"; //v-chart
 import { mapGetters, mapActions, mapState } from "vuex";
+import { toDecimal } from "@/utils/util";
 
 export default {
 	watch: {
@@ -197,15 +198,25 @@ export default {
 
 			this.sexageData = {
 				ageData: result,
+				// sexData: {
+				// 	female:
+				// 		val.c_uv_share_sex_female == -9999
+				// 			? "0.00"
+				// 			: (val.c_uv_share_sex_female * 100).toFixed(2), //c_uv_sex_female
+				// 	gender:
+				// 		val.c_uv_share_sex_gender == -9999
+				// 			? "0.00"
+				// 			: (val.c_uv_share_sex_gender * 100).toFixed(2)
+				// }
 				sexData: {
 					female:
 						val.c_uv_share_sex_female == -9999
 							? "0.00"
-							: (val.c_uv_share_sex_female * 100).toFixed(2), //c_uv_sex_female
+							: toDecimal(val.c_uv_share_sex_female * 100), //c_uv_sex_female
 					gender:
 						val.c_uv_share_sex_gender == -9999
 							? "0.00"
-							: (val.c_uv_share_sex_gender * 100).toFixed(2)
+							: toDecimal(val.c_uv_share_sex_gender * 100)
 				}
 			};
 		},
