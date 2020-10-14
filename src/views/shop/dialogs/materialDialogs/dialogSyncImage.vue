@@ -25,6 +25,7 @@
               @current-change="handleCurrentChange"
               :current-page="currentPage"
               :page-size="pageSize"
+              :page-sizes="[20]"
               layout="prev, pager, next, sizes"
               :total="total*1"
               class="page_nav">
