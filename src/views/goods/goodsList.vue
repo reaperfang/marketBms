@@ -399,6 +399,7 @@
 }
 .red {
     color: #FD4C2B;
+    
 }
 
 .goods-list-empty {
