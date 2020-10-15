@@ -65,7 +65,7 @@
         <div class="input_wrap" v-show="nearDay2 == 4">
           <el-date-picker v-model="date2" type="month" @change="changeDate2" placeholder="选择月份" :picker-options="pickerOptions"></el-date-picker>
         </div>
-        <span class="fr" @click="toLink()">会员消费</span>
+        <span class="fr pointer" @click="toLink()">会员消费</span>
       </div>
 
       <div class="chart3_container clearfix" v-if="ip3Show">
@@ -328,6 +328,9 @@ export default {
   width:332px;
   float:left;
   margin-bottom: 25px;
+  label {
+    margin-left: 0;
+  }
 }
 .p_container {
   padding: 20px;

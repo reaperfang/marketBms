@@ -258,6 +258,10 @@ input::-moz-placeholder, textarea::-moz-placeholder{
   height: 46px;
   color: #44434B;
   background: #F6F7FA;
+  border-bottom: 0 !important;
+  .cell {
+    font-weight: bold !important;
+  }
 }
 .el-table td {
   padding: 16px 0;
