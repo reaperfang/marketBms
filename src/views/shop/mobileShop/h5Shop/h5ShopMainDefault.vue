@@ -137,7 +137,6 @@ export default {
 	background: #fff;
   padding:55px 25px 0;
   background:url('../../../../assets/images/shop/guide/big_back.png') no-repeat 0 0;
-  min-width:1300px;
   .inner{
     display:flex;
     flex-direction: row;
