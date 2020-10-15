@@ -54,7 +54,7 @@ export default {
       return  business && business.length <= 0 ? true : false
     },
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     }
   },

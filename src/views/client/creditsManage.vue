@@ -170,7 +170,7 @@ export default {
                 formObj.scoreToCashOrderMoney = formObj.scoreEnableOrderAchieveCash=="1" ? formObj.scoreToCashOrderMoney:-1;
                 // formObj.scoreToCashOrderRate = formObj.scoreToCashOrderRate == "" ? -1:formObj.scoreToCashOrderRate;
                 formObj.scoreToCashOrderRate = formObj.scoreEnableOrderHighCash == "1" ? formObj.scoreToCashOrderRate:-1;
-                formObj.id = JSON.parse(localStorage.getItem('shopInfos')).id;
+                formObj.id = this.$store.getters.shopInfos.id;
                 this._apis.shopInfo.updateShopInfo(formObj).then((response) => {
                     this.$message({
                         message: "保存积分规则成功",
@@ -189,7 +189,7 @@ export default {
                     type: 'warning'
                 });
             }else{
-                this._apis.shopInfo.updateShopInfo({scoreUpper: this.isSwitch?'1':'0', scoreUpperCount: this.ruleForm.scoreUpperCount, id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {            
+                this._apis.shopInfo.updateShopInfo({scoreUpper: this.isSwitch?'1':'0', scoreUpperCount: this.ruleForm.scoreUpperCount, id: this.$store.getters.shopInfos.id}).then((response) => {            
                     this.$store.dispatch('getShopInfo');     
                     this.$message({
                         message: "每日最高获得积分数保存成功",
@@ -203,7 +203,7 @@ export default {
         handleSwitch(val) {
             if(!val) {
                 this.ruleForm.scoreUpperCount = "";
-                this._apis.shopInfo.updateShopInfo({scoreUpper: this.isSwitch?'1':'0', id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
+                this._apis.shopInfo.updateShopInfo({scoreUpper: this.isSwitch?'1':'0', id: this.$store.getters.shopInfos.id}).then((response) => {
                     this.$store.dispatch('getShopInfo');
                     this.$message({
                         message: "关闭成功",

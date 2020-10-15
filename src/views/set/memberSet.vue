@@ -92,7 +92,7 @@ export default {
   },
   computed:{
     cid(){
-      const shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      const shopInfo = this.$store.getters.shopInfos
       return shopInfo.id
     }
   },

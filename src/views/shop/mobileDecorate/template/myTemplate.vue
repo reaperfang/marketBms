@@ -245,7 +245,7 @@
 					this._apis.templatePay.getOrcode({
 						orderSource: 1,
 						orderType: 1,
-						shopName: JSON.parse(localStorage.getItem('shopInfos')).shopName,
+						shopName: this.$store.getters.shopInfos.shopName,
 						templateChargeType: item.chargeType,
 						templateId: item.pageTemplateId,
 						templateName: item.name,

@@ -118,7 +118,7 @@ const mixin = {
       return this.$refs.canvas1;
     },
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
     getAddress() {
@@ -261,7 +261,7 @@ const mixin = {
     },
 
     setShopName() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       let name = shopInfo.shopName;
       if (name != this.form.shopName) {
         shopInfo.shopName = this.form.shopName;

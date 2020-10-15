@@ -1,10 +1,25 @@
+import { isJsonStr, isObject } from "@/utils/base.js";
 const getters = {
   sidebar: state => state.app.sidebar,
   device: state => state.app.device,
   token: state => state.user.token,
-  userInfo: state => state.user.userInfo || localStorage.getItem('userInfo'),
+  // userInfo: state => state.user.userInfo || localStorage.getItem('userInfo'),
+  userInfo: state => {
+    let userInfo = state.user.userInfo || localStorage.getItem('userInfo')
+    if (isObject(userInfo)) return userInfo
+    if (!isJsonStr(userInfo)) return null
+    userInfo = JSON.parse(userInfo);
+    return userInfo
+  },
   roles: state => state.user.roles,
-  shopInfos: state => state.user.shopInfos || localStorage.getItem('shopInfos'),
+  // shopInfos: state => state.user.shopInfos || localStorage.getItem('shopInfos'),
+  shopInfos: state => {
+    let shopInfos = state.user.shopInfos || localStorage.getItem('shopInfos')
+    if (isObject(shopInfos)) return shopInfos
+    if (!isJsonStr(shopInfos)) return null
+    shopInfos = JSON.parse(shopInfos);
+    return shopInfos
+  },
   permission_routers: state => state.permission.routers,
   permission_routers_tree: state => state.permission.routers && state.permission.routers.filter(val => !val.hidden && val.children),
   addRouters: state => state.permission.addRouters,

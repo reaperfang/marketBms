@@ -498,7 +498,7 @@ export default {
       return "是否确认删除？";
     },
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
     getAddress() {

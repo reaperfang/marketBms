@@ -133,7 +133,7 @@ export default {
       return this.ruleForm.id ? '编辑地址' : '新建地址'
     },
     cid(){
-      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      let shopInfo = this.$store.getters.shopInfos
       return shopInfo.id
     },
   },

@@ -88,7 +88,7 @@ export default {
       }
     },
     shopInfo(){
-        return JSON.parse(localStorage.getItem('shopInfos'))
+        return this.$store.getters.shopInfos
      }
   },
   created(){

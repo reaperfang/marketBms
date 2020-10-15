@@ -61,7 +61,7 @@ export default {
 
   computed: {
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
     // 判断是否店铺勾选微信公众号

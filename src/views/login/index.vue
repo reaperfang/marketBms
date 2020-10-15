@@ -65,7 +65,7 @@ export default {
   name: 'Login',
   computed: {
     isAdminUser(){
-      let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      let userInfo = this.$store.getters.userInfo
 
       if(userInfo && userInfo.type == "admin") {
         return true
@@ -184,7 +184,7 @@ export default {
         this.loading = false
         this.autoLoginLoading = false
         this.shopList = []
-        let info = JSON.parse(localStorage.getItem('userInfo'))
+        let info = this.$store.getters.userInfo
         let arr = Object.keys(info.shopInfoMap) 
         if(arr.length == 0){//没有店铺时，提示去创建店铺
           this.dialogVisible = true

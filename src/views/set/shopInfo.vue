@@ -249,8 +249,8 @@ export default {
       return this.$refs.canvas1;
     },
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-      return shopInfo.id;
+      let shopInfo = this.$store.getters.shopInfos
+      return shopInfo && shopInfo.id
     },
     getAddress() {
       return `${this.province}${this.city}${this.area}`
@@ -490,7 +490,7 @@ export default {
     },
 
     setShopName() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       let name = shopInfo.shopName;
       if (name != this.form.shopName) {
         shopInfo.shopName = this.form.shopName;

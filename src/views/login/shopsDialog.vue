@@ -49,7 +49,7 @@ export default {
   name: 'shopsDialog',
   computed: {
     isAdminUser(){
-      let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      let userInfo = this.$store.getters.userInfo
       if(userInfo && userInfo.type == "admin") {
         return true
       }
@@ -84,7 +84,7 @@ export default {
   methods: {
     //获取店铺列表
     getShopList(){
-      let userInfo = JSON.parse(localStorage.getItem('userInfo')) 
+      let userInfo = this.$store.getters.userInfo 
       let tid = '',id = '',type = ''
       if(userInfo){
         tid = userInfo.tenantInfoId

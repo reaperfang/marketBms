@@ -501,7 +501,7 @@ export default {
             return 0
         },
         cid(){
-          let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+          let shopInfo = this.$store.getters.shopInfos
           return shopInfo.id
         }
     },
@@ -547,7 +547,7 @@ export default {
           })
         },
         getGain() {
-            let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+            let shopInfo = this.$store.getters.shopInfos;
             console.log(this);
             this._apis.order.getGain({
                 businessId:1,

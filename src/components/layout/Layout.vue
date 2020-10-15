@@ -106,7 +106,7 @@ export default {
       }
     },
     cid(){
-        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        let shopInfo = this.$store.getters.shopInfos
         return shopInfo.id
     },
     shopInfo() {
@@ -168,7 +168,6 @@ export default {
       return isExternal(routePath)
     },
     hasShowChildren(item) {
-      console.log('hasShowChildren:item',item)
       for (let i = 0; i < item.length; i++) {
         const tmp = {...item[i]}
         if (tmp.children) {
@@ -176,7 +175,6 @@ export default {
           console.log('result',result)
           return result
         } else {
-          console.log('item[i]',tmp)
           if (!tmp.hidden) return true
         }
       }

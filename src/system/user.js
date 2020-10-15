@@ -1,24 +1,12 @@
 import { isJsonStr, isObject } from "@/utils/base.js";
-import { getShopInfos } from "@/system/shop.js";
 import { getToken } from "@/system/auth.js";
 import store from '@/store'
-// 获取用户信息
-export function getUserInfo() {
-  let userInfo = store.getters.userInfo
-  if (isObject(userInfo)) return userInfo
-  if (!isJsonStr(userInfo)) return null
-  userInfo = JSON.parse(userInfo);
-  return userInfo
-}
 
 // 是否登录
 export function isLogin() {
-  const user = getUserInfo()
-  const shopInfo = getShopInfos()
-  console.log('shopInfo:user',user)
-  console.log('shopInfo:shopInfo',shopInfo)
+  const user = store.getters.userInfo
+  const shopInfo = store.getters.shopInfos
   const token = getToken()
-  console.log('shopInfo:token',token)
   if (user && token && shopInfo) return true
   return false
 }
@@ -29,7 +17,6 @@ export function isLogin() {
  */
 export function isExistAuth(authList = []) {
   let msfList = getLevelAuthList()
-  console.log('msfList',msfList)
   if (msfList.length > 0 && isExistAuthInData(msfList[0].children, authList)) return true
   return false
 }
@@ -56,7 +43,7 @@ export function isExistAuthInData(data = [], authList = [], index = 0) {
 // 获取权限列表
 export function getAuthList() {
   let authList = []
-  const shopInfo = getShopInfos()
+  const shopInfo = store.getters.shopInfos
   if(shopInfo && shopInfo.data && shopInfo.data.msfList) {
     authList = shopInfo.data.msfList
   }
@@ -65,7 +52,7 @@ export function getAuthList() {
 // 获取层级权限列表
 export function getLevelAuthList() {
   let authList = []
-  const shopInfo = getShopInfos()
+  const shopInfo = store.getters.shopInfos
   if(shopInfo && shopInfo.data && shopInfo.data.functions) {
     authList = shopInfo.data.functions
   }

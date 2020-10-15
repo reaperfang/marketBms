@@ -164,7 +164,7 @@ export default {
       })
     },
     setShopName() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       let name = shopInfo.shopName;
       if (name != this.form.shopName) {
         shopInfo.shopName = this.form.shopName;

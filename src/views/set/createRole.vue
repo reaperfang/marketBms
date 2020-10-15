@@ -81,7 +81,7 @@ export default {
           return this.$route.params.data
       },
       userInfo(){
-        return JSON.parse(localStorage.getItem('userInfo'))
+        return this.$store.getters.userInfo
      },
   },
   created(){

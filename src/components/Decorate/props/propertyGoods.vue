@@ -392,7 +392,7 @@ export default {
       if(!this.ruleForm.currentCatagoryId) {
         return;
       }
-      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      let shopInfo = this.$store.getters.shopInfos
       let cid = shopInfo && shopInfo.id || ''
       this._apis.goods.getCategoryDetail({
         id: this.ruleForm.currentCatagoryId

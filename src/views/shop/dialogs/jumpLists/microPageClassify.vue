@@ -93,7 +93,7 @@ export default {
       }
       this.tableData = tempList;
 
-      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      let shopInfo = this.$store.getters.shopInfos
       let cid = shopInfo && shopInfo.id || ''
 
       if(state) {

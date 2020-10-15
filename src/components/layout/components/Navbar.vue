@@ -99,15 +99,15 @@ export default {
   },
   computed: {
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
     ...mapGetters(["sidebar", "device"]),
     userInfo() {
-      return JSON.parse(localStorage.getItem("userInfo"));
+      return this.$store.getters.userInfo;
     },
     userType() {
-      let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      let userInfo = this.$store.getters.userInfo;
 
       if (userInfo && userInfo.type == "admin") {
         return true;
@@ -178,13 +178,13 @@ export default {
 
     //获取店铺名称
     getShopName() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       this.shopName = shopInfo && shopInfo.shopName;
     },
 
     //切换店铺
     init() {
-      let info = JSON.parse(localStorage.getItem("userInfo"));
+      let info = this.$store.getters.userInfo;
       let arr = Object.keys(info.shopInfoMap);
       let data = info.shopInfoMap
         for(let key in data){

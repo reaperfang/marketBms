@@ -147,7 +147,7 @@ export default {
   },
   computed: {
     time() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       let time = new Date();
       time.setTime(
         shopInfo.createTime + 3600 * 1000 * 24 * (shopInfo.lifeTime - 1)

@@ -164,7 +164,6 @@ export default {
         if(children.some(val => val.meta.tabTitle)) {
           children = this.handleTabTitle(children)
         }
-        console.log('setSidebarItems',children)
         this.sidebarItems = children
       }
     },

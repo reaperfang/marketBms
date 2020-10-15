@@ -113,11 +113,11 @@ export default {
   },
   computed:{
     userInfo(){
-      return JSON.parse(localStorage.getItem('userInfo'))
+      return this.$store.getters.userInfo
     },
     cid(){
-      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-      return shopInfo.id
+      let shopInfo = this.$store.getters.shopInfos
+      return shopInfo && shopInfo.id
     }
   },
   created() {
