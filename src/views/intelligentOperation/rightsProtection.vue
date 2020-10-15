@@ -14,7 +14,7 @@
                         </el-radio-group>
                         <div class="input_wrap" v-if="form.timeType == 4">
                         <el-date-picker
-                            v-model="dateRange"
+                            v-model="form.daterange"
                             type="datetimerange"
                             align="right"
                             range-separator="至"
@@ -101,6 +101,7 @@ export default {
                 ProtectionReason: null,
                 endTime:'',
                 startTime:'',
+                daterange:null,
                 timeType:1,
                 memberType:null,
                 pageSize:10,
@@ -136,6 +137,10 @@ export default {
         },
         // 获取维权全部数据
         getRightsProtection(idx,pageS){
+            if(this.form.timeType == 4 && !this.form.daterange){
+                this.$message.warning('请选择查询时间')
+                return
+            }
             this.form.loads = true
             this.note = ''
             this.form.pageSize = pageS;
