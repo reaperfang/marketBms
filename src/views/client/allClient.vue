@@ -552,7 +552,7 @@ export default {
     border-radius: 4px;
     .form_container{
         .check_con1{
-            width: 290px; 
+            width: 295px; 
             display: inline-block;
             .con1_input{
                 display: inline-block
