@@ -84,7 +84,7 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="currentPage"
+        :current-page="Number(startIndex) || 1"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="pageSize"
         layout="sizes, prev, pager, next"
@@ -100,10 +100,11 @@ import TableBase from "@/components/TableBase";
 export default {
   name: "mcTable",
   extends: TableBase,
-  props:['listObj','totalCount','background'],
+  props:['listObj','totalCount','background','nowPage'],
   data() {
     return {
       pageSize:10,
+      startIndex: 1
       // dataList:[
       //   {
       //       choose: true,
@@ -117,6 +118,13 @@ export default {
       //   },
       // ],
     };
+  },
+  watch: {
+    nowPage(val) {
+      if(val) {
+        this.startIndex = val;
+      }
+    }
   },
   computed:{
 
@@ -132,7 +140,7 @@ export default {
     },
     //选择页数
     handleCurrentChange(val){
-      console.log(val)
+      this.startIndex = val;
       this.$emit('currentChange',val)
     }
     

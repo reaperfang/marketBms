@@ -75,7 +75,7 @@
                     </el-tooltip>
                 </div>
             </div>
-            <ma2Table class="marT20s" :listObj="listObj" @getRightsProtection="getRightsProtection"></ma2Table>
+            <ma2Table class="marT20s" :listObj="listObj" @getRightsProtection="getRightsProtection" :nowPage="nowPage"></ma2Table>
         </div>
         <div v-if="listObj.members != undefined && note" >
             <h3 class="marT20s">运营建议:</h3>
@@ -110,6 +110,7 @@ export default {
             listObj:{
                
             },
+            nowPage: 0,
             pickerMinDate: '',
             dateRange: [],
             reasons:[],
@@ -136,6 +137,7 @@ export default {
         },
         // 获取维权全部数据
         getRightsProtection(idx,pageS){
+            this.nowPage = idx;
             this.form.loads = true
             this.note = ''
             this.form.pageSize = pageS;

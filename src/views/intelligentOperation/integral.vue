@@ -67,6 +67,7 @@
                 @currentChange="currentChange"
                 :pageSize="10"
                 :listObj="listObj"
+                :nowPage="nowPage"
                 :totalCount="listObj.totalSize">
             </ma3Table>
         </div>
@@ -107,6 +108,7 @@ export default {
                 loads:false,
                 pageSize:10
             },
+            nowPage: 0,
             memberCount:0, //会员数
             ratio:0, //会员占比
             listObj:{}, //表格数据
@@ -167,6 +169,7 @@ export default {
         goSearch(num){
             this.form.loads = true
             this.form.startIndex = num || this.form.startIndex
+            this.nowPage = this.form.startIndex;
             this._apis.data.integralconsumption(this.form).then(res => {
                 this.memberCount = res.memberCount;
                 this.ratio = res.ratio;
