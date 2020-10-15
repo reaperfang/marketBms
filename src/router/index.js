@@ -80,6 +80,13 @@ const routerConfig = {
   routes: syncRouterMap
 };
 
+
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+  return originalPush.call(this, location).catch(err => err)
+}
+
 let router = new Router(routerConfig);
 router.selfAddRoutes = function (params){  //解决控制台路由警告提示  https://www.cnblogs.com/fqh123/p/11571688.html
   router.matcher = new Router(routerConfig).matcher; //此处清掉之前的路由，创建新的

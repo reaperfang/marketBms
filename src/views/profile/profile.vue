@@ -343,6 +343,7 @@ export default {
     }
   },
   created() {
+    this._globalEvent.$off('refreshProfile')
     this._globalEvent.$on("refreshProfile", () => {
       this.init();
       this.getLink();
