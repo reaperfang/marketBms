@@ -513,7 +513,7 @@ export default {
     .table {
       .opeater {
         .disabled {
-          color:rgba(101, 94, 255, .5) !important;
+          opacity: 0.5;
         }
       }
     }

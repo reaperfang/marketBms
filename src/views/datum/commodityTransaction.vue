@@ -39,7 +39,7 @@
                         <!--<el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>-->
                         <!--<el-radio-button class="btn_bor" label="4">自定义</el-radio-button>-->
                     <!--</el-radio-group>-->
-					<div class="radio-group">
+					<div class="radio-group" style="margin-right: 10px;">
 						<span @click="changeDayM(7)" :class="dateType == 7 ? 'active' : ''">最近7天</span>
 						<span @click="changeDayM(15)" :class="dateType == 15 ? 'active' : ''">最近15天</span>
 						<span @click="changeDayM(30)" :class="dateType == 30 ? 'active' : ''">最近30天</span>

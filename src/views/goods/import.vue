@@ -288,8 +288,10 @@ export default {
             margin-top: 15px;
             p.title {
                 font-size:14px;
-                color:rgba(101,94,255,1);
+                color:#44434B;
+                font-weight: bold;
                 padding-bottom: 10px;
+                padding-top: 20px;
             }
             p:nth-child(2) {
                 margin-top: 5px;
@@ -362,7 +364,8 @@ export default {
         margin-left: 50px;
     }
     .records {
-        color: $globalMainColor;
+        color: #5d5d63;
+        font-weight: bold;
         margin-bottom: 23px;
     }
     /deep/ .el-step__title {
