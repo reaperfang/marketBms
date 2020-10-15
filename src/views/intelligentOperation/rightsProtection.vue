@@ -149,6 +149,9 @@ export default {
                 this.listObj = response;
                 this.form.loads = false
                 this.note = this.form.ProtectionReason
+            }).catch(error => {
+                this.form.loads = false;
+                this.$message.error(error);
             })
         },
         changeTime(val){

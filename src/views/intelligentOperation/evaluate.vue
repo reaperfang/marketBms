@@ -165,6 +165,9 @@ export default {
                         item.suggest != null && (this.showNote1 = true)
                     }
                 }
+            }).catch(error=> {
+                this.form.loads = false;
+                this.$message.error(error);
             })
         },
         //获取口碑满意率

@@ -188,6 +188,7 @@ export default {
                     }
                 }
             }).catch(error => {
+                this.form.loads = false
                 this.$message.error(error);
             });
         },
