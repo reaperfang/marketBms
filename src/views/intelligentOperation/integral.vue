@@ -108,7 +108,7 @@ export default {
                 loads:false,
                 pageSize:10
             },
-            nowPage: 0,
+            nowPage: 1,
             memberCount:0, //会员数
             ratio:0, //会员占比
             listObj:{}, //表格数据

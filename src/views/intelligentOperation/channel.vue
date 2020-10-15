@@ -116,7 +116,7 @@ export default {
             listObj:{
                 list:[]
             },
-            nowPage: 0,
+            nowPage: 1,
             totalCount:0,//总页数
             pickerMinDate: '',
             dateRange: [],

@@ -146,7 +146,7 @@ export default {
                 pageSize:10,
                 loads:false,
             },  
-            nowPage: 0,          
+            nowPage: 1,          
             lowprice:'',
             highprice:'',
             textTips:false, 

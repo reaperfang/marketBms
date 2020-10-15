@@ -110,7 +110,7 @@ export default {
             listObj:{
                
             },
-            nowPage: 0,
+            nowPage: 1,
             pickerMinDate: '',
             dateRange: [],
             reasons:[],

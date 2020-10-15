@@ -111,7 +111,7 @@ export default {
             listObj:{
                
             },
-            nowPage: 0,
+            nowPage: 1,
             satisfaction:[],  //满意率
             badreviews:[],  //差评率       
             pickerMinDate: '',
