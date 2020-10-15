@@ -16,7 +16,7 @@
                   <p class="title">{{item.title}}</p>
                   <!-- <img :src="item.fileCover" class="imgCover">
                   <span class="btn" @click="openVideo(item)"></span> -->
-                  <video v-if="item.video_url !=''" :src="item.video_url" class="avatar video-avatar" controls="controls">您的浏览器不支持视频播放</video> 
+                  <video v-if="item.video_url !=''" :poster="getCover(item)" :src="item.video_url" class="avatar video-avatar" controls="controls">您的浏览器不支持视频播放</video> 
                   <!-- <img :src="item.filePath" class="imgs"> -->
                 </div>
               </div>
@@ -88,6 +88,9 @@ export default {
     this.getList()
   },
   methods: {
+    getCover(item) {
+      return location.protocol + `${process.env.DATA_API}/api-decoration-web/notify/image.do?wxp=`+item.cover_url
+    },
     //获取微信图片列表
     getList(){
       let query ={

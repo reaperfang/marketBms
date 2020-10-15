@@ -464,9 +464,9 @@ export default {
     margin-bottom: 20px;
     border-radius: 4px;
     .statistics {
-      color: #e0dee8;
+      color: #92929b;
       span {
-        color: #45444c;
+        color: #44434B;
       }
     }
   }
