@@ -73,6 +73,7 @@
                     @sizeChange="sizeChange"
                     @currentChange="currentChange"
                     @changeSort="changeSort"
+                    :nowPage="nowPage"
                 >
                 </channel-table>               
             </div>
@@ -116,6 +117,7 @@ export default {
             listObj:{
                 list:[]
             },
+            nowPage: 1,
             totalCount:0,//总页数
             pickerMinDate: '',
             dateRange: [],
@@ -144,6 +146,7 @@ export default {
             }
             this.form.loads = true
             this.form.startIndex = num || this.form.startIndex
+            this.nowPage = this.form.startIndex;
             this._apis.data.channelConversion(this.form).then(response => {
                 this.listObj = response;
                 this.totalNum = response.totalSize || 0;
@@ -159,6 +162,7 @@ export default {
                     }
                 }
             }).catch(error => {
+                this.form.loads = false;
                 this.$message.error(error);
             });
         },

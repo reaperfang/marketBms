@@ -102,6 +102,7 @@
                 @sizeChange = "sizeChange"
                 @currentChange = "currentChange"                   
                 :listObj="listObj" 
+                :nowPage="nowPage"
                 :totalCount="totalCount">
             </maTable>
         </div>
@@ -144,7 +145,8 @@ export default {
                 startIndex:1,
                 pageSize:10,
                 loads:false,
-            },            
+            },  
+            nowPage: 1,          
             lowprice:'',
             highprice:'',
             textTips:false, 
@@ -256,6 +258,7 @@ export default {
                 return
             }
             this.form.startIndex = num || this.form.startIndex
+            this.nowPage = this.form.startIndex;
             this.form.loads = true
             // let memberType = this.form.memberType;
             this._apis.data.memberInformation(this.form).then(res => {
