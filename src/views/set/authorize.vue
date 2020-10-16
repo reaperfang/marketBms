@@ -122,7 +122,7 @@ export default {
   methods: {
     getShopAuthList() {
       store.dispatch('getShopAuthList').then(() => {
-        const localMsfList = localStorage.getItem('shopInfos');
+        const localMsfList = this.$store.getters.shopInfos;
         let msfList = [];
         let enable = 0
 

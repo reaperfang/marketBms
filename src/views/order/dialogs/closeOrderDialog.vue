@@ -102,8 +102,6 @@ export default {
     },
     created(){
         this.deliveryWay = this.data.deliveryWay
-        debugger
-       
     },
     methods: {
         thirdAbnormalDelivery(){

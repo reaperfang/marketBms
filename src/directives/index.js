@@ -1,5 +1,5 @@
 import Vue from 'vue'
-
+import store from '@/store'
 // let msfList = [
 //     {
 //         "seqnum": 1,
@@ -170,12 +170,12 @@ let enable = 0
 
 window.eventHub = new Vue()
 var shopInfos = function() {
-    console.log('1111')
-    if(localStorage.getItem('shopInfos') && JSON.parse(localStorage.getItem('shopInfos')) && JSON.parse(localStorage.getItem('shopInfos')).data && JSON.parse(localStorage.getItem('shopInfos')).data.functions && JSON.parse(localStorage.getItem('shopInfos')).data.functions[0] && JSON.parse(localStorage.getItem('shopInfos')).data.functions[0].children) {
-        msfList = JSON.parse(localStorage.getItem('shopInfos')).data.functions[0].children
+    if(store.getters.shopInfos && store.getters.shopInfos.data && store.getters.shopInfos.data.functions && store.getters.shopInfos.data.functions[0] && store.getters.shopInfos.data.functions[0].children) {
+        msfList = store.getters.shopInfos.data.functions[0].children
    
         Vue.directive('permission', {
             inserted: function (el, binding, vnode) {
+                
                 let { value } = binding
 
                 if(typeof value == 'string') value = eval(value)
