@@ -785,7 +785,7 @@ export default {
         .sendGoods3(params)
         .then(res => {
           if(res.code == 2155) {
-            this.confirm({title: '提示', text: '达达账户余额不足，请充值后再发货', confirmText: '去充值'}).then(() => {
+            this.confirm({text: '达达账户余额不足，请充值后再发货', confirmText: '去充值'}).then(() => {
                 this.$router.push('/set/recharge')
             })
             return

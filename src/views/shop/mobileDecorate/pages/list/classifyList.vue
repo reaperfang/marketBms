@@ -86,7 +86,6 @@ export default {
     deleteClassify(item) {
       this.currentItem = item;
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: `确定删除 [ ${item.name} ] 吗？`

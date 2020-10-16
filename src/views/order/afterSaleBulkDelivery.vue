@@ -556,7 +556,7 @@ export default {
                       return false
                     })
                 ) {
-                  this.confirm({ title: "提示", icon: true, text: "快递单号不能为空" });
+                  this.confirm({icon: true, text: "快递单号不能为空" });
                   return;
                 }
               }

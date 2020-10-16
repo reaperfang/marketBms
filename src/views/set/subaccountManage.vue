@@ -183,7 +183,6 @@ export default {
       let ids = []
       id ? ids.push(id) : ids = this.multipleSelection
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '此操作将永久删除该子账号, 是否继续?'

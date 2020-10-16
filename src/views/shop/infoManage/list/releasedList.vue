@@ -126,7 +126,6 @@ export default {
     /* 删除 */
     deleteInfo(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: `确定删除 [ ${item.title} ] 吗？`
@@ -143,7 +142,6 @@ export default {
     /* 下线 */
     offline(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: `确定下线 [ ${item.title} ] 吗？`
@@ -160,7 +158,6 @@ export default {
     /* 批量删除 */
     batchDeleteInfo(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: `确定删除吗？`

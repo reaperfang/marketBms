@@ -156,7 +156,9 @@ export default {
         // console.log("切换店铺后的店铺信息 ：", shopInfo);
         this.$store.dispatch('setShopInfos',shopInfo).then(() => {
             this.$store.dispatch('getShopInfo')
-            this._globalEvent.$emit('refreshProfile')
+            console.log('saveShop',this.$route.path)
+            const fromPath = this.$route.path
+            if (fromPath === '/profile/profile') this._globalEvent.$emit('refreshProfile')
             this.getShopAuthList()
             this.handleClose()
             this.$store.commit('setStoreGuide', shop.storeGuide)

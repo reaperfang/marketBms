@@ -170,10 +170,10 @@ export default {
     },
     hideTags() {
       if(!this.multipleSelection.length) {
-        this.confirm({title: '批量隐藏', icon: true, text: '请选择想要批量隐藏的标签。'})
+        this.confirm({ icon: true, text: '请选择想要批量隐藏的标签。'})
         return
       }
-      this.confirm({title: '批量隐藏', icon: true, text: '确认隐藏所选标签吗？'}).then(() => {
+      this.confirm({icon: true, text: '确认隐藏所选标签吗？'}).then(() => {
           this._apis.goods
           .enableTag({enable: 0, ids: this.multipleSelection.map(val => val.id)})
           .then(res => {
@@ -190,10 +190,10 @@ export default {
     },
     showTags() {
       if(!this.multipleSelection.length) {
-        this.confirm({title: '批量显示', icon: true, text: '请选择想要批量显示的标签。'})
+        this.confirm({icon: true, text: '请选择想要批量显示的标签。'})
         return
       }
-      this.confirm({title: '批量显示', icon: true, text: '确认显示所选标签吗？'}).then(() => {
+      this.confirm({icon: true, text: '确认显示所选标签吗？'}).then(() => {
           this._apis.goods
           .enableTag({enable: 1, ids: this.multipleSelection.map(val => val.id)})
           .then(res => {
@@ -238,7 +238,7 @@ export default {
       })
     },
     deleteTag(row) {
-      this.confirm({title: '立即删除', icon: true, text: '删除后将不可恢复，确认删除吗？'}).then(() => {
+      this.confirm({icon: true, text: '删除后将不可恢复，确认删除吗？'}).then(() => {
           this._apis.goods
           .deleteTag({ids: [row.id]})
           .then(res => {
@@ -274,7 +274,7 @@ export default {
     },
     deleteTags() {
       if(!this.multipleSelection.length) {
-        this.confirm({title: '批量删除', icon: true, text: '请选择想要批量删除的标签。'})
+        this.confirm({icon: true, text: '请选择想要批量删除的标签。'})
         return
       }
       this.confirm({

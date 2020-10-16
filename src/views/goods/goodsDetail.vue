@@ -2153,12 +2153,12 @@ export default {
         },
         deleteSpec(index) {
             if(this.ruleForm.goodsInfos[index].activity) {
-                this.confirm({title: '立即删除', icon: true, text: '当前商品正在参与营销活动，活动有效期内商品不得“删除”。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({icon: true, text: '当前商品正在参与营销活动，活动有效期内商品不得“删除”。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
             }
-            this.confirm({title: '立即删除', icon: true, text: '是否确认删除？'}).then(() => {
+            this.confirm({icon: true, text: '是否确认删除？'}).then(() => {
                 console.log(index)
                 let _goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
                 let __goodsInfos

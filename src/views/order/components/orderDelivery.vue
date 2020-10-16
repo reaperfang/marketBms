@@ -426,7 +426,7 @@ export default {
         },
         batchSendGoods() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量发货的单据。'})
+                this.confirm({icon: true, showCancelButton: false, text: '请先勾选当前页需要批量发货的单据。'})
                 return
             }
             // if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
@@ -434,15 +434,15 @@ export default {
             //     return;
             // }
             if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
-                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出普通快递、商家配送或第三方配送的待发货订单后再进行批量发货。'})
+                this.confirm({icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出普通快递、商家配送或第三方配送的待发货订单后再进行批量发货。'})
                 return;
             }
             if(this.multipleSelection.some(val => val.status != 3 && val.status != 4)) {
-            this.confirm({title: '提示', icon: true, text: '勾选单据包含已完成发货或已关闭的单据，无法批量发货，请重新选择。'})
+            this.confirm({icon: true, text: '勾选单据包含已完成发货或已关闭的单据，无法批量发货，请重新选择。'})
                 return
             }
             if(this.multipleSelection.some(val => val.isFillUp)) {
-            this.confirm({title: '提示', icon: true, text: '勾选单据包含已完成发货或已关闭的单据，无法批量发货，请重新选择。'})
+            this.confirm({icon: true, text: '勾选单据包含已完成发货或已关闭的单据，无法批量发货，请重新选择。'})
                 return
             }
             this.$router.push(`/order/orderBulkDelivery?ids=${this.multipleSelection.map(val => val.orderId).join(',')}&_ids=${this.multipleSelection.map(val => val.id).join(',')}`)
@@ -453,28 +453,28 @@ export default {
             //     return
             // }
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量打印电子面单的单据。'})
+                this.confirm({icon: true, showCancelButton: false, text: '请先勾选当前页需要批量打印电子面单的单据。'})
                 return
             }
             if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
-                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出配送方式为普通快递-电子面单的单据，再进行批量打印电子面单。'})
+                this.confirm({icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出配送方式为普通快递-电子面单的单据，再进行批量打印电子面单。'})
                 return;
             }
             if(!this.multipleSelection.map(val => val.isKDBird).every(val => val == true)) {
-                this.confirm({title: '提示', icon: true, text: '勾选单据中包含不支持电子面单的单据，无法批量打印，请先依据支持电子面单的快递公司筛选单据后，再打印。'})
+                this.confirm({icon: true, text: '勾选单据中包含不支持电子面单的单据，无法批量打印，请先依据支持电子面单的快递公司筛选单据后，再打印。'})
                 return
             }
             if(this.multipleSelection.filter(val => val.isAutoSend).some(val => val.isFillUp == 1)) {
-                this.confirm({title: '提示', icon: true, text: '自动发货订单，未填报物流信息，不能批量打印电子面单。'})
+                this.confirm({icon: true, text: '自动发货订单，未填报物流信息，不能批量打印电子面单。'})
                 return
             }
             if(this.multipleSelection.filter(val => !val.isAutoSend).some(val => (val.status != 4 && val.status != 5 && val.status != 6))) {
-                this.confirm({title: '提示', icon: true, text: '没有完成发货，不能批量打印电子面单。'})
+                this.confirm({icon: true, text: '没有完成发货，不能批量打印电子面单。'})
                 return
             }
 
             if(this.multipleSelection.some(val => val.isKDBird === null)) {
-                this.confirm({title: '提示', icon: true, text: '不支持打印电子面单。'})
+                this.confirm({icon: true, text: '不支持打印电子面单。'})
                 return
             }
 
@@ -485,15 +485,15 @@ export default {
         //批量打印配送单
         batchPrintDistributionSlip() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, showCancelButton: false, text: '请先勾选当前页需要批量打印配送单的单据。'})
+                this.confirm({icon: true, showCancelButton: false, text: '请先勾选当前页需要批量打印配送单的单据。'})
                 return
             }
             if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
-                this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出普通快递、商家配送、第三方配送或上门自提的单据，再进行批量打印配送单。'})
+                this.confirm({icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含多种配送方式，无法批量操作。<br/>请先筛选出普通快递、商家配送、第三方配送或上门自提的单据，再进行批量打印配送单。'})
                 return;
             }
             if(this.multipleSelection.some(val => val.status == 3)) {
-                this.confirm({title: '提示', icon: true, text: '勾选订单包含未发货或未付款订单，无法批量打印；请重新勾选已发货订单批量打印配送单。'})
+                this.confirm({icon: true, text: '勾选订单包含未发货或未付款订单，无法批量打印；请重新勾选已发货订单批量打印配送单。'})
                 return
             }
             let ids = this.multipleSelection.map(val => val.id).join(',')
@@ -669,6 +669,7 @@ export default {
         position: relative;
         top: 3px;
         margin-right: 10px;
+        vertical-align: -2px;
     }
     .unauto {
         display: inline-block;
@@ -677,6 +678,7 @@ export default {
         position: relative;
         top: 3px;
         margin-right: 10px;
+        vertical-align: -2px;
     }
     /deep/ .searchTimeType .el-form-item__content {
         display: flex;
@@ -765,5 +767,6 @@ export default {
         color:rgba(101,94,255,1);
         margin-left:1px;
         margin-right:5px;
+        vertical-align: 1px;
     }
 </style>

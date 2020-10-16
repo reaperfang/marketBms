@@ -244,7 +244,6 @@ export default {
     /* 取消保存 */
     cancelSave() {
       this.confirm({
-        title: '提示', 
         subTitle: '确认取消？',
         customClass: 'goods-custom', 
         icon: true, 

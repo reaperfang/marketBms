@@ -213,7 +213,6 @@ export default {
     },
     deletequickDelivery(id) {
       this.confirm({
-        title: "提示",
         icon: true,
         text: '删除模板后无法撤销，确定删除吗？'
       }).then(() => {

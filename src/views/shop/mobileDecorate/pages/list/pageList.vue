@@ -155,7 +155,6 @@ export default {
     copyPage(item) {
       this.currentItem = item;
       this.confirm({
-        title: '提示',
         customClass: 'goods-custom',
         icon: true,
         text: `确定复制 [ ${item.name} ] 吗？`
@@ -173,7 +172,6 @@ export default {
     deletePage(item) {
        this.currentItem = item;
        this.confirm({
-        title: '提示',
         customClass: 'goods-custom',
         icon: true,
         text: `确定删除 [ ${item.name} ] 吗？`
@@ -190,7 +188,6 @@ export default {
     /* 批量删除页面 */
     batchDeletePage(item) {
        this.confirm({
-        title: '提示',
         customClass: 'goods-custom',
         icon: true,
         text: `确定删除吗？`
@@ -219,7 +216,6 @@ export default {
     setIndex(item) {
       this.currentItem = item;
       this.confirm({
-        title: '提示',
         customClass: 'goods-custom',
         icon: true,
         text: `确定将 [ ${item.name} ] 设为首页吗？`

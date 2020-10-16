@@ -362,13 +362,13 @@ export default {
             //如果是普通快递
             if(formName == 'ruleForm'){
                 if(!this.ruleForm.expressCompanyCode) {
-                    this.confirm({title: '提示', icon: true, text: '请选择快递公司'})
+                    this.confirm({icon: true, text: '请选择快递公司'})
                     return
                 }
             }
 
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择需要发货的商品'})
+                this.confirm({icon: true, text: '请选择需要发货的商品'})
                 return
             }
 

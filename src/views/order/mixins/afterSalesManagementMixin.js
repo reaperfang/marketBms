@@ -70,7 +70,7 @@ export const afterSalesManagementMethods = {
     },
     confirmReceived(row) {
       this._apis.order.orderConfirmReceived({id: row.id, isSellerReceived: 1}).then(res => {
-          this.confirm({title: '提示', iconSuccess: true, text: '确认收货成功', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+          this.confirm({iconSuccess: true, text: '确认收货成功', showCancelButton: false, confirmText: '我知道了'}).then(() => {
               
           })
           this.getList()
