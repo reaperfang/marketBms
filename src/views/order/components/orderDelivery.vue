@@ -678,6 +678,7 @@ export default {
         position: relative;
         top: 3px;
         margin-right: 10px;
+        vertical-align: -2px;
     }
     /deep/ .searchTimeType .el-form-item__content {
         display: flex;
@@ -766,5 +767,6 @@ export default {
         color:rgba(101,94,255,1);
         margin-left:1px;
         margin-right:5px;
+        vertical-align: 1px;
     }
 </style>
