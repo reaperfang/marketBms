@@ -106,7 +106,6 @@ export default {
     },
     handleClose(row) {
        this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确认禁用该等级？'

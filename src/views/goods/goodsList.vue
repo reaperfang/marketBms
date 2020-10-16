@@ -997,7 +997,7 @@ export default {
         },
         editCategory(){
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择商品后再进行编辑分类操作。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({customClass: 'confirm-goods', icon: true, text: '请选择商品后再进行编辑分类操作。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
@@ -1027,7 +1027,7 @@ export default {
         },
         changePriceMore() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择想要批量改价的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({customClass: 'confirm-goods', icon: true, text: '请选择想要批量改价的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
@@ -1088,12 +1088,12 @@ export default {
         shareMore() {
             let obj = {}
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择想要批量推广的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({customClass: 'confirm-goods', icon: true, text: '请选择想要批量推广的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
             }
-            this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '当前只支持批量下载微信公众号商品详情页二维码图片！', confirmText: '一键下载'}).then(() => {
+            this.confirm({customClass: 'confirm-goods', icon: true, text: '当前只支持批量下载微信公众号商品详情页二维码图片！', confirmText: '一键下载'}).then(() => {
                 let ids = this.multipleSelection.map(val => val.id)
 
                 this._apis.goods.shareMore({ids, channelInfoId: 2}).then((res) => {

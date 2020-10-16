@@ -349,7 +349,7 @@ export default {
                         //     this.currentDialog = 'TransferGoodsDialog'
                         //     this.dialogVisible = true
                         // })
-                        this.confirm({title: '提示', icon: true, showCancelButton: false, text: '当前商品分类无法删除，请您去商品列表转移该分类下的所有商品，再尝试删除。'}).then(() => {
+                        this.confirm({icon: true, showCancelButton: false, text: '当前商品分类无法删除，请您去商品列表转移该分类下的所有商品，再尝试删除。'}).then(() => {
                             
                         })
                     } else {

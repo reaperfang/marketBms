@@ -100,7 +100,6 @@ export default {
     },
     createGood() {
       this.confirm({
-        title: "提示",
         icon: true,
         text: '您是否成功的创建了您的第一个商品',
         confirmText: '确定',
@@ -115,7 +114,6 @@ export default {
     },
     importGoods() {
       this.confirm({
-        title: "提示",
         icon: true,
         text: '您是否成功的创建了您的第一个商品',
         confirmText: '确定',
@@ -135,7 +133,6 @@ export default {
       }})
       window.open(routeData.href, '_blank');
       this.confirm({
-        title: "提示",
         icon: true,
         text: '您是否成功创建了短信签名',
         confirmText: '确定',

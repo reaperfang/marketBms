@@ -99,7 +99,6 @@ export default {
     },
     deleteRow(row) {
       this.confirm({
-        title: "提示",
         customClass: "goods-custom",
         icon: true,
         text: "确认删除标签？"

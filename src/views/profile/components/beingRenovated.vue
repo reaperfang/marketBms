@@ -147,7 +147,6 @@ export default {
       if (this.step === 6) {
         this.isDisabled = true
         this.confirm({
-          title: "提示",
           iconSuccess: true,
           text: '引导步骤已完成',
           confirmText: '确定',
@@ -265,7 +264,6 @@ export default {
               pageTemplateId: item.id
             }).then(response => {
               this.confirm({
-                title: '提示',
                 customClass: 'goods-custom',
                 // icon: true,
                 text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
@@ -275,7 +273,6 @@ export default {
             })
           } else {
             this.confirm({
-              title: '提示',
               customClass: 'goods-custom',
               // icon: true,
               text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
@@ -363,7 +360,6 @@ export default {
             pageTemplateId: id
           }).then(response => {
             this.confirm({
-              title: '提示',
               showCancelButton: false,
               customClass: 'goods-custom',
               icon: true,
@@ -376,7 +372,6 @@ export default {
           })
         } else {
           this.confirm({
-            title: '提示',
             showCancelButton: false,
             icon: true,
             text: `您已选择${this.currentTemplate.name}模板，为了保证商城的完整性， 需要您对当前模板进行信息编辑。`,

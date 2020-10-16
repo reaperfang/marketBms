@@ -451,7 +451,7 @@ export default {
         background-color: #fff;
         border-radius: 4px;
         .form-inline {
-            padding: 20px;
+            padding: 20px 20px 2px 20px;
         }
         .buttons {
             display: flex;

@@ -57,7 +57,7 @@ export default {
     },
     methods: {
         deleteSensitive(item) {
-            this.confirm({title: '提示', icon: true, text: '是否确认删除'}).then(() => {
+            this.confirm({icon: true, text: '是否确认删除'}).then(() => {
                 this._apis.order.deleteSensitiveWord({id: item.id}).then((res) => {
                 this.getList()
                 this.visible = false

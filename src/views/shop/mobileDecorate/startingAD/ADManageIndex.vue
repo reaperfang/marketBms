@@ -154,7 +154,6 @@ export default {
     /* 启用广告 */
     startAD(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定启用此广告吗？'
@@ -169,7 +168,6 @@ export default {
     /* 停用广告 */
     stopAD(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定停用此广告吗？'
@@ -193,8 +191,7 @@ export default {
 
     /* 删除广告 */
     deleteAD(item) {
-      this.confirm({
-        title: '提示', 
+      this.confirm({ 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定删除此启动广告吗？'
@@ -211,7 +208,6 @@ export default {
      /* 批量删除广告 */
     batchDeleteAD(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定删除吗？'

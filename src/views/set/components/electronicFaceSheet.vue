@@ -145,7 +145,7 @@ export default {
           this.getList()
       },
     deleteElectronicFaceSheet(row) {
-      this.confirm({title: '提示', text: '删除后无法撤销，确定删除吗？'}).then(() => {
+      this.confirm({text: '删除后无法撤销，确定删除吗？'}).then(() => {
           this._apis.order.deleteElectronicFaceSheet({id: row.id, expressCompanyCode: row.expressCompanyCode}).then((res) => {
               this.getList()
               this.$message.success('删除成功！');
