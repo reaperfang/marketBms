@@ -311,7 +311,7 @@
     .header {
         display: flex;
         align-items: center;
-        border-bottom: 2px solid #CACFCB;
+        border-bottom: 1px solid #D0D6E4;
         padding-bottom: 18px;
         .item {
             margin-right: 40px;

@@ -554,6 +554,7 @@ export default {
             height: 34px !important;
           }
           .m-colorPicker {
+            height: 34px;
             padding: 4px;
             margin-right: 5px;
             border:1px solid rgba(204,204,204,1);

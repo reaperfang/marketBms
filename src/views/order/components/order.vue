@@ -410,7 +410,7 @@ export default {
             padding-top: 17px;
             height: 46px;
             background:rgba(208,214,228,.2);
-            font-weight:500;
+            font-weight:bold;
             .item {
                 width: 80px;
                 margin-right: 30px;
@@ -445,7 +445,7 @@ export default {
                 background: rgba(101,94,255,.1)!important;
             }
             .container-item {
-                border: 1px solid rgb(202, 207, 203);
+                border: 1px solid #D0D6E4;
                 border-radius:10px;
                 margin-bottom: 20px;
                 min-width: 1108px;

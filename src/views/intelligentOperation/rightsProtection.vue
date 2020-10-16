@@ -223,7 +223,11 @@ export default {
 * @Description  产研-电商中台  bugID: CYDSZT-3506
 *
 */
-
+.el-radio-group{
+  label {
+    margin-left: 0;
+  }
+}
 /deep/.el-checkbox.is-bordered{
     border: none;
 }

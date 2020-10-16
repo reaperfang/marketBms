@@ -167,10 +167,11 @@ export default {
     .pane_container{
         color: #3D434A;
         .i_line{
+            font-size: 0;
             .input_wrap{
                 // width: 320px;
                 display: inline-block;
-                margin-right: 26px;
+                margin-right: 20px;
             }
         }
     }

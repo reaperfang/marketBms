@@ -469,10 +469,10 @@ export default {
         border-radius: 4px;
         p {
             font-size: 16px;
-            color: #B6B5C8;
+            color: #92929b;
             margin: 23px 0 20px 0;
             span {
-                color: rgb(76, 75, 83);
+                color: #44434B;
             }
         }
         .footer {

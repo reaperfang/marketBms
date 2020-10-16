@@ -643,10 +643,10 @@ export default {
         padding: 0 20px;
         p {
             font-size: 16px;
-            color: #B6B5C8;
+            color: #92929b;
             margin: 23px 0 20px 0;
             span {
-                color: #45444c;
+                color: #44434B;
             }
         }
         .footer {
@@ -669,6 +669,7 @@ export default {
         position: relative;
         top: 3px;
         margin-right: 10px;
+        vertical-align: -2px;
     }
     .unauto {
         display: inline-block;
