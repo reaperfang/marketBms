@@ -276,7 +276,8 @@ export default {
 
 	.mall {
 		overflow-y: auto;
-		min-width: 1850px;
+		min-width: 1366px;
+		font-size: 12px!important;
 	}
 
 	// *::-webkit-scrollbar {
