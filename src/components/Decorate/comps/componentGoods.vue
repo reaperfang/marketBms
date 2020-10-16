@@ -7,7 +7,11 @@
                     <li v-for="(item,key) in displayList" :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                         <div class="img" >
                             <div class="imgAbsolute">
-                                <el-image :key="listStyle" :scroll-container="listStyle == 6 ? null : '.phone-body'" :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}" lazy></el-image>
+                                <el-image :key="listStyle" :scroll-container="listStyle == 6 ? null : '.phone-body'" :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}" lazy>
+                                    <div slot="placeholder" class="el-image__lazyloading">
+                                        加载中...
+                                    </div>
+                                </el-image>
                             </div>
                             <div class="label" v-if="item.productLabelInfo&&item.productLabelInfo.enable==1" :style="{background:color2}">{{item.productLabelInfo.name}}</div>
                             <p class="nothing" v-if="item.status ===0">下架</p>

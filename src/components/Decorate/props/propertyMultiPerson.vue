@@ -14,7 +14,11 @@
             <template>
               <template v-for="(item, key) of displayList">
                 <li :key="key" :title="item.activeName">
-                  <el-image :src="item.mainImage" alt="" lazy></el-image>
+                  <el-image :src="item.mainImage" alt="" lazy>
+                    <div slot="placeholder" class="el-image__lazyloading">
+                        加载中...
+                    </div>
+                  </el-image>
                   <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1" v-show="deleteShow"></i>
                 </li>
               </template>

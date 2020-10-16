@@ -6,7 +6,11 @@
         <div class="goods_list" v-loading="loading">
           <ul>
             <li v-for="(item, key) of displayList" :key="key" :title="item.name">
-              <el-image :src="item.activityPic" alt="" lazy></el-image>
+              <el-image :src="item.activityPic" alt="" lazy>
+                <div slot="placeholder" class="el-image__lazyloading">
+                    加载中...
+                </div>
+              </el-image>
               <i class="delete_btn" @click.stop="deleteItem(item)" v-show="deleteShow"></i>
             </li>
             <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectNyuan'">

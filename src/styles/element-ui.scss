@@ -152,3 +152,12 @@ input::-moz-placeholder, textarea::-moz-placeholder{
     border-radius: 0 4px 4px 0;
   }
 }
+
+
+.el-image__lazyloading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #B6B5C8;
+}
