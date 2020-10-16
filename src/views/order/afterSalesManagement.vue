@@ -490,6 +490,10 @@ export default {
 /deep/ .input-with-select .el-input-group__prepend {
     background-color: #fff;
 }
+/deep/ .el-date-editor{
+    border-top-left-radius: 1;
+    border-bottom-left-radius: 1;
+}
 </style>
 
 

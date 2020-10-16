@@ -334,18 +334,18 @@ export default {
             this._apis.order.replyComment({ids: this.multipleSelection.map(val => val.id), replyContent: value}).then((res) => {
                 // this.$message.success('批量回复成功！');
                 this.getList()
-                this.confirm({title: '提示', iconSuccess: true, text: '批量回复成功。', confirmText: '我知道了', showCancelButton: false, showConfirmButton: false})
+                this.confirm({iconSuccess: true, text: '批量回复成功。', confirmText: '我知道了', showCancelButton: false, showConfirmButton: false})
             }).catch(error => {
                 this.$message.error(error);
             })
         },
         batchAudit() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要批量审核的评论', confirmText: '知道了', showCancelButton: false})
+                this.confirm({icon: true, text: '请先勾选当前页需要批量审核的评论', confirmText: '知道了', showCancelButton: false})
                 return
             } else {
                 if(this.multipleSelection.filter(val => val.auditStatus != 0).length) {
-                    this.confirm({title: '提示', icon: true, text: '勾选的评论中包含已审核的数据，无法批量回复，请重新选择。', confirmText: '知道了'})
+                    this.confirm({icon: true, text: '勾选的评论中包含已审核的数据，无法批量回复，请重新选择。', confirmText: '知道了'})
 
                     return
                 }
@@ -358,11 +358,11 @@ export default {
         },
         batchReply() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: false, text: '请先勾选当前页需要批量回复的评论', confirmText: '我知道了', showCancelButton: false})
+                this.confirm({icon: false, text: '请先勾选当前页需要批量回复的评论', confirmText: '我知道了', showCancelButton: false})
                 return
             } else {
                 if(this.multipleSelection.filter(val => val.isReply).length) {
-                    this.confirm({title: '提示', icon: false, text: '勾选的评论中包含已回复的数据，无法批量回复，请重新选择。', confirmText: '我知道了', showCancelButton: false})
+                    this.confirm({icon: false, text: '勾选的评论中包含已回复的数据，无法批量回复，请重新选择。', confirmText: '我知道了', showCancelButton: false})
 
                     return
                 }
