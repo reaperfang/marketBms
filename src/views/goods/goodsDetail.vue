@@ -2863,8 +2863,8 @@ export default {
                             val.label.split(',').forEach((spec, index) => {
                                 _specs[this.specsLabel.split(',')[index]] = spec
                             })
-                            val.specs = JSON.stringify(_specs)
                             //val.specs = _specs
+                            val.specs = JSON.stringify(_specs)
                             val.fileList = []
                             return val
                         })
