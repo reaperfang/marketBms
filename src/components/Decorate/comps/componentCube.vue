@@ -183,7 +183,7 @@
                     <div class="fill_block fill_block1" 
                     :style="{marginBottom: currentComponentData.data.imgMargin + 'px'}"
                     >
-                      <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['1']" :src="currentComponentData.data.list['1'].url" alt="" lazy>
+                      <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['1'] && currentComponentData.data.list['1'].url" :src="currentComponentData.data.list['1'].url" alt="" lazy>
                         <div slot="placeholder" class="el-image__lazyloading">
                             加载中...
                         </div>
@@ -193,14 +193,14 @@
                       <div class="fill_block fill_block3" 
                       :style="{marginRight: currentComponentData.data.imgMargin + 'px'}"
                       >
-                        <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['2']" :src="currentComponentData.data.list['2'].url" alt="" lazy>
+                        <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['2'] && currentComponentData.data.list['2'].url" :src="currentComponentData.data.list['2'].url" alt="" lazy>
                           <div slot="placeholder" class="el-image__lazyloading">
                               加载中...
                           </div>
                         </el-image>
                       </div>
                       <div class="fill_block fill_block4">
-                        <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['3']" :src="currentComponentData.data.list['3'].url" alt="" lazy>
+                        <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['3'] && currentComponentData.data.list['3'].url" :src="currentComponentData.data.list['3'].url" alt="" lazy>
                           <div slot="placeholder" class="el-image__lazyloading">
                               加载中...
                           </div>
