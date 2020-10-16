@@ -669,6 +669,7 @@ export default {
         position: relative;
         top: 3px;
         margin-right: 10px;
+        vertical-align: -2px;
     }
     .unauto {
         display: inline-block;
