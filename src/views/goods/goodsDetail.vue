@@ -1651,7 +1651,13 @@ export default {
                     _list.forEach((val, index) => {
                         let label = val.label
 
-                        if(label.indexOf(prevSpecsStr + ',') != -1) {
+                        // if(label.indexOf(prevSpecsStr + ',') != -1) {
+                        //     indexArr.push(index)
+                        //     number++
+                        // }
+                        let reg = new RegExp("^" + prevSpecsStr + "\\,")
+
+                        if(reg.test(label)) {
                             indexArr.push(index)
                             number++
                         }
