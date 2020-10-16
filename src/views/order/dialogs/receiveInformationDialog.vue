@@ -440,7 +440,8 @@ export default {
               })
             } else {
                params = Object.assign({}, params, {
-                orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id)
+                orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
+                //orderId: this.$route.query._ids ? this.$route.query._ids : this._ids
               })
             }
           }
