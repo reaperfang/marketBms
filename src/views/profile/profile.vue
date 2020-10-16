@@ -343,8 +343,11 @@ export default {
     }
   },
   created() {
+    let i = 0;
     this._globalEvent.$off('refreshProfile')
     this._globalEvent.$on("refreshProfile", () => {
+      i++
+      console.log('refreshProfile', i)
       this.init();
       this.getLink();
       this.getIntelligent();
@@ -360,6 +363,7 @@ export default {
       this.getIsReleaseWX();
       this.getIsReleaseGZ();
     });
+    console.log('created')
     this.$message.closeAll();
     this.init();
     this.getLink();
@@ -462,6 +466,7 @@ export default {
     },
     //刷新
     refresh() {
+      console.log('refresh')
       this.getOerviewRemind();
       this.getOverviewSelling();
     },
