@@ -15,7 +15,7 @@ export default {
   data() {
     return {
       dataLoaded: false,  //组件数据加载完成
-      preloadLength: 1 //预加载数据条数
+      preloadLength: 10 //预加载数据条数
     }
   },
   computed: {
