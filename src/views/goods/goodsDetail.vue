@@ -1651,7 +1651,13 @@ export default {
                     _list.forEach((val, index) => {
                         let label = val.label
 
-                        if(label.indexOf(prevSpecsStr + ',') != -1) {
+                        // if(label.indexOf(prevSpecsStr + ',') != -1) {
+                        //     indexArr.push(index)
+                        //     number++
+                        // }
+                        let reg = new RegExp("^" + prevSpecsStr + "\\,")
+
+                        if(reg.test(label)) {
                             indexArr.push(index)
                             number++
                         }
@@ -2857,7 +2863,8 @@ export default {
                             val.label.split(',').forEach((spec, index) => {
                                 _specs[this.specsLabel.split(',')[index]] = spec
                             })
-                            val.specs = _specs
+                            //val.specs = _specs
+                            val.specs = JSON.stringify(_specs)
                             val.fileList = []
                             return val
                         })
