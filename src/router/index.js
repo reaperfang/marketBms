@@ -73,6 +73,12 @@ export const syncRouterMap = [ //同步路由表
     hidden: true
   },
   {
+    path: '/datashop',
+    component: () => import('@/views/datashop/index'),
+    name:'datashop',
+    hidden: true
+  },
+  {
     path: 'simpleAddGoods',
     component: () => import('@/views/goods/addGoods'),
     name: 'simpleAddGoods'
