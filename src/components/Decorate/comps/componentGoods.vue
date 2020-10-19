@@ -76,8 +76,7 @@ export default {
             goodListLoading: false,
             goodListFinished: false,
             displayList: [],
-            loading: false,
-            firstLoad: true
+            loading: false
         }
     },
     created() {
@@ -90,7 +89,8 @@ export default {
     watch: {
         'currentComponentData.data.ids': {
             handler(newValue, oldValue) {
-                if(!Array.isArray(newValue)) {
+                //商品组件为数组格式，商品分类组件为对象格式
+                if(!Array.isArray(newValue) && !!this.currentComponentData.data.source) {
                     this.fetch();
                     return;
                 }
@@ -262,8 +262,8 @@ export default {
                 }
 
                 this.loading = true;
-                //优先加载前几条数据出来
-                if(params.ids && params.ids.length > this.preloadLength && componentData.source === 1) {
+                //优先加载前几条数据出来  && componentData.source === 1
+                if(params.ids && params.ids.length > this.preloadLength && componentData.source !== 2) {
                     const paramsLoad = this.utils.deepClone(params);
                     paramsLoad.ids.splice(this.preloadLength);
                     paramsLoad.pageSize = this.preloadLength;
@@ -275,7 +275,8 @@ export default {
                         this.displayList = [];
                     });
                 }
-            
+
+                
                 this._apis.goods.fetchAllSpuGoodsList(params).then((response)=>{
                     this.createList(response, componentData);
                     this.loading = false;
