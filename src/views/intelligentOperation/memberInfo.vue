@@ -102,7 +102,9 @@
                 @sizeChange = "sizeChange"
                 @currentChange = "currentChange"                   
                 :listObj="listObj" 
-                :totalCount="totalCount" :loading="loading">
+                :loading="loading"
+                :nowPage="nowPage"
+                :totalCount="totalCount">
             </maTable>
         </div>
         <div v-if="listObj.members != undefined && showNote">
@@ -143,7 +145,8 @@ export default {
                 startIndex:1,
                 pageSize:10,
                 loads:false,
-            },            
+            },  
+            nowPage: 1,          
             lowprice:'',
             highprice:'',
             textTips:false, 
@@ -251,7 +254,12 @@ export default {
                     this.form.MoneyRange =  String(this.lowprice)+'-'+String(this.highprice);
                 } 
             }
+            if(this.form.timeType == 4 && !this.form.daterange){
+                this.$message.warning('请选择查询时间')
+                return
+            }
             this.form.startIndex = num || this.form.startIndex
+            this.nowPage = this.form.startIndex;
             this.form.loads = true
             this.loading = true;
             // let memberType = this.form.memberType;
