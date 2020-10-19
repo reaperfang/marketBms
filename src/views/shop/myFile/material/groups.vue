@@ -146,7 +146,7 @@ methods: {
   deleteNode (node,data) {
     this.dialogVisible = true
     this.currentDialog = 'dialogGroupsDel'
-    this.dialogTitle = '删除分组'
+    this.dialogTitle = ''
     this.typeData = {
       type:'del',
       node:node,
