@@ -81,7 +81,7 @@
     },
     computed: {
       shopInfos() {
-        return localStorage.getItem("shopInfos") ? JSON.parse(localStorage.getItem("shopInfos")) : null
+        return localStorage.getItem("shopInfos") ? this.$store.getters.shopInfos : null
       }
     },
     created() {
@@ -120,7 +120,7 @@
           // status 状态 0 未完成 1 已完成
           const stepResult = await this._apis.profile.intelligentUpdateStep({changeStep: 4, status: 1});
           // 店铺名更新
-          let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+          let shopInfo = this.$store.getters.shopInfos;
           shopInfo.shopName = this.form.shopName;
           let setRes = await this.$store.dispatch("setShopInfos", shopInfo);
           await this.$store.dispatch('getShopInfo');

@@ -184,7 +184,8 @@ import goods from "@/views/shop/dialogs/jumpLists/goods";
 import goodsGroup from "@/views/shop/dialogs/jumpLists/goodsGroup";
 
 import utils from "@/utils";
-let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+import store from '@/store';
+let shopInfo = store.getters.shopInfos
 const cid = shopInfo && shopInfo.id || ''
 export default {
   name: 'shopNav',

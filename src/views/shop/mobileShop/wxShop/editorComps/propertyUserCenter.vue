@@ -140,7 +140,9 @@
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 import vuedraggable from "vuedraggable";
-let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+
+import store from '@/store';
+let shopInfo = store.getters.shopInfos
 const cid = shopInfo && shopInfo.id || ''
 export default {
   name: 'propertyUserCenter',

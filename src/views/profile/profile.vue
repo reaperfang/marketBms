@@ -297,7 +297,7 @@ import profileCont from "@/system/constant/profile";
 import Clipboard from "clipboard";
 import flowPath from "./flowPath";
 import profileIntelligent from "./components/profile_intelligent";
-import { isExistAuth } from '@/utils/auth'
+import { isExistAuth } from '@/system/user.js';
 export default {
   name: "profile",
   components: { flowPath, profileIntelligent },

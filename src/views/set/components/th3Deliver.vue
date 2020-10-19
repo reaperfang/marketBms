@@ -107,7 +107,7 @@
 <script>
 import protocolDialog from "@/views/set/dialogs/protocolDialog";
 import registerDialog from "@/views/set/dialogs/registerDialog";
-import { isExistAuth } from '@/utils/auth.js'
+import { isExistAuth } from '@/system/user.js';
 export default {
   components: {
     registerDialog,

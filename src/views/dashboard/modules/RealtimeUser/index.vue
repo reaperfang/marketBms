@@ -39,7 +39,7 @@ export default {
 	components: { gridtitle, vtable },
 	data: function() {
 		return {
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			cid: this.$store.getters.shopInfos.id,
 			tableData: []
 		};
 	},

@@ -27,12 +27,12 @@
 
     computed: {
       cid() {
-        let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+        let shopInfo = this.$store.getters.shopInfos;
         return shopInfo.id;
       },
       storeGuide() {
         return this.$store.state.shop.storeGuide || null
-        // let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+        // let shopInfo = this.$store.getters.shopInfos;
         // return shopInfo.storeGuide || null;
       }
     },

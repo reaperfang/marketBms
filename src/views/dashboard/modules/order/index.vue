@@ -41,7 +41,7 @@ export default {
 	components: { vfunnel, gridtitle },
 	data: function() {
 		return {
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			cid: this.$store.getters.shopInfos.id,
 			chartData: {
 				columns: ["状态", "数值"],
 				rows: [
