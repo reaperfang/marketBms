@@ -90,7 +90,6 @@ export default {
   },
   created() {
     this.deliveryWay = this.data.deliveryWay
-    debugger
     if(this.deliveryWay==3){
      this.activities= this.data.traces.map((item,index)=>{
        switch(item.status){
