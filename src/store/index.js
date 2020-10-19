@@ -17,7 +17,7 @@ import dashboard from "./modules/dashboard";
 
 import createLogger from "@/plugins/logger";
 import createPersistedState from "vuex-persistedstate";
-const debug = process.env.NODE_ENV !== "production";
+const debug = process.env.NODE_ENV !== "prod";
 
 const vuexPersisted = new createPersistedState({
   key: "myVuex",
