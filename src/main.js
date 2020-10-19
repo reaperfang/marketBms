@@ -44,6 +44,8 @@ Vue.prototype._apis = api;
 //挂载自定义确认弹窗(作者：chenbaochao)，文件位于utils里面的confirm.js
 Vue.prototype.confirm = utils.confirm.default;  
 
+Vue.prototype.invokeType={invokeType:'mzw'};
+
 
 /****************************** 第三方库或者插件 ******************************/
 
@@ -86,15 +88,22 @@ import waterfall from 'vue-waterfall2'
 Vue.use(waterfall)
 
 //按需注册vant组件
-import { Swipe, SwipeItem, NoticeBar, CountDown } from 'vant';
+import { Swipe, SwipeItem, NoticeBar, CountDown,Toast  } from 'vant';
 Vue.use(Swipe).use(SwipeItem);
 Vue.use(NoticeBar);
 Vue.use(CountDown);
+Vue.use(Toast);
 
 
 /*注册复制剪贴板组件 */
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
+
+import "./icons";
+import Tooltip from 'vue-directive-tooltip';
+import 'vue-directive-tooltip/dist/vueDirectiveTooltip.css';
+
+Vue.use(Tooltip);
 
 
 /* ***************************** 导出vue实例 ******************************/

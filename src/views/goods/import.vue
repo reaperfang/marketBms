@@ -213,13 +213,13 @@ export default {
                 if(res.importFailCount == 0) {
                     _text = `累计导入共${res.importCount}条数据； 成功导入${res.importSuccessCount}条； 失败${res.importFailCount}条。`
 
-                    this.confirm({title: '数据导入成功', text: _text, customClass: 'import-confirm'})
+                    this.confirm({text: _text, customClass: 'import-confirm'})
                     this.active = 3
                 } else {
                     _text = ''
                     _text = `累计导入共${res.importCount}条数据； 成功导入${res.importSuccessCount}条； 失败${res.importFailCount}条。`
                     _text += '<br>' + res.failureMsg
-                    this.confirm({title: '数据导入失败', icon: true, text: _text, showCancelButton: false, customClass: 'import-confirm'})
+                    this.confirm({icon: true, text: _text, showCancelButton: false, customClass: 'import-confirm'})
                     this.active = 1
                 }
                 this.$refs.upload.clearFiles();
@@ -232,7 +232,7 @@ export default {
                 //     message: error,
                 //     type: 'error'
                 // });
-                this.confirm({title: '数据导入失败', text: error, showCancelButton: false})
+                this.confirm({text: error, showCancelButton: false})
                 this.active = 1
                 this.$refs.upload.clearFiles();
                 this.showImport = true
@@ -288,8 +288,10 @@ export default {
             margin-top: 15px;
             p.title {
                 font-size:14px;
-                color:rgba(101,94,255,1);
+                color:#44434B;
+                font-weight: bold;
                 padding-bottom: 10px;
+                padding-top: 20px;
             }
             p:nth-child(2) {
                 margin-top: 5px;
@@ -362,7 +364,8 @@ export default {
         margin-left: 50px;
     }
     .records {
-        color: $globalMainColor;
+        color: #5d5d63;
+        font-weight: bold;
         margin-bottom: 23px;
     }
     /deep/ .el-step__title {

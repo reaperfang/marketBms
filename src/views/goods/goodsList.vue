@@ -121,7 +121,7 @@
                     label="商品名称"
                     :width="list.filter(val => val.activity) && list.filter(val => val.activity).length ? 250 : 216">
                         <template slot-scope="scope">
-                            <div class="ellipsis2" :class="{'ellipsis2-big': list.filter(val => val.activity) && list.filter(val => val.activity).length}" style="width: 196px;" :style="{width: list.filter(val => val.activity) && list.filter(val => val.activity).length ? 239 : 196}" :title="scope.row.name">
+                            <div class="ellipsis2" :class="{'ellipsis2-big': list.filter(val => val.activity) && list.filter(val => val.activity).length}" style="width: 196px;max-height:43px;" :style="{width: list.filter(val => val.activity) && list.filter(val => val.activity).length ? 239 : 196}" :title="scope.row.name">
                                 <template v-if="scope.row.name.length < 14">
                                     {{scope.row.name}}<i v-if="scope.row.activity" class="sale-bg"></i>
                                 </template>
@@ -311,7 +311,7 @@
     .header {
         display: flex;
         align-items: center;
-        border-bottom: 2px solid #CACFCB;
+        border-bottom: 1px solid #D0D6E4;
         padding-bottom: 18px;
         .item {
             margin-right: 40px;
@@ -577,7 +577,7 @@ export default {
         next(vm => {
             vm.loading = true
             
-            vm._apis.goods.fetchSpuGoodsList().then((res) => {
+            vm._apis.goods.fetchSpuGoodsList({pageSize: 20}).then((res) => {
                 let total = +res.total
 
                 if(!total) {
@@ -889,7 +889,7 @@ export default {
             } else {
                 str = '下架'
                 if(activity) {
-                    this.confirm({title: str, customClass: 'confirm-goods', icon: true, text: '该商品正在参加营销活动，活动结束/失效才可下架。', width: '500px'}).then(() => {
+                    this.confirm({customClass: 'confirm-goods', icon: true, text: '该商品正在参加营销活动，活动结束/失效才可下架。', width: '500px'}).then(() => {
                         this.getList()
                     }).catch(() => {
                         this.getList()
@@ -897,7 +897,7 @@ export default {
                     return
                 }
             }
-            this.confirm({title: str, customClass: 'confirm-goods', icon: true, text: `确定${str}此商品？`, width: '500px'}).then(() => {
+            this.confirm({customClass: 'confirm-goods', icon: true, text: `确定${str}此商品？`, width: '500px'}).then(() => {
                 this._apis.goods.productUpperOrLowerSpu({id, status: _flag ? 1 : 0}).then((res) => {
                     this.getList()
                     this.$message({
@@ -909,7 +909,7 @@ export default {
 
                     text += '<p>上架失败！</p>'
                     text += `<p>${error}</p>`
-                    this.confirm({title: '编辑上下架', customClass: 'confirm-goods', text, width: '500px'}).then(() => {
+                    this.confirm({customClass: 'confirm-goods', text, width: '500px'}).then(() => {
                         this.getList()
                     }).catch(() => {
                         this.getList()
@@ -997,7 +997,7 @@ export default {
         },
         editCategory(){
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择商品后再进行编辑分类操作。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({customClass: 'confirm-goods', icon: true, text: '请选择商品后再进行编辑分类操作。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
@@ -1027,7 +1027,7 @@ export default {
         },
         changePriceMore() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择想要批量改价的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({customClass: 'confirm-goods', icon: true, text: '请选择想要批量改价的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
@@ -1035,7 +1035,7 @@ export default {
             if(this.multipleSelection.some(val => val.activity)) {
                 let name = this.multipleSelection.filter(val => val.activity)[0].name
 
-                this.confirm({title: '批量改价', customClass: 'confirm-goods', icon: true, text: `所选商品“${name}”正在参加营销活动，活动结束/失效才可修改价格。`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({customClass: 'confirm-goods', icon: true, text: `所选商品“${name}”正在参加营销活动，活动结束/失效才可修改价格。`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
@@ -1088,12 +1088,12 @@ export default {
         shareMore() {
             let obj = {}
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择想要批量推广的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({customClass: 'confirm-goods', icon: true, text: '请选择想要批量推广的商品。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
             }
-            this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '当前只支持批量下载微信公众号商品详情页二维码图片！', confirmText: '一键下载'}).then(() => {
+            this.confirm({customClass: 'confirm-goods', icon: true, text: '当前只支持批量下载微信公众号商品详情页二维码图片！', confirmText: '一键下载'}).then(() => {
                 let ids = this.multipleSelection.map(val => val.id)
 
                 this._apis.goods.shareMore({ids, channelInfoId: 2}).then((res) => {
@@ -1196,20 +1196,20 @@ export default {
             if(this.multipleSelection.some(val => val.activity)) {
                 let name = this.multipleSelection.filter(val => val.activity)[0].name
 
-                this.confirm({title: '批量删除', icon: true, text: `当前商品中“${name}”参与的营销活动未结束，无法进行批量删除操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({icon: true, text: `当前商品中“${name}”参与的营销活动未结束，无法进行批量删除操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
             }
 
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择想要批量删除的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({customClass: 'confirm-goods', icon: true, text: '请选择想要批量删除的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
             }
 
-            this.confirm({title: '批量删除', customClass: 'confirm-goods', icon: true, text: '是否确认批量删除？'}).then(() => {
+            this.confirm({ customClass: 'confirm-goods', icon: true, text: '是否确认批量删除？'}).then(() => {
                 let isLast = false
 
                 if(this.listQuery.startIndex == 1) {
@@ -1247,7 +1247,7 @@ export default {
 
             let statusStr = status == 1 ? '上架' : '下架'
 
-            this.confirm({title: `批量${statusStr}`, customClass: 'confirm-goods', icon: true, text: `是否确认批量${statusStr}？`}).then(() => {
+            this.confirm({customClass: 'confirm-goods', icon: true, text: `是否确认批量${statusStr}？`}).then(() => {
                 this._apis.goods.upperOrLowerSpu({ids, status}).then((res) => {
                     this.getList()
                     this.checkedAll = false
@@ -1275,13 +1275,13 @@ export default {
             if(this.multipleSelection.some(val => val.stock == 0)) {
                 let name = this.multipleSelection.filter(val => val.stock == 0)[0].name
 
-                this.confirm({title: '批量上架', customClass: 'confirm-goods', icon: true, text: `当前商品中”${name}“的库存为“0”，无法进行批量上架操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({customClass: 'confirm-goods', icon: true, text: `当前商品中”${name}“的库存为“0”，无法进行批量上架操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
             }
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择想要批量上架的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({customClass: 'confirm-goods', icon: true, text: '请选择想要批量上架的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
@@ -1292,13 +1292,13 @@ export default {
             if(this.multipleSelection.some(val => val.activity)) {
                 let name = this.multipleSelection.filter(val => val.activity)[0].name
 
-                this.confirm({title: '批量下架', customClass: 'confirm-goods', icon: true, text: `当前商品中“${name}”参与的营销活动未结束， 无法进行批量下架操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({customClass: 'confirm-goods', icon: true, text: `当前商品中“${name}”参与的营销活动未结束， 无法进行批量下架操作！`, showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
             }
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', customClass: 'confirm-goods', icon: true, text: '请选择想要批量下架的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({ customClass: 'confirm-goods', icon: true, text: '请选择想要批量下架的商品', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
@@ -1356,7 +1356,7 @@ export default {
                 _status = 1
             }
 
-            this.confirm({title: '立即' + _title, customClass: 'confirm-goods', icon: true, text: `是否确认${_title}？`}).then(() => {
+            this.confirm({customClass: 'confirm-goods', icon: true, text: `是否确认${_title}？`}).then(() => {
                 this._apis.goods.upperOrLowerSpu({ids: [row.goodsInfo.id], status: _status}).then((res) => {
                     this.getList()
                     this.visible = false
@@ -1457,10 +1457,12 @@ export default {
         handleSelectionChange(val) {
             this.multipleSelection = val;
             let checkedCount = val.length;
-            if(this.list.length == this.multipleSelection.length) {
+            if(this.list.length == this.multipleSelection.length && checkedCount!=0) {
                 this.checkedAll = true
+            }else{
+                this.checkedAll = false
             }
-             this.isIndeterminate = checkedCount > 0 && checkedCount < this.list.length;
+            this.isIndeterminate = checkedCount > 0 && checkedCount < this.list.length;
         },
         stateHandler(val) {
             if(this.listQuery.status === val) {
@@ -1561,11 +1563,11 @@ export default {
         },
         deleleHandler(row) {
             if(row.activity) {
-                this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: `当前商品”${row.name}“正在参与营销活动<br />活动有效期内商品不得“删除”。`}).then(() => {
+                this.confirm({customClass: 'goods-custom', icon: true, text: `当前商品”${row.name}“正在参与营销活动<br />活动有效期内商品不得“删除”。`}).then(() => {
 
                 })
             } else {
-                this.confirm({title: '立即删除', customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
+                this.confirm({customClass: 'goods-custom', icon: true, text: '是否确认删除？'}).then(() => {
                     this._apis.goods.allDeleteSpu({ids: [row.id]}).then((res) => {
                         this.getList()
                         //this.getAllList()

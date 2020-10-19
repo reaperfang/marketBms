@@ -390,8 +390,8 @@ export default {
         .then(response => {
           console.log('----response-:getTh3DeliverDetail---',response)
           if (response) {
+            if (response.sourceId) this.isEdit = true
             this.handleEchoData(response)
-            this.isEdit = true
           }
           return response
         })

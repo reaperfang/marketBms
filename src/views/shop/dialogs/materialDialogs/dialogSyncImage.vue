@@ -1,7 +1,7 @@
 <template>
   <DialogBase :visible.sync="visible" width="1000px" :title="'同步微信图片素材'" :showFooter="false">
       <div class="content">
-        <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll" @change="allChecked">全选</el-checkbox>
         <div class="list_main">
           <div class="list_img">
             <div class="imgs">
@@ -25,6 +25,7 @@
               @current-change="handleCurrentChange"
               :current-page="currentPage"
               :page-size="pageSize"
+              :page-sizes="[20]"
               layout="prev, pager, next, sizes"
               :total="total*1"
               class="page_nav">
@@ -54,7 +55,8 @@ export default {
       currentPage:1,
       pageSize:20,
       total:0,
-      disNum:true
+      disNum:true,
+      isIndeterminate: false
     }
   },
   props: {
@@ -85,14 +87,20 @@ export default {
     getList(){
       let query ={
         startIndex:this.currentPage,
+        pageSize: this.pageSize
       }
       this._apis.file.getWxImage(query).then((response)=>{
         this.list = []
         response.item.map(item => {
           let urls = location.protocol + `${process.env.DATA_API}/api-decoration-web/notify/image.do?wxp=`+ item.url
           let data = Object.assign({checked:false,urls:urls}, item)
+
           this.list.push(data)
+
         })
+        this.checkedAll = false;
+        this.isIndeterminate = false;
+        this.disNum = true;
         this.total = response.total
       }).catch((error)=>{
         this.$message.error(error);
@@ -148,6 +156,7 @@ export default {
           return this.list
         })
       }
+      this.isIndeterminate = false;
     },
     handleChecked(val){
       if(val){
@@ -157,9 +166,20 @@ export default {
          this.disNum = !this.list.some(item => {
           return item.checked == true
         })
+        if(this.checkedAll) {
+          this.isIndeterminate = false;
+        }else{
+          this.isIndeterminate = true;
+        }
       }else{
         this.checkedAll = false
         this.disNum = true
+        
+        if(this.list.filter(item => item.checked == true).length != 0){
+          this.isIndeterminate = true;
+        }else{
+          this.isIndeterminate = false;
+        }
       }
     },
 

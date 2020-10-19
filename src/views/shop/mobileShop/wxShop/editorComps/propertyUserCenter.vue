@@ -140,6 +140,8 @@
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 import vuedraggable from "vuedraggable";
+let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+const cid = shopInfo && shopInfo.id || ''
 export default {
   name: 'propertyUserCenter',
   components: {dialogSelectJumpPage, dialogSelectImageMaterial, vuedraggable},
@@ -187,7 +189,8 @@ export default {
             disabled: 2,
             linkTo: {
               pageType: 'memberRank',
-              id: 8
+              id: 8,
+              cid: cid
             }
           },
           {
@@ -199,7 +202,8 @@ export default {
             disabled: 2,
             linkTo: {
               pageType: 'gift',
-              id: 10
+              id: 10,
+              cid: cid
             }
           },
           {
@@ -211,7 +215,8 @@ export default {
             disabled: 2,
             linkTo: {
               pageType: 'myAssemble',
-              id: 11
+              id: 11,
+              cid: cid
             }
           },
           {
@@ -223,7 +228,8 @@ export default {
             disabled: 2,
             linkTo: {
               pageType: 'address',
-              id: 12
+              id: 12,
+              cid: cid
             }
           },
           {
@@ -235,7 +241,8 @@ export default {
             disabled: 2,
             linkTo: {
               pageType: 'commissionCenter',
-              id: 13
+              id: 13,
+              cid: cid
             }
           }
         ]
@@ -356,7 +363,7 @@ export default {
 
     //删除自定义
     deleteCustom(val, index) {
-      this.confirm({title: '提示', icon: true, text: '是否确认删除'}).then(() => {
+      this.confirm({icon: true, text: '是否确认删除'}).then(() => {
           const delNum = parseInt(val.title.substring(3));
           this.ruleForm.moduleList.splice(index, 1);
           this.ruleForm.moduleList.forEach((item) => {
@@ -547,6 +554,7 @@ export default {
             height: 34px !important;
           }
           .m-colorPicker {
+            height: 34px;
             padding: 4px;
             margin-right: 5px;
             border:1px solid rgba(204,204,204,1);

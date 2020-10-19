@@ -181,7 +181,7 @@
                     <el-tooltip class="item" effect="light" placement="top">
                         <div slot="content">SKU编码：SKU(Stock Keeping Unit)库存量单元 --- <br/>
                             SKU是商品下的一个分类属性（商品下一个颜色或者尺<br/>
-                            码），单的说： SPU就是一个iPhone6s, SKU就是银色<br/>
+                            码），简单的说： SPU就是一个iPhone6s, SKU就是银色<br/>
                             iPhone6s、粉色iPhone6s。
                         </div>
                         <i class="el-icon-warning-outline sku-code"></i>
@@ -313,6 +313,7 @@
                                         <p class="spec-message" v-if="item.focus && !item.list || (item.focus && item.list && !item.list.length)">暂无匹配项，您可新增规格值到列表</p>
                                         <div class="add-specs-value-footer">
                                             <el-button v-if="item.list && item.list.length" @click="specValueSubmit(false, index)" type="primary">确定</el-button>
+                                            <el-button v-if="item.list && item.list.length" @click="specValueSubmit(false, index)">取消</el-button>
                                         </div>
                                     </div>
                                     <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false, index)" :disabled="editor && ruleForm.activity">添加规格值</el-button>
@@ -738,6 +739,15 @@ export default {
             if (!str) return callback();
             return callback(new Error('当前输入有误，请您重新输入'));
         }
+        var goodsNameValidator = (rule, value, callback) => {
+            if(value === "") {
+            callback(new Error('请输入商品名称'));
+            } else if(value.length > 60){
+            callback(new Error('商品名称过长，最大60个字符'));
+            }else {
+            callback();
+            }
+        };
         return {
             specRadio:0,//商品规格信息，0:单一规格，1:多规格
             singleSpec:{
@@ -810,7 +820,8 @@ export default {
                 ],
                 name: [
                     { required: true, message: '请输入商品名称', trigger: 'blur' },
-                    {validator: validSpecialChar, trigger: 'blur' }
+                    {validator: validSpecialChar, trigger: 'blur' },
+                    { validator: goodsNameValidator, trigger: 'blur' }
                 ],
                 description: [
                     {validator: validSpecialChar, trigger: 'blur' }
@@ -1575,6 +1586,7 @@ export default {
                 })
                 return {
                     label: valArr.join(','),
+                    labelArr: valArr,
                     costPrice: '',
                     salePrice: '',
                     stock: '',
@@ -1632,6 +1644,36 @@ export default {
                 }
             })
 
+            let getLabelList = (labels) => {
+                let arr = []
+                
+                let getLabelStr = (arr) => {
+                    let str = ''
+
+                    if(arr && arr.length) {
+                        arr.forEach((item, index) => {
+                            if(index != arr.length - 1) {
+                                str += item + ','
+                            } else {
+                                str += item
+                            }
+                        })
+                    }
+
+                    return str
+                }
+
+                if(labels && labels.length) {
+                    labels.forEach((item, index) => {
+                        let _arr = labels.slice(0, index + 1)
+
+                        arr.push(getLabelStr(_arr))
+                    })
+                }
+
+                return arr
+            }
+
             let computeRowspan = (prevSpecs, leftSpecs) => {
                 let prevSpecsStr = prevSpecs.join(',')
                 let number = 0
@@ -1640,8 +1682,21 @@ export default {
                 if(leftSpecs && leftSpecs.length) {
                     _list.forEach((val, index) => {
                         let label = val.label
+                        let labelList = getLabelList(val.labelArr)
 
-                        if(label.indexOf(prevSpecsStr + ',') != -1) {
+                        // if(label.indexOf(prevSpecsStr + ',') != -1) {
+                        //     indexArr.push(index)
+                        //     number++
+                        // }
+
+                        // let reg = new RegExp("^" + prevSpecsStr + "\\,")
+
+                        // if(reg.test(label)) {
+                        //     indexArr.push(index)
+                        //     number++
+                        // }
+
+                        if(labelList.find(item => item == prevSpecsStr)) {
                             indexArr.push(index)
                             number++
                         }
@@ -2132,12 +2187,12 @@ export default {
         },
         deleteSpec(index) {
             if(this.ruleForm.goodsInfos[index].activity) {
-                this.confirm({title: '立即删除', icon: true, text: '当前商品正在参与营销活动，活动有效期内商品不得“删除”。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({icon: true, text: '当前商品正在参与营销活动，活动有效期内商品不得“删除”。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
             }
-            this.confirm({title: '立即删除', icon: true, text: '是否确认删除？'}).then(() => {
+            this.confirm({icon: true, text: '是否确认删除？'}).then(() => {
                 console.log(index)
                 let _goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
                 let __goodsInfos
@@ -2450,6 +2505,7 @@ export default {
                     res.goodsInfos.forEach(val => {
                         let label = Object.values(JSON.parse(val.specs)).join(',')
                         val.label = label
+                        val.labelArr = Object.values(JSON.parse(val.specs))
                         val.editorDisabled = true
                         val.showCodeSpan = false
                     })
@@ -2842,7 +2898,8 @@ export default {
                             val.label.split(',').forEach((spec, index) => {
                                 _specs[this.specsLabel.split(',')[index]] = spec
                             })
-                            val.specs = _specs
+                            //val.specs = _specs
+                            val.specs = JSON.stringify(_specs)
                             val.fileList = []
                             return val
                         })
@@ -2887,6 +2944,10 @@ export default {
                         this.editorGoods(params)
                     }
                 } else {
+                  if(this.ruleForm.name.length > 60) {
+                    // this.$refs.ruleForm.validateField('name');
+                    this.$message.error("商品名称过长")
+                  }
                     console.log('error submit!!');
                     return false;
                 }

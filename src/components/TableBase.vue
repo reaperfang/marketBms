@@ -19,7 +19,8 @@ export default {
       multipleSelection: [],
       currentPage: null,
       date: [utils.calcDate(new Date(), '-', 30), new Date()],
-      selectStatus: false
+      selectStatus: false,
+      isIndeterminate: false, //全选状态
     }
   },
 
@@ -64,9 +65,15 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
       if(val.length !=0 && val.length == this.tableData.length ){
-        this.selectStatus = true; 
+        this.selectStatus = true;
+        this.isIndeterminate = false; 
       }else{
         this.selectStatus = false;
+        if(val.length !=0){
+					this.isIndeterminate = true;
+				}else{
+					this.isIndeterminate = false;
+				}
       }
     },
 
@@ -87,6 +94,7 @@ export default {
       }else{
         this.$refs.multipleTable.clearSelection();
       }
+      this.isIndeterminate = false;
     },
   }
 }

@@ -15,6 +15,9 @@ import * as industry from "./industry"; //行业
 import * as templatePay from "./templatePay"; //模板支付
 import * as map from "./map"
 import * as shopInfo from "./shopInfo"
+import * as realSurvey from "./realSurvey" //实时概况
+
+import * as dashboard from "./dashboard" // 数据大屏
 
 
 export default {
@@ -34,5 +37,7 @@ export default {
 	industry,
 	templatePay,
 	map,
-	shopInfo
+	shopInfo,
+	realSurvey,
+	dashboard
 };

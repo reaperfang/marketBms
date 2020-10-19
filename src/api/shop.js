@@ -316,9 +316,9 @@ export function getQrcode(data) {
 // 获取小程序码
 export function getMiniAppQrcode(data) {
   return request({
-    target: 'DECORATION-MINI-PROGRAMS-PROCESSOR',
+    target: 'SHOP-API-APPMAURL-PROCESSOR',
     method: 'post',
-    apiType: 'decorate',
+    apiType: 'manager',
     data
   })
 }

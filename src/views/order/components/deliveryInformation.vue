@@ -458,7 +458,7 @@ export default {
                 sendName:JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address).sendName || '',
                 sendProductName:this.orderDetail.orderInfo.sendType==2
                     ?(this.orderDetail.orderOperationRecordList.find(item=>item.operationType==4) && this.orderDetail.orderOperationRecordList.find(item=>item.operationType==4).createUserName||'')
-                    :(this.orderDetail.orderOperationRecordList.find(item=>(item.operationType==5||item.operationType==11))&& this.orderDetail.orderOperationRecordList.find(item=>(item.operationType==5||item.operationType==11)).createUserName||''),
+                    :(this.orderDetail.orderOperationRecordList.find(item=>(item.operationType==5||item.operationType==14))&& this.orderDetail.orderOperationRecordList.find(item=>(item.operationType==5||item.operationType==14)).createUserName||''),
                 id:item.datas[0]&&item.datas[0].orderId || '',
                 createTime: item.datas[0]&&item.datas[0]&&item.datas[0].createTime || '',
                 deliveryWay: item.datas[0]&&item.datas[0].deliveryWay || '',

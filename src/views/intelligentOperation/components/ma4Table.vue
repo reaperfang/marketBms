@@ -80,10 +80,10 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="currentPage"
+        :current-page="Number(startIndex) || 1"
         :page-sizes="[10, 20, 30, 40]"
-        :page-size="10"
         layout="prev, pager, next, sizes"
+        :page-size="pageSize*1"
         :total="listObj.totalSize"
         :background="true">
       </el-pagination>
@@ -98,8 +98,9 @@ export default {
   extends: TableBase,
   data() {
     return { 
+      loading1: true,
       pageSize:10,
-      loading1: true
+      startIndex: 1
     };
   },
   props:{
@@ -114,15 +115,24 @@ export default {
     loading: {
       type: Boolean,
       default: true
+    },
+    nowPage: {
+      type: Number,
+      default: 0
+    }
+  },
+  watch: {
+    nowPage(val) {
+      if(val) {
+        this.startIndex = val;
+      }
+    },
+    loading(newValue) {
+      this.loading1 = newValue;
     }
   },
   created() {
 
-  },
-  watch: {
-    loading(newValue) {
-      this.loading1 = newValue;
-    }
   },
   methods: {
     handleSizeChange(val){
@@ -130,6 +140,7 @@ export default {
       this.$emit('getEvaluation',1,val)
     },
     handleCurrentChange(val){
+      this.startIndex = val;
       this.$emit('getEvaluation',val,this.pageSize)
     }
   },

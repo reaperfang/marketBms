@@ -18,7 +18,7 @@
       </div>-->
           <div class="content">
             <template v-if="reject">
-                <div class="reject">未开启轨迹查询服务</div>
+                <!-- <div class="reject">未开启轨迹查询服务</div> -->
             </template>
             <template v-else>
               <el-timeline v-show="data.traces.length" :reverse="reverse">
@@ -90,7 +90,6 @@ export default {
   },
   created() {
     this.deliveryWay = this.data.deliveryWay
-    debugger
     if(this.deliveryWay==3){
      this.activities= this.data.traces.map((item,index)=>{
        switch(item.status){

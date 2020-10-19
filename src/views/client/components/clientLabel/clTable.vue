@@ -8,6 +8,8 @@
       :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}"
       :default-sort="{prop: 'date', order: 'descending'}"
       v-loading="loading"
+      @select-all="handleSelectAll"
+      @selection-change="handleSelectChange"
     >
       <el-table-column type="selection" width="34"></el-table-column>
       <el-table-column prop="tagName" label="标签名称" min-width="200" fixed="left" class-name="table-padding"></el-table-column>
@@ -46,7 +48,7 @@
       </el-table-column>
     </el-table>
     <div class="a_line table-select">
-      <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
+      <el-checkbox v-model="checkAll" @change="handleChange" :indeterminate="isIndeterminate">全选</el-checkbox>
       <el-button @click="batchDelete" class="border-button">批量删除</el-button>
     </div>
     <div class="page_styles">
@@ -76,15 +78,27 @@ export default {
       checkAll: false,
       tagList: [],
       loading: false,
-      canDelete: true
+      canDelete: true,
+      isIndeterminate: false
     };
   },
   computed: {},
   created() {},
   methods: {
+    handleSelectChange(val) {
+      let checkedCount = val.length;
+      this.checkAll = checkedCount === this.tagList.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.tagList.length;
+    },
+    handleSelectAll(val) {
+      if(!val.length) {
+        this.checkAll = false
+      }else{
+        this.checkAll = true;
+      }
+    },
     deleteRow(row) {
       this.confirm({
-        title: "提示",
         customClass: "goods-custom",
         icon: true,
         text: "确认删除标签？"
@@ -111,15 +125,19 @@ export default {
       });
     },
     handleSizeChange(val) {
+      this.$nextTick(() => {
+        this.checkAll = false;
+      });
       this.getLabelList(1, val);
       this.pageSize = val;
-      this.checkAll = false;
       this.$refs.clientLabelTable.clearSelection();
     },
     handleCurrentChange(val) {
+      this.$nextTick(() => {
+        this.checkAll = false;
+      })
       this.getLabelList(val, this.pageSize);
       this.startIndex = val;
-      this.checkAll = false;
       this.$refs.clientLabelTable.clearSelection();
     },
     handleChange(val) {

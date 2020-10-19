@@ -1,7 +1,7 @@
 <template>
   <DialogBase :visible.sync="visible" width="1000px" :title="'同步微信图文素材'" :showFooter="false">
       <div>
-        <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll" @change="allChecked">全选</el-checkbox>
         <div class="list_main">
           <div class="list_img">
               <div class="item_img" v-for="item in list" :key="item.id">
@@ -25,6 +25,7 @@
             @current-change="handleCurrentChange"
             :current-page="currentPage"
             :page-size="pageSize"
+            :page-sizes="[20]"
             layout="prev, pager, next, sizes"
             :total="total*1"
             class="page_nav">
@@ -52,7 +53,8 @@ export default {
       currentPage:1,
       pageSize:20,
       total:0,
-      disNum:true
+      disNum:true,
+      isIndeterminate: false
     }
   },
   props: {
@@ -83,14 +85,18 @@ export default {
     getList(){
       let query ={
         startIndex:this.currentPage,
+        pageSize: this.pageSize
       }
       this._apis.file.getWxArticle(query).then((response)=>{
         this.list = []
         response.item.map(item => {
           let data = Object.assign({checked:false}, item)
-          data.thumb_url = "//img01.store.sogou.com/net/a/04/link?appid=100520029&url=" + data.thumb_url;
+          data.thumb_url = location.protocol + `${process.env.DATA_API}/api-decoration-web/notify/image.do?wxp=` + data.thumb_url;
           this.list.push(data)
         })
+        this.checkedAll = false;
+        this.isIndeterminate = false;
+        this.disNum = true;
         this.total = response.total
       }).catch((error)=>{
         this.$message.error(error);
@@ -149,6 +155,7 @@ export default {
           return this.list
         })
       }
+      this.isIndeterminate = false;
     },
     handleChecked(val){
       if(val){
@@ -158,9 +165,20 @@ export default {
         this.disNum = !this.list.some(item => {
           return item.checked == true
         })
+        if(this.checkedAll) {
+          this.isIndeterminate = false;
+        }else{
+          this.isIndeterminate = true;
+        }
       }else{
         this.checkedAll = false
         this.disNum = true
+
+        if(this.list.filter(item => item.checked == true).length != 0){
+          this.isIndeterminate = true;
+        }else{
+          this.isIndeterminate = false;
+        }
       }
     },
 

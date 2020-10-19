@@ -69,7 +69,7 @@
         </el-table-column>
       </el-table>
       <div class="multiple_selection table-select" style="margin-left: 20px;">
-        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+        <el-checkbox :indeterminate="isIndeterminate" class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button class="border-button" @click="deleteRole()">批量删除</el-button>
       </div>
       <div class="page_styles">
@@ -190,9 +190,15 @@ export default {
         this.multipleSelection.push(item.roleName)
       })
       if(val.length !=0 && val.length == this.dataList.length ){
-        this.selectStatus = true; 
+        this.selectStatus = true;
+        this.isIndeterminate = false; 
       }else{
         this.selectStatus = false;
+        if(val.length !=0){
+					this.isIndeterminate = true;
+				}else{
+					this.isIndeterminate = false;
+				}
       }
     },
     handleClick(row){

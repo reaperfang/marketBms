@@ -11,6 +11,13 @@ const getters = {
     userInfo = JSON.parse(userInfo);
     return userInfo
   },
+  shopName: state => {
+    if(state.user.shopInfos && state.user.shopInfos.shopName) return state.user.shopInfos.shopName
+    else {
+      let shopInfos = JSON.parse(localStorage.getItem('shopInfos'))
+      return shopInfos.shopName
+    }
+  },
   roles: state => state.user.roles,
   // shopInfos: state => state.user.shopInfos || localStorage.getItem('shopInfos'),
   shopInfos: state => {

@@ -103,7 +103,6 @@ export default {
     open() {
       this.updateShopInfo({ isOpenOrdinaryExpress: 1 }).then(response =>{
         this.confirm({
-          title: "提示",
           iconSuccess: true,
           text: '已成功开启快递配送！',
           confirmText: '我知道了',
@@ -125,7 +124,6 @@ export default {
 
       if (isHasOtherWay) {
         this.confirm({
-          title: "提示",
           icon: true,
           text: '关闭快递配送功能，买家下单时将不能使用普通快递配送 您确定要关闭吗？'
         }).then(() => {
@@ -142,7 +140,6 @@ export default {
         });
       } else {
         this.confirm({
-          title: "提示",
           icon: true,
           text: '至少需要开启快递发货、商家配送中的一种配送方式 店铺才能正常经营',
           confirmText: '我知道了',

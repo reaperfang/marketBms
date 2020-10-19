@@ -8,7 +8,7 @@ import goods from './goods';
 import order from './order';
 import finance from './finance';
 import set from './set';
-import intelligentOperation from './intelligentOperation';
+// import intelligentOperation from './intelligentOperation';
 import client from './client';
 import datum from './datum';
 import profile from './profile';
@@ -21,7 +21,7 @@ export const asyncRouterMap = [  //异步路由表
   ...order,
   ...client,
   ...datum,
-  ...intelligentOperation,
+  // ...intelligentOperation,
   ...finance,
   ...apply,
   ...set
@@ -66,6 +66,12 @@ export const syncRouterMap = [ //同步路由表
     hidden: true
   },
   {
+    path: '/dashboard',
+    component: () => import('@/views/dashboard/index'),
+    name:'dashboard',
+    hidden: true
+  },
+  {
     path: 'simpleAddGoods',
     component: () => import('@/views/goods/addGoods'),
     name: 'simpleAddGoods'
@@ -81,7 +87,8 @@ const routerConfig = {
 
 // vue-router ≥3.0版本回调形式以及改成promise api的形式了，返回的是一个promise，如果路由地址跳转相同, 且没有捕获到错误，控制台始终会出现错误警告 （注：3.0以下版本则不会出现以下警告！！！，因路由回调问题…）
 const originalPush = Router.prototype.push
-Router.prototype.push = function push(location) {
+Router.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
   return originalPush.call(this, location).catch(err => err)
 }
 

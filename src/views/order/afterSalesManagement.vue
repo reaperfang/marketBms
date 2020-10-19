@@ -245,7 +245,7 @@ export default {
             } else {
                 this.$refs.multipleTable.clearSelection();
             }
-            this.isIndeterminate = true;
+            this.isIndeterminate = false;
         },
         showLogistics(row) {
             this.expressNo = row.returnExpressNo
@@ -277,7 +277,7 @@ export default {
            this._apis.order.orderAfterSaleExport(_param).then((res) => {
                 console.log(res)
                 if(res > 1000) {
-                    this.confirm({title: '提示', icon: true, text: '导出数据量超出1000条，建议分时间段导出。<br />点击确定导出当前筛选下的前1000条数据<br />点击取消请重新筛选'}).then(() => {
+                    this.confirm({icon: true, text: '导出数据量超出1000条，建议分时间段导出。<br />点击确定导出当前筛选下的前1000条数据<br />点击取消请重新筛选'}).then(() => {
                         _param.isExport = 1
                         this._apis.order
                         .orderAfterSaleExport(_param)
@@ -299,11 +299,11 @@ export default {
         },
         batchUpdateStatus() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请勾选需要批量审核的售后单', showCancelButton: false, confirmText: '我知道了'})
+                this.confirm({ icon: true, text: '请勾选需要批量审核的售后单', showCancelButton: false, confirmText: '我知道了'})
                 return
             } else {
                 if(this.multipleSelection.filter(val => val.orderAfterSaleStatus != 0).length) {
-                    this.confirm({title: '提示', icon: true, text: '选择的数据中包含已经审核过的售后单， 无法批量审核，请重新选择', showCancelButton: false, confirmText: '我知道了'})
+                    this.confirm({icon: true, text: '选择的数据中包含已经审核过的售后单， 无法批量审核，请重新选择', showCancelButton: false, confirmText: '我知道了'})
                     return
                 }
             }
@@ -364,7 +364,7 @@ export default {
         handleSelectionChange(val) {
             this.multipleSelection = val;
             let checkedCount = val.length;
-            this.checkedAll = checkedCount === this.tableData.length;
+            this.checkedAll = (checkedCount === this.tableData.length) && (checkedCount !== 0);
             this.isIndeterminate = checkedCount > 0 && checkedCount < this.tableData.length;
         },
         getList(param) {
@@ -416,7 +416,7 @@ export default {
         background-color: #fff;
         border-radius: 4px;
         .form-inline {
-            padding: 20px;
+            padding: 20px 20px 2px 20px;
         }
         .buttons {
             display: flex;
@@ -489,6 +489,10 @@ export default {
 }
 /deep/ .input-with-select .el-input-group__prepend {
     background-color: #fff;
+}
+/deep/ .el-date-editor{
+    border-top-left-radius: 1;
+    border-bottom-left-radius: 1;
 }
 </style>
 

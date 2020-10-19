@@ -556,7 +556,7 @@ export default {
                       return false
                     })
                 ) {
-                  this.confirm({ title: "提示", icon: true, text: "快递单号不能为空" });
+                  this.confirm({icon: true, text: "快递单号不能为空" });
                   return;
                 }
               }
@@ -956,7 +956,7 @@ export default {
           //   });
           res.forEach(item => {
             if(!item.orderAfterSaleSendInfo.sendAddress) {
-              if(item.orderAfterSaleSendInfo && (item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 2 || item.orderAfterSaleSendInfo.deliveryWay == 4)) {
+              if(item.orderAfterSaleSendInfo && (item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 2 || item.orderAfterSaleSendInfo.deliveryWay == 3 || item.orderAfterSaleSendInfo.deliveryWay == 4)) {
                 this._apis.order
                 .getShopSendAddress({ cid: this.cid })
                 .then(res => {

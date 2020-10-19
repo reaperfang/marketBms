@@ -36,6 +36,7 @@
     });
     window.addEventListener('message', function (event) {
         if (event.origin == xiumi_url) {
+            console.log("editor 秀米event.data数据---: ",event.data);
             editor.execCommand('insertHtml', event.data);
             dialog.close();
         }

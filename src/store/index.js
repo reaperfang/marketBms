@@ -13,6 +13,22 @@ import client from './modules/client'
 import order from './modules/order'
 import getters from './getters'
 import api from '@/api';
+import dashboard from "./modules/dashboard";
+
+import createLogger from "@/plugins/logger";
+import createPersistedState from "vuex-persistedstate";
+const debug = process.env.NODE_ENV !== "prod";
+
+const vuexPersisted = new createPersistedState({
+  key: "myVuex",
+  storage: window.localStorage,
+  reducer: state => ({
+    dashboard: {
+      // realtimeuser: state.dashboard.realtimeuser,
+      highlight:state.dashboard.highlight
+    }
+  })
+});
 
 Vue.use(Vuex)
 
@@ -28,9 +44,13 @@ const store = new Vuex.Store({
     data,
     shop,
     client,
-    order
+    order,
+    dashboard
   },
-  getters
+  getters,
+  strict: debug,
+  plugins: debug ? [createLogger(), vuexPersisted] : [vuexPersisted]
+
 });
 store._apis = api;
 

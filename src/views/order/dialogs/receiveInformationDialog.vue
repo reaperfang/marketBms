@@ -116,6 +116,8 @@ export default {
         } else {
           if(this.ruleForm.sendName.length > 50) {
             callback(new Error("发货人姓名不能超过50个字符"));
+          }else if(!/^[a-zA-Z0-9\s\u4e00-\u9fa5]*$/.test(this.ruleForm.sendName)){
+            callback("发货人姓名中含有特殊字符请修改");
           }else {
             callback();
           }
@@ -131,6 +133,8 @@ export default {
         } else {
           if(this.ruleForm.receivedName.length > 50) {
             callback(new Error("收货人姓名不能超过50个字符"));
+          }else if(!/^[a-zA-Z0-9\s\u4e00-\u9fa5]*$/.test(this.ruleForm.receivedName)){
+            callback("收货人姓名中含有特殊字符请修改");
           }else {
             callback();
           }
@@ -416,6 +420,7 @@ export default {
               params = Object.assign({}, params, {
                 orderIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
                 orderSendInfoIds: this.$route.query._ids ? this.$route.query._ids.split(',').map(id => id) : this._ids,
+                orderId:this.$route.query.ids || this.$route.query.id
               })
             } else {
                params = Object.assign({}, params, {
@@ -433,10 +438,12 @@ export default {
               params = Object.assign({}, params, {
                 orderIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
                 orderSendInfoIds: this.$route.query._ids ? this.$route.query._ids.split(',').map(id => id) : this._ids,
+                orderId:this.$route.query.ids || this.$route.query.id
               })
             } else {
                params = Object.assign({}, params, {
-                orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id)
+                orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
+                //orderId: this.$route.query._ids ? this.$route.query._ids : this._ids
               })
             }
           }

@@ -33,7 +33,7 @@
     </div>
     <div class="table" v-calcMinHeight="299">
       <p>广告（{{total || 0}}个）</p>
-      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
+      <el-table :data="tableData" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"  
           width="34">
@@ -81,7 +81,7 @@
         </el-table-column>
       </el-table>
        <div class="multiple_selection table-select" v-if="tableData.length">
-        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+        <el-checkbox :indeterminate="isIndeterminate" class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button class="border-button" @click="batchDeleteAD"  :disabled="!this.multipleSelection.length">批量删除</el-button>
       </div>
       <div class="pagination" v-if="tableData.length">
@@ -154,7 +154,6 @@ export default {
     /* 启用广告 */
     startAD(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定启用此广告吗？'
@@ -169,7 +168,6 @@ export default {
     /* 停用广告 */
     stopAD(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定停用此广告吗？'
@@ -193,8 +191,7 @@ export default {
 
     /* 删除广告 */
     deleteAD(item) {
-      this.confirm({
-        title: '提示', 
+      this.confirm({ 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定删除此启动广告吗？'
@@ -211,7 +208,6 @@ export default {
      /* 批量删除广告 */
     batchDeleteAD(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定删除吗？'

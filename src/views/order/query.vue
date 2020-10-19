@@ -259,26 +259,26 @@ export default {
     },
     batchSendGoods() {
       if(!this.$refs['shop'].list.filter(val => val.checked).length) {
-            this.confirm({title: '提示', icon: true, text: '请选择需要发货的订单'})
+            this.confirm({icon: true, text: '请选择需要发货的订单'})
             return
         }
         if(this.$refs['shop'].list.filter(val => val.checked).some(val => val.orderStatus != 3 && val.orderStatus != 4)) {
-          this.confirm({title: '提示', icon: true, text: '请选择待发货或者部分发货的订单'})
+          this.confirm({icon: true, text: '请选择待发货或者部分发货的订单'})
             return
         }
         this.$router.push('/order/orderBulkDelivery?ids=' + this.$refs['shop'].list.filter(val => val.checked).map(val => val.id).join(','))
     },
     batchSupplementaryLogistics() {
       if(!this.$refs['shop'].list.filter(val => val.checked).length) {
-          this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要补填物流信息的订单。'})
+          this.confirm({icon: true, text: '请先勾选当前页需要补填物流信息的订单。'})
           return
       }
       if(this.$refs['shop'].list.filter(val => val.checked).some(val => val.deliveryWay == 1) && this.$refs['shop'].list.filter(val => val.checked).some(val => val.deliveryWay == 2)){
-          this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量补填物流。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量补填物流。'})
+          this.confirm({icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量补填物流。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量补填物流。'})
           return;
       }
       if(this.$refs['shop'].list.filter(val => val.checked).filter(val => val.isFillUp != 1).length) {
-        this.confirm({title: '提示', icon: true, showCancelButton: false, text: '您勾选的订单包括不能补填物流信息的订单，请重新选择。'})
+        this.confirm({ticon: true, showCancelButton: false, text: '您勾选的订单包括不能补填物流信息的订单，请重新选择。'})
         return
       }
       this.$router.push('/order/batchSupplementaryLogistics?ids=' + this.$refs['shop'].list.filter(val => val.checked).map(val => val.id).join(','))
@@ -313,7 +313,7 @@ export default {
           let message
 
           if(res > 1000) {
-            this.confirm({title: '提示', icon: true, text: '导出数据量超出1000条，建议分时间段导出。<br />点击确定导出当前筛选下的前1000条数据<br />点击取消请重新筛选'}).then(() => {
+            this.confirm({ icon: true, text: '导出数据量超出1000条，建议分时间段导出。<br />点击确定导出当前筛选下的前1000条数据<br />点击取消请重新筛选'}).then(() => {
                 _params = Object.assign({}, _params, {
                   isExport: 1
                 })
@@ -464,9 +464,9 @@ export default {
     margin-bottom: 20px;
     border-radius: 4px;
     .statistics {
-      color: #e0dee8;
+      color: #92929b;
       span {
-        color: #45444c;
+        color: #44434B;
       }
     }
   }

@@ -24,7 +24,7 @@
           <numberInput
             style="width: 193px;"
             v-model="ruleForm.price"
-            :max="99999999.99"
+            :intLength="7"
             placeholder="请输入充值金额"
           ></numberInput>
           <span>元</span>
@@ -46,7 +46,7 @@ export default {
       if (value === "" || value === 0) {
         callback(
           new Error(
-            "请输入有效的金额值，充值金额不能为0，小数点前不能超过8位数字，小数点后不能超过2位数字。"
+            "请输入有效的金额值，充值金额不能为0，小数点前不能超过7位数字，小数点后不能超过2位数字。"
           )
         );
       } else {
@@ -84,7 +84,7 @@ export default {
               if (url) {
                 window.open(url);
                 this.confirm({
-                  title: "请确认支持状态",
+                  title: "请确认支付状态",
                   text: "请在新开页面中完成支付",
                   showCancelButton: false,
                   customClass: "recharge-confirm",

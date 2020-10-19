@@ -19,13 +19,14 @@
               </div>
             </div> -->
             <div class="item" v-if="isOpenResell || (item.tabTitle !== '分销账目')">
-              <h2>{{item.tabTitle}}</h2>
-              <div v-if="!child.hidden" v-for="child in item.data" class="item-child">
-                <!-- <div v-if="child.meta.title == '修改密码' && userType"></div> -->
-                <div>
-                  <router-link :title="child.meta.title" class="ellipsis" active-class="active" :to="resolvePath(child.path)">{{child.meta.title}}</router-link>
+				<h2 v-if="item.tabTitle == '分割线'" style="width: 56px;height: 1px;background: #D9DEE9;margin-left: 20px"></h2>
+                <h2 v-else>{{item.tabTitle}}</h2>
+                <div v-if="!child.hidden" v-for="child in item.data" class="item-child">
+                	<!-- <div v-if="child.meta.title == '修改密码' && userType"></div> -->
+					<div>
+					  <router-link :title="child.meta.title" class="ellipsis" active-class="active" :to="resolvePath(child.path)">{{child.meta.title}}</router-link>
+					</div>
                 </div>
-              </div>
             </div>
           </div>
           <div v-else class="item">

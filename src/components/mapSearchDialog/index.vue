@@ -1,6 +1,7 @@
 <template>
   <span class="mapSearch">
-    <el-button type="text" class="search-map" @click="handleOpen">{{btnTxt}}<i class="el-icon-search"></i></el-button>
+    <!-- <el-button type="text" class="search-map" @click="handleOpen">{{btnTxt}}<i class="el-icon-search"></i></el-button> -->
+    <el-button type="text" class="search-map" @click="handleOpen">{{btnTxt}}<img class="i_map_search" src="../../assets/images/profile/i_map_search.png"  alt="" /></el-button>
 
     <el-dialog
       title="搜索地图"
@@ -9,7 +10,7 @@
       :close-on-click-modal="false"
       custom-class="dialog">
       <div style="height: 480px;">
-        <map-search 
+        <map-search
         class="map"
         ref="shopInfoMap"
         :scaleControl="mapStyle.scaleControl"
@@ -125,15 +126,17 @@ import mapSearch from '@/components/mapSearch'
 .search-map {
     margin-left: 17px;
     width:106px;
-    height:34px;
+    height:32px;
+    font-size: 14px;
     border: 0;
-    padding: 7px 12px;
+    padding: 5px 12px 7px;
     background:rgba(240,239,255,1);
     border-radius:4px;
     color:rgba(101,94,255,1);
     cursor: pointer;
     i {
       padding-left: 6px;
+      font-weight: bold;
     }
     &:hover {
     background:rgba(240,239,255,1);
@@ -146,4 +149,18 @@ import mapSearch from '@/components/mapSearch'
     height: 100%;
     // border-left: 1px solid #ccc;
   }
+  
+  .i_map_search {
+    width: 18px;
+    height: 18px;
+    vertical-align: text-bottom;
+    margin-left: 6px;
+  }
+  /deep/ .el-dialog__footer{
+    text-align: center;
+  }
+  /deep/ .el-input-group__append{
+  border: none;
+  background: #655eff;
+ }
 </style>

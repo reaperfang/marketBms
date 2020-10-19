@@ -14,7 +14,7 @@
                         </el-radio-group>
                         <div class="input_wrap" v-if="form.timeType == 4">
                         <el-date-picker
-                            v-model="dateRange"
+                            v-model="form.daterange"
                             type="datetimerange"
                             align="right"
                             range-separator="至"
@@ -76,7 +76,7 @@
                             </el-tooltip>
                         </div>
                     </div>
-                    <ma4Table class="marT20s" :listObj="listObj" @getEvaluation="getEvaluation" :loading="loading"></ma4Table>
+                    <ma4Table class="marT20s" :listObj="listObj" @getEvaluation="getEvaluation" :nowPage="nowPage" :loading="loading"></ma4Table>
                 </div>
                 <div v-if="listObj.members != undefined && (showNote || showNote1)">
                     <p>运营建议：</p>
@@ -98,6 +98,7 @@ export default {
             form: {
                 niceRatioRange:null,
                 badRatioRange: null,
+                daterange:null,
                 endTime:'',
                 startTime:'',
                 timeType:1,
@@ -110,6 +111,7 @@ export default {
             listObj:{
                
             },
+            nowPage: 1,
             satisfaction:[],  //满意率
             badreviews:[],  //差评率       
             pickerMinDate: '',
@@ -135,6 +137,11 @@ export default {
     methods: {
         // 查询
         getEvaluation(idx,pageS){
+            if(this.form.timeType == 4 && !this.form.daterange){
+                this.$message.warning('请选择查询时间')
+                return
+            }
+            this.nowPage = idx;
             this.form.loads = true
             this.loading = true
             this.form.pageSize = pageS;
@@ -168,7 +175,8 @@ export default {
             }).catch((error)=>{
                 this.$message.error(error)
                 this.loading = false
-            }) 
+                this.form.loads = false;
+            })
         },
         //获取口碑满意率
          memberInforNum(){
@@ -276,7 +284,11 @@ export default {
 * @Description  产研-电商中台  bugID: CYDSZT-3505
 *
 */
-
+.el-radio-group{
+  label {
+    margin-left: 0;
+  }
+}
 /deep/.el-checkbox.is-bordered{
     border: none;
 }

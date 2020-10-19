@@ -360,13 +360,13 @@ export default {
             //如果是普通快递
             if(formName == 'ruleForm'){
                 if(!this.ruleForm.expressCompanyCode) {
-                    this.confirm({title: '提示', icon: true, text: '请选择快递公司'})
+                    this.confirm({icon: true, text: '请选择快递公司'})
                     return
                 }
             }
 
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择需要发货的商品'})
+                this.confirm({icon: true, text: '请选择需要发货的商品'})
                 return
             }
 
@@ -556,7 +556,7 @@ export default {
                 }, 0)
                 this.orderAfterSaleSendInfo = res[0].orderAfterSaleSendInfo
                 if(!this.orderAfterSaleSendInfo.sendAddress) {
-                    if(this.orderAfterSaleSendInfo.deliveryWay == 1 || this.orderAfterSaleSendInfo.deliveryWay == 2 || this.orderAfterSaleSendInfo.deliveryWay == 4) {
+                    if(this.orderAfterSaleSendInfo.deliveryWay == 1 || this.orderAfterSaleSendInfo.deliveryWay == 2 || this.orderAfterSaleSendInfo.deliveryWay == 3 || this.orderAfterSaleSendInfo.deliveryWay == 4) {
                         this.fetchOrderAddress();
                     }
                 }

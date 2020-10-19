@@ -1,7 +1,7 @@
 <template>
   <DialogBase :visible.sync="visible" width="1000px" :title="'同步微信视频素材'" :showFooter="false">
       <div class="content">
-        <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll" @change="allChecked">全选</el-checkbox>
         <div class="list_main">
           <div class="list_img">
             <div class="imgs">
@@ -16,7 +16,7 @@
                   <p class="title">{{item.title}}</p>
                   <!-- <img :src="item.fileCover" class="imgCover">
                   <span class="btn" @click="openVideo(item)"></span> -->
-                  <video v-if="item.video_url !=''" :src="item.video_url" class="avatar video-avatar" controls="controls">您的浏览器不支持视频播放</video> 
+                  <video v-if="item.video_url !=''" :poster="getCover(item)" :src="item.video_url" class="avatar video-avatar" controls="controls">您的浏览器不支持视频播放</video> 
                   <!-- <img :src="item.filePath" class="imgs"> -->
                 </div>
               </div>
@@ -27,7 +27,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="currentPage"
-                :page-sizes="[10, 20, 30, 40]"
+                :page-sizes="[20]"
                 :page-size="pageSize"
                 layout="prev, pager, next, sizes"
                 :total="total*1"
@@ -61,6 +61,7 @@ export default {
       total:0,
       disNum:true,
       data:'',
+      isIndeterminate: false
     }
   },
   props: {
@@ -87,10 +88,14 @@ export default {
     this.getList()
   },
   methods: {
+    getCover(item) {
+      return location.protocol + `${process.env.DATA_API}/api-decoration-web/notify/image.do?wxp=`+item.cover_url
+    },
     //获取微信图片列表
     getList(){
       let query ={
         startIndex:this.currentPage,
+        pageSize: this.pageSize
       }
       this._apis.file.getWxVideo(query).then((response)=>{
         this.list = []
@@ -98,6 +103,9 @@ export default {
           let data = Object.assign({checked:false}, item)
           this.list.push(data)
         })
+        this.checkedAll = false;
+        this.isIndeterminate = false;
+        this.disNum = true;
         this.total = response.total
       }).catch((error)=>{
         this.$message.error(error);
@@ -152,6 +160,7 @@ export default {
           return this.list
         })
       }
+      this.isIndeterminate = false;
     },
     handleChecked(val){
       if(val){
@@ -161,9 +170,20 @@ export default {
         this.disNum = !this.list.some(item => {
           return item.checked == true
         })
+        if(this.checkedAll) {
+          this.isIndeterminate = false;
+        }else{
+          this.isIndeterminate = true;
+        }
       }else{
         this.checkedAll = false
         this.disNum = true
+
+        if(this.list.filter(item => item.checked == true).length != 0){
+          this.isIndeterminate = true;
+        }else{
+          this.isIndeterminate = false;
+        }
       }
     },
 

@@ -48,6 +48,7 @@
           </div>
         </div>
       </div>
+      <profileIntelligent :current-step="currentStep" :step-status="stepStatus"></profileIntelligent>
       <div class="p_l_main">
         <div class="p_l_item dealt">
           <p class="title1">待办提醒：</p>
@@ -151,7 +152,7 @@
               <p class="title3">微信小程序商城</p>
               <div style="position:relative;">
                 <div class="el-loading-mask profile-wxsc-loading"><div class="el-loading-spinner"><svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg><!----></div></div>
-                
+
                 <div v-if="!isReleaseWX && !isEmpowerWX && wxQrcode" class="profile-wxsc-item">
                   <img  class="erweima" :src="wxQrcode" alt/>
                   <p class="opt">
@@ -202,7 +203,7 @@
                 </div>
               </div>
             </div>
-          </div>  
+          </div>
         </div>
       </div>
     </div>
@@ -295,9 +296,11 @@ import { mapMutations } from "vuex";
 import profileCont from "@/system/constant/profile";
 import Clipboard from "clipboard";
 import flowPath from "./flowPath";
+import profileIntelligent from "./components/profile_intelligent";
+import { isExistAuth } from '@/utils/auth'
 export default {
   name: "profile",
-  components: { flowPath },
+  components: { flowPath, profileIntelligent },
   data() {
     return {
       todo: '',
@@ -321,6 +324,9 @@ export default {
       cid:'',
       isGetWXstatus:true,//是否获取到小程序状态数据
       isGetGZstatus:true,//是否获取到公众号状态数据
+      currentStep: 4, // 智能开店：当前步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
+      stepStatus: 1, // 智能开店： 步骤状态 0 未完成 1 已完成
+
     };
   },
 
@@ -337,9 +343,11 @@ export default {
     }
   },
   created() {
+    this._globalEvent.$off('refreshProfile')
     this._globalEvent.$on("refreshProfile", () => {
       this.init();
       this.getLink();
+      this.getIntelligent();
       this.getQrcode();
       this.getOverviewDetails();
       this.getOerviewRemind();
@@ -352,9 +360,11 @@ export default {
       this.getIsReleaseWX();
       this.getIsReleaseGZ();
     });
+    console.log('created')
     this.$message.closeAll();
     this.init();
     this.getLink();
+    this.getIntelligent();
     this.getQrcode();
     this.getOverviewDetails();
     this.getOerviewRemind();
@@ -398,6 +408,23 @@ export default {
       
     },
 
+    // 获取智能开店信息
+    async getIntelligent() {
+      try {
+        const result = await this._apis.profile.getIntelligentProgress();
+        if(result){
+          this.currentStep = result.currentStep ? result.currentStep : 1;
+          this.stepStatus = result.status || 0;
+        }else {
+          this.currentStep =  1;
+          this.stepStatus =  0;
+        }
+      } catch (err) {
+        console.error("智能开店接口 err :", err);
+        this.$message.error(err);
+      }
+    },
+
     //获取客户工作台二维码
     getQrcode() {
       this._apis.shop
@@ -435,11 +462,35 @@ export default {
     },
     //刷新
     refresh() {
+      console.log('refresh')
       this.getOerviewRemind();
       this.getOverviewSelling();
     },
+    getMessageAuth() {
+      const authlist1 = ['订单','订单查询']
+      const authlist2 = ['订单', '发货管理']
+      
+      if (isExistAuth(authlist1)) {
+        return 1
+      }
+      if (isExistAuth(authlist2)) {
+        return 2
+      }
+      return 0
+    },
     // 待办提醒
     getOerviewRemind() {
+      const authCode = this.getMessageAuth()
+      let prompt = ''
+      switch(authCode) {
+        case 1:
+          prompt = '<a href="/bp/order/query?isAbnormal=1&orderStatus=5">请查看</a>'
+          break;
+        case 2:
+          prompt = '请查看'
+          break;
+      }
+      if (!prompt) return false
       this.closeTodo()
       this._apis.overview.overviewRemind({}).then(response => {
         this.stayProcessedCount = response.stayProcessedCount;
@@ -451,7 +502,7 @@ export default {
           this.todo = this.$message({
             showClose: true,
             dangerouslyUseHTMLString: true,
-            message:'<p>您有'+ num +'条异常订单需要处理，<a href="/bp/order/query?isAbnormal=1&orderStatus=5">请查看</a></p>',
+            message:`<p>您有${num}条异常订单需要处理，${prompt}</p>`,
             type: "warning",
             duration: 0
           });
@@ -611,7 +662,7 @@ export default {
           console.error(error);
         });
     },
-    
+
     //获取公众号二维码
     getGZQrcode(){
       this._apis.shop
@@ -643,7 +694,7 @@ export default {
   display: flex;
   width:100%;
   .title1{
-    font-size:16px; 
+    font-size:16px;
     font-weight:500;
     color:rgba(22,22,23,1);
   }
@@ -721,7 +772,7 @@ export default {
               display: block;
             }
           }
-          .dealt_list_l{  
+          .dealt_list_l{
             .dealt_item_1{
               width: 94px;
               height: 110px;

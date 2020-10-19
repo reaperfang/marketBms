@@ -296,7 +296,7 @@ export default {
     .footer {
         text-align: center;
         margin-top: 60px;
-        margin-bottom: 40px;
+        // margin-bottom: 40px;
     }
     .upload-ul {
         overflow: hidden;

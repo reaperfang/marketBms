@@ -81,7 +81,7 @@
         </el-table-column>
       </el-table>
        <div class="multiple_selection table-select" style="margin-left: 20px;">
-        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+        <el-checkbox :indeterminate="isIndeterminate" class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button class="border-button" @click="deleteAccount()">批量删除</el-button>
       </div>
         <div class="page_styles">
@@ -183,7 +183,6 @@ export default {
       let ids = []
       id ? ids.push(id) : ids = this.multipleSelection
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '此操作将永久删除该子账号, 是否继续?'
@@ -208,8 +207,14 @@ export default {
       })
       if(val.length !=0 && val.length == this.dataList.length ){
         this.selectStatus = true; 
+        this.isIndeterminate = false;
       }else{
         this.selectStatus = false;
+        if(val.length !=0){
+					this.isIndeterminate = true;
+				}else{
+					this.isIndeterminate = false;
+				}
       }
     },
     //编辑

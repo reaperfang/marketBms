@@ -47,6 +47,7 @@
                 :data="couponList"
                 style="width: 100%"
                 ref="couponListTable"
+                @selection-change="handleSelectionChangeCouponList"
                 :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
                 :default-sort="{prop: 'date', order: 'descending'}"
                 v-loading="loading"
@@ -88,7 +89,7 @@
             </el-table>
             <div class="a_line">
                 <div class="fl">
-                    <el-checkbox v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
+                    <el-checkbox :indeterminate="isIndeterminateCouponList" v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
                 </div>
                 <div class="fr">
                     共{{couponList.length}}条数据
@@ -111,6 +112,7 @@
                 :data="codeList"
                 style="width: 100%"
                 ref="codeListTable"
+                @selection-change="handleSelectionChangeCodeList"
                 :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
                 :default-sort="{prop: 'date', order: 'descending'}"
                 v-loading="loading"
@@ -152,7 +154,7 @@
             </el-table>
             <div class="a_line">
                 <div class="fl">
-                    <el-checkbox v-model="checkAll2" @change="handleChangeAll2">全选</el-checkbox>
+                    <el-checkbox :indeterminate="isIndeterminateCodeList" v-model="checkAll2" @change="handleChangeAll2">全选</el-checkbox>
                 </div>
                 <div class="fr">
                     共{{codeList.length}}条数据
@@ -195,7 +197,9 @@ export default {
             checkAll2: false,
             selectedCoupons: [],
             selectedCodes: [],
-            canSubmit: true
+            canSubmit: true,
+            isIndeterminateCouponList: false,
+            isIndeterminateCodeList: false
         }
     },
     methods: {
@@ -227,11 +231,25 @@ export default {
             this.couponList.forEach(row => {
                 this.$refs.couponListTable.toggleRowSelection(row,val);
             });
+            this.isIndeterminateCouponList = false;
+        },
+        handleSelectionChangeCouponList(val) {
+            console.log(val)
+            let checkedCount = val.length;
+            this.checkAll = (checkedCount === this.couponList.length) && (checkedCount !== 0);
+            this.isIndeterminateCouponList = checkedCount > 0 && checkedCount < this.couponList.length;
         },
         handleChangeAll2(val) {
             this.codeList.forEach(row => {
                 this.$refs.codeListTable.toggleRowSelection(row,val);
             });
+            this.isIndeterminateCodeList = false;
+        },
+        handleSelectionChangeCodeList(val) {
+            console.log(val)
+            let checkedCount = val.length;
+            this.checkAll2 = (checkedCount === this.codeList.length) && (checkedCount !== 0);
+            this.isIndeterminateCodeList = checkedCount > 0 && checkedCount < this.codeList.length;
         },
         changeCoupon(val) {
             if(val) {
@@ -506,7 +524,6 @@ export default {
     height: 502px;
 }
 /deep/ .el-dialog__header{
-    background: #f1f0ff;
     border-radius: 10px 10px 0 0;
 }
 /deep/ .el-input-number--small .el-input-number__decrease{
