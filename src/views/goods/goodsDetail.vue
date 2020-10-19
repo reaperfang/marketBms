@@ -1585,6 +1585,7 @@ export default {
                 })
                 return {
                     label: valArr.join(','),
+                    labelArr: valArr,
                     costPrice: '',
                     salePrice: '',
                     stock: '',
@@ -1642,6 +1643,36 @@ export default {
                 }
             })
 
+            let getLabelList = (labels) => {
+                let arr = []
+                
+                let getLabelStr = (arr) => {
+                    let str = ''
+
+                    if(arr && arr.length) {
+                        arr.forEach((item, index) => {
+                            if(index != arr.length - 1) {
+                                str += item + ','
+                            } else {
+                                str += item
+                            }
+                        })
+                    }
+
+                    return str
+                }
+
+                if(labels && labels.length) {
+                    labels.forEach((item, index) => {
+                        let _arr = labels.slice(0, index + 1)
+
+                        arr.push(getLabelStr(_arr))
+                    })
+                }
+
+                return arr
+            }
+
             let computeRowspan = (prevSpecs, leftSpecs) => {
                 let prevSpecsStr = prevSpecs.join(',')
                 let number = 0
@@ -1650,14 +1681,21 @@ export default {
                 if(leftSpecs && leftSpecs.length) {
                     _list.forEach((val, index) => {
                         let label = val.label
+                        let labelList = getLabelList(val.labelArr)
 
                         // if(label.indexOf(prevSpecsStr + ',') != -1) {
                         //     indexArr.push(index)
                         //     number++
                         // }
-                        let reg = new RegExp("^" + prevSpecsStr + "\\,")
 
-                        if(reg.test(label)) {
+                        // let reg = new RegExp("^" + prevSpecsStr + "\\,")
+
+                        // if(reg.test(label)) {
+                        //     indexArr.push(index)
+                        //     number++
+                        // }
+
+                        if(labelList.find(item => item == prevSpecsStr)) {
                             indexArr.push(index)
                             number++
                         }
@@ -2471,6 +2509,7 @@ export default {
                     res.goodsInfos.forEach(val => {
                         let label = Object.values(JSON.parse(val.specs)).join(',')
                         val.label = label
+                        val.labelArr = Object.values(JSON.parse(val.specs))
                         val.editorDisabled = true
                         val.showCodeSpan = false
                     })
