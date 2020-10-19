@@ -8,7 +8,7 @@ import goods from './goods';
 import order from './order';
 import finance from './finance';
 import set from './set';
-import intelligentOperation from './intelligentOperation';
+// import intelligentOperation from './intelligentOperation';
 import client from './client';
 import datum from './datum';
 import profile from './profile';
@@ -22,7 +22,7 @@ export const asyncRouterMap = [  //异步路由表
   ...order,
   ...client,
   ...datum,
-  ...intelligentOperation,
+  // ...intelligentOperation,
   ...finance,
   ...apply,
   ...set
@@ -64,6 +64,12 @@ export const syncRouterMap = [ //同步路由表
   {
     path: '/401',
     component: () => import('@/components/errorPage/401'),
+    hidden: true
+  },
+  {
+    path: '/dashboard',
+    component: () => import('@/views/dashboard/index'),
+    name:'dashboard',
     hidden: true
   },
   {

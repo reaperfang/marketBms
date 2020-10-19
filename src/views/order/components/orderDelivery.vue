@@ -134,7 +134,7 @@
                     width="160">
                     <template slot-scope="scope">
                         <div>
-                            <div>{{scope.row.deliveryDate | formatDateRemoveZero}}</div> 
+                            <div>{{scope.row.deliveryDate | formatDateRemoveZero}}</div>
                             <div>{{scope.row.deliveryTime}}</div>
                         </div>
                     </template>
@@ -244,7 +244,7 @@ export default {
         return {
             multipleSelection: [],
             multipleTable: [
-                
+
             ],
             total: 0,
             listQuery: {
@@ -252,7 +252,7 @@ export default {
                 pageSize: 20,
                 searchType: 'orderCode',
                 searchValue: '',
-                status: '',
+                status: '3',
                 isAutosend: '',
                 searchType2: 'orderProductNames',
                 searchValue2: '',
@@ -379,7 +379,7 @@ export default {
                 startIndex: 1,
                 pageSize: 20,
             })
-            
+
             this.getList()
         },
         batchSupplementaryLogistics() {
@@ -422,7 +422,7 @@ export default {
             });
         },
         pickerBeginDateBefore (time) {
-            
+
         },
         batchSendGoods() {
             if(!this.multipleSelection.length) {
