@@ -40,7 +40,6 @@
 import treeMenu from '@/components/TreeMenu'
 import * as menus from '@/components/menus'
 import dialogTree from './dialogs/dialogTree';
-import { userInfo } from 'os';
 export default {
   name: 'createRole',
   components:{
