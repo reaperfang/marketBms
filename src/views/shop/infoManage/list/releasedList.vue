@@ -85,13 +85,14 @@
       </el-table>
       <div class="pagination" v-if="tableData.length">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(startIndex) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
           >
         </el-pagination>
       </div>
@@ -125,7 +126,6 @@ export default {
     /* 删除 */
     deleteInfo(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: `确定删除 [ ${item.title} ] 吗？`
@@ -142,7 +142,6 @@ export default {
     /* 下线 */
     offline(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: `确定下线 [ ${item.title} ] 吗？`
@@ -159,7 +158,6 @@ export default {
     /* 批量删除 */
     batchDeleteInfo(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: `确定删除吗？`

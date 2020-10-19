@@ -1,5 +1,5 @@
 <template>
-<div class="m_container">
+<div class="m_container mh">
         <div class="pane_container head-wrapper">
             <el-form ref="form" :model="form" class="clearfix">
                 <el-form-item label="交易时间">
@@ -102,6 +102,8 @@
                 @sizeChange = "sizeChange"
                 @currentChange = "currentChange"                   
                 :listObj="listObj" 
+                :loading="loading"
+                :nowPage="nowPage"
                 :totalCount="totalCount">
             </maTable>
         </div>
@@ -109,8 +111,7 @@
             <p>运营建议：</p>
             <p class="proposal"><b>交易次数{{note.label}} ：</b>{{note.suggest}}</p>
         </div>
-            <div class="contents"></div>
-            <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
+            <!-- <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div> -->
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
         </div>
 </template>
@@ -144,7 +145,8 @@ export default {
                 startIndex:1,
                 pageSize:10,
                 loads:false,
-            },            
+            },  
+            nowPage: 1,          
             lowprice:'',
             highprice:'',
             textTips:false, 
@@ -181,6 +183,7 @@ export default {
             currentDialog:"",
             dialogVisible: false,
             currentData:{},
+            loading: true
         }
     },
     computed:{
@@ -251,8 +254,14 @@ export default {
                     this.form.MoneyRange =  String(this.lowprice)+'-'+String(this.highprice);
                 } 
             }
+            if(this.form.timeType == 4 && !this.form.daterange){
+                this.$message.warning('请选择查询时间')
+                return
+            }
             this.form.startIndex = num || this.form.startIndex
+            this.nowPage = this.form.startIndex;
             this.form.loads = true
+            this.loading = true;
             // let memberType = this.form.memberType;
             this._apis.data.memberInformation(this.form).then(res => {
                 this.repeatPaymentRatio = res.repeatPaymentRatio;
@@ -266,6 +275,7 @@ export default {
                 this.customerCount = res.customerCount;
                 this.customerRatio = res.customerRatio || 0;
                 this.form.loads = false
+                this.loading = false;
                 // this.note = this.form.tradeCountRange
                 //切换交易次数获取运营建议
                 for(let item of this.tradeCount){
@@ -279,7 +289,8 @@ export default {
                 }
 
             }).catch(error => {
-                this.form.loads = false
+                this.form.loads = false;
+                this.loading = false;
                 this.$message.error(error);
             });
         },
@@ -373,7 +384,8 @@ export default {
 .el-range-editor.el-input__inner {padding-top:1px;}
 .m_container{
     background-color: #fff;
-    padding: 10px 20px;
+    padding: 20px;
+    border-radius: 4px;
     .el-button--small{
         border: 1px solid #655EFF;
         color: #655EFF;
@@ -391,14 +403,13 @@ export default {
 	}
     .pane_container{
         color:#3D434A;
-        padding: 10px;
+        // padding: 10px;
         .input_wrap{
             display: inline-block;
             width: 450px;
         }
         .input_wrap2{
             display: inline-block;
-            width: 140px;
         }
         .input_wrap3{
             display: inline-block;

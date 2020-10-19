@@ -4,6 +4,7 @@
     <el-tabs v-model="currentTab" @tab-click="handleClick" class="tabs">
       <el-tab-pane label="电子面单" name="faceSheet"></el-tab-pane>
       <el-tab-pane v-if="showTab" label="物流查询" name="logisticsInquiry"></el-tab-pane>
+      <el-tab-pane label="三方配送" name="threeDistribution"></el-tab-pane>
     </el-tabs>
     <component :is="currentTab"></component>
   </div>
@@ -12,9 +13,10 @@
 <script>
 import faceSheet from './components/faceSheet';
 import logisticsInquiry from './components/logisticsInquiry';
+import threeDistribution from './components/threeDistribution';
 export default {
   name: 'revenueSituation',
-  components: {faceSheet, logisticsInquiry},
+  components: {faceSheet, logisticsInquiry,threeDistribution},
   data() {
     return {
       currentTab: 'faceSheet',
@@ -64,5 +66,6 @@ export default {
 .tabs{
   background:#fff; 
   padding:10px 20px;
+  border-radius: 4px 4px 0 0;
 }
 </style>

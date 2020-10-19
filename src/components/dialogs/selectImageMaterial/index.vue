@@ -192,8 +192,6 @@ export default {
     margin-top:40px;
   }
   .dialog-footer .el-button{
-    padding: 9px 20px;
-    margin-left: 30px;
     span{
       letter-spacing: 5px;
       margin-right: -4px;

@@ -181,7 +181,7 @@
                     <el-tooltip class="item" effect="light" placement="top">
                         <div slot="content">SKU编码：SKU(Stock Keeping Unit)库存量单元 --- <br/>
                             SKU是商品下的一个分类属性（商品下一个颜色或者尺<br/>
-                            码），单的说： SPU就是一个iPhone6s, SKU就是银色<br/>
+                            码），简单的说： SPU就是一个iPhone6s, SKU就是银色<br/>
                             iPhone6s、粉色iPhone6s。
                         </div>
                         <i class="el-icon-warning-outline sku-code"></i>
@@ -1585,6 +1585,7 @@ export default {
                 })
                 return {
                     label: valArr.join(','),
+                    labelArr: valArr,
                     costPrice: '',
                     salePrice: '',
                     stock: '',
@@ -1642,6 +1643,36 @@ export default {
                 }
             })
 
+            let getLabelList = (labels) => {
+                let arr = []
+                
+                let getLabelStr = (arr) => {
+                    let str = ''
+
+                    if(arr && arr.length) {
+                        arr.forEach((item, index) => {
+                            if(index != arr.length - 1) {
+                                str += item + ','
+                            } else {
+                                str += item
+                            }
+                        })
+                    }
+
+                    return str
+                }
+
+                if(labels && labels.length) {
+                    labels.forEach((item, index) => {
+                        let _arr = labels.slice(0, index + 1)
+
+                        arr.push(getLabelStr(_arr))
+                    })
+                }
+
+                return arr
+            }
+
             let computeRowspan = (prevSpecs, leftSpecs) => {
                 let prevSpecsStr = prevSpecs.join(',')
                 let number = 0
@@ -1650,8 +1681,21 @@ export default {
                 if(leftSpecs && leftSpecs.length) {
                     _list.forEach((val, index) => {
                         let label = val.label
+                        let labelList = getLabelList(val.labelArr)
 
-                        if(label.indexOf(prevSpecsStr + ',') != -1) {
+                        // if(label.indexOf(prevSpecsStr + ',') != -1) {
+                        //     indexArr.push(index)
+                        //     number++
+                        // }
+
+                        // let reg = new RegExp("^" + prevSpecsStr + "\\,")
+
+                        // if(reg.test(label)) {
+                        //     indexArr.push(index)
+                        //     number++
+                        // }
+
+                        if(labelList.find(item => item == prevSpecsStr)) {
                             indexArr.push(index)
                             number++
                         }
@@ -1971,7 +2015,7 @@ export default {
                     this.isExpressSet = false;
                 }
                 //如果商家配送未开启则提示去设置
-                if(name == 'delivery' && res.isOpenMerchantDeliver == 0){
+                if(name == 'delivery' && (res.isOpenMerchantDeliver == 0 && res.isOpenTh3Deliver == 0)){
                     this.isDeliverySet = false;
                 }
                 //如果上门自提未开启则提示去设置
@@ -2147,12 +2191,12 @@ export default {
         },
         deleteSpec(index) {
             if(this.ruleForm.goodsInfos[index].activity) {
-                this.confirm({title: '立即删除', icon: true, text: '当前商品正在参与营销活动，活动有效期内商品不得“删除”。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({icon: true, text: '当前商品正在参与营销活动，活动有效期内商品不得“删除”。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
             }
-            this.confirm({title: '立即删除', icon: true, text: '是否确认删除？'}).then(() => {
+            this.confirm({icon: true, text: '是否确认删除？'}).then(() => {
                 console.log(index)
                 let _goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
                 let __goodsInfos
@@ -2465,6 +2509,7 @@ export default {
                     res.goodsInfos.forEach(val => {
                         let label = Object.values(JSON.parse(val.specs)).join(',')
                         val.label = label
+                        val.labelArr = Object.values(JSON.parse(val.specs))
                         val.editorDisabled = true
                         val.showCodeSpan = false
                     })
@@ -2857,7 +2902,8 @@ export default {
                             val.label.split(',').forEach((spec, index) => {
                                 _specs[this.specsLabel.split(',')[index]] = spec
                             })
-                            val.specs = _specs
+                            //val.specs = _specs
+                            val.specs = JSON.stringify(_specs)
                             val.fileList = []
                             return val
                         })

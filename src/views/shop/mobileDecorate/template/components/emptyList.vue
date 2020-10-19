@@ -28,6 +28,7 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	border-radius: 4px;
 	img {
 		width: 302px;
 		height: 236px;

@@ -1,5 +1,5 @@
 <template>
-    <div class="import">
+    <div class="import mh">
         <section class="header">
             <el-row type="flex" align="center">
                 <el-col :span="12">
@@ -63,14 +63,15 @@
                 v-loading="loading"
                 :data="tableData"
                 :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
-                style="width: 100%">
+                style="width: 100%;margin-bottom: 10px;">
                 <el-table-column
                     prop="number"
                     align="left"
                     header-align="left"
                     label="序号"
-                    width="180"
-                    style="padding-left:20px;"
+                    width="120"
+                    fixed="left" 
+                    class-name="table-padding"
                     >
                 </el-table-column>
                 <el-table-column
@@ -84,12 +85,14 @@
                     align="right"
                     prop="importSuccessCount"
                     header-align="right"
+                    min-width="90"
                     label="导入成功数">
                 </el-table-column>
                 <el-table-column
                     align="right"
                     header-align="right"
                     prop="importFailCount"
+                    min-width="90"
                     label="导入失败数">
                 </el-table-column>
                 <el-table-column
@@ -102,7 +105,10 @@
                     align="center"
                     header-align="center"
                     prop="createTime"
-                    label="导入时间">
+                    label="导入时间"
+                    fixed="right"
+                    width="200"
+                    class-name="table-padding">
                 </el-table-column>
             </el-table>
             <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
@@ -207,13 +213,13 @@ export default {
                 if(res.importFailCount == 0) {
                     _text = `累计导入共${res.importCount}条数据； 成功导入${res.importSuccessCount}条； 失败${res.importFailCount}条。`
 
-                    this.confirm({title: '数据导入成功', text: _text, customClass: 'import-confirm'})
+                    this.confirm({text: _text, customClass: 'import-confirm'})
                     this.active = 3
                 } else {
                     _text = ''
                     _text = `累计导入共${res.importCount}条数据； 成功导入${res.importSuccessCount}条； 失败${res.importFailCount}条。`
                     _text += '<br>' + res.failureMsg
-                    this.confirm({title: '数据导入失败', icon: true, text: _text, showCancelButton: false, customClass: 'import-confirm'})
+                    this.confirm({icon: true, text: _text, showCancelButton: false, customClass: 'import-confirm'})
                     this.active = 1
                 }
                 this.$refs.upload.clearFiles();
@@ -226,7 +232,7 @@ export default {
                 //     message: error,
                 //     type: 'error'
                 // });
-                this.confirm({title: '数据导入失败', text: error, showCancelButton: false})
+                this.confirm({text: error, showCancelButton: false})
                 this.active = 1
                 this.$refs.upload.clearFiles();
                 this.showImport = true
@@ -243,22 +249,16 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-     /deep/.el-table td:nth-child(1){
-         padding-left:10px;
-     }
-     /deep/.el-table th:nth-child(1){
-         padding-left:10px;
-     }
     .import {
         position: relative;
         background-color: #fff;
-        padding: 32px 38px;
-        padding-top: 10px;
+        padding: 20px;
         font-size: 14px;
+        border-radius: 4px;
         section {
-            border-bottom: 1px dashed #d3d3d3;
-            padding-top: 15px;
-            padding-bottom: 22px;
+            // border-bottom: 1px dashed #d3d3d3;
+            // padding-top: 15px;
+            padding-bottom: 0px;
         }
         .header {
             .header-righter {
@@ -280,6 +280,7 @@ export default {
             }
             .steps {
                 margin-top: 36px;
+                margin-left: 12px;
             }
         }
         .importing {
@@ -287,8 +288,10 @@ export default {
             margin-top: 15px;
             p.title {
                 font-size:14px;
-                color:rgba(101,94,255,1);
+                color:#44434B;
+                font-weight: bold;
                 padding-bottom: 10px;
+                padding-top: 20px;
             }
             p:nth-child(2) {
                 margin-top: 5px;
@@ -361,7 +364,8 @@ export default {
         margin-left: 50px;
     }
     .records {
-        color: $globalMainColor;
+        color: #5d5d63;
+        font-weight: bold;
         margin-bottom: 23px;
     }
     /deep/ .el-step__title {

@@ -1,7 +1,9 @@
 <template>
     <div class="order" v-loading="loading">
         <order ref="order" :list="list" @getList="getList" v-bind="$attrs" class="order-list"></order>
-        <el-checkbox v-if="!authHide" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
+        <div class="table-select" style="margin-bottom: 10px;padding-left: 21px;">
+            <el-checkbox :indeterminate="isIndeterminate" v-if="!authHide" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
+        </div>
         <!--<el-button v-if="!authHide" v-permission="['订单', '订单查询', '商城订单', '批量补填物流']" class="border-button" @click="wad">批量补填物流</el-button>-->
         <pagination v-show="total>0" :total="total" :page.sync="params.startIndex" :limit.sync="params.pageSize" @pagination="search" />
     </div>
@@ -24,7 +26,8 @@ export default {
             list: [],
             memberLevelImg: '',
             checkedAll: false,
-            loading: false
+            loading: false,
+            isIndeterminate: false
         }
     },
     created() {
@@ -39,6 +42,19 @@ export default {
             handler() {
                 //this.getList()
             }
+        },
+        checkedLength(newValue, oldValue) {
+            if(newValue && newValue == this.list.length){
+                this.checkedAll = true;
+                this.isIndeterminate = false;
+            }else{
+                this.checkedAll = false;
+                if(newValue){
+                    this.isIndeterminate = true;
+                }else{
+                    this.isIndeterminate = false;
+                }
+            }
         }
     },
     methods: {
@@ -50,13 +66,14 @@ export default {
             this.$emit('batchSupplementaryLogistics')
         },
         checkedAllChange() {
+            this.isIndeterminate = false
             let arr = [...this.list]
 
             if(this.checkedAll) {
                 arr.forEach(val => {
                     val.checked = true;
                 })
-
+                
                 this.list = arr
             } else {
                 arr.forEach(val => {
@@ -85,6 +102,7 @@ export default {
             // });
             //this.$refs['order'].loading = true
             this.checkedAll = false
+            this.isIndeterminate = false
             if(obj) {
                 if(obj.orderTimeValue && obj.orderTimeValue.length) {
                     if(obj.orderTimeValue[0]) {
@@ -199,7 +217,7 @@ export default {
 </script>
 <style lang="scss" scoped>
     .order-list {
-        padding-bottom: 10px;
+        margin-bottom: 10px;
         overflow-x: auto;
     }
     /deep/ .el-checkbox {

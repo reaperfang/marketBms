@@ -6,25 +6,31 @@
       style="width: 100%"
       :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
       :default-sort = "{prop: 'date', order: 'descending'}"
+      v-loading="loading1"
       >
       <el-table-column
         type="index"
         label="排序"
-        width="80"
+        width="100"
+        fixed="left" class-name="table-padding"
         align="left">
       </el-table-column>
       <el-table-column
         prop="id"
+        align="center"
         label="用户ID">
       </el-table-column>
       <el-table-column
         prop="phone"
+        align="center"
+        width="150"
         label="手机号码">
         <template slot-scope="scope">
           {{scope.row.phone ? scope.row.phone : '-'}}
         </template>
       </el-table-column>
       <el-table-column
+      align="center"
         label="用户类型"
       >
       <template slot-scope="scope">
@@ -33,11 +39,15 @@
       </el-table-column>
       <el-table-column
         prop="name"
+        align="center"
+        min-width="140"
         label="会员昵称"
       >
       </el-table-column>
       <el-table-column
         prop="score"
+        align="right"
+        width="140"
         label="积分(余额)"
       >
         <template slot-scope="scope">
@@ -45,6 +55,8 @@
         </template>
       </el-table-column>
       <el-table-column
+      align="center"
+      width="160"
         label="入会时间"
       >
         <template slot-scope="scope">
@@ -56,20 +68,21 @@
         prop="scoreTradeCount"
         label="积分消耗次数（总）"
         align="right"
-        width="200px"
+        fixed="right" class-name="table-padding"
+        width="180px"
       >
       </el-table-column>
     </el-table>
-    <div class="page_styles">
+    <div class="page_styles" v-show="listObj.totalSize>0">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="currentPage"
+        :current-page="Number(startIndex) || 1"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="pageSize"
-        layout="sizes, prev, pager, next"
+        layout="prev, pager, next, sizes"
         :total="listObj.totalSize"
-        :background="background">
+        :background="true">
       </el-pagination>
     </div>
   </div>
@@ -80,10 +93,12 @@ import TableBase from "@/components/TableBase";
 export default {
   name: "mcTable",
   extends: TableBase,
-  props:['listObj','totalCount','background'],
+  props:['listObj','totalCount','background','nowPage', 'loading'],
   data() {
     return {
       pageSize:10,
+      loading1: true,
+      startIndex: 1
       // dataList:[
       //   {
       //       choose: true,
@@ -104,6 +119,16 @@ export default {
   created() {
 
   },
+  watch: {
+    loading(newValue) {
+      this.loading1 = newValue;
+    },
+    nowPage(val) {
+      if(val) {
+        this.startIndex = val;
+      }
+    }
+  },
   methods: {
     //更改每页条数
     handleSizeChange(val){
@@ -112,7 +137,7 @@ export default {
     },
     //选择页数
     handleCurrentChange(val){
-      console.log(val)
+      this.startIndex = val;
       this.$emit('currentChange',val)
     }
     
@@ -134,16 +159,8 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .cell{
-            .btns{
-                span{
-                    color: #655EFF;
-                    margin-right: 5px;
-                }
-            }
-        }
-        /deep/ .el-table--small td, /deep/.el-table--small th{
-  padding:8px 10px;
+.page_styles {
+    margin: 40px 0 30px 0;
 }
 
 </style>

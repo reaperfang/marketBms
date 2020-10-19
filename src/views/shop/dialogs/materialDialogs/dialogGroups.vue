@@ -84,4 +84,15 @@ export default {
 .w250{
   width: 250px;
 }
+/deep/ .dialog-footer{
+  text-align: center;
+  .el-form-item__content{
+    margin-left: 0px !important;
+    padding-top: 35px;
+  }
+  
+}
+/deep/ .el-form-item {
+  margin-bottom: 0px !important;
+}
 </style>

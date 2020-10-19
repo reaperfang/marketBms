@@ -257,7 +257,6 @@ export default {
 
     deleteItem(item) {
       this.confirm({
-        title: '提示',
         customClass: 'goods-custom',
         icon: true,
         text: '确定删除此图片广告吗？'

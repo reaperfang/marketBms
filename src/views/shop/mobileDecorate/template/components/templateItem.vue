@@ -50,8 +50,8 @@
 				<el-switch
 					style="display: block"
 					v-model="templateItem.status"
-					active-color="#87D068"
-					inactive-color="#CCCCCC">
+					active-color="#13ce66"
+					inactive-color="#CACACF">
 				</el-switch>
 			</div>
 			<div class="template-item-foot-right">

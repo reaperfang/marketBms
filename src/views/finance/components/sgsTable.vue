@@ -4,7 +4,7 @@
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="状态">
-          <el-select v-model="ruleForm.acceptStatus" style="width:200px;">
+          <el-select v-model="ruleForm.acceptStatus">
             <el-option
               v-for="item in smsStatus"
               :key="item.value"
@@ -31,7 +31,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="414">
       <div class="total">
         <span>全部 <em>{{total*1}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
@@ -48,7 +48,9 @@
       >
         <el-table-column
           prop="content"
-          label="消息内容">
+          label="消息内容"
+          fixed="left" class-name="table-padding"
+          width="300px">
         </el-table-column>
         <el-table-column
           prop="smsType"
@@ -69,7 +71,7 @@
         <el-table-column
           prop="acceptSmsCountDisplay"
           label="消息数量"
-          align="center">
+          align="right">
         </el-table-column>
         <el-table-column
           prop="acceptStatus"
@@ -83,7 +85,10 @@
           prop="sendTime"
           label="发送时间"
           sortable = "custom"
-          align="right">
+          align="center"
+          class-name="table-padding"
+          width="190px"
+          fixed="right">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -94,9 +99,9 @@
           :current-page="Number(ruleForm.pageNum) || 1"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1"
-          :background="background">
+          :background="true">
         </el-pagination>
       </div>
     </div>
@@ -230,15 +235,15 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
+  border-radius: 4px;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
 }
 .under_part{
   width: 100%;
   background: #fff;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
   .total{
     display: flex;
     justify-content: space-between;
@@ -246,7 +251,7 @@ export default {
       font-size: 16px;
       color: #B6B5C8;
       display:block;
-      margin-top:15px;
+      // margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -259,12 +264,6 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
-}
-/deep/.el-table--small td{
-  padding:16px 10px;
-}
-/deep/.el-table--small th{
-  padding:8px 0px 8px 10px;
 }
 </style>
 

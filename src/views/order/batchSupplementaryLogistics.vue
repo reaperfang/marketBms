@@ -1,5 +1,5 @@
 <template>
-  <div class="bulk-delivery">
+  <div class="bulk-delivery mh">
     <div class="title">批量补填物流</div>
     <div class="container">
       <section>
@@ -986,6 +986,7 @@ export default {
   color: #333333;
   background-color: #fff;
   padding: 20px;
+  border-radius: 4px;
   > .title {
     font-size: 16px;
   }

@@ -68,7 +68,7 @@
                     </div>
                   </div>
                   <div class="col">
-                    <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 4">
+                    <el-form :model="item.orderAfterSaleSendInfo" label-width="100px" class="demo-ruleForm" v-if="item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 3 || item.orderAfterSaleSendInfo.deliveryWay == 4">
                         <el-form-item label="快递公司" prop="expressCompanyCodes" class="expressCompanys">
                             <el-select filterable @change="checkExpress(index)" v-model="item.orderAfterSaleSendInfo.expressCompanyCodes" placeholder="请选择">
                                 <el-option :label="item.expressCompany" :value="item.expressCompanyCode" v-for="(item, index) in expressCompanyList" :key="index"></el-option>
@@ -542,7 +542,7 @@ export default {
           try {
               let params
 
-              if(deliveryWay == 1){ //如果为普通快递
+              if(deliveryWay == 1 || deliveryWay == 3 || deliveryWay == 4){ //如果为普通快递
                 if (
                   this.list
                     .reduce((total, val) => {
@@ -556,7 +556,7 @@ export default {
                       return false
                     })
                 ) {
-                  this.confirm({ title: "提示", icon: true, text: "快递单号不能为空" });
+                  this.confirm({icon: true, text: "快递单号不能为空" });
                   return;
                 }
               }
@@ -658,7 +658,7 @@ export default {
                 orderAfterSaleSendInfoDtoList: this.list.map(item => {
                     let expressCompanys = ''
                     
-                    if(item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 4){ //如果为普通快递在对快递单号等进行处理
+                    if(item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 3 || item.orderAfterSaleSendInfo.deliveryWay == 4){ //如果为普通快递在对快递单号等进行处理
                       if (item.expressCompanyCodes == "other") {
                         expressCompanys = item.other;
                       } else {
@@ -694,7 +694,7 @@ export default {
                         remark: item.orderAfterSaleSendInfo.remark 
                     };
                     //如果是普通快递，则添加快递公司与快递单号
-                    if(item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 4){
+                    if(item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 3 || item.orderAfterSaleSendInfo.deliveryWay == 4){
                       obj.deliveryWay = 1;
                       obj.expressCompanys = expressCompanys;
                       obj.expressNos = item.orderAfterSaleSendInfo.expressNos;
@@ -958,7 +958,7 @@ export default {
           //   });
           res.forEach(item => {
             if(!item.orderAfterSaleSendInfo.sendAddress) {
-              if(item.orderAfterSaleSendInfo && (item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 2 || item.orderAfterSaleSendInfo.deliveryWay == 4)) {
+              if(item.orderAfterSaleSendInfo && (item.orderAfterSaleSendInfo.deliveryWay == 1 || item.orderAfterSaleSendInfo.deliveryWay == 2 || item.orderAfterSaleSendInfo.deliveryWay == 3 || item.orderAfterSaleSendInfo.deliveryWay == 4)) {
                 this._apis.order
                 .getShopSendAddress({ cid: this.cid })
                 .then(res => {
@@ -1001,6 +1001,7 @@ export default {
   background-color: #fff;
   padding: 20px;
   color: #333;
+  border-radius: 4px;
   > .title {
     font-size: 16px;
   }

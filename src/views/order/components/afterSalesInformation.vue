@@ -105,6 +105,8 @@
                         :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
+                            fixed="left" 
+                            class-name="table-padding"
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
@@ -120,15 +122,18 @@
                         </el-table-column>
                         <el-table-column
                             prop="goodsUnit"
+                            align="center"
                             label="单位">
                         </el-table-column>
                         <el-table-column
                             prop="afterSaleCount"
+                            align="right"
                             label="数量">
                         </el-table-column>
                         <el-table-column
                             v-if="orderAfterSale.type != 2"
                             prop="salePrice"
+                            align="right"
                             label="商品单价">
                             <template  slot-scope="scope">
                                 ¥{{scope.row.salePrice}}
@@ -137,6 +142,7 @@
                         <el-table-column
                             v-if="orderAfterSale.type != 2"
                             prop="subtotalMoney"
+                            align="right"
                             label="小计">
                             <template  slot-scope="scope">
                                 ¥{{scope.row.subtotalMoney}}
@@ -491,22 +497,6 @@ export default {
                     return '赠品订单'
             }
         },
-        goodsSpecsFilter(value) {
-            let _value
-            if(!value) return ''
-            if(typeof value == 'string') {
-                _value = JSON.parse(value)
-            }
-            let str = ''
-            for(let i in _value) {
-                if(_value.hasOwnProperty(i)) {
-                    str += i + ':'
-                    str += _value[i] + ','
-                }
-            }
-
-            return str
-        }
     },
     methods: {
         changeHandler() {
@@ -674,6 +664,7 @@ export default {
         background-color: #fff;
         padding: 20px;
         margin-top: 20px;
+        border-radius: 4px;
         .row {
             margin: 10px 0;
             &:first-child {
@@ -836,38 +827,6 @@ export default {
     }
     .title-section .content {
         padding-top: 29px;
-    }
-    /deep/ .el-table th>.cell {
-        padding-left: 0;
-        padding-right: 0;
-    }
-    /deep/ .el-table th:first-child>.cell {
-        padding-left: 20px;
-    }
-    /deep/ .el-table td, /deep/ .el-table th {
-        text-align: center;
-        &:nth-child(1) {
-            text-align: left;
-        }
-    }
-    /deep/ .el-table.operate td, /deep/ .el-table.operate th {
-        text-align: center;
-        &:nth-child(1) {
-            text-align: left;
-        }
-        &:nth-child(3) {
-            text-align: right;
-        }
-    }
-    /deep/ .el-table.operate th {
-        &:nth-child(3) {
-            padding-right: 50px;
-        }
-    }
-    /deep/ .el-table table tbody tr {
-        .cell {
-            padding-left: 20px;
-        }
     }
     /deep/ .el-table tr th {
         border-bottom: none;

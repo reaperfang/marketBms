@@ -8,7 +8,7 @@ import goods from './goods';
 import order from './order';
 import finance from './finance';
 import set from './set';
-import intelligentOperation from './intelligentOperation';
+// import intelligentOperation from './intelligentOperation';
 import client from './client';
 import datum from './datum';
 import profile from './profile';
@@ -22,7 +22,7 @@ export const asyncRouterMap = [  //异步路由表
   ...order,
   ...client,
   ...datum,
-  ...intelligentOperation,
+  // ...intelligentOperation,
   ...finance,
   ...apply,
   ...set
@@ -67,6 +67,12 @@ export const syncRouterMap = [ //同步路由表
     hidden: true
   },
   {
+    path: '/dashboard',
+    component: () => import('@/views/dashboard/index'),
+    name:'dashboard',
+    hidden: true
+  },
+  {
     path: 'simpleAddGoods',
     component: () => import('@/views/goods/addGoods'),
     name: 'simpleAddGoods'
@@ -79,6 +85,13 @@ const routerConfig = {
   scrollBehavior: () => ({ y: 0 }),
   routes: syncRouterMap
 };
+
+
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+  return originalPush.call(this, location).catch(err => err)
+}
 
 let router = new Router(routerConfig);
 router.selfAddRoutes = function (params){  //解决控制台路由警告提示  https://www.cnblogs.com/fqh123/p/11571688.html

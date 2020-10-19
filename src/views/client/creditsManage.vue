@@ -58,7 +58,7 @@
                 <div class="c_block">
                     <el-switch
                         v-model="isSwitch"
-                        active-color="#66CCAC"
+                        active-color="#13ce66" inactive-color="#CACACF"
                         @change="handleSwitch"
                     ></el-switch>
                     <span class="marR20">积分获取上限</span>
@@ -236,8 +236,11 @@ export default {
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
 .c_container{
-    padding: 19px 20px 50px 20px;
+    padding: 20px;
+    padding-top:0;
     background-color: #fff;
+    min-height:100%;
+    border-radius: 4px;
     .marL20{
         margin-left: 20px;
     }

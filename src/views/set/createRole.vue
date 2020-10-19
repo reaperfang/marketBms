@@ -1,6 +1,6 @@
 /*新建子账号 */
 <template>
-    <div class="main">
+    <div class="main mh bor-radius">
         <h1>{{ title }}</h1>
         <el-form ref="form" :model="form" :rules="rules" label-width="120px">
             <!-- <el-form-item label="店铺名称:" prop="shopName">

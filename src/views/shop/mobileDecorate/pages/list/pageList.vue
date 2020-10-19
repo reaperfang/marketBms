@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head-wrapper">
-      <el-form ref="ruleForm" :model="ruleForm" :inline="true">
+      <el-form ref="ruleForm" :model="ruleForm" :inline="true" class="input_style">
         <el-form-item label="" prop="pageCategoryInfoId">
           <el-select v-if="classifyList.length" v-model="ruleForm.pageCategoryInfoId" placeholder="请选择分类">
             <el-option label="全部分类" value=""></el-option>
@@ -19,44 +19,46 @@
         <el-button type="primary" @click="_routeTo('m_templateManageIndex', {'tab': 'myTemplate'})">新建页面</el-button>
       </div>
     </div>
-    <div class="table" v-calcHeight="300">
+    <div class="table" v-calcMinHeight="313">
       <p>微页面（共{{total || 0}}个）</p>
-      <el-table :data="tableData" :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
+      <el-table :data="tableData" :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"
           :selectable='selectInit'
           width="34">
         </el-table-column>
-        <el-table-column prop="name" label="页面名称">
+        <el-table-column prop="name" label="页面名称" min-width="150" fixed="left" class-name="table-padding">
           <template slot-scope="scope">
             <span class="page_name" @click="_routeTo('m_decoratePreview', {pageId: scope.row.id})">{{scope.row.name}} </span>
             <span class="index_page_flag" v-if="scope.row.isHomePage == 1">首页</span>
           </template>
         </el-table-column>
-        <el-table-column prop="title" label="页面标题"></el-table-column>
-        <el-table-column prop="pageCategoryName" label="所属分类">
+        <el-table-column prop="title" label="页面标题" min-width="130"></el-table-column>
+        <el-table-column prop="pageCategoryName" label="所属分类" align="center">
           <template slot-scope="scope">
             <span v-if="scope.row.pageCategoryInfoId == '-1'">未分类</span>
             <span v-else>{{scope.row.pageCategoryName}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="vv" label="访客数"></el-table-column>
-        <el-table-column prop="pv" label="浏览数"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
-        <el-table-column prop="updateTime" sortable="custom" label="最后编辑时间"></el-table-column>
-        <el-table-column prop="updateUserName" label="操作账号"></el-table-column>
-        <el-table-column prop="" label="操作" :width="'300px'" fixed="right">
+        <el-table-column prop="vv" label="访客数" align="right"></el-table-column>
+        <el-table-column prop="pv" label="浏览数" align="right"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" align="center" min-width="160"></el-table-column>
+        <el-table-column prop="updateTime" sortable="custom" label="最后编辑时间" align="center" min-width="160"></el-table-column>
+        <el-table-column prop="updateUserName" label="操作账号" align="center"></el-table-column>
+        <el-table-column prop="" label="操作" :width="operationColumnW" align="left" fixed="right" header-align="center" class-name="table-padding">
           <template slot-scope="scope">
-            <span class="table-btn" @click="copyPage(scope.row)">复制</span>
-            <span class="table-btn" @click="_routeTo('m_shopEditor', {pageId: scope.row.id})">编辑</span>
-            <span class="table-btn" @click="deletePage(scope.row)" v-if="scope.row.isHomePage !== 1">删除</span>
-            <span class="table-btn" @click="spread(scope.row)">推广</span>
-            <span class="table-btn" @click="setIndex(scope.row)" v-if="scope.row.isHomePage !== 1">设为首页</span>
+            <div class="table-operate">
+              <span class="table-btn" @click="copyPage(scope.row)">复制</span>
+              <span class="table-btn" @click="_routeTo('m_shopEditor', {pageId: scope.row.id})">编辑</span>
+              <span class="table-btn table-warning" @click="deletePage(scope.row)" v-if="scope.row.isHomePage !== 1">删除</span>
+              <span class="table-btn" @click="spread(scope.row)">推广</span>
+              <span class="table-btn" @click="setIndex(scope.row)" v-if="scope.row.isHomePage !== 1">设为首页</span>
+            </div>
           </template>
         </el-table-column>
       </el-table>
-      <div class="multiple_selection" v-if="tableData.length">
-        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+      <div class="multiple_selection table-select" v-if="tableData.length">
+        <el-checkbox :indeterminate="isIndeterminate" class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button class="border-button" v-popover:popover4 :disabled="!this.multipleSelection.length">批量改分类</el-button>
         <el-button class="border-button" @click="batchDeletePage"  :disabled="!this.multipleSelection.length">批量删除</el-button>
         <el-popover
@@ -122,7 +124,8 @@ export default {
       visible: false,  //是否显示批量该分类浮层
       pageLink: '',
       disableStatus: [1],  //不可选状态值
-      disableKey: 'isHomePage'
+      disableKey: 'isHomePage',
+      operationColumnW: 72 //操作列宽度
     }
   },
   created() {
@@ -136,6 +139,14 @@ export default {
         }
       },
       deep: true
+    },
+    'tableData': {
+        handler(newVal, oldVal) { //计算操作栏宽度
+            this.$nextTick(() => {
+                this.operationColumnW = this.utils.getOperationColumnW();
+            })
+        },
+        deep: true
     }
   },
   methods: {
@@ -144,7 +155,6 @@ export default {
     copyPage(item) {
       this.currentItem = item;
       this.confirm({
-        title: '提示',
         customClass: 'goods-custom',
         icon: true,
         text: `确定复制 [ ${item.name} ] 吗？`
@@ -162,7 +172,6 @@ export default {
     deletePage(item) {
        this.currentItem = item;
        this.confirm({
-        title: '提示',
         customClass: 'goods-custom',
         icon: true,
         text: `确定删除 [ ${item.name} ] 吗？`
@@ -179,7 +188,6 @@ export default {
     /* 批量删除页面 */
     batchDeletePage(item) {
        this.confirm({
-        title: '提示',
         customClass: 'goods-custom',
         icon: true,
         text: `确定删除吗？`
@@ -208,7 +216,6 @@ export default {
     setIndex(item) {
       this.currentItem = item;
       this.confirm({
-        title: '提示',
         customClass: 'goods-custom',
         icon: true,
         text: `确定将 [ ${item.name} ] 设为首页吗？`
@@ -290,12 +297,15 @@ export default {
   background:#fff;
   padding:20px;
   padding-top:0;
+  border-radius: 0 0 4px 4px;
 }
 /deep/ .table{
-  overflow-y: auto;
+  // overflow-y: auto;
   margin-top:20px;
   background:#fff;
   padding:20px;
+  padding-bottom:50px;
+  border-radius: 4px;
   p{
     margin-bottom:20px;
   }
@@ -313,23 +323,6 @@ export default {
 /deep/ thead th{
   background: #f6f7fa;
   color:#44434B!important;
-}
-/deep/ .el-table td, /deep/ .el-table th {
-  text-align: center;
-  &:nth-child(2) {
-      text-align: left;
-      padding-left: 10px;
-  }
-}
-/deep/ .el-table td{
-  &:nth-child(5) {
-    text-align: right;
-    padding-right: 50px;
-  }
-  &:nth-child(6) {
-    text-align: right;
-    padding-right: 50px;
-  }
 }
 .table-btn{
   padding-right: 5px;

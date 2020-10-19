@@ -3,13 +3,13 @@
         <el-dialog
         title=""
         :visible.sync="showShopsDialog"
-        width="740px"
+        width="760px"
         :before-close="handleClose"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         :show-close="showClose"
         style="margin-top:5vh;">
-        <span slot="title" class="dialog_title">
+        <span slot="title" class="el-dialog__title">
             我的店铺
         </span>
         <div class="content"  v-loading="loading">
@@ -31,9 +31,9 @@
               @current-change="handleCurrentChange"
               :current-page="Number(startIndex) || 1"
               :page-size="pageSize*1"
-              layout="prev, pager, next"
+              layout="prev, pager, next, sizes"
               :total="total*1"
-              :background="background">
+              :background="true">
             </el-pagination>
           </p>
         </div>
@@ -156,7 +156,9 @@ export default {
         // console.log("切换店铺后的店铺信息 ：", shopInfo);
         this.$store.dispatch('setShopInfos',shopInfo).then(() => {
             this.$store.dispatch('getShopInfo')
-            this._globalEvent.$emit('refreshProfile')
+            console.log('saveShop',this.$route.path)
+            const fromPath = this.$route.path
+            if (fromPath === '/profile/profile') this._globalEvent.$emit('refreshProfile')
             this.getShopAuthList()
             this.handleClose()
             this.$store.commit('setStoreGuide', shop.storeGuide)
@@ -271,9 +273,9 @@ export default {
   }
 
 }
-/deep/ .el-dialog__header{
-  background:rgba(101,94,255,0.09) !important;
-}
+// /deep/ .el-dialog__header{
+//   background:rgba(101,94,255,0.09) !important;
+// }
 .p_center{
   text-align: center;
 }

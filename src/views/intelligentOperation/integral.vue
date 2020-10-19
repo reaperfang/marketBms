@@ -1,6 +1,6 @@
 /*积分消耗 */
 <template>
-    <div class="m_container">
+    <div class="m_container mh">
          <div class="pane_container head-wrapper">
             <el-form ref="form" :model="form" class="clearfix" :inline="true">
                 <el-form-item label="交易时间">
@@ -14,7 +14,7 @@
                         </el-radio-group>
                         <el-date-picker
                         v-if="form.timeType == 4"
-                        v-model="daterange"
+                        v-model="form.daterange"
                         type="datetimerange"
                         align="right"
                         range-separator="至"
@@ -67,6 +67,8 @@
                 @currentChange="currentChange"
                 :pageSize="10"
                 :listObj="listObj"
+                :loading="loading"
+                :nowPage="nowPage"
                 :totalCount="listObj.totalSize">
             </ma3Table>
         </div>
@@ -74,8 +76,7 @@
             <p>运营建议：</p>
             <p class="proposal"><b>消耗次数{{note.label}} ：</b>{{note.suggest}}</p>
         </div>
-        <div class="contents"></div>
-        <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
+        <!-- <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div> -->
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
 </template>
@@ -100,6 +101,7 @@ export default {
             form: {
                 startTime:null,
                 endTime:null,
+                daterange:null,
                 scorePaymentCountRange:null,
                 memberType:null,
                 timeType:1,
@@ -107,6 +109,7 @@ export default {
                 loads:false,
                 pageSize:10
             },
+            nowPage: 1,
             memberCount:0, //会员数
             ratio:0, //会员占比
             listObj:{}, //表格数据
@@ -133,6 +136,7 @@ export default {
             currentDialog:"",
             dialogVisible: false,
             currentData:{},
+            loading:true
         }
     },
     created(){
@@ -144,11 +148,11 @@ export default {
             this.day = item;
         },
         getData() {
-            if(this.daterange){
+            if(this.form.daterange){
                 this.form.timeType = 4;
                 Object.assign(this.form,{
-                    startTime:this.daterange[0],
-                    endTime:this.daterange[1]
+                    startTime:this.form.daterange[0],
+                    endTime:this.form.daterange[1]
                 });
             }else{
                 Object.assign(this.form,{
@@ -165,8 +169,14 @@ export default {
         //
         //查询
         goSearch(num){
+            if(this.form.timeType == 4 && !this.form.daterange){
+                this.$message.warning('请选择查询时间')
+                return
+            }
             this.form.loads = true
+            this.loading = true;
             this.form.startIndex = num || this.form.startIndex
+            this.nowPage = this.form.startIndex;
             this._apis.data.integralconsumption(this.form).then(res => {
                 this.memberCount = res.memberCount;
                 this.ratio = res.ratio;
@@ -184,8 +194,11 @@ export default {
                         item.suggest != null && (this.showNote = true)
                     }
                 }
+                this.loading = false;
             }).catch(error => {
+                this.form.loads = false
                 this.$message.error(error);
+                this.loading = false;
             });
         },
         //消耗次数
@@ -268,7 +281,11 @@ export default {
 * @Description  产研-电商中台  bugID: CYDSZT-3504
 *
 */
-
+.el-radio-group{
+  label {
+    margin-left: 0;
+  }
+}
 /deep/.el-checkbox.is-bordered{
     border: none;
 }
@@ -293,7 +310,8 @@ export default {
 }
 .m_container{
     background-color: #fff;
-    padding: 10px 20px;
+    padding: 20px;
+    border-radius: 4px;
     .el-button--small{
         border: 1px solid #655EFF;
         color: #655EFF;
@@ -305,14 +323,13 @@ export default {
 	}
     .pane_container{
         color:#3D434A;
-        padding: 10px;
+        // padding: 10px;
         .input_wrap{
             display: inline-block;
             width: 450px;
         }
         .input_wrap2{
             display: inline-block;
-            width: 140px;
         }
         .input_wrap3{
             display: inline-block;

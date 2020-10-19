@@ -1,6 +1,6 @@
 /*微信设置 */
 <template>
-    <div class="main">
+    <div class="main mh bor-radius">
         <h1>
           微信支付信息设置
           <span style="color:#FC3D42;font-size:12px;">
@@ -315,7 +315,6 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .main{
     width: 100%;
-    height:100%;
     background: #fff;
     padding:20px;
     h1{

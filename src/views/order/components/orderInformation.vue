@@ -5,7 +5,7 @@
                 <div class="grid-content lefter">
                     <div class="item">
                         <div class="label">配送方式</div>
-                        <div class="value">{{orderInfo.deliveryWay | deliveryWayFilter}}</div>
+                        <div class="value">{{orderInfo | deliveryWayFilter}}</div>
                         <!-- && orderInfo.deliveryDate -->
                     </div>
                     <template v-if="orderInfo.deliveryWay == 4">
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                     </template>
-                    <!-- <p v-if="!authHide && orderInfo.orderStatus != 2 && orderInfo.orderStatus != 4 && orderInfo.orderStatus != 5 && orderInfo.orderStatus != 6" @click="currentDialog = 'ReceiveInformationDialog'; currentData =orderInfo; ajax = true; dialogVisible = true" class="change"><span class="pointer">修改</span></p> -->
+                    <p v-if="orderInfo.deliveryWay !=4 && orderInfo.orderStatus != 2 && orderInfo.orderStatus != 4 && orderInfo.orderStatus != 5 && orderInfo.orderStatus != 6" @click="changeReceivedInfo" class="change"><span class="pointer">修改</span></p>
                 </div>
             </el-col>
             <el-col :span="8"><div class="grid-content center">
@@ -205,14 +205,16 @@
                 :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     label="商品"
-                    width="380">
+                    fixed="left"
+                    class-name="table-padding"
+                    width="350">
                     <template slot-scope="scope">
                         <div class="goods-detail">
                             <div class="item image-box">
                                 <img width="66" :src="scope.row.goodsImage" alt="">
                             </div>
                             <div class="item">
-                                <p :title="scope.row.goodsName" class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
+                                <p :title="scope.row.goodsName" class="ellipsis">{{scope.row.goodsName}}</p>
                                 <p class="goods-specs">{{scope.row.goodsSpecs | goodsSpecsFilter}}</p>
                             </div>
                         </div>
@@ -221,27 +223,33 @@
                 <el-table-column
                     prop="goodsUnit"
                     label="单位"
+                    align="center"
                     width="180">
                 </el-table-column>
                 <el-table-column
                     prop="goodsCount"
+                    align="right"
                     label="数量">
                 </el-table-column>
                 <el-table-column
                     prop="productCode"
+                    align="center"
                     label="SPU编码">
                 </el-table-column>
                 <el-table-column
                     prop="code"
+                    align="center"
                     label="SKU编码">
                 </el-table-column>
                 <el-table-column
+                    align="right"
                     label="商品单价">
                     <template slot-scope="scope">
                         ¥{{scope.row.salePrice}}
                     </template>
                 </el-table-column>
                 <el-table-column
+                    align="right"
                     label="商品小计">
                     <template slot-scope="scope">
                         ¥{{(+scope.row.salePrice * scope.row.goodsCount).toFixed(2)}}
@@ -249,7 +257,10 @@
                 </el-table-column>
                 <el-table-column
                     label="商品状态"
-                    class-name="goods-status">
+                    align="center"
+                    fixed="right"
+                    width="150"
+                    class-name="goods-status table-padding">
                     <template slot-scope="scope">
                         <template v-if="scope.row.afterSaleStatus && scope.row.afterSaleStatus != 0">
                             <router-link :to="{ path: '/order/afterSalesDetails', query: { id: scope.row.orderAfterSaleId }}">{{scope.row | orderStatusFilter}}</router-link>
@@ -371,7 +382,7 @@ export default {
             currentData: '',
             dialogVisible: false,
             remarkVisible: false,
-            ajax: false,
+            ajax: true,
             sendGoods: 'received',
             goodsListMessage: {
                consultType: 1,
@@ -663,15 +674,32 @@ export default {
                 this.remarkVisible = false
                 this.$message.error(error);
             }) 
-        }
+        },
+         changeReceivedInfo() {
+            this.currentDialog = "ReceiveInformationDialog";
+            this.currentData = this.orderInfo;
+            this.sendGoods = "received";
+            this.title = "修改收货信息";
+            this.dialogVisible = true;
+        },
     },
     filters: {
-        deliveryWayFilter(code) {
-            if(code === 1) {
+        deliveryWayFilter(order) {
+            if(order.deliveryWay === 1) {
                 return '普通快递'
-            } else if(code === 2) {
+            } else if(order.deliveryWay === 2) {
                 return '商家配送'
-            }else if(code ===4) {
+            } else if(order.deliveryWay === 3){
+                if(order.orderStatus==5||order.orderStatus==6){
+                    if(order.thirdType==1){
+                        return "第三方配送-达达"
+                    }else if(!order.thirdType){
+                        return "第三方配送"
+                    }
+                }else{
+                    return "第三方配送"
+                }
+            } else if(order.deliveryWay ===4) {
                 return '上门自提'
             }
         },
@@ -1062,18 +1090,6 @@ export default {
 }
 .nowrap {
     white-space: nowrap;
-}
-/deep/ .el-table td, /deep/ .el-table th {
-    text-align: center;
-    &:nth-child(1) {
-        text-align: left;
-    }
-}
-/deep/ .el-table .cell {
-    text-align: center;
-    &:first-child {
-        text-align: left;
-    }
 }
 </style>
 

@@ -8,8 +8,7 @@
       :visible.sync="centerDialogVisible"
       width="60%"
       :close-on-click-modal="false"
-      custom-class="dialog"
-      center>
+      custom-class="dialog">
       <div style="height: 480px;">
         <map-search
         class="map"
@@ -23,8 +22,9 @@
         :isInitSearch="false"></map-search>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="handleSubmit">确 定</el-button>
+        <el-button @click="centerDialogVisible = false">取 消</el-button>
+        
       </span>
     </el-dialog>
   </span>
@@ -105,23 +105,23 @@ import mapSearch from '@/components/mapSearch'
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
 .mapSearch {
-  /deep/ .dialog {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    overflow: hidden;
-    .el-dialog__header {
-      height: 60px;
-      box-sizing: border-box;
-      padding: 15px 20px;
-      background-color: #F1F0FF;
-      text-align: left;
-      .el-dialog__title {
-        font-size: 22px;
-        line-height: 30px;
-        color:#44434B;
-      }
-    }
-  }
+  // /deep/ .dialog {
+  //   border-top-left-radius: 10px;
+  //   border-top-right-radius: 10px;
+  //   overflow: hidden;
+  //   .el-dialog__header {
+  //     height: 60px;
+  //     box-sizing: border-box;
+  //     padding: 15px 20px;
+  //     background-color: #F1F0FF;
+  //     text-align: left;
+  //     .el-dialog__title {
+  //       font-size: 22px;
+  //       line-height: 30px;
+  //       color:#44434B;
+  //     }
+  //   }
+  // }
 }
 .search-map {
     margin-left: 17px;
@@ -155,5 +155,8 @@ import mapSearch from '@/components/mapSearch'
     height: 18px;
     vertical-align: text-bottom;
     margin-left: 6px;
+  }
+  /deep/ .el-dialog__footer{
+    text-align: center;
   }
 </style>

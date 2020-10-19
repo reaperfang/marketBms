@@ -1,6 +1,6 @@
 /* 角色管理 */
 <template>
-     <div class="main">
+     <div class="main mh bor-radius">
       <div class="top_part">
         <div class="search head-wrapper">
           <el-form ref="form" :inline="true" :model="form">
@@ -32,10 +32,11 @@
         >
         <el-table-column
         type="selection"
-        width="55">
+        width="34">
         </el-table-column>
         <el-table-column
           prop="roleName"
+          min-width="150" fixed="left" class-name="table-padding"
           label="角色名称">
         </el-table-column>
         <el-table-column
@@ -48,32 +49,38 @@
         </el-table-column> -->
         <el-table-column
           prop="createUserName"
+          align="center"
           label="创建人">
         </el-table-column>
         <el-table-column
           prop="createTime"
+          align="center"
+          width="160"
           label="创建时间">
         </el-table-column>
         <el-table-column
-        label="操作" fixed="right">
+        label="操作" width="117" fixed="right" header-align="center" class-name="table-padding">
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
-            <el-button @click="deleteRole(scope.row.roleName)" type="text" size="small" style="color:#FD4C2B">删除</el-button>
+            <div class="table-operate">
+              <span class="table-btn" @click="handleClick(scope.row)">编辑</span>
+              <span class="table-btn table-warning" @click="deleteRole(scope.row.roleName)">删除</span>
+            </div>
           </template>
         </el-table-column>
       </el-table>
-      <div class="multiple_selection">
-        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
-        <el-button style="margin-top:10px;" class="border-button" @click="deleteRole()">批量删除</el-button>
+      <div class="multiple_selection table-select" style="margin-left: 20px;">
+        <el-checkbox :indeterminate="isIndeterminate" class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+        <el-button class="border-button" @click="deleteRole()">批量删除</el-button>
       </div>
       <div class="page_styles">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="form.pageSize"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1">
         </el-pagination>
       </div>
@@ -183,9 +190,15 @@ export default {
         this.multipleSelection.push(item.roleName)
       })
       if(val.length !=0 && val.length == this.dataList.length ){
-        this.selectStatus = true; 
+        this.selectStatus = true;
+        this.isIndeterminate = false; 
       }else{
         this.selectStatus = false;
+        if(val.length !=0){
+					this.isIndeterminate = true;
+				}else{
+					this.isIndeterminate = false;
+				}
       }
     },
     handleClick(row){

@@ -8,11 +8,13 @@
       :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}"
       :default-sort="{prop: 'date', order: 'descending'}"
       v-loading="loading"
+      @select-all="handleSelectAll"
+      @selection-change="handleSelectChange"
     >
-      <el-table-column type="selection"></el-table-column>
-      <el-table-column prop="tagName" label="标签名称"></el-table-column>
-      <el-table-column prop="tagType" label="标签类型"></el-table-column>
-      <el-table-column label="包含人数">
+      <el-table-column type="selection" width="34"></el-table-column>
+      <el-table-column prop="tagName" label="标签名称" min-width="200" fixed="left" class-name="table-padding"></el-table-column>
+      <el-table-column prop="tagType" label="标签类型" align="center"></el-table-column>
+      <el-table-column label="包含人数" align="right" width="120">
         <template slot-scope="scope">
           <span
             class="edit_span"
@@ -22,41 +24,43 @@
           <span class="edit_span" v-else style="color:#000">{{scope.row.labelContains}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标签条件">
+      <el-table-column label="标签条件" min-width="200">
         <template slot-scope="scope">
           <div>
             {{scope.row.labelCondition?scope.row.labelCondition.substring(0,scope.row.labelCondition.lastIndexOf(',')):""}}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column prop="createTime" label="创建时间" align="center" width="160"></el-table-column>
+      <el-table-column label="操作" width="122" fixed="right" header-align="center" class-name="table-padding">
         <template slot-scope="scope">
-          <span
-            class="edit_span"
-            style="margin-right: 5px; padding-right: 1px; border-right: 1px solid #dadae3;"
-            @click="edit(scope.row)"
-            v-permission="['用户', '用户标签', '默认页面', '查看标签']"
-          >
-            编辑
-          </span>
-          <span class="edit_span" @click="deleteRow(scope.row)" style="color: #FD4C2B">删除</span>
+          <div class="table-operate">
+            <span
+              class="edit_span table-btn"
+              @click="edit(scope.row)"
+              v-permission="['用户', '用户标签', '默认页面', '查看标签']"
+            >
+              编辑
+            </span>
+            <span class="edit_span table-btn table-warning" @click="deleteRow(scope.row)">删除</span>
+          </div>
         </template>
       </el-table-column>
     </el-table>
-    <div class="a_line">
-      <el-checkbox v-model="checkAll" @change="handleChange">全选</el-checkbox>
-      <el-button @click="batchDelete" class="marL20 border-button">批量删除</el-button>
+    <div class="a_line table-select">
+      <el-checkbox v-model="checkAll" @change="handleChange" :indeterminate="isIndeterminate">全选</el-checkbox>
+      <el-button @click="batchDelete" class="border-button">批量删除</el-button>
     </div>
     <div class="page_styles">
       <el-pagination
+        :background="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="Number(startIndex) || 1"
         :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
         :page-size="pageSize*1"
         :total="total*1"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="prev, pager, next, sizes"
       ></el-pagination>
     </div>
   </div>
@@ -74,15 +78,27 @@ export default {
       checkAll: false,
       tagList: [],
       loading: false,
-      canDelete: true
+      canDelete: true,
+      isIndeterminate: false
     };
   },
   computed: {},
   created() {},
   methods: {
+    handleSelectChange(val) {
+      let checkedCount = val.length;
+      this.checkAll = checkedCount === this.tagList.length;
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.tagList.length;
+    },
+    handleSelectAll(val) {
+      if(!val.length) {
+        this.checkAll = false
+      }else{
+        this.checkAll = true;
+      }
+    },
     deleteRow(row) {
       this.confirm({
-        title: "提示",
         customClass: "goods-custom",
         icon: true,
         text: "确认删除标签？"
@@ -109,12 +125,20 @@ export default {
       });
     },
     handleSizeChange(val) {
+      this.$nextTick(() => {
+        this.checkAll = false;
+      });
       this.getLabelList(1, val);
       this.pageSize = val;
+      this.$refs.clientLabelTable.clearSelection();
     },
     handleCurrentChange(val) {
+      this.$nextTick(() => {
+        this.checkAll = false;
+      })
       this.getLabelList(val, this.pageSize);
       this.startIndex = val;
+      this.$refs.clientLabelTable.clearSelection();
     },
     handleChange(val) {
       this.tagList.forEach(row => {
@@ -198,22 +222,6 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .el-table td, /deep/ .el-table th {
-        text-align: center;
-        &:nth-child(2) {
-            text-align: left;
-            padding-left: 20px;
-        }
-    }
-/deep/ .el-table td{
-  &:nth-child(4) {
-    text-align: right;
-    padding-right: 90px;
-  }
-  &:nth-child(5) {
-    text-align: left;
-  }
-}
 /deep/ .el-table--small td, .el-table--small th{
   padding: 16px 0;
 }

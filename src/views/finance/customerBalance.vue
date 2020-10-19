@@ -4,10 +4,10 @@
     <div class="top_part head-wrapper">
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item label="交易流水号">
-          <el-input v-model="ruleForm.tradeDetailSn" placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.tradeDetailSn" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
         <el-form-item label="交易类型">
-          <el-select v-model="ruleForm.businessType" style="width:140px;" placeholder="全部">
+          <el-select v-model="ruleForm.businessType" placeholder="全部">
             <el-option
               v-for="item in transactionTypes"
               :key="item.value"
@@ -34,7 +34,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="211">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
@@ -53,12 +53,13 @@
         <el-table-column
           prop="tradeDetailSn"
           label="交易流水号"
-          width="210px"
-          fixed>
+          fixed="left" class-name="table-padding"
+          width="210px">
         </el-table-column>
         <el-table-column
           prop="relationSn"
           label="关联单据编号"
+          align="center"
           :render-header="renderRelationSn"
           width="230px">
         </el-table-column>
@@ -71,14 +72,12 @@
         <el-table-column
           prop="nickName"
           label="用户昵称"
-          align="center"
-          width="100px">
+          align="center">
         </el-table-column>
         <el-table-column
           prop="businessType"
           label="交易类型"
-          align="center"
-          width="100px">
+          align="center">
           <template slot-scope="scope">
             {{transactionTypes[scope.row.businessType].label}}
           </template>
@@ -103,6 +102,7 @@
           label="交易时间"
           sortable = "custom"
           align="center"
+          class-name="table-padding"
           width="190px"
           fixed="right">
         </el-table-column>
@@ -115,9 +115,9 @@
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1"
-          :background="background">
+          :background="true">
         </el-pagination>
       </div>
       <exportTipDialog :data = currentData :dialogVisible.sync="dialogVisible" ></exportTipDialog>
@@ -170,7 +170,7 @@ export default {
   methods: {
     renderRelationSn(){
       return(
-        <div style="height:49px;line-height:49px;">
+        <p>
           <span style="font-weight:bold;vertical-align:middle;">关联单据编号</span>
           <el-popover
             placement="top-start"
@@ -180,7 +180,7 @@ export default {
             content="订单编号、售后单编号、提现编号">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
-        </div>
+        </p>
       )
     },
     init(){
@@ -264,14 +264,14 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
-  padding: 15px 20px;
+  border-radius: 4px;
+  padding: 20px;
 }
 .under_part{
   width: 100%;
   background: #fff;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
   .total{
     display: flex;
     justify-content: space-between;
@@ -279,7 +279,7 @@ export default {
       font-size: 16px;
       color: #B6B5C8;
       display: block;
-      margin-top:15px;
+      // margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -296,11 +296,5 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
-}
-/deep/ .el-table--small td{
-  padding:16px 10px;
-}
-/deep/.el-table--small th{
-  padding:0px 10px;
 }
 </style>

@@ -463,7 +463,8 @@ export default {
 }
 .c_container{
     background-color: #fff;
-    padding: 13px 20px 44px 20px;
+    padding: 20px;
+    height:100%;
     .c_top{
         padding-bottom: 15px;
         border-bottom: 1px dashed #D3D3D3;

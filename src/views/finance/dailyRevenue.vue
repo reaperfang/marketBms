@@ -21,7 +21,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="211">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
@@ -40,11 +40,14 @@
           prop="accountDate"
           label="日期"
           align="left"
+          min-width="160"
+          fixed="left" class-name="table-padding"
           sortable = "custom">
         </el-table-column>
         <el-table-column
           prop="income"
           label="总收入（元）"
+          min-width="170"
           align="right">
           <template slot-scope="scope">
             {{scope.row.income}}
@@ -53,6 +56,7 @@
         <el-table-column
           prop="expend"
           label="总支出（元）"
+          min-width="170"
           align="right">
           <template slot-scope="scope">
             {{scope.row.expend}}
@@ -61,6 +65,8 @@
         <el-table-column
           prop="realIncome"
           label="实际收入（元）"
+          min-width="170"
+          fixed="right" class-name="table-padding"
           align="right">
         </el-table-column>
       </el-table>
@@ -72,9 +78,9 @@
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="pageSize*1"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1"
-          :background="background">
+          :background="true">
         </el-pagination>
       </div>
 		<exportTipDialog :data="currentData" :dialogVisible.sync="dialogVisible"></exportTipDialog>
@@ -198,14 +204,14 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
-  padding: 15px 20px;
+  border-radius: 4px;
+  padding: 20px;
 }
 .under_part{
   width: 100%;
   background: #fff;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
   .total{
     display: flex;
     justify-content: space-between;
@@ -213,7 +219,7 @@ export default {
       font-size: 16px;
       color: #B6B5C8;
       display: block;
-      margin-top:15px;
+      // margin-top:15px;
       em{
         font-style: normal;
         color: #000;

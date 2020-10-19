@@ -194,8 +194,10 @@ export default {
     padding: 5px 10px;
 }
 .c_container{
-    padding: 20px;
+    padding: 0 20px 20px 20px;
     background-color: #fff;
+    min-height:100%;
+    border-radius: 4px;
 }
 .marL20{
     margin-left: 20px;

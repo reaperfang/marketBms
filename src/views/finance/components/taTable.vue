@@ -45,7 +45,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="426">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
@@ -65,11 +65,14 @@
         <el-table-column
           prop="memberSn"
           label="用户ID"
+          width="120"
+          fixed="left" class-name="table-padding"
           :render-header="renderMemberId">
         </el-table-column>
         <el-table-column
           prop='nickName'
           label="用户昵称"
+          align="center"
           >
         </el-table-column>
         <el-table-column
@@ -89,8 +92,10 @@
           prop="createTime"
           label="时间"
           sortable = "custom"
-          align="right"
-          width="200px">
+          align="center"
+          class-name="table-padding"
+          width="190px"
+          fixed="right">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -101,9 +106,9 @@
           :current-page="Number(ruleForm.pageNum) || 1"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1"
-          :background="background">
+          :background="true">
         </el-pagination>
       </div>
 		<exportTipDialog :data=currentData  :dialogVisible.sync="dialogVisible"></exportTipDialog>
@@ -178,7 +183,7 @@ export default {
   methods: {
     renderMemberId(){
       return(
-        <div style="height:49px;line-height:49px;">
+        <p>
           <span style="font-weight:bold;vertical-align:middle;">用户ID</span>
           <el-popover
             placement="top-start"
@@ -188,7 +193,7 @@ export default {
             content="所有参与超级海报获得奖励的用户ID">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
-        </div>
+        </p>
       )
     },
     fetch(num){
@@ -274,13 +279,13 @@ export default {
   background: #fff;
   border-radius: 3px;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
 }
 .under_part{
   width: 100%;
   background: #fff;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
   .total{
     display: flex;
     justify-content: space-between;
@@ -288,7 +293,7 @@ export default {
       font-size: 16px;
       color: #B6B5C8;
       display: block;
-      margin-top:15px;
+      // margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -307,12 +312,6 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
-}
-/deep/.el-table--small td{
-  padding:16px 10px 16px 0;
-}
-/deep/.el-table--small th{
-  padding:0px;
 }
 
 </style>

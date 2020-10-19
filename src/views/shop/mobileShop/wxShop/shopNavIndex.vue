@@ -9,8 +9,8 @@
       <el-switch
         v-model="openNav"
         active-color="#13ce66"
-        @change="switchStatusChange"
-        inactive-color="#ff4949">
+        inactive-color="#CACACF"
+        @change="switchStatusChange">
       </el-switch>
     </div>
     <component :is="navigation_type === '0' ? 'h5NavEdit' : 'miniNavEdit'" :apiNavData="apiNavData" @submitNavData="submit" @resetNavData="resetData"></component>

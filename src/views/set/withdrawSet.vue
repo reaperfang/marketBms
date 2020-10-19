@@ -1,6 +1,6 @@
 /*提现设置 */
 <template>
-    <div class="main">
+    <div class="main mh bor-radius">
       <el-form ref="form" :model="form">
         <el-form-item label="是否允许提现:" prop="cashOut">
           <el-radio-group v-model="form.cashOut">
@@ -187,7 +187,7 @@ export default {
     }
   }
   .save{
-    margin: 200px 0 200px 140px;
+    margin: 200px 0 20px 140px;
   }
   .pdl100{
     padding-left: 100px;

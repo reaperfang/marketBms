@@ -9,6 +9,8 @@
       v-loading="loading"
       >
       <el-table-column
+       fixed="left" class-name="table-padding"
+       min-width="300"
         label="获取积分场景">
         <template slot-scope="scope">
           <span>{{scope.row.sceneName}}</span>
@@ -17,9 +19,10 @@
       </el-table-column>
       <el-table-column
         prop="enable"
+        align="center"
         label="状态">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="116" fixed="right" header-align="center" class-name="table-padding">
         <template slot-scope="scope">
             <span class="edit_span" @click="editCredit(scope.row)" v-permission="['用户', '积分管理', '获取积分规则', '查看']">
                 <!-- <i class="edit_i"></i> -->
@@ -30,13 +33,14 @@
     </el-table>
     <div class="page_styles">
       <el-pagination
+        :background="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="Number(startIndex) || 1"
         :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
         :page-size="pageSize*1"
         :total="total*1"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="prev, pager, next, sizes"
       ></el-pagination>
     </div>
     <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @refreshPage="refreshPage"></component>
@@ -158,13 +162,6 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .el-table td, /deep/ .el-table th {
-        text-align: center;
-        &:nth-child(1) {
-            text-align: left;
-            padding-left: 20px;
-        }
-    }
 .edit_span{
     color: #655EFF;
     cursor: pointer;
@@ -179,6 +176,7 @@ export default {
 .page_styles{
   text-align: center;
   margin-top: 40px;
+  margin-bottom: 30px;
 }
 .yy{
   display: inline-block;

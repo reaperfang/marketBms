@@ -40,6 +40,7 @@
                 :data="data.allCoupons"
                 style="width: 100%"
                 ref="couponListTable"
+                @selection-change="handleSelectionChange"
                 :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
                 :default-sort="{prop: 'date', order: 'descending'}"
                 v-loading="loading"
@@ -93,7 +94,7 @@
             </el-table>
             <div class="a_line">
                 <div class="fl">
-                    <el-checkbox v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
+                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
                 </div>
                 <div class="fr">
                     共{{data.allCoupons.length}}条数据
@@ -122,7 +123,8 @@ export default {
       loading: false,
       checkAll: false,
       selectedCoupons: [],
-      infoArrs: []
+      infoArrs: [],
+      isIndeterminate: false
     };
   },
   methods: {
@@ -151,6 +153,7 @@ export default {
       this.data.allCoupons.forEach(row => {
           this.$refs.couponListTable.toggleRowSelection(row,val);
       });
+      this.isIndeterminate = false;
     },
     submit() {
       this.btnLoading = true;
@@ -212,7 +215,12 @@ export default {
     close() {
       this.selectedCoupons = [];
       this.infoArrs = [];
-    }
+    },
+    handleSelectionChange(val) {
+        let checkedCount = val.length;
+        this.checkAll = (checkedCount === this.data.allCoupons.length) && (checkedCount !== 0);
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.data.allCoupons.length;
+    },
   },
   computed: {
     visible: {

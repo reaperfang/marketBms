@@ -1,11 +1,11 @@
 <template>
-  <div class="tag">
+  <div class="tag mh">
     <div class="search">
       <div>
         <el-button v-permission="['商品', '商品标签', '默认页面', '新建标签']" @click="addTagHandler" type="primary">新建标签</el-button>
         <!-- <el-button class="border-button" @click="moreManageHandler">批量管理</el-button> -->
       </div>
-      <el-form :inline="true" :model="listQuery" ref="form" class="form-inline">
+      <el-form :inline="true" :model="listQuery" ref="form" class="form-inline input_style">
         <el-form-item label="搜索标签" prop="name">
           <el-input v-model="listQuery.name" placeholder="请输入标签名称..."></el-input>
         </el-form-item>
@@ -33,28 +33,25 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column prop="name" label="标签名称" width="300"></el-table-column>
-      <el-table-column prop="productCount" label="绑定商品数量" width="150" align="right" header-align="right"></el-table-column>
-      <el-table-column label="状态" width="250" align="center" header-align="center">
+      <el-table-column type="selection" width="34"></el-table-column>
+      <el-table-column prop="name" label="标签名称" min-width="150" fixed="left" class-name="table-padding"></el-table-column>
+      <el-table-column prop="productCount" label="绑定商品数量" align="right"></el-table-column>
+      <el-table-column label="状态" align="center">
         <template slot-scope="scope">
           <span>{{scope.row.enable | enableFilter}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" fixed="right" align="center" header-align="center
-      ">
+      <el-table-column label="操作" :width="operationColumnW" align="left" fixed="right" header-align="center" class-name="table-padding">
         <template slot-scope="scope" >
-          <div class="operate-box">
-          <span v-permission="['商品', '商品标签', '默认页面', '修改']" class="operate-span blue pointer" @click="change(scope.row)">修改</span>
-          <span v-permission="['商品', '商品标签', '默认页面', '显示/隐藏']" class="operate-span blue pointer" @click="hide(scope.row)">
-            {{scope.row.enable | operateEnable}}
-          </span>
-          <span v-permission="['商品', '商品标签', '默认页面', '删除']" class="operate-span deleteColor pointer" @click="deleteTag(scope.row)">删除</span>
+          <div class="operate-box table-operate">
+          <span v-permission="['商品', '商品标签', '默认页面', '修改']" class="table-btn" @click="change(scope.row)">修改</span>
+          <span v-permission="['商品', '商品标签', '默认页面', '显示/隐藏']" class="table-btn" @click="hide(scope.row)">{{scope.row.enable | operateEnable}}</span>
+          <span v-permission="['商品', '商品标签', '默认页面', '删除']" class="table-btn table-warning" @click="deleteTag(scope.row)">删除</span>
         </div>
         </template>
       </el-table-column>
     </el-table>
-    <div class="table-footer">
+    <div class="table-footer table-select">
       <!-- <div class="row justify-between">
         <div class="col">
           <el-button v-if="showTableCheck" @click="checkAllHandler">全选</el-button>
@@ -116,7 +113,18 @@ export default {
       loading: false,
       checkedAll: false,
       isIndeterminate: false,
+      operationColumnW: 72 //操作列宽度
     };
+  },
+  watch: {
+    'list': {
+        handler(newVal, oldVal) { //计算操作栏宽度
+            this.$nextTick(() => {
+                this.operationColumnW = this.utils.getOperationColumnW();
+            })
+        },
+        deep: true
+    }
   },
   created() {
     this.getList()
@@ -162,10 +170,10 @@ export default {
     },
     hideTags() {
       if(!this.multipleSelection.length) {
-        this.confirm({title: '批量隐藏', icon: true, text: '请选择想要批量隐藏的标签。'})
+        this.confirm({ icon: true, text: '请选择想要批量隐藏的标签。'})
         return
       }
-      this.confirm({title: '批量隐藏', icon: true, text: '确认隐藏所选标签吗？'}).then(() => {
+      this.confirm({icon: true, text: '确认隐藏所选标签吗？'}).then(() => {
           this._apis.goods
           .enableTag({enable: 0, ids: this.multipleSelection.map(val => val.id)})
           .then(res => {
@@ -182,10 +190,10 @@ export default {
     },
     showTags() {
       if(!this.multipleSelection.length) {
-        this.confirm({title: '批量显示', icon: true, text: '请选择想要批量显示的标签。'})
+        this.confirm({icon: true, text: '请选择想要批量显示的标签。'})
         return
       }
-      this.confirm({title: '批量显示', icon: true, text: '确认显示所选标签吗？'}).then(() => {
+      this.confirm({icon: true, text: '确认显示所选标签吗？'}).then(() => {
           this._apis.goods
           .enableTag({enable: 1, ids: this.multipleSelection.map(val => val.id)})
           .then(res => {
@@ -230,7 +238,7 @@ export default {
       })
     },
     deleteTag(row) {
-      this.confirm({title: '立即删除', icon: true, text: '删除后将不可恢复，确认删除吗？'}).then(() => {
+      this.confirm({icon: true, text: '删除后将不可恢复，确认删除吗？'}).then(() => {
           this._apis.goods
           .deleteTag({ids: [row.id]})
           .then(res => {
@@ -248,8 +256,10 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
       let checkedCount = val.length;
-      if(this.list.length == this.multipleSelection.length) {
+      if(this.list.length == this.multipleSelection.length && checkedCount!=0) {
           this.checkedAll = true
+      }else{
+         this.checkedAll = false
       }
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.list.length;
     },
@@ -264,7 +274,7 @@ export default {
     },
     deleteTags() {
       if(!this.multipleSelection.length) {
-        this.confirm({title: '批量删除', icon: true, text: '请选择想要批量删除的标签。'})
+        this.confirm({icon: true, text: '请选择想要批量删除的标签。'})
         return
       }
       this.confirm({
@@ -287,6 +297,7 @@ export default {
     async getList() {
       try {
         this.loading = true
+        this.checkedAll = false
         let res = await fetchTagsList(this.listQuery)
 
         if(res) {
@@ -317,9 +328,6 @@ export default {
         }
     }
 }
-/deep/ .el-table--small td,.el-table--small th{
-      padding:16px 0;
-}
 /deep/ .el-table-column--selection .cell{
     padding-left:20px;
 }
@@ -340,7 +348,8 @@ export default {
 }
 .tag {
   background-color: #fff;
-  padding: 25px 38px;
+  padding: 20px;
+  border-radius: 4px;
   .dialog-container {
     text-align: left;
   }
@@ -360,8 +369,7 @@ export default {
 .table-footer {
   display: flex;
   align-items: center;
-  padding: 20px;
-  padding-left: 15px;
+  padding: 20px 20px 10px 20px;
   button {
     margin-left: 0;
     //margin-right: 28px;
