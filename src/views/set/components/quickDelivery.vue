@@ -77,6 +77,7 @@
           :data="tableData"
           style="width: 100%"
           empty-text="暂无数据"
+          :default-sort="{prop: 'updateTime', order: 'descending'}"
          :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '500'}"
         >
           <el-table-column prop="name" label="模板名称" width="180" fixed="left" 
