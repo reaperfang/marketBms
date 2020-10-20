@@ -27,7 +27,7 @@
 
 		<el-row class="row-4">
 			<el-col :span="7">
-				<!-- <order></order> -->
+				<order></order>
 			</el-col>
 			<el-col :span="10">
 				<mallhistory></mallhistory>

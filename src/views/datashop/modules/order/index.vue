@@ -41,7 +41,7 @@ export default {
 	components: { vfunnel, gridtitle },
 	data: function() {
 		return {
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			//cid: JSON.parse(localStorage.getItem("shopInfos")).id,
 			chartData: {
 				columns: ["状态", "数值"],
 				rows: [
@@ -78,8 +78,10 @@ export default {
 		...mapActions(["orderlist"]),
 		async init() {
 			let parames = { ...this.invokeType, cid: this.cid };
-			let data = await this._apis.dashboard.order(parames);
-			let res = JSON.parse(data);
+			//let data = await this._apis.dashboard.order(parames);
+			let res = JSON.parse(
+				'{"uv_7d":23,"order_c_uv_7d":12,"paid_order_number_7d":11,"order_c_uv_7dco":0.52174,"paid_c_order_7dco":0.91667,"paid_c_uv_7dco":0.47826}'
+			);
 
 			var chart = [
 				{
@@ -113,8 +115,6 @@ export default {
 			// paid_order_number_7d 支付人数 integer(int32) integer(int32)
 			// uv_7d 访问人数 integer(int32) integer(int32)
 
-
-
 			// this.orderlist({
 			// 	chart: chart,
 			// 	youcejiantouData: {
@@ -132,21 +132,15 @@ export default {
 			// 	}
 			// });
 
-
-					this.orderlist({
+			this.orderlist({
 				chart: chart,
 				youcejiantouData: {
-					order_c_uv_7dco:
-						(res.order_c_uv_7dco*100).toFixed(2)
-					,
-					paid_c_order_7dco: 
+					order_c_uv_7dco: (res.order_c_uv_7dco * 100).toFixed(2),
+					paid_c_order_7dco:
 						res.paid_c_order_7dco == -9999
 							? 0
-							: (res.paid_c_order_7dco*100).toFixed(2)
-					,
-					paid_c_uv_7dco: 
-						(res.paid_c_uv_7dco*100).toFixed(2)
-					
+							: (res.paid_c_order_7dco * 100).toFixed(2),
+					paid_c_uv_7dco: (res.paid_c_uv_7dco * 100).toFixed(2)
 				}
 			});
 		}
