@@ -98,7 +98,7 @@ export default {
 					// left: "4%",
 					right: 17,
 					height: "135",
-					bottom: "-2"
+					bottom: screen.width > 1600 ? "-2" : "-15"
 				},
 				xAxis: [
 					{
@@ -132,7 +132,7 @@ export default {
 							borderWidth: 0
 						},
 
-						top: 25,
+						top: screen.width > 1600 ? 25 : 10,
 						// bottom:30,
 						type: "funnel",
 						height: "150",

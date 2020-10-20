@@ -218,7 +218,7 @@ export default {
 	.mediaCanvas /deep/ canvas{
 		/*height: 205px!important;
 		width: 453px!important;*/
-		margin-top: -60px!important;
+		/*<!--margin-top: -60px!important;-->*/
 	}
 }
 </style>

@@ -134,7 +134,7 @@ export default {
 		if (screen.width == 1440){
 			this.chartSettings.radius = [38, 48]
 		}else if (screen.width == 1600){
-			this.chartSettings.radius = [40, 50]
+			this.chartSettings.radius = [35, 45]
 		}else {
 			console.log(screen.width)
 		}

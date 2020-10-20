@@ -351,11 +351,11 @@ export default {
 
 		// $grid-content-h: 450px;
 		// $row-3-grid-content: 250px;
-		$row-4-grid-content: 250px;
+		$row-4-grid-content: 220px;
 		$grid-content-h: 370px;
 		$row-3-grid-content: 20vh;
 		// $row-4-grid-content: 25vh;
-		$grid-map-h: calc(450px - 150px);
+		$grid-map-h: calc(370px - 150px);
 		width: 100%;
 		height: 100%;
 		overflow-y: scroll;
@@ -364,12 +364,12 @@ export default {
 		.row-2,
 		.row-3 {
 			// margin: 20px 35px;
-			margin: 20px;
+			margin: 14px;
 		}
 
 		.row-4 {
 			// margin: 20px 35px 0 35px;
-			margin: 20px 20px 0 20px;
+			margin: 14px 14px 0 14px;
 		}
 
 		.row-3 {
@@ -379,7 +379,7 @@ export default {
 				height: 100%;
 			}
 
-			min-height: 220px;
+			min-height: 200px;
 		}
 
 		.row-4 {
