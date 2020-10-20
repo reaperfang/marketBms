@@ -81,7 +81,7 @@
     },
     computed: {
       shopInfos() {
-        return localStorage.getItem("shopInfos") ? this.$store.getters.shopInfos : null
+        return this.$store.getters.shopInfos || null
       }
     },
     created() {
