@@ -71,7 +71,8 @@ export default {
 					: keepTwoDecimalFull(
 							parseFloat(val.place_order_am_rgrt) * 100
 					  );
-			this.endVal = parseFloat(val.place_order_am_rt);
+			// this.endVal = parseFloat(val.place_order_am_rt);
+			this.endVal = 1074;
 
 			//this.$refs.countTo.start();
 		}
