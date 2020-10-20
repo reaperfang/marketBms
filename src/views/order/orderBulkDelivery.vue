@@ -784,12 +784,7 @@ export default {
         this._apis.order
         .sendGoods3(params)
         .then(res => {
-          if(this.list[0] && this.list[0].deliveryWay == 3) {
-            //本次批量发货100单，成功80单，失败20单 
-            this.$message.success('发货成功');
-          } else {
-            this.$message.success('发货成功');
-          }
+          this.$message.success(`本次批量发货${+res.success + +res.error}单，成功${res.success}单，失败${res.error}单`);
           this.sending = false
           
           let printIds = this.list.filter(val => !val.express).map(val => val.orderId).join(',')
@@ -809,6 +804,9 @@ export default {
         })
         .catch(error => {
           if(error && (error.code == 2155)) {
+            if(error && error.data && error.data.success && (+error.data.success > 0)) {
+              this.$message.success(`本次批量发货${+error.data.success + +error.data.error}单，成功${error.data.success}单，失败${error.data.error}单`);
+            }
             this.confirm({text: '达达账户余额不足，请充值后再发货。', confirmText: '去充值'}).then(() => {
                 this.$router.push('/set/recharge')
             })
