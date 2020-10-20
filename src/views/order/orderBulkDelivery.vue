@@ -804,9 +804,7 @@ export default {
         })
         .catch(error => {
           if(error && (error.code == 2155)) {
-            if(error && error.data && error.data.success && (+error.data.success > 0)) {
-              this.$message.success(`本次批量发货${+error.data.success + +error.data.error}单，成功${error.data.success}单，失败${error.data.error}单`);
-            }
+            this.$message.success(`本次批量发货${+error.data.success + +error.data.error}单，成功${error.data.success}单，失败${error.data.error}单`);
             this.confirm({text: '达达账户余额不足，请充值后再发货。', confirmText: '去充值'}).then(() => {
                 this.$router.push('/set/recharge')
             })
