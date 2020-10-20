@@ -194,4 +194,34 @@ export default {
 // .vue-tooltip.tooltip-custom .tooltip-arrow {
 // 	border-color: red;
 // }
+
+@media screen and(max-width: 1600px) and(max-height: 900px){
+	.realtime-user {
+		.el-table {
+			margin-top: 9px;
+		}
+		table th .cell{
+			font-size: 14px;
+			transform: scale(0.71);
+		}
+	}
+	.el-table--small th {
+		padding: 0;
+	}
+}
+@media screen and(max-width: 1440px) and(max-height: 900px){
+	.realtime-user {
+		.el-table {
+			margin-top: 7px;
+		}
+		table th .cell{
+			font-size: 14px;
+			transform: scale(0.71);
+		}
+	}
+	.el-table--small th {
+		padding: 0;
+	}
+}
+
 </style>
