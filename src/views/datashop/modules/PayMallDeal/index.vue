@@ -57,6 +57,44 @@ export default {
 		},
 		"dashboard.amount"(val) {
 			this.setPayData(val);
+		},
+		"datashop.amount"(amount) {
+			//console.log('"datashop.amount"(val) {', val);
+
+			let pay = amount - parseFloat(this.randomNum(1, 10, 2));
+
+			let val = this.dashboard.amount;
+
+			this.payData = [
+				{
+					children: [
+						{
+							title: "支付人数",
+							content:
+								parseInt(pay) +
+								parseInt(this.randomNum(1, 2, 0))
+						},
+						{
+							title: "支付金额",
+							content: this.toDecimal(pay)
+						},
+						{
+							title: "客单价",
+							content: this.toDecimal(val.atv_rt)
+						}
+					]
+				},
+				{
+					children: [
+						{ title: "支付订单数", content: val.paid_order_cq_rt },
+						{
+							title: "退款金额",
+							content: this.toDecimal(val.refund_am_rt)
+						},
+						{ title: "退款订单数", content: val.refund_cq_rt }
+					]
+				}
+			];
 		}
 	},
 	props: {
@@ -98,13 +136,13 @@ export default {
 		};
 	},
 	computed: {
-		...mapState(["dashboard"])
+		...mapState(["dashboard", "datashop"])
 	},
 	mounted() {
 		this.init();
-		var IntervalId = window.setInterval(() => {
-			this.init();
-		}, 10000);
+		// var IntervalId = window.setInterval(() => {
+		// 	this.init();
+		// }, 10000);
 	},
 	beforeCreate() {},
 	created() {},
@@ -189,6 +227,30 @@ export default {
 			}
 
 			return result;
+		},
+		randomNum(maxNum, minNum, decimalNum) {
+			// 获取指定范围内的随机数, decimalNum指小数保留多少位
+			var max = 0,
+				min = 0;
+			minNum <= maxNum
+				? ((min = minNum), (max = maxNum))
+				: ((min = maxNum), (max = minNum));
+			switch (arguments.length) {
+				case 1:
+					return Math.floor(Math.random() * (max + 1));
+					break;
+				case 2:
+					return Math.floor(Math.random() * (max - min + 1) + min);
+					break;
+				case 3:
+					return (Math.random() * (max - min) + min).toFixed(
+						decimalNum
+					);
+					break;
+				default:
+					return Math.random();
+					break;
+			}
 		}
 	}
 };
