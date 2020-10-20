@@ -64,15 +64,17 @@ export default {
 			let pay = amount - parseFloat(this.randomNum(1, 10, 2));
 
 			let val = this.dashboard.amount;
-			let person =
-				parseInt(pay) - parseInt(this.randomNum(1, 2, 0)) * 700;
+			// let person =
+			// 	parseInt(pay) - parseInt(this.randomNum(1, 2, 0)) * 700;
+			this.person += parseInt(this.randomNum(1, 4, 0));
+			this.payOrder += parseInt(this.randomNum(1, 3, 0));
 
 			this.payData = [
 				{
 					children: [
 						{
 							title: "支付人数",
-							content: person
+							content: this.person
 						},
 						{
 							title: "支付金额",
@@ -80,13 +82,16 @@ export default {
 						},
 						{
 							title: "客单价",
-							content: this.toDecimal(pay / person)
+							content: this.toDecimal(pay / this.person)
 						}
 					]
 				},
 				{
 					children: [
-						{ title: "支付订单数", content: val.paid_order_cq_rt },
+						{
+							title: "支付订单数",
+							content: this.payOrder
+						},
 						{
 							title: "退款金额",
 							content: this.toDecimal(val.refund_am_rt)
@@ -132,7 +137,9 @@ export default {
 					city: "广州"
 				}
 			],
-			toDecimal: toDecimal
+			toDecimal: toDecimal,
+			person: 10,
+			payOrder: 9
 		};
 	},
 	computed: {
@@ -158,12 +165,12 @@ export default {
 
 			//let resTop = await this._apis.dashboard.top3(parames);
 			let resTop =
-				'{"top3":[{"place_order_am":2.2908659977E8,"area_name":"北京","place_order_area":1.9547335971E8,"place_order_am_s":0.85327},{"place_order_am":2.2908659977E8,"area_name":"内蒙古","place_order_area":3.288671007E7,"place_order_am_s":0.14356},{"place_order_am":2.2908659977E8,"area_name":"四川","place_order_area":419874.01,"place_order_am_s":0.00183}]}';
+				'{"top3":[{"place_order_am":2.2908659977E8,"area_name":"北京","place_order_area":1.9547335971E8,"place_order_am_s":0.75327},{"place_order_am":2.2908659977E8,"area_name":"内蒙古","place_order_area":3.288671007E7,"place_order_am_s":0.44356},{"place_order_am":2.2908659977E8,"area_name":"四川","place_order_area":419874.01,"place_order_am_s":0.37183}]}';
 			this.toplist(JSON.parse(resTop).top3);
 
 			//let resPay = await this._apis.dashboard.realtimedealamount(parames);
 			let resPay =
-				'{"place_order_am_rt":9952.0,"place_order_am_rgrt":1.52675,"paid_order_nu_rt":1,"paid_order_am_rt":2952.0,"atv_rt":2952.0,"paid_order_cq_rt":9,"refund_am_rt":0.0,"refund_cq_rt":0.0}';
+				'{"place_order_am_rt":9952.0,"place_order_am_rgrt":1.52675,"paid_order_nu_rt":10,"paid_order_am_rt":2952.0,"atv_rt":2952.0,"paid_order_cq_rt":9,"refund_am_rt":0.0,"refund_cq_rt":0.0}';
 			this.amoountlist(JSON.parse(resPay));
 		},
 		setPieData(val) {
