@@ -80,6 +80,9 @@ export default {
 }
 .dialog-footer{
   margin-top:30px;
-  text-align: center;
+  text-align: right;
+}
+/deep/ .el-dialog__header{
+  background: #fff;
 }
 </style>
