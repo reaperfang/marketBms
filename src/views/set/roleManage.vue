@@ -36,7 +36,7 @@
         </el-table-column>
         <el-table-column
           prop="roleName"
-          min-width="150" fixed="left" class-name="table-padding"
+          min-width="140" fixed="left" class-name="table-padding"
           label="角色名称">
         </el-table-column>
         <el-table-column
@@ -48,6 +48,7 @@
           label="包含人数">
         </el-table-column> -->
         <el-table-column
+          min-width="120"
           prop="createUserName"
           align="center"
           label="创建人">
@@ -55,7 +56,7 @@
         <el-table-column
           prop="createTime"
           align="center"
-          width="160"
+          min-width="160"
           label="创建时间">
         </el-table-column>
         <el-table-column

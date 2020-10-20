@@ -40,7 +40,7 @@
         </el-table-column>
         <el-table-column
           prop="userName"
-          min-width="150" fixed="left" class-name="table-padding"
+          min-width="120" fixed="left" class-name="table-padding"
           label="账号">
         </el-table-column>
         <el-table-column
@@ -51,10 +51,11 @@
         <el-table-column
           prop="mobile"
           align="center"
-          width="150"
+          min-width="150"
           label="手机号">
         </el-table-column>
         <el-table-column
+          min-width="120"
           prop="createUserName"
           align="center"
           label="创建人">
@@ -62,7 +63,7 @@
         <el-table-column
           prop="createTime"
           align="center"
-          width="160"
+          min-width="160"
           label="创建时间">
         </el-table-column>
         <!-- <el-table-column

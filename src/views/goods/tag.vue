@@ -34,9 +34,9 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="34"></el-table-column>
-      <el-table-column prop="name" label="标签名称" min-width="150" fixed="left" class-name="table-padding"></el-table-column>
-      <el-table-column prop="productCount" label="绑定商品数量" align="right"></el-table-column>
-      <el-table-column label="状态" align="center">
+      <el-table-column prop="name" label="标签名称" width="160" fixed="left" class-name="table-padding"></el-table-column>
+      <el-table-column prop="productCount" label="绑定商品数量" align="right" min-width="120"></el-table-column>
+      <el-table-column label="状态" align="center" min-width="200">
         <template slot-scope="scope">
           <span>{{scope.row.enable | enableFilter}}</span>
         </template>
