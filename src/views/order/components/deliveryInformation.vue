@@ -275,6 +275,7 @@ export default {
           case 2://待取货
           case 3://配送中
           case 4://已完成
+          case 100://骑士到店
               return `配送员：${item.distributorName} 联系方式：${item.distributorPhone}`
           case 5://取消
               if(item.cancelFrom==1){ //cancelFrom:1达达骑手取消，2商家取消，3系统或者客服取消，0默认值
@@ -328,7 +329,7 @@ export default {
    
   textColorObject(item){
       return {
-        'text-normal':item.status==2||item.status==3||item.status==4||item.status==8,
+        'text-normal':item.status==2||item.status==3||item.status==4||item.status==8||item.status==100,
         'text-warning':item.status==1||item.status==9,
         'text-danger':item.status==5||item.status==7||item.status==10||item.status==1000
       }
