@@ -65,9 +65,7 @@ export default {
 		};
 	},
 	mounted() {
-		this.showChart();
-
-		//this.test();
+		//this.showChart();
 
 		window.addEventListener("resize", ev => {
 			this.chart.resize();
@@ -124,9 +122,6 @@ export default {
 	},
 	methods: {
 		showChart(data) {
-			if (!data) {
-				return;
-			}
 			this.chart = echarts.init(this.$refs.chartContentPietest);
 
 			//var name_title = "新型冠状病毒累计确诊·中国"
