@@ -195,28 +195,34 @@ export default {
 // 	border-color: red;
 // }
 
-@media screen and(max-width: 1600px) and(max-height: 900px){
+@media screen and(max-width: 1440px) and(max-height: 900px){
 	.realtime-user {
-		.el-table {
-			margin-top: 9px;
-		}
 		table th .cell{
-			font-size: 14px;
-			transform: scale(0.71);
+			font-size: 12px;
+			transform: scale(0.83);
 		}
 	}
 	.el-table--small th {
 		padding: 0;
 	}
 }
-@media screen and(max-width: 1440px) and(max-height: 900px){
+
+@media screen and(max-width: 1600px) and(max-height: 900px){
 	.realtime-user {
-		.el-table {
-			margin-top: 7px;
-		}
 		table th .cell{
-			font-size: 14px;
-			transform: scale(0.71);
+			font-size: 12px;
+			transform: scale(0.83);
+		}
+	}
+	.el-table--small th {
+		padding: 0;
+	}
+}
+
+@media screen and(max-width: 1920px) and(max-height: 1080px){
+	.realtime-user {
+		table th .cell{
+			font-size: 12px;
 		}
 	}
 	.el-table--small th {

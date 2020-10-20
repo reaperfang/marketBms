@@ -37,7 +37,7 @@ export default {
 					borderRadius: 4,
 					color: "#FFFFFF",
 					verticalAlign: "center",
-					offset: [15, 32, 0, 0],
+					offset: screen.width<1920 ? [-10, 32, 0, 0] : [15, 32, 0, 0],
 					fontSize: 12,
 					//   padding: [3, 10, 5, 10],
 					formatter: function(d) {
@@ -226,7 +226,7 @@ export default {
 						//-999900
 						data: [
 							{
-								value: 361,
+								value: screen.width == 1440 ? 354 : 361,
 								itemValue:
 									youcejiantouData.order_c_uv_7dco == -999900
 										? "0%"
