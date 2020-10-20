@@ -9,7 +9,7 @@
 				<todayuserdeal></todayuserdeal>
 			</el-col>
 			<el-col :span="7" class="el-col">
-				<!-- <paymalldeal></paymalldeal> -->
+				<paymalldeal></paymalldeal>
 			</el-col>
 		</el-row>
 

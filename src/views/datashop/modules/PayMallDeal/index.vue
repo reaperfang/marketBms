@@ -75,7 +75,7 @@ export default {
 				// { progress: 70, barColor: "RGBA(255, 92, 49, 1)", city: "上海" },
 				// { progress: 95, barColor: "RGBA(245, 159, 0, 1)", city: "深圳" },
 			],
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			//cid: JSON.parse(localStorage.getItem("shopInfos")).id,
 			payData: {},
 			defaultChart: [
 				{
@@ -118,10 +118,14 @@ export default {
 		async init() {
 			let parames = { ...this.invokeType, cid: this.cid };
 
-			let resTop = await this._apis.dashboard.top3(parames);
+			//let resTop = await this._apis.dashboard.top3(parames);
+			let resTop =
+				'{"top3":[{"place_order_am":2.2908659977E8,"area_name":"北京","place_order_area":1.9547335971E8,"place_order_am_s":0.85327},{"place_order_am":2.2908659977E8,"area_name":"内蒙古","place_order_area":3.288671007E7,"place_order_am_s":0.14356},{"place_order_am":2.2908659977E8,"area_name":"四川","place_order_area":419874.01,"place_order_am_s":0.00183}]}';
 			this.toplist(JSON.parse(resTop).top3);
 
-			let resPay = await this._apis.dashboard.realtimedealamount(parames);
+			//let resPay = await this._apis.dashboard.realtimedealamount(parames);
+			let resPay =
+				'{"place_order_am_rt":9952.0,"place_order_am_rgrt":1.52675,"paid_order_nu_rt":1,"paid_order_am_rt":2952.0,"atv_rt":2952.0,"paid_order_cq_rt":9,"refund_am_rt":0.0,"refund_cq_rt":0.0}';
 			this.amoountlist(JSON.parse(resPay));
 		},
 		setPieData(val) {
