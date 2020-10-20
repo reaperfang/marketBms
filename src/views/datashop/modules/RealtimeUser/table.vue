@@ -55,7 +55,7 @@ export default {
 		...mapState(["dashboard"])
 	},
 	mounted() {
-		//setInterval(this.scroll, 1000);
+		setInterval(this.scroll, 1000);
 	},
 	beforeCreate() {},
 	created() {},
