@@ -45,7 +45,7 @@ export default {
 	components: { gridtitle, vhistogram },
 	data: function() {
 		return {
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			//cid: JSON.parse(localStorage.getItem("shopInfos")).id,
 			chartData: {
 				columns: ["日期", "访问用户"],
 				rows: []
@@ -105,10 +105,18 @@ export default {
 		async init() {
 			let parames = { ...this.invokeType, cid: this.cid };
 
-			let left = await this._apis.dashboard.totalamount(parames);
-			this.trasationlist({ left: JSON.parse(left) });
-			let right = await this._apis.dashboard.price(parames);
-			this.trasationlist({ right: JSON.parse(right) });
+			//et left = await this._apis.dashboard.totalamount(parames);
+			this.trasationlist({
+				left: JSON.parse(
+					'{"x":["0-20元","20-50元","50-100元","100-300元","300元以上"],"order_cquantity_price":[1831.0,144.0,24.0,934.0,604.0]}'
+				)
+			});
+			//let right = await this._apis.dashboard.price(parames);
+			this.trasationlist({
+				right: JSON.parse(
+					'{"x":["10.13","10.14","10.15","10.16","10.17","10.18","10.19"],"atv_td_7d":[0.0,2106.61,2798.33333,29979.75,0.0,0.0,841.165]}'
+				)
+			});
 		},
 		setChartDataleft(val) {
 			this.left = {

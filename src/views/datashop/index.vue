@@ -21,7 +21,7 @@
 				<mallvistors></mallvistors>
 			</el-col>
 			<el-col :span="7">
-				<!-- <transaction></transaction> -->
+				<transaction></transaction>
 			</el-col>
 		</el-row>
 
