@@ -383,7 +383,7 @@ export default {
 			// 	return item.value > 0;
 			// });
 
-			var j = 0;
+			// var j = 0;
 
 			// console.log("seriesData", seriesData);
 
@@ -400,7 +400,7 @@ export default {
 				// );
 				// console.log("geoCoordMap", geoCoordMap);
 				this.chart.setOption(this.option);
-				j++;
+				// j++;
 			}, 1000);
 
 			// var j = 0;
