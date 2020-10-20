@@ -73,7 +73,9 @@ export default {
 					  );
 			this.endVal = parseFloat(val.place_order_am_rt);
 
-			this.$refs.countTo.start();
+			//this.$refs.countTo.start();
+
+			console.log("this.endVal ", this.endVal);
 		}
 	},
 
@@ -126,7 +128,9 @@ export default {
 				{ name: "青海", value: 0 },
 				{ name: "澳门", value: 0 },
 				{ name: "西藏", value: 0 }
-			]
+			],
+			interval: {},
+			intervalTime: 1000
 		};
 	},
 	computed: {
@@ -134,9 +138,13 @@ export default {
 	},
 	mounted() {
 		this.init();
-		var IntervalId = window.setInterval(() => {
-			this.init();
-		}, 10000);
+		// var IntervalId = window.setInterval(() => {
+		// 	this.init();
+		// }, 10000);
+
+		//this.modifyAmount();
+
+		this.createInterval(this.intervalTime);
 	},
 	beforeCreate() {},
 	created() {},
@@ -181,6 +189,67 @@ export default {
 		},
 		abs(val) {
 			return Math.abs(val);
+		},
+		setInterval(callback, time) {
+			return window.setInterval(() => {
+				callback();
+			}, time);
+		},
+		randomNum(maxNum, minNum, decimalNum) {
+			// 获取指定范围内的随机数, decimalNum指小数保留多少位
+			var max = 0,
+				min = 0;
+			minNum <= maxNum
+				? ((min = minNum), (max = maxNum))
+				: ((min = maxNum), (max = minNum));
+			switch (arguments.length) {
+				case 1:
+					return Math.floor(Math.random() * (max + 1));
+					break;
+				case 2:
+					return Math.floor(Math.random() * (max - min + 1) + min);
+					break;
+				case 3:
+					return (Math.random() * (max - min) + min).toFixed(
+						decimalNum
+					);
+					break;
+				default:
+					return Math.random();
+					break;
+			}
+		},
+		createInterval(intervalTime) {
+			this.interval[intervalTime] = this.setInterval(() => {
+				this.endVal += parseFloat(this.randomNum(30, 100, 2));
+				this.clearInterval(this.intervalTime);
+				this.intervalTime = parseInt(this.randomNum(1, 5, 2)) * 1000;
+				this.createInterval(this.intervalTime);
+			}, intervalTime);
+		},
+		clearInterval(intervalTime) {
+			window.clearInterval(this.interval[intervalTime]);
+		},
+		modifyAmount() {
+			// if (this.interval) {
+			// 	this.clearInterval();
+			// }
+			// this.interval[this.intervalTime] = this.setInterval(() => {
+			// 	// if (j == seriesData.length) j = 0;
+			// 	// // topCity数组就是top的这个5个城市.
+			// 	// this.option.series[0].data = [convertData(seriesData)[j]];
+			// 	// // console.log(
+			// 	// // 	"this.option.series[0].data",
+			// 	// // 	this.option.series[0].data
+			// 	// // );
+			// 	// // console.log("geoCoordMap", geoCoordMap);
+			// 	// this.chart.setOption(this.option);
+			// 	// j++;
+			// 	this.intervalTime = parseInt(this.randomNum(1, 5, 2)) * 1000;
+			// 	// console.log("this.intervalTime", this.intervalTime);
+			// 	this.endVal += parseFloat(this.randomNum(30, 100, 2));
+			// 	this.clearInterval(this.intervalTime);
+			// }, this.intervalTime);
 		}
 	}
 };
