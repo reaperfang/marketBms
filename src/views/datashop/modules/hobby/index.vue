@@ -57,7 +57,7 @@ export default {
 			//let resstatistics = await this._apis.dashboard.statistics(parames);
 			this.hobbylist(
 				JSON.parse(
-					'{"goods_type_name":[{"goods_type_name":"电器","paid_order_am_cl":1.135859E7},{"goods_type_name":"居家产品","paid_order_am_cl":9274995.0},{"goods_type_name":"自动化","paid_order_am_cl":6001397.0},{"goods_type_name":"宝石类","paid_order_am_cl":603498.0},{"goods_type_name":"玩具","paid_order_am_cl":249874.77}],"c_uv":1480.0,"c_uv_phone":1193.0,"c_uv_share_phone":0.80608}'
+					'{"goods_type_name":[{"goods_type_name":"果蔬生鲜","paid_order_am_cl":1.135859E7},{"goods_type_name":"休闲食品","paid_order_am_cl":9274995.0},{"goods_type_name":"家具装饰","paid_order_am_cl":6001397.0},{"goods_type_name":"大小家电","paid_order_am_cl":603498.0},{"goods_type_name":"酒水茶叶","paid_order_am_cl":249874.77}],"c_uv":1480.0,"c_uv_phone":1193.0,"c_uv_share_phone":0.80608}'
 				)
 			);
 		}

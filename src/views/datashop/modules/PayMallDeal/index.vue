@@ -165,7 +165,7 @@ export default {
 
 			//let resTop = await this._apis.dashboard.top3(parames);
 			let resTop =
-				'{"top3":[{"place_order_am":2.2908659977E8,"area_name":"北京","place_order_area":1.9547335971E8,"place_order_am_s":0.75327},{"place_order_am":2.2908659977E8,"area_name":"内蒙古","place_order_area":3.288671007E7,"place_order_am_s":0.44356},{"place_order_am":2.2908659977E8,"area_name":"四川","place_order_area":419874.01,"place_order_am_s":0.37183}]}';
+				'{"top3":[{"place_order_am":2.2908659977E8,"area_name":"北京","place_order_area":1.9547335971E8,"place_order_am_s":0.43327},{"place_order_am":2.2908659977E8,"area_name":"内蒙古","place_order_area":3.288671007E7,"place_order_am_s":0.34356},{"place_order_am":2.2908659977E8,"area_name":"四川","place_order_area":419874.01,"place_order_am_s":0.21183}]}';
 			this.toplist(JSON.parse(resTop).top3);
 
 			//let resPay = await this._apis.dashboard.realtimedealamount(parames);
