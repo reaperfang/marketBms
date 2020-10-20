@@ -351,9 +351,9 @@ export default {
 			// 	// }
 			// });
 
-			if (this.interval) {
-				this.clearInterval();
-			}
+			// if (this.interval) {
+			// 	this.clearInterval();
+			// }
 			// if (!this.$store.state.dashboard.realtimeuser.length) {
 			// 	return;
 			// }
