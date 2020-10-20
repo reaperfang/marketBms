@@ -18,7 +18,9 @@
             <el-button type="primary" @click="reset">重置</el-button>
           </el-form>
         </div>
-        <el-button type="primary"  v-permission="['设置', '角色管理', '默认页面', '新建角色']" @click="_routeTo('createRole')">新建角色</el-button>
+        <div>
+          <el-button type="primary"  v-permission="['设置', '角色管理', '默认页面', '新建角色']" @click="_routeTo('createRole')">新建角色</el-button>
+        </div>
       </div>
       <div class="bottom_part">
         <el-table
@@ -243,7 +245,6 @@ export default {
     justify-content: space-between;
   }
   .bottom_part{
-    margin-top:10px;
     /deep/ th.is-leaf {
       border:0;
     }
