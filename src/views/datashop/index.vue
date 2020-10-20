@@ -33,7 +33,7 @@
 				<mallhistory></mallhistory>
 			</el-col>
 			<el-col :span="7">
-				<!-- <realtimeuser></realtimeuser> -->
+				<realtimeuser></realtimeuser>
 			</el-col>
 		</el-row>
 	</div>

@@ -39,7 +39,7 @@ export default {
 	components: { gridtitle, vtable },
 	data: function() {
 		return {
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			//cid: JSON.parse(localStorage.getItem("shopInfos")).id,
 			tableData: []
 		};
 	},
@@ -64,7 +64,9 @@ export default {
 		async init() {
 			let parames = { ...this.invokeType, cid: this.cid };
 
-			let res = await this._apis.dashboard.realdealuser(parames);
+			//let res = await this._apis.dashboard.realdealuser(parames);
+			let res =
+				'[{"c_uv_name_rt":"暴躁的小王同学\uD83D\uDE4A","time_rt":"2020-10-20 09:43:03.0","op_rt":"下单","pd_rt":"华为nova7手机华为nova7手机华为nova7手机华为nova7手机华为nova7手机华为nova7手机华为nova","pro_code_rt":"130000","city_code_rt":"130100","county_code_rt":"130102","pro_name_rt":"河北","county_name_rt":"长安区","city_name_rt":"石家庄市"},{"c_uv_name_rt":"暴躁的小王同学\uD83D\uDE4A","time_rt":"2020-10-20 09:42:48.0","op_rt":"支付","pd_rt":"丝蕴洗发水+护发素","pro_code_rt":"130000","city_code_rt":"130100","county_code_rt":"130102","pro_name_rt":"河北","county_name_rt":"长安区","city_name_rt":"石家庄市"},{"c_uv_name_rt":"暴躁的小王同学\uD83D\uDE4A","time_rt":"2020-10-20 09:42:48.0","op_rt":"下单","pd_rt":"丝蕴洗发水+护发素","pro_code_rt":"130000","city_code_rt":"130100","county_code_rt":"130102","pro_name_rt":"河北","county_name_rt":"长安区","city_name_rt":"石家庄市"},{"c_uv_name_rt":"暴躁的小王同学\uD83D\uDE4A","time_rt":"2020-10-20 09:42:34.0","op_rt":"支付","pd_rt":"商品55","pro_code_rt":"130000","city_code_rt":"130100","county_code_rt":"130102","pro_name_rt":"河北","county_name_rt":"长安区","city_name_rt":"石家庄市"},{"c_uv_name_rt":"暴躁的小王同学\uD83D\uDE4A","time_rt":"2020-10-20 09:42:34.0","op_rt":"下单","pd_rt":"商品55","pro_code_rt":"130000","city_code_rt":"130100","county_code_rt":"130102","pro_name_rt":"河北","county_name_rt":"长安区","city_name_rt":"石家庄市"}]';
 			this.realtimeuserlist(JSON.parse(res));
 		}
 	}
