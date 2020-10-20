@@ -356,9 +356,9 @@ export default {
 			// 	// }
 			// });
 
-			// if (this.interval) {
-			// 	this.clearInterval();
-			// }
+			if (this.interval) {
+				this.clearInterval();
+			}
 			// if (!this.$store.state.dashboard.realtimeuser.length) {
 			// 	return;
 			// }
@@ -370,9 +370,9 @@ export default {
 			// 	};
 			// });
 
-			// var seriesData = data.filter(item => {
-			// 	return item.value > 0;
-			// });
+			var seriesData = data.filter(item => {
+				return item.value > 0;
+			});
 
 			// let seriesData = this.$store.state.dashboard.highlight.map(item => {
 			// 	let row = JSON.parse(item);
@@ -386,22 +386,22 @@ export default {
 			// 	return item.value > 0;
 			// });
 
-			// var j = 0;
+			var j = 0;
 
 			// console.log("seriesData", seriesData);
 
-			// this.interval = this.setInterval(() => {
-			// 	if (j == seriesData.length) j = 0;
-			// 	// topCity数组就是top的这个5个城市.
-			// 	this.option.series[0].data = [convertData(seriesData)[j]];
-			// 	console.log(
-			// 		"this.option.series[0].data",
-			// 		this.option.series[0].data
-			// 	);
-			// 	console.log("geoCoordMap", geoCoordMap);
-			// 	this.chart.setOption(this.option);
-			// 	j++;
-			// }, 1000);
+			this.interval = this.setInterval(() => {
+				if (j == seriesData.length) j = 0;
+				// topCity数组就是top的这个5个城市.
+				this.option.series[0].data = [convertData(seriesData)[j]];
+				// console.log(
+				// 	"this.option.series[0].data",
+				// 	this.option.series[0].data
+				// );
+				// console.log("geoCoordMap", geoCoordMap);
+				this.chart.setOption(this.option);
+				j++;
+			}, 1000);
 
 			// var j = 0;
 			// var IntervalId = window.setInterval(() => {
