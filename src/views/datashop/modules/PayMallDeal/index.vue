@@ -64,15 +64,15 @@ export default {
 			let pay = amount - parseFloat(this.randomNum(1, 10, 2));
 
 			let val = this.dashboard.amount;
+			let person =
+				parseInt(pay) - parseInt(this.randomNum(1, 2, 0)) * 700;
 
 			this.payData = [
 				{
 					children: [
 						{
 							title: "支付人数",
-							content:
-								parseInt(pay) +
-								parseInt(this.randomNum(1, 2, 0))
+							content: person
 						},
 						{
 							title: "支付金额",
@@ -80,7 +80,7 @@ export default {
 						},
 						{
 							title: "客单价",
-							content: this.toDecimal(val.atv_rt)
+							content: this.toDecimal(pay / person)
 						}
 					]
 				},
