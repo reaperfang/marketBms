@@ -120,6 +120,9 @@ export default {
           case 10:
             item.acceptStation='妥投异常之物品返回完成 '
              break
+          case 100:
+            item.acceptStation='骑士到店'
+            break
           case 1000:
             item.acceptStation= '创建达达运单失败'
             break
