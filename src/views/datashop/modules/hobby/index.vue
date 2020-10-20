@@ -33,7 +33,7 @@ export default {
 	components: { gridtitle, vcap },
 	data: function() {
 		return {
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			//cid: JSON.parse(localStorage.getItem("shopInfos")).id,
 			boddy: []
 		};
 	},
@@ -54,8 +54,12 @@ export default {
 		...mapActions(["hobbylist"]),
 		async init() {
 			let parames = { ...this.invokeType, cid: this.cid };
-			let resstatistics = await this._apis.dashboard.statistics(parames);
-			this.hobbylist(JSON.parse(resstatistics));
+			//let resstatistics = await this._apis.dashboard.statistics(parames);
+			this.hobbylist(
+				JSON.parse(
+					'{"goods_type_name":[{"goods_type_name":"电器","paid_order_am_cl":1.135859E7},{"goods_type_name":"居家产品","paid_order_am_cl":9274995.0},{"goods_type_name":"自动化","paid_order_am_cl":6001397.0},{"goods_type_name":"宝石类","paid_order_am_cl":603498.0},{"goods_type_name":"玩具","paid_order_am_cl":249874.77}],"c_uv":1480.0,"c_uv_phone":1193.0,"c_uv_share_phone":0.80608}'
+				)
+			);
 		}
 	}
 };

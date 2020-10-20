@@ -39,7 +39,7 @@ export default {
 	components: { vline, gridtitle },
 	data: function() {
 		return {
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			//cid: JSON.parse(localStorage.getItem("shopInfos")).id,
 			chartData: {
 				columns: ["日期", "访客"],
 				rows: [
@@ -144,8 +144,12 @@ export default {
 		async init() {
 			let parames = { ...this.invokeType, cid: this.cid };
 
-			let res = await this._apis.dashboard.vistor(parames);
-			this.maivistorlist(JSON.parse(res));
+			//let res = await this._apis.dashboard.vistor(parames);
+			this.maivistorlist(
+				JSON.parse(
+					' {"x":["10.13","10.14","10.15","10.16","10.17","10.18","10.19"],"uv_7d":[3,13,15,9,0,0,0]}'
+				)
+			);
 		},
 		setChartData(val) {
 			this.chartData = {

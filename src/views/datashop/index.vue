@@ -13,7 +13,7 @@
 			</el-col>
 		</el-row>
 
-		<!-- <el-row class="row-3">
+		<el-row class="row-3">
 			<el-col :span="7">
 				<boddy></boddy>
 			</el-col>
@@ -21,21 +21,21 @@
 				<mallvistors></mallvistors>
 			</el-col>
 			<el-col :span="7">
-				<transaction></transaction>
+				<!-- <transaction></transaction> -->
 			</el-col>
-		</el-row> -->
+		</el-row>
 
-		<!-- <el-row class="row-4">
+		<el-row class="row-4">
 			<el-col :span="7">
-				<order></order>
+				<!-- <order></order> -->
 			</el-col>
 			<el-col :span="10">
 				<mallhistory></mallhistory>
 			</el-col>
 			<el-col :span="7">
-				<realtimeuser></realtimeuser>
+				<!-- <realtimeuser></realtimeuser> -->
 			</el-col>
-		</el-row> -->
+		</el-row>
 	</div>
 </template>
 
