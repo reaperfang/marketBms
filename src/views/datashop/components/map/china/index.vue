@@ -25,30 +25,30 @@ export default {
 		// 	console.log("dashboard.realtiemuser", result);
 		// 	this.$refs.chart.setSeriesData(result);
 		// }
-		"dashboard.highlight"(newVal, oldVal) {
-			// console.log(
-			// 	'"dashboard.highlight"(newVal, oldVal) {',
-			// 	newVal,
-			// 	oldVal
-			// );
-			// let difference = _.difference(newVal, oldVal);
-			// if (difference.length == 0) {
-			// 	return;
-			// }
-			// this.setHightlight(newVal);
-			let beforeTime = moment().subtract(60, "seconds");
-			let difference = _.difference(newVal, oldVal);
-			if (difference.length == 0) {
-				return;
-			}
-			// console.log("newVal", newVal);
-			let result = newVal.filter(item => {
-				let row = JSON.parse(item);
-				return moment(row.time_rt) > beforeTime;
-			});
-			//console.log("result", result);
-			this.setHightlight(result);
-		}
+		// "dashboard.highlight"(newVal, oldVal) {
+		// 	// console.log(
+		// 	// 	'"dashboard.highlight"(newVal, oldVal) {',
+		// 	// 	newVal,
+		// 	// 	oldVal
+		// 	// );
+		// 	// let difference = _.difference(newVal, oldVal);
+		// 	// if (difference.length == 0) {
+		// 	// 	return;
+		// 	// }
+		// 	// this.setHightlight(newVal);
+		// 	// let beforeTime = moment().subtract(60, "seconds");
+		// 	// let difference = _.difference(newVal, oldVal);
+		// 	// if (difference.length == 0) {
+		// 	// 	return;
+		// 	// }
+		// 	// // console.log("newVal", newVal);
+		// 	// let result = newVal.filter(item => {
+		// 	// 	let row = JSON.parse(item);
+		// 	// 	return moment(row.time_rt) > beforeTime;
+		// 	// });
+		// 	//console.log("result", result);
+		// 	//this.setHightlight(result);
+		// }
 	},
 	computed: {
 		...mapState(["dashboard"])
@@ -387,10 +387,23 @@ export default {
 
 			// console.log("seriesData", seriesData);
 
-			this.interval = this.setInterval(() => {
-				//if (j == seriesData.length) j = 0;
-				// topCity数组就是top的这个5个城市.
-				// this.option.series[0].data = [convertData(seriesData)[j]];
+			// this.interval = this.setInterval(() => {
+			// 	//if (j == seriesData.length) j = 0;
+			// 	// topCity数组就是top的这个5个城市.
+			// 	// this.option.series[0].data = [convertData(seriesData)[j]];
+			// 	this.option.series[0].data = [
+			// 		convertData(seriesData)[parseInt(this.randomNum(1, 33, 0))]
+			// 	];
+			// 	// console.log(
+			// 	// 	"this.option.series[0].data",
+			// 	// 	this.option.series[0].data
+			// 	// );
+			// 	// console.log("geoCoordMap", geoCoordMap);
+			// 	this.chart.setOption(this.option);
+			// 	// j++;
+			// }, 1000);
+
+			var IntervalId = window.setInterval(() => {
 				this.option.series[0].data = [
 					convertData(seriesData)[parseInt(this.randomNum(1, 33, 0))]
 				];
@@ -400,17 +413,7 @@ export default {
 				// );
 				// console.log("geoCoordMap", geoCoordMap);
 				this.chart.setOption(this.option);
-				// j++;
 			}, 1000);
-
-			// var j = 0;
-			// var IntervalId = window.setInterval(() => {
-			// 	if (j == 30) j = 0;
-			// 	// topCity数组就是top的这个5个城市.
-			// 	option.series[0].data = [convertData(data)[j]];
-			// 	this.chart.setOption(option);
-			// 	j++;
-			// }, 1000);
 		},
 
 		prepareChartMap(mapName) {
