@@ -154,7 +154,7 @@ export default {
 	beforeDestroy() {},
 	destroyed: function() {},
 	methods: {
-		...mapActions(["maplist"]),
+		...mapActions(["maplist", "modifyAmount"]),
 		async init() {
 			let parames = { ...this.invokeType, cid: this.cid };
 			//let res = await this._apis.dashboard.realTimeUser(parames);
@@ -222,6 +222,7 @@ export default {
 		createInterval(intervalTime) {
 			this.interval[intervalTime] = this.setInterval(() => {
 				this.endVal += parseFloat(this.randomNum(30, 100, 2));
+				this.modifyAmount(this.endVal);
 				this.clearInterval(this.intervalTime);
 				this.intervalTime = parseInt(this.randomNum(1, 5, 2)) * 1000;
 				this.createInterval(this.intervalTime);
@@ -229,27 +230,6 @@ export default {
 		},
 		clearInterval(intervalTime) {
 			window.clearInterval(this.interval[intervalTime]);
-		},
-		modifyAmount() {
-			// if (this.interval) {
-			// 	this.clearInterval();
-			// }
-			// this.interval[this.intervalTime] = this.setInterval(() => {
-			// 	// if (j == seriesData.length) j = 0;
-			// 	// // topCity数组就是top的这个5个城市.
-			// 	// this.option.series[0].data = [convertData(seriesData)[j]];
-			// 	// // console.log(
-			// 	// // 	"this.option.series[0].data",
-			// 	// // 	this.option.series[0].data
-			// 	// // );
-			// 	// // console.log("geoCoordMap", geoCoordMap);
-			// 	// this.chart.setOption(this.option);
-			// 	// j++;
-			// 	this.intervalTime = parseInt(this.randomNum(1, 5, 2)) * 1000;
-			// 	// console.log("this.intervalTime", this.intervalTime);
-			// 	this.endVal += parseFloat(this.randomNum(30, 100, 2));
-			// 	this.clearInterval(this.intervalTime);
-			// }, this.intervalTime);
 		}
 	}
 };

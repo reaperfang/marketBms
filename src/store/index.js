@@ -14,6 +14,7 @@ import order from './modules/order'
 import getters from './getters'
 import api from '@/api';
 import dashboard from "./modules/dashboard";
+import datashop from "./modules/datashop";
 
 import createLogger from "@/plugins/logger";
 import createPersistedState from "vuex-persistedstate";
@@ -45,7 +46,8 @@ const store = new Vuex.Store({
     shop,
     client,
     order,
-    dashboard
+    dashboard,
+    datashop
   },
   getters,
   strict: debug,
