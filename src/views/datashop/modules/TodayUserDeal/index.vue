@@ -51,11 +51,12 @@ import { keepTwoDecimalFull } from "@/utils/util";
 
 export default {
 	watch: {
-		"dashboard.chinamap"(val) {
-			this.$refs.chart.showChart(
-				this.initMapData(this.mapData, val ? val : [])
-			);
-		},
+		// "dashboard.chinamap"(val) {
+		// 	console.log(JSON.stringify(val));
+		// 	this.$refs.chart.showChart(
+		// 		this.initMapData(this.mapData, val ? val : [])
+		// 	);
+		// },
 		"dashboard.amount"(val) {
 			// this.persent =
 			// 	val.place_order_amount_rgrt == "-9999"
@@ -72,7 +73,7 @@ export default {
 							parseFloat(val.place_order_am_rgrt) * 100
 					  );
 			// this.endVal = parseFloat(val.place_order_am_rt);
-			this.endVal = 1074;
+			this.endVal = 1000;
 
 			//this.$refs.countTo.start();
 		}
@@ -136,6 +137,7 @@ export default {
 		...mapState(["dashboard"])
 	},
 	mounted() {
+		this.createInterval(this.intervalTime);
 		this.init();
 		// var IntervalId = window.setInterval(() => {
 		// 	this.init();
@@ -143,7 +145,11 @@ export default {
 
 		//this.modifyAmount();
 
-		this.createInterval(this.intervalTime);
+		let chinamap =
+			'[{"area_name":"西藏","order_cquantity_area":0},{"area_name":"河南","order_cquantity_area":9},{"area_name":"甘肃","order_cquantity_area":0},{"area_name":"陕西","order_cquantity_area":0},{"area_name":"天津","order_cquantity_area":47},{"area_name":"安徽","order_cquantity_area":0},{"area_name":"北京","order_cquantity_area":3065},{"area_name":"福建","order_cquantity_area":0},{"area_name":"山西","order_cquantity_area":0},{"area_name":"海南","order_cquantity_area":6},{"area_name":"广西","order_cquantity_area":0},{"area_name":"河北","order_cquantity_area":13},{"area_name":"辽宁","order_cquantity_area":3},{"area_name":"湖北","order_cquantity_area":0},{"area_name":"内蒙古","order_cquantity_area":300},{"area_name":"广东","order_cquantity_area":8},{"area_name":"四川","order_cquantity_area":64},{"area_name":"江苏","order_cquantity_area":0},{"area_name":"香港","order_cquantity_area":5},{"area_name":"黑龙江","order_cquantity_area":0},{"area_name":"青海","order_cquantity_area":0},{"area_name":"台湾","order_cquantity_area":0},{"area_name":"浙江","order_cquantity_area":6},{"area_name":"山东","order_cquantity_area":7},{"area_name":"贵州","order_cquantity_area":0},{"area_name":"宁夏","order_cquantity_area":0},{"area_name":"上海","order_cquantity_area":3},{"area_name":"湖南","order_cquantity_area":0},{"area_name":"重庆","order_cquantity_area":0},{"area_name":"云南","order_cquantity_area":0},{"area_name":"吉林","order_cquantity_area":0},{"area_name":"江西","order_cquantity_area":0},{"area_name":"澳门","order_cquantity_area":0},{"area_name":"新疆","order_cquantity_area":1}]';
+		this.$refs.chart.showChart(
+			this.initMapData(this.mapData, JSON.parse(chinamap))
+		);
 	},
 	beforeCreate() {},
 	created() {},
