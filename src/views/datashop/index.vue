@@ -6,7 +6,7 @@
 				<useragemobilemember></useragemobilemember>
 			</el-col>
 			<el-col :span="10" class="el-col">
-				<!-- <todayuserdeal></todayuserdeal> -->
+				<todayuserdeal></todayuserdeal>
 			</el-col>
 			<el-col :span="7" class="el-col">
 				<!-- <paymalldeal></paymalldeal> -->

@@ -89,7 +89,7 @@ export default {
 			startVal: 0,
 			endVal: 0,
 			persent: "",
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			//cid: JSON.parse(localStorage.getItem("shopInfos")).id,
 			//mapData: [],
 			mapData: [
 				{ name: "湖北", value: 0 },
@@ -149,7 +149,9 @@ export default {
 		...mapActions(["maplist"]),
 		async init() {
 			let parames = { ...this.invokeType, cid: this.cid };
-			let res = await this._apis.dashboard.realTimeUser(parames);
+			//let res = await this._apis.dashboard.realTimeUser(parames);
+			let res =
+				'{"areaOrderNumList":[{"area_name":"西藏","order_cquantity_area":0},{"area_name":"河南","order_cquantity_area":9},{"area_name":"甘肃","order_cquantity_area":0},{"area_name":"陕西","order_cquantity_area":0},{"area_name":"天津","order_cquantity_area":47},{"area_name":"安徽","order_cquantity_area":0},{"area_name":"北京","order_cquantity_area":3065},{"area_name":"福建","order_cquantity_area":0},{"area_name":"山西","order_cquantity_area":0},{"area_name":"海南","order_cquantity_area":6},{"area_name":"广西","order_cquantity_area":0},{"area_name":"河北","order_cquantity_area":13},{"area_name":"辽宁","order_cquantity_area":3},{"area_name":"湖北","order_cquantity_area":0},{"area_name":"内蒙古","order_cquantity_area":300},{"area_name":"广东","order_cquantity_area":8},{"area_name":"四川","order_cquantity_area":64},{"area_name":"江苏","order_cquantity_area":0},{"area_name":"香港","order_cquantity_area":5},{"area_name":"黑龙江","order_cquantity_area":0},{"area_name":"青海","order_cquantity_area":0},{"area_name":"台湾","order_cquantity_area":0},{"area_name":"浙江","order_cquantity_area":6},{"area_name":"山东","order_cquantity_area":7},{"area_name":"贵州","order_cquantity_area":0},{"area_name":"宁夏","order_cquantity_area":0},{"area_name":"上海","order_cquantity_area":3},{"area_name":"湖南","order_cquantity_area":0},{"area_name":"重庆","order_cquantity_area":0},{"area_name":"云南","order_cquantity_area":0},{"area_name":"吉林","order_cquantity_area":0},{"area_name":"江西","order_cquantity_area":0},{"area_name":"澳门","order_cquantity_area":0},{"area_name":"新疆","order_cquantity_area":1}]}';
 			this.maplist(JSON.parse(res).areaOrderNumList);
 		},
 
