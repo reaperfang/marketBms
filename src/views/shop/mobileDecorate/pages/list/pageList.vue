@@ -21,7 +21,7 @@
     </div>
     <div class="table" v-calcMinHeight="313">
       <p>微页面（共{{total || 0}}个）</p>
-      <el-table :data="tableData" :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
+      <el-table :data="tableData" :header-cell-style="{background:'#f6f7fa', color:'#44434B', height: '46px'}" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'updateTime', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"
           :selectable='selectInit'

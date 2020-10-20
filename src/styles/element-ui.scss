@@ -333,3 +333,10 @@ input::-moz-placeholder, textarea::-moz-placeholder{
     }
   }
 }
+
+.el-table .ascending .sort-caret.ascending {
+  border-bottom-color: #44434b;
+}
+.el-table .descending .sort-caret.descending {
+  border-top-color: #44434b;
+}

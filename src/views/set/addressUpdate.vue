@@ -354,9 +354,37 @@ export default {
         showCancelButton: false
       });
     },
+    updateStoreInfo() {
+      let req = this.getReqData()
+      console.log('req',req)
+      req = this.formateReqData(req)
+      const data = {
+        cid: req.cid,
+        cityName: req.city_name,
+        cityCode: req.city_code,
+        areaName: req.area_name,
+        areaCode: req.area_code,
+        stationAddress: (req.address || req.address_detail) ?  `${req.address} ${req.address_detail}` : '',
+        lng: req.longitude,
+        lat: req.latitude,
+        thirdType: 1,
+        contactName: req.name,
+        phone: req.mobile
+      }
+      return this._apis.set.updateStore(data)
+    },
     // 处理达达已经覆盖的逻辑
     handleHasDaDaCoveredArea() {
-
+      // const p1 = this.saveAddress()
+      // const p2 = this.updateStoreInfo()
+      this.updateStoreInfo().then(() => {
+        this.saveAddress()
+      }).catch((err) => {
+        console.log('err',err)
+        this.isLoading = false
+        this.$message.error(err || '保存失败')
+      }).finally(() => {
+      })
     },
     // 处理开启商家配送提醒 status 1 商家配送 2 三方配送
     hanldeIsOpenDelivery(res, status) {
@@ -395,18 +423,22 @@ export default {
           showCancelButton: true,
           customClass: 'address-update'
         }).then(() => {
-          const params = {
-            cid: req.cid,
-            cityCode: req.city_code,
-            areaCode: req.area_code
-          }
-          this.isDaDaCoveredArea(params).then(() => {
+          console.log('res', status)
+          if (status === 2) {
+            const params = {
+              cid: req.cid,
+              cityCode: req.city_code,
+              areaCode: req.area_code
+            }
+            this.isDaDaCoveredArea(params).then(() => {
+              this.handleHasDaDaCoveredArea()
+            }).catch(() => {
+              this.isLoading = false
+              this.handleNoDaDaCoveredArea()
+            })
+          } else if (status === 1) {
             this.saveAddress()
-          }).catch(() => {
-            this.isLoading = false
-            this.handleNoDaDaCoveredArea()
-          })
-          
+          }
         }).catch(() => {
           this.isLoading = false
         });
@@ -467,24 +499,24 @@ export default {
       } else {
         p1 = this._apis.set.addAddress(req)
       }
-      p1.then((res) => {
-          const status = Object.create(null)
-          console.log('res', res)
-          if (res) {
-            status.code = 1
-            status.id = res.id
-          } else {
-            status.code = 0
-          }
-          this.handleAfterSave(status)
-        }).catch((err) => {
-          console.log(1111111)
-          console.log(err)
+      return p1.then((res) => {
+        const status = Object.create(null)
+        console.log('res', res)
+        if (res) {
+          status.code = 1
+          status.id = res.id
+        } else {
+          status.code = 0
+        }
+        this.handleAfterSave(status)
+      }).catch((err) => {
+        console.log(1111111)
+        console.log(err)
 
-          this.$message.error(err || '保存失败')
-        }).finally(() => {
-          this.isLoading = false
-        })
+        this.$message.error(err || '保存失败')
+      }).finally(() => {
+        this.isLoading = false
+      })
       // 保存后
 
       // this.handleAfterSave(res)
@@ -526,10 +558,10 @@ export default {
             console.log('--onSubmit:result--',result)
             const [{ isOpenMerchantDeliver, isOpenTh3Deliver }, res1, res2] = result
             // 是否打开同城配送
-            if (isOpenMerchantDeliver) {
-              this.hanldeIsOpenDelivery(res1, 1)
-            } else if (isOpenTh3Deliver) {
+            if (isOpenTh3Deliver) {
               this.hanldeIsOpenDelivery(res2, 2)
+            } else if (isOpenMerchantDeliver) {
+              this.hanldeIsOpenDelivery(res1, 1)
             } else {
               this.saveAddress()
             }

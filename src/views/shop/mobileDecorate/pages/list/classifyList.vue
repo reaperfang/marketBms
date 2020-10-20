@@ -15,7 +15,7 @@
     </div>
     <div class="table" v-calcMinHeight="313">
       <p>微页面分类（共{{total || 0}}个）</p>
-      <el-table :data="tableData" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
+      <el-table :data="tableData" v-loading="loading" :default-sort = "{prop: 'updateTime', order: 'descending'}" @sort-change="changeSort">
         <el-table-column prop="name" label="分类名称" min-width="150" fixed="left" class-name="table-padding">
            <template slot-scope="scope">
             <span class="page_name" @click="_routeTo('m_decorateClassifyPreview', {pageId: scope.row.id})">{{scope.row.name}} </span>

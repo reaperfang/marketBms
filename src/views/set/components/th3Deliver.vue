@@ -304,10 +304,29 @@ export default {
       req.id = this.cid
       return this._apis.set.updateShopInfo(req)
     },
+    updateStoreInfo() {
+      // 没有
+      if (!this.addressInfo || !this.isOpenTh3Deliver) return Promise.resolve()
+      const req = {
+        cid: this.cid,
+        cityName: this.addressInfo.cityName,
+        cityCode: this.addressInfo.cityCode,
+        areaName: this.addressInfo.areaName,
+        areaCode: this.addressInfo.areaCode,
+        stationAddress: (this.addressInfo.address || this.addressInfo.addressDetail) ?  `${this.addressInfo.address} ${this.addressInfo.addressDetail}` : '',
+        lng: this.addressInfo.longitude,
+        lat: this.addressInfo.latitude,
+        thirdType: 1,
+        contactName: this.addressInfo.name,
+        phone: this.addressInfo.mobile
+      }
+      return this._apis.set.updateStore(req)
+    },
     save() {
       const p1 = this.setBindThirdsend()
       const p2 = this.updateShopInfo()
-      Promise.all([p1, p2]).then(response =>{
+      const p3 = this.updateStoreInfo()
+      Promise.all([p1, p2, p3]).then(response =>{
         let html = `<span class="sucess">保存成功！</span>`
         if (this.isOpenTh3Deliver) html += `<span class="prompt" style="">第三方配送-达达配送已开启。</span>`
         this.confirm({
