@@ -371,8 +371,10 @@ export default {
 			// });
 
 			var seriesData = data.filter(item => {
-				return item.value > 0;
+				return item;
 			});
+
+			console.log("seriesData", seriesData);
 
 			// let seriesData = this.$store.state.dashboard.highlight.map(item => {
 			// 	let row = JSON.parse(item);
@@ -391,9 +393,12 @@ export default {
 			// console.log("seriesData", seriesData);
 
 			this.interval = this.setInterval(() => {
-				if (j == seriesData.length) j = 0;
+				//if (j == seriesData.length) j = 0;
 				// topCity数组就是top的这个5个城市.
-				this.option.series[0].data = [convertData(seriesData)[j]];
+				// this.option.series[0].data = [convertData(seriesData)[j]];
+				this.option.series[0].data = [
+					convertData(seriesData)[parseInt(this.randomNum(1, 33, 0))]
+				];
 				// console.log(
 				// 	"this.option.series[0].data",
 				// 	this.option.series[0].data
@@ -485,6 +490,30 @@ export default {
 				this.chart.setOption(this.option);
 				j++;
 			}, 1000);
+		},
+		randomNum(maxNum, minNum, decimalNum) {
+			// 获取指定范围内的随机数, decimalNum指小数保留多少位
+			var max = 0,
+				min = 0;
+			minNum <= maxNum
+				? ((min = minNum), (max = maxNum))
+				: ((min = maxNum), (max = minNum));
+			switch (arguments.length) {
+				case 1:
+					return Math.floor(Math.random() * (max + 1));
+					break;
+				case 2:
+					return Math.floor(Math.random() * (max - min + 1) + min);
+					break;
+				case 3:
+					return (Math.random() * (max - min) + min).toFixed(
+						decimalNum
+					);
+					break;
+				default:
+					return Math.random();
+					break;
+			}
 		},
 		test() {
 			console.log("	test() {");

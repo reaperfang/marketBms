@@ -74,8 +74,6 @@ export default {
 			this.endVal = parseFloat(val.place_order_am_rt);
 
 			//this.$refs.countTo.start();
-
-			console.log("this.endVal ", this.endVal);
 		}
 	},
 
