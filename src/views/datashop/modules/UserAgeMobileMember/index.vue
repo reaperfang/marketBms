@@ -73,7 +73,7 @@ export default {
 	components: { gridtitle, vitem, pchart },
 	data: function() {
 		return {
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			//cid: JSON.parse(localStorage.getItem("shopInfos")).id,
 			chartData: {
 				columns: ["日期", "访问用户"],
 				rows: [
@@ -114,17 +114,17 @@ export default {
 		async init() {
 			let parames = { ...this.invokeType, cid: this.cid };
 
-			let resMember = await this._apis.dashboard.member(parames);
-			this.memberlist(JSON.parse(resMember));
-			let resUserDis = await this._apis.dashboard.userdistributed(
-				parames
-			);
-			this.userlist(JSON.parse(resUserDis));
-			let resSexAage = await this._apis.dashboard.sexage(parames);
-			this.sexagelist(JSON.parse(resSexAage));
+			//let resMember = await this._apis.dashboard.member(parames);
+			this.memberlist(JSON.parse('{"member":1158,"member_channel_gzh":15,"member_channel_xcx":1144,"member_share_channel_gzh":0.01294,"member_share_channel_xcx":0.98706}'));
+			// let resUserDis = await this._apis.dashboard.userdistributed(
+			// 	parames
+			// );
+			this.userlist(JSON.parse('{"c_uv":1480,"c_uv_share_channel_xcx":0.94122,"c_uv_channel_xcx":1393,"c_uv_share_channel_gzh":0.05878,"c_uv_channel_gzh":87}'));
+			//let resSexAage = await this._apis.dashboard.sexage(parames);
+			this.sexagelist(JSON.parse('{"c_uv":1480,"c_uv_sex_gender":73,"c_uv_share_sex_gender":0.04932,"c_uv_sex_female":89,"c_uv_share_sex_female":0.06014,"c_uv_age_25":1136,"c_uv_share_age_25":0.76757,"c_uv_age_25_50":1,"c_uv_share_age_25_50":6.8E-4,"c_uv_age_50":1,"c_uv_share_age_50":6.8E-4,"c_uv_age_0":342,"c_uv_share_age_0":0.23108,"c_uv_sex_unknow":1318,"c_uv_share_sex_unknow":0.89054}'));
 
-			let resPhone = await this._apis.dashboard.statistics(parames);
-			this.phonelist(JSON.parse(resPhone));
+			//let resPhone = await this._apis.dashboard.statistics(parames);
+			this.phonelist(JSON.parse('{"goods_type_name":[{"goods_type_name":"电器","paid_order_am_cl":1.135859E7},{"goods_type_name":"居家产品","paid_order_am_cl":9274995.0},{"goods_type_name":"自动化","paid_order_am_cl":6001397.0},{"goods_type_name":"宝石类","paid_order_am_cl":603498.0},{"goods_type_name":"玩具","paid_order_am_cl":249874.77}],"c_uv":1480.0,"c_uv_phone":1193.0,"c_uv_share_phone":0.80608}'));
 		},
 		setMember(val) {
 			let result = {

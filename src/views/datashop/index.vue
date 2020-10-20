@@ -1,17 +1,17 @@
 <template>
 	<div class="mall" id="mall">
 		<vhead></vhead>
-		<!-- <el-row class="row-2">
+		<el-row class="row-2">
 			<el-col :span="7" class="el-col">
 				<useragemobilemember></useragemobilemember>
 			</el-col>
 			<el-col :span="10" class="el-col">
-				<todayuserdeal></todayuserdeal>
+				<!-- <todayuserdeal></todayuserdeal> -->
 			</el-col>
 			<el-col :span="7" class="el-col">
-				<paymalldeal></paymalldeal>
+				<!-- <paymalldeal></paymalldeal> -->
 			</el-col>
-		</el-row> -->
+		</el-row>
 
 		<!-- <el-row class="row-3">
 			<el-col :span="7">

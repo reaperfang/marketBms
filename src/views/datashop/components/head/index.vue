@@ -41,7 +41,7 @@ export default {
 	components: {},
 	data: function() {
 		return {
-			shopName: JSON.parse(localStorage.getItem("shopInfos")).shopName,
+			shopName: "单周迭代店铺-专业版",
 			timer: "", //定义一个定时器的变量
 			currentTime: this.setCurrentTime(), // 获取当前时间
 			fullscreenState: false
