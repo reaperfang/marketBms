@@ -11,7 +11,7 @@
       <el-table-column
         prop="alias"
         fixed="left"
-        min-width="100"
+        width="110"
         class-name="table-padding"
         label="会员卡等级">
       </el-table-column>
@@ -23,18 +23,18 @@
       <el-table-column
         prop="receiveConditionsRemarks"
         label="领取条件"
-        min-width="140"
+        min-width="150"
       >
       </el-table-column>
       <el-table-column
         prop="rights"
         label="权益"
-        min-width="140"
+        min-width="150"
       >
       </el-table-column>
       <el-table-column
         label="升级礼包"
-        min-width="140"
+        min-width="100"
       >
         <template slot-scope="scope">
           <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[0]:''}}</p>
@@ -71,7 +71,7 @@
         
       </el-table-column>
     </el-table>
-    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" v-if="hackReset"></component>
+    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" v-if="dialogVisible"></component>
   </div>
 </template>
 <script type='es6'>
@@ -86,7 +86,6 @@ export default {
       currentDialog: "",
       dialogVisible: false,
       currentData: {},
-      hackReset: false,
       cardList: [],
       loading: false,
       operationColumnW: 72 //操作列宽度
@@ -142,10 +141,6 @@ export default {
       })
     },
     sendCard(row) {
-      this.hackReset = false;
-      this.$nextTick(() => {
-        this.hackReset = true;
-      })
       this.dialogVisible = true;
       this.currentDialog = "sendCardDialog";
       this.currentData.name = row.name;
