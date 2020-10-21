@@ -38,7 +38,7 @@ export default {
 					color: "#FFFFFF",
 					verticalAlign: "center",
 					offset: screen.width<1920 ? [-10, 32, 0, 0] : [15, 32, 0, 0],
-					fontSize: 12,
+					fontSize: screen.width<1920 ? 10: 12,
 					//   padding: [3, 10, 5, 10],
 					formatter: function(d) {
 						if (d.value) {
@@ -58,7 +58,7 @@ export default {
 					color: "#FFFFFF",
 					verticalAlign: "center",
 					offset: [50, 0, 0, 0],
-					fontSize: 12,
+					fontSize: screen.width<1920 ? 10: 12,
 					//   padding: [3, 10, 5, 10],
 					formatter: function(d) {
 						if (d.value) {
@@ -234,7 +234,7 @@ export default {
 										  "%",
 								show: true,
 								label: markLineSetting,
-								name: "下单转化率"
+								name: "下单转化率",
 							},
 							{
 								value: 348,
@@ -243,7 +243,7 @@ export default {
 								label: markLineSetting,
 								name: "下单支付转化率"
 							}
-						]
+						],
 					},
 
 					// left
@@ -268,9 +268,9 @@ export default {
 										? "0%"
 										: youcejiantouData.paid_c_uv_7dco + "%",
 								label: markLineSettingleft,
-								name: "支付转化率"
+								name: "支付转化率",
 							}
-						]
+						],
 					}
 				]
 			};
