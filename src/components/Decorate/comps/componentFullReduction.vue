@@ -74,10 +74,25 @@ export default {
     },
 
     //根据ids拉取数据
-    fetch(componentData = this.currentComponentData.data) {
+    async fetch(componentData = this.currentComponentData.data) {
       if(componentData) {
           if(Array.isArray(componentData.ids) && componentData.ids.length){
               this.loading = true;
+
+              //优先加载
+              if(componentData.ids.length > this.preloadLength) {
+                  const paramsLoad = this.utils.deepClone(componentData.ids);
+                  paramsLoad.splice(this.preloadLength);
+                  await this._apis.shop.getFullReductionListByIds({
+                      ids: paramsLoad.join(',')
+                  }).then((response)=>{
+                      this.createList(response);
+                      this.loading = false;
+                  }).catch((error)=>{
+                      this.displayList = [];
+                  });
+              }
+
               this._apis.shop.getFullReductionListByIds({
                   ids: componentData.ids.join(',')
               }).then((response)=>{

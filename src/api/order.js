@@ -768,7 +768,8 @@ export function sendGoods3(data) {
     target: 'ORDER-SENDINFO-BATCHV2-PROCESS',
     method: 'post',
     apiType: 'order',
-    data
+    data,
+    sendGoods3: true
   })
 }
 //重新发单

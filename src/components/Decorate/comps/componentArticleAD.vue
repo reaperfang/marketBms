@@ -6,14 +6,22 @@
         <div v-if="currentComponentData.data.templateType==1" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
           <template v-if="hasContent">
             <div class="article_first">
-                <img
-                  :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                  v-for="(item, key) of currentComponentData.data.itemList"
-                  :key="key"
-                  :src="item.url || require('../../../assets/images/shop/articleAD/AD-empty.png')"
-                  :style="{'marginBottom':currentComponentData.data.imgMargin+'px'}"
-                  alt
-                />
+                <template v-for="(item, key) of currentComponentData.data.itemList">
+                  <el-image
+                    v-if="item.url"
+                    scroll-container=".phone-body"
+                    lazy
+                    :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                    :key="key"
+                    :src="item.url"
+                    :style="{'marginBottom':currentComponentData.data.imgMargin+'px'}"
+                  ></el-image>
+                  <img 
+                    v-else 
+                    :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']" 
+                    :key="key" 
+                    :src="require('../../../assets/images/shop/articleAD/AD-empty.png')" />
+                </template>
             </div>
           </template>
           <template v-else>
@@ -113,14 +121,15 @@
               </van-swipe-item>
             </van-swipe> -->
             <div class="container">
-              <img
+              <el-image
                 v-for="(item, key) of currentComponentData.data.itemList"
                 :key="key" 
                 :src="item.url || require('../../../assets/images/shop/articleAD/AD-empty5.png')"
                 :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                 alt
                 :style="{'marginLeft':currentComponentData.data.imgMargin + 'px'}"
-              />
+                lazy
+              ></el-image>
             </div>
             <span style="color:#aaa;">模拟效果，请以手机实际滑动效果为准。</span>
           </template>
@@ -200,14 +209,17 @@ export default {
   .article_first {
     width: 100%;
     height: 100%;
-    & > img {
-      width: 100%;
-      // height: 180px;
-      object-fit: fill;
+    /deep/ .el-image {
       display: block;
-    }
-    & > img:last-child {
-      margin-bottom: 0px !important;
+      & > img {
+        width: 100%;
+        // height: 180px;
+        object-fit: fill;
+        display: block;
+      }
+      & > img:last-child {
+        margin-bottom: 0px !important;
+      }
     }
   }
   /deep/ .van-swipe__track {
@@ -239,6 +251,11 @@ export default {
   .borderRadius {
     border-radius: 5px;
   }
+  /deep/ .borderRadius {
+    img {
+      border-radius: 5px;
+    }
+  }
   //   投影
   .boxShadow {
     box-shadow: 0px 5px 10px 0px rgba(232, 232, 240, 1);
@@ -251,12 +268,20 @@ export default {
     overflow-x:scroll;
     white-space:nowrap;
     font-size:0;
-    img{
+    /deep/ .el-image{
       display:inline-block;
       width:110px;
       height:55px;
       &:first-child{
         margin-left:0 !important;
+      }
+      img{
+        display:inline-block;
+        width:110px;
+        height:55px;
+        &:first-child{
+          margin-left:0 !important;
+        }
       }
     }
   }

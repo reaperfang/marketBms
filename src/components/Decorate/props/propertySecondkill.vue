@@ -6,8 +6,12 @@
         <div class="goods_list" v-loading="loading">
           <ul>
             <li v-for="(item, key) of displayList" :key="key" :title="item.activityName">
-              <img :src="item.goodsImgUrl" alt="">
-              <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+              <el-image :src="item.goodsImgUrl" alt="" lazy>
+                <div slot="placeholder" class="el-image__lazyloading">
+                    加载中...
+                </div>
+              </el-image>
+              <i class="delete_btn" @click.stop="deleteItem(item)" v-show="deleteShow"></i>
             </li>
             <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectSecondkill'">
               <i class="inner"></i>
@@ -267,7 +271,7 @@ export default {
   },
   methods: {
      //根据ids拉取数据
-    fetch(bNeedUpdateMiddle = true) {
+    async fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
         if(componentData) {
             bNeedUpdateMiddle && this.syncToMiddle();
@@ -287,6 +291,22 @@ export default {
                     }
                 }
 
+                //优先加载
+                if(ids.length > this.preloadLength) {
+                    const paramsLoad = this.utils.deepClone(ids);
+                    paramsLoad.splice(this.preloadLength);
+                    await this._apis.shop.getSecondkillListByIds({
+                        rightsDiscount: 1, 
+                        activityIds: paramsLoad.join(','),
+                        hideStatus: hideStatus
+                    }).then((response)=>{
+                        this.createList(response);
+                        this.loading = false;
+                        this.deleteShow = false;
+                    }).catch((error)=>{
+                        this.displayList = [];
+                    });
+                }
 
                 this._apis.shop.getSecondkillListByIds({
                     rightsDiscount: 1, 
@@ -295,10 +315,12 @@ export default {
                 }).then((response)=>{
                     this.createList(response);
                     this.loading = false;
+                    this.deleteShow = true;
                 }).catch((error)=>{
                     console.error(error);
                     this.displayList = [];
                     this.loading = false;
+                    this.deleteShow = true;
                 });
             }else{
                 this.displayList = [];

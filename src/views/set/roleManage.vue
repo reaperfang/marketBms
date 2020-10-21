@@ -18,7 +18,9 @@
             <el-button type="primary" @click="reset">重置</el-button>
           </el-form>
         </div>
-        <el-button type="primary"  v-permission="['设置', '角色管理', '默认页面', '新建角色']" @click="_routeTo('createRole')">新建角色</el-button>
+        <div>
+          <el-button type="primary"  v-permission="['设置', '角色管理', '默认页面', '新建角色']" @click="_routeTo('createRole')">新建角色</el-button>
+        </div>
       </div>
       <div class="bottom_part">
         <el-table
@@ -36,7 +38,7 @@
         </el-table-column>
         <el-table-column
           prop="roleName"
-          min-width="150" fixed="left" class-name="table-padding"
+          min-width="140" fixed="left" class-name="table-padding"
           label="角色名称">
         </el-table-column>
         <el-table-column
@@ -48,6 +50,7 @@
           label="包含人数">
         </el-table-column> -->
         <el-table-column
+          min-width="120"
           prop="createUserName"
           align="center"
           label="创建人">
@@ -55,7 +58,7 @@
         <el-table-column
           prop="createTime"
           align="center"
-          width="160"
+          min-width="160"
           label="创建时间">
         </el-table-column>
         <el-table-column
@@ -242,7 +245,6 @@ export default {
     justify-content: space-between;
   }
   .bottom_part{
-    margin-top:10px;
     /deep/ th.is-leaf {
       border:0;
     }

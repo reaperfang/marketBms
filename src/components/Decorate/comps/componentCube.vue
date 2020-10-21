@@ -10,9 +10,17 @@
                     <div class="fill_block" 
                     :style="{marginRight: currentComponentData.data.imgMargin + 'px'}"
                     >
-                      <img v-if="currentComponentData.data.list['1']" :src="currentComponentData.data.list['1'].url" alt=""></div>
+                      <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['1'] && currentComponentData.data.list['1'].url" :src="currentComponentData.data.list['1'].url" alt="" lazy>
+                        <div slot="placeholder" class="el-image__lazyloading">
+                            加载中...
+                        </div>
+                      </el-image></div>
                     <div class="fill_block">
-                      <img v-if="currentComponentData.data.list['2']" :src="currentComponentData.data.list['2'].url" alt="">
+                      <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['2'] && currentComponentData.data.list['2'].url" :src="currentComponentData.data.list['2'].url" alt="" lazy>
+                        <div slot="placeholder" class="el-image__lazyloading">
+                            加载中...
+                        </div>
+                      </el-image>
                     </div>
                   </div>
                 </template>
@@ -34,15 +42,27 @@
                     <div class="fill_block" 
                     :style="{marginRight: currentComponentData.data.imgMargin + 'px'}"
                     >
-                      <img v-if="currentComponentData.data.list['1']" :src="currentComponentData.data.list['1'].url" alt="">
+                    <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['1'] && currentComponentData.data.list['1'].url" :src="currentComponentData.data.list['1'].url" alt="" lazy>
+                      <div slot="placeholder" class="el-image__lazyloading">
+                          加载中...
+                      </div>
+                    </el-image>
                     </div>
                     <div class="fill_block" 
                     :style="{marginRight: currentComponentData.data.imgMargin + 'px'}"
                     >
-                      <img v-if="currentComponentData.data.list['2']" :src="currentComponentData.data.list['2'].url" alt="">
+                    <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['2'] && currentComponentData.data.list['2'].url" :src="currentComponentData.data.list['2'].url" alt="" lazy>
+                      <div slot="placeholder" class="el-image__lazyloading">
+                          加载中...
+                      </div>
+                    </el-image>
                     </div>
                     <div class="fill_block">
-                      <img v-if="currentComponentData.data.list['3']" :src="currentComponentData.data.list['3'].url" alt="">
+                      <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['3'] && currentComponentData.data.list['3'].url" :src="currentComponentData.data.list['3'].url" alt="" lazy>
+                        <div slot="placeholder" class="el-image__lazyloading">
+                            加载中...
+                        </div>
+                      </el-image>
                     </div>
                   </div>
                 </template>
@@ -64,20 +84,36 @@
                     <div class="fill_block" 
                     :style="{marginRight: currentComponentData.data.imgMargin + 'px'}"
                     >
-                      <img v-if="currentComponentData.data.list['1']" :src="currentComponentData.data.list['1'].url" alt="">
+                    <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['1'] && currentComponentData.data.list['1'].url" :src="currentComponentData.data.list['1'].url" alt="" lazy>
+                      <div slot="placeholder" class="el-image__lazyloading">
+                          加载中...
+                      </div>
+                    </el-image>
                     </div>
                     <div class="fill_block" 
                     :style="{marginRight: currentComponentData.data.imgMargin + 'px'}"
                     >
-                      <img v-if="currentComponentData.data.list['2']" :src="currentComponentData.data.list['2'].url" alt="">
+                    <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['2'] && currentComponentData.data.list['2'].url" :src="currentComponentData.data.list['2'].url" alt="" lazy>
+                      <div slot="placeholder" class="el-image__lazyloading">
+                          加载中...
+                      </div>
+                    </el-image>
                     </div>
                     <div class="fill_block" 
                     :style="{marginRight: currentComponentData.data.imgMargin + 'px'}"
                     >
-                      <img v-if="currentComponentData.data.list['3']" :src="currentComponentData.data.list['3'].url" alt="">
+                    <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['3'] && currentComponentData.data.list['3'].url" :src="currentComponentData.data.list['3'].url" alt="" lazy>
+                      <div slot="placeholder" class="el-image__lazyloading">
+                          加载中...
+                      </div>
+                    </el-image>
                     </div>
                     <div class="fill_block">
-                      <img v-if="currentComponentData.data.list['4']" :src="currentComponentData.data.list['4'].url" alt="">
+                      <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['4'] && currentComponentData.data.list['4'].url" :src="currentComponentData.data.list['4'].url" alt="" lazy>
+                        <div slot="placeholder" class="el-image__lazyloading">
+                            加载中...
+                        </div>
+                      </el-image>
                     </div>
                   </div>
                 </template>
@@ -103,7 +139,11 @@
                         width: 'calc(50% - '+ currentComponentData.data.imgMargin/2 +'px)',
                         height: 'calc(50% - '+ currentComponentData.data.imgMargin/2 +'px)'}"
                     >
-                      <img v-if="currentComponentData.data.list['1']" :src="currentComponentData.data.list['1'].url" alt="">
+                    <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['1'] && currentComponentData.data.list['1'].url" :src="currentComponentData.data.list['1'].url" alt="" lazy>
+                      <div slot="placeholder" class="el-image__lazyloading">
+                          加载中...
+                      </div>
+                    </el-image>
                     </div>
                     <div class="fill_block" 
                     :style="{
@@ -111,7 +151,11 @@
                       width: 'calc(50% - '+ currentComponentData.data.imgMargin/2 +'px)',
                       height: 'calc(50% - '+ currentComponentData.data.imgMargin/2 +'px)'}"
                     >
-                      <img v-if="currentComponentData.data.list['2']" :src="currentComponentData.data.list['2'].url" alt="">
+                    <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['2'] && currentComponentData.data.list['2'].url" :src="currentComponentData.data.list['2'].url" alt="" lazy>
+                      <div slot="placeholder" class="el-image__lazyloading">
+                          加载中...
+                      </div>
+                    </el-image>
                     </div>
                     <div class="fill_block" 
                     :style="{
@@ -119,14 +163,22 @@
                       width: 'calc(50% - '+ currentComponentData.data.imgMargin/2 +'px)',
                       height: 'calc(50% - '+ currentComponentData.data.imgMargin/2 +'px)'}"
                     >
-                      <img v-if="currentComponentData.data.list['3']" :src="currentComponentData.data.list['3'].url" alt="">
+                    <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['3'] && currentComponentData.data.list['3'].url" :src="currentComponentData.data.list['3'].url" alt="" lazy>
+                        <div slot="placeholder" class="el-image__lazyloading">
+                            加载中...
+                        </div>
+                      </el-image>
                     </div>
                     <div class="fill_block" 
                     :style="{
                       width: 'calc(50% - '+ currentComponentData.data.imgMargin/2 +'px)',
                       height: 'calc(50% - '+ currentComponentData.data.imgMargin/2 +'px)'}"
                     >
-                      <img v-if="currentComponentData.data.list['4']" :src="currentComponentData.data.list['4'].url" alt="">
+                    <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['4'] && currentComponentData.data.list['4'].url" :src="currentComponentData.data.list['4'].url" alt="" lazy>
+                        <div slot="placeholder" class="el-image__lazyloading">
+                            加载中...
+                        </div>
+                      </el-image>
                     </div>
                   </div>
                 </template>
@@ -150,17 +202,29 @@
                       marginRight: currentComponentData.data.imgMargin + 'px',
                       width: 'calc(50% - '+ currentComponentData.data.imgMargin/2 +'px)'}"
                     >
-                      <img v-if="currentComponentData.data.list['1']" :src="currentComponentData.data.list['1'].url" alt="">
+                    <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['1'] && currentComponentData.data.list['1'].url" :src="currentComponentData.data.list['1'].url" alt="" lazy>
+                        <div slot="placeholder" class="el-image__lazyloading">
+                            加载中...
+                        </div>
+                      </el-image>
                     </div>
                     <div class="fill_block fill_block2" 
                     :style="{width: 'calc(50% - '+ currentComponentData.data.imgMargin/2 +'px)'}">
                       <div class="fill_block fill_block3" 
                       :style="{marginBottom: currentComponentData.data.imgMargin + 'px'}"
                       >
-                        <img v-if="currentComponentData.data.list['2']" :src="currentComponentData.data.list['2'].url" alt="">
+                      <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['2'] && currentComponentData.data.list['2'].url" :src="currentComponentData.data.list['2'].url" alt="" lazy>
+                        <div slot="placeholder" class="el-image__lazyloading">
+                            加载中...
+                        </div>
+                      </el-image>
                       </div>
                       <div class="fill_block fill_block4">
-                        <img v-if="currentComponentData.data.list['3']" :src="currentComponentData.data.list['3'].url" alt="">
+                        <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['3'] && currentComponentData.data.list['3'].url" :src="currentComponentData.data.list['3'].url" alt="" lazy>
+                        <div slot="placeholder" class="el-image__lazyloading">
+                            加载中...
+                        </div>
+                      </el-image>
                       </div>
                     </div>
                   </div>
@@ -183,16 +247,28 @@
                     <div class="fill_block fill_block1" 
                     :style="{marginBottom: currentComponentData.data.imgMargin + 'px'}"
                     >
-                      <img v-if="currentComponentData.data.list['1']" :src="currentComponentData.data.list['1'].url" alt="">
+                      <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['1'] && currentComponentData.data.list['1'].url" :src="currentComponentData.data.list['1'].url" alt="" lazy>
+                        <div slot="placeholder" class="el-image__lazyloading">
+                            加载中...
+                        </div>
+                      </el-image>
                     </div>
                     <div class="fill_block fill_block2">
                       <div class="fill_block fill_block3" 
                       :style="{marginRight: currentComponentData.data.imgMargin + 'px'}"
                       >
-                        <img v-if="currentComponentData.data.list['2']" :src="currentComponentData.data.list['2'].url" alt="">
+                        <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['2'] && currentComponentData.data.list['2'].url" :src="currentComponentData.data.list['2'].url" alt="" lazy>
+                          <div slot="placeholder" class="el-image__lazyloading">
+                              加载中...
+                          </div>
+                        </el-image>
                       </div>
                       <div class="fill_block fill_block4">
-                        <img v-if="currentComponentData.data.list['3']" :src="currentComponentData.data.list['3'].url" alt="">
+                        <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['3'] && currentComponentData.data.list['3'].url" :src="currentComponentData.data.list['3'].url" alt="" lazy>
+                          <div slot="placeholder" class="el-image__lazyloading">
+                              加载中...
+                          </div>
+                        </el-image>
                       </div>
                     </div>
                   </div>
@@ -217,23 +293,39 @@
                       marginRight: currentComponentData.data.imgMargin + 'px',
                       width: 'calc(50% - '+ currentComponentData.data.imgMargin/2 +'px)'}"
                     >
-                      <img v-if="currentComponentData.data.list['1']" :src="currentComponentData.data.list['1'].url" alt="">
+                    <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['1'] && currentComponentData.data.list['1'].url" :src="currentComponentData.data.list['1'].url" alt="" lazy>
+                        <div slot="placeholder" class="el-image__lazyloading">
+                            加载中...
+                        </div>
+                      </el-image>
                     </div>
                     <div class="fill_block fill_block2" 
                     :style="{width: 'calc(50% - '+ currentComponentData.data.imgMargin/2 +'px)'}">
                       <div class="fill_block fill_block3" 
                       :style="{marginBottom: currentComponentData.data.imgMargin + 'px'}"
                       >
-                        <img v-if="currentComponentData.data.list['2']" :src="currentComponentData.data.list['2'].url" alt="">
+                      <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['2'] && currentComponentData.data.list['2'].url" :src="currentComponentData.data.list['2'].url" alt="" lazy>
+                          <div slot="placeholder" class="el-image__lazyloading">
+                              加载中...
+                          </div>
+                        </el-image>
                       </div>
                       <div class="fill_block fill_block4">
                         <div class="fill_block fill_block5" 
                         :style="{marginRight: currentComponentData.data.imgMargin + 'px'}"
                         >
-                          <img v-if="currentComponentData.data.list['3']" :src="currentComponentData.data.list['3'].url" alt="">
+                        <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['3'] && currentComponentData.data.list['3'].url" :src="currentComponentData.data.list['3'].url" alt="" lazy>
+                          <div slot="placeholder" class="el-image__lazyloading">
+                              加载中...
+                          </div>
+                        </el-image>
                         </div>
                         <div class="fill_block fill_block6">
-                          <img v-if="currentComponentData.data.list['4']" :src="currentComponentData.data.list['4'].url" alt="">
+                          <el-image scroll-container=".phone-body" v-if="currentComponentData.data.list['4'] && currentComponentData.data.list['4'].url" :src="currentComponentData.data.list['4'].url" alt="" lazy>
+                          <div slot="placeholder" class="el-image__lazyloading">
+                              加载中...
+                          </div>
+                        </el-image>
                         </div>
                       </div>
                     </div>
@@ -305,5 +397,9 @@ export default {
 }
 ul.cube li .fill_block{
   background: transparent;
+  .el-image {
+    display: block;
+    height: 100%;
+  }
 }
 </style>

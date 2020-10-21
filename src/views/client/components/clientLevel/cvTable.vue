@@ -12,7 +12,7 @@
       <el-table-column
         prop="alias"
         fixed="left"
-        min-width="100"
+        width="100"
         class-name="table-padding"
         label="等级排序">
       </el-table-column>
@@ -26,17 +26,17 @@
         label="说明">
       </el-table-column>
       <el-table-column
-        min-width="140"
+        min-width="150"
         prop="receiveConditionsRemarks"
         label="等级条件">
       </el-table-column>
       <el-table-column
         prop="rights"
-        min-width="140"
+        min-width="150"
         label="等级权益">
       </el-table-column>
       <el-table-column
-        min-width="140"
+        min-width="100"
         label="升级奖励">
         <template slot-scope="scope">
           <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[0]:''}}</p>

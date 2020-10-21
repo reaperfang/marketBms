@@ -12,9 +12,9 @@
       @selection-change="handleSelectChange"
     >
       <el-table-column type="selection" width="34"></el-table-column>
-      <el-table-column prop="tagName" label="标签名称" min-width="200" fixed="left" class-name="table-padding"></el-table-column>
+      <el-table-column prop="tagName" label="标签名称" min-width="180" fixed="left" class-name="table-padding"></el-table-column>
       <el-table-column prop="tagType" label="标签类型" align="center"></el-table-column>
-      <el-table-column label="包含人数" align="right" width="120">
+      <el-table-column label="包含人数" align="right" min-width="120">
         <template slot-scope="scope">
           <span
             class="edit_span"
@@ -24,14 +24,14 @@
           <span class="edit_span" v-else style="color:#000">{{scope.row.labelContains}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标签条件" min-width="200">
+      <el-table-column label="标签条件" align="center" min-width="200">
         <template slot-scope="scope">
           <div>
             {{scope.row.labelCondition?scope.row.labelCondition.substring(0,scope.row.labelCondition.lastIndexOf(',')):""}}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" align="center" width="160"></el-table-column>
+      <el-table-column prop="createTime" label="创建时间" align="center" min-width="160"></el-table-column>
       <el-table-column label="操作" width="122" fixed="right" header-align="center" class-name="table-padding">
         <template slot-scope="scope">
           <div class="table-operate">

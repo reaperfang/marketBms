@@ -11,7 +11,7 @@
       <el-table-column
         prop="name"
         fixed="left"
-        min-width="100"
+        width="110"
         class-name="table-padding"
         label="会员卡名称">
       </el-table-column>
@@ -21,11 +21,13 @@
         label="状态">
       </el-table-column>
       <el-table-column
+        min-width="160"
         prop="cardSn"
         align="center"
         label="卡号">
       </el-table-column>
       <el-table-column
+        min-width="100"
         prop="memberSn"
         align="center"
         label="用户ID"
@@ -34,11 +36,12 @@
       <el-table-column
         prop="createTime"
         align="center"
-        width="160"
+        min-width="160"
         label="领取时间"
       >
       </el-table-column>
       <el-table-column
+        min-width="100"
         prop="receiveWay"
         align="center"
         label="获取方式"

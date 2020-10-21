@@ -521,6 +521,7 @@ export default {
       req.stationAddress = (this.addressInfo.address || this.addressInfo.addressDetail) ?  `${this.addressInfo.address} ${this.addressInfo.addressDetail}` : ''
       req.lng = this.addressInfo.longitude
       req.lat = this.addressInfo.latitude
+      req.phone = this.addressInfo.mobile
 
       req.businessType = data.businessType || ''
       req.email = data.email || ''

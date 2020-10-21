@@ -33,7 +33,7 @@
     </div>
     <div class="table" v-calcMinHeight="299">
       <p>广告（{{total || 0}}个）</p>
-      <el-table :data="tableData" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
+      <el-table :data="tableData" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort="{prop: 'updateTime', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"  
           width="34">
@@ -48,7 +48,7 @@
         <el-table-column prop="name" label="广告名称" min-width="130"></el-table-column>
         <el-table-column prop="vv" label="访客数" align="right"></el-table-column>
         <el-table-column prop="pv" label="浏览数" align="right"></el-table-column>
-        <el-table-column prop="updateTime" label="展示时间" min-width="310" align="center">
+        <el-table-column prop="startTime" label="展示时间" min-width="310" align="center">
           <template slot-scope="scope">
             {{scope.row.startTime}} 至 {{scope.row.endTime}}
           </template>

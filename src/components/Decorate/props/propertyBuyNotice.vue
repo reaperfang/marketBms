@@ -36,7 +36,11 @@
         <div class="goods_list">
           <ul>
             <li v-for="(item, key) of displayList" :key="key">
-              <img :src="item.mainImage" alt="">
+              <el-image :src="item.mainImage" alt="" lazy>
+                <div slot="placeholder" class="el-image__lazyloading">
+                    加载中...
+                </div>
+              </el-image>
               <i class="delete_btn" @click.stop="deleteItem(item)"></i>
             </li>
             <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectGoods'">

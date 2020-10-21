@@ -11,7 +11,11 @@
                   <ul class="img_nav" :class="{'five':currentComponentData.data.itemList.length>4}">
                     <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
                       <div :class="{'default': !item.url}">
-                        <img :src="item.url" alt />
+                        <el-image v-if="item.url" scroll-container=".phone-body" :src="item.url" alt lazy>
+                          <div slot="placeholder" class="el-image__lazyloading" style="font-size: 12px;">
+                              加载中
+                          </div>
+                        </el-image>
                       </div>
                       <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
                     </li>
@@ -32,7 +36,12 @@
                   <ul class="img_nav2 clearfix" ref="scrollContent">
                     <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
                       <div >
-                        <img :src="item.url" alt />
+                        <el-image v-if="item.url" scroll-container=".scroll_wrapper" :src="item.url" alt lazy>
+                          <div slot="placeholder" class="el-image__lazyloading">
+                              加载中...
+                          </div>
+                        </el-image>
+                        <div v-else class="el-image" style="border: 1px #ddd solid;"></div>
                       </div>
                       <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
                     </li>
@@ -158,6 +167,11 @@ export default {
     white-space:nowrap;
     overflow:hidden;
     padding:11.5px 0 19px;
+    .el-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
     & > li {
       width:25%;
       float:left;
@@ -225,6 +239,11 @@ export default {
   .img_nav2 {
     display: -webkit-box;
     overflow-x: scroll;
+    .el-image {
+      display: block;
+      width: 100%;
+      height: 80px;
+    }
     & > li {
       width: 80px;
       text-align: center;

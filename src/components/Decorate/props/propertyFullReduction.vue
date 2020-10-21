@@ -19,7 +19,7 @@
           <el-tag
             v-for="tag in displayList"
             :key="tag.name"
-            closable
+            :closable="deleteShow ? true : false"
             style="margin-right:5px;"
             type="success" @close="deleteItem(tag)">
             {{tag.name}}
@@ -91,21 +91,39 @@ export default {
   },
   methods: {
      //根据ids拉取数据
-    fetch(bNeedUpdateMiddle = true) {
+    async fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
       if(componentData) {
          bNeedUpdateMiddle && this.syncToMiddle();
           if(Array.isArray(componentData.ids) && componentData.ids.length){
               this.loading = true;
+
+              //优先加载
+              if(componentData.ids.length > this.preloadLength) {
+                  const paramsLoad = this.utils.deepClone(componentData.ids);
+                  paramsLoad.splice(this.preloadLength);
+                  await this._apis.shop.getFullReductionListByIds({
+                      ids: paramsLoad.join(',')
+                  }).then((response)=>{
+                      this.createList(response);
+                      this.loading = false;
+                      this.deleteShow = false;
+                  }).catch((error)=>{
+                      this.displayList = [];
+                  });
+              }
+
               this._apis.shop.getFullReductionListByIds({
                   ids: componentData.ids.join(',')
               }).then((response)=>{
                   this.createList(response);
                   this.loading = false;
+                  this.deleteShow = true;
               }).catch((error)=>{
                   console.error(error);
                   this.displayList = [];
                   this.loading = false;
+                  this.deleteShow = true;
               });
           }else{
               this.displayList = [];

@@ -99,7 +99,11 @@ class Ajax {
         }else if (res.errno === 0) {
           return res.data;
         }else {
-          return Promise.reject(res.msg || res)
+          if(response.config && response.config.sendGoods3) {
+            return Promise.reject(res)
+          } else {
+            return Promise.reject(res.msg || res)
+          }
         }
       },
       error => {
