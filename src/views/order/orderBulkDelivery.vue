@@ -787,12 +787,7 @@ export default {
           let successNumber = res.success && +res.success || 0
           let errorNumber = res.error && +res.error || 0
 
-          //this.$message.success(`本次批量发货${successNumber + errorNumber}单，成功${successNumber}单，失败${errorNumber}单`);
-          this.$message({
-            message: `本次批量发货${successNumber + errorNumber}单，成功${successNumber}单，失败${errorNumber}单`,
-            type: 'success',
-            duration: 3000
-          });
+          this.$message.success(`本次批量发货${successNumber + errorNumber}单，成功${successNumber}单，失败${errorNumber}单`);
           this.sending = false
           
           let printIds = this.list.filter(val => !val.express).map(val => val.orderId).join(',')
@@ -815,15 +810,12 @@ export default {
             let successNumber = error.data && error.data.success && +error.data.success || 0
             let errorNumber = error.data && error.data.error && +error.data.error || 0
 
-            //this.$message.success(`本次批量发货${successNumber + errorNumber}单，成功${successNumber}单，失败${errorNumber}单`);
-            this.$message({
-              message: `本次批量发货${successNumber + errorNumber}单，成功${successNumber}单，失败${errorNumber}单`,
-              type: 'success',
-              duration: 3000
-            });
-            this.confirm({text: '达达账户余额不足，请充值后再发货。', confirmText: '去充值'}).then(() => {
+            this.$message.success(`本次批量发货${successNumber + errorNumber}单，成功${successNumber}单，失败${errorNumber}单`);
+            this.confirm({text: '达达账户余额不足，请充值后再发货。', confirmText: '去充值', showClose: false, closeOnClickModal: false, cancelButtonText: '返回'}).then(() => {
                 this.$router.push('/set/recharge')
-            })
+            }).catch(action => {
+              this.$router.push('/order/deliveryManagement')
+            });
           } else {
             this.$message.error(error);
           }

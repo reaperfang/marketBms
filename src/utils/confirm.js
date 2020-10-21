@@ -1,6 +1,6 @@
 /* 全局确认弹窗工具 */
 
-export default function({title, icon, iconSuccess, text, cancel, width, confirmText, customClass, showCancelButton, showConfirmButton, beforeClose, cancelButtonText = '取消', iconWarning, distinguishCancelAndClose = false}) {
+export default function({title, icon, iconSuccess, showClose, closeOnClickModal, text, cancel, width, confirmText, customClass, showCancelButton, showConfirmButton, beforeClose, cancelButtonText = '取消', iconWarning, distinguishCancelAndClose = false}) {
   return new Promise((resolve, reject) => {
     let str = ''
     let _customClass
@@ -41,7 +41,9 @@ export default function({title, icon, iconSuccess, text, cancel, width, confirmT
       width: width,
       customClass: _customClass,
       beforeClose: beforeClose,
-      distinguishCancelAndClose: distinguishCancelAndClose
+      distinguishCancelAndClose: distinguishCancelAndClose,
+      showClose,
+      closeOnClickModal
     }).then(() => {
       resolve()
     }).catch((error) => {
