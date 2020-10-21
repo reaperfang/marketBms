@@ -246,7 +246,7 @@
             <span class="title1">产品动态</span>
           </span>
           <el-link
-            :href="zxLink+`/cms?type=service&dept=${domain}&cat=shushangdongtai`"
+            :href="zxLink+`/cms?type=news&dept=${domain}&cat=shushangdongtai`"
             target="_blank"
             :underline="false"
           >
