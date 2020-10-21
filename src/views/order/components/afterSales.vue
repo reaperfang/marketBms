@@ -267,7 +267,7 @@ export default {
         },
         batchSendGoods() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择需要发货的售后单'})
+                this.confirm({icon: true, text: '请选择需要发货的售后单'})
                 return
             }
             // if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
@@ -279,7 +279,7 @@ export default {
             //     return;
             // }
             if(this.multipleSelection.some(val => val.status != 2)) {
-            this.confirm({title: '提示', icon: true, text: '请选择待发货的售后单'})
+            this.confirm({icon: true, text: '请选择待发货的售后单'})
                 return
             }
             this.$router.push(`/order/afterSaleBulkDelivery?ids=${this.multipleSelection.map(val => val.orderAfterSaleId).join(',')}&afterSale=true`)
@@ -287,7 +287,7 @@ export default {
         //批量打印配送单
         batchPrintDistributionSlip() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择需要打印配送单的售后单'})
+                this.confirm({ icon: true, text: '请选择需要打印配送单的售后单'})
                 return
             }
             // if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
@@ -295,7 +295,7 @@ export default {
             //     return;
             // }
             if(this.multipleSelection.some(val => (val.status != 3 && val.status != 4))) {
-                this.confirm({title: '提示', icon: true, text: '没有完成发货，不能批量打印配送单。'})
+                this.confirm({icon: true, text: '没有完成发货，不能批量打印配送单。'})
                 return
             }
             let ids = this.multipleSelection.map(val => val.orderAfterSaleId).join(',')
@@ -316,7 +316,7 @@ export default {
         },
         batchPrintElectronicForm() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择需要打印电子面单的售后单'})
+                this.confirm({icon: true, text: '请选择需要打印电子面单的售后单'})
                 return
             }
             // if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
@@ -324,7 +324,7 @@ export default {
             //     return;
             // }
             if(this.multipleSelection.some(val => (!val.isSupportElectronicSheet))) {
-                this.confirm({title: '提示', icon: true, text: '含有不支持打印电子面单的售后单，不能批量打印电子面单。'})
+                this.confirm({ icon: true, text: '含有不支持打印电子面单的售后单，不能批量打印电子面单。'})
                 return
             }
             let ids = this.multipleSelection.map(val => val.orderAfterSaleId).join(',')

@@ -600,13 +600,12 @@ table.yuan-table{
 .confirm.no-cancel {
   .el-button {
     margin-left: 0!important;
-    padding: 9px 12px 9px 20px;
-    letter-spacing: 8px;
-    font-size:14px;
+    // padding: 9px 12px 9px 20px;
+    // letter-spacing: 8px;
+    // font-size:14px;
   }
 }
 .goods-custom{
-  padding-bottom: 30px!important;
   width: 500px!important;
 }
 
@@ -706,7 +705,9 @@ table.yuan-table{
 .el-select .el-input .el-select__caret:before {
   content: "\e78f";
 }
-
+.el-icon-arrow-down:before {
+  content: "\e790";
+}
 .el-radio-group label:last-child {
   margin-left: 5px;
 }

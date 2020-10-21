@@ -89,7 +89,6 @@ export default {
     resetClassify(item) {
        this.currentItem = item;
        this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: `确定移除 [ ${item.name} ] 吗？移除后会进入[未分类]`

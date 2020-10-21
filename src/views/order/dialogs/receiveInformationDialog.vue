@@ -420,6 +420,7 @@ export default {
               params = Object.assign({}, params, {
                 orderIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
                 orderSendInfoIds: this.$route.query._ids ? this.$route.query._ids.split(',').map(id => id) : this._ids,
+                orderId:this.$route.query.ids || this.$route.query.id
               })
             } else {
                params = Object.assign({}, params, {
@@ -437,10 +438,12 @@ export default {
               params = Object.assign({}, params, {
                 orderIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
                 orderSendInfoIds: this.$route.query._ids ? this.$route.query._ids.split(',').map(id => id) : this._ids,
+                orderId:this.$route.query.ids || this.$route.query.id
               })
             } else {
                params = Object.assign({}, params, {
-                orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id)
+                orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
+                //orderId: this.$route.query._ids ? this.$route.query._ids : this._ids
               })
             }
           }

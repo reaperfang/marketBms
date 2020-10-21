@@ -168,7 +168,6 @@ export default {
       if (this.isOnlyOpenAkindPayWay) {
         const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
         this.confirm({
-          title: '提示', 
           iconWarning: true, 
           customClass: 'goods-custom',
           text: html,
@@ -217,8 +216,7 @@ export default {
     handleCloseAliPay() {
       if (this.isOnlyOpenAkindPayWay) {
         const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
-        this.confirm({
-          title: '提示', 
+        this.confirm({ 
           iconWarning: true, 
           text: html,
           confirmText: '我知道了',
@@ -280,8 +278,7 @@ export default {
     handleCloseBalanceOfAccountPay() {
       if (this.isOnlyOpenAkindPayWay) {
         const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
-        this.confirm({
-          title: '提示', 
+        this.confirm({ 
           iconWarning: true, 
           text: html,
           confirmText: '我知道了',
@@ -338,7 +335,6 @@ export default {
       if (this.isOnlyOpenAkindPayWay) {
         const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
         this.confirm({
-          title: '提示', 
           iconWarning: true, 
           text: html,
           confirmText: '我知道了',

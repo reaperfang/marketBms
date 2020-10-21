@@ -33,7 +33,7 @@
     </div>
     <div class="table" v-calcMinHeight="299">
       <p>广告（{{total || 0}}个）</p>
-      <el-table :data="tableData" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
+      <el-table :data="tableData" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort="{prop: 'updateTime', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"  
           width="34">
@@ -48,7 +48,7 @@
         <el-table-column prop="name" label="广告名称" min-width="130"></el-table-column>
         <el-table-column prop="vv" label="访客数" align="right"></el-table-column>
         <el-table-column prop="pv" label="浏览数" align="right"></el-table-column>
-        <el-table-column prop="updateTime" label="展示时间" min-width="310" align="center">
+        <el-table-column prop="startTime" label="展示时间" min-width="310" align="center">
           <template slot-scope="scope">
             {{scope.row.startTime}} 至 {{scope.row.endTime}}
           </template>
@@ -154,7 +154,6 @@ export default {
     /* 启用广告 */
     startAD(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定启用此广告吗？'
@@ -169,7 +168,6 @@ export default {
     /* 停用广告 */
     stopAD(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定停用此广告吗？'
@@ -193,8 +191,7 @@ export default {
 
     /* 删除广告 */
     deleteAD(item) {
-      this.confirm({
-        title: '提示', 
+      this.confirm({ 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定删除此启动广告吗？'
@@ -211,7 +208,6 @@ export default {
      /* 批量删除广告 */
     batchDeleteAD(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定删除吗？'

@@ -123,7 +123,6 @@ export default {
               this.getPageList();
             }else {
               this.confirm({
-                title: '提示',
                 icon: true,
                 showCancelButton: false,
                 confirmText: '我知道了',
@@ -135,7 +134,6 @@ export default {
             }
           }else if(res.templateStatus === 2) {
             this.confirm({
-              title: '提示',
               icon: true,
               showCancelButton: false,
               confirmText: '我知道了',
@@ -148,7 +146,6 @@ export default {
           
         } else {  // res == null，未购买 / 不在我的模板里
           this.confirm({
-            title: '提示',
             icon: true,
             showCancelButton: false,
             confirmText: '我知道了',
@@ -293,7 +290,6 @@ export default {
 
     tabClick(event, item) {
       this.confirm({
-        title: '提示',
         customClass: 'goods-custom',
         icon: true,
         text: '是否要离开当前页面？离开将不会保存。'

@@ -15,7 +15,10 @@ import * as set from "./set"; //设置模块
 import * as profile from "./profile"; //帮助中心
 import * as industry from "./industry"; //行业
 import * as templatePay from "./templatePay"; //模板支付
-import * as map from "./map"
+import * as map from "./map";
+import * as realSurvey from "./realSurvey" //实时概况
+
+import * as dashboard from "./dashboard" // 数据大屏
 
 
 export default {
@@ -36,5 +39,7 @@ export default {
 	profile,
 	industry,
 	templatePay,
-	map
+	map,
+	realSurvey,
+	dashboard
 };

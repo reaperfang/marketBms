@@ -77,17 +77,18 @@
           :data="tableData"
           style="width: 100%"
           empty-text="暂无数据"
+          :default-sort="{prop: 'updateTime', order: 'descending'}"
          :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '500'}"
         >
-          <el-table-column prop="name" label="模板名称" min-width="180" fixed="left" 
+          <el-table-column prop="name" label="模板名称" width="180" fixed="left" 
           class-name="table-padding"></el-table-column>
           <el-table-column prop="calculationWay" label="计费方式" min-width="160" align="center">
             <template slot-scope="scope">
               <span>{{scope.row.calculationWay | calculationWayFilter}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="productCount" min-width="160" label="应用商品数量" align="right"></el-table-column>
-          <el-table-column prop="updateTime" sortable label="编辑时间" min-width="160" align="center"></el-table-column>
+          <el-table-column prop="productCount" width="150" label="应用商品数量" align="right"></el-table-column>
+          <el-table-column prop="updateTime" sortable label="编辑时间" min-width="180" align="center"></el-table-column>
           <el-table-column label="操作" :width="operationColumnW" fixed="right"
           header-align="center"
           class-name="table-padding">
@@ -213,7 +214,6 @@ export default {
     },
     deletequickDelivery(id) {
       this.confirm({
-        title: "提示",
         icon: true,
         text: '删除模板后无法撤销，确定删除吗？'
       }).then(() => {

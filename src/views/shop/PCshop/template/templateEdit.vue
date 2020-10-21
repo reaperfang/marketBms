@@ -209,7 +209,6 @@ export default {
 
     tabClick(event, item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '是否要离开当前页面？离开将不会保存。'

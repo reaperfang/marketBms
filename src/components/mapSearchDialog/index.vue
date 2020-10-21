@@ -156,4 +156,11 @@ import mapSearch from '@/components/mapSearch'
     vertical-align: text-bottom;
     margin-left: 6px;
   }
+  /deep/ .el-dialog__footer{
+    text-align: center;
+  }
+  /deep/ .el-input-group__append{
+  border: none;
+  background: #655eff;
+ }
 </style>

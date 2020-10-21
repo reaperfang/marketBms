@@ -306,7 +306,7 @@ export default {
             if(node.data.enable === 1) {
                 _enable = 0
                 if(data.isRecommend == 1) {
-                    this.confirm({title: '禁用', icon: true, text: '当前分类正在首页推荐位置，不可禁用。', customClass: 'alert'}).then(() => {
+                    this.confirm({icon: true, text: '当前分类正在首页推荐位置，不可禁用。', customClass: 'alert'}).then(() => {
 
                     })
                     return
@@ -336,12 +336,12 @@ export default {
         },
         delete(node, data) {
             if(data.isRecommend == 1) {
-                this.confirm({title: '删除', icon: true, text: '当前分类正在首页推荐位置，不可删除。', customClass: 'alert'}).then(() => {
+                this.confirm({icon: true, text: '当前分类正在首页推荐位置，不可删除。', customClass: 'alert'}).then(() => {
 
                 })
                 return
             }
-            this.confirm({title: '立即删除', icon: true, text: '删除后此分类无法展示，确认删除吗？'}).then(() => {
+            this.confirm({icon: true, text: '删除后此分类无法展示，确认删除吗？'}).then(() => {
                 this._apis.goods.deleteCategory({id: node.data.id}).then((res) => {
                     if(res && res.msg == 'existProduct') {
                         // this.confirm({title: '转移商品', icon: false, text: '是否将此分类其下的全部商品转移到其他分类中？'}).then(() => {
@@ -349,7 +349,7 @@ export default {
                         //     this.currentDialog = 'TransferGoodsDialog'
                         //     this.dialogVisible = true
                         // })
-                        this.confirm({title: '提示', icon: true, showCancelButton: false, text: '当前商品分类无法删除，请您去商品列表转移该分类下的所有商品，再尝试删除。'}).then(() => {
+                        this.confirm({icon: true, showCancelButton: false, text: '当前商品分类无法删除，请您去商品列表转移该分类下的所有商品，再尝试删除。'}).then(() => {
                             
                         })
                     } else {

@@ -24,7 +24,7 @@ module.exports = {
 
     /* 300官网 */
     '/zx_server/**': {
-      target: 'https://test3-cms-api.300.cn',  //此地址不分test几，只有test/pre和空前缀
+      target: 'https://test2-cms-api.300.cn',  //此地址不分test几，只有test/pre和空前缀
       changeOrigin: true,
       pathRewrite: {
         '^/zx_server': ''

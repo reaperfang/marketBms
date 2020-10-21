@@ -53,7 +53,7 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page.sync="currentPage"
+                :current-page="Number(startIndex) || 1"
                 :page-sizes="[10, 20, 30, 40]"
                 :page-size="pageSize"
                 layout="prev, pager, next, sizes"
@@ -69,11 +69,12 @@ import TableBase from "@/components/TableBase";
 export default {
     name: "channelTable",
     extends: TableBase,
-    props:['listObj','background', 'loading'],
+    props:['listObj','background','nowPage', 'loading'],
     data() {
         return {
             pageSize:10,
-            loading1: true
+            loading1: true,
+            startIndex: 1
         };
     },
     created() {
@@ -81,6 +82,11 @@ export default {
     watch: {
         loading(newValue) {
             this.loading1 = newValue;
+        },
+        nowPage(val) {
+          if(val) {
+            this.startIndex = val;
+          }
         }
     },
     methods: {
@@ -91,7 +97,7 @@ export default {
         },
         //选择页数
         handleCurrentChange(val){
-            console.log(val)
+            this.startIndex = val;
             this.$emit('currentChange',val)
         },
         //支付转化率排序
