@@ -11,7 +11,7 @@
                   <ul class="img_nav" :class="{'five':currentComponentData.data.itemList.length>4}">
                     <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
                       <div :class="{'default': !item.url}">
-                        <el-image scroll-container=".phone-body" :src="item.url" alt lazy>
+                        <el-image v-if="item.url" scroll-container=".phone-body" :src="item.url" alt lazy>
                           <div slot="placeholder" class="el-image__lazyloading" style="font-size: 12px;">
                               加载中
                           </div>
@@ -36,11 +36,12 @@
                   <ul class="img_nav2 clearfix" ref="scrollContent">
                     <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
                       <div >
-                        <el-image scroll-container=".scroll_wrapper" :src="item.url" alt lazy>
+                        <el-image v-if="item.url" scroll-container=".scroll_wrapper" :src="item.url" alt lazy>
                           <div slot="placeholder" class="el-image__lazyloading">
                               加载中...
                           </div>
                         </el-image>
+                        <div v-else class="el-image" style="border: 1px #ddd solid;"></div>
                       </div>
                       <p class="ellipsis" :style="{color:currentComponentData.data.fontColor}">{{item.title}}</p>
                     </li>

@@ -6,15 +6,22 @@
         <div v-if="currentComponentData.data.templateType==1" :style="{'padding':currentComponentData.data.pageMargin+'px'}">
           <template v-if="hasContent">
             <div class="article_first">
-                <el-image
-                  scroll-container=".phone-body"
-                  lazy
-                  :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
-                  v-for="(item, key) of currentComponentData.data.itemList"
-                  :key="key"
-                  :src="item.url || require('../../../assets/images/shop/articleAD/AD-empty.png')"
-                  :style="{'marginBottom':currentComponentData.data.imgMargin+'px'}"
-                ></el-image>
+                <template v-for="(item, key) of currentComponentData.data.itemList">
+                  <el-image
+                    v-if="item.url"
+                    scroll-container=".phone-body"
+                    lazy
+                    :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
+                    :key="key"
+                    :src="item.url"
+                    :style="{'marginBottom':currentComponentData.data.imgMargin+'px'}"
+                  ></el-image>
+                  <img 
+                    v-else 
+                    :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']" 
+                    :key="key" 
+                    :src="require('../../../assets/images/shop/articleAD/AD-empty.png')" />
+                </template>
             </div>
           </template>
           <template v-else>
