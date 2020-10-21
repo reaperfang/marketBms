@@ -246,7 +246,7 @@
             <span class="title1">产品动态</span>
           </span>
           <el-link
-            :href="zxLink+'/cms?type=service&dept=aiyouyi.cn&cat=shushangdongtai'"
+            :href="zxLink+`/cms?type=news&dept=${domain}&cat=shushangdongtai`"
             target="_blank"
             :underline="false"
           >
@@ -271,7 +271,7 @@
             <span class="title1">帮助中心</span>
           </span>
           <el-link
-            :href="zxLink+'/cms?type=service&dept=aiyouyi.cn&cat=yidongshangcheng'"
+            :href="zxLink+`/cms?type=service&dept=${domain}&cat=yidongshangcheng`"
             target="_blank"
             :underline="false"
           >
@@ -324,6 +324,7 @@ export default {
       isGetGZstatus:true,//是否获取到公众号状态数据
       currentStep: 4, // 智能开店：当前步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
       stepStatus: 1, // 智能开店： 步骤状态 0 未完成 1 已完成
+      domain: process.env.BASE_DOMAIN
 
     };
   },

@@ -1,12 +1,12 @@
 import request from '@/system/request'
-
+const host = location.host;
 
 
 
     // 行业列表
 export function getIndustry(data) {
     return request({
-      url: '/news?dept=aiyouyi.cn&cat=hangye&pagenum=3',
+      url: `/news?dept=${process.env.BASE_DOMAIN}&cat=hangye&pagenum=3`,
       method: 'get',
       baseURL: process.env.ZX_API,
       data
@@ -14,7 +14,7 @@ export function getIndustry(data) {
   }
 export function getNews(data) {
   return request({
-    url: '/news?dept=aiyouyi.cn&cat=news&pagenum=3',
+    url: `/news?dept=${process.env.BASE_DOMAIN}&cat=news&pagenum=3`,
     method: 'get',
     baseURL: process.env.ZX_API,
     data
@@ -23,7 +23,7 @@ export function getNews(data) {
 // 产品动态
 export function getProductNews(data) {
   return request({
-    url: '/news?dept=aiyouyi.cn&cat=shushangdongtai&pagenum=6',
+    url: `/news?dept=${process.env.BASE_DOMAIN}&cat=shushangdongtai&pagenum=6`,
     method: 'get',
     baseURL: process.env.ZX_API,
     data
@@ -102,7 +102,7 @@ export function intelligentUpdateStep (data = {}) {
 // 帮助中心
 export function getHelpNews(data) {
   return request({
-    url: '/info?dept=aiyouyi.cn&cat=yidongshangcheng&pagenum=8',
+    url: `/info?dept=${process.env.BASE_DOMAIN}&cat=yidongshangcheng&pagenum=8`,
     method: 'get',
     baseURL: process.env.ZX_API,
     data
