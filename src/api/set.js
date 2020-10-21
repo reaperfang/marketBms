@@ -381,6 +381,15 @@ export function registerStore(data) {
     data
   })
 }
+/*  三方-达达配送-更新门店 */
+export function updateStore(data) {
+  return request({
+    target: 'THIRD-PART-UPDATE-SHOP-PROCESSOR',
+    method: 'post',
+    apiType: 'manager',
+    data
+  })
+}
 /*  三方-第三方配送列表 */
 export function getTh3DeliverList(data) {
   return request({

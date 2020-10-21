@@ -784,18 +784,15 @@ export default {
         this._apis.order
         .sendGoods3(params)
         .then(res => {
-          if(res.code == 2155) {
-            this.confirm({text: '达达账户余额不足，请充值后再发货', confirmText: '去充值'}).then(() => {
-                this.$router.push('/set/recharge')
-            })
-            return
-          }
-          if(this.list[0] && this.list[0].deliveryWay == 3) {
-            //本次批量发货100单，成功80单，失败20单 
-            this.$message.success('发货成功');
-          } else {
-            this.$message.success('发货成功');
-          }
+          let successNumber = res.success && +res.success || 0
+          let errorNumber = res.error && +res.error || 0
+
+          //this.$message.success(`本次批量发货${successNumber + errorNumber}单，成功${successNumber}单，失败${errorNumber}单`);
+          this.$message({
+            message: `本次批量发货${successNumber + errorNumber}单，成功${successNumber}单，失败${errorNumber}单`,
+            type: 'success',
+            duration: 3000
+          });
           this.sending = false
           
           let printIds = this.list.filter(val => !val.express).map(val => val.orderId).join(',')
@@ -814,7 +811,22 @@ export default {
           });
         })
         .catch(error => {
-          this.$message.error(error);
+          if(error && (error.code == 2155)) {
+            let successNumber = error.data && error.data.success && +error.data.success || 0
+            let errorNumber = error.data && error.data.error && +error.data.error || 0
+
+            //this.$message.success(`本次批量发货${successNumber + errorNumber}单，成功${successNumber}单，失败${errorNumber}单`);
+            this.$message({
+              message: `本次批量发货${successNumber + errorNumber}单，成功${successNumber}单，失败${errorNumber}单`,
+              type: 'success',
+              duration: 3000
+            });
+            this.confirm({text: '达达账户余额不足，请充值后再发货。', confirmText: '去充值'}).then(() => {
+                this.$router.push('/set/recharge')
+            })
+          } else {
+            this.$message.error(error);
+          }
           this.sending = false
         });
       } else {

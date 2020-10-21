@@ -21,7 +21,7 @@
     </div>
     <div class="table" v-calcMinHeight="313">
       <p>草稿（共{{total || 0}}个）</p>
-      <el-table :data="tableData" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
+      <el-table :data="tableData" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'updateTime', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"
           width="34">
