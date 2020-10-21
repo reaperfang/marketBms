@@ -10,7 +10,7 @@
       >
       <el-table-column
        fixed="left" class-name="table-padding"
-       min-width="300"
+       width="250"
         label="获取积分场景">
         <template slot-scope="scope">
           <span>{{scope.row.sceneName}}</span>
