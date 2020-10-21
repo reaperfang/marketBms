@@ -269,15 +269,22 @@ export default {
 	// 	// transform: scale(0.86, 0.93);
 	// }
 
-	body {
-		zoom: 80%;
-		z-index: -2;
+	// body {
+	// 	zoom: 80%;
+	// 	z-index: -2;
+	// }
+
+	.mall {
+		overflow-y: auto;
+		min-width: 1850px;
 	}
 
-	// .mall {
-	// 	overflow-y: auto;
-	// 	min-width: 1850px;
-	// }
+		*::-webkit-scrollbar {
+		/*滚动条整体样式*/
+		width: 7px; /*定义纵向滚动条宽度*/
+		height: 7px; /*定义横向滚动条高度*/
+	}
+
 
 	// *::-webkit-scrollbar {
 	// 	/*滚动条整体样式*/
