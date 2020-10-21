@@ -43,7 +43,7 @@
         layout="prev, pager, next, sizes"
       ></el-pagination>
     </div>
-    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @refreshPage="refreshPage"></component>
+    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @refreshPage="refreshPage" v-if="dialogVisible"></component>
   </div>
 </template>
 
@@ -130,6 +130,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.getCreditList(val, this.pageSize);
+      this.startIndex = val;
     },
     handleSizeChange(val) {
       this.getCreditList(1, val);
