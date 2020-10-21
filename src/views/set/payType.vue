@@ -6,7 +6,11 @@
             <img src="@/assets/images/set/set-pay1.png"/>
             <div class="note">
               <h3>微信支付</h3>
-              <p style="width:90%">如需正常使用微信支付，除需要“设置支付信息”中的内容外，还请在微信商户平台（<a href="pay.weixin.qq.com" target="_blank" class="links">pay.weixin.qq.com</a>）设置您的JSAPI支付支付目录,（设置路径：商户平台-->产品中心-->开发配置)中追加一条支付授权目录：<a href="https://omo.aiyouyi.cn/cp/" target="_blank" class="links">https://omo.aiyouyi.cn/cp/</a></p>
+              <p style="width:90%">如需正常使用微信支付，除需要“设置支付信息”中的内容外，还请在微信商户平台（<a href="pay.weixin.qq.com" target="_blank" class="links">pay.weixin.qq.com</a>）设置您的JSAPI支付支付目录,（设置路径：商户平台-->产品中心-->开发配置)中追加一条支付授权目录：
+                <!-- <a :href="origin + '/cp/'" target="_blank" class="links"> -->
+                  {{origin + '/cp/'}}
+                <!-- </a> -->
+              </p>
             </div>
           </div>
           <div class="right_cont">
@@ -98,7 +102,8 @@ export default {
       dialogVisible:false,
       pageName:'',
       protocol: location.protocol,
-      isOnlyOpenAkindPayWay: false // 是否仅打开一种支付方式
+      isOnlyOpenAkindPayWay: false, // 是否仅打开一种支付方式
+      origin: location.origin
     }
   },
   components: {},

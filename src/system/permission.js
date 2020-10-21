@@ -19,7 +19,7 @@ function hasPermission(msfList, route) {
   }
 }
 
-const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
+const whiteList = ['/login', '/auth-redirect','/datashop']// no redirect whitelist
 
 let flag = 0
 router.beforeEach((to, from, next) => {
