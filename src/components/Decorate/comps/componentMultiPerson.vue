@@ -8,7 +8,7 @@
                         <li :key="key" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                             <div class="img_box">
                                 <p class="label" v-if="showContents.indexOf('6')!=-1">{{item.joinedActivityPeopleNum > -1 ? item.joinedActivityPeopleNum : 0}}人已团</p>
-                                <el-image :key="listStyle" :scroll-container="listStyle == 6 ? null : '.phone-body'" :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}" lazy>
+                                <el-image :key="listStyle" :scroll-container="listStyle == 6 ? null : bodyClass ?  '.'+bodyClass : '.phone-body'" :src="item.mainImage" alt="" :class="{goodsFill:goodsFill!=1}" lazy>
                                     <div slot="placeholder" class="el-image__lazyloading">
                                         加载中...
                                     </div>

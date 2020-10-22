@@ -7,7 +7,7 @@
                     <li v-for="(item,key) of displayList" :key="key" v-if="item.show" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                         <div class="img_box">
                             <div class="label">已售{{item.participateActivityNum}}套</div>
-                            <el-image :key="listStyle" :scroll-container="listStyle == 6 ? null : '.phone-body'" :src="item.activityPic" alt="" :class="{goodsFill:goodsFill!=1}" lazy>
+                            <el-image :key="listStyle" :scroll-container="listStyle == 6 ? null : bodyClass ?  '.'+bodyClass : '.phone-body'" :src="item.activityPic" alt="" :class="{goodsFill:goodsFill!=1}" lazy>
                                 <div slot="placeholder" class="el-image__lazyloading">
                                     加载中...
                                 </div>

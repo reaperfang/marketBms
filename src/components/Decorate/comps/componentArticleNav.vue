@@ -11,7 +11,7 @@
                   <ul class="img_nav" :class="{'five':currentComponentData.data.itemList.length>4}">
                     <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
                       <div :class="{'default': !item.url}">
-                        <el-image v-if="item.url" scroll-container=".phone-body" :src="item.url" alt lazy>
+                        <el-image v-if="item.url" :scroll-container="bodyClass ?  '.'+bodyClass : '.phone-body'" :src="item.url" alt lazy>
                           <div slot="placeholder" class="el-image__lazyloading" style="font-size: 12px;">
                               加载中
                           </div>
@@ -31,12 +31,12 @@
                 </template>
               </div>
             <!-- (2)横向滑动 -->
-              <div v-else-if="currentComponentData.data.slideType===2" class="scroll_wrapper">
+              <div v-else-if="currentComponentData.data.slideType===2" class="scroll_wrapper" :class="{'scroll_wrapper_preview': bodyClass}">
                 <template v-if="hasContent">
                   <ul class="img_nav2 clearfix" ref="scrollContent">
                     <li ref="img_w" v-for="(item,index) in currentComponentData.data.itemList" :key="index">
                       <div >
-                        <el-image v-if="item.url" scroll-container=".scroll_wrapper" :src="item.url" alt lazy>
+                        <el-image v-if="item.url" :scroll-container="bodyClass ?  '.scroll_wrapper_preview' : '.scroll_wrapper'" :src="item.url" alt lazy>
                           <div slot="placeholder" class="el-image__lazyloading">
                               加载中...
                           </div>

@@ -4,7 +4,7 @@
       <img src="@/assets/images/shop/editor/phone_head.png" alt="">
       <span>{{baseInfo.title || baseInfo.name || '页面标题'}}</span>
     </div>
-    <div class="phone-body" ref="view_container" @click="clickTitle($event)" v-calcHeight="renderCalcHeight + 64 + 10" @drop="dropAddComponent($event)" @dragover="dragover($event)" @dragleave="dragleave($event)">
+    <div class="phone-body" :class="bodyClass" ref="view_container" @click="clickTitle($event)" v-calcHeight="renderCalcHeight + 64 + 10" @drop="dropAddComponent($event)" @dragover="dragover($event)" @dragleave="dragleave($event)">
 
       <!-- 可拖拽调整顺序 -->
       <vuedraggable 
@@ -67,7 +67,7 @@
       <template v-else>
         <template v-for="(item, key) of componentDataIds">
           <div class="component_wrapper" style="cursor:text"  :key="key" v-if="allTemplateLoaded && !getComponentConfigData(item, key).hidden">
-            <component :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" :dragable="dragable"  @componentDataLoaded="componentDataLoaded"></component>
+            <component :is='templateList[getComponentData(item).type]' :key="key" :data="getComponentData(item)" :bodyClass="bodyClass" :dragable="dragable"  @componentDataLoaded="componentDataLoaded"></component>
           </div>
         </template>
       </template>
@@ -99,6 +99,9 @@ import vuedraggable from "vuedraggable";
 export default {
   name: 'renderView',
   props: {
+    bodyClass: {
+      type: String
+    },
     dragable: {
       type: Boolean,
       default: true
