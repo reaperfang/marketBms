@@ -5,7 +5,8 @@ export default {
   extends: mixinPropsBase,
   data() {
     return {
-      items: []
+      items: [],
+      listScrollTop: null
     }
   },
   created() {
@@ -14,6 +15,12 @@ export default {
   methods: {
      /* 删除数据项 */
     deleteItem(item) {
+      //记录数据列表滚动位置，预加载功能全部数据完成后回到该位置
+      const container = this.$refs.listScroll;
+      if(container && container.scrollTop) {
+        this.listScrollTop = container.scrollTop
+      }
+
       const tempItems = [...this.displayList];
       for(let i=0;i<tempItems.length;i++) {
         if(item === tempItems[i]) {
