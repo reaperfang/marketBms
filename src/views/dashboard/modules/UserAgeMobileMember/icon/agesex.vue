@@ -133,11 +133,11 @@ export default {
 }
 @media screen and(max-width: 1600px){
 	.icon-agesex {
-		margin-top: 30px;
+		margin-top: 32px;
 		.top {
 			img {
-				width: 13px;
-				height: 24px;
+				width: 10px;
+				height: 20px;
 				margin-left: 10px;
 			}
 			>span {
