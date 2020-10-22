@@ -10,6 +10,9 @@ export default {
     dragable: {
       type: Boolean,
       default: true
+    },
+    bodyClass: {
+      type: String
     }
   },
   data() {

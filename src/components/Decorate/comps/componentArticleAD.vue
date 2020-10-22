@@ -9,7 +9,7 @@
                 <template v-for="(item, key) of currentComponentData.data.itemList">
                   <el-image
                     v-if="item.url"
-                    scroll-container=".phone-body"
+                    :scroll-container="bodyClass ?  '.'+bodyClass : '.phone-body'"
                     lazy
                     :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                     :key="key"

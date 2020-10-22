@@ -57,7 +57,7 @@
                   </template>
                 </div>
               <div class="componentGoodsGroup_content">
-                  <componentGoods :data='currentComponentData' :currentCatagoryId="currentCatagory? currentCatagory.id : showAllGroup === 2 ? displayList[0] && displayList[0].id : 'all'"></componentGoods>
+                  <componentGoods :data='currentComponentData' :bodyClass="bodyClass" :currentCatagoryId="currentCatagory? currentCatagory.id : showAllGroup === 2 ? displayList[0] && displayList[0].id : 'all'"></componentGoods>
               </div> 
             </div>
             <div v-else style="padding: 10px;">
