@@ -60,7 +60,7 @@
       :is="currentDialog" 
       :dialogVisible.sync="dialogVisible" 
       :data="currentData"
-      v-if="hackReset"
+      v-if="dialogVisible"
     >
     </component>
   </div>
@@ -80,7 +80,6 @@ export default {
       currentDialog: "",
       dialogVisible: false,
       currentData:{},
-      hackReset: false,
       loading: false,
       startIndex: 1,
       pageSize: 10
@@ -117,10 +116,6 @@ export default {
     },
     addTag(row) {
       if(row.successNum !== 0) {
-        this.hackReset = false;
-        this.$nextTick(() => {
-          this.hackReset = true;
-        })
         this.dialogVisible = true;
         this.currentDialog = "batchAddTagDialog";
         this.currentData.successNum = row.successNum;
@@ -139,10 +134,6 @@ export default {
           type: 'warning'
         });
       }else{
-        this.hackReset = false;
-        this.$nextTick(() => {
-          this.hackReset = true;
-        })
         this.dialogVisible = true;
         this.currentDialog = "changeIdentityDialog";
         this.currentData.successNum = row.successNum;

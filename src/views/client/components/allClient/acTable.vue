@@ -86,6 +86,7 @@
       :dialogVisible.sync="dialogVisible"
       :data="currentData"
       @freshTable="freshTable"
+      v-if="dialogVisible"
     ></component>
   </div>
 </template>

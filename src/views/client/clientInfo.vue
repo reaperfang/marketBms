@@ -109,7 +109,7 @@
             :data="currentData"
             @sendDiscount="sendDiscount"
             @refreshPage="refreshPage" 
-            v-if="hackReset">
+            v-if="dialogVisible">
         </component>
     </div>
 </template>
@@ -159,7 +159,6 @@ export default {
             allCodes: [],
             couponList: [],
             codeList: [],
-            hackReset: true,
             level: "",
             sexText: "",
             topLevel: 0,
@@ -205,10 +204,6 @@ export default {
         changeIdentity() {
             let tl = this.topLevel == 9 ? 9:this.topLevel;
             if(this.clientInfoById.level !== tl) {
-                this.hackReset = false;
-                this.$nextTick(() => {
-                    this.hackReset = true;
-                })
                 this.dialogVisible = true;
                 this.currentDialog = "changeIdentityDialog";
                 this.currentData.id = this.userId;
@@ -241,30 +236,18 @@ export default {
             this.clientInfoById.labelRecordViews.map((v) => {
                 arr.push(v.memberLabelInfoName);
             });
-            this.hackReset = false;
-            this.$nextTick(() => {
-                this.hackReset = true;
-            })
             this.dialogVisible = true;
             this.currentData.id = this.userId;
             this.currentData.selectedNames = [].concat(arr);
             this.currentDialog = "addTagDialog";
         },
         showBalanceList() {
-            this.hackReset = false;
-            this.$nextTick(() => {
-                this.hackReset = true;
-            })
             this.dialogVisible = true;
             this.currentDialog = "balanceListDialog";
             this.currentData.balance = this.clientInfoById.balance;
             this.currentData.id = this.userId;
         },
         showAdjustBalance() {
-            this.hackReset = false;
-            this.$nextTick(() => {
-                this.hackReset = true;
-            })
             this.dialogVisible = true;
             this.currentDialog = "adjustBalanceDialog";
             this.currentData.balance = this.clientInfoById.balance;
@@ -272,10 +255,6 @@ export default {
             this.currentData.memberSn = this.clientInfoById.memberSn;
         },
         showAdjustScore() {
-            this.hackReset = false;
-            this.$nextTick(() => {
-                this.hackReset = true;
-            })
             this.dialogVisible = true;
             this.currentDialog = "adjustCreditDialog";
             this.currentData.score = this.clientInfoById.score;
@@ -283,10 +262,6 @@ export default {
             this.currentData.memberSn = this.clientInfoById.memberSn;
         },
         showDiscountCoupon(type) {
-            this.hackReset = false;
-            this.$nextTick(() => {
-                this.hackReset = true;
-            })
             this.dialogVisible = true;
             this.currentDialog = "discountCouponDialog";
             this.currentData.type = type;
@@ -295,10 +270,6 @@ export default {
             this.currentData.codeList = [].concat(this.codeList);
         },
         sendDiscount(val) {
-            this.hackReset = false;
-            this.$nextTick(() => {
-                this.hackReset = true;
-            })
             if(val == 'first') {
                 this.dialogVisible = true;
                 this.currentDialog = "issueCouponDialog";
@@ -314,10 +285,6 @@ export default {
             }
         },
         showAddBlack() {
-            this.hackReset = false;
-            this.$nextTick(() => {
-                this.hackReset = true;
-            })
             this.dialogVisible = true;
             this.currentDialog = "addBlackDialog";
             this.currentData.memberSn = this.clientInfoById.memberSn;
@@ -330,10 +297,6 @@ export default {
             this.currentData.id = this.clientInfoById.id;
         },
         showSendCard() {
-            this.hackReset = false;
-            this.$nextTick(() => {
-                this.hackReset = true;
-            })
             this.dialogVisible = true;
             this.currentDialog = "sendCardDialog";
             this.currentData.id = this.userId;
@@ -342,10 +305,6 @@ export default {
         showChangeCard() {
             let tl = this.topCard == 5?5:this.topCard;
             if(this.clientInfoById.cardLevel !== tl) {
-                this.hackReset = false;
-                this.$nextTick(() => {
-                    this.hackReset = true;
-                })
                 this.dialogVisible = true;
                 this.currentDialog = "changeCardDialog";
                 this.currentData.id = this.userId;
@@ -361,10 +320,6 @@ export default {
             
         },
         showScoreList() {
-            this.hackReset = false;
-            this.$nextTick(() => {
-                this.hackReset = true;
-            })
             this.dialogVisible = true;
             this.currentDialog = "scoreListDialog";
             this.currentData.score = this.clientInfoById.score;

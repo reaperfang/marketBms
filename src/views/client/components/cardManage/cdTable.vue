@@ -62,7 +62,7 @@
         
       </el-table-column>
     </el-table>
-    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" v-if="hackReset"></component>
+    <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" v-if="dialogVisible"></component>
   </div>
 </template>
 <script type='es6'>
@@ -77,7 +77,6 @@ export default {
       currentDialog: "",
       dialogVisible: false,
       currentData: {},
-      hackReset: false,
       cardList: [],
       loading: false
     };
@@ -122,10 +121,6 @@ export default {
       })
     },
     sendCard(row) {
-      this.hackReset = false;
-      this.$nextTick(() => {
-        this.hackReset = true;
-      })
       this.dialogVisible = true;
       this.currentDialog = "sendCardDialog";
       this.currentData.name = row.name;
