@@ -31,7 +31,7 @@
           id: this.cid,
           cid: this.cid,
         }
-        this._apis.shop.getShopInfo(query).then(response => {
+        this._apis.shopInfo.getShopInfo(query).then(response => {
           this.wechatPay = response.wechatPay;
           this.$emit('wxpay-status', this.wechatPay);
         }).catch(error => {
