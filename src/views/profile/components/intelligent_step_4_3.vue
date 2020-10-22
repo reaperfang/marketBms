@@ -115,7 +115,7 @@
             latitude: this.form.lat,
             longitude: this.form.lng,
           };
-          const formResult = await this._apis.shopInfos.updateShopInfo(params);
+          const formResult = await this._apis.shopInfo.updateShopInfo(params);
           // changeStep 更改步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
           // status 状态 0 未完成 1 已完成
           const stepResult = await this._apis.profile.intelligentUpdateStep({changeStep: 4, status: 1});

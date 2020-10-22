@@ -48,7 +48,7 @@
           id,
           storeGuide
         }
-        this._apis.shopInfos.updateShopInfo(data).then(response =>{
+        this._apis.shopInfo.updateShopInfo(data).then(response =>{
           this.$store.dispatch('getShopInfo');
           const storeGuide = response && response.storeGuide || storeGuide
           this.$store.commit('setStoreGuide', storeGuide)
