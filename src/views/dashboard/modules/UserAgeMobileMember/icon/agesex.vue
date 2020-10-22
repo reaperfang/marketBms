@@ -114,4 +114,20 @@ export default {
 		}
 	}*/
 }
+@media screen and(max-width: 1440px){
+	.icon-agesex {
+		.top {
+			img {
+				width: 10px;
+				height: 20px;
+				margin-left: 10px;
+			}
+			>span {
+				font-size: 12px;
+				transform: scale(0.83);
+				margin-left: -7px;
+			}
+		}
+	}
+}
 </style>
