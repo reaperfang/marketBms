@@ -195,9 +195,9 @@ export default {
 // 	border-color: red;
 // }
 
-@media screen and(max-width: 1440px) and(max-height: 900px){
+/* @media screen and(max-width: 1440px) and(max-height: 900px){
 	.realtime-user {
-		table th .cell{
+		table th,tr .cell{
 			font-size: 12px;
 			transform: scale(0.83);
 		}
@@ -205,11 +205,15 @@ export default {
 	.el-table--small th {
 		padding: 0;
 	}
-}
+} */
 
 @media screen and(max-width: 1600px) and(max-height: 900px){
 	.realtime-user {
 		table th .cell{
+			font-size: 12px;
+			transform: scale(0.83);
+		}
+		table td .cell{
 			font-size: 12px;
 			transform: scale(0.83);
 		}
