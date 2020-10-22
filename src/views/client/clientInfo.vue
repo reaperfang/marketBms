@@ -484,7 +484,7 @@ export default {
                 line-height: 48px;
                 padding-left: 20px;
                 font-size: 18px;
-                background:rgba(101,94,255,0.09);
+                background:#F6F7FA;
                 border-radius:10px 10px 0px 0px;
                 .btn{
                     float: right;

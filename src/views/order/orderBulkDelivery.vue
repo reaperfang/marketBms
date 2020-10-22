@@ -416,7 +416,6 @@ export default {
             .filter(val => val.checked).length
         ) {
           this.confirm({
-            title: "提示",
             icon: true,
             text: "请选择您要进行发货的商品"
           });
@@ -811,7 +810,7 @@ export default {
             let errorNumber = error.data && error.data.error && +error.data.error || 0
 
             this.$message.success(`本次批量发货${successNumber + errorNumber}单，成功${successNumber}单，失败${errorNumber}单`);
-            this.confirm({text: '达达账户余额不足，请充值后再发货。', confirmText: '去充值', showClose: false, closeOnClickModal: false, cancelButtonText: '返回'}).then(() => {
+            this.confirm({text: '达达账户余额不足，请充值后再发货。', icon: true,confirmText: '去充值', showClose: false, closeOnClickModal: false, cancelButtonText: '返回'}).then(() => {
                 this.$router.push('/set/recharge')
             }).catch(action => {
               this.$router.push('/order/deliveryManagement')
