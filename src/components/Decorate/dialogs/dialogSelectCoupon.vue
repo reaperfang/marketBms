@@ -21,7 +21,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :row-key="getRowKey">
+      <el-table :data="tableData" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :row-key="getRowKey">
           <el-table-column
             type="selection"
             :selectable="itemSelectable"

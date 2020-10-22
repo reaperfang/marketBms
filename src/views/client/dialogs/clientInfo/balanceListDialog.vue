@@ -7,14 +7,13 @@
       <el-table
         :data="balanceList"
         style="width: 100%"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort="{prop: 'date', order: 'descending'}"
       >
-        <el-table-column prop="updateUserName" label="操作人"></el-table-column>
-        <el-table-column prop="tradeTime" label="操作时间"></el-table-column>
-        <el-table-column prop="changeReason" label="交易类型"></el-table-column>
-        <el-table-column prop="remark" label="原因"></el-table-column>
-        <el-table-column prop="changeAmount" label="数量"></el-table-column>
+        <el-table-column prop="updateUserName" label="操作人" fixed="left" class-name="table-padding"></el-table-column>
+        <el-table-column prop="tradeTime" label="操作时间" align="center"></el-table-column>
+        <el-table-column prop="changeReason" label="交易类型" align="center"></el-table-column>
+        <el-table-column prop="remark" label="原因" align="center"></el-table-column>
+        <el-table-column prop="changeAmount" label="数量" align="center" class-name="table-padding"></el-table-column>
       </el-table>
       <div class="page_styles">
         <el-pagination

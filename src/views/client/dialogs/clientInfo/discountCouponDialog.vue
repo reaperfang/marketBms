@@ -18,7 +18,6 @@
             <el-table
               :data="couponList"
               style="width: 100%"
-              :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
               :default-sort="{prop: 'date', order: 'descending'}"
             >
             <el-table-column prop="name" label="优惠券名称"></el-table-column>
@@ -42,7 +41,6 @@
           <el-table
             :data="codeList"
             style="width: 100%"
-            :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
             :default-sort="{prop: 'date', order: 'descending'}"
           >
             <el-table-column prop="name" label="优惠券名称"></el-table-column>
