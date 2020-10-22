@@ -152,6 +152,7 @@ export default {
             dialogVisible: false,
             loading: false,
             storeMark: false, //商家配送标记，如果列表中包含商家配送，则为true, 为了让配送方式标题宽度变宽
+            clicked: false
         }
     },
     created() {
@@ -342,15 +343,17 @@ export default {
             this.dialogVisible = true
         },
         sendOrderAgain(order){
-             this._apis.order.reOrder({cid:order.cid,orderId:order.id})
-            .then(res=>{
-                 this.$emit('getList');
-                 this.$message.success('重新发单成功');
-            }).catch(error=>{
-                this.$message.error('重新发单失败，请再次重新发单');
-            })
-               
-            
+            if(!this.clicked) {
+                this.clicked = true
+                this._apis.order.reOrder({cid:order.cid,orderId:order.id})
+                .then(res=>{
+                    this.$emit('getList');
+                    this.$message.success('重新发单成功');
+                }).catch(error=>{
+                    this.$message.error('重新发单失败，请再次重新发单');
+                    this.clicked = false
+                })
+            }
         },
         submit(value) {
             let orderId = "";
