@@ -139,17 +139,18 @@ export default {
 					order_c_uv_7dco:
 						(res.order_c_uv_7dco*100).toFixed(2)
 					,
-					paid_c_order_7dco: 
+					paid_c_order_7dco:
 						res.paid_c_order_7dco == -9999
 							? 0
 							: (res.paid_c_order_7dco*100).toFixed(2)
 					,
-					paid_c_uv_7dco: 
+					paid_c_uv_7dco:
 						(res.paid_c_uv_7dco*100).toFixed(2)
-					
+
 				}
 			});
 		}
 	}
 };
 </script>
+

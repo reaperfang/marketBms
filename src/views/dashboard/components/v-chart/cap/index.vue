@@ -461,6 +461,21 @@ export default {
 	}
 }
 
+@media screen and (max-width: 1440px) and (max-height: 900px){
+	.panel-content-cap {
+		.chartContent {
+			margin-top: -10px;
+		}
+	}
+}
+@media screen and (max-width: 1600px) and (max-height: 900px){
+	.panel-content-cap {
+		.chartContent {
+			margin-top: -10px;
+		}
+	}
+}
+
 /* custom CSS */
 .vue-tooltip.tooltip-custom {
 	opacity: 0.8;

@@ -50,7 +50,7 @@ export default {
 				// },
 				//radius: [60, 70],
 				radius: [50, 60],
-				offsetY: 90,
+				offsetY: screen.width == 1440 ? 80 : 90,
 				labelLine: {
 					normal: {
 						length: 5,
@@ -129,6 +129,18 @@ export default {
 
 			return result;
 		}
+	},
+	mounted() {
+		if (screen.width == 1440){
+			this.chartSettings.radius = [32, 42]
+		}else if (screen.width == 1600){
+			this.chartSettings.radius = [35, 45]
+		}else {
+			console.log(screen.width)
+		}
+		if (window.screen.height < 900) {
+			this.chartSettings.radius = [35, 45]
+		}
 	}
 };
 </script>
@@ -137,5 +149,15 @@ export default {
 .v-chart-ring {
 	height: 100%;
 	position: relative;
+}
+@media screen and (max-width: 1440px) and (max-height: 900px){
+	.v-chart-ring /deep/ canvas{
+		top: -17px!important;
+	}
+}
+@media screen and (max-width: 1600px) and (max-height: 900px){
+	.v-chart-ring /deep/ canvas{
+		top: -17px!important;
+	}
 }
 </style>

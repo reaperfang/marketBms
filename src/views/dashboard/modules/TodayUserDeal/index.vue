@@ -37,7 +37,7 @@
 		</el-row>
 
 		<el-row class="grid-map">
-			<chinamap :mapData="mapData" ref="chart"></chinamap>
+			<chinamap :mapData="mapData" class="mediaCanvas" ref="chart"></chinamap>
 		</el-row>
 	</div>
 </template>
@@ -212,6 +212,13 @@ export default {
 	100% {
 		transform: translateX(-100%);
 		-webkit-transform: translateX(-100%);
+	}
+}
+@media screen and (max-width: 1600px) and (max-height: 900px){
+	.mediaCanvas /deep/ canvas{
+		/*height: 205px!important;
+		width: 453px!important;*/
+		/*<!--margin-top: -60px!important;-->*/
 	}
 }
 </style>

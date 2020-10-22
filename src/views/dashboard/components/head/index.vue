@@ -255,4 +255,16 @@ export default {
 		}
 	}
 }
+@media screen and (max-width: 1600px) and (max-height: 900px){
+	.head{
+		height: 67px;
+		.content{
+			font-size: 34px;
+			width: 270px
+		}
+		.right{
+			margin-top: -5px;
+		}
+	}
+}
 </style>
