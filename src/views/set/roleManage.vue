@@ -168,7 +168,6 @@ export default {
       let roleNames = []
       roleName ? roleNames.push(roleName) : roleNames = this.multipleSelection
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '此操作将永久删除该角色, 是否继续?'

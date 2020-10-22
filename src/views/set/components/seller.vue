@@ -162,9 +162,9 @@ export default {
       this.handleSwitch(query);
     },
     handleSwitch(query) {
-      this.$msgbox({
-        title: '确认提示',
-        message: '确认要进行此项操作吗？',
+      this.confirm({
+        text: '确认要进行此项操作吗？',
+        icon: true,
         showCancelButton: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',

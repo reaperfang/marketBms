@@ -172,7 +172,7 @@ export default {
         enable = 1
       }
 
-      this.confirm({title: '解除授权', icon: true, customClass: 'auth-manage cancel-auth', text, width: '500px'}).then(() => {
+      this.confirm({icon: true, customClass: 'auth-manage cancel-auth', text, width: '500px'}).then(() => {
         this._apis.set.cancelAuth({
           id: row.id,
           cid: this.cid,
@@ -221,7 +221,7 @@ export default {
             }
           }
           
-          this.confirm({title: '授权码', customClass: 'auth-manage confirm-code', text, confirmText: '复制', width: '500px', beforeClose}).then(() => {
+          this.confirm({ customClass: 'auth-manage confirm-code', text, confirmText: '复制', width: '500px', beforeClose}).then(() => {
             this.showCodeDialog = false     
           }).catch(() => {
             this.showCodeDialog = false
