@@ -142,19 +142,20 @@ export default {
   name: "upgrade",
   data() {
     return {
-      status: "0"
+      status: "0",
+      time: null
     };
   },
   computed: {
-    time() {
-      let shopInfo = this.$store.getters.shopInfos;
-      let time = new Date();
-      time.setTime(
-        shopInfo.createTime + 3600 * 1000 * 24 * (shopInfo.lifeTime - 1)
-      );
-      time = utils.formatDate(time, "yyyy-MM-dd hh:mm:ss");
-      return time;
-    }
+    // time() {
+    //   let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+    //   let time = new Date();
+    //   time.setTime(
+    //     shopInfo.createTime + 3600 * 1000 * 24 * (shopInfo.lifeTime - 1)
+    //   );
+    //   time = utils.formatDate(time, "yyyy-MM-dd hh:mm:ss");
+    //   return time;
+    // }
   },
   created() {
     this.show();
@@ -168,6 +169,8 @@ export default {
           }else{
             this.status = "0";
           }
+          console.log(data.shopExpireTime)
+          this.time = data.shopExpireTime;
         })
         .catch(error => {
           console.error(error);

@@ -252,7 +252,10 @@ export default {
             this.expressCompanys = row.returnExpressName
             this._apis.order.orderLogistics({expressNo: row.returnExpressNo, id: row.id, isOrderAfter: 1}).then(res => {
                 this.currentDialog = 'LogisticsDialog'
-                this.currentData = res.traces || []
+                this.currentData = {
+                    traces: res.traces || [],
+                    deliveryWay: 1
+                }
                 this.dialogVisible = true
             }).catch(error => {
                 this.$message.error(error);
