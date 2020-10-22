@@ -234,7 +234,7 @@
         // this.form.lng = this.shopInfos.longitude || "";
         try {
           let id = this.shopInfos.id;
-          let result = await this._apis.set.getShopInfo({id});
+          let result = await this._apis.shopInfo.getShopInfo({id});
           this.form.shopName = result.shopName || "";
           this.form.phone = result.phone || "";
           this.form.sendAddress = result.sendAddress || "";
