@@ -132,7 +132,7 @@ export default {
 	},
 	mounted() {
 		if (screen.width == 1440){
-			this.chartSettings.radius = [34, 44]
+			this.chartSettings.radius = [32, 42]
 		}else if (screen.width == 1600){
 			this.chartSettings.radius = [35, 45]
 		}else {
