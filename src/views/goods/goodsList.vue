@@ -889,7 +889,7 @@ export default {
             } else {
                 str = '下架'
                 if(activity) {
-                    this.confirm({title: str, customClass: 'confirm-goods', icon: true, text: '该商品正在参加营销活动，活动结束/失效才可下架。', width: '500px'}).then(() => {
+                    this.confirm({customClass: 'confirm-goods', icon: true, text: '该商品正在参加营销活动，活动结束/失效才可下架。', width: '500px'}).then(() => {
                         this.getList()
                     }).catch(() => {
                         this.getList()
@@ -897,7 +897,7 @@ export default {
                     return
                 }
             }
-            this.confirm({title: str, customClass: 'confirm-goods', icon: true, text: `确定${str}此商品？`, width: '500px'}).then(() => {
+            this.confirm({customClass: 'confirm-goods', icon: true, text: `确定${str}此商品？`, width: '500px'}).then(() => {
                 this._apis.goods.productUpperOrLowerSpu({id, status: _flag ? 1 : 0}).then((res) => {
                     this.getList()
                     this.$message({
