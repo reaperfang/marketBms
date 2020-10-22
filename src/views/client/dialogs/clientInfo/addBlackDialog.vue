@@ -48,7 +48,6 @@
                 style="width: 100%"
                 ref="couponListTable"
                 @selection-change="handleSelectionChangeCouponList"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
                 :default-sort="{prop: 'date', order: 'descending'}"
                 v-loading="loading"
             >
@@ -113,7 +112,6 @@
                 style="width: 100%"
                 ref="codeListTable"
                 @selection-change="handleSelectionChangeCodeList"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
                 :default-sort="{prop: 'date', order: 'descending'}"
                 v-loading="loading"
             >

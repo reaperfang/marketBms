@@ -12,7 +12,6 @@
           :data="couponList"
           style="width: 100%"
           ref="couponTable"
-          :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
           :default-sort="{prop: 'date', order: 'descending'}"
         >
           <el-table-column type="selection"></el-table-column>
