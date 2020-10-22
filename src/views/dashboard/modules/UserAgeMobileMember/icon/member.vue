@@ -78,8 +78,9 @@ export default {
 
 @media screen and(max-width: 1440px){
 	.icon-member {
+		margin-top: 37px;
 		.start {
-			font-size: 12px;		
+			font-size: 12px;
 			transform: scale(0.83);
 			margin-top: 10px;
 		}

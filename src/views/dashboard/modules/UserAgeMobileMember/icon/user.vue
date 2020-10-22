@@ -82,6 +82,7 @@ export default {
 
 @media screen and(max-width: 1440px){
 	.icon-user {
+		margin-top: 37px;
 		.start {
 			font-size: 12px;
 			transform: scale(0.83);
