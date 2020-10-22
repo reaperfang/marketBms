@@ -104,6 +104,8 @@
 
         try {
           this.$emit("update-completed-loading", true);
+          const latitude = this.form.lat ? { latitude: this.form.lat } : null
+          const longitude = this.form.lng ? { latitude: this.form.lng } : null
           const params = {
             id: this.shopInfos.id,
             shopName: this.form.shopName,
@@ -112,10 +114,12 @@
             cityCode: this.form.addressCode[1],
             areaCode: this.form.addressCode[2],
             sendAddress: this.form.sendAddress,
-            latitude: this.form.lat,
-            longitude: this.form.lng,
+            ...latitude,
+            ...longitude
           };
+          // 与后端沟通后，经纬度如果为空不能传给后端
           const formResult = await this._apis.shopInfo.updateShopInfo(params);
+          
           // changeStep 更改步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
           // status 状态 0 未完成 1 已完成
           const stepResult = await this._apis.profile.intelligentUpdateStep({changeStep: 4, status: 1});
