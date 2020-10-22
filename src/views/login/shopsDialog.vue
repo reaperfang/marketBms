@@ -31,7 +31,7 @@
               @current-change="handleCurrentChange"
               :current-page="Number(startIndex) || 1"
               :page-size="pageSize*1"
-              layout="prev, pager, next, sizes"
+              layout="prev, pager, next"
               :total="total*1"
               :background="true">
             </el-pagination>
