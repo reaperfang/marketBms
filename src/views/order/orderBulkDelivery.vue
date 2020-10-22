@@ -816,7 +816,7 @@ export default {
               this.$router.push('/order/deliveryManagement')
             });
           } else {
-            this.$message.error(error);
+            this.$message.error(error.msg);
           }
           this.sending = false
         });
