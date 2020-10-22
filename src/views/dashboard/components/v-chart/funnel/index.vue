@@ -57,7 +57,7 @@ export default {
 					borderRadius: 4,
 					color: "#FFFFFF",
 					verticalAlign: "center",
-					offset: [45, 0, 0, 0],
+					offset: [screen.width==1600 ?45 : 50, 0, 0, 0],
 					fontSize: screen.width<1920 ? 10: 12,
 					//   padding: [3, 10, 5, 10],
 					formatter: function(d) {
