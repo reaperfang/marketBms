@@ -486,7 +486,7 @@ export default {
 				.item-content {
 					height: 100%;
 					margin: 0 8px;
-
+					overflow: hidden;
 					.v-el-col {
 						height: 100%;
 					}
