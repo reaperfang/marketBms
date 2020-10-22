@@ -9,7 +9,7 @@
       </el-form-item>
       <el-form-item label="选择商品" v-if="ruleForm.source === 1" prop="goods">
         <div class="goods_list" v-if="ruleForm.source === 1" prop="goods" v-loading="loading">
-          <ul>
+          <ul ref="listScroll">
             <li v-for="(item, key) of displayList" :key="key" :title="item.name">
               <el-image :src="item.mainImage" alt="" lazy>
                 <div slot="placeholder" class="el-image__lazyloading">
@@ -361,6 +361,16 @@ export default {
                 this.createList(response);
                 this.loading = false;
                 this.deleteShow = true;
+
+                //如果有记录的列表滚动位置，预加载功能全部数据完成后回到该位置
+                this.$nextTick(() => {
+                  if(this.listScrollTop) {
+                    this.$refs.listScroll.scrollTo({
+                      top: this.listScrollTop
+                    });
+                    this.listScrollTop = null;
+                  }
+                })
             }).catch((error)=>{
                 console.error(error);
                 this.displayList = [];
