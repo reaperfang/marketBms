@@ -5,14 +5,13 @@
         <el-table
             :data="scoreList"
             style="width: 100%"
-            :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
             :default-sort="{prop: 'date', order: 'descending'}"
           >
-            <el-table-column prop="updateUserName" label="操作人"></el-table-column>
-            <el-table-column prop="createTime" label="操作时间"></el-table-column>
-            <el-table-column prop="businessTypeName" label="交易类型"></el-table-column>
-            <el-table-column prop="remarks" label="原因"></el-table-column>
-            <el-table-column prop="changeScore" label="数量"></el-table-column>
+            <el-table-column prop="updateUserName" label="操作人" width="120" fixed="left" class-name="table-padding"></el-table-column>
+            <el-table-column prop="createTime" label="操作时间" align="center" min-width="150"></el-table-column>
+            <el-table-column prop="businessTypeName" label="交易类型" align="center" min-width="120"></el-table-column>
+            <el-table-column prop="remarks" label="原因" align="center" min-width="120"></el-table-column>
+            <el-table-column prop="changeScore" label="数量" min-width="125" align="right" fixed="right" class-name="table-padding"></el-table-column>
         </el-table>
         <div class="page_styles">
             <el-pagination
