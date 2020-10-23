@@ -258,7 +258,7 @@ export default {
 // 	zoom: 80%;
 // }
 
-@media screen and (max-width: 1600px) {
+@media screen and (max-width: 1600px) and (max-height: 900px) {
 	// html {
 	// 	//zoom: 0.8;
 
@@ -276,7 +276,10 @@ export default {
 
 	.mall {
 		overflow-y: auto;
-		min-width: 1850px;
+		min-width: 1366px;
+		max-height: 900px;
+		font-size: 12px!important;
+
 	}
 
 	// *::-webkit-scrollbar {
@@ -339,5 +342,157 @@ export default {
 	// ::-webkit-scrollbar-track-piece — 滚动条没有滑块的轨道部分
 	// ::-webkit-scrollbar-corner — 边角，即当同时有垂直滚动条和水平滚动条时交汇的部分
 	// ::-webkit-resizer — 某些元素的corner部分的部分样式(例:textarea的可拖动按钮)
+}
+@media screen and (max-width: 1600px) and (max-height: 900px) {
+	.mall {
+		// $grid-content-h: 500px;
+		// $row-3-grid-content: 40vh;
+		// $row-4-grid-content: 350px;
+
+		// $grid-content-h: 450px;
+		// $row-3-grid-content: 250px;
+		$row-4-grid-content: 220px;
+		$grid-content-h: 370px;
+		$row-3-grid-content: 20vh;
+		// $row-4-grid-content: 25vh;
+		$grid-map-h: calc(370px - 150px);
+		width: 100%;
+		height: 100%;
+		overflow-y: scroll;
+		background: #000b23;
+
+		.row-2,
+		.row-3 {
+			// margin: 20px 35px;
+			margin: 14px;
+		}
+
+		.row-4 {
+			// margin: 20px 35px 0 35px;
+			margin: 14px 14px 0 14px;
+		}
+
+		.row-3 {
+			height: $row-3-grid-content;
+
+			.el-col {
+				height: 100%;
+			}
+
+			min-height: 200px;
+		}
+
+		.row-4 {
+			height: $row-4-grid-content;
+
+			.el-col {
+				height: 100%;
+			}
+		}
+		.grid-content,
+		.row-3-grid-content,
+		.row-4-grid-content {
+			// height: $row-3-grid-content;
+			height: 100%;
+			background: rgba(71, 225, 255, 0.02);
+			box-shadow: 0px 1px 20px 0px rgba(71, 225, 255, 0.1);
+			border: 1px solid rgba(71, 225, 255, 0.15);
+		}
+
+		.grid-content {
+			height: $grid-content-h;
+			.grid-title-end {
+				margin: 8px 8px 0 0;
+				height: 40px;
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+				span {
+					font-size: 14px;
+					font-weight: 400;
+					color: rgba(255, 255, 255, 1);
+					span {
+						color: #ffe14b;
+					}
+				}
+			}
+		}
+
+		.middle-grid-margin {
+			// margin: 0 10px;
+			margin: 0 20px;
+		}
+
+		.grid-map {
+			height: $grid-map-h;
+		}
+
+		.flex-column {
+			display: flex;
+			flex-direction: column;
+
+			.item-four-section {
+				height: $grid-content-h/2;
+			}
+
+			.item {
+				flex: 1;
+			}
+
+			.item-start {
+				flex: 190;
+			}
+
+			.item-end {
+				flex: 310;
+			}
+
+			.item-title {
+				height: 50px;
+			}
+
+			.item-content {
+				height: 100%;
+				margin: 0 5px;
+
+				.v-el-col {
+					height: 100%;
+				}
+			}
+		}
+
+		.flex-box {
+			// box-sizing: border-box;
+			// margin: 0 10px;
+
+			position: relative;
+			// width: 100%;
+			height: 100%;
+			.title {
+				width: 100%;
+				height: 43px;
+				// background: #29f0bf;
+			}
+			.content {
+				width: 100%;
+				position: absolute;
+				top: 43px;
+				bottom: 0px;
+				left: 0px;
+				right: 0px;
+				// margin-left: 8px;
+				// background: #f09529;
+
+				.item-content {
+					height: 100%;
+					margin: 0 8px;
+					overflow: hidden;
+					.v-el-col {
+						height: 100%;
+					}
+				}
+			}
+		}
+	}
 }
 </style>

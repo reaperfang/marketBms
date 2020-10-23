@@ -56,12 +56,15 @@ export default {
 					axisLine: {
 						lineStyle: {
 							color: "rgba(255,255,255,0.8)"
-						}
+						},
+
 					},
 					axisLabel: {
 						interval: 0,
-						rotate: 35
-					}
+						rotate: 35,
+						show: true,
+					},
+
 				},
 				yAxis: {
 					splitLine: {
@@ -73,7 +76,7 @@ export default {
 						lineStyle: {
 							color: "rgba(255,255,255,0.8)"
 						},
-						show: false
+						show: false,
 					}
 				},
 				tooltip: {
