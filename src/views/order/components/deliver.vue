@@ -700,7 +700,7 @@ export default {
                 this.$router.push('/set/recharge')
             })
           } else {
-            this.$message.error(error);
+            this.$message.error(error.msg);
           }
           this.sending = false
         });

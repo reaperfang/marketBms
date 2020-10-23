@@ -135,16 +135,14 @@
                 :data="selectedList"
                 style="width: 100%"
                 ref="selectedTable"
-                border
-                :header-cell-style="{color:'#655EFF'}"
                 :default-sort="{prop: 'date', order: 'descending'}"
             >
                 <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
-                <el-table-column prop="goodsInfo.name" label="商品名称"></el-table-column>
-                <el-table-column prop="goodsInfo.specs" label="规格" width="300"></el-table-column>
-                <el-table-column prop="goodsInfo.salePrice" label="商品价格"></el-table-column>
-                <el-table-column prop="goodsInfo.stock" label="商品库存"></el-table-column>
-                <el-table-column label="操作" width="80">
+                <el-table-column prop="goodsInfo.name" label="商品名称" width="150" fixed="left" class-name="table-padding"></el-table-column>
+                <el-table-column prop="goodsInfo.specs" label="规格" min-width="120" align="center"></el-table-column>
+                <el-table-column prop="goodsInfo.salePrice" label="商品价格" min-width="120" align="right"></el-table-column>
+                <el-table-column prop="goodsInfo.stock" label="商品库存" min-width="100" align="right"></el-table-column>
+                <el-table-column label="操作" width="100" align="center" fixed="right" class-name="table-padding">
                   <template slot-scope="scope">
                       <span class="edit_span pointer" @click="deleteRow(scope.row)">删除</span>
                   </template>
