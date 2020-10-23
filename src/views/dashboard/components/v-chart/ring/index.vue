@@ -50,7 +50,7 @@ export default {
 				// },
 				//radius: [60, 70],
 				radius: [50, 60],
-				offsetY: screen.width > 1600 ? 90 : 70,
+				offsetY: screen.width > 1600 ? 90 : 75,
 				labelLine: {
 					normal: {
 						length: 5,

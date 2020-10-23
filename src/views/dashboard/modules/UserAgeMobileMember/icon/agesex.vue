@@ -117,7 +117,7 @@ export default {
 
 @media screen and(max-width: 1600px){
 	.icon-agesex {
-		margin-top: 32px;
+		margin-top: 34px;
 		.top {
 			img {
 				width: 10px;
@@ -135,7 +135,7 @@ export default {
 
 @media screen and(max-width: 1440px){
 	.icon-agesex {
-		margin-top: 30px;
+		margin-top: 35px;
 		.top {
 			img {
 				width: 10px;
