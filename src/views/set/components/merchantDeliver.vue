@@ -470,7 +470,7 @@ export default {
   },
 
   created() {
-    this._formatDecimals = debounce(this.formatDecimals, 500)
+    this._formatDecimals = debounce(this.formatDecimals, 1000)
     // if (this.shopInfo) {
     //   this.getShopInfo(this.shopInfo)
     // }
