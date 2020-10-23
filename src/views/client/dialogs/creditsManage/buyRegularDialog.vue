@@ -74,7 +74,7 @@
             </span>
         </div>
     </DialogBase>
-    <el-dialog :visible.sync="otherVisible" width="40%" title="选择商品">
+    <el-dialog :visible.sync="otherVisible" width="40%" title="选择商品" v-if="otherVisible">
       <div class="dialog-container">
         <div class="c_container">
           <div class="marB20">
@@ -127,6 +127,7 @@
         title="已选商品"
         :visible.sync="dialogVisible2"
         width="45%"
+        v-if="dialogVisible2"
     >
         <div>
             <span class="clearFont">（清空全部已选商品）</span>
@@ -419,6 +420,9 @@ export default {
     },
     clearList() {
       this.selectedList = [];
+      this.skuList.map(item => {
+        delete item.noselected;
+      })
     },
     submit3() {
       this.$nextTick(() => {
