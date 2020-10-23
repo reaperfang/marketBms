@@ -130,7 +130,7 @@ export default {
       this.selectedList = [];
     },
     getRowKeys(row) {
-      return row.id
+      return row.goodsInfo.id
     },
     handleSizeChange(val) {
       this.getSkuList(1, val);
