@@ -10,7 +10,7 @@
      <el-form-item :label="ruleForm.addType === 1 ? '选择活动' : ''" prop="goods">
         <p class="prop-message" style="margin: 9px 0 8px 0;" v-if="ruleForm.addType === 1">建议最多添加30个活动</p>  
         <div class="goods_list" prop="goods" v-loading="loading">
-          <ul>
+          <ul ref="listScroll">
             <template>
               <template v-for="(item, key) of displayList">
                 <li :key="key" :title="item.activeName">

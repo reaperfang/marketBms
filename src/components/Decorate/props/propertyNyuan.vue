@@ -4,7 +4,7 @@
       <el-form-item label="选择活动" prop="promotions">
         <p class="prop-message" style="margin: 9px 0 8px 0;">建议最多添加30个活动</p>
         <div class="goods_list" v-loading="loading">
-          <ul>
+          <ul ref="listScroll">
             <li v-for="(item, key) of displayList" :key="key" :title="item.name">
               <el-image :src="item.activityPic" alt="" lazy>
                 <div slot="placeholder" class="el-image__lazyloading">
