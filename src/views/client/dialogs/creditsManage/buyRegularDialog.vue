@@ -271,7 +271,10 @@ export default {
           message: '请选择指定产品',
           type: 'warning'
         });
-      } else {
+        return;
+      }
+      if(params.sceneRule.isAllProduct) {
+        params.selectedList = [];
         this._apis.client
           .editCreditRegular(params)
           .then(response => {
@@ -288,7 +291,24 @@ export default {
             this.visible = false;
             console.log(error);
           });
+          return;
       }
+      this._apis.client
+          .editCreditRegular(params)
+          .then(response => {
+            this.btnLoading = false;
+            this.visible = false;
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            });
+            this.$emit('refreshPage')
+          })
+          .catch(error => {
+            this.btnLoading = false;
+            this.visible = false;
+            console.log(error);
+          });
     },
     showDialog(val) {
       if (val == 1) {
@@ -408,14 +428,16 @@ export default {
           ids.push(i.id);
         });
         //this.payAmount = sceneRule.yesDistinguish.payAmount;
-        this._apis.client.getSkuList({status: 1, ids: ids, startIndex:1, pageSize: this.pageSize}).then((response) => {
-          this.selectedList = response.list;
-          this.selectedList.map(item => {
-            item.goodsInfo.specs = item.goodsInfo.specs.replace(/{|}|"|"/g, "");
+        if(ids.length > 0) {
+          this._apis.client.getSkuList({status: 1, ids: ids, startIndex:1, pageSize: this.pageSize}).then((response) => {
+            this.selectedList = response.list;
+            this.selectedList.map(item => {
+              item.goodsInfo.specs = item.goodsInfo.specs.replace(/{|}|"|"/g, "");
+            })
+          }).catch((error) => {
+            console.log(error);
           })
-        }).catch((error) => {
-          console.log(error);
-        })
+        }
       }
     },
     clearList() {
