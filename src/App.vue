@@ -48,6 +48,18 @@ export default{
         })
       }
     });
+    // 监听当storage 中不存在userInfo或者shopInfos时跳转登录页面
+    // const map = {
+    //   userInfo: true,
+    //   shopInfos: true
+    // }
+    // window.addEventListener('storage', (e) => { 
+    //   if (map[e.key] && !e.newValue) {
+    //     localStorage.clear()
+    //     this.$router.replace({ path: '/login' })
+    //   }
+    // })
+  
   },
   methods: {
     isIE() {
