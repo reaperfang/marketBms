@@ -32,7 +32,7 @@
                 :src="item.filePath"
                 class="avatar video-avatar"
                 controls="controls">您的浏览器不支持视频播放</video>  -->
-                <img :src="item.fileCover" class="imgs" v-if="item.fileCover">
+                <img :src="getCover(item)" class="imgs" v-if="item.fileCover">
                 <div v-else class="imgs_cover"></div>
                 <span class="btn" @click="openVideo(item)"></span>
               </div>
@@ -130,6 +130,9 @@ export default {
     this.getList()
   },
   methods: {
+    getCover(item) {
+      return location.protocol + `${process.env.DATA_API}/api-decoration-web/notify/image.do?wxp=`+item.fileCover
+    },
     //获取视频列表
     getList(id, cPage){
       id && (this.groupId = id)
