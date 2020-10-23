@@ -21,7 +21,7 @@ class Ajax {
   // request拦截器
   requestGlobal(config) {
     let shopInfo = store.getters.shopInfos
-    console.log('getShopInfo',store.getters.shopInfos)
+    //console.log('getShopInfo',store.getters.shopInfos)
     let cid = shopInfo && shopInfo.id || ''
     let headers = Object.assign({
           businessId: 1,
