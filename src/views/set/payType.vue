@@ -76,14 +76,18 @@
           </div>
         </div>
         <el-dialog
-          title="提示"
           :visible.sync="dialogVisible"
           width="30%">
+          <div class="content">
+            <p ><img src="../../assets/images/tips.png" alt=""></p>
           <span>未设置支付信息</span>
+          
+          </div>
           <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="_routeTo(pageName)">去设置</el-button>
             <el-button @click="dialogVisible = false">取 消</el-button>
           </span>
+          
         </el-dialog>
     </div>    
 </template>
@@ -170,7 +174,7 @@ export default {
     // 处理关闭微信支付开关逻辑
     handleCloseWechatPay() {
       if (this.isOnlyOpenAkindPayWay) {
-        const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
+        const html = '您需要至少开启一种支付方式<br/><span style="color:#44434B;font-size:12px;">保证买家完成订单付款！</span>'
         this.confirm({
           iconWarning: true, 
           customClass: 'goods-custom',
@@ -219,7 +223,7 @@ export default {
     },
     handleCloseAliPay() {
       if (this.isOnlyOpenAkindPayWay) {
-        const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
+        const html = '您需要至少开启一种支付方式<br/><span style="color:#44434B;font-size:12px;">保证买家完成订单付款！</span>'
         this.confirm({ 
           iconWarning: true, 
           text: html,
@@ -281,7 +285,7 @@ export default {
     },
     handleCloseBalanceOfAccountPay() {
       if (this.isOnlyOpenAkindPayWay) {
-        const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
+        const html = '您需要至少开启一种支付方式<br/><span style="color:#44434B;font-size:12px;">保证买家完成订单付款！</span>'
         this.confirm({ 
           iconWarning: true, 
           text: html,
@@ -337,7 +341,7 @@ export default {
     },
     handleClosePayOnDelivery() {
       if (this.isOnlyOpenAkindPayWay) {
-        const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
+        const html = '您需要至少开启一种支付方式<br/><span style="color:#44434B;font-size:12px;">保证买家完成订单付款！</span>'
         this.confirm({
           iconWarning: true, 
           text: html,
@@ -473,4 +477,29 @@ export default {
 .links:hover{
   color:#655EFF;
 }
+.content{
+  font-size: 14px;
+  display: flex;
+  line-height: 30px;
+  img{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+  }
+  span{
+    display: inline-block;
+    font-weight: 500;
+    padding-left: 15px;
+  }
+}
+/deep/ .el-dialog__header{
+  background: #fff;
+}
+// /deep/ .el-dialog__body{
+//   span{
+//     display: inline-block;
+//     color: #44434b;
+//     font-weight: 500;
+//   }
+// }
 </style>

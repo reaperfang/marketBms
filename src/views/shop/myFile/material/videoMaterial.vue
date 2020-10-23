@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     getCover(item) {
-      return location.protocol + `${process.env.DATA_API}/api-decoration-web/notify/image.do?wxp=`+item.fileCover
+      return location.protocol + `${process.env.DATA_API}/api-decoration-web/notify/image.do?wxp=`+item.fileCover.replace(/\&/g, "%26");
     },
     //获取视频列表
     getList(id, cPage){
