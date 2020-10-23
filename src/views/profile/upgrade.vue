@@ -55,7 +55,7 @@
         <p class="u_title">移动商城</p>
         <div class="u_item">
           <div class="u_t p4">
-            <p>专业版1</p>
+            <p>专业版</p>
             <span class="u_cont">升级请联系当地分司或致电400-660-5555</span>
             <span v-if="status=='1'">有效期至：{{time}}</span>
           </div>
