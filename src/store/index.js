@@ -51,7 +51,7 @@ const store = new Vuex.Store({
   },
   getters,
   strict: debug,
-  // plugins: process.env.NODE_ENV === 'dev' ? [createLogger(), vuexPersisted] : [vuexPersisted]
+  plugins: process.env.NODE_ENV === '' ? [createLogger(), vuexPersisted] : [vuexPersisted]
 
 });
 store._apis = api;
