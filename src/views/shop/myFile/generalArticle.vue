@@ -147,12 +147,13 @@ export default {
     },
     beforeAvatarUpload(file){
       this.loading = true
-
+      console.log(file.name)
       const isJPG = file.type === 'image/jpg';
       // const isJPEG = file.type === 'image/jpeg';
       const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 0.5;
-      if (!(isJPG || isPNG) || !/\.jpg|\.png|\.JPG|\.PNG$/.test(file.name)) {
+      //if (!(isJPG || isPNG) || !/\.jpg|\.png|\.JPG|\.PNG$/.test(file.name)) {
+      if (!/\.jpg|\.png|\.JPG|\.PNG$/.test(file.name)) {
         this.$message.error('上传图片支持jpg,png格式!');
         this.loading = false;
         return false;

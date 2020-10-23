@@ -9,11 +9,12 @@
                 <template v-for="(item, key) of currentComponentData.data.itemList">
                   <el-image
                     v-if="item.url"
-                    :scroll-container="bodyClass ?  '.'+bodyClass : '.phone-body'"
+                    :scroll-container="'.phone-body'"
                     lazy
                     :class="[currentComponentData.data.imgChamfer==1?'':'borderRadius', currentComponentData.data.imgStyle===1?'':'boxShadow']"
                     :key="key"
                     :src="item.url"
+                    style="min-height: 1px;"
                     :style="{'marginBottom':currentComponentData.data.imgMargin+'px'}"
                   ></el-image>
                   <img 
