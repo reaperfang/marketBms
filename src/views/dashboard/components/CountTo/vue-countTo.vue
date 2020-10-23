@@ -449,4 +449,93 @@ export default {
 		}
 	}
 }
+@media screen and (max-width: 1600px) and (max-height: 900px) {
+	.item-amount {
+		height: 90px;
+		.box {
+			height: 100%;
+			margin: 0 20px;
+			display: flex;
+			justify-content: space-around;
+
+			.flex-end {
+				display: flex;
+				align-items: flex-end;
+			}
+
+			.box-item {
+				width: 52px;
+				height: 100%;
+				// display: flex;
+				// align-items: flex-end;
+
+				.box-item-start {
+					font-size: 12px;
+					font-weight: 500;
+					color: #ffffff;
+					height: 25%;
+					text-align: center;
+					padding: 8px 0 0 0;
+				}
+
+				.number-item {
+					// justify-self: end;
+					height: 75%;
+					width: 52px;
+					background: rgba(71, 225, 255, 0.02);
+					box-shadow: 0px 1px 20px 0px rgba(71, 225, 255, 0.1) inset;
+					//margin-left: 10px;
+
+					font-size: 60px;
+					font-weight: bold;
+					color: #ffffff;
+					background: linear-gradient(180deg, #dafffd 0%, #14e1fc 100%);
+					-webkit-background-clip: text;
+					-webkit-text-fill-color: transparent;
+
+					text-align: center;
+
+					// display: flex;
+					// align-self: center;
+					position: relative;
+
+					.line {
+						width: 100%;
+						height: 1px;
+						background: #033d55;
+						display: inline-block;
+						position: absolute;
+						top: 0px;
+						bottom: 0px;
+						left: 0px;
+						right: 0px;
+						margin: auto;
+						z-index: -1111;
+					}
+				}
+			}
+
+			.point {
+				background: url("./icon/point.png") no-repeat;
+				background-size: cover;
+				-webkit-background-size: cover;
+				-o-background-size: cover;
+				background-position: center 0;
+				width: 10px;
+				height: 10px;
+			}
+
+			.semicolon {
+				// width: 10px;
+				background: url("./icon/split.png") no-repeat;
+				background-size: cover;
+				-webkit-background-size: cover;
+				-o-background-size: cover;
+				background-position: center 0;
+				width: 10px;
+				height: 18px;
+			}
+		}
+	}
+}
 </style>

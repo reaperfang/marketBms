@@ -163,6 +163,13 @@ export default {
     },
     //推出登录
     logout() {
+      const shopInfos = localStorage.getItem('shopInfos');
+      const userInfo = localStorage.getItem('userInfo');
+      const token = this.$store.getters.token
+      if (!shopInfos || !userInfo || !token) {
+        this.$router.replace({ path: '/login' })
+        return false
+      }
       this.$store.dispatch("LogOut").then(() => {
         console.log("退出");
         location.reload(); // In order to re-instantiate the vue-router object to avoid bugs

@@ -79,4 +79,30 @@ export default {
 
 	// background: yellow;
 }
+
+@media screen and(max-width: 1600px){
+	.icon-user {
+		margin-top: 50px;
+		.end {
+			margin-top: -2px;
+		}
+	}
+}
+
+@media screen and(max-width: 1440px){
+	.icon-user {
+		margin-top: 48px;
+		.start {
+			font-size: 12px;
+			transform: scale(0.83);
+			margin-top: 10px;
+		}
+		.end {
+			font-size: 17px;
+			line-height: 24px;
+			margin-top: 0;
+		}
+	}
+}
+
 </style>

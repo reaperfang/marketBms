@@ -23,6 +23,15 @@ function hasPermission(msfList, route) {
 const whiteList = ['/login', '/auth-redirect','/datashop']// no redirect whitelist
 
 let flag = 0
+function isLogin() {
+  const shopInfos = localStorage.getItem('shopInfos');
+  const userInfo = localStorage.getItem('userInfo');
+  const token = store.getters.token
+  if (!shopInfos || !userInfo || !token) {
+    return false
+  }
+  return true
+}
 router.beforeEach((to, from, next) => {
   console.log('enter: beforeEach')
   NProgress.start() // start progress bar
