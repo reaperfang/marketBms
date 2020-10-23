@@ -50,7 +50,7 @@ export default {
 				// },
 				//radius: [60, 70],
 				radius: [50, 60],
-				offsetY: screen.width == 1440 ? 80 : 90,
+				offsetY: screen.width > 1600 ? 90 : 70,
 				labelLine: {
 					normal: {
 						length: 5,
@@ -150,14 +150,14 @@ export default {
 	height: 100%;
 	position: relative;
 }
-@media screen and (max-width: 1440px) and (max-height: 900px){
+/* @media screen and (max-width: 1440px) and (max-height: 900px){
 	.v-chart-ring /deep/ canvas{
 		top: -17px!important;
 	}
-}
-@media screen and (max-width: 1600px) and (max-height: 900px){
+} */
+/* @media screen and (max-width: 1600px) and (max-height: 900px){
 	.v-chart-ring /deep/ canvas{
 		top: -17px!important;
 	}
-}
+} */
 </style>
