@@ -15,8 +15,8 @@ import getters from './getters'
 import api from '@/api';
 // import dashboard from "./modules/dashboard";
 
-//import createLogger from "@/plugins/logger";
-//import createPersistedState from "vuex-persistedstate";
+import createLogger from "@/plugins/logger";
+import createPersistedState from "vuex-persistedstate";
 const debug = process.env.NODE_ENV !== "prod";
 /*
 *   自动注册modules
@@ -33,16 +33,16 @@ let modules = (m => {
 })(require.context('./modules', false, /.*\.js/))
 
 
-// const vuexPersisted = new createPersistedState({
-//   key: "myVuex",
-//   storage: window.localStorage,
-//   reducer: state => ({
-//     dashboard: {
-//       // realtimeuser: state.dashboard.realtimeuser,
-//       highlight:state.dashboard.highlight
-//     }
-//   })
-// });
+const vuexPersisted = new createPersistedState({
+  key: "myVuex",
+  storage: window.localStorage,
+  reducer: state => ({
+    dashboard: {
+      // realtimeuser: state.dashboard.realtimeuser,
+      highlight:state.dashboard.highlight
+    }
+  })
+});
 
 Vue.use(Vuex)
 
