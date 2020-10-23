@@ -8,9 +8,9 @@
     </el-tabs>
     <div v-if="loading && currentTab === 'shopMainDefault'" class="loading_wrapper" v-calcHeight="160" v-loading="loading"></div>
     <template v-if="!loading">
-      <transition name="fade" :duration="{ enter: 100, leave: 100 }">
+      <!-- <transition name="fade" :duration="{ enter: 10, leave: 10 }"> -->
         <component :is="currentTab" :decorateData="decorateData" :webPageStatus="webPageStatus" :statusLoading="statusLoading"></component>
-      </transition>
+      <!-- </transition> -->
     </template>
   </div>
 </template>
