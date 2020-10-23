@@ -80,9 +80,18 @@ export default {
 	// background: yellow;
 }
 
+@media screen and(max-width: 1600px){
+	.icon-user {
+		margin-top: 50px;
+		.end {
+			margin-top: -2px;
+		}
+	}
+}
+
 @media screen and(max-width: 1440px){
 	.icon-user {
-		margin-top: 37px;
+		margin-top: 48px;
 		.start {
 			font-size: 12px;
 			transform: scale(0.83);
@@ -95,4 +104,5 @@ export default {
 		}
 	}
 }
+
 </style>

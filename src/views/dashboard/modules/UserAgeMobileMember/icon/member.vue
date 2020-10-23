@@ -76,9 +76,18 @@ export default {
 	// background: yellow;
 }
 
+@media screen and(max-width: 1600px){
+	.icon-member {
+		margin-top: 50px;
+		.end {
+			margin-top: -2px;
+		}
+	}
+}
+
 @media screen and(max-width: 1440px){
 	.icon-member {
-		margin-top: 37px;
+		margin-top: 48px;
 		.start {
 			font-size: 12px;
 			transform: scale(0.83);
