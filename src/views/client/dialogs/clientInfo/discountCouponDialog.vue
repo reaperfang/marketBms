@@ -20,10 +20,10 @@
               style="width: 100%"
               :default-sort="{prop: 'date', order: 'descending'}"
             >
-            <el-table-column prop="name" label="优惠券名称"></el-table-column>
-            <el-table-column prop="receiveType" label="领取方式"></el-table-column>
-            <el-table-column prop="receiveTime" label="获取时间"></el-table-column>
-            <el-table-column prop="usedType" label="状态"></el-table-column>
+            <el-table-column prop="name" label="优惠券名称" width="120" fixed="left" class-name="table-padding"></el-table-column>
+            <el-table-column prop="receiveType" label="领取方式" align="center" min-width="120"></el-table-column>
+            <el-table-column prop="receiveTime" label="获取时间" align="center" min-width="150"></el-table-column>
+            <el-table-column prop="usedType" label="状态" min-width="125" align="center" fixed="right" class-name="table-padding"></el-table-column>
           </el-table>
           </div>
         </el-tab-pane>
@@ -43,10 +43,10 @@
             style="width: 100%"
             :default-sort="{prop: 'date', order: 'descending'}"
           >
-            <el-table-column prop="name" label="优惠券名称"></el-table-column>
-            <el-table-column prop="receiveType" label="领取方式"></el-table-column>
-            <el-table-column prop="receiveTime" label="获取时间"></el-table-column>
-            <el-table-column prop="usedType" label="状态"></el-table-column>
+            <el-table-column prop="name" label="优惠券名称" width="120" fixed="left" class-name="table-padding"></el-table-column>
+            <el-table-column prop="receiveType" label="领取方式" align="center" min-width="120"></el-table-column>
+            <el-table-column prop="receiveTime" label="获取时间" align="center" min-width="150"></el-table-column>
+            <el-table-column prop="usedType" label="状态" min-width="125" align="center" fixed="right" class-name="table-padding"></el-table-column>
           </el-table>
         </el-tab-pane>
       </el-tabs>

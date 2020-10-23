@@ -20,15 +20,14 @@
         :row-key="getRowKeys"
         style="width: 100%"
         ref="skuTable"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort="{prop: 'date', order: 'descending'}"
       >
-        <el-table-column type="selection" prop="choose" label="选择" :reserve-selection="true" :selectable="selectable"></el-table-column>
+        <el-table-column type="selection" prop="choose" label="选择" :reserve-selection="true" :selectable="selectable" width="34"></el-table-column>
         <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
-        <el-table-column prop="goodsInfo.name" label="商品名称"></el-table-column>
-        <el-table-column prop="goodsInfo.specs" label="规格"></el-table-column>
-        <el-table-column prop="goodsInfo.salePrice" label="商品价格"></el-table-column>
-        <el-table-column prop="goodsInfo.stock" label="商品库存"></el-table-column>
+        <el-table-column prop="goodsInfo.name" label="商品名称" width="150" fixed="left" class-name="table-padding"></el-table-column>
+        <el-table-column prop="goodsInfo.specs" label="规格" align="center" min-width="120"></el-table-column>
+        <el-table-column prop="goodsInfo.salePrice" label="商品价格" align="right" min-width="120"></el-table-column>
+        <el-table-column prop="goodsInfo.stock" label="商品库存" min-width="120" align="right" fixed="right" class-name="table-padding"></el-table-column>
       </el-table>
       <div class="page_styles">
         <el-pagination
