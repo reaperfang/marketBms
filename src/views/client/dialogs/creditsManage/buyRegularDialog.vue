@@ -216,7 +216,7 @@ export default {
       this[ele] = val;
     },
     getRowKeys(row) {
-      return row.id
+      return row.goodsInfo.id
     },
     handelSelect(val,row) {
       this.selections.push(row);
