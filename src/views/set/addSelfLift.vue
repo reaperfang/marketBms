@@ -168,7 +168,7 @@ export default {
     };
     // 验证手机号
     const validateMobile = (rule, value, callback) => {
-      let mobile = /^[1][3578][0-9]{9}$/
+      let mobile = /^[1][345678][0-9]{9}$/
       if (!mobile.test(value)) {
         return callback(new Error("格式错误，请重新输入正确的手机号码"));
       } else {
