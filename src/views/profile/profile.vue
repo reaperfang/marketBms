@@ -13,19 +13,19 @@
           <div class="p_p_l">
             <span>
               <div>支付金额</div>
-              <div>{{profileData.payMoneyAmount ? '¥'+ profileData.payMoneyAmount : '--' }}</div>
+              <div>{{dadiData.paid_order_am_rt | tofix2}}</div>
             </span>
             <span>
               <div>支付订单数</div>
-              <div>{{profileData.payNum ? profileData.payNum : '--' }}</div>
+              <div>{{dadiData.paid_order_cq_rt}}</div>
             </span>
             <span>
               <div>支付用户数</div>
-              <div>{{profileData.customPayerNum ? profileData.customPayerNum : '--' }}</div>
+              <div>{{dadiData.paid_order_nu_rt}}</div>
             </span>
             <span>
               <div>客单价</div>
-              <div>{{profileData.averageMoney ? '¥'+ profileData.averageMoney : '--' }}</div>
+              <div>{{dadiData.atv_rt | tofix2}}</div>
             </span>
           </div>
           <div class="p_p_r">
@@ -246,7 +246,7 @@
             <span class="title1">产品动态</span>
           </span>
           <el-link
-            :href="zxLink+'/cms?type=service&dept=aiyouyi.cn&cat=shushangdongtai'"
+            :href="zxLink+`/cms?type=news&dept=${domain}&cat=shushangdongtai`"
             target="_blank"
             :underline="false"
           >
@@ -271,7 +271,7 @@
             <span class="title1">帮助中心</span>
           </span>
           <el-link
-            :href="zxLink+'/cms?type=service&dept=aiyouyi.cn&cat=yidongshangcheng'"
+            :href="zxLink+`/cms?type=service&dept=${domain}&cat=yidongshangcheng`"
             target="_blank"
             :underline="false"
           >
@@ -324,10 +324,24 @@ export default {
       isGetGZstatus:true,//是否获取到公众号状态数据
       currentStep: 4, // 智能开店：当前步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
       stepStatus: 1, // 智能开店： 步骤状态 0 未完成 1 已完成
+      domain: process.env.BASE_DOMAIN,
+      dadiData: {}  //来自大地的概况数据
 
     };
   },
-
+  filters: {
+    tofix2: function(num) {
+      var  dd=1;  
+      var  tempnum;  
+      for(var i=0;i<2;i++){
+          dd*=10;  
+      }  
+      tempnum = (num?num:0) *dd;
+      tempnum = Math.round(tempnum); 
+      var endNum = Number(tempnum/dd).toFixed(2)
+      return '￥' + endNum
+    },
+  },
   watch:{
     cid(newValue,oldValue){
       console.log('????')
@@ -349,6 +363,7 @@ export default {
       this.getIntelligent();
       this.getQrcode();
       this.getOverviewDetails();
+      this.getDadiData();
       this.getOerviewRemind();
       this.getOverviewSelling();
       this.getProductNews();
@@ -365,6 +380,7 @@ export default {
     this.getIntelligent();
     this.getQrcode();
     this.getOverviewDetails();
+    this.getDadiData();
     this.getOerviewRemind();
     this.getOverviewSelling();
     this.getProductNews();
@@ -636,6 +652,16 @@ export default {
           console.error(error);
         });
     },
+
+    /* 获取大地的实时概况数据 */
+    getDadiData() {
+      this._apis.realSurvey.dataView({invokeType:'mzw'}).then(response => {
+        this.dadiData = JSON.parse(response) || {}
+        console.log(this.dadiData);
+      }).catch(error => {
+        this.$message.error(error);
+      });
+    }
 
   }
 };

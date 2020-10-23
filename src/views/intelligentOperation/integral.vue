@@ -14,7 +14,7 @@
                         </el-radio-group>
                         <el-date-picker
                         v-if="form.timeType == 4"
-                        v-model="daterange"
+                        v-model="form.daterange"
                         type="datetimerange"
                         align="right"
                         range-separator="至"
@@ -67,6 +67,7 @@
                 @currentChange="currentChange"
                 :pageSize="10"
                 :listObj="listObj"
+                :nowPage="nowPage"
                 :totalCount="listObj.totalSize">
             </ma3Table>
         </div>
@@ -100,6 +101,7 @@ export default {
             form: {
                 startTime:null,
                 endTime:null,
+                daterange:null,
                 scorePaymentCountRange:null,
                 memberType:null,
                 timeType:1,
@@ -107,6 +109,7 @@ export default {
                 loads:false,
                 pageSize:10
             },
+            nowPage: 1,
             memberCount:0, //会员数
             ratio:0, //会员占比
             listObj:{}, //表格数据
@@ -144,11 +147,11 @@ export default {
             this.day = item;
         },
         getData() {
-            if(this.daterange){
+            if(this.form.daterange){
                 this.form.timeType = 4;
                 Object.assign(this.form,{
-                    startTime:this.daterange[0],
-                    endTime:this.daterange[1]
+                    startTime:this.form.daterange[0],
+                    endTime:this.form.daterange[1]
                 });
             }else{
                 Object.assign(this.form,{
@@ -165,8 +168,13 @@ export default {
         //
         //查询
         goSearch(num){
+            if(this.form.timeType == 4 && !this.form.daterange){
+                this.$message.warning('请选择查询时间')
+                return
+            }
             this.form.loads = true
             this.form.startIndex = num || this.form.startIndex
+            this.nowPage = this.form.startIndex;
             this._apis.data.integralconsumption(this.form).then(res => {
                 this.memberCount = res.memberCount;
                 this.ratio = res.ratio;
@@ -185,6 +193,7 @@ export default {
                     }
                 }
             }).catch(error => {
+                this.form.loads = false
                 this.$message.error(error);
             });
         },

@@ -19,13 +19,23 @@ function hasPermission(msfList, route) {
   }
 }
 
-const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
+const whiteList = ['/login', '/auth-redirect','/datashop']// no redirect whitelist
 
 let flag = 0
+function isLogin() {
+  const shopInfos = localStorage.getItem('shopInfos');
+  const userInfo = localStorage.getItem('userInfo');
+  const token = store.getters.token
+  if (!shopInfos || !userInfo || !token) {
+    return false
+  }
+  return true
+}
 router.beforeEach((to, from, next) => {
+  console.log('go router')
   NProgress.start() // start progress bar
   //  if (true) { // determine if there has token
-  if(store.getters.token){
+  if(isLogin()){
     const localMsfList = localStorage.getItem('shopInfos');
     let msfList = [];
     let enable = 0

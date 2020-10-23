@@ -14,7 +14,7 @@
                         </el-radio-group>
                         <div class="input_wrap" v-if="form.timeType == 4">
                         <el-date-picker
-                            v-model="dateRange"
+                            v-model="form.daterange"
                             type="datetimerange"
                             align="right"
                             range-separator="至"
@@ -75,7 +75,7 @@
                     </el-tooltip>
                 </div>
             </div>
-            <ma2Table class="marT20s" :listObj="listObj" @getRightsProtection="getRightsProtection"></ma2Table>
+            <ma2Table class="marT20s" :listObj="listObj" @getRightsProtection="getRightsProtection" :nowPage="nowPage"></ma2Table>
         </div>
         <div v-if="listObj.members != undefined && note" >
             <h3 class="marT20s">运营建议:</h3>
@@ -101,6 +101,7 @@ export default {
                 ProtectionReason: null,
                 endTime:'',
                 startTime:'',
+                daterange:null,
                 timeType:1,
                 memberType:null,
                 pageSize:10,
@@ -110,6 +111,7 @@ export default {
             listObj:{
                
             },
+            nowPage: 1,
             pickerMinDate: '',
             dateRange: [],
             reasons:[],
@@ -136,6 +138,11 @@ export default {
         },
         // 获取维权全部数据
         getRightsProtection(idx,pageS){
+            if(this.form.timeType == 4 && !this.form.daterange){
+                this.$message.warning('请选择查询时间')
+                return
+            }
+            this.nowPage = idx;
             this.form.loads = true
             this.note = ''
             this.form.pageSize = pageS;
@@ -147,6 +154,9 @@ export default {
                 this.listObj = response;
                 this.form.loads = false
                 this.note = this.form.ProtectionReason
+            }).catch(error => {
+                this.form.loads = false;
+                this.$message.error(error);
             })
         },
         changeTime(val){

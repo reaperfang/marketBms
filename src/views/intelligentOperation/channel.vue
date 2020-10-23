@@ -13,7 +13,7 @@
                             </el-radio-group>
                             <div class="input_wrap" v-if="form.timeType == 4">
                                 <el-date-picker
-                                    v-model="dateRange"
+                                    v-model="form.daterange"
                                     type="datetimerange"
                                     align="right"
                                     range-separator="至"
@@ -73,6 +73,7 @@
                     @sizeChange="sizeChange"
                     @currentChange="currentChange"
                     @changeSort="changeSort"
+                    :nowPage="nowPage"
                 >
                 </channel-table>               
             </div>
@@ -104,6 +105,7 @@ export default {
             form: {
                 startTime:null,
                 endTime:null,
+                daterange: null,
                 channel:null,
                 changeRatioRange:null,
                 timeType:1,
@@ -115,6 +117,7 @@ export default {
             listObj:{
                 list:[]
             },
+            nowPage: 1,
             totalCount:0,//总页数
             pickerMinDate: '',
             dateRange: [],
@@ -137,8 +140,13 @@ export default {
         },
         //查询
         goSearch(num){
+            if(this.form.timeType == 4 && !this.form.daterange){
+                this.$message.warning('请选择查询时间')
+                return
+            }
             this.form.loads = true
             this.form.startIndex = num || this.form.startIndex
+            this.nowPage = this.form.startIndex;
             this._apis.data.channelConversion(this.form).then(response => {
                 this.listObj = response;
                 this.totalNum = response.totalSize || 0;
@@ -154,6 +162,7 @@ export default {
                     }
                 }
             }).catch(error => {
+                this.form.loads = false;
                 this.$message.error(error);
             });
         },

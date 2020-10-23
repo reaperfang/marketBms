@@ -142,14 +142,14 @@ export default {
     // },
     onHelp() {
       let link =
-          "/cms/search?type=service&dept=aiyouyi.cn&cat=yidongshangcheng",
+          `/cms/search?type=service&dept=${process.env.BASE_DOMAIN}&cat=yidongshangcheng`,
         tag =
           document.querySelector(".sidebar-lefter .active span") ||
           document.querySelector(".sidebar-lefter .active a");
       if (tag) {
         const text = tag.innerText;
         if (text && text == "概况") {
-          this.helpLink = "/cms?type=service&dept=aiyouyi.cn&cat=yidongshangcheng";
+          this.helpLink = `/cms?type=service&dept=${process.env.BASE_DOMAIN}&cat=yidongshangcheng`;
           return;
         }
         link += `&wd=${text}`;
@@ -163,6 +163,13 @@ export default {
     },
     //推出登录
     logout() {
+      const shopInfos = localStorage.getItem('shopInfos');
+      const userInfo = localStorage.getItem('userInfo');
+      const token = this.$store.getters.token
+      if (!shopInfos || !userInfo || !token) {
+        this.$router.replace({ path: '/login' })
+        return false
+      }
       this.$store.dispatch("LogOut").then(() => {
         console.log("退出");
         location.reload(); // In order to re-instantiate the vue-router object to avoid bugs
@@ -196,7 +203,7 @@ export default {
     //帮助中心搜索
     onSearch() {
       window.open(
-        `${this.zxLink}/cms/search?type=service&wd=${this.searchName}&dept=aiyouyi.cn&cat=yidongshangcheng`
+        `${this.zxLink}/cms/search?type=service&wd=${this.searchName}&dept=${process.env.BASE_DOMAIN}&cat=yidongshangcheng`
       );
     },
     //返回到上一个页面
