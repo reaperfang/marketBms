@@ -37,8 +37,8 @@ export default {
 					borderRadius: 4,
 					color: "#FFFFFF",
 					verticalAlign: "center",
-					offset: [15, 32, 0, 0],
-					fontSize: 12,
+					offset: screen.width<1920 ? [-10, 32, 0, 0] : [15, 32, 0, 0],
+					fontSize: screen.width<1920 ? 10: 12,
 					//   padding: [3, 10, 5, 10],
 					formatter: function(d) {
 						if (d.value) {
@@ -57,8 +57,8 @@ export default {
 					borderRadius: 4,
 					color: "#FFFFFF",
 					verticalAlign: "center",
-					offset: [50, 0, 0, 0],
-					fontSize: 12,
+					offset: [screen.width==1600 ?45 : 50, 0, 0, 0],
+					fontSize: screen.width<1920 ? 10: 12,
 					//   padding: [3, 10, 5, 10],
 					formatter: function(d) {
 						if (d.value) {
@@ -98,7 +98,7 @@ export default {
 					// left: "4%",
 					right: 17,
 					height: "135",
-					bottom: "-2"
+					bottom: screen.width > 1600 ? "-2" : "-15"
 				},
 				xAxis: [
 					{
@@ -132,7 +132,7 @@ export default {
 							borderWidth: 0
 						},
 
-						top: 25,
+						top: screen.width > 1600 ? 25 : 10,
 						// bottom:30,
 						type: "funnel",
 						height: "150",
@@ -226,7 +226,7 @@ export default {
 						//-999900
 						data: [
 							{
-								value: 361,
+								value: screen.width == 1440 ? 354 : 361,
 								itemValue:
 									youcejiantouData.order_c_uv_7dco == -999900
 										? "0%"
@@ -234,7 +234,7 @@ export default {
 										  "%",
 								show: true,
 								label: markLineSetting,
-								name: "下单转化率"
+								name: "下单转化率",
 							},
 							{
 								value: 348,
@@ -243,7 +243,7 @@ export default {
 								label: markLineSetting,
 								name: "下单支付转化率"
 							}
-						]
+						],
 					},
 
 					// left
@@ -268,9 +268,9 @@ export default {
 										? "0%"
 										: youcejiantouData.paid_c_uv_7dco + "%",
 								label: markLineSettingleft,
-								name: "支付转化率"
+								name: "支付转化率",
 							}
-						]
+						],
 					}
 				]
 			};

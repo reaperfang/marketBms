@@ -9,11 +9,11 @@
         style="width: 100%"
         :default-sort="{prop: 'date', order: 'descending'}"
       >
-        <el-table-column prop="updateUserName" label="操作人" fixed="left" class-name="table-padding"></el-table-column>
-        <el-table-column prop="tradeTime" label="操作时间" align="center"></el-table-column>
-        <el-table-column prop="changeReason" label="交易类型" align="center"></el-table-column>
-        <el-table-column prop="remark" label="原因" align="center"></el-table-column>
-        <el-table-column prop="changeAmount" label="数量" align="center" class-name="table-padding"></el-table-column>
+        <el-table-column prop="updateUserName" label="操作人" width="120" fixed="left" class-name="table-padding"></el-table-column>
+        <el-table-column prop="tradeTime" label="操作时间" align="center" min-width="150"></el-table-column>
+        <el-table-column prop="changeReason" label="交易类型" align="center" min-width="120"></el-table-column>
+        <el-table-column prop="remark" label="原因" align="center" min-width="120"></el-table-column>
+        <el-table-column prop="changeAmount" label="数量" min-width="125" align="right" fixed="right" class-name="table-padding"></el-table-column>
       </el-table>
       <div class="page_styles">
         <el-pagination

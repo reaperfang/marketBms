@@ -1,6 +1,20 @@
 <template>
 	<div class="icon-agesex">
-		<div class="start">
+		<div class="top">
+			<img
+				src="../../../../../assets/images/dashboard/person/men.png"
+				alt=""
+			/>
+			<span>{{ sexData && sexData.gender }}%</span>
+		</div>
+		<div class="top">
+			<img
+				src="../../../../../assets/images/dashboard/person/women.png"
+				alt=""
+			/>
+			<span>{{ sexData && sexData.female }}%</span>
+		</div>
+		<!--<div class="start">
 			<img
 				src="../../../../../assets/images/dashboard/person/men.png"
 				alt=""
@@ -13,7 +27,7 @@
 		<div class="end">
 			<span>{{ sexData && sexData.gender }}%</span>
 			<span>{{ sexData && sexData.female }}%</span>
-		</div>
+		</div>-->
 	</div>
 </template>
 
@@ -57,7 +71,7 @@ export default {
 .icon-agesex {
 	position: absolute;
 	margin: auto;
-	top: 0;
+	top: 10px;
 	left: 0;
 	bottom: 0;
 	right: 0;
@@ -65,11 +79,23 @@ export default {
 	width: 100px;
 	text-align: center;
 	img {
-		height: 40px;
+		height: 24px;
 		margin: 0 5px;
 	}
-
-	.end {
+	.top{
+		color: #FFFFFF;
+		display: flex;
+		justify-content: center;
+		margin-top: 5px;
+		span {
+			font-size: 12px;
+			font-weight: 400;
+			color: #ffffff;
+			line-height: 17px;
+			margin: 5px 3px 0 3px;
+		}
+	}
+	/*.end {
 		display: flex;
 		span {
 			font-size: 12px;
@@ -86,6 +112,43 @@ export default {
 		&:nth-child(2) {
 			padding-left: 5px;
 		}
+	}*/
+}
+
+@media screen and(max-width: 1600px){
+	.icon-agesex {
+		margin-top: 34px;
+		.top {
+			img {
+				width: 10px;
+				height: 20px;
+				margin-left: 10px;
+			}
+			>span {
+				font-size: 12px;
+				transform: scale(0.92);
+				margin-left: -5px;
+			}
+		}
 	}
 }
+
+@media screen and(max-width: 1440px){
+	.icon-agesex {
+		margin-top: 35px;
+		.top {
+			img {
+				width: 10px;
+				height: 20px;
+				margin-left: 10px;
+			}
+			>span {
+				font-size: 12px;
+				transform: scale(0.83);
+				margin-left: -7px;
+			}
+		}
+	}
+}
+
 </style>

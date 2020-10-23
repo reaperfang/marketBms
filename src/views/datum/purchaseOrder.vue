@@ -208,18 +208,21 @@ export default {
                             break;
                     }
                 });
-                this.paymentData.forEach(e => {
-                    switch (e.id){
-                        case '01': e.num = response.payerNum
-                            break;
-                        case '02': e.num = response.orderPayNum
-                            break;
-                        case '03': e.num = response.payMoneyAmount
-                            break;
-                        case '04': e.num = response.orderPayRate
-                            break;
-                    }
+                this.getDadiData((result) => {
+                    this.paymentData.forEach(e => {
+                        switch (e.id){
+                            case '01': e.num = result.paid_order_nu_rt || 0
+                                break;
+                            case '02': e.num = result.paid_order_cq_rt || 0
+                                break;
+                            case '03': e.num = this.tofix2(result.paid_order_am_rt) || '0.00'
+                                break;
+                            case '04': e.num = response.orderPayRate
+                                break;
+                        }
+                    });
                 });
+                
                 this.orderProbabilityData.forEach(e => {
                     switch (e.id){
                         case '001': e.num = response.shopRepurchaseRate
@@ -236,6 +239,27 @@ export default {
                 this.loading1 = false;
                 this.loading2 = false;
             })
+        },
+
+        /* 获取大地的实时概况数据 */
+        getDadiData(callback) {
+            this._apis.realSurvey.dataView({invokeType:'mzw'}).then(response => {
+                callback && callback(JSON.parse(response) || {})
+            }).catch(error => {
+                this.$message.error(error);
+            });
+        },
+
+        tofix2: function(num) {
+            var  dd=1;  
+            var  tempnum;  
+            for(var i=0;i<2;i++){
+                dd*=10;  
+            }  
+            tempnum = (num?num:0) *dd;
+            tempnum = Math.round(tempnum); 
+            var endNum = Number(tempnum/dd).toFixed(2)
+            return endNum
         },
     },
 }

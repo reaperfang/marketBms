@@ -53,20 +53,25 @@
             >
                 <el-table-column
                     type="selection"
-                    width="55">
+                    width="34">
                 </el-table-column>
                 <el-table-column
                     prop="name"
-                    label="优惠券名称">
+                    label="优惠券名称"
+                    width="150" fixed="left" class-name="table-padding">
                 </el-table-column>
                 <el-table-column
-                    label="优惠方式">
+                    label="优惠方式"
+                    align="center"
+                    min-width="130">
                     <template slot-scope="scope">
                         {{scope.row.useType == 0?`减免${scope.row.useTypeFullcut}元`:`折扣${scope.row.useTypeDiscount}`}}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="使用门槛">
+                    label="使用门槛"
+                    align="center"
+                    min-width="130">
                     <template slot-scope="scope">
                         {{scope.row.useCondition == -1?'无极限':`订单满${scope.row.useCondition}元`}}
                     </template>
@@ -74,12 +79,14 @@
                 <el-table-column
                     prop="ownNum"
                     label="数量"
-                    width="80"
+                    align="right"
+                    min-width="90"
                 >
                 </el-table-column>
                 <el-table-column
                     label="冻结数量"
                     width="150"
+                    align="center" fixed="right" class-name="table-padding"
                     >
                     <template slot-scope="scope">
                         <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.ownNum"></el-input-number>
@@ -117,20 +124,25 @@
             >
                 <el-table-column
                     type="selection"
-                    width="55">
+                    width="34">
                 </el-table-column>
                 <el-table-column
                     prop="name"
-                    label="优惠券名称">
+                    label="优惠券名称"
+                    width="150" fixed="left" class-name="table-padding">
                 </el-table-column>
                 <el-table-column
-                    label="优惠方式">
+                    label="优惠方式"
+                    align="center"
+                    min-width="130">
                     <template slot-scope="scope">
                         {{scope.row.useType == 0?`减免${scope.row.useTypeFullcut}元`:`折扣${scope.row.useTypeDiscount}`}}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="使用门槛">
+                    label="使用门槛"
+                    align="center"
+                    min-width="130">
                     <template slot-scope="scope">
                         {{scope.row.useCondition == -1?'无极限':`订单满${scope.row.useCondition}元`}}
                     </template>
@@ -138,12 +150,14 @@
                 <el-table-column
                     prop="ownNum"
                     label="数量"
-                    width="80"
+                    align="right"
+                    min-width="90"
                 >
                 </el-table-column>
                 <el-table-column
                     label="冻结数量"
                     width="150"
+                    align="center" fixed="right" class-name="table-padding"
                     >
                     <template slot-scope="scope">
                         <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.ownNum"></el-input-number>
@@ -516,10 +530,6 @@ export default {
 <style lang="scss" scoped>
 /deep/ .el-table .cell{
   padding-left: 16px;
-}
-/deep/ .el-table__body-wrapper{
-    overflow: auto;
-    height: 502px;
 }
 /deep/ .el-dialog__header{
     border-radius: 10px 10px 0 0;
