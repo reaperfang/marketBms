@@ -65,7 +65,7 @@
                     <p>用户选择货到付款，您需要自行安排配送和收款。</p>
                     <div class="button-box">
                         <el-button @click="closeOrder">关闭订单</el-button>
-                        <el-button v-if="!authHide" type="primary" @click="$router.push(`/order/deliverGoods?id=${$route.query.id}&_ids=${$route.query._ids}`)">发货</el-button>
+                        <el-button v-if="!authHide" type="primary" @click="sendGoodsHandler">发货</el-button>
                     </div>
                 </div>
             </template>
@@ -84,7 +84,7 @@
                     <p>部分发货</p>
                     <div class="button-box">
                         <!--<el-button @click="closeOrder">关闭订单</el-button>-->
-                        <el-button v-if="!authHide" type="primary" @click="$router.push(`/order/deliverGoods?id=${$route.query.id}&_ids=${$route.query._ids}`)">发货</el-button>
+                        <el-button v-if="!authHide" type="primary" @click="sendGoodsHandler">发货</el-button>
                     </div>
                 </div>
             </template>
@@ -404,7 +404,7 @@
                     <p>待发货</p>
                     <div class="button-box">
                         <el-button @click="closeOrder">关闭订单</el-button>
-                        <el-button v-if="!authHide" type="primary" @click="$router.push(`/order/deliverGoods?id=${$route.query.id}&_ids=${$route.query._ids}`)">发货</el-button>
+                        <el-button v-if="!authHide" type="primary" @click="sendGoodsHandler">发货</el-button>
                     </div>
                 </div>
             </template>
@@ -428,7 +428,7 @@
                     <p>部分发货</p>
                     <div class="button-box">
                         <!--<el-button @click="closeOrder">关闭订单</el-button>-->
-                        <el-button v-if="!authHide" type="primary" @click="$router.push(`/order/deliverGoods?id=${$route.query.id}&_ids=${$route.query._ids}`)">发货</el-button>
+                        <el-button v-if="!authHide" type="primary" @click="sendGoodsHandler">发货</el-button>
                     </div>
                 </div>
             </template>
@@ -572,6 +572,16 @@ export default {
         }
     },
     methods: {
+        sendGoodsHandler() {
+            let _ids = ''
+
+            if(this.$route.query._ids) {
+                _ids = this.$route.query._ids
+            } else {
+                _ids = this.orderSendInfo.id
+            }
+            this.$router.push(`/order/deliverGoods?id=${this.$route.query.id}&_ids=${_ids}`)
+        },
         submit(value) {
             this._apis.order.orderClose({...value, id: this.orderInfo.id}).then((res) => {
                 this.$message.success('关闭成功！');
@@ -597,6 +607,9 @@ export default {
             type: Number | String
         },
         orderInfo: {
+            type: Object
+        },
+        orderSendInfo: {
             type: Object
         }
     },
