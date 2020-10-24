@@ -608,6 +608,9 @@ export default {
         },
         orderInfo: {
             type: Object
+        },
+        orderSendInfo: {
+            type: Object
         }
     },
     components: {

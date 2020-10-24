@@ -13,7 +13,7 @@
                 <span class="member-sn">用户ID：{{orderDetail.orderInfo.memberSn}}</span>
             </div>
         </div>
-        <orderState :orderInfo="orderDetail.orderInfo" :orderState="orderDetail.orderInfo.orderStatus" :payWay="orderDetail.orderInfo.payWay" :closeReaosn="orderDetail.orderInfo.closeReaosn" @orderStatusSuccess="getDetail" class="order-state"></orderState>
+        <orderState :orderInfo="orderDetail.orderInfo" :orderSendInfo="orderDetail.orderSendInfo" :orderState="orderDetail.orderInfo.orderStatus" :payWay="orderDetail.orderInfo.payWay" :closeReaosn="orderDetail.orderInfo.closeReaosn" @orderStatusSuccess="getDetail" class="order-state"></orderState>
         <div class="message">
             <el-tabs v-model="activeName">
                 <el-tab-pane label="订单信息" name="order">
