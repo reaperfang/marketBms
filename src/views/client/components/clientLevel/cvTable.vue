@@ -11,10 +11,14 @@
       >
       <el-table-column
         prop="alias"
+        fixed="left"
+        width="100"
+        class-name="table-padding"
         label="等级排序">
       </el-table-column>
       <el-table-column
         prop="name"
+        align="center"
         label="等级名称">
       </el-table-column>
       <el-table-column
@@ -22,14 +26,17 @@
         label="说明">
       </el-table-column>
       <el-table-column
+        min-width="150"
         prop="receiveConditionsRemarks"
         label="等级条件">
       </el-table-column>
       <el-table-column
         prop="rights"
+        min-width="150"
         label="等级权益">
       </el-table-column>
       <el-table-column
+        min-width="100"
         label="升级奖励">
         <template slot-scope="scope">
           <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[0]:''}}</p>
@@ -38,19 +45,21 @@
           <p>{{scope.row.upgradePackage ? scope.row.upgradePackage.split(',')[3]:''}}</p>
         </template>
       </el-table-column>
-      <el-table-column label="状态">
+      <el-table-column label="状态" align="center">
         <template slot-scope="scope">
             <!-- <el-switch v-model="scope.row.status" @change="handleSwitch(scope.row)" v-permission="['用户', '会员等级', '默认页面', '启用/禁用']"></el-switch> -->
             <span v-if="scope.row.status == 1" v-permission="['用户', '会员等级', '默认页面', '启用/禁用']">启用</span>
             <span v-if="scope.row.status == 0" v-permission="['用户', '会员等级', '默认页面', '启用/禁用']">未启用</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" :width="operationColumnW" fixed="right" header-align="center" class-name="table-padding">
         <template slot-scope="scope">
-            <span class="edit_span" @click="handleOpen(scope.row)" v-if="scope.row.enableShow == true && scope.row.name" v-permission="['用户', '会员等级', '默认页面', '查看']">启用</span>
-            <span class="edit_span" style="color:#FD4C2B; padding-right: 5px; border-right: 1px solid #dadae3;" @click="handleClose(scope.row)" v-if="scope.row.disableShow == true" v-permission="['用户', '会员等级', '默认页面', '查看']">禁用</span>
-            <span class="edit_span" @click="edit(scope.row)" v-if="scope.row.name" v-permission="['用户', '会员等级', '默认页面', '查看']">编辑</span>
-            <span class="edit_span" @click="handleConfig(scope.row)" v-if="!scope.row.name" :style="{color:scope.row.isGray?'#eee':'#655EFF'}" v-permission="['用户', '会员等级', '默认页面', '待配置']">待配置</span>
+          <div class="table-operate"> 
+            <span class="edit_span table-btn" @click="handleOpen(scope.row)" v-if="scope.row.enableShow == true && scope.row.name" v-permission="['用户', '会员等级', '默认页面', '查看']">启用</span>
+            <span class="edit_span table-btn table-warning" style="color:#FD4C2B; padding-right: 5px; border-right: 1px solid #dadae3;" @click="handleClose(scope.row)" v-if="scope.row.disableShow == true" v-permission="['用户', '会员等级', '默认页面', '查看']">禁用</span>
+            <span class="edit_span table-btn" @click="edit(scope.row)" v-if="scope.row.name" v-permission="['用户', '会员等级', '默认页面', '查看']">编辑</span>
+            <span class="edit_span table-btn" @click="handleConfig(scope.row)" v-if="!scope.row.name" :style="{color:scope.row.isGray?'#eee':'#655EFF'}" v-permission="['用户', '会员等级', '默认页面', '待配置']">待配置</span>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -71,7 +80,8 @@ export default {
     return {
       checked: false,
       levelList: [],
-      loading: false
+      loading: false,
+      operationColumnW: 72 //操作列宽度
     };
   },
   computed: {
@@ -96,7 +106,6 @@ export default {
     },
     handleClose(row) {
        this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确认禁用该等级？'
@@ -190,30 +199,19 @@ export default {
   watch: {
     params() {
       this.getLevelsList();
+    },
+    'levelList': {
+        handler(newVal, oldVal) { //计算操作栏宽度
+            this.$nextTick(() => {
+                this.operationColumnW = this.utils.getOperationColumnW();
+            })
+        },
+        deep: true
     }
   }
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .el-table td, /deep/ .el-table th {
-        text-align: center;
-        &:nth-child(1) {
-            text-align: left;
-            padding-left: 20px;
-        }
-        &:nth-child(6) {
-            text-align: left;
-        }
-    }
-/deep/ .el-table td{
-  &:nth-child(6) {
-    text-align: left;
-  }
-  &:nth-child(8) {
-    text-align: left;
-    padding-left: 39px;
-  }
-}
 /deep/ .el-table--small td, .el-table--small th{
   padding: 16px 0;
 }

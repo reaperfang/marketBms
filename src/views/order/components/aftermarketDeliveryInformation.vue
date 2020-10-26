@@ -1,7 +1,7 @@
 <template>
     <div class="aftermarketDeliveryInformation">
         <!-- 普通快递 -->
-        <template v-if="orderAfterSale.deliveryWay == 1 || orderAfterSale.deliveryWay == 4">
+        <template v-if="orderAfterSale.deliveryWay == 1 || orderAfterSale.deliveryWay == 3 || orderAfterSale.deliveryWay == 4">
         <div v-if="orderAfterSale.returnExpressNo" class="delivery-information-header">
             用户退货
         </div>
@@ -361,7 +361,7 @@ export default {
             if(value.memberReceiveGoodsTime) {
                 return '【用户签收】'
             } else if(expressNos) {
-                return '【用户发货】'
+                return '【商户发货】'
             } else {
                 return ''
             }
@@ -431,7 +431,11 @@ export default {
 
             if (this.isTrace == 0) {
                 this.currentDialog = "LogisticsDialog";
-                this.currentData = [];
+                this.currentData = {
+                        traces: [],
+                        deliveryWay:this.orderAfterSale.deliveryWay,
+                        thirdType: this.orderAfterSale.thirdType?this.orderAfterSale.thirdType:''
+                    }
                 this.reject = true;
                 this.expressNo = expressNo
                 this.expressCompanys = this.expressCompanys
@@ -443,7 +447,11 @@ export default {
                 .orderLogistics({ expressNo, id: id, isOrderAfter: 1 })
                 .then(res => {
                     this.currentDialog = "LogisticsDialog";
-                    this.currentData = res.traces || [];
+                    this.currentData = {
+                        traces:res.traces || [],
+                        deliveryWay:this.orderAfterSale.deliveryWay,
+                        thirdType: this.orderAfterSale.thirdType?this.orderAfterSale.thirdType:''
+                    }
                     this.expressCompanys = this.expressCompanys
                     this.dialogVisible = true;
                 })

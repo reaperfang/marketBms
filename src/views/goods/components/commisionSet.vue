@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-top:20px; min-height: 75vh;">
+  <div style="margin-top:20px;">
     <div class="line">
       <div class="line-title">是否参与分销：</div>
       <div class="line-content">

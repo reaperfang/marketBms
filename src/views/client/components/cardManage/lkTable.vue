@@ -10,46 +10,60 @@
       >
       <el-table-column
         prop="name"
+        fixed="left"
+        width="110"
+        class-name="table-padding"
         label="会员卡名称">
       </el-table-column>
       <el-table-column
         prop="enable"
+        align="center"
         label="状态">
       </el-table-column>
       <el-table-column
+        min-width="160"
         prop="cardSn"
+        align="center"
         label="卡号">
       </el-table-column>
       <el-table-column
+        min-width="100"
         prop="memberSn"
+        align="center"
         label="用户ID"
       >
       </el-table-column>
       <el-table-column
         prop="createTime"
+        align="center"
+        min-width="160"
         label="领取时间"
       >
       </el-table-column>
       <el-table-column
+        min-width="100"
         prop="receiveWay"
+        align="center"
         label="获取方式"
       >
       </el-table-column>
       <el-table-column
         prop="createUserName"
+        align="center"
         label="发放人"
       >
       </el-table-column>
     </el-table>
     <div class="page_styles">
       <el-pagination
+        :background="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="Number(startIndex) || 1"
         :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
         :page-size="pageSize*1"
         :total="total*1"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="prev, pager, next, sizes"
       ></el-pagination>
     </div>
   </div>
@@ -114,20 +128,8 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .el-table td, /deep/ .el-table th {
-        text-align: center;
-        &:nth-child(1) {
-            text-align: left;
-            padding-left: 20px;
-        }
-    }
-/deep/ .cell{
-            .btns{
-                span{
-                    color: #655EFF;
-                    margin-right: 5px;
-                }
-            }
-        }
+.page_styles {
+  margin: 40px 0 30px 0;
+}
 
 </style>

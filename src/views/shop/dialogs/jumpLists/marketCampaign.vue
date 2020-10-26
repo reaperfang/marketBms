@@ -1,22 +1,22 @@
 <template>
   <div class="head-wrapper">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="65px" :inline="true">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" :inline="true">
           <div class="inline-head">
             <el-form-item label="活动状态" prop="status">
-              <el-select label="活动状态" v-model="ruleForm.status" placeholder="请选择活动状态">
+              <el-select label="活动状态" v-model="ruleForm.status" placeholder="请选择活动状态" style="width:120px">
                 <el-option label="全部" :value="''"></el-option>
                 <el-option label="未生效" :value="0"></el-option>
                 <el-option label="生效中" :value="1"></el-option>
                 <!-- <el-option label="已失效" :value="2"></el-option> -->
               </el-select>
             </el-form-item>
-            <el-form-item label="" prop="">
+            <el-form-item label="活动类型" prop="">
               <el-select v-if="activities.length" v-model="ruleForm.appType" placeholder="请选择活动类型" style="width:150px;">
                 <el-option label="全部类型" value=""></el-option>
                 <el-option v-for="(item, key) of activities" :key="key" :label="item.name" :value="item.code"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="" prop="idOrName">
+            <el-form-item label="活动名称" prop="idOrName">
               <el-input v-model="ruleForm.idOrName" placeholder="请输入名称" clearable style="width:120px;"></el-input>
             </el-form-item>
             <el-form-item label="" prop="">
@@ -45,13 +45,14 @@
         </el-table>
       <div class="pagination">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(pageNum) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
           >
         </el-pagination>
       </div>

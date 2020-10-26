@@ -8,7 +8,7 @@
                <el-switch
                 v-model="autoOrder"
                 active-color="#13ce66"
-                inactive-color="#cacfcb"
+                inactive-color="#CACACF"
                 class="item-switch1"
                 >
               </el-switch>
@@ -106,7 +106,7 @@
               <el-switch
                 v-model="sendOrder"
                 active-color="#13ce66"
-                inactive-color="#cacfcb"
+                inactive-color="#CACACF"
                 class="item-switch2"
                 >
               </el-switch>

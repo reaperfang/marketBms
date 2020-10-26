@@ -19,7 +19,7 @@
               <!--<el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>-->
               <!--<el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>-->
             <!--</el-radio-group>-->
-			  <div class="radio-group">
+			  <div class="radio-group" style="margin-right: 10px;">
 				  <span @click="changeDay(7)" :class="nearDay == 7 ? 'active' : ''">最近7天</span>
 				  <span @click="changeDay(15)" :class="nearDay == 15 ? 'active' : ''">最近15天</span>
 				  <span @click="changeDay(30)" :class="nearDay == 30 ? 'active' : ''">最近30天</span>
@@ -54,7 +54,7 @@
 					<el-radio-button class="btn_bor" label="4"  v-if="visitSourceType ==0 ">访问来源</el-radio-button>
 				</el-radio-group>
 			</div>
-          <div class="chart_container">
+          <div class="chart_container" v-loading="loading1">
             <pfChart 
             :title="'测试图表'" 
             ref="prChart"
@@ -72,6 +72,7 @@
         </div>
         <div>
             <durationChart 
+            v-loading="loading2"
             :title="'测试图表'" 
             ref="dtChart"
             :dataChart="dataChart1"
@@ -112,7 +113,9 @@ export default {
       duration:'1',
       channel:0,
       type:1,
-      isPc:false
+      isPc:false,
+      loading1: true,
+      loading2: true
     };
   },
   created() {
@@ -141,6 +144,7 @@ export default {
 
     //浏览量/访问量
     getFlowAnalysis(){
+      this.loading1 = true;
       let data = {
           channel:this.visitSourceType,
           startTime: this.startTime,
@@ -148,9 +152,11 @@ export default {
           nearDay: this.nearDay  == '4' ? null : this.nearDay,
         };
       this._apis.data.flowAnalysis(data).then(response => {
-        this.dataChart = response
+        this.dataChart = response;
+        this.loading1 = false;
       }).catch(error => {
         this.$message.error(error);
+        this.loading1 = false;
       });
     },
 
@@ -162,10 +168,13 @@ export default {
           endTime: this.endTime,
           nearDay: this.nearDay  == '4' ? null : this.nearDay,
         };
+        this.loading1 = true;
       this._apis.data.uvhour(data).then(response => {
-        this.dataChart = response
+        this.dataChart = response;
+        this.loading1 = false;
       }).catch(error => {
         this.$message.error(error);
+        this.loading1 = false;
       });
     },
 
@@ -177,10 +186,13 @@ export default {
           endTime: this.endTime,
           nearDay: this.nearDay  == '4' ? null : this.nearDay,
         };
+        this.loading1 = true;
       this._apis.data.pvady(data).then(response => {
-        this.dataChart = response
+        this.dataChart = response;
+        this.loading1 = false;
       }).catch(error => {
         this.$message.error(error);
+        this.loading1 = false;
       });
     },
 
@@ -191,10 +203,13 @@ export default {
           endTime: this.endTime,
           nearDay: this.nearDay  == '4' ? null : this.nearDay,
         };
+        this.loading1 = true;
       this._apis.data.channel(data).then(response => {
-          this.dataChart = response
+          this.dataChart = response;
+          this.loading1 = false;
         }).catch(error => {
           this.$message.error(error);
+          this.loading1 = false;
         });
     },
 
@@ -206,10 +221,13 @@ export default {
           endTime: this.endTime,
           nearDay: this.nearDay  == '4' ? null : this.nearDay,
         };
+        this.loading2 = true;
       this._apis.data.residetime(data).then(response => {
-          this.dataChart1 = response
+          this.dataChart1 = response;
+          this.loading2 = false;
         }).catch(error => {
           this.$message.error(error);
+          this.loading2 = false;
         });
     },
 
@@ -221,10 +239,13 @@ export default {
           endTime: this.endTime,
           nearDay: this.nearDay  == '4' ? null : this.nearDay,
         };
+        this.loading2 = true;
       this._apis.data.bouncerate(data).then(response => {
-            this.dataChart1 = response
+            this.dataChart1 = response;
+            this.loading2 = false;
         }).catch(error => {
           this.$message.error(error);
+          this.loading2 = false;
         });
     },
 
@@ -325,6 +346,7 @@ export default {
 .p_container {
   padding: 20px;
   background-color: #fff;
+  border-radius: 4px;
   .pane_container {
 	  position: relative;
     .p_line {

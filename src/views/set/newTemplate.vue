@@ -1,5 +1,5 @@
 <template>
-  <div class="new-template">
+  <div class="new-template mh bor-radius">
     <h2 class="">{{ setTitle }}</h2>
     <section>
       <div class="title">基础信息设置：</div>
@@ -508,7 +508,7 @@ export default {
 .new-template {
   background-color: #fff;
   h2 {
-    padding: 18px 0 10px 20px;
+    padding: 20px 0 10px 20px;
     font-size:14px;
     font-weight:500;
     color:rgba(68,67,75,1);

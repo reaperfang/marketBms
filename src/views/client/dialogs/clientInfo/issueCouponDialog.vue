@@ -40,27 +40,31 @@
                 :data="data.allCoupons"
                 style="width: 100%"
                 ref="couponListTable"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                @selection-change="handleSelectionChange"
                 :default-sort="{prop: 'date', order: 'descending'}"
                 v-loading="loading"
             >
                 <el-table-column
                     type="selection"
-                    width="55">
+                    width="34">
                 </el-table-column>
                 <el-table-column
                     prop="name"
-                    label="优惠券名称">
+                    label="优惠券名称" width="150" fixed="left" class-name="table-padding">
                 </el-table-column>
                 <el-table-column
                     label="优惠方式"
+                    align="center"
+                    min-width="120"
                     >
                     <template slot-scope="scope">
                         {{scope.row.useType == 0?`减免${scope.row.useTypeFullcut}元`:`折扣${scope.row.useTypeDiscount}`}}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="使用门槛">
+                    label="使用门槛"
+                    align="center"
+                    min-width="120">
                     <template slot-scope="scope">
                         {{scope.row.useCondition == -1?'无极限':`订单满${scope.row.useCondition}元`}}
                     </template>
@@ -68,10 +72,14 @@
                 <el-table-column
                     prop="remainStock"
                     label="库存数量"
+                    align="right"
+                    min-width="120"
                 >
                 </el-table-column>
                 <el-table-column
                     label="限领数量"
+                    align="right"
+                    min-width="120"
                 >
                   <template slot-scope="scope">
                     <span>{{scope.row.receiveLimitCount == -1?'不限制': scope.row.receiveLimitCount}}</span>
@@ -79,12 +87,15 @@
                 </el-table-column>
                 <el-table-column
                     prop="receivedNum"
+                    align="right"
+                    min-width="120"
                     label="已领数量"
                 >
                 </el-table-column>
                 <el-table-column
                     label="发放数量"
                     width="150"
+                    align="center" fixed="right" class-name="table-padding"
                     >
                     <template slot-scope="scope">
                         <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.remainStock > 10 ? 10:scope.row.remainStock"></el-input-number>
@@ -93,7 +104,7 @@
             </el-table>
             <div class="a_line">
                 <div class="fl">
-                    <el-checkbox v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
+                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
                 </div>
                 <div class="fr">
                     共{{data.allCoupons.length}}条数据
@@ -122,7 +133,8 @@ export default {
       loading: false,
       checkAll: false,
       selectedCoupons: [],
-      infoArrs: []
+      infoArrs: [],
+      isIndeterminate: false
     };
   },
   methods: {
@@ -151,6 +163,7 @@ export default {
       this.data.allCoupons.forEach(row => {
           this.$refs.couponListTable.toggleRowSelection(row,val);
       });
+      this.isIndeterminate = false;
     },
     submit() {
       this.btnLoading = true;
@@ -212,7 +225,12 @@ export default {
     close() {
       this.selectedCoupons = [];
       this.infoArrs = [];
-    }
+    },
+    handleSelectionChange(val) {
+        let checkedCount = val.length;
+        this.checkAll = (checkedCount === this.data.allCoupons.length) && (checkedCount !== 0);
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.data.allCoupons.length;
+    },
   },
   computed: {
     visible: {
@@ -251,10 +269,6 @@ export default {
   width: 60px;
   padding-left: 10px;
 }
-/deep/ .el-dialog__header{
-    background: #f1f0ff;
-    border-radius: 10px 10px 0 0;
-}
 /deep/ .el-input-number--small .el-input-number__decrease{
     width: 18px;
     font-size: 13px;
@@ -285,10 +299,6 @@ export default {
 }
 /deep/ .el-dialog{
     border-radius: 10px;
-}
-/deep/ .el-table{
-  height: 591px;
-  overflow-y: auto;
 }
 .c_container {
     text-align: left;

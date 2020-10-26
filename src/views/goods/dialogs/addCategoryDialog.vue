@@ -371,7 +371,7 @@ export default {
     .footer {
         text-align: center;
         margin-top: 60px;
-        margin-bottom: 40px;
+        // margin-bottom: 40px;
     }
     /deep/ .el-form .el-form-item {
         &.enable {

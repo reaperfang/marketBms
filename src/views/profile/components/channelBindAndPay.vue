@@ -126,7 +126,6 @@ export default {
       window.open(routeData.href, '_blank');
       this.SETCURRENT(8)
       this.confirm({
-        title: "提示",
         icon: true,
         text: '请确认您已完成微信公众号授权',
         confirmText: '确定',
@@ -146,7 +145,6 @@ export default {
 
       this.SETCURRENT(8)
       this.confirm({
-        title: "提示",
         icon: true,
         text: '请确认您已完成微信小程序授权',
         confirmText: '确定',
@@ -174,7 +172,6 @@ export default {
     },
     setPayInfo() {
       this.confirm({
-        title: "提示",
         icon: true,
         text: '请确认您已开启微信支付并填写支付参数信息',
         confirmText: '确定',

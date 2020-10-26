@@ -1,6 +1,6 @@
 /* 会员分析列表 */
 <template>
-    <div class="m_container">
+    <div class="m_container mh bor-radius">
         <div class="chennelDetailHead">
             <p style="font-size: 16px">渠道转化订单具体信息：</p>
             <el-button class="yellow_btn" icon="el-icon-share" @click="exportExl">导出到Excel</el-button>
@@ -10,11 +10,12 @@
             style="width: 100%"
             :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
             :default-sort = "{prop: 'changeRatio', order: 'descending'}"
+            v-loading="loading"
         >
             <el-table-column
-                width="180"
+                width="80"
                 type="index"
-                align="center"
+                fixed="left" class-name="table-padding"
                 label="排序">
             </el-table-column>
             <el-table-column
@@ -47,6 +48,9 @@
             <el-table-column
                 label="订单支付时间"
                 align="center"
+                fixed="right" class-name="table-padding"
+                width="160"
+
             >
                 <template slot-scope="scope">
                     <span>{{Number(scope.row.bookOrderTime) | time}}</span>
@@ -55,12 +59,13 @@
         </el-table>
         <div class="page_styles">
             <el-pagination
+                :background="true"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page.sync="currentPage"
                 :page-sizes="[10, 20, 30, 40]"
                 :page-size="pageSize"
-                layout="sizes, prev, pager, next"
+                layout="prev, pager, next, sizes"
                 :total="totalCount">
             </el-pagination>
         </div>
@@ -79,6 +84,7 @@ export default {
             totalCount:0,
             ruleForm:[],
             list:[],//列表
+            loading: true
         };
     },
     mounted(){
@@ -99,9 +105,14 @@ export default {
                 startIndex : this.ruleForm.startIndex,
                 pageSize : this.ruleForm.pageSize
             }
+            this.loading = true;
             this._apis.data.channelConversionDetails(this.ruleForm).then(response => {
                 this.list = response.list;
                 this.totalCount = response.totalSize;
+                this.loading = false;
+            }).catch((error)=>{
+                this.$message.error(error);
+                this.loading = false;
             })
         },
         //导出
@@ -159,14 +170,6 @@ export default {
     background-color: #fff;
     padding: 10px 20px;
 }
-/deep/ .cell{
-            .btns{
-                span{
-                    color: #655EFF;
-                    margin-right: 5px;
-                }
-            }
-        }
 .chennelDetailHead{
     padding: 20px;
     display: flex;

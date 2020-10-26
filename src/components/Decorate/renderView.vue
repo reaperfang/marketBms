@@ -217,8 +217,7 @@ export default {
     //删除组件
     deleteComponent(id) {
       
-      this.confirm({
-        title: '提示', 
+      this.confirm({ 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定删除此组件吗？'

@@ -16,6 +16,9 @@
             <el-button type="primary" @click="submit">确 认</el-button>
             <el-button v-if="hasCancel" @click="dialogVisible = false">取 消</el-button>
         </span>
+        <div v-if="useHtmlTitle" slot="title">
+            <slot name="title"></slot>
+        </div>
     </el-dialog>
 </template>
 <script>
@@ -75,17 +78,17 @@ export default {
         appendToBody: {
             type: Boolean,
             default: false
+        },
+        useHtmlTitle: {
+            type: Boolean,
+            default: false
         }
     }
 }
 </script>
 <style lang="scss" scoped>
     /deep/ .el-dialog {
-        border-radius: 10px;
-    }
-    /deep/ .el-dialog__header {
-        background: #f1f0ff;
-        border-radius: 10px 10px 0 0;
+        border-radius: 3px;
     }
     /deep/ .el-dialog__title {
         color: #44434B;

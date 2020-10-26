@@ -7,11 +7,14 @@
             :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
             :default-sort = "{prop: 'changeRatio', order: 'descending'}"
             @sort-change="changeSort"
+            v-loading="loading1"
         >
             <el-table-column
-                width="180"
                 type="index"
                 label="排序"
+                fixed="left"
+                width="120"
+                class-name="table-padding"
                 align="left">
             </el-table-column>
             <el-table-column
@@ -36,6 +39,9 @@
                 prop="changeRatio"
                 label="支付转化率"
                 align="right"
+                fixed="right"
+                min-width="140"
+                class-name="table-padding"
                 sortable
             >
             <template slot-scope="scope">
@@ -43,16 +49,16 @@
             </template>
             </el-table-column>
         </el-table>
-        <div class="page_styles">
+        <div class="page_styles" v-show="listObj.totalSize>0">
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="Number(startIndex) || 1"
                 :page-sizes="[10, 20, 30, 40]"
                 :page-size="pageSize"
-                layout="sizes, prev, pager, next"
+                layout="prev, pager, next, sizes"
                 :total="listObj.totalSize"
-                :background="background">
+                :background="true">
             </el-pagination>
         </div>
     </div>
@@ -63,16 +69,20 @@ import TableBase from "@/components/TableBase";
 export default {
     name: "channelTable",
     extends: TableBase,
-    props:['listObj','background','nowPage'],
+    props:['listObj','background','nowPage', 'loading'],
     data() {
         return {
             pageSize:10,
+            loading1: true,
             startIndex: 1
         };
     },
     created() {
     },
     watch: {
+        loading(newValue) {
+            this.loading1 = newValue;
+        },
         nowPage(val) {
           if(val) {
             this.startIndex = val;
@@ -112,21 +122,13 @@ export default {
 };
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-/deep/ .cell{
-    .btns{
-        span{
-            color: #655EFF;
-            margin-right: 5px;
-        }
-    }
-}
 /deep/.el-table .descending .sort-caret.descending{
   border-top-color:#44434B;
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
 }
-/deep/ .el-table--small td, /deep/.el-table--small th{
-  padding:8px 10px;
+.page_styles {
+    margin: 40px 0 30px 0;
 }
 </style>

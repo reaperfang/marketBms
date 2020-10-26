@@ -552,19 +552,19 @@ export default {
     border-radius: 4px;
     .form_container{
         .check_con1{
-            width: 210px; 
+            width: 295px; 
             display: inline-block;
             .con1_input{
-                width: 120px; 
                 display: inline-block
             }
         }
         .check_con2{
-            width: 260px; 
             display: inline-block;
             .con2_input{
-                width: 250px; 
                 display: inline-block;
+                /deep/ .el-input__inner{
+                    width: 210px;
+                }
             }
         }
         .relaPosition{

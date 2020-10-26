@@ -1,6 +1,6 @@
 /*微信设置 */
 <template>
-    <div class="main">
+    <div class="main mh bor-radius">
         <h1>
           微信支付信息设置
           <span style="color:#FC3D42;font-size:12px;">
@@ -48,8 +48,8 @@
             </div>
             </el-form-item> -->
 
-            <el-form-item label="CERT证书文件:" prop="certBase64Content" label-width="180px">
-              <input type="file"  @change="fileChange" style="width:75px;">
+            <el-form-item label="CERT证书文件:" prop="certBase64Content" label-width="180px" class="wxSet-file">
+              <input type="file"  @change="fileChange" style="width:75px;overflow:hidden;">
               <span>{{form.certFileName}}</span>
               <span style="color:#FC3D42;font-size:12px;"> (请上传.p12类型的证书文件)</span>
             </el-form-item>
@@ -315,7 +315,6 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .main{
     width: 100%;
-    height:100%;
     background: #fff;
     padding:20px;
     h1{
@@ -361,6 +360,12 @@ export default {
     &:before{
       content:'*';
       color: #ff4246;
+    }
+  }
+  .wxSet-file {
+    /deep/ .el-form-item__content {
+      display: flex;
+      align-items: center;
     }
   }
  

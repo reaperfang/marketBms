@@ -155,6 +155,10 @@ export default {
                     return '自动发货'
                 case 12:
                     return '核销验证'
+                case 13:
+                    return '重新发单'
+                case 14:
+                    return '自动发单'
             }
         },
         channelInfoIdFilter(code) {
@@ -223,7 +227,6 @@ export default {
         getDetail() {
             return new Promise((resolve, reject) => {
                 let id = this.$route.query.id
-
                 this._apis.order.fetchOrderDetail({id}).then((res) => {
                     res.orderInfo && (res.orderInfo.consultType = res.orderInfo.consultType || 2)
                     this.orderDetail = res
@@ -256,6 +259,7 @@ export default {
             height: 60px;
             line-height: 60px;
             padding: 0 20px;
+            border-radius: 4px;
             .lefter {
                 span {
                     border-right: 1px solid #cacfcb;
@@ -274,6 +278,7 @@ export default {
             margin-top: 20px;
             padding: 20px;
             padding-top: 5px;
+            border-radius: 4px;
         }
         .goods-detail {
             display: flex;
@@ -283,6 +288,7 @@ export default {
             background-color: #fff;
             margin-top: 20px;
             padding: 20px;
+            border-radius: 4px;
             .header {
                 padding-bottom: 20px;
                 font-size: 16px;

@@ -7,24 +7,24 @@
       <el-table
         :data="balanceList"
         style="width: 100%"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort="{prop: 'date', order: 'descending'}"
       >
-        <el-table-column prop="updateUserName" label="操作人"></el-table-column>
-        <el-table-column prop="tradeTime" label="操作时间"></el-table-column>
-        <el-table-column prop="changeReason" label="交易类型"></el-table-column>
-        <el-table-column prop="remark" label="原因"></el-table-column>
-        <el-table-column prop="changeAmount" label="数量"></el-table-column>
+        <el-table-column prop="updateUserName" label="操作人" width="120" fixed="left" class-name="table-padding"></el-table-column>
+        <el-table-column prop="tradeTime" label="操作时间" align="center" min-width="150"></el-table-column>
+        <el-table-column prop="changeReason" label="交易类型" align="center" min-width="120"></el-table-column>
+        <el-table-column prop="remark" label="原因" align="center" min-width="120"></el-table-column>
+        <el-table-column prop="changeAmount" label="数量" min-width="125" align="right" fixed="right" class-name="table-padding"></el-table-column>
       </el-table>
       <div class="page_styles">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(startIndex) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
         ></el-pagination>
       </div>
     </div>

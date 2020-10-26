@@ -1,8 +1,8 @@
 <template>
   <div class="head-wrapper">
-     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0" :inline="true">
+     <el-form ref="ruleForm" :model="ruleForm" :rules="rules" :inline="true">
           <div class="inline-head">
-            <el-form-item label="" prop="name">
+            <el-form-item label="分类名称" prop="name">
               <el-input v-model="ruleForm.name" placeholder="请输入微页面分类名称" clearable></el-input>
             </el-form-item>
             <el-form-item label="" prop="">
@@ -23,13 +23,14 @@
         </el-table>
       <div class="pagination">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(startIndex) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
           >
         </el-pagination>
       </div>

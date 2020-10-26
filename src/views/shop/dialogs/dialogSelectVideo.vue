@@ -38,12 +38,13 @@
             </div>
             <p class="pages" v-if="materialResultList.length">
                 <el-pagination
+                :background="true"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="materialCurrentPage"
                 :page-sizes="[9, 18, 27, 45, 90, 100]"
                 :page-size="materialPageSize"
-                layout="total, sizes, prev, pager, next, jumper"
+                layout="prev, pager, next, sizes"
                 :total="materialTotal*1"
                 class="page_nav">
                 </el-pagination>

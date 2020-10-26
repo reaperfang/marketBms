@@ -1,5 +1,5 @@
 <template>
-  <div class="addSelfLift">
+  <div class="addSelfLift mh bor-radius">
     <h2>{{ setTitle }}</h2>
     <el-form class="ruleForm" ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px">
        <div class="form-area">
@@ -755,16 +755,17 @@ export default {
             let txt = ''
             if (!id) {
               const url = `${location.protocol}//${location.host}/bp/set/addSelfLift`
-              txt = `<p style="font-size:16px;color:rgba(68,67,75,1);">保存成功</p><p style="font-size:12px;color:rgba(68,67,75,1);"><a href="${url}" style="color:#655EFF;text-decoration: underline;">继续新建自提点</a></p>`
+              txt = `<span class="success" style="font-size:16px;color:rgba(68,67,75,1);">保存成功！</span><span class="prompt" style="font-size:12px;color:rgba(68,67,75,1);"><a href="${url}" style="color:#655EFF;text-decoration: underline;">继续新建自提点</a></span>`
             } else {
-              txt = `<p style="font-size:16px;color:rgba(68,67,75,1);">保存成功</p>`
+              txt = `<span class="success" style="font-size:16px;color:rgba(68,67,75,1);">保存成功！</span>`
             }
             this.confirm({
-              title: "提示",
+              title: "",
               iconSuccess: true,
               text: txt,
               showConfirmButton: false,
               confirmText: '我知道了',
+              customClass: 'setting-custom',
               showCancelButton: false
             }).catch(() => {
               this.$router.push({ path: '/set/selfLift'})

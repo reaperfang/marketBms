@@ -32,12 +32,13 @@
     </el-table>
     <div class="page_styles">
       <el-pagination
+        :background="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="10"
-        layout="sizes, prev, pager, next"
+        layout="prev, pager, next, sizes"
         :total="100">
       </el-pagination>
     </div>

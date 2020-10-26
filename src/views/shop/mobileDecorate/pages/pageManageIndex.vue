@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs v-model="currentTab" @tab-click="handleClick">
+    <el-tabs v-model="currentTab" @tab-click="handleClick" style="border-radius: 4px 4px 0 0;">
       <el-tab-pane label="页面管理" name="pageList"></el-tab-pane>
       <el-tab-pane label="分类管理" name="classifyList"></el-tab-pane>
       <el-tab-pane label="草稿箱" name="draftList"></el-tab-pane>
@@ -34,5 +34,6 @@ export default {
 .el-tabs {
   background: #fff;
   padding: 20px;
+  padding-top:0;
 }
 </style>

@@ -158,6 +158,42 @@ export function orderAfterSaleStatusFilter(status) {
       return '已完成'
     case 5:
       return '已关闭'
+    case 6:
+    case 7:
+      return '处理中'
+  }
+}
+
+//售后单类型过滤器
+export function orderAfterSaleType(code) {
+  if(code == 1) {
+      return '退货退款'
+  } else if(code == 2) {
+      return '换货'
+  } else if(code == 3) {
+      return '仅退款'
+  }
+}
+
+// 配送方式过滤器 
+export function deliveryWayFilter(order) {
+  switch(order.deliveryWay) {
+      case 1:
+          return '普通快递'
+      case 2:
+          return '商家配送'
+      case 3:
+          if(order.status==5||order.status == 6){
+              if(order.thirdType == 1) {
+                return '第三方配送-达达'
+              } else {
+                return '第三方配送'
+              }
+          }else{
+              return '第三方配送'
+          }
+      case 4:
+          return '上门自提'
   }
 }
 
@@ -341,4 +377,40 @@ export function isSafariBrowser() {
 
 export function unique(arr) {
   return Array.from(new Set(arr))
+}
+
+
+//列表操作列宽度动态计算
+export function getOperationColumnW() {
+  const numArr = []; //存放每一行中宽度
+  const w = 15; //单个文字宽度
+  const btnsBox = document.querySelectorAll('.table-operate'); //所有操作列中的行
+  btnsBox.forEach((item) => {
+      const spans = item.querySelectorAll('span'); //对应下的按钮
+      let num = (spans.length - 1) * 11 + 42; //按钮间有10px间距+1px边线，所以是11  最后一个按钮没有， 40为外框左右padding, 2是宽裕出来的
+      item.querySelectorAll('span').forEach((tag) => {
+          num += tag.innerHTML.trim().length * w;
+        })
+      numArr.push(num);
+  })
+  return Math.max(...numArr)
+}
+//按照创建时间正序排序
+export function sortCreateTime(arr){
+  arr.sort((a, b) => {
+    const thisTimeA = a.createTime.replace(/-/g, '/')
+    const thisTimeB = b.createTime.replace(/-/g, '/')
+    let timeA = new Date(thisTimeA).getTime()
+    let timeB = new Date(thisTimeB).getTime()
+
+    if(timeA > timeB) {
+      return 1
+    } else if(timeA < timeB) {
+      return -1
+    } else if(timeA == timeB) {
+      return 0
+    } 
+  })
+  return arr
+
 }

@@ -6,11 +6,11 @@
         v-model="openAD"
         active-color="#13ce66"
         @change="switchStatusChange"
-        inactive-color="#ff4949">
+        inactive-color="#CACACF">
       </el-switch>
     </div>
     <div class="ad_head_wrapper head-wrapper">
-      <el-form ref="ruleForm" :model="ruleForm" :inline="true">
+      <el-form ref="ruleForm" :model="ruleForm" :inline="true" class="input_style">
         <el-form-item label="" prop="status">
           <el-select v-model="ruleForm.status" placeholder="请选择广告状态">
             <el-option label="全部广告" :value="''"></el-option>
@@ -31,33 +31,33 @@
         <el-button type="primary" @click="_routeTo('m_createAD')">新建广告</el-button>
       </div>
     </div>
-    <div class="table" v-calcHeight="300">
+    <div class="table" v-calcMinHeight="299">
       <p>广告（{{total || 0}}个）</p>
-      <el-table :data="tableData" stripe ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort = "{prop: 'date', order: 'descending'}" @sort-change="changeSort">
+      <el-table :data="tableData" ref="multipleTable" @selection-change="handleSelectionChange" v-loading="loading" :default-sort="{prop: 'updateTime', order: 'descending'}" @sort-change="changeSort">
         <el-table-column
           type="selection"  
           width="34">
         </el-table-column>
-        <el-table-column prop="imagePath" label="广告图">
+        <el-table-column prop="imagePath" label="广告图" min-width="100" fixed="left" class-name="table-padding">
           <template slot-scope="scope">
             <div class="name_wrapper">
               <img :src="scope.row.imagePath">
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="广告名称"></el-table-column>
-        <el-table-column prop="vv" label="访客数" width="100"></el-table-column>
-        <el-table-column prop="pv" label="浏览数" width="100"></el-table-column>
-        <el-table-column prop="updateTime" label="展示时间" :width="170">
+        <el-table-column prop="name" label="广告名称" min-width="130"></el-table-column>
+        <el-table-column prop="vv" label="访客数" align="right"></el-table-column>
+        <el-table-column prop="pv" label="浏览数" align="right"></el-table-column>
+        <el-table-column prop="startTime" label="展示时间" min-width="310" align="center">
           <template slot-scope="scope">
             {{scope.row.startTime}} 至 {{scope.row.endTime}}
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" :width="170"></el-table-column>
-        <el-table-column prop="updateTime" sortable="custom" label="最后编辑时间" :width="170"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" min-width="160" align="center"></el-table-column>
+        <el-table-column prop="updateTime" sortable="custom" label="最后编辑时间" min-width="160" align="center"></el-table-column>
         <!-- <el-table-column prop="startTime" sortable label="开始时间" :width="170"></el-table-column>
         <el-table-column prop="endTime" sortable label="结束时间" :width="170"></el-table-column> -->
-        <el-table-column prop="createUserName" label="操作账号"></el-table-column>
+        <el-table-column prop="createUserName" label="操作账号" align="center"></el-table-column>
         <el-table-column prop="status" label="状态">
           <template slot-scope="scope">
             <span v-if="scope.row.status === 0">展示中</span>
@@ -67,20 +67,21 @@
             <span v-else>--</span>
           </template>
         </el-table-column>
-        <el-table-column prop="" label="操作" :width="'150px'" fixed="right">
+        <el-table-column prop="" label="操作"  :width="operationColumnW" align="left" fixed="right" header-align="center" class-name="table-padding">>
           <template slot-scope="scope">
-            <span class="table-btn" v-if="scope.row.status === 0" @click="_routeTo('m_createAD', {ADId: scope.row.id, showType: 'view'})">查看</span>
-            <span class="table-btn" v-if="scope.row.status === 3" @click="startAD(scope.row)">启用</span>
-            <span class="table-btn" v-else-if="scope.row.status === 0 || scope.row.status === 1" @click="stopAD(scope.row)">停用</span>
-            <span class="table-btn" v-else>---</span>
-            <span class="table-btn" v-if="scope.row.status !== 0" @click="_routeTo('m_createAD', {ADId: scope.row.id})">编辑</span>
-            <span class="table-btn" @click="deleteAD(scope.row)">删除</span>
+            <div class="table-operate">
+              <span class="table-btn" v-if="scope.row.status === 0" @click="_routeTo('m_createAD', {ADId: scope.row.id, showType: 'view'})">查看</span>
+              <span class="table-btn" v-if="scope.row.status === 3" @click="startAD(scope.row)">启用</span>
+              <span class="table-btn table-warning" v-else-if="scope.row.status === 0 || scope.row.status === 1" @click="stopAD(scope.row)">停用</span>
+              <span class="table-btn" v-if="scope.row.status !== 0" @click="_routeTo('m_createAD', {ADId: scope.row.id})">编辑</span>
+              <span class="table-btn table-warning" @click="deleteAD(scope.row)">删除</span>
+            </div>
             <!-- <el-button class="table-btn" type="text" @click="deleteAD(scope.row)" :disabled="true">删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>
-       <div class="multiple_selection" v-if="tableData.length">
-        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+       <div class="multiple_selection table-select" v-if="tableData.length">
+        <el-checkbox :indeterminate="isIndeterminate" class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button class="border-button" @click="batchDeleteAD"  :disabled="!this.multipleSelection.length">批量删除</el-button>
       </div>
       <div class="pagination" v-if="tableData.length">
@@ -115,7 +116,8 @@ export default {
         name: '',
         sort: 'desc'
       },
-      rules: {}
+      rules: {},
+      operationColumnW: 72 //操作列宽度
     }
   },
   watch: {
@@ -124,6 +126,14 @@ export default {
         this.openAD = newValue.adOpenType === 1;
       },
       depp: true
+    },
+    'tableData': {
+        handler(newVal, oldVal) { //计算操作栏宽度
+            this.$nextTick(() => {
+                this.operationColumnW = this.utils.getOperationColumnW();
+            })
+        },
+        deep: true
     }
   },
   computed: {
@@ -144,7 +154,6 @@ export default {
     /* 启用广告 */
     startAD(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定启用此广告吗？'
@@ -159,7 +168,6 @@ export default {
     /* 停用广告 */
     stopAD(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定停用此广告吗？'
@@ -183,8 +191,7 @@ export default {
 
     /* 删除广告 */
     deleteAD(item) {
-      this.confirm({
-        title: '提示', 
+      this.confirm({ 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定删除此启动广告吗？'
@@ -201,7 +208,6 @@ export default {
      /* 批量删除广告 */
     batchDeleteAD(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: '确定删除吗？'
@@ -273,12 +279,15 @@ export default {
 .ad_head_wrapper{
   background:#fff;
   padding:20px;
+  border-radius: 4px;
 }
 /deep/ .table{
-  overflow-y: auto;
+  // overflow-y: auto;
   margin-top:20px;
   background:#fff;
   padding:20px;
+  padding-bottom:50px;
+  border-radius: 4px;
   p{
     margin-bottom:20px;
   }
@@ -296,26 +305,6 @@ export default {
 /deep/ thead th{
   background: #f6f7fa!important;
   color:#44434B!important;
-}
-/deep/ .el-table td, /deep/ .el-table th {
-  text-align: center;
-  &:nth-child(2) {
-      text-align: left;
-      padding-left: 10px;
-  }
-}
-/deep/ .el-table td{
-  &:nth-child(4) {
-    text-align: right;
-    padding-right: 19px;
-  }
-  &:nth-child(5) {
-    text-align: right;
-    padding-right: 19px;
-  }
-  &:nth-child(6) {
-    text-align: left;
-  }
 }
 .table-btn{
   padding-right: 5px;

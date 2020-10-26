@@ -30,13 +30,14 @@
     </div>
     <div class="pagination" v-if="tableData.length">
       <el-pagination
+        :background="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="Number(startIndex) || 1"
         :page-sizes="[5, 10, 20, 50, 100]"
         :page-size="pageSize*1"
         :total="total*1"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="prev, pager, next, sizes"
       ></el-pagination>
     </div>
   </DialogBase>

@@ -2,7 +2,9 @@
   <div>
    <div v-if="isFirstLogin" class="shopGuidePrompt">
      <p class="prompt-txt">为了早日线上营业，请您完成以下必要操作</p>
-     <img class="prompt-bg" src="@/assets/images/profile/b_shop_guide.png">
+     <div class="prompt-bg">
+       <!-- <img src="@/assets/images/profile/b_shop_guide.jpg"> -->
+     </div>
      <div class="prompt-btn">
        <el-button size="small" class="btn guidePrompt-cancel" @click="goPage">先体验</el-button>
        <el-button size="small" type="primary" class="btn guidePrompt-confirm" @click="goStep">我已准备好</el-button>
@@ -120,9 +122,15 @@ export default {
       display: block;
       max-width: 930px;
       max-height: 503px;
+      width: 100%;
+      height: 503px;
       margin: 0 auto;
       margin-top: 74px;
-      // background: url('~@/assets/images/profile/b_shop_guide.png') no-repeat;
+      text-align: center;
+      background-size: contain;
+      background-image: url('~@/assets/images/profile/b_shop_guide.jpg');
+      background-repeat: no-repeat;
+      background-position: center;
     }
     &-btn {
       padding-top: 83px;

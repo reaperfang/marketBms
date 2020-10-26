@@ -54,7 +54,7 @@
                           <source :src="item" type="video/mp4">
                         Your browser does not support the video tag.
                         </video> -->
-                        <div @click="dialogVisible = true; bigMessage.image = false; bigMessage.url = item.image;" class="image-item" :class="{active: item.over}" @mouseover="item.over = true" @mouseout="item.over = false">
+                        <div @click="dialogVisible = true; bigMessage.image = false; bigMessage.url = item.image; bigMessage.images = orderProductComment.images; bigMessage.imageIndex = index;" class="image-item" :class="{active: item.over}" @mouseover="item.over = true" @mouseout="item.over = false">
                             <video width="51" controls="controls">
                             <source :src="item.image" type="video/ogg">
                             <source :src="item.image" type="video/mp4">
@@ -165,6 +165,7 @@
     <el-dialog
       title=""
       :visible.sync="dialogVisible"
+      v-if="dialogVisible"
       width="800px"
       :close-on-click-modal="false"
       :close-on-press-escape="false">
@@ -179,11 +180,13 @@
       </template>
       <template v-else>
           <div class="video-box">
-              <video width="500" controls="controls">
+            <div @click="goImage('left')" class="lefter"></div>
+            <video :src="bigMessage.url" width="500" controls="controls">
               <source :src="bigMessage.url" type="video/ogg">
               <source :src="bigMessage.url" type="video/mp4">
               Your browser does not support the video tag.
-              </video>
+            </video>
+            <div @click="goImage('right')" class="righter"></div>
           </div>
       </template>
   </el-dialog>
@@ -248,23 +251,6 @@ export default {
           return "取消精选";
       }
     },
-    goodsSpecsFilter(value) {
-      let str = ''
-      let _value
-
-      if(typeof value == 'string') {
-        _value = JSON.parse(value)
-      } else {
-        _value = value
-      }
-
-      for(let i in _value) {
-        str += i + ':' + _value[i] + ','
-      }
-      str = str.replace(/(^.*)\,$/, '$1')
-
-      return str
-    },
     starNumFilter(value) {
       switch (value) {
         case 1:
@@ -305,16 +291,16 @@ export default {
             
             if(flag == 'left') {
                 index = index - 1
-                this.bigMessage.imageIndex = index
 
                 if(index >=0) {
+                    this.bigMessage.imageIndex = index
                     this.bigMessage.url = list[index].image
                     this.$forceUpdate()
                 }
             } else {
                 index = index + 1
-                this.bigMessage.imageIndex = index
                 if(index <= list.length - 1) {
+                    this.bigMessage.imageIndex = index
                     this.bigMessage.url = list[index].image
                     this.$forceUpdate()
                 }
@@ -438,6 +424,7 @@ export default {
     background-color: #fff;
     padding: 20px;
     margin-bottom: 20px;
+    border-radius: 4px;
     &.customer-reviews {
       .title {
         font-size: 16px;
@@ -561,7 +548,7 @@ export default {
         padding: 10px;
         padding-bottom: 60px;
     }
-    .images-box {
+    .images-box, .video-box {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -578,11 +565,11 @@ export default {
             cursor: pointer;
         }
     }
-    .video-box {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+    // .video-box {
+    //     display: flex;
+    //     justify-content: center;
+    //     align-items: center;
+    // }
     /deep/ .el-table td, /deep/ .el-table th {
         text-align: center;
     }

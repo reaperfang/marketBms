@@ -12,7 +12,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:230px;"></el-input>
         </el-form-item>
         <el-form-item label="查询时间">
           <el-date-picker
@@ -27,7 +27,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="快递公司">
-          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:200px;"></el-input>
+          <el-input v-model="ruleForm.expressCompany" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '物流对账', '物流查询', '查询']">查询</el-button>
@@ -36,7 +36,7 @@
       </el-form>
       <div style="color:red;">说明：物流查询已上线，最新物流查询费用详见应用工具中的<a @click="$router.push({path:'/apply',query:{paths:'/application/toolapp/logisticstool',applyId:'2'}})" style="text-decoration: underline;">物流查询</a>。</div>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="301">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
@@ -53,15 +53,19 @@
         >
         <el-table-column
           prop="expressSn"
-          label="快递单号">
+          label="快递单号"
+          fixed="left" class-name="table-padding"
+          width="200px">
         </el-table-column>
         <el-table-column
           prop="expressCompany"
+          align="center"
           label="快递公司">
         </el-table-column>
         <el-table-column
           prop="relationSn"
           label="关联单据编号"
+          align="center"
           :render-header="renderRelationSn"
           width="230px">
         </el-table-column>
@@ -73,9 +77,10 @@
         <el-table-column
           prop="createTime"
           label="查询时间"
-          sortable = "custom"
-          align="right"
-          width="200px">
+          align="center"
+          class-name="table-padding"
+          width="190px"
+          fixed="right">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -86,13 +91,13 @@
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1"
-          :background="background">
+          :background="true">
         </el-pagination>
       </div>
     </div>
-	  <exportTipDialog :data=currentData  :dialogVisible.sync="dialogVisible"></exportTipDialog>
+	  <exportTipDialog :data="currentData" :dialogVisible.sync="dialogVisible"></exportTipDialog>
   </div>
 </template>
 
@@ -141,7 +146,7 @@ export default {
   methods: {
     renderRelationSn(){
       return(
-        <div style="height:49px;line-height:49px;">
+        <p>
           <span style="font-weight:bold;vertical-align:middle;">关联单据编号</span>
           <el-popover
             placement="top-start"
@@ -151,7 +156,7 @@ export default {
             content="订单编号、售后单编号、提现编号">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
-        </div>
+        </p>
       )
     },
     init(){
@@ -250,14 +255,14 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
-  padding: 15px 20px;
+  border-radius: 4px;
+  padding: 20px;
 }
 .under_part{
   width: 100%;
   background: #fff;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
   .total{
     display: flex;
     justify-content: space-between;
@@ -265,7 +270,7 @@ export default {
       font-size: 16px;
       color: #B6B5C8;
       display:block;
-      margin-top:15px;
+      // margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -282,11 +287,5 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
-}
-/deep/.el-table--small td{
-  padding:16px 10px;
-}
-/deep/.el-table--small th{
-  padding:0px 0px 0px 10px;
 }
 </style>

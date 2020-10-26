@@ -4,7 +4,7 @@
       <div class="c_container">
         <div class="clearfix">
           <span class="fl marR20 marB20">购买商品获取积分规则</span>
-          <el-switch class="fl" v-model="enable" active-color="#66CCAC"></el-switch>
+          <el-switch class="fl" v-model="enable" active-color="#13ce66" inactive-color="#CACACF"></el-switch>
         </div>
         <div v-if="enable" class="giveBottom">
           <div>购买获得积分，订单售后结束后按规则发放积分</div>
@@ -94,26 +94,26 @@
             :data="skuList"
             style="width: 100%"
             ref="skuTable"
-            :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
             :default-sort="{prop: 'date', order: 'descending'}"
             :row-key="getRowKeys"
           >
-            <el-table-column type="selection" prop="choose" label="选择" :reserve-selection="true" :selectable="selectable"></el-table-column>
+            <el-table-column type="selection" prop="choose" label="选择" :reserve-selection="true" :selectable="selectable" width="34"></el-table-column>
             <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
-            <el-table-column prop="goodsInfo.name" label="商品名称"></el-table-column>
-            <el-table-column prop="goodsInfo.specs" label="规格"></el-table-column>
-            <el-table-column prop="goodsInfo.salePrice" label="商品价格"></el-table-column>
-            <el-table-column prop="goodsInfo.stock" label="商品库存"></el-table-column>
+            <el-table-column prop="goodsInfo.name" label="商品名称" width="150" fixed="left" class-name="table-padding"></el-table-column>
+            <el-table-column prop="goodsInfo.specs" label="规格" align="center" min-width="120"></el-table-column>
+            <el-table-column prop="goodsInfo.salePrice" label="商品价格" align="right" min-width="120"></el-table-column>
+            <el-table-column prop="goodsInfo.stock" label="商品库存" min-width="120" align="right" fixed="right" class-name="table-padding"></el-table-column>
           </el-table>
           <div class="page_styles">
             <el-pagination
+              :background="true"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="Number(startIndex) || 1"
               :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
               :page-size="pageSize*1"
               :total="total*1"
-              layout="total, sizes, prev, pager, next, jumper"
+              layout="prev, pager, next, sizes"
             ></el-pagination>
           </div>
         </div>
@@ -136,16 +136,14 @@
                 :data="selectedList"
                 style="width: 100%"
                 ref="selectedTable"
-                border
-                :header-cell-style="{color:'#655EFF'}"
                 :default-sort="{prop: 'date', order: 'descending'}"
             >
                 <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
-                <el-table-column prop="goodsInfo.name" label="商品名称"></el-table-column>
-                <el-table-column prop="goodsInfo.specs" label="规格" width="300"></el-table-column>
-                <el-table-column prop="goodsInfo.salePrice" label="商品价格"></el-table-column>
-                <el-table-column prop="goodsInfo.stock" label="商品库存"></el-table-column>
-                <el-table-column label="操作" width="80">
+                <el-table-column prop="goodsInfo.name" label="商品名称" width="150" fixed="left" class-name="table-padding"></el-table-column>
+                <el-table-column prop="goodsInfo.specs" label="规格" min-width="120" align="center"></el-table-column>
+                <el-table-column prop="goodsInfo.salePrice" label="商品价格" min-width="120" align="right"></el-table-column>
+                <el-table-column prop="goodsInfo.stock" label="商品库存" min-width="100" align="right"></el-table-column>
+                <el-table-column label="操作" width="100" align="center" fixed="right" class-name="table-padding">
                   <template slot-scope="scope">
                       <span class="edit_span pointer" @click="deleteRow(scope.row)">删除</span>
                   </template>
@@ -490,10 +488,6 @@ export default {
 <style lang="scss" scoped>
 /deep/ .el-dialog {
   border-radius: 10px;
-}
-/deep/ .el-dialog__header {
-  background: #f1f0ff;
-  border-radius: 10px 10px 0 0;
 }
 /deep/ .el-dialog__title {
   color: #44434b;

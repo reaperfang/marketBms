@@ -1,6 +1,6 @@
 /*维权 */
 <template>
-    <div class="m_container">
+    <div class="m_container mh bor-radius">
         <div class="pane_container head-wrapper">
             <el-form class="clearfix">
                 <el-form-item label="交易时间">
@@ -75,7 +75,7 @@
                     </el-tooltip>
                 </div>
             </div>
-            <ma2Table class="marT20s" :listObj="listObj" @getRightsProtection="getRightsProtection" :nowPage="nowPage"></ma2Table>
+            <ma2Table class="marT20s" :listObj="listObj" @getRightsProtection="getRightsProtection" :nowPage="nowPage" :loading="loading"></ma2Table>
         </div>
         <div v-if="listObj.members != undefined && note" >
             <h3 class="marT20s">运营建议:</h3>
@@ -83,8 +83,7 @@
             <p v-if="note ==6" class="proposal"><b>"卖家缺货":</b>建议针对此类用户免费调换商品。</p>
             <p v-if="note ==8" class="proposal"><b>"拍错了/订单信息错误":</b>建议针对此类用户补偿商品优惠券，发放现金红包，更换升级版商品。</p>
         </div>
-        <div class="contents"></div>
-        <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
+        <!-- <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div> -->
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
 </template>
@@ -126,7 +125,8 @@ export default {
             note:'',
             currentDialog:"",
             dialogVisible: false,
-            currentData:{}
+            currentData:{},
+            loading: true
         }
     },
     methods: {
@@ -144,6 +144,7 @@ export default {
             }
             this.nowPage = idx;
             this.form.loads = true
+            this.loading = true
             this.note = ''
             this.form.pageSize = pageS;
             this.form.startIndex = idx;
@@ -153,10 +154,12 @@ export default {
             this._apis.data.rightsProtection(this.form).then(response => {
                 this.listObj = response;
                 this.form.loads = false
+                this.loading = false
                 this.note = this.form.ProtectionReason
             }).catch(error => {
                 this.form.loads = false;
                 this.$message.error(error);
+                this.loading = false
             })
         },
         changeTime(val){
@@ -228,7 +231,11 @@ export default {
 * @Description  产研-电商中台  bugID: CYDSZT-3506
 *
 */
-
+.el-radio-group{
+  label {
+    margin-left: 0;
+  }
+}
 /deep/.el-checkbox.is-bordered{
     border: none;
 }
@@ -255,7 +262,7 @@ export default {
 
 .m_container{
     background-color: #fff;
-    padding: 10px 20px;
+    padding: 20px;
     .el-button--small{
         border: 1px solid #655EFF;
         color: #655EFF;
@@ -267,14 +274,13 @@ export default {
 	}
     .pane_container{
         color:#3D434A;
-        padding: 10px;
+        // padding: 10px;
         .input_wrap{
             display: inline-block;
             width: 450px;
         }
         .input_wrap2{
             display: inline-block;
-            width: 140px;
         }
         .input_wrap3{
             display: inline-block;

@@ -201,6 +201,8 @@ export default {
 .main{
   background:#fff;
   padding:20px;
+  padding-top:0;
+  height:100%;
 }
 .title{
   height: 50px;

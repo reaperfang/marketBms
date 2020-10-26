@@ -297,11 +297,13 @@ import profileCont from "@/system/constant/profile";
 import Clipboard from "clipboard";
 import flowPath from "./flowPath";
 import profileIntelligent from "./components/profile_intelligent";
+import { isExistAuth } from '@/utils/auth'
 export default {
   name: "profile",
   components: { flowPath, profileIntelligent },
   data() {
     return {
+      todo: '',
       profileData: "",
       toBeSoldOut: "",
       stayProcessedCount: "",
@@ -344,7 +346,6 @@ export default {
   },
   watch:{
     cid(newValue,oldValue){
-      console.log('????')
       this.isEmpowerWX = true;
       this.isEmpowerGZ = true;
       this.isReleaseWX = true;
@@ -355,8 +356,8 @@ export default {
       return newValue;
     }
   },
-
   created() {
+    this._globalEvent.$off('refreshProfile')
     this._globalEvent.$on("refreshProfile", () => {
       this.init();
       this.getLink();
@@ -374,6 +375,7 @@ export default {
       this.getIsReleaseWX();
       this.getIsReleaseGZ();
     });
+    console.log('created')
     this.$message.closeAll();
     this.init();
     this.getLink();
@@ -416,6 +418,11 @@ export default {
     getLink(){
       this.pageLink = process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9002` : location.origin + "/bh" //客户工作台地址
       this.gzLink = process.env.NODE_ENV === 'dev' ? `${location.protocol}//${location.hostname}:9001` : location.origin + "/cp/?cid=" + this.cid //公众号商城地址
+    },
+
+    //是否开通订单动能
+    isOpenOrder(){
+      
     },
 
     // 获取智能开店信息
@@ -472,18 +479,54 @@ export default {
     },
     //刷新
     refresh() {
+      console.log('refresh')
       this.getOerviewRemind();
       this.getOverviewSelling();
     },
+    getMessageAuth() {
+      const authlist1 = ['订单','订单查询']
+      const authlist2 = ['订单', '发货管理']
+      
+      if (isExistAuth(authlist1)) {
+        return 1
+      }
+      if (isExistAuth(authlist2)) {
+        return 2
+      }
+      return 0
+    },
     // 待办提醒
     getOerviewRemind() {
+      const authCode = this.getMessageAuth()
+      let prompt = ''
+      switch(authCode) {
+        case 1:
+          prompt = '<a href="/bp/order/query?isAbnormal=1&orderStatus=5">请查看</a>'
+          break;
+        case 2:
+          prompt = '请查看'
+          break;
+      }
+      if (!prompt) return false
+      this.closeTodo()
       this._apis.overview.overviewRemind({}).then(response => {
         this.stayProcessedCount = response.stayProcessedCount;
         this.staySendCount = response.staySendCount;
         this.stayAuthCount = response.stayAuthCount;
+        //判断是否有异常订单
+        let num = response.abnormalCount
+        if(num>0){
+          this.todo = this.$message({
+            showClose: true,
+            dangerouslyUseHTMLString: true,
+            message:`<p>您有${num}条异常订单需要处理，${prompt}</p>`,
+            type: "warning",
+            duration: 0
+          });
+        }
       });
     },
-    // 待办售罄
+    // 待办提醒-商品售罄
     getOverviewSelling() {
       this._apis.overview.overviewSelling({}).then(response => {
         this.toBeSoldOut = response;
@@ -652,7 +695,11 @@ export default {
           console.error(error);
         });
     },
-
+    closeTodo() {
+      if (this.todo && 'close' in this.todo) {
+        this.todo.close()
+      }
+    },
     /* 获取大地的实时概况数据 */
     getDadiData() {
       this._apis.realSurvey.dataView({invokeType:'mzw'}).then(response => {
@@ -662,6 +709,10 @@ export default {
         this.$message.error(error);
       });
     }
+  },
+  beforeDestroy() {
+    this.closeTodo()
+
 
   }
 };
@@ -680,7 +731,7 @@ export default {
     .p_l_item {
       background-color: #fff;
       padding: 20px;
-      border-radius: 5px;
+      border-radius: 4px;
     }
     .p_l_top {
       .p_p {
@@ -869,7 +920,7 @@ export default {
       padding: 20px 16px;
       // width: 215px;
       color: #3d434a;
-      border-radius: 5px;
+      border-radius: 4px;
     }
     //客服中心
     .p_r_kefu {

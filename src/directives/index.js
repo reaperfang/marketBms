@@ -170,71 +170,76 @@ let enable = 0
 
 window.eventHub = new Vue()
 var shopInfos = function() {
-    console.log('1111')
-    if(localStorage.getItem('shopInfos') && JSON.parse(localStorage.getItem('shopInfos')) && JSON.parse(localStorage.getItem('shopInfos')).data && JSON.parse(localStorage.getItem('shopInfos')).data.functions && JSON.parse(localStorage.getItem('shopInfos')).data.functions[0] && JSON.parse(localStorage.getItem('shopInfos')).data.functions[0].children) {
-        msfList = JSON.parse(localStorage.getItem('shopInfos')).data.functions[0].children
-   
-        Vue.directive('permission', {
-            inserted: function (el, binding, vnode) {
-                let { value } = binding
+    let shopInfos = localStorage.getItem('shopInfos')
 
-                if(typeof value == 'string') value = eval(value)
-        
-                let hasPermeission = function () {
-                    let object1 = null
-                    let object2 = null
-                    let object3 = null
-                    let object4 = null
-        
-                    object1 = msfList.find(val => val.name == value[0])
-                    if(!object1) return false
-                    if(object1.children) {
-                        object2 = object1.children.find(val => val.name == value[1])
-                        if(!object2) return false
-                    }
-                    if (value.length == 3) {
-                        if (object2.children) {
-                            object3 = object2.children.find(val => val.name == value[2])
-                            if (object3) return true
+    if(shopInfos) {
+        shopInfos = JSON.parse(shopInfos)
+
+        if(shopInfos.data && shopInfos.data.functions && shopInfos.data.functions[0] && shopInfos.data.functions[0].children) {
+            msfList = shopInfos.data.functions[0].children
+   
+            Vue.directive('permission', {
+                inserted: function (el, binding, vnode) {
+                    let { value } = binding
+
+                    if(typeof value == 'string') value = eval(value)
+            
+                    let hasPermeission = function () {
+                        let object1 = null
+                        let object2 = null
+                        let object3 = null
+                        let object4 = null
+            
+                        object1 = msfList.find(val => val.name == value[0])
+                        if(!object1) return false
+                        if(object1.children) {
+                            object2 = object1.children.find(val => val.name == value[1])
+                            if(!object2) return false
                         }
-                        return false
+                        if (value.length == 3) {
+                            if (object2.children) {
+                                object3 = object2.children.find(val => val.name == value[2])
+                                if (object3) return true
+                            }
+                            return false
+                        }
+                        if (value.length == 4) {
+                            if (object2.children) {
+                                object3 = object2.children.find(val => val.name == value[2])
+                                if (!object3) return false
+                                if (object3.children) {
+                                    object4 = object3.children.find(val => val.name == value[3])
+                                    if (object4) return true
+                                }
+                            }
+                            return false
+                        }
                     }
-                    if (value.length == 4) {
-                        if (object2.children) {
-                            object3 = object2.children.find(val => val.name == value[2])
-                            if (!object3) return false
-                            if (object3.children) {
-                                object4 = object3.children.find(val => val.name == value[3])
-                                if (object4) return true
+            
+                    if (value && value instanceof Array && (value.length > 2)) {
+                        if (!hasPermeission()) {
+                            if(el.className.indexOf('el-tab-pane') != -1) {
+                                vnode.context.$nextTick(function () {
+                                    let _id = el.getAttribute('aria-labelledby')
+            
+                                    let obj = document.getElementById(_id)
+                                    let parent = obj.parentNode
+                                    
+                                    el.parentNode.removeChild(el)
+                                    parent.removeChild(obj)
+                                    let firstNode = parent.getElementsByClassName('el-tabs__item')[0]
+                                    firstNode && firstNode.click()
+                                })
+                            } else {
+                                el.parentNode && el.parentNode.removeChild(el)
                             }
                         }
-                        return false
+                    } else {
+                        throw new Error('v-permission格式为长度大于2的字符串数组')
                     }
                 }
-        
-                if (value && value instanceof Array && (value.length > 2)) {
-                    if (!hasPermeission()) {
-                        if(el.className.indexOf('el-tab-pane') != -1) {
-                            vnode.context.$nextTick(function () {
-                                let _id = el.getAttribute('aria-labelledby')
-        
-                                let obj = document.getElementById(_id)
-                                let parent = obj.parentNode
-                                
-                                el.parentNode.removeChild(el)
-                                parent.removeChild(obj)
-                                let firstNode = parent.getElementsByClassName('el-tabs__item')[0]
-                                firstNode && firstNode.click()
-                            })
-                        } else {
-                            el.parentNode && el.parentNode.removeChild(el)
-                        }
-                    }
-                } else {
-                    throw new Error('v-permission格式为长度大于2的字符串数组')
-                }
-            }
-        })
+            })
+        }
     }
 }
 let anotherAuth = () => {
@@ -290,6 +295,23 @@ Vue.directive('calcHeight', {
        el.style.height = document.body.clientHeight - (binding.value || 0) + 'px'
        vnode.context._globalEvent.$on('resize', ()=> {
            el.style.height = document.body.clientHeight - (binding.value || 0) + 'px';
+       })
+    }
+})
+
+Vue.directive('calcMinHeight', {
+    inserted: function (el, binding, vnode) {
+       el.style.minHeight = document.body.clientHeight - (binding.value || 0) + 'px';
+       vnode.context._globalEvent.$off('resize')
+       vnode.context._globalEvent.$on('resize', ()=> {
+           el.style.minHeight = document.body.clientHeight - (binding.value || 0) + 'px';
+       })
+    },
+    componentUpdated: function (el, binding, vnode) {
+       el.style.minHeight = document.body.clientHeight - (binding.value || 0) + 'px'
+       vnode.context._globalEvent.$off('resize')
+       vnode.context._globalEvent.$on('resize', ()=> {
+           el.style.minHeight = document.body.clientHeight - (binding.value || 0) + 'px';
        })
     }
 })

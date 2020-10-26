@@ -119,12 +119,12 @@
                 <el-pagination
                     v-if="printOrderInfo.length>1" 
                     class="pagination"
-                    background
+                    :background="true"
                     :total="printOrderInfo.length" 
                     :page-size="1"
                     :pager-count="5"
                     :current-page="1"
-                    layout="prev, pager, next"
+                    layout="prev, pager, next, sizes"
                     @current-change="handleCurrentChange"
                 >
                 </el-pagination>
@@ -247,6 +247,7 @@ export default {
     padding: 20px;
     background: #fff;
     height: 100%;
+    border-radius: 4px;
     .print_preview_info{
         height: 100%;
         padding: 0px 10px 18px 0px;

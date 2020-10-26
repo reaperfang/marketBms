@@ -1,6 +1,6 @@
 /*提现设置 */
 <template>
-    <div class="main">
+    <div class="main mh bor-radius">
       <el-form ref="form" :model="form">
         <el-form-item label="是否允许提现:" prop="cashOut">
           <el-radio-group v-model="form.cashOut">
@@ -98,9 +98,9 @@ export default {
     },
 
     onSubmit(formName){
-      this.$msgbox({
-        title: '确认提示',
-        message: '请确认开通了【商户支付】功能，否则将可能会产生相关客诉，因此产生的法律风险商家需要自行承担',
+      this.confirm({
+        text: '请确认开通了【商户支付】功能，否则将可能会产生相关客诉，因此产生的法律风险商家需要自行承担',
+        icon: true, 
         showCancelButton: true,
         confirmButtonText: '确认已开通，继续保存',
         cancelButtonText: '返回',
@@ -187,7 +187,7 @@ export default {
     }
   }
   .save{
-    margin: 200px 0 200px 140px;
+    margin: 200px 0 20px 140px;
   }
   .pdl100{
     padding-left: 100px;

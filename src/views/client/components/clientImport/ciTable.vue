@@ -47,20 +47,21 @@
     </el-table>
     <div class="page_styles">
       <el-pagination
+        :background="true"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="Number(startIndex) || 1"
         :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
         :page-size="pageSize*1"
         :total="total*1"
-        layout="total, sizes, prev, pager, next, jumper"
+        layout="prev, pager, next, sizes"
       ></el-pagination>
     </div>
     <component 
       :is="currentDialog" 
       :dialogVisible.sync="dialogVisible" 
       :data="currentData"
-      v-if="hackReset"
+      v-if="dialogVisible"
     >
     </component>
   </div>
@@ -80,7 +81,6 @@ export default {
       currentDialog: "",
       dialogVisible: false,
       currentData:{},
-      hackReset: false,
       loading: false,
       startIndex: 1,
       pageSize: 10
@@ -117,10 +117,6 @@ export default {
     },
     addTag(row) {
       if(row.successNum !== 0) {
-        this.hackReset = false;
-        this.$nextTick(() => {
-          this.hackReset = true;
-        })
         this.dialogVisible = true;
         this.currentDialog = "batchAddTagDialog";
         this.currentData.successNum = row.successNum;
@@ -139,10 +135,6 @@ export default {
           type: 'warning'
         });
       }else{
-        this.hackReset = false;
-        this.$nextTick(() => {
-          this.hackReset = true;
-        })
         this.dialogVisible = true;
         this.currentDialog = "changeIdentityDialog";
         this.currentData.successNum = row.successNum;

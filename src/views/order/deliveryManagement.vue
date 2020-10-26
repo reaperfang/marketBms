@@ -1,5 +1,5 @@
 <template>
-    <div class="delivery-management">
+    <div class="delivery-management mh">
         <section>
             <el-tabs v-model="activeName">
                 <el-tab-pane v-permission="['订单', '发货管理', '订单发货']" label="订单发货" name="order">
@@ -44,6 +44,7 @@ export default {
 <style lang="scss" scoped>
     .delivery-management {
         background-color: #fff;
+        border-radius: 4px;
         section {
           padding: 0 0 20px 0;
         }
