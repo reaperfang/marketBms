@@ -237,7 +237,6 @@ var shopInfos = function() {
             })
         }
     }
-}
 let anotherAuth = () => {
     if(localStorage.getItem('anotherAuthEnable')) {
         enable = +localStorage.getItem('anotherAuthEnable')
