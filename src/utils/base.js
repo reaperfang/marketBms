@@ -400,14 +400,12 @@ export function getOperationColumnW() {
   const btnsBox = document.querySelectorAll('.table-operate'); //所有操作列中的行
   btnsBox.forEach((item) => {
       const spans = item.querySelectorAll('span'); //对应下的按钮
-      console.log('spans',spans)
-      num =  (spans.length - 1) * 11 + 42; //按钮间有10px间距+1px边线，所以是11  最后一个按钮没有， 40为外框左右padding, 2是宽裕出来的
+      let num =  (spans.length - 1) * 11 + 42; //按钮间有10px间距+1px边线，所以是11  最后一个按钮没有， 40为外框左右padding, 2是宽裕出来的
       item.querySelectorAll('span').forEach((tag) => {
           num += tag.innerHTML.trim().length * w;
         })
       numArr.push(num);
   })
-  console.log('Math.max(...numArr)',Math.max(...numArr))
   return Math.max(...numArr, 72)
 }
 //按照创建时间正序排序
