@@ -45,6 +45,9 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.shop.getGoodsGroup({}).then((response)=>{
+        if(!response || !response.pageData) {
+          return;
+        }
         const string = utils.uncompileStr(response.pageData);
         if(string.indexOf('groupStyle') < 0) {
           return;
