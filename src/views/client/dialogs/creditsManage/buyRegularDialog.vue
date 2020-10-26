@@ -185,6 +185,7 @@ export default {
       distinguish: null,
       total: 0,
       pageSize: 10,
+      resultPageSize: 600,  //回显的列表数据条数，不能用10.不然设置的数据刷新页面重新请求就只能看到10条了。跟产品申鹏展沟通暂定为600条。
       startIndex: 1,
       btnLoading: false,
       dialogVisible2: false,
@@ -427,7 +428,7 @@ export default {
         });
         //this.payAmount = sceneRule.yesDistinguish.payAmount;
         if(ids.length > 0) {
-          this._apis.client.getSkuList({status: 1, ids: ids, startIndex:1, pageSize: this.pageSize}).then((response) => {
+          this._apis.client.getSkuList({status: 1, ids: ids, startIndex:1, pageSize: this.resultPageSize}).then((response) => {
             this.selectedList = response.list;
             this.selectedList.map(item => {
               item.goodsInfo.specs = item.goodsInfo.specs.replace(/{|}|"|"/g, "");
