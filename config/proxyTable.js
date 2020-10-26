@@ -6,7 +6,7 @@ module.exports = {
 
     /* 电商服务 */
     '/data-server/**': {
-      target: 'https://pre-omo.aiyouyi.cn',
+      target: 'https://test2-omo.aiyouyi.cn',
       changeOrigin: true,
       pathRewrite: {
         '^/data-server': ''
@@ -15,7 +15,7 @@ module.exports = {
 
     /* 营销服务 */
     '/sale_server/**': {
-      target: 'https://pre-omo.aiyouyi.cn/mkt-api/',
+      target: 'https://test2-omo.aiyouyi.cn/mkt-api/',
       changeOrigin: true,
       pathRewrite: {
         '^/sale_server': ''
@@ -24,7 +24,7 @@ module.exports = {
 
     /* 300官网 */
     '/zx_server/**': {
-      target: 'https://pre-cms-api.300.cn',  //此地址不分test几，只有test/pre和空前缀
+      target: 'https://test-cms-api.300.cn',  //此地址不分test几，只有test/pre和空前缀
       changeOrigin: true,
       pathRewrite: {
         '^/zx_server': ''
