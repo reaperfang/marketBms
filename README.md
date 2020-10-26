@@ -2,7 +2,7 @@
 
 http://test-omo.aiyouyi.cn/xiaoyaoji/doc/2ShuYz40m这个是接口地址
 
-名：admin-mdl  密码：nBEtNs*Q53avSg6^
+名：admin-mdl  密码：nBEtNs*Q53avSg6^ 
 
 ### 项目运行
 
