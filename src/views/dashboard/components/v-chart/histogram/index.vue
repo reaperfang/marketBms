@@ -63,6 +63,9 @@ export default {
 						interval: 0,
 						rotate: 35,
 						show: true,
+						/*textStyle: {
+							fontSize: screen.width > 1600 ? '12':'8'
+						}*/
 					},
 
 				},

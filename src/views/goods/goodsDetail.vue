@@ -397,7 +397,7 @@
                 <!-- <el-button class="border-button new-units">新增单位</el-button> -->
                 <div style="margin-top: 21px;">
                     <el-checkbox :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.other">其他</el-checkbox>
-                    <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.otherUnit" placeholder="请输入计量单位"></el-input>
+                    <el-input :disabled="!ruleForm.productCategoryInfoId" maxlength="10" v-model="ruleForm.otherUnit" @input="changeInputOther(ruleForm.otherUnit)" placeholder="请输入计量单位"></el-input>
                 </div>
             </el-form-item>
             <!-- <el-form-item label="商品品牌" prop="productBrandInfoId">
@@ -1109,6 +1109,13 @@ export default {
         });
     },
     methods: {
+		changeInputOther(val) {
+			this.$message.closeAll()
+			if (!/^([A-Za-z]|[\u4E00-\u9FA5])+$/.test(val)) {
+				this.$message.error('仅支持汉字和字母输入，不超过10个字符，请重新输入。')
+				return false
+			}
+		},
         validateGoodsInfos(obj){
             if(obj){
                 if(obj.costPrice == '') {

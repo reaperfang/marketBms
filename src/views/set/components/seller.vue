@@ -38,7 +38,7 @@
           v-permission="['设置', '消息设置', '默认页面', '开启/关闭']">
           </el-switch>
           <el-tooltip
-            :disabled="!scope.row.wechatPublicId" 
+            :disabled="!scope.row.wechatPublicId"
             placement="bottom">
             <div slot="content" style="width:200px;">
               <p class="preview_title">{{scope.row.msgTitle}}</p>
@@ -101,7 +101,7 @@
         </template>
       </el-table-column>
     </el-table>
-  </div>     
+  </div>
 </template>
 
 <script>
@@ -115,10 +115,10 @@ export default {
   },
   components: {},
   watch: {
-    
+
   },
   computed: {
-  }, 
+  },
   created() {
     this.getShopMessage()
   },
@@ -178,7 +178,7 @@ export default {
         }).catch(error =>{
           this.$message.error(error);
           this.getShopMessage()
-        })        
+        })
       }).catch(() =>{
         this.getShopMessage()
       })
@@ -212,7 +212,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .tabs{
-  background:#fff; 
+  background:#fff;
   padding:10px 20px;
 }
 .main{

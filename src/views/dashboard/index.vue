@@ -278,7 +278,7 @@ export default {
 		overflow-y: auto;
 		min-width: 1366px;
 		max-height: 900px;
-		font-size: 12px!important;
+		/*font-size: 12px!important;*/
 
 	}
 
