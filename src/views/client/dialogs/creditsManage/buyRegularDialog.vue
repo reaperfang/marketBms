@@ -74,7 +74,7 @@
             </span>
         </div>
     </DialogBase>
-    <el-dialog :visible.sync="otherVisible" width="40%" title="选择商品">
+    <el-dialog :visible.sync="otherVisible" width="40%" title="选择商品" v-if="otherVisible">
       <div class="dialog-container">
         <div class="c_container">
           <div class="marB20">
@@ -127,6 +127,7 @@
         title="已选商品"
         :visible.sync="dialogVisible2"
         width="45%"
+        v-if="dialogVisible2"
     >
         <div>
             <span class="clearFont">（清空全部已选商品）</span>
@@ -184,6 +185,7 @@ export default {
       distinguish: null,
       total: 0,
       pageSize: 10,
+      resultPageSize: 600,  //回显的列表数据条数，不能用10.不然设置的数据刷新页面重新请求就只能看到10条了。跟产品申鹏展沟通暂定为600条。
       startIndex: 1,
       btnLoading: false,
       dialogVisible2: false,
@@ -213,7 +215,7 @@ export default {
       this[ele] = val;
     },
     getRowKeys(row) {
-      return row.id
+      return row.goodsInfo.id
     },
     handelSelect(val,row) {
       this.selections.push(row);
@@ -268,7 +270,10 @@ export default {
           message: '请选择指定产品',
           type: 'warning'
         });
-      } else {
+        return;
+      }
+      if(params.sceneRule.isAllProduct) {
+        params.selectedList = [];
         this._apis.client
           .editCreditRegular(params)
           .then(response => {
@@ -285,7 +290,24 @@ export default {
             this.visible = false;
             console.log(error);
           });
+          return;
       }
+      this._apis.client
+          .editCreditRegular(params)
+          .then(response => {
+            this.btnLoading = false;
+            this.visible = false;
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            });
+            this.$emit('refreshPage')
+          })
+          .catch(error => {
+            this.btnLoading = false;
+            this.visible = false;
+            console.log(error);
+          });
     },
     showDialog(val) {
       if (val == 1) {
@@ -405,18 +427,23 @@ export default {
           ids.push(i.id);
         });
         //this.payAmount = sceneRule.yesDistinguish.payAmount;
-        this._apis.client.getSkuList({status: 1, ids: ids, startIndex:1, pageSize: this.pageSize}).then((response) => {
-          this.selectedList = response.list;
-          this.selectedList.map(item => {
-            item.goodsInfo.specs = item.goodsInfo.specs.replace(/{|}|"|"/g, "");
+        if(ids.length > 0) {
+          this._apis.client.getSkuList({status: 1, ids: ids, startIndex:1, pageSize: this.resultPageSize}).then((response) => {
+            this.selectedList = response.list;
+            this.selectedList.map(item => {
+              item.goodsInfo.specs = item.goodsInfo.specs.replace(/{|}|"|"/g, "");
+            })
+          }).catch((error) => {
+            console.log(error);
           })
-        }).catch((error) => {
-          console.log(error);
-        })
+        }
       }
     },
     clearList() {
       this.selectedList = [];
+      this.skuList.map(item => {
+        delete item.noselected;
+      })
     },
     submit3() {
       this.$nextTick(() => {

@@ -343,7 +343,9 @@ export default {
                 receivedPhone: this.ruleForm.receivedPhone,
                 receivedName: this.ruleForm.receivedName,
                 receivedLat: this.ruleForm.lat,
-                receivedLng: this.ruleForm.lng
+                receivedLng: this.ruleForm.lng,
+                receivedLatitude: this.ruleForm.lat,
+                receivedLongitude: this.ruleForm.lng
               };
             } else if (this.sendGoods == "send") {
 
@@ -359,7 +361,9 @@ export default {
                 sendPhone: this.ruleForm.sendPhone,
                 sendName: this.ruleForm.sendName,
                 sendLat: this.ruleForm.lat,
-                sendLng: this.ruleForm.lng
+                sendLng: this.ruleForm.lng,
+                sendLatitude: this.ruleForm.lat,
+                sendLongitude: this.ruleForm.lng
               };
 
               // this._apis.order
