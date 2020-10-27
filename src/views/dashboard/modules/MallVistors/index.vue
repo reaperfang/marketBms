@@ -99,6 +99,9 @@ export default {
 						lineStyle: {
 							color: "rgba(255,255,255,0.8)"
 						}
+					},
+					axisLabel: {
+						fontSize: screen.width==1280 || screen.width==1366 ? 8 : screen.width==1440 || screen.width==1600 ? 10 : 12,
 					}
 				},
 				yAxis: {
@@ -112,6 +115,9 @@ export default {
 							color: "rgba(255,255,255,0.8)"
 						},
 						show: false
+					},
+					axisLabel: {
+						fontSize: screen.width==1280 || screen.width==1366 ? 8 : screen.width==1440 || screen.width==1600 ? 10 : 12,
 					},
 					minInterval: 1
 				},
