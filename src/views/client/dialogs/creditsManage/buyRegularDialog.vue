@@ -10,7 +10,7 @@
           <div>购买获得积分，订单售后期结束可正常使用积分</div>
           <div>
             <span>赠送积分的商品：</span>
-            <el-radio v-model="isAllProduct" label="0">全部商品</el-radio>
+            <el-radio v-model="isAllProduct" label="0" @change="toggleAllProduct">全部商品</el-radio>
             <el-radio v-model="isAllProduct" label="1" @change="showDialog">指定商品</el-radio>
             <el-button style="margin-left: 10px" @click="dialogVisible2 = true" v-if="selectedList.length !== 0">查看已选商品</el-button>
           </div>
@@ -127,6 +127,7 @@
         title="已选商品"
         :visible.sync="dialogVisible2"
         width="45%"
+        @close="close3"
         v-if="dialogVisible2"
     >
         <div>
@@ -289,7 +290,7 @@ export default {
           .catch(error => {
             this.btnLoading = false;
             this.visible = false;
-            console.log(error);
+            console.error(error);
           });
           return;
       }
@@ -307,7 +308,7 @@ export default {
           .catch(error => {
             this.btnLoading = false;
             this.visible = false;
-            console.log(error);
+            console.error(error);
           });
     },
     showDialog(val) {
@@ -358,7 +359,7 @@ export default {
           this.categoryOptions = [].concat(arr);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     getSkuList(startIndex, pageSize) {
@@ -387,7 +388,7 @@ export default {
           this.total = response.total;
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     handleSearch() {
@@ -446,7 +447,7 @@ export default {
               item.goodsInfo.specs = item.goodsInfo.specs.replace(/{|}|"|"/g, "");
             })
           }).catch((error) => {
-            console.log(error);
+            console.error(error);
           })
         }
       }
@@ -470,7 +471,7 @@ export default {
           })
         })
       }); 
-    },
+    }
     // cancel3() {
     //   this.dialogVisible2 = false;
     //   if(this.oldSelect.length > 0) {
@@ -489,6 +490,8 @@ export default {
     //     }) 
     //   }
     // },
+    
+  },
   computed: {
     visible: {
       get() {
