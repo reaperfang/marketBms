@@ -127,7 +127,6 @@
         title="已选商品"
         :visible.sync="dialogVisible2"
         width="45%"
-        @close="close3"
         v-if="dialogVisible2"
     >
         <div>
@@ -490,25 +489,6 @@ export default {
     //     }) 
     //   }
     // },
-    close3() {
-      this.dialogVisible2 = false;
-      if(this.oldSelect.length > 0) {
-        this.selectedList = this.oldSelect;
-        this.$nextTick(() => {
-          this.skuList.forEach(row => {
-            this.$refs.skuTable.toggleRowSelection(row,false);
-          });
-        }) 
-      }else if(this.oldSelect.length == 0 && this.selectedList.length > 0){
-        this.selectedList = [];
-        this.$nextTick(() => {
-          this.skuList.forEach(row => {
-            this.$refs.skuTable.toggleRowSelection(row,false);
-          });
-        }) 
-      }
-    }
-  },
   computed: {
     visible: {
       get() {
