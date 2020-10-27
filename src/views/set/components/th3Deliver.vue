@@ -52,7 +52,7 @@
                     type="text"
                     size="medium"
                     @click="goPay"
-                    v-permission="['设置','同城配送', '第三方配送', '充值']"
+                    v-permission="['设置','同城配送', '第三方配送', '充值/查看余额']"
                     v-if="scope.row.status === 1"
                   >充值</el-button>
                   <el-button
@@ -60,7 +60,7 @@
                     type="text"
                     size="medium"
                     @click="viewBalance"
-                    v-permission="['设置','同城配送', '第三方配送', '查看余额']"
+                    v-permission="['设置','同城配送', '第三方配送', '充值/查看余额']"
                     v-if="scope.row.status === 1"
                   >查看余额</el-button>
                 </template>
