@@ -202,6 +202,9 @@ export default {
       }
       
   } 
+/deep/ .el-timeline {
+  max-width: 512px;
+}
 </style>
 <style lang="scss">
 .logistics {
