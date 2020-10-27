@@ -87,8 +87,8 @@
           label="变动积分"
           align="right">
           <template slot-scope="scope">
-            <span v-if="scope.row.changeType == 1 || scope.row.changeType == 3"> - </span>
-            <span v-else> + </span>
+            <span v-if="scope.row.changeType == 1 || scope.row.changeType == 5 || scope.row.changeType == 6"> - </span>
+            <span v-if="scope.row.changeType == 0 || scope.row.changeType == 3 || scope.row.changeType == 4"> + </span>
             {{scope.row.changeScore}}
           </template>
         </el-table-column>
