@@ -13,7 +13,7 @@
             <i class="el-icon-plus"></i>
             <span>选择活动</span>
           </div>
-          <p class="message">建议最多添加5个活动</p>
+          <p class="message">最多添加10个活动</p>
         </div>
         <div v-loading="loading" class="goods_groups">
           <el-tag
@@ -91,27 +91,12 @@ export default {
   },
   methods: {
      //根据ids拉取数据
-    async fetch(bNeedUpdateMiddle = true) {
+    fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
       if(componentData) {
          bNeedUpdateMiddle && this.syncToMiddle();
           if(Array.isArray(componentData.ids) && componentData.ids.length){
               this.loading = true;
-
-              //优先加载
-              if(componentData.ids.length > this.preloadLength) {
-                  const paramsLoad = this.utils.deepClone(componentData.ids);
-                  paramsLoad.splice(this.preloadLength);
-                  await this._apis.shop.getFullReductionListByIds({
-                      ids: paramsLoad.join(',')
-                  }).then((response)=>{
-                      this.createList(response);
-                      this.loading = false;
-                      this.deleteShow = false;
-                  }).catch((error)=>{
-                      this.displayList = [];
-                  });
-              }
 
               this._apis.shop.getFullReductionListByIds({
                   ids: componentData.ids.join(',')
