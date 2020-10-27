@@ -320,7 +320,7 @@ export default {
       }
     },
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
     
@@ -338,7 +338,7 @@ export default {
       this._apis.order
         .getIsTrace({ cid: this.cid })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.isTrace = res.isTrace;
         })
         .catch(error => {

@@ -192,7 +192,7 @@ export default {
                 }
                 this.satisfaction = pleased
             }).catch(error =>{
-                console.log('error',error)
+                console.error('error',error)
             })
         },
         //获取口碑差评率
@@ -209,7 +209,7 @@ export default {
                 }
                 this.badreviews = differences
             }).catch(error =>{
-                console.log('error',error)
+                console.error('error',error)
             })
         },
         changeTime(val){

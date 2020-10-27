@@ -204,7 +204,7 @@ export default {
           }
           this.$emit('refreshPage',1);
         }).catch((error) => {
-          console.log(error);
+          console.error(error);
           this.btnLoading = false;
           this.visible = false;
         })

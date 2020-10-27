@@ -89,10 +89,11 @@ const permission = {
     }
   },
   actions: {
-    GenerateRoutes({ commit }, { data, enable }) {
+    GenerateRoutes({ commit, rootGetters }, { data, enable }) {
       return new Promise(resolve => {
         const msfList = data
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+        const userInfo = rootGetters.userInfo
+        console.log('userInfo', userInfo)
         const type = userInfo.type
         let accessedRouters
         if (type == 'admin') {
@@ -119,9 +120,9 @@ const permission = {
       let _asyncRouterMap
 
       return new Promise((resolve, reject) => {
-        console.log(asyncRouterMap)
+        // console.log(asyncRouterMap)
         _asyncRouterMap = filterAnotherAuthAsyncRouter(asyncRouterMap, enable)
-        console.log(_asyncRouterMap)
+        // console.log(_asyncRouterMap)
 
         commit('SET_ROUTERS', _asyncRouterMap)
         resolve()

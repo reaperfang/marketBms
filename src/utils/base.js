@@ -1,4 +1,5 @@
-import { getToken } from '@/system/auth'
+import { getToken } from "@/system/auth.js";
+import store from '@/store'
 /**
  * 合并对象
  * 
@@ -230,28 +231,40 @@ export function GetQueryString(name) {
 /* 添加新营销活动 */
 export function addNewApply(path, access) {
   let token = getToken('authToken')
-  let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
-  let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName)
-  let tenantId = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).tenantInfoId)
+  let shopInfo = store.getters.shopInfos
+
+  let userName = store.getters.userInfo && encodeURI(store.getters.userInfo.userName)
+  let tenantId = store.getters.userInfo && encodeURI(store.getters.userInfo.tenantInfoId)
   let cid = shopInfo && shopInfo.id || ''
   let newUrl = `${process.env.NODE_ENV === 'dev' ? '//127.0.0.1:8080' : process.env.DATA_API}/vue/marketing${path}?access=${access}&token=${token}&businessId=1&loginUserId=1&tenantId=${tenantId}&cid=${cid}&userName=${userName}`
   let newWindow = window.open("about:blank");
   newWindow.location.href = newUrl;
 }
-
-
-
+/**
+ * 判断此类型是否是Object类型
+ * @param {Object} {}
+ */
+export function isObject(obj){
+  return Object.prototype.toString.call(obj)==='[object Object]';
+};
+/**
+ * 判断此类型是否是Array类型
+ * @param {Array} arr 
+ */
+export  function isArray(arr){
+  return Object.prototype.toString.call(arr)==='[object Array]';
+};
 export function equalsObj(oldData,newData){
-  function  isObject(obj){
-      return Object.prototype.toString.call(obj)==='[object Object]';
-  };
+  // function  isObject(obj){
+  //     return Object.prototype.toString.call(obj)==='[object Object]';
+  // };
   /**
    * 判断此类型是否是Array类型
    * @param {Array} arr 
    */
-  function isArray(arr){
-      return Object.prototype.toString.call(arr)==='[object Array]';
-  };
+  // function isArray(arr){
+  //     return Object.prototype.toString.call(arr)==='[object Array]';
+  // };
   // 类型为基本类型时,如果相同,则返回true
   if(oldData === newData) return true;
   if(isObject(oldData)&&isObject(newData)&&Object.keys(oldData).length === Object.keys(newData).length){
@@ -387,13 +400,13 @@ export function getOperationColumnW() {
   const btnsBox = document.querySelectorAll('.table-operate'); //所有操作列中的行
   btnsBox.forEach((item) => {
       const spans = item.querySelectorAll('span'); //对应下的按钮
-      let num = (spans.length - 1) * 11 + 42; //按钮间有10px间距+1px边线，所以是11  最后一个按钮没有， 40为外框左右padding, 2是宽裕出来的
+      let num =  (spans.length - 1) * 11 + 42; //按钮间有10px间距+1px边线，所以是11  最后一个按钮没有， 40为外框左右padding, 2是宽裕出来的
       item.querySelectorAll('span').forEach((tag) => {
           num += tag.innerHTML.trim().length * w;
         })
       numArr.push(num);
   })
-  return Math.max(...numArr)
+  return Math.max(...numArr, 72)
 }
 //按照创建时间正序排序
 export function sortCreateTime(arr){
@@ -413,4 +426,21 @@ export function sortCreateTime(arr){
   })
   return arr
 
+}
+
+// 判断是否为json字符串
+export function isJsonStr(str) {
+  if (typeof str == 'string') {
+    try {
+      const obj = JSON.parse(str);
+      if (typeof obj == 'object' && obj) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+  return false;
 }

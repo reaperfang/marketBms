@@ -96,7 +96,7 @@ export default {
   },
     //调用
     mounted(){
-        console.log(this.dataChart)
+        // console.log(this.dataChart)
         this.$nextTick(function() {
             this.drawPie('main')
         })

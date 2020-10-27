@@ -95,7 +95,7 @@ export default {
   },
   computed: {
     cid(){
-        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        let shopInfo = this.$store.getters.shopInfos
         return shopInfo.id
     }
   },
@@ -122,7 +122,7 @@ export default {
   methods: {
     getShopAuthList() {
       store.dispatch('getShopAuthList').then(() => {
-        const localMsfList = localStorage.getItem('shopInfos');
+        const localMsfList = this.$store.getters.shopInfos;
         let msfList = [];
         let enable = 0
 
@@ -196,7 +196,7 @@ export default {
         return
       }
       this.showCodeDialog = true
-      this._apis.set.getShopCode().then((res) => {
+      this._apis.shopInfo.getShopCode().then((res) => {
           this.shopCode = res
           let text = `${this.shopCode}<br/><span class="message">用户绑定授权平台、数据对接，一经授权不得修改</span>`
           let beforeClose = (action, instance, done) => {
@@ -253,14 +253,14 @@ export default {
     },
     getList() {
       this.loading = true
-      this._apis.set.getAuthPageList().then((res) => {
+      this._apis.shopInfo.getAuthPageList().then((res) => {
         this.loading = false
         this.total = +res.total
         res.list.forEach(val => {
           val.shopName = this.shopName
         })
         this.list = res.list
-          console.log(res)
+          // console.log(res)
       }).catch(error => {
           this.loading = false
           this.$message.error({
@@ -270,8 +270,7 @@ export default {
       })
     },
     getShopInfo(){
-      let id = this.cid
-      this._apis.set.getShopInfo({id:id}).then(response =>{
+      this.$store.dispatch('getShopInfo').then(response =>{
         this.shopName = response.shopName
         this.getList()
       }).catch(error =>{

@@ -107,7 +107,7 @@
 <script>
 import protocolDialog from "@/views/set/dialogs/protocolDialog";
 import registerDialog from "@/views/set/dialogs/registerDialog";
-import { isExistAuth } from '@/utils/auth.js'
+import { isExistAuth } from '@/system/user.js';
 export default {
   components: {
     registerDialog,
@@ -154,7 +154,7 @@ export default {
       return this.address ? '修改': '新建'
     },
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
     isHasOpenTh3Config() {
@@ -162,7 +162,7 @@ export default {
       return obj ? true : false
     },
     isTableShow() {
-      console.log('this.isHasOpenTh3Config:',this.isHasOpenTh3Config, 'isOpenTh3Deliver:',this.isOpenTh3Deliver, 'isApplyOpen:',this.isApplyOpen)
+      // console.log('this.isHasOpenTh3Config:',this.isHasOpenTh3Config, 'isOpenTh3Deliver:',this.isOpenTh3Deliver, 'isApplyOpen:',this.isApplyOpen)
       if ((!this.isHasOpenTh3Config && !this.isOpenTh3Deliver) || this.isApplyOpen) return false
       return true
     }
@@ -170,7 +170,7 @@ export default {
 
   watch: {
     isOpenTh3Deliver(val) {
-      console.log('isOpenTh3Deliver',val)
+      // console.log('isOpenTh3Deliver',val)
       // this.isTableShow = this.isOpen
       if (!val) this.isApplyOpen = false
       this.btnShow = false
@@ -212,7 +212,7 @@ export default {
       })
     },
     formatTh3DeliverList(list) {
-      console.log('-----formatTh3DeliverList---', list)
+      // console.log('-----formatTh3DeliverList---', list)
       let arr = [
         {
           thirdType: 1,
@@ -256,10 +256,7 @@ export default {
       })
     },
     getShopInfo() {
-      let id = this.cid;
-      return this._apis.set
-        .getShopInfo({ id: id })
-        .then(response => {
+      return this.$store.dispatch('getShopInfo').then(response => {
           if (!response) return false
           this.isOpenTh3Deliver = response.isOpenTh3Deliver === 1 ? true : false
           this.isOpenAutoCall = response.autoCall === 1 ? 1 : 0
@@ -302,7 +299,7 @@ export default {
       req.autoCall = this.isOpenAutoCall
       req.isOpenTh3Deliver = this.isOpenTh3Deliver ? 1 : 0
       req.id = this.cid
-      return this._apis.set.updateShopInfo(req)
+      return this._apis.shopInfo.updateShopInfo(req)
     },
     updateStoreInfo() {
       // 没有

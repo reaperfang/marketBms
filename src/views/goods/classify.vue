@@ -75,7 +75,7 @@ export default {
     },
     computed: {
         cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
             return shopInfo.id
         },
     },
@@ -285,7 +285,7 @@ export default {
             }
         },
         change(node, data) {
-            console.log(data)
+            // console.log(data)
             this.currentDialog = 'AddCategoryDialog'
             this.currentData = {
                 id: data.id,
@@ -295,7 +295,7 @@ export default {
             this.dialogVisible = true
         },
         addCategory(node, data) {
-            console.log(node)
+            // console.log(node)
             this.currentDialog = 'AddCategoryDialog'
             this.currentData = Object.assign({}, node.data, {add: true})
             this.dialogVisible = true

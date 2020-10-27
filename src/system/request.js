@@ -20,11 +20,12 @@ class Ajax {
 
   // request拦截器
   requestGlobal(config) {
-    let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+    let shopInfo = store.getters.shopInfos
+    //console.log('getShopInfo',store.getters.shopInfos)
     let cid = shopInfo && shopInfo.id || ''
     let headers = Object.assign({
           businessId: 1,
-          tenantId: localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).tenantInfoId,
+          tenantId: store.getters.userInfo && store.getters.userInfo.tenantInfoId,
           merchantId: cid,
           loginUserId: 1,
           token: store.getters.token || getToken('authToken')
@@ -151,7 +152,7 @@ class Ajax {
 
     //获取cid和shopInfoId
     // let cid = store.getters.userInfo && store.getters.userInfo.cid ? store.getters.userInfo.cid : '';
-    let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+    let shopInfo = store.getters.shopInfos
     let cid = shopInfo && shopInfo.id || ''
     let shopInfoId = store.getters.userInfo && store.getters.userInfo.shopInfoId ? store.getters.userInfo.shopInfoId
       : '';

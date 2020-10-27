@@ -128,10 +128,10 @@ export default {
   },
   computed:{
     userInfo(){
-      return JSON.parse(localStorage.getItem('userInfo'))
+      return this.$store.getters.userInfo
     },
     cid(){
-      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      let shopInfo = this.$store.getters.shopInfos
       return shopInfo.id
     }
   },

@@ -97,10 +97,10 @@ export default {
           return this.$route.params.data
       },
       userInfo(){
-        return JSON.parse(localStorage.getItem('userInfo'))
+        return this.$store.getters.userInfo
      },
      cid(){
-        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        let shopInfo = this.$store.getters.shopInfos
         return shopInfo.id
      },
   },

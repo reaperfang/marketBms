@@ -204,7 +204,7 @@ export default {
   },
   computed: {
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     }
   },
@@ -432,7 +432,7 @@ export default {
             })
             //如果没有子帐号配置权限，则默认自己是配送员
             if(!this.distributorSet){
-                const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+                const userInfo = this.$store.getters.userInfo;
                 res.list = [
                     {
                         "id": 1,
@@ -745,7 +745,7 @@ export default {
                 // }
               }
               this._list = this._list.filter(val => val.express != null && !val.express.sizeSpecs && val.sizeList && val.sizeList.length)
-              console.log(this.list)
+              // console.log(this.list)
               var __result = [];
               var __obj = {};
                 for(let i =0,l=this._list.length; i<l; i++){
@@ -934,9 +934,7 @@ export default {
 
           this.list = res;
 
-          // this._apis.order
-          //   .fetchOrderAddress({ id: this.cid, cid: this.cid })
-          //   .then(response => {
+          // this.$store.dispatch('getShopInfo').then(response => {
           //     this.list.forEach(res => {
           //       if(!res.orderAfterSaleSendInfo.sendAddress) {
           //         res.orderAfterSaleSendInfo.sendName = response.senderName;

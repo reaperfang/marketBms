@@ -184,7 +184,7 @@ export default {
           this.loading1 = false;
         })
         .catch(error => {
-          console.log('error',error);
+          console.error('error',error);
           this.loading1 = false;
         });
     },
@@ -256,7 +256,7 @@ export default {
           this.loading2 = false;
         })
         .catch(error => {
-          console.log('error',error);
+          console.error('error',error);
           this.loading2 = false;
         });
     },
@@ -294,7 +294,7 @@ export default {
         })
         .catch(error => {
           this.ip3Show = false
-          console.log('error',error);
+          console.error('error',error);
           this.loading3 = false;
         });
     },

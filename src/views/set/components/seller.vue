@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     getShopMessage(){
-      this._apis.set.getShopMessage({msgReceiver:'0'}).then(response =>{
+      this._apis.shopInfo.getShopMessage({msgReceiver:'0'}).then(response =>{
         this.tableData = []
         response.map(item => {
           if(item.tcShopInfoMsgTemplateId != 21){
@@ -169,7 +169,7 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       }).then(() => {
-        this._apis.set.setShopMessage(query).then(response =>{
+        this._apis.shopInfo.setShopMessage(query).then(response =>{
           this.$message({
             type: 'success',
             message: '操作成功！'

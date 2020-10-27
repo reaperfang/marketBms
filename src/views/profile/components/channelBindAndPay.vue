@@ -61,7 +61,7 @@ export default {
 
   computed: {
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
     // 判断是否店铺勾选微信公众号
@@ -108,12 +108,12 @@ export default {
     getIsAuth() {
       // 需要调用微信是否授权接口
       const id = this.cid
-      return this._apis.profile.getwxBindStatus({ id }).then(response => {
+      return this._apis.shopInfo.getwxBindStatus({ id }).then(response => {
         console.log('getwxBindStatus',response)
         this.isBindGzh = response && response.bindWechatAccount === 1 || false
         this.isBindXcx = response && response.bindWechatApplet === 1 || false
       }).catch((err) => {
-        console.log(err)
+        console.error(err)
         this.$message.error(err)
       })
     },
@@ -186,9 +186,7 @@ export default {
     },
     getShopInfo() {
       let id = this.cid;
-      return this._apis.set
-        .getShopInfo({ id: id })
-        .then(response => {
+      return this.$store.dispatch('getShopInfo').then(response => {
          console.log('----response--', response)
          this.businessChannel = response && response.businessChannel
         })

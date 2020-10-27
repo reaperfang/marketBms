@@ -173,21 +173,21 @@ export default {
                 this.couponNum = response.couponNum;
                 this.codeNum = response.couponCodeNum;
             }).catch(error => {
-                console.log(error);
+                console.error(error);
             })
         }, 
         getLevelMax() {
             this._apis.client.getLevelMax({}).then(response => {
                 this.topLevel = response;
             }).catch(error => {
-                console.log(error)
+                console.error(error)
             })
         },
         getCardMax() {
             this._apis.client.getCardMax({}).then(response => {
                 this.topCard = response;
             }).catch(error => {
-                console.log(error)
+                console.error(error)
             })
         },
         refreshPage(num) {
@@ -228,7 +228,7 @@ export default {
                 });
                 this.getMemberInfo();
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         addTag() {
@@ -333,7 +333,7 @@ export default {
                     this.$set(item, 'frozenNum',1);
                 })
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         getAllCodes() {
@@ -343,7 +343,7 @@ export default {
                     this.$set(item, 'frozenNum',1);
                 })
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         getMemberInfo() {
@@ -362,7 +362,7 @@ export default {
                 selected[2] = this.clientInfoById.areaCode;
                 this.$set(this.clientInfoById, 'selected',selected);
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         sendCoupon() {

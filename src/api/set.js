@@ -1,24 +1,24 @@
 import request from '@/system/request'
 
-/* 获取店铺信息 */
-export function getShopInfo(data) {
-  return request({
-    target: 'SHOP-API-100-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// /* 获取店铺信息 */
+// export function getShopInfo(data) {
+//   return request({
+//     target: 'SHOP-API-100-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
-/* 更新店铺信息 */
-export function updateShopInfo(data) {
-  return request({
-    target: 'SHOP-API-102-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// /* 更新店铺信息 */
+// export function updateShopInfo(data) {
+//   return request({
+//     target: 'SHOP-API-102-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
 /* 店铺支付信息 */
 export function getShopPayInfo(data) {
@@ -70,25 +70,25 @@ export function updateShopLogistics(data) {
   })
 }
 
-/* 获取店铺消息列表 */
-export function getShopMessage(data) {
-  return request({
-    target: 'SHOP-API-107-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// /* 获取店铺消息列表 */
+// export function getShopMessage(data) {
+//   return request({
+//     target: 'SHOP-API-107-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
-/* 设置店铺消息列表 */
-export function setShopMessage(data) {
-  return request({
-    target: 'SHOP-API-108-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// /* 设置店铺消息列表 */
+// export function setShopMessage(data) {
+//   return request({
+//     target: 'SHOP-API-108-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
 /* 获取子账号列表 */
 export function getSubAccount(data) {
@@ -184,45 +184,45 @@ export function uploadImage(data) {
   })
 }
 
-/* 店铺授权分页列表 */
-export function getAuthPageList(data) {
-  return request({
-    target: 'SHOP-API-AUTH-PAGE-LIST-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// /* 店铺授权分页列表 */
+// export function getAuthPageList(data) {
+//   return request({
+//     target: 'SHOP-API-AUTH-PAGE-LIST-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
-/* 获取店铺授权码 */
-export function getShopCode(data) {
-  return request({
-    target: 'SHOP-API-GET-AUTH-CODE-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// /* 获取店铺授权码 */
+// export function getShopCode(data) {
+//   return request({
+//     target: 'SHOP-API-GET-AUTH-CODE-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
-/* 解除店铺授权 */
-export function cancelAuth(data) {
-  return request({
-    target: 'SHOP-API-AUTH-ENABLE-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// /* 解除店铺授权 */
+// export function cancelAuth(data) {
+//   return request({
+//     target: 'SHOP-API-AUTH-ENABLE-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
-/* 店铺授权平台列表 */
-export function getShopAuthList(data) {
-  return request({
-    target: 'SHOP-API-AUTH-LIST-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// /* 店铺授权平台列表 */
+// export function getShopAuthList(data) {
+//   return request({
+//     target: 'SHOP-API-AUTH-LIST-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
 /* 同城配送|商家配送信息详情 */
 export function getOrderDeliverInfo(data) {

@@ -114,7 +114,7 @@ export default {
         })
 
         // 获取分销商设置
-        this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+        this.$store.dispatch('getShopInfo').then( data => {
             if(data.isOpenResell == 1) this.resellConfigInfo = data.resellConfigInfo ? JSON.parse(data.resellConfigInfo) : null;
         }).catch((error) => {
             console.error(error);
@@ -211,7 +211,7 @@ export default {
     },
     methods: {
         sendGoods() {
-            console.log('sendGoods')
+            // console.log('sendGoods')
         },
         reducePriceHandler() {
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
@@ -230,7 +230,7 @@ export default {
                 this._apis.order.fetchOrderDetail({id}).then((res) => {
                     res.orderInfo && (res.orderInfo.consultType = res.orderInfo.consultType || 2)
                     this.orderDetail = res
-                    console.log(typeof res)
+                    // console.log(typeof res)
                     resolve(res)
                 }).catch(error => {
                     this.$message.error(error);

@@ -73,7 +73,7 @@ export default {
 	components: { gridtitle, vitem, pchart },
 	data: function() {
 		return {
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			cid: this.$store.getters.shopInfos.id,
 			chartData: {
 				columns: ["日期", "访问用户"],
 				rows: [

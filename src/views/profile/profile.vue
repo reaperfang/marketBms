@@ -297,7 +297,7 @@ import profileCont from "@/system/constant/profile";
 import Clipboard from "clipboard";
 import flowPath from "./flowPath";
 import profileIntelligent from "./components/profile_intelligent";
-import { isExistAuth } from '@/utils/auth'
+import { isExistAuth } from '@/system/user.js';
 export default {
   name: "profile",
   components: { flowPath, profileIntelligent },
@@ -375,7 +375,7 @@ export default {
       this.getIsReleaseWX();
       this.getIsReleaseGZ();
     });
-    console.log('created')
+    // console.log('created')
     this.$message.closeAll();
     this.init();
     this.getLink();
@@ -396,10 +396,9 @@ export default {
   methods: {
     ...mapMutations(["SETCURRENT"]),
     init() {
-      this.cid = JSON.parse(localStorage.getItem("shopInfos")).id
-      this._apis.shop
-        .getShopInfo({ id: this.cid })
-        .then(response => {
+      const shopInfo = this.$store.getters.shopInfos
+      this.cid = shopInfo && shopInfo.id
+      this.$store.dispatch('getShopInfo').then(response => {
           if (response.shopExpire == 2) {
             this.$message({
               showClose: true,
@@ -411,7 +410,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log("error", error);
+          console.error("error", error);
         });
     },
 
@@ -474,12 +473,12 @@ export default {
           this.profileData = response;
         })
         .catch(error => {
-          console.log("error", error);
+          console.error("error", error);
         });
     },
     //刷新
     refresh() {
-      console.log('refresh')
+      // console.log('refresh')
       this.getOerviewRemind();
       this.getOverviewSelling();
     },
@@ -633,7 +632,7 @@ export default {
 
     //判断是否授权
     isEmpower(){
-      this._apis.profile
+      this._apis.shopInfo
         .getwxBindStatus({id:this.cid}).then(response => {
           this.isEmpowerWX = response.bindWechatApplet ? false : 'true'
           this.isEmpowerGZ = response.bindWechatAccount ? false : 'true'
@@ -671,7 +670,7 @@ export default {
 
     //获取小程序二维码
     getWXQrcode(){
-      this._apis.profile
+      this._apis.shopInfo
         .getSmallQRcode({id:this.cid}).then(response => {
           this.wxQrcode = `data:image/png;base64,${response}`;
         })
@@ -704,7 +703,7 @@ export default {
     getDadiData() {
       this._apis.realSurvey.dataView({invokeType:'mzw'}).then(response => {
         this.dadiData = JSON.parse(response) || {}
-        console.log(this.dadiData);
+        // console.log(this.dadiData);
       }).catch(error => {
         this.$message.error(error);
       });

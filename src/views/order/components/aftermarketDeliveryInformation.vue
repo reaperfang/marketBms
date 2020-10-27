@@ -44,6 +44,7 @@
                         :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
+                            class-name="table-padding"
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
@@ -51,7 +52,7 @@
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
-                                        <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
+                                        <p class="ellipsis">{{scope.row.goodsName}}</p>
                                         <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
@@ -191,6 +192,7 @@
                         :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
+                            class-name="table-padding"
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
@@ -198,7 +200,7 @@
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
-                                        <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
+                                        <p class="ellipsis">{{scope.row.goodsName}}</p>
                                         <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
@@ -345,7 +347,7 @@ export default {
                     str += _value[i] + ','
                 }
             }
-
+            str = str.replace(/^(.*)\,$/, '$1')
             return str
         },
         customerFilter(value) {
@@ -387,7 +389,7 @@ export default {
     },
     computed: {
         cid() {
-            let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+            let shopInfo = this.$store.getters.shopInfos;
             return shopInfo.id;
         },
         orderSendReceivedAddress() {
@@ -401,9 +403,7 @@ export default {
     methods: {
         getShopInfo() {
             let id = this.cid;
-            this._apis.set
-                .getShopInfo({ id: id })
-                .then(response => {
+            this.$store.dispatch('getShopInfo').then(response => {
                     console.log(response)
                     this.tenantName = response.tenantName
                 })
@@ -467,7 +467,7 @@ export default {
             this._apis.order
                 .getIsTrace({ cid: this.cid })
                 .then(res => {
-                console.log(res);
+                // console.log(res);
                 this.isTrace = res.isTrace;
                 })
                 .catch(error => {
@@ -531,7 +531,6 @@ export default {
                     color: #44434B;
                     border-radius: 10px 10px 0 0;
                     padding: 0 20px;
-                    line-height: 50px;
                     display: flex;
                     justify-content: space-between;
                     .header-lefter {

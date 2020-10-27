@@ -20,15 +20,17 @@
         <div class="phone-footer">
           <ul class="navs type1" v-if="ruleForm.navStyle.id == 1">
             <li v-for="(item, key) of ruleForm.navIds" v-dragging="{ item: item, list: ruleForm.navIds, group: 'id'}" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
-              <img v-if="ruleForm.navMap[item].navIconActive || ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
-              <img src="" alt="" class="empty_img" v-else>
+              <img v-if="ruleForm.navMap[item].active && ruleForm.navMap[item].navIconActive" :src="ruleForm.navMap[item].navIconActive" />
+              <img v-else-if="!ruleForm.navMap[item].active && ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].navIcon" />
+              <div v-else class="empty_img"></div>
               <span>{{ruleForm.navMap[item].navName}}</span>
             </li>
           </ul>
           <ul class="navs type2" v-if="ruleForm.navStyle.id == 2">
             <li v-for="(item, key) of ruleForm.navIds" v-dragging="{ item: item, list: ruleForm.navIds, group: 'id'}" :class="{'active': ruleForm.navMap[item].active}" :key="key" @click="selectNav(item)">
-              <img v-if="ruleForm.navMap[item].navIconActive || ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
-              <img src="" alt="" class="empty_img" v-else>
+              <img v-if="ruleForm.navMap[item].active && ruleForm.navMap[item].navIconActive" :src="ruleForm.navMap[item].navIconActive" />
+              <img v-else-if="!ruleForm.navMap[item].active && ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].navIcon" />
+              <div v-else class="empty_img"></div>
             </li>
           </ul>
           <ul class="navs type3" v-if="ruleForm.navStyle.id == 3">
@@ -186,7 +188,9 @@ import goods from "@/views/shop/dialogs/jumpLists/goods";
 import goodsGroup from "@/views/shop/dialogs/jumpLists/goodsGroup";
 
 import utils from "@/utils";
-let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+
+import store from '@/store';
+let shopInfo = store.getters.shopInfos
 const cid = shopInfo && shopInfo.id || ''
 export default {
   name: 'shopNav',
@@ -703,9 +707,11 @@ export default {
               height:24px;
               object-fit: cover;
               display:block;
-              &.empty_img{
-                background:#D8D8D8;
-              }
+            }
+            .empty_img{
+              width:24px;
+              height:24px;
+              background:#D8D8D8;
             }
             span{
               margin-top:5px;
@@ -723,9 +729,11 @@ export default {
               height:30px;
               object-fit: cover;
               display:block;
-              &.empty_img{
-                background:#D8D8D8;
-              }
+            }
+            .empty_img{
+              width:30px;
+              height:30px;
+              background:#D8D8D8;
             }
           }
         }

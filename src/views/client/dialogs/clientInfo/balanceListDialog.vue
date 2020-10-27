@@ -68,7 +68,7 @@ export default {
           this.total = response.total;
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     handleSizeChange(val) {

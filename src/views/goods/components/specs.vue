@@ -306,7 +306,7 @@ export default {
             return _list
         },
         cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
             return shopInfo.id
         },
     },
@@ -321,7 +321,7 @@ export default {
         // }
     },
     mounted () {
-        console.log(this.activity);
+        // console.log(this.activity);
     },
     methods: {
         specsChange(index, str) {
@@ -462,7 +462,7 @@ export default {
             }
         },
         costPriceChange(value) {
-            console.log(value)
+            // console.log(value)
         },
         imageSelected(image) {
             if(this.material) {

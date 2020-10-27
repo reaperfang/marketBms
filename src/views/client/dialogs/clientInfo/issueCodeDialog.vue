@@ -214,7 +214,7 @@ export default {
         }).catch((error) => {
           this.btnLoading = false;
           this.visible = false;
-          console.log(error);
+          console.error(error);
         })
       }else{
         this.btnLoading = false;

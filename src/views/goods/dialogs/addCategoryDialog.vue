@@ -82,7 +82,7 @@ import DialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/
 export default {
     data() {
         var sortValidator = (rule, value, callback) => {
-            console.log(this.basicForm.sort)
+            // console.log(this.basicForm.sort)
             if(!/^\d{1,6}$/.test(this.basicForm.sort)) {
                 callback(new Error('请输入正确的格式'));
             } else {
@@ -132,7 +132,7 @@ export default {
     created() {
         if(this.data.editor) {
             this.getCategoryDetail(this.data.id).then(res => {
-                console.log(res)
+                // console.log(res)
                 if(this.data.level == 0) {
                     this.basicForm.name = res.name
                 } else {
@@ -251,7 +251,7 @@ export default {
                     }
                     this.visible = false
                 } else {
-                    console.log('error submit!!');
+                    console.error('error submit!!');
                     return false;
                 }
             });

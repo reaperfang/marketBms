@@ -487,7 +487,7 @@ export default {
 			}, 1000);
 		},
 		test() {
-			console.log("	test() {");
+			// console.log("	test() {");
 			let list = [
 				'{"c_uv_name_rt":"暴躁的小王同学🙊","time_rt":"2020-10-10 09:36:51.0","op_rt":"下单","pd_rt":"中国华为 HUAWEI P30 Pro 超感光徕卡四摄10倍混合变焦麒麟980芯片屏内指纹","pro_code_rt":"110000","city_code_rt":"110100","county_code_rt":"110115","pro_name_rt":"北京","county_name_rt":"大兴区","city_name_rt":"北京市","id":1}',
 				'{"c_uv_name_rt":"暴躁的小王同学🙊","time_rt":"2020-10-10 09:36:04.0","op_rt":"下单","pd_rt":"三星11pro","pro_code_rt":"110000","city_code_rt":"110100","county_code_rt":"110115","pro_name_rt":"北京","county_name_rt":"大兴区","city_name_rt":"北京市","id":4}'
@@ -500,7 +500,7 @@ export default {
 				return moment(row.time_rt) > beforeTime;
 			});
 
-			console.log("result", result);
+			// console.log("result", result);
 		}
 	},
 	components: {}

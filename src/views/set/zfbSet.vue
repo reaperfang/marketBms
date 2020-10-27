@@ -59,11 +59,11 @@ export default {
   },
   computed:{
         cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
             return shopInfo.id
         },
         shopName(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
             return shopInfo.shopName
         }
     },
@@ -158,8 +158,8 @@ export default {
         id:id,
         alipayBinding:1
       }
-      this._apis.set.updateShopInfo(query).then(response =>{
-        
+      this._apis.shopInfo.updateShopInfo(query).then(response =>{
+        this.$store.dispatch('getShopInfo');
       }).catch(error =>{
         this.$message.error(error);
       })

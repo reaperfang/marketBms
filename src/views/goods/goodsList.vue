@@ -849,7 +849,7 @@ export default {
                     this.getList()
                 })
                 .catch(err=>{
-                    console.log("编辑分类出错啦。。。")
+                    console.error("编辑分类出错啦。。。")
                 })
             },
             sortChange({column, prop, order}) {
@@ -1156,7 +1156,7 @@ export default {
              return new Promise((resolve, reject) => {
                 this._apis.goods.getMarketActivity({ids: list.map(val => val.id)}).then((res) => {
                     //obj.activityList = res
-                    console.log(res)
+                    // console.log(res)
                     resolve(res)
                 }).catch(error => {
                     this.$message.error({

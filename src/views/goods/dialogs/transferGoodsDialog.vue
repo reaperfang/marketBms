@@ -56,7 +56,7 @@ export default {
             })
         },
         submit() {
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
 
             this._apis.goods.transferGoods({
                 cid: shopInfo.id,

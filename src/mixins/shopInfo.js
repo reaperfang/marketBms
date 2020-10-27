@@ -118,7 +118,7 @@ const mixin = {
       return this.$refs.canvas1;
     },
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
     getAddress() {
@@ -151,9 +151,7 @@ const mixin = {
     },
 
     getShopInfo() {
-      let id = this.cid;
-      this._apis.set
-        .getShopInfo({ id: id })
+      this.$store.dispatch('getShopInfo')
         .then(response => {
           this.form = Object.assign({}, this.form, response);
           if (response.provinceCode) {
@@ -182,7 +180,7 @@ const mixin = {
       if (reg.test(address)) {
         address = address.replace(reg, '')
       }
-      console.log('--formatAddress---',address)
+      // console.log('--formatAddress---',address)
 
       address = province === city ? `${province}${area}${address}`: `${province}${city}${area}${address}`
       
@@ -232,7 +230,7 @@ const mixin = {
       //   deliverServiceRadius = ''
       // }
       const data = this.getReqData()
-      this._apis.set.updateShopInfo(data).then(response =>{
+      this._apis.shopInfo.updateShopInfo(data).then(response =>{
         this.setShopName()    
         this.$store.dispatch('getShopInfo');    
         // this.$nextTick(()=> {
@@ -240,7 +238,7 @@ const mixin = {
         //   this.$refs.shopInfoMap.clearKeyword()
         // })
       }).catch(error =>{
-        console.log('updateShopInfo:error', error)
+        console.error('updateShopInfo:error', error)
         this.$message.error('保存失败');
       }).finally(() => {
         this.loading = false
@@ -263,7 +261,7 @@ const mixin = {
     },
 
     setShopName() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       let name = shopInfo.shopName;
       if (name != this.form.shopName) {
         shopInfo.shopName = this.form.shopName;
@@ -309,7 +307,7 @@ const mixin = {
       ).then((response) => {
         this.form.logoCircle = response.data.data.url
       }).catch((error) => {
-        console.log(error);
+        console.error(error);
       })
     },
 
@@ -331,9 +329,9 @@ const mixin = {
       let provinces = this.$pcaa[86]
       let provinceCode = null
       for( const val in provinces) {
-        console.log(val, this.province)
+        // console.log(val, this.province)
         if (provinces[val] === this.province) {
-          console.log('--province---',val, provinces[val])
+          // console.log('--province---',val, provinces[val])
           provinceCode = val
           break
         }
@@ -387,7 +385,7 @@ const mixin = {
     getProvincesCities(address){
       const reg = /.+?(省|市|自治区|自治州|县|区)/g
       const arr = address.match(reg)
-      console.log('---getProvincesCities---',arr)
+      // console.log('---getProvincesCities---',arr)
       if (arr && arr.length > 0) {
         if (arr[0] !== '北京市' && arr[0] !== '上海市' && arr[0] !== '天津市' && arr[0] !== '重庆市') {
           this.province = arr[0]
@@ -402,7 +400,7 @@ const mixin = {
       }
     },
     getMapClickPoi(poi) {
-      console.log('poi----getMapClickPoi', poi)
+      // console.log('poi----getMapClickPoi', poi)
       if (!poi) return false 
       this.form.sendAddress = poi.address
       this.tempSendAddress = poi.address

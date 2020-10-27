@@ -157,11 +157,11 @@ export default {
   },
   computed:{
         cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
             return shopInfo.id
         },
         shopName(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
             return shopInfo.shopName
         }
     },
@@ -172,7 +172,7 @@ export default {
     //上传文件转化为base64格式
     fileChange(e) {
         let file = e.target.files[0]
-        console.log('file',file)
+        // console.log('file',file)
         this.form.certFileName = file.name
         let _self = this
         var reader = new FileReader();
@@ -300,8 +300,8 @@ export default {
         id:id,
         wechatBinding:1
       }
-      this._apis.set.updateShopInfo(query).then(response =>{
-        
+      this._apis.shopInfo.updateShopInfo(query).then(response =>{
+        this.$store.dispatch('getShopInfo');
       }).catch(error =>{
         this.$message.error(error);
       })

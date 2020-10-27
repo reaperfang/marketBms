@@ -17,7 +17,7 @@
 import courierSettings from './components/courierSettings'
 import quickDelivery from './components/quickDelivery'
 import electronicFaceSheet from './components/electronicFaceSheet'
-import { isExistAuth } from '@/utils/auth.js'
+import { isExistAuth } from '@/system/user.js'
 export default {
   name: 'ordinaryExpress',
   data() {
@@ -47,7 +47,7 @@ export default {
   },
   watch: {
     currentTab(curr) {
-      console.log(curr)
+      // console.log(curr)
       // this.init()
     }
   },
@@ -59,7 +59,7 @@ export default {
   methods: {
     setCurrentTab() {
       const currentTab = this.$route.query.currentTab
-      console.log('--currentTab---', currentTab)
+      // console.log('--currentTab---', currentTab)
       if (currentTab) {
         this.currentTab = currentTab
       } else {

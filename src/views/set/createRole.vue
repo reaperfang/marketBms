@@ -40,7 +40,6 @@
 import treeMenu from '@/components/TreeMenu'
 import * as menus from '@/components/menus'
 import dialogTree from './dialogs/dialogTree';
-import { userInfo } from 'os';
 export default {
   name: 'createRole',
   components:{
@@ -81,7 +80,7 @@ export default {
           return this.$route.params.data
       },
       userInfo(){
-        return JSON.parse(localStorage.getItem('userInfo'))
+        return this.$store.getters.userInfo
      },
   },
   created(){

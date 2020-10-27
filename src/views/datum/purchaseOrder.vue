@@ -235,7 +235,7 @@ export default {
                 this.loading1 = false;
                 this.loading2 = false;
             }).catch(error =>{
-                console.log(error)
+                console.error(error)
                 this.loading1 = false;
                 this.loading2 = false;
             })

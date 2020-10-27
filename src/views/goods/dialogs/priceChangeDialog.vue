@@ -95,7 +95,7 @@ export default {
                 this.visible = false
             } else {
                 this.visible = false
-                console.log('error submit!!');
+                console.error('error submit!!');
                 return false;
             }
             });

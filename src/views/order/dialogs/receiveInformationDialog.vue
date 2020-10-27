@@ -251,7 +251,7 @@ export default {
       this.submitFlag = false;
     },
     getMapClickPoi(poi, tencentCode) {
-      console.log(poi);
+      // console.log(poi);
       this.submitFlag = true
       this.ruleForm.provinceCode = poi.provinceCode;
       this.ruleForm.cityCode = poi.cityCode;
@@ -485,7 +485,7 @@ export default {
               this.$message.error(error);
             });
         } else {
-          console.log("error submit!!");
+          console.error("error submit!!");
           return false;
         }
       });
@@ -509,7 +509,7 @@ export default {
       return "是否确认删除？";
     },
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
     getAddress() {

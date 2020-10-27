@@ -89,7 +89,7 @@ export default {
 			startVal: 0,
 			endVal: 0,
 			persent: "",
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			cid: this.$store.getters.shopInfos.id,
 			//mapData: [],
 			mapData: [
 				{ name: "湖北", value: 0 },

@@ -332,7 +332,7 @@ export default {
             window.open(routeData.href, '_blank');
         },
         fetchOrderAddress(address) {
-            // this._apis.order.fetchOrderAddress({id: this.cid, cid: this.cid}).then((res) => {
+            // this.$store.dispatch('getShopInfo').then((res) => {
             //     this.orderInfo.sendName = res.senderName
             //     this.orderInfo.sendPhone = res.senderPhone
             //     this.orderInfo.sendProvinceCode = res.provinceCode
@@ -475,7 +475,7 @@ export default {
                         this.orderSendGoodsHander(params)
                     }
                 } else {
-                    console.log('error submit!!');
+                    console.error('error submit!!');
                     return false;
                 }
             });

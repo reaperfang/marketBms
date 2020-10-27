@@ -251,7 +251,7 @@ export default {
 
     //浏览量/访客量 or 到店时段 or 访问次数 or 访问来源
     changeType(e) {
-    	console.log("skdjfks");
+    	// console.log("skdjfks");
       if(this.nearDay != 4 || this.range != ''){
         switch (e) {
           case '1':

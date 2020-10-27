@@ -70,7 +70,7 @@
     created() {
       // 获取助用户上次操作的步骤和数据状态
       this.fetchIntelligentStatus();
-      console.log("this.stepCurrent" + this.stepCurrent);
+      // console.log("this.stepCurrent" + this.stepCurrent);
     },
     methods: {
       /** 获取助用户上次操作的步骤和数据状态 */

@@ -208,7 +208,7 @@ export default {
           searchValue2: resellerPhone
       })
     }
-    console.log(this.$route.query.id);
+    // console.log(this.$route.query.id);
     this._globalEvent.$on("checkedLength", number => {
       this.checkedLength = number;
     });
@@ -250,7 +250,7 @@ export default {
   methods: {
     checkCreditRule() {
       // 获取分销商设置
-      this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+      this.$store.dispatch('getShopInfo').then( data => {
 
           if(data.isOpenResell == 1) this.resellConfigInfo = data.resellConfigInfo ? JSON.parse(data.resellConfigInfo) : null;
       }).catch((error) => {
@@ -349,7 +349,7 @@ export default {
     onSubmit() {
       this.checkedList = [];
 
-      console.log(this.listQuery)
+      // console.log(this.listQuery)
       this.listQuery = Object.assign({}, this.listQuery, {
         startIndex: 1,
         pageSize: 20,

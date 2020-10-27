@@ -50,7 +50,7 @@ var markLineSetting = {
         fontSize: 14,
         padding: [3, 10, 5, 10],
         formatter: function(d) {
-            console.log(d)
+            // console.log(d)
             if (d.value) {
                 var ins = '{img1|} ' + '{words|' + d.data.itemValue + '}';
                 return ins

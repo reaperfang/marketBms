@@ -62,7 +62,7 @@ export const deliveryWay1 = {
             expressCompanyCodes: this.ruleForm.expressCompanyCode,
             express: res
           }))
-          console.log(this._list)
+          // console.log(this._list)
         })
         .catch(error => {
           this.visible = false;
@@ -123,7 +123,7 @@ export const deliveryWay2 = {
           })
           //如果没有子帐号配置权限，则默认自己是配送员
           if (!this.distributorSet) {
-            const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+            const userInfo = this.$store.getters.userInfo;
             res.list = [
               {
                 "id": 1,
@@ -491,7 +491,7 @@ export const deliveryWay2More = {
           })
           //如果没有子帐号配置权限，则默认自己是配送员
           if(!this.distributorSet){
-              const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+              const userInfo = this.$store.getters.userInfo;
               res.list = [
                   {
                       "id": 1,
@@ -535,7 +535,7 @@ export const common = {
   },
   computed: {
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
   },
@@ -579,7 +579,7 @@ export const commonMore = {
   },
   computed: {
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
   },

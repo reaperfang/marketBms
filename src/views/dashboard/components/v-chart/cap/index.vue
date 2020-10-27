@@ -251,7 +251,7 @@ export default {
 				}
 			];
 
-			console.log("this.chartData ", this.chartData);
+			// console.log("this.chartData ", this.chartData);
 		}
 	},
 	components: {}

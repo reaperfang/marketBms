@@ -338,6 +338,16 @@ input::-moz-placeholder, textarea::-moz-placeholder{
   }
 }
 
+
+.el-image__lazyloading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #B6B5C8;
+  font-size: 14px;
+}
+
 .el-table .ascending .sort-caret.ascending {
   border-bottom-color: #44434b;
 }

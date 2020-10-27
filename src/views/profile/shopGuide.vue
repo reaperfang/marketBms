@@ -47,7 +47,7 @@ export default {
 
   computed: {
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     }
   },
@@ -70,12 +70,12 @@ export default {
         cid: this.cid
       }
       this._apis.shop.getStep(req).then((res) => {
-        console.log('--getStep---',res)
+        // console.log('--getStep---',res)
         this.step = res && res.step
         this.setCurrentComponent()
         
       }).catch((err) => {
-        console.log(err)
+        console.error(err)
         this.$message.error(err)
       }).finally(() => {
         this.isLoading = false

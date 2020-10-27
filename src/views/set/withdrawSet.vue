@@ -60,10 +60,10 @@ export default {
         cashOutLower:0,
         cashOutTimes:0,
         cashOutMoney:0,  
-        isCashOutUpper:0,
-        isCashOutLower:0,
-        isCashOutTimes:0,
-        isCashOutMoney:0
+        isCashOutUpper: false,
+        isCashOutLower: false,
+        isCashOutTimes: false,
+        isCashOutMoney: false
       },
     }
   },
@@ -76,7 +76,7 @@ export default {
   },
   computed:{
       cid(){
-          let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+          let shopInfo = this.$store.getters.shopInfos
           return shopInfo.id
       }
   },
@@ -85,8 +85,7 @@ export default {
   },
   methods: {
     getShopInfo(){
-      let id = this.cid
-      this._apis.set.getShopInfo({id:id}).then(response =>{
+      this.$store.dispatch('getShopInfo').then(response =>{
         this.form = response
         this.form.isCashOutUpper =  this.form.isCashOutUpper == 1 ? true : false
         this.form.isCashOutLower =  this.form.isCashOutLower == 1 ? true : false
@@ -118,10 +117,11 @@ export default {
               this.$message.error('允许状态下至少勾选一个条件');
             }else{
               let id = this.cid
-              this.form.isCashOutUpper =  this.form.isCashOutUpper == true ? 1 : 0
-              this.form.isCashOutLower =  this.form.isCashOutLower == true ? 1 : 0
-              this.form.isCashOutTimes =  this.form.isCashOutTimes == true ? 1 : 0
-              this.form.isCashOutMoney =  this.form.isCashOutMoney == true ? 1 : 0
+              // this.form.isCashOutUpper =  this.form.isCashOutUpper == true ? 1 : 0
+              // this.form.isCashOutLower =  this.form.isCashOutLower == true ? 1 : 0
+              // this.form.isCashOutTimes =  this.form.isCashOutTimes == true ? 1 : 0
+              // this.form.isCashOutMoney =  this.form.isCashOutMoney == true ? 1 : 0
+
               if(String(this.form.cashOutUpper).trim()== 'undefined'){
                 this.$message({
                   message: '单笔提现金额上限,请输入有效数字',
@@ -144,8 +144,15 @@ export default {
                 });
               }else{
                 this.loading = true
-                let data = Object.assign({id:id},this.form)
-                this._apis.set.updateShopInfo(data).then(response =>{
+                const req = {
+                  isCashOutUpper: this.form.isCashOutUpper == true ? 1 : 0,
+                  isCashOutLower: this.form.isCashOutLower == true ? 1 : 0,
+                  isCashOutTimes: this.form.isCashOutTimes == true ? 1 : 0,
+                  isCashOutMoney: this.form.isCashOutMoney == true ? 1 : 0
+                }
+                let data = Object.assign({id:id},{ ...this.form, ...req })
+                console.log('data', data)
+                this._apis.shopInfo.updateShopInfo(data).then(response =>{
                   this.loading = false
                   this.$message.success('保存成功！');
                   this.getShopInfo()

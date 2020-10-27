@@ -136,7 +136,7 @@ import utils from "@/utils";
 export default {
   computed: {
     cid(){
-        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        let shopInfo = this.$store.getters.shopInfos
         return shopInfo.id
     }
   },
@@ -199,9 +199,10 @@ export default {
         id:this.cid,
         transportationExpenseType:this.mode
       }
-      this._apis.set.updateShopInfo(data).then(response =>{
+      this._apis.shopInfo.updateShopInfo(data).then(response =>{
+        this.$store.dispatch('getShopInfo');
       }).catch(error =>{
-        console.log('-----err-----', error)
+        console.error('-----err-----', error)
       })
     },
     search() {
@@ -232,13 +233,7 @@ export default {
       });
     },
     getShopInfo() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-
-      this._apis.set
-        .getShopInfo({
-          id: shopInfo.id
-        })
-        .then(res => {
+      this.$store.dispatch('getShopInfo').then(res => {
           this.mode = res.transportationExpenseType;
         })
         .catch(error => {});

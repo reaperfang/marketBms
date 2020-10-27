@@ -78,6 +78,7 @@ export default {
       if(componentData) {
           if(Array.isArray(componentData.ids) && componentData.ids.length){
               this.loading = true;
+
               this._apis.shop.getFullReductionListByIds({
                   ids: componentData.ids.join(',')
               }).then((response)=>{

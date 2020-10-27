@@ -501,7 +501,7 @@ export default {
             return 0
         },
         cid(){
-          let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+          let shopInfo = this.$store.getters.shopInfos
           return shopInfo.id
         }
     },
@@ -540,16 +540,14 @@ export default {
             this.dialogVisible = true
         },
         getShopInfo(){
-          let id = this.cid
-
-          this._apis.set.getShopInfo({id:id}).then(response =>{
+          this.$store.dispatch('getShopInfo').then(response =>{
             this.invoiceOpen = response.invoiceOpen
           }).catch(error =>{
-            console.log(error)
+            console.error(error)
           })
         },
         getGain() {
-            let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+            let shopInfo = this.$store.getters.shopInfos;
             console.log(this);
             this._apis.order.getGain({
                 businessId:1,

@@ -162,18 +162,14 @@ export default {
   },
   methods: {
     show() {
-      this._apis.client
-        .checkCreditRule({
-          id: JSON.parse(localStorage.getItem("shopInfos")).id
-        })
-        .then(data => {
+      this.$store.dispatch('getShopInfo').then(data => {
           if (data.isOpenResell == 1) {
             //专业版开启，时间显示在专业版本上
             this.status = "1";
           }else{
             this.status = "0";
           }
-          console.log(data.shopExpireTime)
+          // console.log(data.shopExpireTime)
           this.time = data.shopExpireTime;
         })
         .catch(error => {

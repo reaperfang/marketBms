@@ -39,7 +39,7 @@ export default {
     }
   },
   created() {
-    console.log( process.env.NODE_ENV)
+    // console.log( process.env.NODE_ENV)
     this.config = Object.assign(this.defaultConfig, this.myConfig);
   },
   mounted() {
@@ -126,9 +126,9 @@ export default {
       const iframe = editorInstance.iframe;
       const document = iframe.contentDocument;
       utils.asyncLoadCss(document, this.config.UEDITOR_HOME_URL + 'dialogs/xiumi/xiumi-ue-v5.css').then(()=>{
-        console.log('秀米编辑器样式加载成功！')
+        // console.log('秀米编辑器样式加载成功！')
       }).catch(()=>{
-        console.log('秀米编辑器样式加载失败！')
+        console.error('秀米编辑器样式加载失败！')
       });
 
       this.editor.addListener('fullscreenchanged',(event,isFullScreen)=>{

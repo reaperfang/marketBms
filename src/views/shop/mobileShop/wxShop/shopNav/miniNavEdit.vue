@@ -25,8 +25,9 @@
               :class="{'active': ruleForm.navMap[item].active}"
               :key="key"
               @click="selectNav(item)">
-              <img v-if="ruleForm.navMap[item].navIconActive || ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].active? ruleForm.navMap[item].navIconActive: ruleForm.navMap[item].navIcon" alt="">
-              <img src="" alt="" class="empty_img" v-else>
+              <img v-if="ruleForm.navMap[item].active && ruleForm.navMap[item].navIconActive" :src="ruleForm.navMap[item].navIconActive" />
+              <img v-else-if="!ruleForm.navMap[item].active && ruleForm.navMap[item].navIcon" :src="ruleForm.navMap[item].navIcon" />
+              <div v-else class="empty_img"></div>
               <span v-if="ruleForm.navMap[item].active" :style="{color: ruleForm.activeColor}">{{ruleForm.navMap[item].navName}}</span>
               <span v-else :style="{color: ruleForm.unactiveColor}">{{ruleForm.navMap[item].navName}}</span>
             </li>
@@ -474,9 +475,11 @@ export default {
               height:24px;
               object-fit: cover;
               display:block;
-              &.empty_img{
-                background:#D8D8D8;
-              }
+            }
+            .empty_img{
+              width:24px;
+              height:24px;
+              background:#D8D8D8;
             }
             span{
               margin-top:5px;
@@ -494,9 +497,11 @@ export default {
               height:30px;
               object-fit: cover;
               display:block;
-              &.empty_img{
-                background:#D8D8D8;
-              }
+            }
+            .empty_img{
+              width:24px;
+              height:24px;
+              background:#D8D8D8;
             }
           }
         }

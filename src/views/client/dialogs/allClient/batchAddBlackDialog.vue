@@ -172,14 +172,14 @@ export default {
                     this._apis.client.batchFrozenCoupons({couponIdList: couponIdList, memberIdList:memberIdList, frozenType: 1}).then((response) => {
                         //console.log(response);
                     }).catch((error) => {
-                        console.log(error);
+                        console.error(error);
                     });
                 }
                 if(couponIdList2.length > 0) {
                     this._apis.client.batchFrozenCoupons({couponIdList: couponIdList2, memberIdList:memberIdList, frozenType: 1}).then((response) => {
                         //console.log(response);
                     }).catch((error) => {
-                        console.log(error);
+                        console.error(error);
                     });
                 }
                 //电商批量加入黑名单
@@ -194,7 +194,7 @@ export default {
                 }).catch((error) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    console.log(error);
+                    console.error(error);
                 })
             }else{
                 this.btnLoading = false;
@@ -213,7 +213,7 @@ export default {
                 this.couponId = this.checks[0].id;
                 this.codeId = this.checks[1].id;
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         addCouponSel() {
@@ -232,14 +232,14 @@ export default {
             this._apis.client.getAllCoupons({couponType: 0, t: Date.parse(new Date()) / 1000}).then((response) => {
                 this.allCoupons = [].concat(response.list);
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         getAllCodes() {
             this._apis.client.getAllCoupons({couponType: 1, t: Date.parse(new Date()) / 1000}).then((response) => {
                 this.allCodes = [].concat(response.list);
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
     },

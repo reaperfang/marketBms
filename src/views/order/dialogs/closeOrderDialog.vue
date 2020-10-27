@@ -104,7 +104,6 @@ export default {
     },
     created(){
         this.deliveryWay = this.data.deliveryWay
-       
     },
     methods: {
         thirdAbnormalDelivery(){

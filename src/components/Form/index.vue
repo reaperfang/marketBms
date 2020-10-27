@@ -33,7 +33,7 @@ export default {
         }
     },
     created() {
-        console.log(this.data)
+        // console.log(this.data)
     },
     methods: {
         onSubmit() {
@@ -46,7 +46,7 @@ export default {
                 this.$parent.$emit('update:visible', false)
                 this.$emit('submit', this.ruleForm)
             } else {
-                console.log('error submit!!');
+                console.error('error submit!!');
                 return false;
             }
             });

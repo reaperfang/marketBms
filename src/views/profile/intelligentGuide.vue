@@ -27,12 +27,12 @@
 
     computed: {
       cid() {
-        let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+        let shopInfo = this.$store.getters.shopInfos;
         return shopInfo.id;
       },
       storeGuide() {
         return this.$store.state.shop.storeGuide || null
-        // let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+        // let shopInfo = this.$store.getters.shopInfos;
         // return shopInfo.storeGuide || null;
       }
     },
@@ -48,7 +48,7 @@
           id,
           storeGuide
         }
-        this._apis.set.updateShopInfo(data).then(response =>{
+        this._apis.shopInfo.updateShopInfo(data).then(response =>{
           this.$store.dispatch('getShopInfo');
           const storeGuide = response && response.storeGuide || storeGuide
           this.$store.commit('setStoreGuide', storeGuide)
@@ -58,7 +58,7 @@
           //   this.$refs.shopInfoMap.clearKeyword()
           // })
         }).catch(error =>{
-          console.log('updateShopInfo:error', error)
+          console.error('updateShopInfo:error', error)
           // this.$message.error('保存失败');
         })
       },
@@ -79,7 +79,7 @@
           .then(response => {
             this.$router.push({ path: '/profile/shopGuide'})
           }).catch((err) => {
-            console.log(err)
+            console.error(err)
           })
       },
 

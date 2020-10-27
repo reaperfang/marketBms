@@ -117,7 +117,7 @@ export default {
               this.couponList.push(v.appCoupon);
           })
       }).catch((error) => {
-        console.log(error);
+        console.error(error);
       })
     },
     getUsedCode(type) {
@@ -136,7 +136,7 @@ export default {
             this.codeList.push(v.appCoupon);
           })
       }).catch((error) => {
-        console.log(error);
+        console.error(error);
       })
     },
     getStatus(status) {

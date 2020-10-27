@@ -44,7 +44,7 @@ export default {
 
   computed: {
     cid(){
-      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      let shopInfo = this.$store.getters.shopInfos
       return shopInfo.id
     },
     getSwitchTxt() {
@@ -67,10 +67,7 @@ export default {
 
   methods: {
     init() {
-      let id = this.cid;
-      this._apis.set
-        .getShopInfo({ id })
-        .then(response => {
+      this.$store.dispatch('getShopInfo').then(response => {
           console.log('----response-', response.isOpenOrdinaryExpress, typeof response.isOpenOrdinaryExpress)
           this.form.isOpen = response.isOpenOrdinaryExpress === 1 ? true : false
           isHasOtherWay = response.isOpenMerchantDeliver === 1 || response.isOpenTh3Deliver === 1 || response.isOpenSelfLift === 1
@@ -81,7 +78,7 @@ export default {
     },
     handleIsOpen(val) {
       // return false
-      console.log('val', val)
+      // console.log('val', val)
       // 当前是否开启普通快递
       if (val) {
         this.open()
@@ -95,7 +92,7 @@ export default {
       const id = this.cid
 
       return new Promise((resolve, reject) => {
-        this._apis.set.updateShopInfo({...data, id }).then(response =>{
+        this._apis.shopInfo.updateShopInfo({...data, id }).then(response =>{
           this.$store.dispatch('getShopInfo');    
           resolve(response)
         }).catch(error =>{
@@ -148,7 +145,7 @@ export default {
           confirmText: '我知道了',
           showCancelButton: false
         }).finally(() => {
-          console.log('----finally--')
+          // console.log('----finally--')
           this.form.isOpen = true
         });
       }
@@ -188,7 +185,7 @@ export default {
         this.form.apiKey = response.apiKey,
         this.form.kdBusinessId = response.kdBusinessId
       }).catch(error =>{
-        console.log(error)
+        console.error(error)
       })
     }
   }

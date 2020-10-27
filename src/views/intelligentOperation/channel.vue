@@ -230,7 +230,7 @@ export default {
                 }
                 this.productiveness = vipcake
             }).catch(error =>{
-                console.log('error',error)
+                console.error('error',error)
             })
         },
         //查看详情

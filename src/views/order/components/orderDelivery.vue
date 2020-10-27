@@ -336,7 +336,7 @@ export default {
     },
     computed:{
         cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
             return shopInfo.id
         },
         haveAuto() {
@@ -368,7 +368,7 @@ export default {
         },
         getShopInfo() {
             let id = this.cid
-            this._apis.set.getShopInfo({id:id}).then(response =>{
+            this.$store.dispatch('getShopInfo').then(response =>{
                 this.isOrderAutoSend = Boolean(response.isOrderAutoSend)
             }).catch(error =>{
                 this.$message.error(error);

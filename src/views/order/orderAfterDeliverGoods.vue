@@ -302,9 +302,7 @@ export default {
     },
     methods: {
         fetchOrderAddress() {
-    //   this._apis.order
-    //     .fetchOrderAddress({ id: this.cid, cid: this.cid })
-    //     .then(res => {
+    //   this.$store.dispatch('getShopInfo').then(res => {
     //       this.orderAfterSaleSendInfo.sendName = res.senderName;
     //       this.orderAfterSaleSendInfo.sendPhone = res.senderPhone;
     //       this.orderAfterSaleSendInfo.sendProvinceCode = res.provinceCode;
@@ -484,7 +482,7 @@ export default {
                         this.orderSendGoodsHander(params)
                     }
                 } else {
-                    console.log('error submit!!');
+                    console.error('error submit!!');
                     return false;
                 }
             });

@@ -603,7 +603,7 @@ export default {
           
         })
         this.list = _list
-        console.log(_list)
+        // console.log(_list)
         if(isWrong) {
           this.$nextTick(() => {
             document.querySelector('.error-message').scrollIntoView()
@@ -637,7 +637,7 @@ export default {
         params = {
           sendInfoDtoList: _list.map(item => {
             let expressCompanys = "";
-            console.log(this.expressCompanyList);
+            // console.log(this.expressCompanyList);
             if(item.deliveryWay == 1){ //如果为普通快递在对快递单号等进行处理
               if (item.expressCompanyCodes == "other") {
                 expressCompanys = item.other;
@@ -746,7 +746,7 @@ export default {
             //   this._list.splice(index, 1)
             // }
           }
-          console.log(this._list)
+          // console.log(this._list)
           this._list = this._list.filter(val => val.express != null && !val.express.sizeSpecs && val.sizeList && val.sizeList.length)
 
           var __result = [];
@@ -972,9 +972,7 @@ export default {
             //获取配送员列表
             this.getDistributorList(res.length);
           }
-          // this._apis.order
-          //   .fetchOrderAddress({ id: this.cid, cid: this.cid })
-          //   .then(response => {
+          // this.$store.dispatch('getShopInfo').then(response => {
           //     this.list.forEach(res => {
           //       if(!res.sendAddress) {
           //         res.sendName = response.senderName;

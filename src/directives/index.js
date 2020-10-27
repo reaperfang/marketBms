@@ -1,5 +1,5 @@
 import Vue from 'vue'
-
+import store from '@/store'
 // let msfList = [
 //     {
 //         "seqnum": 1,
@@ -170,17 +170,13 @@ let enable = 0
 
 window.eventHub = new Vue()
 var shopInfos = function() {
-    let shopInfos = localStorage.getItem('shopInfos')
-
-    if(shopInfos) {
-        shopInfos = JSON.parse(shopInfos)
-
-        if(shopInfos.data && shopInfos.data.functions && shopInfos.data.functions[0] && shopInfos.data.functions[0].children) {
-            msfList = shopInfos.data.functions[0].children
+    if(store.getters.shopInfos && store.getters.shopInfos.data && store.getters.shopInfos.data.functions && store.getters.shopInfos.data.functions[0] && store.getters.shopInfos.data.functions[0].children) {
+        msfList = store.getters.shopInfos.data.functions[0].children
    
-            Vue.directive('permission', {
-                inserted: function (el, binding, vnode) {
-                    let { value } = binding
+        Vue.directive('permission', {
+            inserted: function (el, binding, vnode) {
+                
+                let { value } = binding
 
                     if(typeof value == 'string') value = eval(value)
             
@@ -241,7 +237,6 @@ var shopInfos = function() {
             })
         }
     }
-}
 let anotherAuth = () => {
     if(localStorage.getItem('anotherAuthEnable')) {
         enable = +localStorage.getItem('anotherAuthEnable')

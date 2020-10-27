@@ -306,7 +306,7 @@ export default {
     },
 
     getRebusinessTypes(){
-       this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+       this.$store.dispatch('getShopInfo').then( data => {
           if(data.isOpenResell == 1){
             this.types = financeCons.rebusinessTypes
           }else{

@@ -206,7 +206,7 @@ export default {
   },
   computed: {
         cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
             return shopInfo.id
         }
     },
@@ -393,7 +393,7 @@ export default {
             })
             //如果没有子帐号配置权限，则默认自己是配送员
             if(!this.distributorSet){
-                const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+                const userInfo = this.$store.getters.userInfo;
                 res.list = [
                     {
                         "id": 1,
@@ -625,7 +625,7 @@ export default {
             params = {
                 sendInfoDtoList: this.list.map(item => {
                     let expressCompanys = ''
-                    console.log(this.expressCompanyList)
+                    // console.log(this.expressCompanyList)
                       if(item.deliveryWay == 1){ //如果为普通快递在对快递单号等进行处理
                         if (item.expressCompanyCodes == "other") {
                           expressCompanys = item.other;
@@ -825,7 +825,7 @@ export default {
           ids: this.$route.query.ids.split(",").map(val => +val)
         })
         .then(res => {
-          console.log(res)
+          // console.log(res)
           let _address = res.shopAddressInfo
           
           this.shopAddressInfo = res.shopAddressInfo
@@ -903,9 +903,7 @@ export default {
 
           
 
-          // this._apis.order
-          //   .fetchOrderAddress({ id: this.cid, cid: this.cid })
-          //   .then(response => {
+          // this.$store.dispatch('getShopInfo').then(response => {
           //     this.list.forEach(res => {
           //       if(!res.sendAddress) {
           //         res.sendName = response.senderName

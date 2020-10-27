@@ -156,7 +156,7 @@ export default {
             this._apis.client.getChannels({}).then((response) => {
                 this.channelOptions = [].concat(response);
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         handleNew() {
@@ -203,7 +203,7 @@ export default {
     },
     computed: {
         cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
             return shopInfo.id
         }
     },

@@ -233,7 +233,7 @@ export default {
   },
   computed:{
       cid(){
-          let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+          let shopInfo = this.$store.getters.shopInfos
           return shopInfo.id
       }
   },
@@ -244,8 +244,7 @@ export default {
 
   methods: {
     getShopInfo(){
-      let id = this.cid
-      this._apis.set.getShopInfo({id:id}).then(response =>{
+      this.$store.dispatch('getShopInfo').then(response =>{
         this.form.memberAutoConfirmReceive = response.memberAutoConfirmReceive,
         this.form.shopAutoConfirmReceive = response.shopAutoConfirmReceive,
         this.form.orderAutoFinished = response.orderAutoFinished,
@@ -259,7 +258,7 @@ export default {
         this.memberAutoReceive = Boolean(response.isMemberAutoConfirmReceive),
         this.autoFinished = Boolean(response.isOrderAutoFinished)
       }).catch(error =>{
-        console.log(error)
+        console.error(error)
       })
     },
     
@@ -298,7 +297,8 @@ export default {
           isShopAutoConfirmReceive : this.form.isShopAutoConfirmReceive ,
           isOrderAutoFinished : this.form.isOrderAutoFinished 
         }
-        this._apis.set.updateShopInfo(data).then(response =>{
+        this._apis.shopInfo.updateShopInfo(data).then(response =>{
+          this.$store.dispatch('getShopInfo'); 
           this.loading = false
           this.$message.success('保存成功！');
           // this.logistics()

@@ -553,26 +553,26 @@ export function orderSendInfoImportAfterSaleBatchDelever(data) {
     })
 }
 
- //修改发货地址
- export function orderUpdateAddress(data) {
-  return request({
-    //token: '09255c7724fe9b8df952aa2f7e3ec718768b8ae62e74d1ef2214c0aead86a36b',
-    target: 'SHOP-API-102-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+//  //修改发货地址
+//  export function orderUpdateAddress(data) {
+//   return request({
+//     //token: '09255c7724fe9b8df952aa2f7e3ec718768b8ae62e74d1ef2214c0aead86a36b',
+//     target: 'SHOP-API-102-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
- //修改发货地址
- export function fetchOrderAddress(data) {
-  return request({
-    target: 'SHOP-API-100-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+//  //修改发货地址
+//  export function fetchOrderAddress(data) {
+//   return request({
+//     target: 'SHOP-API-100-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
  //电子面单 获取快递公司
  export function getElectronicFaceSheetExpressCompanyList(data) {

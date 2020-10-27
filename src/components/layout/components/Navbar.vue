@@ -99,15 +99,15 @@ export default {
   },
   computed: {
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
     ...mapGetters(["sidebar", "device", "shopName"]),
     userInfo() {
-      return JSON.parse(localStorage.getItem("userInfo"));
+      return this.$store.getters.userInfo;
     },
     userType() {
-      let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      let userInfo = this.$store.getters.userInfo;
 
       if (userInfo && userInfo.type == "admin") {
         return true;
@@ -132,7 +132,7 @@ export default {
     },
     // getShopInfo() {
     //   let id = this.cid;
-    //   this._apis.set
+    //   this._apis.shopInfo
     //     .getShopInfo({ id: id })
     //     .then(response => {
     //       console.log('21212',  response.storeGuide, response)
@@ -171,7 +171,7 @@ export default {
         return false
       }
       this.$store.dispatch("LogOut").then(() => {
-        console.log("退出");
+        // console.log("退出");
         location.reload(); // In order to re-instantiate the vue-router object to avoid bugs
       });
     },
@@ -185,13 +185,13 @@ export default {
 
     //获取店铺名称
     getShopName() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       this.shopName = shopInfo && shopInfo.shopName;
     },
 
     //切换店铺
     init() {
-      let info = JSON.parse(localStorage.getItem("userInfo"));
+      let info = this.$store.getters.userInfo;
       let arr = Object.keys(info.shopInfoMap);
       let data = info.shopInfoMap
         for(let key in data){
@@ -213,7 +213,7 @@ export default {
 
     //获取版本类型
      getGuide(){
-       this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+       this.$store.dispatch('getShopInfo').then( data => {
           if(data.isOpenResell == 1){
             this.guideType = '专业版'
           }else{

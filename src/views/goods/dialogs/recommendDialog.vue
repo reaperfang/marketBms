@@ -102,7 +102,7 @@ export default {
     created() {
         if(this.data.editor) {
             this.getCategoryDetail(this.data.id).then(res => {
-                console.log(res)
+                // console.log(res)
                 this.basicForm.name = res.name
                 this.basicForm.enable = res.enable
                 this.basicForm.sort = res.sort
@@ -190,7 +190,7 @@ export default {
                     }
                     this.visible = false
                 } else {
-                    console.log('error submit!!');
+                    console.error('error submit!!');
                     return false;
                 }
             });

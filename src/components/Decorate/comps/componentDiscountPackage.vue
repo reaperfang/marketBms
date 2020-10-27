@@ -7,7 +7,11 @@
                     <li v-for="(item,key) of displayList" :key="key" v-if="item.show" :style="[goodMargin,goodWidth]" :class="['goodsStyle'+goodsStyle,{goodsChamfer:goodsChamfer!=1},'goodsRatio'+goodsRatio]">
                         <div class="img_box">
                             <div class="label">已售{{item.participateActivityNum}}套</div>
-                            <img :src="item.activityPic" alt="" :class="{goodsFill:goodsFill!=1}">
+                            <el-image :key="listStyle" :scroll-container="listStyle == 6 ? null : bodyClass ?  '.'+bodyClass : '.phone-body'" :src="item.activityPic" alt="" :class="{goodsFill:goodsFill!=1}" lazy>
+                                <div slot="placeholder" class="el-image__lazyloading">
+                                    加载中...
+                                </div>
+                            </el-image>
                         </div>
                         <div class="countdown_Bar" v-if="showContents.indexOf('4')!=-1">
                             <h1 class="title">优惠套装</h1>
@@ -153,10 +157,25 @@ export default {
         },
 
          //根据ids拉取数据
-        fetch(componentData = this.currentComponentData.data) {
+        async fetch(componentData = this.currentComponentData.data) {
             if(componentData) {
                 if(Array.isArray(componentData.ids) && componentData.ids.length){
                     this.loading = true;
+
+                    //优先加载
+                    if(componentData.ids.length > this.preloadLength) {
+                        const paramsLoad = this.utils.deepClone(componentData.ids);
+                        paramsLoad.splice(this.preloadLength);
+                        await this._apis.shop.getDiscountPackageListByIds({
+                            ids: paramsLoad.join(',')
+                        }).then((response)=>{
+                            this.createList(response);
+                            this.loading = false;
+                        }).catch((error)=>{
+                            this.displayList = [];
+                        });
+                    }
+
                     this._apis.shop.getDiscountPackageListByIds({
                         ids: componentData.ids.join(',')
                     }).then((response)=>{
@@ -937,6 +956,25 @@ export default {
             }
             img.goodsFill{
                 object-fit:contain;
+            }
+            /deep/ .el-image {
+                z-index: 0;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                img{
+                    width:100%;
+                    height:100%;
+                    left:0;
+                    top:0;
+                    position:absolute;
+                    object-fit:cover;
+                }
+            }
+            /deep/ .goodsFill{
+                img{
+                    object-fit: contain;
+                }
             }
         }
         .countdown_Bar{
