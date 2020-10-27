@@ -404,7 +404,7 @@ export default {
             this._apis.set
                 .getShopInfo({ id: id })
                 .then(response => {
-                    console.log(response)
+                    // console.log(response)
                     this.tenantName = response.tenantName
                 })
                 .catch(error => {
@@ -467,7 +467,7 @@ export default {
             this._apis.order
                 .getIsTrace({ cid: this.cid })
                 .then(res => {
-                console.log(res);
+                // console.log(res);
                 this.isTrace = res.isTrace;
                 })
                 .catch(error => {

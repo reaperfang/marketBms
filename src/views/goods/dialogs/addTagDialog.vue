@@ -114,7 +114,7 @@ export default {
             this.add()
           }
         } else {
-          console.log("error submit!!");
+          console.error("error submit!!");
           return false;
         }
       });

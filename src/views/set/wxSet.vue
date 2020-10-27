@@ -172,7 +172,7 @@ export default {
     //上传文件转化为base64格式
     fileChange(e) {
         let file = e.target.files[0]
-        console.log('file',file)
+        // console.log('file',file)
         this.form.certFileName = file.name
         let _self = this
         var reader = new FileReader();

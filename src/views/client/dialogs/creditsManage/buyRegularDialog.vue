@@ -288,7 +288,7 @@ export default {
           .catch(error => {
             this.btnLoading = false;
             this.visible = false;
-            console.log(error);
+            console.error(error);
           });
           return;
       }
@@ -306,7 +306,7 @@ export default {
           .catch(error => {
             this.btnLoading = false;
             this.visible = false;
-            console.log(error);
+            console.error(error);
           });
     },
     showDialog(val) {
@@ -352,7 +352,7 @@ export default {
           this.categoryOptions = [].concat(arr);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     getSkuList(startIndex, pageSize) {
@@ -381,7 +381,7 @@ export default {
           this.total = response.total;
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     handleSearch() {
@@ -434,7 +434,7 @@ export default {
               item.goodsInfo.specs = item.goodsInfo.specs.replace(/{|}|"|"/g, "");
             })
           }).catch((error) => {
-            console.log(error);
+            console.error(error);
           })
         }
       }

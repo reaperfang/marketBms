@@ -137,7 +137,7 @@ export default {
             localStorage.setItem('userInfo',JSON.stringify(info));//更新本地存储的账号信息
             this.saveShop(shop)
           }).catch(error =>{
-            console.log('error',error)
+            console.error('error',error)
           })
         }
       }else{
@@ -156,7 +156,7 @@ export default {
         // console.log("切换店铺后的店铺信息 ：", shopInfo);
         this.$store.dispatch('setShopInfos',shopInfo).then(() => {
             this.$store.dispatch('getShopInfo')
-            console.log('saveShop',this.$route.path)
+            // console.log('saveShop',this.$route.path)
             const fromPath = this.$route.path
             if (fromPath === '/profile/profile') this._globalEvent.$emit('refreshProfile')
             this.getShopAuthList()
@@ -172,7 +172,7 @@ export default {
             this.$message.error(error);
           })
       }).catch(error => {
-        console.log(error)
+        console.error(error)
       })
     },
 

@@ -86,7 +86,7 @@ export default {
 						type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
 					},
 					formatter: function(params) {
-						console.log(params);
+						// console.log(params);
 						let item = params[0],
 							list = item.data;
 						var dotHtml = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${item.color}"></span>`;

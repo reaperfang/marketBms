@@ -97,7 +97,7 @@ export default {
           if(pageData.moduleList.filter(item => item.title === '分销中心').length == 1 && this.shopInfo.isOpenResell!==1){
             pageData.moduleList = pageData.moduleList.filter(item => item.title !== '分销中心');
           }
-          console.log(pageData)
+          // console.log(pageData)
           this.ruleForm = pageData;
           this.ruleForm['status'] = response.status;
           this.ruleForm['shareUrl'] = 'https:' + response.shareUrl.split(':')[1];

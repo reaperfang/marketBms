@@ -47,7 +47,7 @@ export default {
         this.currentComponent = 'beingRenovated'
       } else {
         this._apis.shop.getHomePage({ pageTag: 0 }).then((response)=>{
-          console.log('response', response)
+          // console.log('response', response)
           //没有装修首页
           if(!response) {
             this.currentComponent = 'beingRenovated'
@@ -56,7 +56,7 @@ export default {
             this.shareUrl = response && response.shareUrl
           }
         }).catch((error)=>{
-          console.log(error)
+          console.error(error)
         });
       }
     }

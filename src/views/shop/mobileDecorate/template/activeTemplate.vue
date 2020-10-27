@@ -322,7 +322,7 @@
         }
         this.preLoadObj.src = data[this.imgNow][name];
         this.preLoadObj.onerror = function () {
-          console.log("图片加载失败");
+          console.warn("图片加载失败");
           _self.imgNow++;
           if (_self.imgNow < data.length) {  //  如果还没有加载到最后一张
             _self.preload(data, name);          //  递归调用自己
@@ -332,8 +332,8 @@
           }
         }
         this.preLoadObj.onload = function () {
-          console.log(this.clientWidth)
-          console.log(this.clientHeight)
+          // console.log(this.clientWidth)
+          // console.log(this.clientHeight)
           _self.imgNow++;
           if (_self.imgNow < data.length) {  //  如果还没有加载到最后一张
             _self.preload(data, name);          //  递归调用自己
@@ -397,7 +397,7 @@
                 this.dialogVisible = true;
                 this.tempInfo = item
               }).catch((err)=> {
-                console.log('aaa', err);
+                console.error(err);
                 this.$message.error(err)
               }).finally(() => {this.isLoading = false})
             } else {
@@ -423,7 +423,7 @@
                   this._routeTo('m_templateEdit', {id: item.id});
                 })
               }).catch((err)=> {
-                console.log('aaa', err);
+                console.error(err);
                 this.$message.error(err)
               }).finally(() => {this.isLoading = false})
             } else {

@@ -195,7 +195,7 @@ export default {
                         type: 'success'
                     });
                 }).catch((error) => {
-                    console.log(error);
+                    console.error(error);
                 })
             }
         },
@@ -208,7 +208,7 @@ export default {
                         type: 'success'
                     });
                 }).catch((error) => {
-                    console.log(error);
+                    console.error(error);
                 })
             }
         },
@@ -225,7 +225,7 @@ export default {
                 this.ruleForm.scoreUpperCount = response.scoreUpperCount;
                 this.isSwitch = response.scoreUpper == 1? true:false;
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         }
     },

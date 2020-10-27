@@ -323,7 +323,7 @@ export default {
     },
     ruleFormH5: {
       handler(newValue){
-        console.log(newValue);
+        // console.log(newValue);
       },
       deep: true
     }

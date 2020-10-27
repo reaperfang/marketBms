@@ -114,7 +114,7 @@ export default {
               this.getLabelList(this.startIndex, this.pageSize);
             })
             .catch(error => {
-              console.log(error);
+              console.error(error);
             });
         } else {
           this.$message({
@@ -160,7 +160,7 @@ export default {
         })
         .catch(error => {
           this.loading = false;
-          console.log(error);
+          console.error(error);
         });
     },
     edit(row) {
@@ -205,7 +205,7 @@ export default {
               this.checkAll = false;
             })
             .catch(error => {
-              console.log(error);
+              console.error(error);
             });
         }
       }

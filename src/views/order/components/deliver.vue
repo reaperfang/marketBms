@@ -648,7 +648,7 @@ export default {
             try {
               let res = await this._apis.order.getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
 
-              console.log(res)
+              // console.log(res)
               if(res && res.length) {
                 this._list[0].sizeList = res.map(item => ({
                   ...item,
@@ -672,7 +672,7 @@ export default {
             this.orderSendGoodsHander(params)
           }
         } else {
-          console.log("error submit!!");
+          console.error("error submit!!");
           return false;
         }
       });

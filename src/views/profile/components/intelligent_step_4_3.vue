@@ -131,7 +131,7 @@
           this.$message.error(e || "出错了，请稍后再试~");
           console.error(e)
         } finally {
-          console.log("update-shopInfo: finally");
+          // console.log("update-shopInfo: finally");
           this.$emit("update-completed-loading", false);
         }
       },
@@ -195,13 +195,13 @@
           }
         } catch (e) {
           this.$message.error(e || "出错了，请稍后再试~");
-          console.log(e);
+          console.error(e);
         }
       },
 
       /**  地图  */
       getMapClickPoi(poi) {
-        console.log('poi----getMapClickPoi', poi);
+        // console.log('poi----getMapClickPoi', poi);
         if (!poi) return false;
         this.form.sendAddress = poi.address;
         this.form.lat = poi.location.lat;

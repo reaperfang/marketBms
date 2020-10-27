@@ -130,7 +130,7 @@ export default {
           height: "120"
         })
         .then(response => {
-          console.log('getQrcode',response)
+          // console.log('getQrcode',response)
           this.qrCode = response ? `data:image/png;base64,${response}` : null;
         })
         .catch(error => {
@@ -142,7 +142,7 @@ export default {
     getwxBindStatus() {
       const id = this.cid
       return this._apis.profile.getwxBindStatus({ id }).then(response => {
-        console.log('getwxBindStatus',response)
+        // console.log('getwxBindStatus',response)
         this.isBindGzh = response && response.bindWechatAccount === 1 || false
         this.isBindXcx = response && response.bindWechatApplet === 1 || false
       }).catch((err) => {
@@ -165,7 +165,7 @@ export default {
       return this._apis.set
         .getShopInfo({ id: id })
         .then(response => {
-         console.log('----response--', response)
+        //  console.log('----response--', response)
          this.businessChannel = response && response.businessChannel
         })
         .catch(error => {

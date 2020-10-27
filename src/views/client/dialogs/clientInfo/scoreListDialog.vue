@@ -63,7 +63,7 @@ export default {
             this.scoreList = [].concat(list);
             this.total = response.total;
         }).catch((error) => {
-          console.log(error);
+          console.error(error);
         })
     },
     handleSizeChange(val) {

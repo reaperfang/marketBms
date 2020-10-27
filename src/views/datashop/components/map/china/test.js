@@ -36,7 +36,7 @@ const mobulesConfig = {
   
   async function getData(type) {
     const ret = await axios.get(`by_${type}.json`);
-    console.log("ret",ret.data);
+    // console.log("ret",ret.data);
     return ret.data;
   }
   

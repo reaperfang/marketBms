@@ -63,7 +63,7 @@ export default {
         //   this.$refs.shopInfoMap.clearKeyword()
         // })
       }).catch(error =>{
-        console.log('updateShopInfo:error', error)
+        console.error('updateShopInfo:error', error)
         // this.$message.error('保存失败');
       })
     },
@@ -84,7 +84,7 @@ export default {
         .then(response => {
           this.$router.push({ path: '/profile/shopGuide'})
         }).catch((err) => {
-          console.log(err)
+          console.error(err)
         })
     },
     getShopInfo() {

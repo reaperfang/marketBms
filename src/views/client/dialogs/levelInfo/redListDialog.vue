@@ -92,7 +92,7 @@ export default {
               })
             }
         }).catch((error) => {
-          console.log(error);
+          console.error(error);
             // this.$notify.error({
             //     title: '错误',
             //     message: error

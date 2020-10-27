@@ -53,14 +53,14 @@ export default {
       //长连接demo
       this._apis.websocketDemo.getData({aaa:1}, {
         onopen: () => {
-          console.log('opened');
+          // console.log('opened');
         },
         onmessage: (res) => {
           _self.socketValue = res;
-          console.log(res);
+          // console.log(res);
         },
         onclose: (onclose) => {
-          console.log('closed原因：' + onclose);
+          // console.log('closed原因：' + onclose);
         },
         onerror: (error) => {
           console.error(error);

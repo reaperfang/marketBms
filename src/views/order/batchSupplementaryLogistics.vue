@@ -625,7 +625,7 @@ export default {
             params = {
                 sendInfoDtoList: this.list.map(item => {
                     let expressCompanys = ''
-                    console.log(this.expressCompanyList)
+                    // console.log(this.expressCompanyList)
                       if(item.deliveryWay == 1){ //如果为普通快递在对快递单号等进行处理
                         if (item.expressCompanyCodes == "other") {
                           expressCompanys = item.other;
@@ -825,7 +825,7 @@ export default {
           ids: this.$route.query.ids.split(",").map(val => +val)
         })
         .then(res => {
-          console.log(res)
+          // console.log(res)
           let _address = res.shopAddressInfo
           
           this.shopAddressInfo = res.shopAddressInfo

@@ -216,7 +216,7 @@ export default {
           this.$emit('refreshPage');
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     getInfo() {

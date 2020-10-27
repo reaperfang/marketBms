@@ -282,7 +282,7 @@ export default {
         icon: true,
         text: "删除后将不可恢复，确认删除所选标签吗？"
       }).then(() => {
-        console.log(this.multipleSelection)
+        // console.log(this.multipleSelection)
         this._apis.goods.deleteTag({ids: this.multipleSelection.map(val => val.id)}).then(() => {
           this.getList()
           this.$message({
@@ -290,7 +290,7 @@ export default {
             type: 'success'
           });
         }).catch(error => {
-
+          console.error(error)
         })
       });
     },

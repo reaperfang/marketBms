@@ -91,11 +91,11 @@ export default {
   mounted(){
     if(!this.mapLoaded) {
       this._globalEvent.$on('mapLoaded', ()=>{
-        console.log(11111111111111111)
+        // console.log(11111111111111111)
         this.init();
       });
     }else{
-        console.log(222222222222222222)
+        // console.log(222222222222222222)
       this.init();
     }
   },
@@ -112,9 +112,9 @@ export default {
         Lat = 39.9046900000
         lng = 116.4071700000
       }
-      console.log('-----init---', Lat, lng)
+      // console.log('-----init---', Lat, lng)
       this.centerObj = new qq.maps.LatLng(Lat, lng);
-      console.log('-----this.centerObj---', this.centerObj)
+      // console.log('-----this.centerObj---', this.centerObj)
       this.mapObj = new qq.maps.Map(this.$refs.mapContainer, {
         zoom: this.zoom,
         center: this.centerObj,

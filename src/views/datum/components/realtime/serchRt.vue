@@ -91,7 +91,7 @@ export default {
             lastday=this.value2
         }else if(this.value==1){//选中周的 周日 日期 时间戳 到秒
             var today = new Date().getDay();// 今天是这周的第几天
-            console.log(today)
+            // console.log(today)
             var stepSunDay = -today+1 ;//上周日距离今天的天数（负数表示）
             stepSunDay=stepSunDay-1
             if (today == 0) {// 如果今天是周日

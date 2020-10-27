@@ -208,7 +208,7 @@ export default {
           searchValue2: resellerPhone
       })
     }
-    console.log(this.$route.query.id);
+    // console.log(this.$route.query.id);
     this._globalEvent.$on("checkedLength", number => {
       this.checkedLength = number;
     });
@@ -349,7 +349,7 @@ export default {
     onSubmit() {
       this.checkedList = [];
 
-      console.log(this.listQuery)
+      // console.log(this.listQuery)
       this.listQuery = Object.assign({}, this.listQuery, {
         startIndex: 1,
         pageSize: 20,

@@ -46,7 +46,7 @@ export default {
   watch: {
     'currentComponentData.data.coverUrl': {
       handler(newValue, oldValue) {
-        console.log(newValue)
+        // console.log(newValue)
         if(newValue === oldValue){
           return;
         }

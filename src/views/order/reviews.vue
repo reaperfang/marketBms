@@ -330,7 +330,7 @@ export default {
             })
         },
         onSubmit(value) {
-            console.log(value)
+            // console.log(value)
             this._apis.order.replyComment({ids: this.multipleSelection.map(val => val.id), replyContent: value}).then((res) => {
                 // this.$message.success('批量回复成功！');
                 this.getList()

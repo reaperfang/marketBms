@@ -48,7 +48,7 @@ export default {
         if (!Number.isNaN(+this.radius)) {
           radius = this.radius * 1000
         }
-        console.log('radius',radius, this.centerObj, this.center)
+        // console.log('radius',radius, this.centerObj, this.center)
         // const visible = this.address ? true : false
         this.circle = new qq.maps.Circle({
           map: this.mapObj,
@@ -62,7 +62,7 @@ export default {
     },
     // 设置根据地区经纬度变化改变当前地图中心
     setPanTo(lng, lat, zoom = 17) {
-      console.log('-lng, lat---',lng, lat)
+      // console.log('-lng, lat---',lng, lat)
       const oLatLng = new qq.maps.LatLng(lat, lng)
       this.mapObj.panTo(oLatLng)
       this.mapObj.zoomTo(zoom)
@@ -105,7 +105,7 @@ export default {
       } else {
         zoom = 12
       }
-      console.log('---zoom---', zoom)
+      // console.log('---zoom---', zoom)
       this.setPanTo(this.center[1], this.center[0], zoom)
     }
   },
@@ -113,7 +113,7 @@ export default {
   watch: {
     'radius': {
       handler(curr, old) {
-        console.log('radius',curr, old)
+        // console.log('radius',curr, old)
         if (curr && this.center && this.center.length > 0) {
           if(!this.mapLoaded) {
             this._globalEvent.$on('mapLoaded', ()=>{
