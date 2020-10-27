@@ -37,7 +37,7 @@
                         <div class="label">收货信息</div>
                         <div class="value">
                             <p>{{orderInfo.receivedName}} / {{orderInfo.receivedPhone}}</p>
-                            <p>{{orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}</p>
+                            <p>{{(orderInfo.receiveAddress==null||orderInfo.receiveAddress=='') ? orderInfo.receivedProvinceName+orderInfo.receivedCityName+orderInfo.receivedAreaName : orderInfo.receiveAddress}} {{orderInfo.receivedDetail}}</p>
                         </div>
                     </div>
                     </template>
