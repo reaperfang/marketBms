@@ -4,10 +4,10 @@
       <div class="c_container">
         <div class="clearfix">
           <span class="fl marR20 marB20">购买商品获取积分规则</span>
-          <el-switch class="fl" v-model="enable" active-color="#13ce66" inactive-color="#CACACF"></el-switch>
+          <el-switch class="fl" v-model="enable" active-color="#66CCAC"></el-switch>
         </div>
         <div v-if="enable" class="giveBottom">
-          <div>购买获得积分，订单售后结束后按规则发放积分</div>
+          <div>购买获得积分，订单售后期结束可正常使用积分</div>
           <div>
             <span>赠送积分的商品：</span>
             <el-radio v-model="isAllProduct" label="0">全部商品</el-radio>
@@ -31,7 +31,7 @@
             </div>
             <span>元 获得</span>
             <div class="input_wrap">
-              <el-input v-model="allMember" @keyup.native="checkZero($event,allMember,'allMember')" :maxLength="5"></el-input>
+              <el-input v-model="allMember" @keyup.native="checkZero($event,allMember,'allMember')" :maxLength="10"></el-input>
             </div>
             <span>积分</span>
           </div>
@@ -46,21 +46,21 @@
             <div class="marB10">
               <span>用户获得</span>
               <div class="input_wrap2" style="margin-left:14px">
-                <el-input placeholder="请输入整数，不输入则不发放" v-model="noMember" @keyup.native="checkZero($event,noMember,'noMember')" :maxLength="5"></el-input>
+                <el-input placeholder="请输入整数，不输入则不发放" v-model="noMember" @keyup.native="checkZero($event,noMember,'noMember')"></el-input>
               </div>
               <span>积分</span>
             </div>
             <div class="marB10">
               <span>新会员获得</span>
               <div class="input_wrap2">
-                <el-input placeholder="请输入整数，不输入则不发放" v-model="newMember" @keyup.native="checkZero($event,newMember,'newMember')" :maxLength="5"></el-input>
+                <el-input placeholder="请输入整数，不输入则不发放" v-model="newMember" @keyup.native="checkZero($event,newMember,'newMember')"></el-input>
               </div>
               <span>积分</span>
             </div>
             <div class="marB10">
               <span>老会员获得</span>
               <div class="input_wrap2">
-                <el-input placeholder="请输入整数，不输入则不发放" v-model="oldMember" @keyup.native="checkZero($event,oldMember,'oldMember')" :maxLength="5"></el-input>
+                <el-input placeholder="请输入整数，不输入则不发放" v-model="oldMember" @keyup.native="checkZero($event,oldMember,'oldMember')"></el-input>
               </div>
               <span>积分</span>
             </div>
@@ -94,26 +94,26 @@
             :data="skuList"
             style="width: 100%"
             ref="skuTable"
+            :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
             :default-sort="{prop: 'date', order: 'descending'}"
             :row-key="getRowKeys"
           >
-            <el-table-column type="selection" prop="choose" label="选择" :reserve-selection="true" :selectable="selectable" width="34"></el-table-column>
+            <el-table-column type="selection" prop="choose" label="选择" :reserve-selection="true" :selectable="selectable"></el-table-column>
             <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
-            <el-table-column prop="goodsInfo.name" label="商品名称" width="150" fixed="left" class-name="table-padding"></el-table-column>
-            <el-table-column prop="goodsInfo.specs" label="规格" align="center" min-width="120"></el-table-column>
-            <el-table-column prop="goodsInfo.salePrice" label="商品价格" align="right" min-width="120"></el-table-column>
-            <el-table-column prop="goodsInfo.stock" label="商品库存" min-width="120" align="right" fixed="right" class-name="table-padding"></el-table-column>
+            <el-table-column prop="goodsInfo.name" label="商品名称"></el-table-column>
+            <el-table-column prop="goodsInfo.specs" label="规格"></el-table-column>
+            <el-table-column prop="goodsInfo.salePrice" label="商品价格"></el-table-column>
+            <el-table-column prop="goodsInfo.stock" label="商品库存"></el-table-column>
           </el-table>
           <div class="page_styles">
             <el-pagination
-              :background="true"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="Number(startIndex) || 1"
               :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
               :page-size="pageSize*1"
               :total="total*1"
-              layout="prev, pager, next, sizes"
+              layout="total, sizes, prev, pager, next, jumper"
             ></el-pagination>
           </div>
         </div>
@@ -136,14 +136,16 @@
                 :data="selectedList"
                 style="width: 100%"
                 ref="selectedTable"
+                border
+                :header-cell-style="{color:'#655EFF'}"
                 :default-sort="{prop: 'date', order: 'descending'}"
             >
                 <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
-                <el-table-column prop="goodsInfo.name" label="商品名称" width="150" fixed="left" class-name="table-padding"></el-table-column>
-                <el-table-column prop="goodsInfo.specs" label="规格" min-width="120" align="center"></el-table-column>
-                <el-table-column prop="goodsInfo.salePrice" label="商品价格" min-width="120" align="right"></el-table-column>
-                <el-table-column prop="goodsInfo.stock" label="商品库存" min-width="100" align="right"></el-table-column>
-                <el-table-column label="操作" width="100" align="center" fixed="right" class-name="table-padding">
+                <el-table-column prop="goodsInfo.name" label="商品名称"></el-table-column>
+                <el-table-column prop="goodsInfo.specs" label="规格" width="300"></el-table-column>
+                <el-table-column prop="goodsInfo.salePrice" label="商品价格"></el-table-column>
+                <el-table-column prop="goodsInfo.stock" label="商品库存"></el-table-column>
+                <el-table-column label="操作" width="80">
                   <template slot-scope="scope">
                       <span class="edit_span pointer" @click="deleteRow(scope.row)">删除</span>
                   </template>
@@ -151,7 +153,7 @@
             </el-table>
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible2 = false">取 消</el-button>
+            <el-button @click="cancel3">取 消</el-button>
             <el-button type="primary" @click="submit3">确 定</el-button>
         </span>
     </el-dialog>
@@ -189,7 +191,9 @@ export default {
       startIndex: 1,
       btnLoading: false,
       dialogVisible2: false,
-      selectedList: []
+      selectedList: [],
+      selections: [],
+      oldSelect: []
     };
   },
   methods: {
@@ -216,9 +220,6 @@ export default {
     },
     getRowKeys(row) {
       return row.goodsInfo.id
-    },
-    handelSelect(val,row) {
-      this.selections.push(row);
     },
     handleSizeChange(val) {
       this.getSkuList(1, val);
@@ -272,8 +273,8 @@ export default {
         });
         return;
       }
-      if(params.sceneRule.isAllProduct) {
-        params.selectedList = [];
+      if(this.enable && params.sceneRule.isAllProduct) {
+        params.sceneRule.selectProducts = [];
         this._apis.client
           .editCreditRegular(params)
           .then(response => {
@@ -288,7 +289,7 @@ export default {
           .catch(error => {
             this.btnLoading = false;
             this.visible = false;
-            console.error(error);
+            console.log(error);
           });
           return;
       }
@@ -306,7 +307,7 @@ export default {
           .catch(error => {
             this.btnLoading = false;
             this.visible = false;
-            console.error(error);
+            console.log(error);
           });
     },
     showDialog(val) {
@@ -316,9 +317,14 @@ export default {
           this.getSkuList(this.startIndex, this.pageSize);
         }
       }else{
-        this.selectProducts = [];
+        this.selectedList = [];
       }
     },
+    // toggleAllProduct(val) {
+    //   if(Number(val) == 0) {
+    //     this.selectedList = [];
+    //   }
+    // },
     transTreeData(data, pid) {
       var result = [],
         temp;
@@ -352,7 +358,7 @@ export default {
           this.categoryOptions = [].concat(arr);
         })
         .catch(error => {
-          console.error(error);
+          console.log(error);
         });
     },
     getSkuList(startIndex, pageSize) {
@@ -381,7 +387,7 @@ export default {
           this.total = response.total;
         })
         .catch(error => {
-          console.error(error);
+          console.log(error);
         });
     },
     handleSearch() {
@@ -394,15 +400,13 @@ export default {
       this.getSkuList(this.startIndex, this.pageSize);
     },
     submit2() {
-      let selections = this.$refs.skuTable.selection;
-      if(selections.length !== 0) {
+      this.selections = this.$refs.skuTable.selection;
+      if(this.selections.length !== 0) {
         this.dialogVisible2 = true;
-        this.selectedList = this.selectedList.concat(selections);
-        this.$nextTick(() => {
-          this.skuList.forEach(row => {
-            this.$refs.skuTable.toggleRowSelection(row,false);
-          });
-        })  
+        if(this.selectedList.length > 0) {
+          this.oldSelect = this.selectedList;
+        }
+        this.selectedList = this.selectedList.concat(this.selections);
       }else{
         this.$message({
           message: '请选择商品',
@@ -434,7 +438,7 @@ export default {
               item.goodsInfo.specs = item.goodsInfo.specs.replace(/{|}|"|"/g, "");
             })
           }).catch((error) => {
-            console.error(error);
+            console.log(error);
           })
         }
       }
@@ -449,6 +453,7 @@ export default {
       this.$nextTick(() => {
         this.otherVisible = false;
         this.dialogVisible2 = false;
+        this.oldSelect = [];
         this.skuList.map((item) => {
           this.selectedList.map((i) => {
             if(i.goodsInfo.id == item.goodsInfo.id) {
@@ -457,6 +462,17 @@ export default {
           })
         })
       }); 
+    },
+    cancel3() {
+      this.dialogVisible2 = false;
+      if(this.oldSelect.length > 0) {
+        this.selectedList = this.oldSelect;
+        this.$nextTick(() => {
+          this.skuList.forEach(row => {
+            this.$refs.skuTable.toggleRowSelection(row,false);
+          });
+        }) 
+      } 
     }
   },
   computed: {
@@ -488,6 +504,10 @@ export default {
 <style lang="scss" scoped>
 /deep/ .el-dialog {
   border-radius: 10px;
+}
+/deep/ .el-dialog__header {
+  background: #f1f0ff;
+  border-radius: 10px 10px 0 0;
 }
 /deep/ .el-dialog__title {
   color: #44434b;
