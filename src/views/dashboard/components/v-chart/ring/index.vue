@@ -50,7 +50,7 @@ export default {
 				// },
 				//radius: [60, 70],
 				radius: [50, 60],
-				offsetY: screen.width > 1600 ? 90 : screen.width == 1600 ? 75 : screen.width == 1440 ? 75 : screen.width <= 1366 ? 60 : 75,
+				offsetY: screen.width > 1600 ? 90 : screen.width == 1600 ? 75 : screen.width == 1440 ? 75 : screen.width <= 1366 ? 69 : 75,
 				labelLine: {
 					normal: {
 						length: 5,
@@ -69,14 +69,14 @@ export default {
 						borderWidth: 0,
 						borderRadius: 4,
 						padding: [0, -50],
-						height: screen.width > 1366 ? 40 : 20,
+						height: screen.width > 1366 ? 40 : 35,
 						fontSize: screen.width > 1366 ? 13 : 12,
 						align: "center",
 						// color: "#FFFFFF",
 						rich: {
 							b: {
 								fontSize: screen.width > 1366 ? 12 : 9,
-								lineHeight: screen.width > 1366 ? 20 : 30,
+								lineHeight: screen.width > 1366 ? 20 : 20,
 								color: "#FFFFFF",
 								padding: screen.width > 1366 ? [0, 0, 5, 0] : [0, 0, 5, 0],
 								//borderRadius: 100
