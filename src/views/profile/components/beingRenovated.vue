@@ -426,13 +426,17 @@ export default {
       }
       li {
         &.img {
-          min-width: 225px;
+          max-width: 100%;
+          width: 225px;
           height: 300px;
-          text-align: center;
+          display: flex;
+          justify-content: center;
+          align-items: center;
           img {
-            width: 225px;
-            height: 300px;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
+            flex: 1;
           }
         }
         &.desc {
