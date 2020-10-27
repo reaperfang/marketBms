@@ -195,12 +195,12 @@ export default [
                 hidden: true,
                 meta: { title: '查看余额', noCache: true, tabTitle: '配送设置' , navType: 4 }
                 },
-            // {
-            //      path: 'authorize',
-            //      component: () => import('@/views/set/authorize'),
-            //      name: 'authorize',
-            //      meta: { title: '授权管理', noCache: true, tabTitle: '综合服务', navType:2  },
-            //  }
+            {
+                 path: 'authorize',
+                 component: () => import('@/views/set/authorize'),
+                 name: 'authorize',
+                 meta: { title: '授权管理', noCache: true, tabTitle: '综合服务', navType:2  },
+             }
         ]
     }
 ]
