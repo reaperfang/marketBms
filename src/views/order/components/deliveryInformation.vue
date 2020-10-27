@@ -383,7 +383,9 @@ export default {
                 deliveryWay: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].deliveryWay || '',
                 deliveryName: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorName || '',
                 phone: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].distributorPhone || '',
-                receiveAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receiveAddress || '',
+                receiveAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receiveAddress 
+                  ? JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receiveAddress
+                  : JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedProvinceName+JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedCityName+JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedAreaName,
                 receivedDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).receivedDetail || '',
                 sendAddress: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendAddress || '',
                 sendDetail: this.orderDetail.orderSendItemMap[i] && this.orderDetail.orderSendItemMap[i][0] && this.orderDetail.orderSendItemMap[i][0].address && JSON.parse(this.orderDetail.orderSendItemMap[i][0].address).sendDetail || '',
@@ -465,7 +467,9 @@ export default {
                 deliveryWay: item.datas[0]&&item.datas[0].deliveryWay || '',
                 deliveryName:item.datas[0]&&item.datas[0].distributorName || '',
                 phone: item.datas[0]&&item.datas[0].distributorPhone || '',
-                receiveAddress:JSON.parse(item.datas[0].address)&& JSON.parse(item.datas[0].address).receiveAddress || '',
+                receiveAddress:JSON.parse(item.datas[0].address)&& JSON.parse(item.datas[0].address).receiveAddress 
+                  ?JSON.parse(item.datas[0].address).receiveAddress
+                  :JSON.parse(item.datas[0].address).receivedProvinceName+JSON.parse(item.datas[0].address).receivedCityName+JSON.parse(item.datas[0].address).receivedAreaName,
                 receivedDetail: JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address).receivedDetail || '',
                 sendAddress: JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address).sendAddress || '',
                 sendDetail: JSON.parse(item.datas[0].address)&&JSON.parse(item.datas[0].address).sendDetail || '',
