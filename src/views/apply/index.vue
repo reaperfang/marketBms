@@ -37,7 +37,7 @@
       // 利用watch方法检测路由变化：
       $route: function (to, from) {
         // 拿到目标参数 to.params.id 去再次请求数据接口
-        console.log(to.params.id);
+        // console.log(to.params.id);
         this.sendMessage('push')
       },
       deep: true

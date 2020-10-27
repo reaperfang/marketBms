@@ -321,7 +321,7 @@ export default {
         // }
     },
     mounted () {
-        console.log(this.activity);
+        // console.log(this.activity);
     },
     methods: {
         specsChange(index, str) {
@@ -462,7 +462,7 @@ export default {
             }
         },
         costPriceChange(value) {
-            console.log(value)
+            // console.log(value)
         },
         imageSelected(image) {
             if(this.material) {

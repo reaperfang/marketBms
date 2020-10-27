@@ -113,7 +113,7 @@ export default {
         this.isBindGzh = response && response.bindWechatAccount === 1 || false
         this.isBindXcx = response && response.bindWechatApplet === 1 || false
       }).catch((err) => {
-        console.log(err)
+        console.error(err)
         this.$message.error(err)
       })
     },

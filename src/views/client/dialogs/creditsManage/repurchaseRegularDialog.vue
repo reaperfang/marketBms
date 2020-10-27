@@ -1,5 +1,5 @@
 <template>
-    <DialogBase :visible.sync="visible" @submit="submit" title="复购商品获取积分规则" :hasCancel="hasCancel">
+    <DialogBase :visible.sync="visible" @submit="submit" title="复购商品获取积分规则" :hasCancel="hasCancel" :showFooter="false">
         <div class="c_container">
             <div class="clearfix"><span class="fl marR20">复购商品获取积分规则</span><el-switch class="fl" v-model="enable" active-color="#13ce66" inactive-color="#CACACF"></el-switch></div>
             <div v-if="enable" class="giveBottom">
@@ -12,7 +12,7 @@
             <div v-if="distinguish == '0'">
                 <span>获得</span>
                 <div class="input_wrap">
-                    <el-input placeholder="请输入整数" v-model="allMember" @keyup.native="checkZero($event,allMember,'allMember')"></el-input>
+                    <el-input placeholder="请输入整数" v-model="allMember" @keyup.native="checkZero($event,allMember,'allMember')" :maxLength="5"></el-input>
                 </div>
                 <span>积分</span>
             </div>
@@ -20,23 +20,29 @@
                 <div class="marB10">
                     <span>用户获得</span>
                     <div class="input_wrap" style="margin-left:14px">
-                        <el-input placeholder="请输入整数" v-model="noMember" @keyup.native="checkZero($event,noMember,'noMember')"></el-input>
+                        <el-input placeholder="请输入整数" v-model="noMember" @keyup.native="checkZero($event,noMember,'noMember')" :maxLength="5"></el-input>
                     </div>
                 </div>
                 <div class="marB10">
                     <span>新会员获得</span>
                     <div class="input_wrap">
-                        <el-input placeholder="请输入整数" v-model="newMember" @keyup.native="checkZero($event,newMember,'newMember')"></el-input>
+                        <el-input placeholder="请输入整数" v-model="newMember" @keyup.native="checkZero($event,newMember,'newMember')" :maxLength="5"></el-input>
                     </div>
                 </div>
                 <div class="marB10">
                     <span>老会员获得</span>
                     <div class="input_wrap">
-                        <el-input placeholder="请输入整数" v-model="oldMember" @keyup.native="checkZero($event,oldMember,'oldMember')"></el-input>
+                        <el-input placeholder="请输入整数" v-model="oldMember" @keyup.native="checkZero($event,oldMember,'oldMember')" :maxLength="5"></el-input>
                     </div>
                 </div>
             </div>
             </div>
+        </div>
+        <div>
+            <span slot="footer" class="dialog-footer fcc">
+                <el-button type="primary" @click="submit">确 认</el-button>
+                <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+            </span>
         </div>
     </DialogBase>
 </template>
@@ -88,13 +94,15 @@ export default {
                 }
             }
             this._apis.client.editCreditRegular(params).then((response) => {
+                console.log(1);
                 this.$message({
                     message: '保存成功',
                     type: 'success'
                 });
                 this.$emit('refreshPage');
+                this.visible = false;
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         getInfo() {

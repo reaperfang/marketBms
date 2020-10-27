@@ -1,5 +1,5 @@
 <template>
-  <DialogBase :visible.sync="visible" @submit="submit" title="评价获取积分规则" :hasCancel="hasCancel">
+  <DialogBase :visible.sync="visible" @submit="submit" title="评价获取积分规则" :hasCancel="hasCancel" :showFooter="false">
     <div class="c_container">
       <div class="clearfix">
         <span class="fl marR20">评价获取积分规则</span>
@@ -13,12 +13,12 @@
         <div>
           <span>条件1： 文字满</span>
           <div class="input_wrap">
-            <el-input v-model="fullWord1" @keyup.native="checkZero($event,fullWord1,'fullWord1')"></el-input>
+            <el-input v-model="fullWord1" @keyup.native="checkZero($event,fullWord1,'fullWord1')" :maxLength="3"></el-input>
           </div>
           <span>字</span>
           <span v-if="distinguish1 == false">获得</span>
           <div class="input_wrap" v-if="distinguish1 == false">
-            <el-input v-model="allMember1" @keyup.native="checkZero($event,allMember1,'allMember1')"></el-input>
+            <el-input v-model="allMember1" @keyup.native="checkZero($event,allMember1,'allMember1')" :maxLength="5"></el-input>
           </div>
           <span v-if="distinguish1 == false">积分&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <el-checkbox v-model="distinguish1">区分人群奖励</el-checkbox>
@@ -26,29 +26,29 @@
         <div v-if="distinguish1 == true">
           <span>用户</span>
           <div class="input_wrap">
-            <el-input v-model="noMember1" @keyup.native="checkZero($event,noMember1,'noMember1')"></el-input>
+            <el-input v-model="noMember1" @keyup.native="checkZero($event,noMember1,'noMember1')" :maxLength="5"></el-input>
           </div>
           <span>积分</span>
           <span>新会员</span>
           <div class="input_wrap">
-            <el-input v-model="newMember1" @keyup.native="checkZero($event,newMember1,'newMember1')"></el-input>
+            <el-input v-model="newMember1" @keyup.native="checkZero($event,newMember1,'newMember1')" :maxLength="5"></el-input>
           </div>
           <span>积分</span>
           <span>老会员</span>
           <div class="input_wrap">
-            <el-input v-model="oldMember1" @keyup.native="checkZero($event,oldMember1,'oldMember1')"></el-input>
+            <el-input v-model="oldMember1" @keyup.native="checkZero($event,oldMember1,'oldMember1')" :maxLength="5"></el-input>
           </div>
           <span>积分</span>
         </div>
         <div>
           <span>条件2： 满</span>
           <div class="input_wrap">
-            <el-input v-model="fullWord2" @blur="checkBigger($event,fullWord2,'fullWord2')"></el-input>
+            <el-input v-model="fullWord2" @blur="checkBigger($event,fullWord2,'fullWord2')" :maxLength="3"></el-input>
           </div>
           <span>字</span>
           <span v-if="distinguish2 == false">额外获得</span>
           <div class="input_wrap" v-if="distinguish2 == false">
-            <el-input v-model="allMember2" @keyup.native="checkZero($event,allMember2,'allMember2')"></el-input>
+            <el-input v-model="allMember2" @keyup.native="checkZero($event,allMember2,'allMember2')" :maxLength="5"></el-input>
           </div>
           <span v-if="distinguish2 == false">积分&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <el-checkbox v-model="distinguish2">区分人群奖励</el-checkbox>
@@ -56,29 +56,29 @@
         <div v-if="distinguish2 == true">
           <span>用户</span>
           <div class="input_wrap">
-            <el-input v-model="noMember2" @keyup.native="checkZero($event,noMember2,'noMember2')"></el-input>
+            <el-input v-model="noMember2" @keyup.native="checkZero($event,noMember2,'noMember2')" :maxLength="5"></el-input>
           </div>
           <span>积分</span>
           <span>新会员</span>
           <div class="input_wrap">
-            <el-input v-model="newMember2" @keyup.native="checkZero($event,newMember2,'newMember2')"></el-input>
+            <el-input v-model="newMember2" @keyup.native="checkZero($event,newMember2,'newMember2')" :maxLength="5"></el-input>
           </div>
           <span>积分</span>
           <span>老会员</span>
           <div class="input_wrap">
-            <el-input v-model="oldMember2" @keyup.native="checkZero($event,oldMember2,'oldMember2')"></el-input>
+            <el-input v-model="oldMember2" @keyup.native="checkZero($event,oldMember2,'oldMember2')" :maxLength="5"></el-input>
           </div>
           <span>积分</span>
         </div>
         <div>
           <span>条件3： 图片/视频满</span>
           <div class="input_wrap">
-            <el-input v-model="fullWord3" @keyup.native="checkZero($event,fullWord3,'fullWord3')"></el-input>
+            <el-input v-model="fullWord3" @keyup.native="checkZero($event,fullWord3,'fullWord3')" :maxLength="2"></el-input>
           </div>
           <span>张/条</span>
           <span v-if="distinguish3==false">可获得</span>
           <div class="input_wrap" v-if="distinguish3==false">
-            <el-input v-model="allMember3" @keyup.native="checkZero($event,allMember3,'allMember3')"></el-input>
+            <el-input v-model="allMember3" @keyup.native="checkZero($event,allMember3,'allMember3')" :maxLength="5"></el-input>
           </div>
           <span v-if="distinguish3==false">积分&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <el-checkbox v-model="distinguish3" @keyup.native="checkZero($event,distinguish3,'distinguish3')">区分人群奖励</el-checkbox>
@@ -86,21 +86,27 @@
         <div v-if="distinguish3 == true">
           <span>用户</span>
           <div class="input_wrap">
-            <el-input v-model="noMember3" @keyup.native="checkZero($event,noMember3,'noMember3')"></el-input>
+            <el-input v-model="noMember3" @keyup.native="checkZero($event,noMember3,'noMember3')" :maxLength="5"></el-input>
           </div>
           <span>积分</span>
           <span>新会员</span>
           <div class="input_wrap">
-            <el-input v-model="newMember3" @keyup.native="checkZero($event,newMember3,'newMember3')"></el-input>
+            <el-input v-model="newMember3" @keyup.native="checkZero($event,newMember3,'newMember3')" :maxLength="5"></el-input>
           </div>
           <span>积分</span>
           <span>老会员</span>
           <div class="input_wrap">
-            <el-input v-model="oldMember3" @keyup.native="checkZero($event,oldMember3,'oldMember3')"></el-input>
+            <el-input v-model="oldMember3" @keyup.native="checkZero($event,oldMember3,'oldMember3')" :maxLength="5"></el-input>
           </div>
           <span>积分</span>
         </div>
       </div>
+    </div>
+    <div>
+      <span slot="footer" class="dialog-footer fcc">
+          <el-button type="primary" @click="submit">确 认</el-button>
+          <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+      </span>
     </div>
   </DialogBase>
 </template>
@@ -214,9 +220,10 @@ export default {
             type: 'success'
           });
           this.$emit('refreshPage');
+          this.visible = false;
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     getInfo() {

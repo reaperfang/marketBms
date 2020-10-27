@@ -120,9 +120,9 @@ const permission = {
       let _asyncRouterMap
 
       return new Promise((resolve, reject) => {
-        console.log(asyncRouterMap)
+        // console.log(asyncRouterMap)
         _asyncRouterMap = filterAnotherAuthAsyncRouter(asyncRouterMap, enable)
-        console.log(_asyncRouterMap)
+        // console.log(_asyncRouterMap)
 
         commit('SET_ROUTERS', _asyncRouterMap)
         resolve()

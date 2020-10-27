@@ -246,7 +246,7 @@ export default {
             this.isIndeterminateCouponList = false;
         },
         handleSelectionChangeCouponList(val) {
-            console.log(val)
+            // console.log(val)
             let checkedCount = val.length;
             this.checkAll = (checkedCount === this.couponList.length) && (checkedCount !== 0);
             this.isIndeterminateCouponList = checkedCount > 0 && checkedCount < this.couponList.length;
@@ -258,7 +258,7 @@ export default {
             this.isIndeterminateCodeList = false;
         },
         handleSelectionChangeCodeList(val) {
-            console.log(val)
+            // console.log(val)
             let checkedCount = val.length;
             this.checkAll2 = (checkedCount === this.codeList.length) && (checkedCount !== 0);
             this.isIndeterminateCodeList = checkedCount > 0 && checkedCount < this.codeList.length;
@@ -397,7 +397,7 @@ export default {
                     this._apis.client.frozenCoupons({couponList: arr, memberId:this.data.id, frozenType: 1}).then((response) => {
                         //console.log(response);
                     }).catch((error) => {
-                        console.log(error);
+                        console.error(error);
                     });
                 }
                 //优惠码加入黑名单
@@ -412,7 +412,7 @@ export default {
                     this._apis.client.frozenCoupons({couponList: arr, memberId:this.data.id, frozenType: 1}).then((response) => {
                         //console.log(response);
                     }).catch((error) => {
-                        console.log(error);
+                        console.error(error);
                     })
                 }
                 //电商加入黑名单
@@ -425,7 +425,7 @@ export default {
                     });
                     this.$emit('refreshPage');
                 }).catch((error) => {
-                    console.log(error);
+                    console.error(error);
                     this.btnLoading = false;
                     this.visible = false;
                 })
@@ -440,7 +440,7 @@ export default {
                 this.couponId = this.checks[0].id;
                 this.codeId = this.checks[1].id;
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         addCouponSel() {
@@ -484,7 +484,7 @@ export default {
                     this.$set(item, 'frozenNum',1);
                 })
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         getAllCodes() {
@@ -494,7 +494,7 @@ export default {
                     this.$set(item, 'frozenNum', 1);
                 })
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
     },

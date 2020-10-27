@@ -88,7 +88,7 @@ export default {
           this.categoryOptions = [].concat(arr);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
           // this.$notify.error({
           //   title: "错误",
           //   message: error
@@ -112,7 +112,7 @@ export default {
           this.skuList = [].concat(response.list);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
           // this.$notify.error({
           //   title: "错误",
           //   message: error

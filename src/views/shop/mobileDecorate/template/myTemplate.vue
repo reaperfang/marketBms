@@ -187,7 +187,7 @@
 				}
 				this.preLoadObj.src = data[this.imgNow][name];
 				this.preLoadObj.onerror = function () {
-					console.log("图片加载失败");
+					console.warn("图片加载失败");
 					_self.imgNow++;
 					if ( _self.imgNow < data.length ) {  //  如果还没有加载到最后一张
 						_self.preload(data, name);          //  递归调用自己

@@ -290,7 +290,7 @@ export default {
     const validateExceedsRadiuo = (rule, value, callback) => {
       const curr = parseFloat(value) * 100
       const radius = parseFloat(this.ruleForm.radius) * 100
-      console.log(curr, radius)
+      // console.log(curr, radius)
       if (curr > radius) {
         callback(new Error('已超出服务半径，请重新输入'))
       } else {
@@ -428,7 +428,7 @@ export default {
     getCenter() {
       let latlng
       latlng = (this.ruleForm.lat && this.ruleForm.lng) ?  [this.ruleForm.lat,this.ruleForm.lng] : []
-      console.log('---getCenter----',latlng)
+      // console.log('---getCenter----',latlng)
       return latlng
     },
     getSwitchTxt() {
@@ -479,7 +479,7 @@ export default {
     const p3 = this.getOrderDeliverInfo()
     this.isInit = true
     Promise.all([p1,p2,p3]).then(([res1, res2, res3]) => {
-      console.log('promise', res1, res2, res3)
+      // console.log('promise', res1, res2, res3)
       if (res1) {
         this.address = `${res1.address} ${res1.addressDetail}`
         this.ruleForm.lng = res1.longitude
@@ -510,12 +510,12 @@ export default {
         // }
         return response
       }).catch((err) => {
-        console.log('err',err)
+        console.error('err',err)
         this.$message.error(err || '数据获取失败')
       })
     },
     handleRepeatCycleChange(val) {
-      console.log('---val--', val)
+      // console.log('---val--', val)
       // if (val === 1) {
       //   this.ruleForm.weeks = []
       //   this.tempWeeks = []
@@ -530,7 +530,7 @@ export default {
       if (reg.test(address)) {
         address = address.replace(reg, '')
       }
-      console.log('--formatAddress---',address)
+      // console.log('--formatAddress---',address)
 
       address = province === city ? `${province}${area}${address}`: `${province}${city}${area}${address}`
       
@@ -577,7 +577,7 @@ export default {
       this.$refs.ruleForm.clearValidate(arr)
     },
     getPrevVal(form, index, key) {
-      console.log(form,index, key)
+      // console.log(form,index, key)
       if (index < 0) return null
       let prev =  form && form[index] && form[index][key]
       // if (!prev) {
@@ -592,7 +592,7 @@ export default {
       return prev
     },
     getNextVal(form, index, key) {
-      console.log(form,index, key)
+      // console.log(form,index, key)
       if (index >= form.length) return null
       let next = form && form[index] && form[index][key]
       while(index < form.length && !next) {
@@ -604,7 +604,7 @@ export default {
     },
     // 校验时间区间start
     validateTimeRangesStart(rule, value, callback) {
-      console.log('---validateTimeRangesStart---', rule, value)
+      // console.log('---validateTimeRangesStart---', rule, value)
       const arr = rule.fullField.split('.') // .fullField: "timePeriods.1.start"
       const index = +arr[1] // 1
       const ruleForm = this.ruleForm.timePeriods
@@ -620,7 +620,7 @@ export default {
       const minutes = this.formatTime(curr.getMinutes())
       const newValue = `${year}/${month}/${day} ${hours}:${minutes}:00`
 
-      console.log(newValue)
+      // console.log(newValue)
       curr = new Date(newValue)
 
       curr = curr.getTime()
@@ -628,21 +628,21 @@ export default {
       let isValidated = true
       // const validateArr = []
       // this.clearValidate('start')
-        console.log('--index-------', index)
+        // console.log('--index-------', index)
       if (index > 0) {
         // prev prev = ruleForm[index - 1].start
         let prev = this.getPrevVal(ruleForm, index - 1, 'start')
         // let prev = oPrev && oPrev.value
-        console.log('------prev---', prev,'---curr--', curr)
+        // console.log('------prev---', prev,'---curr--', curr)
         if (prev) {
           // this.clearValidate('start')
           this.$refs.ruleForm.clearValidate(`timePeriods.${this.prevIndex}.start`)
           // this.$refs.ruleForm.validateField(`timePeriods.${this.prevIndex}.start`);
-          console.log('---validateTimeRangesStart:prev:curr---', prev, curr)
+          // console.log('---validateTimeRangesStart:prev:curr---', prev, curr)
           prev = this.formatDate(prev)
           prev = new Date(prev)
           prev = prev.getTime()
-          console.log('---validateTimeRangesStart:prev:curr:time---', prev, curr)
+          // console.log('---validateTimeRangesStart:prev:curr:time---', prev, curr)
           if (prev >= curr) {
             isValidated = false
             callback(new Error('当前时间段的开始时间需晚于上一个时间段的开始时间'))
@@ -653,7 +653,7 @@ export default {
         // let next = ruleForm[index + 1].start
         let next = this.getNextVal(ruleForm, index + 1, 'start')
         // let next = oNext && oNext.value
-        console.log('---next--',next)
+        // console.log('---next--',next)
         if (next) {
           // this.clearValidate('start')
           this.$refs.ruleForm.clearValidate(`timePeriods.${this.nextIndex}.start`)
@@ -661,7 +661,7 @@ export default {
           next = this.formatDate(next)
           next = new Date(next)
           next = next.getTime()
-          console.log('---validateTimeRangesStart:next:curr:time---', next, curr)
+          // console.log('---validateTimeRangesStart:next:curr:time---', next, curr)
           if (next <= curr) {
             isValidated = false
             callback(new Error('当前时间段的开始时间不能晚于下一个时间段的开始时间。'))
@@ -699,8 +699,8 @@ export default {
       const minutes = this.formatTime(curr.getMinutes())
       const newValue = `${year}/${month}/${day} ${hours}:${minutes}:00`
 
-        console.log('---validateTimeRangesEnd:curr---', curr)
-      console.log(newValue)
+        // console.log('---validateTimeRangesEnd:curr---', curr)
+      // console.log(newValue)
       curr = new Date(newValue)
       
       curr = curr.getTime()
@@ -711,16 +711,16 @@ export default {
       if (index > 0) {
         // let prev = ruleForm[index - 1].end
         let prev = this.getPrevVal(ruleForm, index - 1, 'end')
-        console.log('---validateTimeRangesEnd:prev---', prev)
+        // console.log('---validateTimeRangesEnd:prev---', prev)
         if (prev) {
           // this.clearValidate('end')
           this.$refs.ruleForm.clearValidate(`timePeriods.${this.prevIndex}.end`)
           prev = this.formatDate(prev)
           prev = new Date(prev)
           prev = prev.getTime()
-          console.log('---validateTimeRangesEnd:prev:curr:time---', prev, curr, prev >= curr)
+          // console.log('---validateTimeRangesEnd:prev:curr:time---', prev, curr, prev >= curr)
           if (prev >= curr) {
-            console.log('12121212')
+            // console.log('12121212')
             isValidated = false
             callback(new Error('时间段可以交叉，不能重叠。'))
           }
@@ -732,7 +732,7 @@ export default {
       if (index + 1 < len) {
         // let next = ruleForm[index + 1].end
         let next = this.getNextVal(ruleForm, index + 1, 'end')
-        console.log('---next--',next)
+        // console.log('---next--',next)
         if (next) {
           // this.clearValidate('end')
           this.$refs.ruleForm.clearValidate(`timePeriods.${this.nextIndex}.end`)
@@ -751,7 +751,7 @@ export default {
       }
     },
     formatDecimals(val, key, digits = 2) {
-      console.log(val, Number.isNaN(+val))
+      // console.log(val, Number.isNaN(+val))
       if (val) {
         if (Number.isNaN(+val)) {
           return false
@@ -760,7 +760,7 @@ export default {
       }
     },
     handleIsOpen(val) {
-      console.log('val', val)
+      // console.log('val', val)
       // 当前是否开启普通快递
       if (val) {
         this.open()
@@ -769,7 +769,7 @@ export default {
       }
     },
     open() {
-      console.log('isCompleted',this.isCompleted)
+      // console.log('isCompleted',this.isCompleted)
       // const isCompleted = Math.random() * 10  > 5 ? true : false // mock data
       // 是否完成配置
       if (!this.isCompleted) {
@@ -816,7 +816,7 @@ export default {
       })
     },
     close() {
-      console.log('--isHasOtherWay---', isHasOtherWay)
+      // console.log('--isHasOtherWay---', isHasOtherWay)
       // 判断是否有其他配送方式
       // const isHasOtherWay = Math.random() * 10  > 5 ? true : false // mock data
       if (isHasOtherWay) {
@@ -849,7 +849,7 @@ export default {
           confirmText: '我知道了',
           showCancelButton: false,
         }).finally(() => {
-          console.log('----finally--')
+          // console.log('----finally--')
           this.isOpen = true
         });
       }
@@ -945,7 +945,7 @@ export default {
         }
         return res
       }).catch(err => {
-        console.log('---getShopInfo--', err)
+        console.error('---getShopInfo--', err)
         // this.$message.error(err && err.message || '查询失败');
       })
     },
@@ -984,13 +984,13 @@ export default {
         // 解决safari不兼容上面的时间格式问题
         start = new Date(start.replace(/-/g, '/'))
         end = new Date(end.replace(/-/g, '/'))
-        console.log(start, end)
+        // console.log(start, end)
         return {
           start,
           end
         }
       })
-      console.log('formatSubscribeTimeHourRanges:timePeriods', timePeriods)
+      // console.log('formatSubscribeTimeHourRanges:timePeriods', timePeriods)
       return timePeriods
     },
     // 格式化  以天为单位，每周重复的时间值(逗号分隔)：1,2,3,4,5,6,7
@@ -1026,14 +1026,14 @@ export default {
             end: ''
           }
         ]
-        console.log('-----res.subscribeTimeHourRanges--', res.subscribeTimeHourRanges)
+        // console.log('-----res.subscribeTimeHourRanges--', res.subscribeTimeHourRanges)
         this.ruleForm.timePeriods = this.formatSubscribeTimeHourRanges(res.subscribeTimeHourRanges) || defaultVal // 每天重复的小时时间段(~和逗号分隔): 00:00:00~00:01:00,00:08:00~00:09:00,00:13:00~00:14:00
         const weeks = this.formatSubscribeTimeWeekDays(res.subscribeTimeWeekDays) || [] // 以天为单位，每周重复的时间值(逗号分隔)：1,2,3,4,5,6,7
         this.ruleForm.weeks = weeks
         this.tempWeeks = weeks
         return res
       }).catch(err => {
-        console.log('---getOrderDeliverInfo--', err)
+        console.error('---getOrderDeliverInfo--', err)
         // this.$message.error(err && err.message || '');
       })
     },
@@ -1041,7 +1041,7 @@ export default {
       this.isLoading = true
       let isValidWeeks = true
       this.errWeekMsg = ''
-      console.log('handleSubmit:before')
+      // console.log('handleSubmit:before')
       if (this.ruleForm.repeatCycle === 2) {
         if (this.ruleForm.weeks.length <= 0) {
           this.errWeekMsg = '请点击编辑，选择重复日'
@@ -1060,16 +1060,16 @@ export default {
         this.isLoading = false
         return false
       }
-      console.log('handleSubmit:repeatCycle')
+      // console.log('handleSubmit:repeatCycle')
       this.$refs[formName].validate((valid) => {
-      console.log('handleSubmit:valid && isValidWeeks', valid, isValidWeeks)
+      // console.log('handleSubmit:valid && isValidWeeks', valid, isValidWeeks)
         if (valid && isValidWeeks) {
-      console.log('handleSubmit:valid && isValidWeeks')
+      // console.log('handleSubmit:valid && isValidWeeks')
           this.updateOrderDeliverInfo()
           // alert('submit!');
           // this.isLoading = false
         } else {
-        console.log('handleSubmit:valid && isValidWeeks: else')
+        console.error('handleSubmit:valid && isValidWeeks: else')
           // console.log('error submit!!');
           this.isLoading = false
           return false;
@@ -1144,7 +1144,7 @@ export default {
     },
     updateOrderDeliverInfo() {
       const req = this.getOrderDeliverReqData()
-      console.log('---req---', req)
+      // console.log('---req---', req)
       // 更新配送价格、时间
       const p1 = this._apis.set.updateOrderDeliverInfo(req)
       const id = this.cid

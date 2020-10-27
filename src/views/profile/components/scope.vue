@@ -129,7 +129,7 @@ export default {
     // 获取类目
     getCategoryInfoIds(arr, id) {
       try {
-        console.log('--getCategoryInfoIds--', this.operateCategoryList.find(val => val.id == id))
+        // console.log('--getCategoryInfoIds--', this.operateCategoryList.find(val => val.id == id))
         let parentId
         let parentIds = this.operateCategoryList.find(val => val.id == id)
         if (!parentIds) {
@@ -201,7 +201,7 @@ export default {
       });
     },
     itemCatHandleChange(value) {
-      console.log(value)
+      // console.log(value)
       let _value = [...value];
       let arr = this.form.business.map(id => {
         return this.operateCategoryList.find(val => val.id == id);
@@ -210,7 +210,7 @@ export default {
       // this.itemCatText = arr.map(val => val.name).join(" > ");
       this.form.sellCategoryId = _value.pop();
       this.form.sellCategory = arr[arr.length - 1].name;
-      console.log('---itemCatHandleChange---')
+      // console.log('---itemCatHandleChange---')
     },
   }
 }

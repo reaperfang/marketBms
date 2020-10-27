@@ -122,11 +122,11 @@ export default {
 
   methods: {
     getDefaultAddress(item) {
-      console.log('item',item)
+      // console.log('item',item)
       return item.isDefaltSenderAddress === 1 || item.isDefaltReturnAddress === 1 || item.isBindThirdsend === 1
     },
     getAddressTypeTxt(item) {
-      console.log('item',item)
+      // console.log('item',item)
       if (!item) return ''
       let txt = ''
       switch(item.addressType) {
@@ -167,7 +167,7 @@ export default {
     getAddressList(req) {
       this.loading = true
       this.ApiGetAddressList(req).then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res) {
           this.dataList = res.list
           this.total = res.total
@@ -242,7 +242,7 @@ export default {
       return new Promise((resolve, reject) => {
         const res = {}
         Promise.all([p1,p2]).then(([res1, res2]) => {
-          console.log(res1, res2)
+          // console.log(res1, res2)
           const total1 = res1 ? parseInt(res1.total) : 0
           const total2 = res2 ? parseInt(res2.total) : 0
           res.total = total1 + total2
@@ -263,7 +263,7 @@ export default {
       // req.pageSize = 20
       // req.addressType = 0
       this.getSendAddressList().then((res) => {
-        console.log('res',res)
+        // console.log('res',res)
         // 仅有一条发货地址信息，同时商家配送已开启，此时要删除该发货地址时，弹框提示如下
         if ((res && res.total == 1) || isBindThirdsend) {
           this.confirm({
@@ -279,7 +279,7 @@ export default {
             const p1 = this.closeCityDeliver(isCloseMerchantDeliver, isClostTh3DeliverId)
             const p2 = this.ApiDelAddressById(id, isBindThirdsend)
             Promise.all([p1, p2]).then((arr) => {
-              console.log('arr',arr)
+              // console.log('arr',arr)
               this.ruleForm.pageNo = 1
               const req = this.getReqData(this.ruleForm)
               this.getAddressList(req)
@@ -304,7 +304,7 @@ export default {
           });
         }
       }).catch((err) => {
-        console.log(err)
+        console.error(err)
       })
 
     },
@@ -342,7 +342,7 @@ export default {
       const p3 = this.getTh3DeliverAddressById() // 获取三方配送默认地址
       Promise.all([p1, p2, p3]).then((result) => {
         const [ { isOpenMerchantDeliver, isOpenTh3Deliver }, merchantDeliver, th3Deliver ] = result
-        console.log('------result-----',result)
+        // console.log('------result-----',result)
         const isOpen = (merchantDeliver && +merchantDeliver.id === +id && isOpenMerchantDeliver) || (th3Deliver && +th3Deliver.id === +id && isOpenTh3Deliver)
         if (isOpen) {
           this.hanldeOpenDelivery(id)
@@ -350,7 +350,7 @@ export default {
            this.$router.push({ path: '/set/addressUpdate', query: { id } }) 
         }
       }).catch((errors) => {
-        console.log(errors)
+        console.error(errors)
       })
     },
     // 是否开启同城配送
@@ -462,14 +462,14 @@ export default {
         const merchantDeliverId = merchantDeliver && merchantDeliver.id
         const th3DeliverId = th3Deliver && th3Deliver.id
         const isOpen = (+merchantDeliverId === +id && isOpenMerchantDeliver) || (+th3DeliverId === +id && isOpenTh3Deliver)
-        console.log('result',result, isOpen)
+        // console.log('result',result, isOpen)
         if (isOpen) {
           this.hanldeOpenDeliveryDelAddress(row, merchantDeliverId, th3DeliverId, isOpenTh3Deliver)
         } else {
           this.handleDelAddress(row, isOpenTh3Deliver)
         }
       }).catch((errors) => {
-        console.log(errors)
+        console.error(errors)
       })
       // } else {
       //   this.handleDelDefaultAddress(row)

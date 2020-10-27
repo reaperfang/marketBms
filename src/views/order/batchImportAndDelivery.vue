@@ -161,7 +161,7 @@ export default {
       this._apis.order
         .orderSendInfoImportBatchDelever({ importUrl: this.url })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.active = 3;
           let successLength = res.success && res.success.length || 0
           let errorLength = res.error && res.error.length || 0
@@ -194,7 +194,7 @@ export default {
       this._apis.order
         .orderSendInfoImportAfterSaleBatchDelever({ importExcelUrl: this.url })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.active = 3;
           let successLength = res.success && res.success.length || 0
           let errorLength = res.error && res.error.length || 0
@@ -248,7 +248,7 @@ export default {
       }
     },
     beforeUpload(file) {
-      console.log(file);
+      // console.log(file);
       if (file.name) {
 		  let name=file.name.substring(file.name.lastIndexOf(".")+1);
 		  if (name != 'csv' && name != 'xls' && name != 'xlsx') {

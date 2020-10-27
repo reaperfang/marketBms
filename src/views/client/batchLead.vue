@@ -256,7 +256,7 @@ export default {
                 this._apis.client.labelDoubleCheck({tagName: this.ruleForm.tagName}).then((response) => {
                     this.saveLabel(response);
                 }).catch((error) => {
-                    console.log(error);
+                    console.error(error);
                 })
             }else{
                 this.$message({
@@ -328,7 +328,7 @@ export default {
                 }
                 if(this.ruleForm.isTotalConsumeTimes == true) {
                     if(!this.isInteger(this.ruleForm.consumeTimesMin) || !this.isInteger(this.ruleForm.consumeTimesMax) || Number(this.ruleForm.consumeTimesMin) > Number(this.ruleForm.consumeTimesMax)) {
-                        console.log(Number(this.ruleForm.consumeTimesMin) < Number(this.ruleForm.consumeTimesMax))
+                        // console.log(Number(this.ruleForm.consumeTimesMin) < Number(this.ruleForm.consumeTimesMax))
                         this.$message({
                             message: '请正确输入累计消费次数区间',
                             type: 'warning'
@@ -426,7 +426,7 @@ export default {
                                     type: 'success'
                                 });                     
                             }).catch((error) => {
-                                console.log(error);
+                                console.error(error);
                             })
                         }else{
                             this._apis.client.updateTag(formObj).then((response) => {
@@ -436,7 +436,7 @@ export default {
                                     type: 'success'
                                 }); 
                             }).catch((error) => {
-                                console.log(error);
+                                console.error(error);
                             })
                         }
                     }else{
@@ -448,7 +448,7 @@ export default {
                                     type: 'success'
                                 });
                             }).catch((error) => {
-                                console.log(error);
+                                console.error(error);
                             })
                         }else{
                             this._apis.client.addTag(formObj).then((response) => {
@@ -458,7 +458,7 @@ export default {
                                     type: 'success'
                                 });
                             }).catch((error) => {
-                                console.log(error);
+                                console.error(error);
                             })
                         }
                     }
@@ -494,7 +494,7 @@ export default {
                             item.goodsInfo.specs = item.goodsInfo.specs.replace(/"|{|}/g, "");
                         })
                     }).catch((error) => {
-                        console.log(error);
+                        console.error(error);
                     }) 
                     if(this.ruleForm.consumeTimeStart && this.ruleForm.consumeTimeEnd) {
                         this.consumeTime = [this.ruleForm.consumeTimeStart,this.ruleForm.consumeTimeEnd];
@@ -507,7 +507,7 @@ export default {
                     }
                 }
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         }
     }

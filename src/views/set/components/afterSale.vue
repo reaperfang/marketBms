@@ -258,7 +258,7 @@ export default {
         this.memberAutoReceive = Boolean(response.isMemberAutoConfirmReceive),
         this.autoFinished = Boolean(response.isOrderAutoFinished)
       }).catch(error =>{
-        console.log(error)
+        console.error(error)
       })
     },
     

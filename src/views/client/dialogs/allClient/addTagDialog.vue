@@ -57,7 +57,7 @@ export default {
                         type: 'success'
                     });
                 }).catch((error) => {
-                    console.log(error);
+                    console.error(error);
                     this.btnLoading = false;
                     this.visible = false;
                 }) 
@@ -73,7 +73,7 @@ export default {
             this._apis.client.getLabels({tagType:0}).then((response) => {
                 this.tagList = [].concat(response); 
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         getSelectedTag() {

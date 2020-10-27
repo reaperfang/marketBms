@@ -165,7 +165,7 @@ export default {
           this.isHasGoods = false
         }
       }).catch((err) => {
-        console.log(err)
+        console.error(err)
         this.isHasGoods = false
       })
     },

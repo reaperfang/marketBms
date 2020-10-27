@@ -47,7 +47,7 @@ export default {
   },
   watch: {
     currentTab(curr) {
-      console.log(curr)
+      // console.log(curr)
       // this.init()
     }
   },
@@ -59,7 +59,7 @@ export default {
   methods: {
     setCurrentTab() {
       const currentTab = this.$route.query.currentTab
-      console.log('--currentTab---', currentTab)
+      // console.log('--currentTab---', currentTab)
       if (currentTab) {
         this.currentTab = currentTab
       } else {

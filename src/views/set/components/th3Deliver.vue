@@ -162,7 +162,7 @@ export default {
       return obj ? true : false
     },
     isTableShow() {
-      console.log('this.isHasOpenTh3Config:',this.isHasOpenTh3Config, 'isOpenTh3Deliver:',this.isOpenTh3Deliver, 'isApplyOpen:',this.isApplyOpen)
+      // console.log('this.isHasOpenTh3Config:',this.isHasOpenTh3Config, 'isOpenTh3Deliver:',this.isOpenTh3Deliver, 'isApplyOpen:',this.isApplyOpen)
       if ((!this.isHasOpenTh3Config && !this.isOpenTh3Deliver) || this.isApplyOpen) return false
       return true
     }
@@ -170,7 +170,7 @@ export default {
 
   watch: {
     isOpenTh3Deliver(val) {
-      console.log('isOpenTh3Deliver',val)
+      // console.log('isOpenTh3Deliver',val)
       // this.isTableShow = this.isOpen
       if (!val) this.isApplyOpen = false
       this.btnShow = false
@@ -212,7 +212,7 @@ export default {
       })
     },
     formatTh3DeliverList(list) {
-      console.log('-----formatTh3DeliverList---', list)
+      // console.log('-----formatTh3DeliverList---', list)
       let arr = [
         {
           thirdType: 1,

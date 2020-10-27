@@ -260,7 +260,7 @@ export default {
           val.shopName = this.shopName
         })
         this.list = res.list
-          console.log(res)
+          // console.log(res)
       }).catch(error => {
           this.loading = false
           this.$message.error({

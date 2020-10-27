@@ -289,7 +289,7 @@ export default {
             })
             this.labels = ['不限', ...this.labels];
         }).catch((error) => {
-            console.log(error);
+            console.error(error);
         })
     },
     getChannels() {
@@ -302,7 +302,7 @@ export default {
                 this.channels.splice(this.channels.indexOf('wap端'),1);
             }
         }).catch((error) => {
-            console.log(error);
+            console.error(error);
         })
     },
     showPc() {

@@ -10,7 +10,7 @@ export const afterSalesManagementMethods = {
   methods: {
     drawback(row) {
       this._apis.order.orderAfterSaleDrawback({id: row.id, memberInfoId: row.memberInfoId}).then((res) => {
-          console.log(res)
+          // console.log(res)
           this.$message.success('已发起退款，系统处理中。');
           this.getList()
       }).catch(error => {

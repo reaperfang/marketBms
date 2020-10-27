@@ -42,7 +42,7 @@ export default {
                     });
                     this.$emit('refreshPage');
                 }).catch((error) => {
-                    console.log(error);
+                    console.error(error);
                     // this.$notify.error({
                     //     title: '错误',
                     //     message: error
@@ -66,7 +66,7 @@ export default {
                     this.$set(item, 'alias', `${item.alias} ${item.name}`);
                 })
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
                 // this.$notify.error({
                 //     title: '错误',
                 //     message: error

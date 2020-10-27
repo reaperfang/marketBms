@@ -80,7 +80,7 @@ export default {
           this.categoryOptions = arr;
         })
         .catch(error => {
-          console.log("调取接口失败");
+          console.error("调取接口失败");
         });
     },
     transTreeData(data, pid) {

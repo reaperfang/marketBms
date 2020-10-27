@@ -395,7 +395,7 @@ export default {
       }
     },
     isOpenPrompt(query = {}) {
-      console.log('query',query, query.hasOwnProperty('balanceOfAccountPay'))
+      // console.log('query',query, query.hasOwnProperty('balanceOfAccountPay'))
       // wechatPay
       // aliPay
       // balanceOfAccountPay

@@ -244,7 +244,7 @@ export default {
         .catch(error => {});
     },
     submit(value) {
-      console.log(value);
+      // console.log(value);
       this.allUpdatePrice(value);
     },
     allUpdatePrice(params) {

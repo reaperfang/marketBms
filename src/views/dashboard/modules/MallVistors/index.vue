@@ -153,7 +153,7 @@ export default {
 				rows: this.getRows(val)
 			};
 
-			console.log("this.chartData test", this.chartData);
+			// console.log("this.chartData test", this.chartData);
 		},
 		getRows(val) {
 			let result = [];

@@ -130,7 +130,7 @@ export default {
           height: "120"
         })
         .then(response => {
-          console.log('getQrcode',response)
+          // console.log('getQrcode',response)
           this.qrCode = response ? `data:image/png;base64,${response}` : null;
         })
         .catch(error => {

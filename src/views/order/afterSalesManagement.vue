@@ -278,7 +278,7 @@ export default {
               })
             }
            this._apis.order.orderAfterSaleExport(_param).then((res) => {
-                console.log(res)
+                // console.log(res)
                 if(res > 1000) {
                     this.confirm({icon: true, text: '导出数据量超出1000条，建议分时间段导出。<br />点击确定导出当前筛选下的前1000条数据<br />点击取消请重新筛选'}).then(() => {
                         _param.isExport = 1
@@ -316,7 +316,7 @@ export default {
             this.dialogVisible = true
         },
         onSubmit(value) {
-            console.log(value)
+            // console.log(value)
             if(value.status == 1) {
                 // 通过
                 if(this.multipleSelection.some(val => val.type == 2)) {
@@ -326,7 +326,7 @@ export default {
                     return
                 } else {
                     this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 1}).then((res) => {
-                        console.log(res)
+                        // console.log(res)
                         this.getList()
                         this.$message.success('审核成功！');
                         this.$refs['sunComponent'].visible = false
@@ -336,7 +336,7 @@ export default {
                 }
             } else {
                 this._apis.order.orderAfterSaleUpdateStatus({ids: this.multipleSelection.map(val => val.id), orderAfterSaleStatus: 5, refuseReason: value.refuseReason}).then((res) => {
-                    console.log(res)
+                    // console.log(res)
                     this.getList()
                     this.$message.success('拒绝审核成功！');
                 }).catch(error => {

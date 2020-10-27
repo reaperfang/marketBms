@@ -543,7 +543,7 @@ export default {
           this.$store.dispatch('getShopInfo').then(response =>{
             this.invoiceOpen = response.invoiceOpen
           }).catch(error =>{
-            console.log(error)
+            console.error(error)
           })
         },
         getGain() {

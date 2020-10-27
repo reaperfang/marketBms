@@ -151,7 +151,7 @@ export default {
 
       let basePath = currentBar.path
       let children = currentBar.children
-      console.log('children',children)
+      // console.log('children',children)
       if(children && children.length) {
         let _path = this.getNoHideChildPath(children)
 

@@ -174,7 +174,7 @@ export default {
       this.$store.dispatch('getShopInfo').then(response => {
         this.ruleForm.msgReceivePhone = response.msgReceivePhone
       }).catch(error =>{
-        console.log(error)
+        console.error(error)
       })
     },
 

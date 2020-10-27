@@ -90,7 +90,7 @@ export default {
             this._apis.client.getLabels(params).then((response) => {
                 this.tags = [].concat(response);
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         handleChange() {

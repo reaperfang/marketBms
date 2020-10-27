@@ -272,7 +272,7 @@ export default {
           .fetchCategoryList({ enable: 1 })
           .then((res) => {
             let arr = this.transTreeData(res, 0);
-            console.log(arr);
+            // console.log(arr);
             arr.forEach((val) => {
               if (val.children && val.children.length > 0) {
                 val.isHasChild = true;

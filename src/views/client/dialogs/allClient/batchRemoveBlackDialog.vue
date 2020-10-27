@@ -27,7 +27,7 @@ export default {
             this._apis.client.batchFrozenCoupons({memberIdList: memberInfoIds, frozenType: 0}).then((response) => {
                 //console.log(response);
             }).catch((error) => {
-                console.log(error)
+                console.error(error)
             });
             let params = {memberInfoIds: memberInfoIds.join(',')}
             this._apis.client.batchRemoveFromBlack(params).then((response) => {
@@ -37,7 +37,7 @@ export default {
                 });
                 this.$emit('freshTable');
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         }
     },

@@ -78,7 +78,7 @@ export default {
     },
     handleIsOpen(val) {
       // return false
-      console.log('val', val)
+      // console.log('val', val)
       // 当前是否开启普通快递
       if (val) {
         this.open()
@@ -145,7 +145,7 @@ export default {
           confirmText: '我知道了',
           showCancelButton: false
         }).finally(() => {
-          console.log('----finally--')
+          // console.log('----finally--')
           this.form.isOpen = true
         });
       }
@@ -185,7 +185,7 @@ export default {
         this.form.apiKey = response.apiKey,
         this.form.kdBusinessId = response.kdBusinessId
       }).catch(error =>{
-        console.log(error)
+        console.error(error)
       })
     }
   }

@@ -714,21 +714,21 @@ export default {
         const validSpecialChar = (rule, value, callback) => {
             const reg5 = /[§]/g
             let str = value && String(value).replace(reg5, '')
-            console.log('str5', typeof str,str)
+            // console.log('str5', typeof str,str)
             if (reg5.test(value)) {
                 return callback(new Error('当前输入有误，请您重新输入'));
             }
             const reg = /[，。？！：；·…~&@#,?!:;、……～＆＠＃“”‘’〝〞 "'＂＇´.＇()【】《》＜＞<>〈〉{}［］()()_¯＿￣`ˋ/／\\＼ˊ¨­ˇ．ˉ〃—-‖∶-]|[！$@#￥%……&*（）——+=-·，。、；‘《》？：“【】{}|、\v\f\n\r\t]/g
             str = String(str).replace(reg, '')
-            console.log('str', typeof str,str)
+            // console.log('str', typeof str,str)
             if (!str) return callback();
             const reg2 = /[\u4e00-\u9fa5]/g
             str = String(str).replace(reg2, '')
-            console.log('str2', typeof str,str)
+            // console.log('str2', typeof str,str)
             if (!str) return callback();
             const reg3 = /[\s\w]+/gi
             str = String(str).replace(reg3, '')
-            console.log('str3', typeof str,str)
+            // console.log('str3', typeof str,str)
             // console.log('str2', str === '', !(str === ''))
             if (!str) return callback();
             for (let s of str ) {
@@ -949,7 +949,7 @@ export default {
         }
     },
     created() {
-        console.log('activity', this.ruleForm.activity);
+        // console.log('activity', this.ruleForm.activity);
         var that = this
         // this.getOperateCategoryList().then(res => {
         //     this.getCategoryList()
@@ -1014,7 +1014,7 @@ export default {
             this._globalEvent.$emit('addGoodsEvent', true);
         }
 
-        console.log(this.$refs.fenleiCascader)
+        // console.log(this.$refs.fenleiCascader)
     },
     computed: {
         editor() {
@@ -1337,7 +1337,7 @@ export default {
             }
         },
         visibleChange(flag) {
-            console.log(flag)
+            // console.log(flag)
             if(flag) {
                 this.leimuSelected = true
             } else {
@@ -1363,7 +1363,7 @@ export default {
             this.ruleForm.videoUrl = ''
         },
         beforeUpload(file) {
-            console.log(file)
+            // console.log(file)
             if(file.size > 2097152) {
                 this.$message({
                     message: '文件最大支持2M',
@@ -1575,7 +1575,7 @@ export default {
                     pId.push(item.parentId)
                 })
                 pId.forEach(id => {
-                    console.log(this.flatSpecsList)
+                    // console.log(this.flatSpecsList)
                     let item = this.flatSpecsList.find(flatItem => flatItem.id == id)
                     names.push(item.name)
                 })
@@ -1871,7 +1871,7 @@ export default {
                     visible: !this.addedSpecs[index].visible
                 }))
             }
-            console.log(this.addedSpecs)
+            // console.log(this.addedSpecs)
         },
         addSpecClick(item) {
             if(this.addedSpecs.find(val => val.id == item.id)) {
@@ -2193,7 +2193,7 @@ export default {
                 return
             }
             this.confirm({icon: true, text: '是否确认删除？'}).then(() => {
-                console.log(index)
+                // console.log(index)
                 let _goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
                 let __goodsInfos
 
@@ -2225,7 +2225,7 @@ export default {
                 code: !(this.ruleForm.isSyncProduct == 1 && this.authHide) ? '' : this.ruleForm.goodsInfos[index].code
             }))
             this.$refs[`uploadImage_${index}`].clearFiles()
-            console.log(this.ruleForm.goodsInfos)
+            // console.log(this.ruleForm.goodsInfos)
         },
         specHandleRemove(index) {
             let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
@@ -2572,12 +2572,12 @@ export default {
                         this.categoryValue = arr
                         this.ruleForm.itemCat = itemCatAr
                         if(this.ruleForm.images) {
-                            console.log(this.ruleForm.images.split(','))
+                            // console.log(this.ruleForm.images.split(','))
                             this.fileList = this.ruleForm.images.split(',') && this.ruleForm.images.split(',').length ? this.ruleForm.images.split(',').map(val => ({
                                 name: '',
                                 url: val
                             })) : []
-                            console.log(this.fileList)
+                            // console.log(this.fileList)
                         }
                         if(this.ruleForm.goodsInfos && this.ruleForm.goodsInfos.length) {
                             let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
@@ -2704,7 +2704,7 @@ export default {
             // let productCategoryInfoId = this.ruleForm.productCategoryInfoId
             // let rootId = this.getRootId(productCategoryInfoId)
             this._apis.goodsOperate.fetchSpecsList({productCategoryId: this.ruleForm.productCategoryInfoId, enable: 1}).then(res => {
-                console.log(res)
+                // console.log(res)
                 res.forEach(val => {
                     val.level = '1'
                     val.newSpecValue = ''
@@ -2948,7 +2948,7 @@ export default {
                     // this.$refs.ruleForm.validateField('name');
                     this.$message.error("商品名称过长")
                   }
-                    console.log('error submit!!');
+                    console.error('error submit!!');
                     return false;
                 }
             });
@@ -3134,7 +3134,7 @@ export default {
                         pId.push(item.parentId)
                     })
                     pId.forEach(id => {
-                        console.log(this.flatSpecsList)
+                        // console.log(this.flatSpecsList)
                         let item = this.flatSpecsList.find(flatItem => flatItem.id == id)
                         names.push(item.name)
                     })
@@ -3165,7 +3165,7 @@ export default {
                     }
                 })
                 this.ruleForm.goodsInfos = _results
-                console.log(_results)
+                // console.log(_results)
             } else {
                 this.ruleForm.goodsInfos = []
             }
@@ -3179,7 +3179,7 @@ export default {
                 // 设置自动上架时间
                 this.ruleForm.autoSaleTime = value
             } else if(this.selectSpecificationsCurrentDialog == 'SelectSpecifications') {
-                console.log('SelectSpecifications', value)
+                // console.log('SelectSpecifications', value)
                 this.specIds = value
                 this.selectSpecificationsHandler(value)
             } else if(this.currentDialog == 'AddSpecifications') {
@@ -3208,7 +3208,7 @@ export default {
             this.imageDialogVisible = true;
         },
         handleRemove(file, fileList) {
-            console.log(file, fileList);
+            // console.log(file, fileList);
             let url = file.url
             this.fileList.splice(this.fileList.findIndex(val => val.url == url), 1)
             this.ruleForm.images = fileList.map(val => {
@@ -3220,7 +3220,7 @@ export default {
             this.hideUpload = this.imagesLength >= 6
         },
         centerFileUrl(response, file, fileList){
-            console.log(response, file, fileList)
+            // console.log(response, file, fileList)
             if(fileList.every(val => val.status == 'success')){
                 this.$message.success('文件上传成功');
                 if(fileList.length > 1 && fileList.every(val => val.status == 'success')) {

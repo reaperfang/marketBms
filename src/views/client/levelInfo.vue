@@ -430,7 +430,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     changeSwitch(obj) {
@@ -525,7 +525,7 @@ export default {
           this.conditionList = [].concat(_arr);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     //获取等级权益
@@ -544,7 +544,7 @@ export default {
           this.getLevelsInfo(this.$route.query.id);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     //获取升级奖励
@@ -562,7 +562,7 @@ export default {
           this.rewardList = [].concat(_arr);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     showGiftDialog(val) {
@@ -898,11 +898,11 @@ export default {
                     this._routeTo("clientLevel");
                   })
                   .catch(error => {
-                    console.log(error);
+                    console.error(error);
                   });
               }
               }).catch((error) => {
-                console.log(error);
+                console.error(error);
               })
           }else if(this.condition2 == "消费次数满") {
             let params = {
@@ -939,11 +939,11 @@ export default {
                       this._routeTo("clientLevel");
                     })
                     .catch(error => {
-                      console.log(error);
+                      console.error(error);
                     });
                 }
               }).catch((error) => {
-                console.log(error);
+                console.error(error);
               })
           }else{
               formObj.levelConditionList = [].concat(levelConditionList);
@@ -967,7 +967,7 @@ export default {
                   this._routeTo("clientLevel");
                 })
                 .catch(error => {
-                  console.log(error);
+                  console.error(error);
                 });
           }
       }

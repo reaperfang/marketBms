@@ -169,7 +169,7 @@ export default {
           }else{
             this.status = "0";
           }
-          console.log(data.shopExpireTime)
+          // console.log(data.shopExpireTime)
           this.time = data.shopExpireTime;
         })
         .catch(error => {

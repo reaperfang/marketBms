@@ -202,7 +202,7 @@ export default {
       this._apis.shopInfo.updateShopInfo(data).then(response =>{
         this.$store.dispatch('getShopInfo');
       }).catch(error =>{
-        console.log('-----err-----', error)
+        console.error('-----err-----', error)
       })
     },
     search() {

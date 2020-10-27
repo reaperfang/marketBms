@@ -388,7 +388,7 @@ export default {
       return this._apis.set
         .getTh3DeliverDetail(req)
         .then(response => {
-          console.log('----response-:getTh3DeliverDetail---',response)
+          // console.log('----response-:getTh3DeliverDetail---',response)
           if (response) {
             if (response.sourceId) this.isEdit = true
             this.handleEchoData(response)
@@ -430,7 +430,7 @@ export default {
       // this.$refs.ruleForm.validateField(key);
     },
     formatText(val, key, rule) {
-      console.log(rule, typeof rule)
+      // console.log(rule, typeof rule)
       switch(rule) {
         // 只能输入数字
         case 1 :
@@ -469,7 +469,7 @@ export default {
         //  }
           
         } else {
-          console.log("error submit!!");
+          console.error("error submit!!");
           this.isSubmit = false
           return false;
         }

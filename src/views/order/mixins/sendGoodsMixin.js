@@ -62,7 +62,7 @@ export const deliveryWay1 = {
             expressCompanyCodes: this.ruleForm.expressCompanyCode,
             express: res
           }))
-          console.log(this._list)
+          // console.log(this._list)
         })
         .catch(error => {
           this.visible = false;

@@ -237,7 +237,7 @@ export default {
                 }
                   this.tradeCount=reviseitem;
             }).catch(error =>{
-                console.log('error',error)
+                console.error('error',error)
             })
         },
         //查询

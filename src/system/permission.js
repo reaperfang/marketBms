@@ -24,7 +24,7 @@ const whiteList = ['/login', '/auth-redirect','/datashop']// no redirect whiteli
 
 let flag = 0
 router.beforeEach((to, from, next) => {
-  console.log('enter: beforeEach')
+  // console.log('go router')
   NProgress.start() // start progress bar
   //  if (true) { // determine if there has token  
   if(isLogin()){
@@ -51,7 +51,7 @@ router.beforeEach((to, from, next) => {
           store.dispatch('GenerateRoutes', {data: msfList, enable}).then(() => { // 根据roles权限生成可访问的路由表
             if(store.getters.addRouters.length != 0){
               router.selfAddRoutes(store.getters.addRouters) // 动态添加可访问路由表
-              console.log('GenerateRoutes',to)
+              // console.log('GenerateRoutes',to)
               next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
             }else{
               next({ path: '/401'})

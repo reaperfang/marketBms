@@ -140,7 +140,7 @@ export default {
 
   watch: {
     '$route'(curr) {
-      console.log(curr)
+      // console.log(curr)
     }
   },
 
@@ -148,7 +148,7 @@ export default {
 
   mounted() {
     this.init()
-	  console.log(this.$route.query.orderType)
+	  // console.log(this.$route.query.orderType)
 	  if (this.$route.query.orderType == 1) {
 		  this.ruleForm.type = [1]
 		  this.isDisabled = true
@@ -326,7 +326,7 @@ export default {
       //同城配送发货地址为默认地址
       const oldIsTrue = res && ((res.addressType === 0 || res.addressType === 2) && res.isDefaltSenderAddress === 1)
       const newIsTrue = this.hasChecked(3) && this.hasChecked(1)
-      console.log('---newIsTrue, oldIsTrue--',newIsTrue, oldIsTrue)
+      // console.log('---newIsTrue, oldIsTrue--',newIsTrue, oldIsTrue)
       // 同城配送发货地址不为默认地址
       const oldIsTrue1 = res && ((res.addressType === 0 || res.addressType === 2) && res.isDefaltSenderAddress === 0)
       const newIsTrue1 = this.hasChecked(1)
@@ -356,7 +356,7 @@ export default {
     },
     updateStoreInfo() {
       let req = this.getReqData()
-      console.log('req',req)
+      // console.log('req',req)
       req = this.formateReqData(req)
       const data = {
         cid: req.cid,
@@ -380,7 +380,7 @@ export default {
       this.updateStoreInfo().then(() => {
         this.saveAddress()
       }).catch((err) => {
-        console.log('err',err)
+        console.error('err',err)
         this.isLoading = false
         this.$message.error(err || '保存失败')
       }).finally(() => {
@@ -423,7 +423,7 @@ export default {
           showCancelButton: true,
           customClass: 'address-update'
         }).then(() => {
-          console.log('res', status)
+          // console.log('res', status)
           if (status === 2) {
             const params = {
               cid: req.cid,
@@ -474,7 +474,7 @@ export default {
     },
     // 数据保存之后的处理逻辑
     handleAfterSave(res) {
-      console.log(res)
+      // console.log(res)
       // 数据重复
       if (res.code === 1) {
         this.handleDataRepeatErr(res.id)
@@ -488,9 +488,9 @@ export default {
     },
     saveAddress() {
       let req = this.getReqData()
-      console.log('req',req)
+      // console.log('req',req)
       req = this.formateReqData(req)
-      console.log('req',req.id)
+      // console.log('req',req.id)
       let p1
       if (req.id) {
         p1 = this._apis.set.editAddressById(req)
@@ -499,7 +499,7 @@ export default {
       }
       return p1.then((res) => {
         const status = Object.create(null)
-        console.log('res', res)
+        // console.log('res', res)
         if (res) {
           status.code = 1
           status.id = res.id
@@ -508,8 +508,8 @@ export default {
         }
         this.handleAfterSave(status)
       }).catch((err) => {
-        console.log(1111111)
-        console.log(err)
+        // console.log(1111111)
+        console.error(err)
 
         this.$message.error(err || '保存失败')
       }).finally(() => {
@@ -553,7 +553,7 @@ export default {
           const p2 = this.getMerchantDeliverAddressById() // 获取商家配送默认地址
           const p3 = this.getTh3DeliverAddressById() // 获取三方配送默认地址
           Promise.all([p1, p2, p3]).then((result) => {
-            console.log('--onSubmit:result--',result)
+            // console.log('--onSubmit:result--',result)
             const [{ isOpenMerchantDeliver, isOpenTh3Deliver }, res1, res2] = result
             // 是否打开同城配送
             if (isOpenTh3Deliver) {
@@ -564,12 +564,12 @@ export default {
               this.saveAddress()
             }
           }).catch((err) => {
-            console.log('err',err)
+            console.error('err',err)
             this.$message.error(err || '保存失败')
             this.isLoading = false
           })
         } else {
-          console.log('error submit!!');
+          console.error('error submit!!');
           return false;
         }
       });
@@ -578,7 +578,7 @@ export default {
       this.isMapChoose = false
     },
     getMapClickPoi(poi) {
-      console.log('poi----getMapClickPoi', poi)
+      // console.log('poi----getMapClickPoi', poi)
       if (!poi) {
         return false
       }
