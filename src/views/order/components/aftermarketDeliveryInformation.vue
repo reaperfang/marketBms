@@ -529,7 +529,6 @@ export default {
                     color: #44434B;
                     border-radius: 10px 10px 0 0;
                     padding: 0 20px;
-                    line-height: 50px;
                     display: flex;
                     justify-content: space-between;
                     .header-lefter {
