@@ -190,7 +190,7 @@ export default {
         this._apis.client.exportToLocal({idList: idList}).then((response) => {
           window.location.href = response
         }).catch((error) => {
-          console.log(error);
+          console.error(error);
         })
       }else{
         this.$message({
@@ -297,7 +297,7 @@ export default {
         })
         .catch(error => {
           this.loading = false;
-          console.log(error);
+          console.error(error);
         });
     },
     freshTable() {

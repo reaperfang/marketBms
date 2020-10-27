@@ -31,7 +31,7 @@ export default {
             this._apis.client.frozenCoupons({memberId: this.data.id, frozenType: 0}).then((response) => {
                 //console.log(response);
             }).catch((error) => {
-                console.log(error)
+                console.error(error)
             });
             this._apis.client.removeFromBlack({memberInfoId: this.data.id}).then((response) => {
                 this.$message({
@@ -40,7 +40,7 @@ export default {
                 });
                 this.$emit('refreshPage');
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         getFreezeList() {
@@ -59,7 +59,7 @@ export default {
                 });
                 this.disableItemValue = [].concat(response);
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         }
     },

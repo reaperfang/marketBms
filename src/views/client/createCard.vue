@@ -406,7 +406,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     getIndex(arr, val) {
@@ -455,7 +455,7 @@ export default {
           this.rightsList = [].concat(_arr);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     getConditionList() {
@@ -472,7 +472,7 @@ export default {
           this.conditionList = [].concat(_arr);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     getRewardList() {
@@ -490,7 +490,7 @@ export default {
           this.getCardInfo();
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     showSpacialDialog(val) {
@@ -858,7 +858,7 @@ export default {
                     });
                   })
                   .catch(error => {
-                    console.log(error);
+                    console.error(error);
                   });
               }else{
                 this.$message({
@@ -867,7 +867,7 @@ export default {
                 });
               }
             }).catch((error) => {
-              console.log(error);
+              console.error(error);
             })
           }else{
             this._apis.client
@@ -880,7 +880,7 @@ export default {
                 });
               })
               .catch(error => {
-                console.log(error);
+                console.error(error);
               });
           }
         }
@@ -892,7 +892,7 @@ export default {
           this.colors = [].concat(response);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     getCardPublic() {
@@ -904,7 +904,7 @@ export default {
           this.ruleForm.notice = response.notice;
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     }
   },

@@ -71,7 +71,7 @@ export default {
       this._apis.set
         .getShopInfo({ id })
         .then(response => {
-          console.log('----response-', response.isOpenOrdinaryExpress, typeof response.isOpenOrdinaryExpress)
+          // console.log('----response-', response.isOpenOrdinaryExpress, typeof response.isOpenOrdinaryExpress)
           this.form.isOpen = response.isOpenOrdinaryExpress === 1 ? true : false
           isHasOtherWay = response.isOpenMerchantDeliver === 1 || response.isOpenTh3Deliver === 1 || response.isOpenSelfLift === 1
         })
@@ -81,7 +81,7 @@ export default {
     },
     handleIsOpen(val) {
       // return false
-      console.log('val', val)
+      // console.log('val', val)
       // 当前是否开启普通快递
       if (val) {
         this.open()
@@ -148,7 +148,7 @@ export default {
           confirmText: '我知道了',
           showCancelButton: false
         }).finally(() => {
-          console.log('----finally--')
+          // console.log('----finally--')
           this.form.isOpen = true
         });
       }
@@ -188,7 +188,7 @@ export default {
         this.form.apiKey = response.apiKey,
         this.form.kdBusinessId = response.kdBusinessId
       }).catch(error =>{
-        console.log(error)
+        console.error(error)
       })
     }
   }

@@ -112,7 +112,7 @@ export default {
         this.total = response.total;
       }).catch((error) => {
         this.loading = false;
-        console.log(error);
+        console.error(error);
       })
     }
   },

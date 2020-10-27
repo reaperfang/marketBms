@@ -139,7 +139,7 @@ export default {
                 this.cardNames = [].concat(response);
                 this.cardNames.unshift({name:'全部', id: '001'})
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         addCardBg() {
@@ -155,7 +155,7 @@ export default {
                     type: 'success'
                 });
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         //检测是否有背景图片
@@ -173,7 +173,7 @@ export default {
                 }
             }).catch((error) => {
                 this.imgLoading = false;
-                console.log(error);
+                console.error(error);
             })
         }
     },

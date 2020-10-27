@@ -40,7 +40,7 @@ export default {
   },
   watch: {
     currentTab(curr) {
-      console.log(curr)
+      // console.log(curr)
       // this.init()
     }
   },
@@ -52,7 +52,7 @@ export default {
   methods: {
     setCurrentTab() {
       const currentTab = this.$route.query.currentTab
-      console.log('--currentTab---', currentTab)
+      // console.log('--currentTab---', currentTab)
       if (currentTab) {
         this.currentTab = currentTab
       } else {
@@ -79,7 +79,7 @@ export default {
       // })
     },
     handleClick(comp) {
-      console.log(comp)
+      // console.log(comp)
       this.currentTab = comp.name;
       this.$router.replace({path: '/set/shopExpress', query:{currentTab: comp.name }})
     }

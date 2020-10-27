@@ -92,7 +92,7 @@ export default {
             //this.listLoading = true
 
             this._apis.order.getSensitiveWordList().then((res) => {
-                console.log(res)
+                // console.log(res)
                 this.sensitiveList = res
             }).catch(error => {
                 //this.listLoading = false

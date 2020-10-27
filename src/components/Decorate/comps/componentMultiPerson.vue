@@ -274,7 +274,7 @@ export default {
 
         /* 检查真数据 */
         checkRealData(newValue) {
-            console.log(newValue)
+            // console.log(newValue)
             this.hasRealData = !!newValue.length;
             this.upadteComponentData();
         },

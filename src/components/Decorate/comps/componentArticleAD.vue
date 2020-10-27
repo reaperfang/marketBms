@@ -180,7 +180,7 @@ export default {
   methods: {
     type3Change(index){
       this.type3Height=this.$refs.imgOption[index].height + 'px';
-      console.log(index,this.type3Height);
+      // console.log(index,this.type3Height);
     },
     type3ChangeFirstLoad(index){
       if(index==0){

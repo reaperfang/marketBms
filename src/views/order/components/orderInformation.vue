@@ -545,12 +545,12 @@ export default {
           this._apis.set.getShopInfo({id:id}).then(response =>{
             this.invoiceOpen = response.invoiceOpen
           }).catch(error =>{
-            console.log(error)
+            console.error(error)
           })
         },
         getGain() {
             let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-            console.log(this);
+            // console.log(this);
             this._apis.order.getGain({
                 businessId:1,
                 tenantId:shopInfo.tenantInfoId,

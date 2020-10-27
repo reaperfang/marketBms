@@ -31,7 +31,7 @@ export default {
                 });
                 this.$emit('freshTable');
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         }
     },

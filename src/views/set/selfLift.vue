@@ -315,7 +315,7 @@ export default {
         startIndex: 1,
         pageSize: 10
       }
-      console.log(1111)
+      // console.log(1111)
       this._apis.set.getAddressList(req).then((res) => {
         this.addressTotal = res.total
       }).catch((err) => {
@@ -351,9 +351,9 @@ export default {
     },
     updateShopInfo(data) {
       const id = this.cid;
-      console.log('--data---',data)
+      // console.log('--data---',data)
       const req = { id, ...data }
-      console.log('--req---',req)
+      // console.log('--req---',req)
       return new Promise((resolve, reject) => {
         this._apis.set.updateShopInfo(req).then((data) => {
           this.$store.dispatch('getShopInfo');
@@ -420,7 +420,7 @@ export default {
     },
     openSelfLift() {
       this.getExistEnabled().then((isExistEnabled) => {
-        console.log('isExistEnabled',isExistEnabled)
+        // console.log('isExistEnabled',isExistEnabled)
         if (isExistEnabled) {
           this._apis.shop.getHomePage({pageTag:0}).then((res) => {
             //如果店铺主页不存在，则正常提示去装修，去装修跳转至店铺主页即可
@@ -442,7 +442,7 @@ export default {
                 this.openSelfLiftSuccess(false, res.id)
               }
             }
-            console.log('--pageData--',pageData)
+            // console.log('--pageData--',pageData)
           }).catch((err) => {
             this.$message.error(err)
           })
@@ -457,7 +457,7 @@ export default {
           }).then(() => {
             // 关闭弹窗
           }).catch((action)=> {
-            console.log('action',action)
+            // console.log('action',action)
             if (action === 'cancel') this.$router.push({ path: '/set/addSelfLift' })
           }).finally(() => {
             this.isOpen = false

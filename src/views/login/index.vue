@@ -149,11 +149,11 @@ export default {
       //   }
       // })
       if(this.loginForm.userName == '' || this.loginForm.password == '' ) {
-        console.log(111111111)
+        // console.log(111111111)
         this.errorMsg = '账号或密码不得为空'
         return
       }else {
-        console.log(222222222)
+        // console.log(222222222)
         this.login();
       }
     },

@@ -396,7 +396,7 @@ export default {
       }
     },
     isOpenPrompt(query = {}) {
-      console.log('query',query, query.hasOwnProperty('balanceOfAccountPay'))
+      // console.log('query',query, query.hasOwnProperty('balanceOfAccountPay'))
       // wechatPay
       // aliPay
       // balanceOfAccountPay
@@ -413,7 +413,7 @@ export default {
       let query = Object.assign({id:id},data)
       const isOpen = this.isOpenPrompt(query)
       this._apis.set.updateShopInfo(query).then(response =>{
-        console.log(123213131321, isOpen)
+        // console.log(123213131321, isOpen)
         if (isOpen) this.$message.success('开启成功')
         else this.$message.success('关闭成功');
         // this.$message.success('开启成功');

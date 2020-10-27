@@ -213,7 +213,7 @@ export default {
           this.categoryOptions = [].concat(arr);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     getSkuList(startIndex, pageSize) {
@@ -242,7 +242,7 @@ export default {
           this.total = response.total;
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     handleSearch() {

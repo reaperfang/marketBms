@@ -745,7 +745,7 @@ export default {
                 // }
               }
               this._list = this._list.filter(val => val.express != null && !val.express.sizeSpecs && val.sizeList && val.sizeList.length)
-              console.log(this.list)
+              // console.log(this.list)
               var __result = [];
               var __obj = {};
                 for(let i =0,l=this._list.length; i<l; i++){

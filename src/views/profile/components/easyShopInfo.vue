@@ -192,7 +192,7 @@ export default {
           // })
           resolve(response)
         }).catch(error =>{
-          console.log('updateShopInfo:error', error)
+          console.error('updateShopInfo:error', error)
           // this.$message.error('保存失败');
           reject(reject)
         }).finally(() => {

@@ -389,7 +389,7 @@ export default {
       this._apis.order
         .getCommentInfo({ id: this.$route.query.id })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           let images = res.orderProductComment.images;
 
           if (images) {

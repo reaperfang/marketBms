@@ -201,7 +201,7 @@ export default {
       }
       this._apis.set.updateShopInfo(data).then(response =>{
       }).catch(error =>{
-        console.log('-----err-----', error)
+        console.error('-----err-----', error)
       })
     },
     search() {

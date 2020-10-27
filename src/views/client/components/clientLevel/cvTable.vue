@@ -101,7 +101,7 @@ export default {
           });
         }
       }).catch((error) => {
-        console.log(error);
+        console.error(error);
       })
     },
     handleClose(row) {
@@ -124,7 +124,7 @@ export default {
               });
             }
           }).catch((error) => {
-            console.log(error);
+            console.error(error);
           })        
         })
     },
@@ -144,7 +144,7 @@ export default {
         }
       }).catch((error) => {
         this.loading = false;
-        console.log(error);
+        console.error(error);
       })
     },
     edit(row) {
@@ -163,7 +163,7 @@ export default {
           type: 'success'
         });
       }).catch((error) => {
-        console.log(error);
+        console.error(error);
       })
     },
     handleAll(val) {
@@ -188,7 +188,7 @@ export default {
           });
           this.getLevelsList();
         }).catch((error) => {
-          console.log(error);
+          console.error(error);
         })
       }
     }

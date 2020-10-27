@@ -175,7 +175,7 @@ export default {
             this.loading = true
             this._apis.order.fetchOrderList(_params).then((res) => {
                 this.loading = false
-                console.log(res)
+                // console.log(res)
                 if(res.list === null) res.list = []
                 res.list.forEach((val, index) => {
                     let _val = Object.assign({}, val, val.orderInfo)

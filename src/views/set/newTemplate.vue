@@ -230,7 +230,7 @@ export default {
   },
   methods: {
     showMoreAreaInfoList(item) {
-      console.log(11111)
+      // console.log(11111)
       this.currTemplate = item.areaInfoList
       this.currentDialog = 'DialogAreaShow'; 
       this.dialogVisible = true
@@ -416,13 +416,13 @@ export default {
               this.add()
             }
           } else {
-            console.log('error submit!!');
+            console.error('error submit!!');
             return false;
           }
         });
     },
     onSubmit(value) {
-      console.log(value);
+      // console.log(value);
       const areaInfoList = value
       this.tableData = [
         ...this.tableData,
@@ -472,7 +472,7 @@ export default {
                 if(receivedProvinceCode == '' && receivedCityCode == '' && receivedAreaCode == '') {
                   name = '默认运费（全国）'
                 } else {
-                  console.log('areaList',areaList)
+                  // console.log('areaList',areaList)
                   if (receivedAreaCode) {
                     name = areaList.find(area => area.code == receivedProvinceCode).citys.find(city => city.code == receivedCityCode).areas.find(area => area.code === receivedAreaCode).name
                   } else if (receivedCityCode) {

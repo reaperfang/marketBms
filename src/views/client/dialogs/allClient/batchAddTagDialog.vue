@@ -60,7 +60,7 @@ export default {
                 }).catch((error) => {
                     this.btnLoading = false;
                     this.visible = false;
-                    console.log(error);
+                    console.error(error);
                 })
             }else{
                 this.btnLoading = false;
@@ -75,7 +75,7 @@ export default {
             this._apis.client.getLabels({tagType:0}).then((response) => {
                 this.tagList = [].concat(response); 
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         }
     },

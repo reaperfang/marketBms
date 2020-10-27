@@ -375,7 +375,7 @@ export default {
       this.getIsReleaseWX();
       this.getIsReleaseGZ();
     });
-    console.log('created')
+    // console.log('created')
     this.$message.closeAll();
     this.init();
     this.getLink();
@@ -411,7 +411,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log("error", error);
+          console.error("error", error);
         });
     },
 
@@ -474,12 +474,12 @@ export default {
           this.profileData = response;
         })
         .catch(error => {
-          console.log("error", error);
+          console.error("error", error);
         });
     },
     //刷新
     refresh() {
-      console.log('refresh')
+      // console.log('refresh')
       this.getOerviewRemind();
       this.getOverviewSelling();
     },
@@ -704,7 +704,7 @@ export default {
     getDadiData() {
       this._apis.realSurvey.dataView({invokeType:'mzw'}).then(response => {
         this.dadiData = JSON.parse(response) || {}
-        console.log(this.dadiData);
+        // console.log(this.dadiData);
       }).catch(error => {
         this.$message.error(error);
       });

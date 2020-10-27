@@ -137,7 +137,7 @@ export default {
           this.cardList = [].concat(response.list);
       }).catch((error) => {
           this.loading = false;
-          console.log(error);
+          console.error(error);
       })
     },
     sendCard(row) {

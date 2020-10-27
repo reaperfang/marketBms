@@ -175,7 +175,7 @@ export default {
       this._apis.set.getShopInfo({ id: id }).then(response => {
         this.ruleForm.msgReceivePhone = response.msgReceivePhone
       }).catch(error =>{
-        console.log(error)
+        console.error(error)
       })
     },
 
