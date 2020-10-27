@@ -180,13 +180,13 @@ export default [
                 component: () => import('@/views/set/recharge'),
                 name: 'recharge',
                 hidden: true,
-                meta: { title: '充值', noCache: true, tabTitle: '配送设置' , navType: 4 }
+                meta: { title: '充值/查看余额', noCache: true, tabTitle: '配送设置' , navType: 4 }
             },{
                 path: 'rechargeRecord',
                 component: () => import('@/views/set/rechargeRecord'),
                 name: 'rechargeRecord',
                 hidden: true,
-                meta: { title: '查看余额', noCache: true, tabTitle: '配送设置' , navType: 4 }
+                meta: { title: '充值/查看余额', noCache: true, tabTitle: '配送设置' , navType: 4 }
                 },
             // {
             //      path: 'authorize',
