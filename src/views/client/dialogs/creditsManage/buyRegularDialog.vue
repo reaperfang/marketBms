@@ -7,10 +7,10 @@
           <el-switch class="fl" v-model="enable" active-color="#13ce66" inactive-color="#CACACF"></el-switch>
         </div>
         <div v-if="enable" class="giveBottom">
-          <div>购买获得积分，订单售后结束后按规则发放积分</div>
+          <div>购买获得积分，订单售后期结束可正常使用积分</div>
           <div>
             <span>赠送积分的商品：</span>
-            <el-radio v-model="isAllProduct" label="0">全部商品</el-radio>
+            <el-radio v-model="isAllProduct" label="0" @change="toggleAllProduct">全部商品</el-radio>
             <el-radio v-model="isAllProduct" label="1" @change="showDialog">指定商品</el-radio>
             <el-button style="margin-left: 10px" @click="dialogVisible2 = true" v-if="selectedList.length !== 0">查看已选商品</el-button>
           </div>
@@ -272,7 +272,7 @@ export default {
         });
         return;
       }
-      if(params.sceneRule.isAllProduct) {
+      if(this.enable && params.sceneRule.isAllProduct) {
         params.selectedList = [];
         this._apis.client
           .editCreditRegular(params)
@@ -316,7 +316,12 @@ export default {
           this.getSkuList(this.startIndex, this.pageSize);
         }
       }else{
-        this.selectProducts = [];
+        this.selectedList = [];
+      }
+    },
+    toggleAllProduct(val) {
+      if(Number(val) == 0) {
+        this.selectedList = [];
       }
     },
     transTreeData(data, pid) {

@@ -359,13 +359,17 @@ export default {
         return false
       }
       this.isLoading = true
-      // 地址是否为达达覆盖范围
-      this.isDaDaCoveredArea().then(() => {
+      if (this.isOpenTh3Deliver) {
+        // 地址是否为达达覆盖范围
+        this.isDaDaCoveredArea().then(() => {
+          this.save()
+        }).catch(() => {
+          this.isLoading = false
+          this.handleNoDaDaCoveredArea()
+        })
+      } else {
         this.save()
-      }).catch(() => {
-        this.isLoading = false
-        this.handleNoDaDaCoveredArea()
-      })
+      }
       // const p1 = this.setBindThirdsend()
       // const p2 = this.updateShopInfo()
       // Promise.all([p1, p2]).then(response =>{

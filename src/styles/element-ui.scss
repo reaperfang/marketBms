@@ -218,6 +218,10 @@ input::-moz-placeholder, textarea::-moz-placeholder{
           color: #44434B;
           padding-top: 4px;
         }
+        .el-icon-success{
+          font-size: 30px;
+          color: #6CD521;
+        }
       }
     }
   }
@@ -350,3 +354,4 @@ input::-moz-placeholder, textarea::-moz-placeholder{
 .el-table .descending .sort-caret.descending {
   border-top-color: #44434b;
 }
+

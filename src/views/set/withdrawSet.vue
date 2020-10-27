@@ -97,9 +97,9 @@ export default {
     },
 
     onSubmit(formName){
-      this.$msgbox({
-        title: '确认提示',
-        message: '请确认开通了【商户支付】功能，否则将可能会产生相关客诉，因此产生的法律风险商家需要自行承担',
+      this.confirm({
+        text: '请确认开通了【商户支付】功能，否则将可能会产生相关客诉，因此产生的法律风险商家需要自行承担',
+        icon: true, 
         showCancelButton: true,
         confirmButtonText: '确认已开通，继续保存',
         cancelButtonText: '返回',
