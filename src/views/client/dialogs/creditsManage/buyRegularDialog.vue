@@ -31,7 +31,7 @@
             </div>
             <span>元 获得</span>
             <div class="input_wrap">
-              <el-input v-model="allMember" @keyup.native="checkZero($event,allMember,'allMember')" :maxLength="10"></el-input>
+              <el-input v-model="allMember" @keyup.native="checkZero($event,allMember,'allMember')" :maxLength="5"></el-input>
             </div>
             <span>积分</span>
           </div>
@@ -46,21 +46,21 @@
             <div class="marB10">
               <span>用户获得</span>
               <div class="input_wrap2" style="margin-left:14px">
-                <el-input placeholder="请输入整数，不输入则不发放" v-model="noMember" @keyup.native="checkZero($event,noMember,'noMember')"></el-input>
+                <el-input placeholder="请输入整数，不输入则不发放" v-model="noMember" @keyup.native="checkZero($event,noMember,'noMember')" :maxLength="5"></el-input>
               </div>
               <span>积分</span>
             </div>
             <div class="marB10">
               <span>新会员获得</span>
               <div class="input_wrap2">
-                <el-input placeholder="请输入整数，不输入则不发放" v-model="newMember" @keyup.native="checkZero($event,newMember,'newMember')"></el-input>
+                <el-input placeholder="请输入整数，不输入则不发放" v-model="newMember" @keyup.native="checkZero($event,newMember,'newMember')" :maxLength="5"></el-input>
               </div>
               <span>积分</span>
             </div>
             <div class="marB10">
               <span>老会员获得</span>
               <div class="input_wrap2">
-                <el-input placeholder="请输入整数，不输入则不发放" v-model="oldMember" @keyup.native="checkZero($event,oldMember,'oldMember')"></el-input>
+                <el-input placeholder="请输入整数，不输入则不发放" v-model="oldMember" @keyup.native="checkZero($event,oldMember,'oldMember')" :maxLength="5"></el-input>
               </div>
               <span>积分</span>
             </div>
