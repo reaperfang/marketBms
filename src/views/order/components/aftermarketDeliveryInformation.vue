@@ -44,6 +44,7 @@
                         :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
+                            class-name="table-padding"
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
@@ -51,7 +52,7 @@
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
-                                        <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
+                                        <p class="ellipsis">{{scope.row.goodsName}}</p>
                                         <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
@@ -191,6 +192,7 @@
                         :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
+                            class-name="table-padding"
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
@@ -198,7 +200,7 @@
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
-                                        <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
+                                        <p class="ellipsis">{{scope.row.goodsName}}</p>
                                         <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
