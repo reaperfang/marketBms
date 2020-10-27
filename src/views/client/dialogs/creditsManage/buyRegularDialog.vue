@@ -127,6 +127,7 @@
         title="已选商品"
         :visible.sync="dialogVisible2"
         width="45%"
+        @close="close3"
         v-if="dialogVisible2"
     >
         <div>
@@ -434,6 +435,7 @@ export default {
         if(ids.length > 0) {
           this._apis.client.getSkuList({status: 1, ids: ids, startIndex:1, pageSize: this.resultPageSize}).then((response) => {
             this.selectedList = response.list;
+            this.oldSelect = this.selectedList;
             this.selectedList.map(item => {
               item.goodsInfo.specs = item.goodsInfo.specs.replace(/{|}|"|"/g, "");
             })
@@ -453,7 +455,7 @@ export default {
       this.$nextTick(() => {
         this.otherVisible = false;
         this.dialogVisible2 = false;
-        this.oldSelect = [];
+        //this.oldSelect = [];
         this.skuList.map((item) => {
           this.selectedList.map((i) => {
             if(i.goodsInfo.id == item.goodsInfo.id) {
@@ -472,7 +474,32 @@ export default {
             this.$refs.skuTable.toggleRowSelection(row,false);
           });
         }) 
-      } 
+      }else if(this.oldSelect.length == 0 && this.selectedList.length > 0){
+        this.selectedList = [];
+        this.$nextTick(() => {
+          this.skuList.forEach(row => {
+            this.$refs.skuTable.toggleRowSelection(row,false);
+          });
+        }) 
+      }
+    },
+    close3() {
+      this.dialogVisible2 = false;
+      if(this.oldSelect.length > 0) {
+        this.selectedList = this.oldSelect;
+        this.$nextTick(() => {
+          this.skuList.forEach(row => {
+            this.$refs.skuTable.toggleRowSelection(row,false);
+          });
+        }) 
+      }else if(this.oldSelect.length == 0 && this.selectedList.length > 0){
+        this.selectedList = [];
+        this.$nextTick(() => {
+          this.skuList.forEach(row => {
+            this.$refs.skuTable.toggleRowSelection(row,false);
+          });
+        }) 
+      }
     }
   },
   computed: {
