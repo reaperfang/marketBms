@@ -347,7 +347,7 @@ export default {
                     str += _value[i] + ','
                 }
             }
-
+            str = str.replace(/^(.*)\,$/, '$1')
             return str
         },
         customerFilter(value) {
