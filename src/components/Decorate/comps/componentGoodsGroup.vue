@@ -101,7 +101,6 @@ export default {
       componentGoods
     },
     created() {
-      this.$store.dispatch('getShopStyle');
     },
     watch: {
       data: {

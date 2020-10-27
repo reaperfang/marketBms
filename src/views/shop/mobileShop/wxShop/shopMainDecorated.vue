@@ -139,7 +139,6 @@ export default {
   },
   created() {
     this.$store.dispatch('getShopInfo');
-    this.$store.dispatch('getShopStyle');
     this.$store.commit("clearEditor");
     this.getQrcode();
     this.getMiniAppQrcode();

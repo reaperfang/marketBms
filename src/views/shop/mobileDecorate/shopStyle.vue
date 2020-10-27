@@ -150,6 +150,7 @@ export default {
       this._apis.shop.setShopStyle({colorStyle: utils.compileStr(JSON.stringify(this.selectedItem))}).then((response)=>{
         this.$message.success('设置成功！');
         this.submitLoadinig = false;
+        this.$store.dispatch('getShopStyle');
       }).catch((error)=>{
         this.submitLoadinig = false;
       });

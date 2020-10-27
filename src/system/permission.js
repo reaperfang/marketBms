@@ -47,6 +47,7 @@ router.beforeEach((to, from, next) => {
       }
     } else {
         if(flag == 0){
+          store.dispatch('getShopStyle');
           store.dispatch('GenerateRoutes', {data: msfList, enable}).then(() => { // 根据roles权限生成可访问的路由表
             if(store.getters.addRouters.length != 0){
               router.selfAddRoutes(store.getters.addRouters) // 动态添加可访问路由表

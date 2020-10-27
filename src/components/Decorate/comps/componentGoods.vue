@@ -81,7 +81,6 @@ export default {
     },
     created() {
         const _self = this;
-        this.$store.dispatch('getShopStyle');
         this.receivePropDataChange('goodsListOfGroupChange', (list) => {
             this.displayList = list;
         });
