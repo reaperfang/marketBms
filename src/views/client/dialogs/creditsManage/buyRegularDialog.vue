@@ -148,13 +148,13 @@
                 <el-table-column prop="goodsInfo.stock" label="商品库存"></el-table-column>
                 <el-table-column label="操作" width="80">
                   <template slot-scope="scope">
-                      <span class="edit_span pointer" @click="deleteRow(scope.row)">删除</span>
+                      <span class="edit_span pointer" @click="deleteRow(scope.row, scope.$index)">删除</span>
                   </template>
               </el-table-column>
             </el-table>
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="cancel3">取 消</el-button>
+            <el-button @click="dialogVisible2 = false">取 消</el-button>
             <el-button type="primary" @click="submit3">确 定</el-button>
         </span>
     </el-dialog>
@@ -205,8 +205,8 @@ export default {
         return true
       }
     },
-    deleteRow(row) {
-      this.selectedList.splice(row, 1);
+    deleteRow(row, index) {
+      this.selectedList.splice(index, 1);
       //删除的设为可选
       this.skuList.map((item) => {
         if(item.goodsInfo.id == row.goodsInfo.id) {
@@ -407,7 +407,14 @@ export default {
         if(this.selectedList.length > 0) {
           this.oldSelect = this.selectedList;
         }
-        this.selectedList = this.selectedList.concat(this.selections);
+
+        const selectedList = this.selectedList.concat(this.selections);
+        const selectedListObj = {};
+        selectedList.forEach((item) => {
+          selectedListObj[item.goodsInfo.id] = item;
+        })
+        this.selectedList = Object.values(selectedListObj);
+
       }else{
         this.$message({
           message: '请选择商品',
@@ -465,24 +472,24 @@ export default {
         })
       }); 
     },
-    cancel3() {
-      this.dialogVisible2 = false;
-      if(this.oldSelect.length > 0) {
-        this.selectedList = this.oldSelect;
-        this.$nextTick(() => {
-          this.skuList.forEach(row => {
-            this.$refs.skuTable.toggleRowSelection(row,false);
-          });
-        }) 
-      }else if(this.oldSelect.length == 0 && this.selectedList.length > 0){
-        this.selectedList = [];
-        this.$nextTick(() => {
-          this.skuList.forEach(row => {
-            this.$refs.skuTable.toggleRowSelection(row,false);
-          });
-        }) 
-      }
-    },
+    // cancel3() {
+    //   this.dialogVisible2 = false;
+    //   if(this.oldSelect.length > 0) {
+    //     this.selectedList = this.oldSelect;
+    //     this.$nextTick(() => {
+    //       this.skuList.forEach(row => {
+    //         this.$refs.skuTable.toggleRowSelection(row,false);
+    //       });
+    //     }) 
+    //   }else if(this.oldSelect.length == 0 && this.selectedList.length > 0){
+    //     this.selectedList = [];
+    //     this.$nextTick(() => {
+    //       this.skuList.forEach(row => {
+    //         this.$refs.skuTable.toggleRowSelection(row,false);
+    //       });
+    //     }) 
+    //   }
+    // },
     close3() {
       this.dialogVisible2 = false;
       if(this.oldSelect.length > 0) {
