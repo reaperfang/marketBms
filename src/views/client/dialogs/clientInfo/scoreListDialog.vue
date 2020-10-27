@@ -57,7 +57,11 @@ export default {
               "yyyy-MM-dd hh:mm:ss"
             );
             if(v.changeScore !== 0) {
-              v.changeScore = v.changeType == 1?"-" + v.changeScore:"+" + v.changeScore;
+              if(v.changeType == 1 || v.changeType == 5 || v.changeType == 6) {
+                v.changeScore = "-" + v.changeScore
+              }else{
+                v.changeScore = "+" + v.changeScore
+              }
             }
           });
             this.scoreList = [].concat(list);
