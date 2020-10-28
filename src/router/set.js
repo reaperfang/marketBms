@@ -1,5 +1,7 @@
 import Layout from '@/components/layout/Layout'
 
+import Authorize from '@/views/set/authorize'
+
 const setArr = [
     {
         path: '/set',
@@ -199,11 +201,12 @@ const setArr = [
     }
 ]
 
+
 //如果不是生产环境，则设置路由中增加 综合服务
 if(process.env.NODE_ENV !== "prod") {
     setArr[0].children.push({
         path: 'authorize',
-        component: () => import('@/views/set/authorize'),
+        component: Authorize,
         name: 'authorize',
         meta: { title: '授权管理', noCache: true, tabTitle: '综合服务', navType:2  },
     })
