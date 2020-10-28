@@ -5,7 +5,7 @@
             <template v-if="orderState == 0">
                 <!-- 待付款 -->
                 <div class="item lefter">
-                    <el-steps active="1">
+                    <el-steps :active="1">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" description=""></el-step>
                         <el-step :title="merchantType" description=""></el-step>
@@ -23,7 +23,7 @@
             <template v-else-if="orderState == 1">
                 <!-- 待成团 -->
                 <div class="item lefter">
-                    <el-steps active="3">
+                    <el-steps :active="3">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="用户付款" description=""></el-step>
                         <el-step :title="merchantType" description=""></el-step>
@@ -52,7 +52,7 @@
             <template v-else-if="orderState == 3">
                 <!-- 待发货 -->
                 <div class="item lefter">
-                    <el-steps active="3">
+                    <el-steps :active="3">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" description=""></el-step>
                         <el-step :title="merchantType" description=""></el-step>
@@ -72,7 +72,7 @@
             <template v-else-if="orderState == 4">
                 <!-- 部分发货 -->
                 <div class="item lefter">
-                    <el-steps active="3">
+                    <el-steps :active="3">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" description=""></el-step>
                         <el-step :title="merchantType" description=""></el-step>
@@ -91,7 +91,7 @@
             <template v-else-if="orderState == 5">
                 <!-- 待收货 -->
                 <div class="item lefter">
-                    <el-steps active="4">
+                    <el-steps :active="4">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" description=""></el-step>
                         <el-step :title="merchantType" :description="orderInfo.sendTime"></el-step>
@@ -114,7 +114,7 @@
             <template v-else-if="orderState == 6">
                 <!-- 完成 -->
                 <div class="item lefter">
-                    <el-steps active="5">
+                    <el-steps :active="5">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="货到付款" :description="orderInfo.createTime"></el-step>
                         <el-step :title="merchantType" :description="orderInfo.sendTime"></el-step>
@@ -172,7 +172,7 @@
                 <template v-if="orderInfo.closeReason == 0">
                     <!-- 超时取消 -->
                     <div class="item lefter">
-                        <el-steps active="3">
+                        <el-steps :active="3">
                             <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                             <el-step title="订单关闭" :description="orderInfo.closeTime"></el-step>
                             <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
@@ -188,7 +188,7 @@
                     <template v-if="orderInfo.payComplateTime">
                         <!-- 客户付款 -->
                         <div class="item lefter">
-                            <el-steps active="4">
+                            <el-steps :active="4">
                                 <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
                                 <el-step title="订单关闭" :description="`用户取消订单${orderInfo.closeTime}`"></el-step>
@@ -203,7 +203,7 @@
                     <template v-else>
                         <!-- 客户未付款 -->
                         <div class="item lefter">
-                            <el-steps active="3">
+                            <el-steps :active="3">
                                 <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="订单关闭" :description="`用户取消订单${orderInfo.closeTime}`"></el-step>
                                 <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
@@ -220,7 +220,7 @@
                     <template v-if="orderInfo.payComplateTime">
                         <!-- 客户付款 -->
                         <div class="item lefter">
-                            <el-steps active="4">
+                            <el-steps :active="4">
                                 <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
                                 <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
@@ -235,7 +235,7 @@
                     <template v-else>
                         <!-- 客户未付款 -->
                         <div class="item lefter">
-                            <el-steps active="3">
+                            <el-steps :active="3">
                                 <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
                                 <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
@@ -252,7 +252,7 @@
                     <template v-if="orderInfo.payComplateTime">
                         <!-- 客户付款 -->
                         <div class="item lefter">
-                            <el-steps active="4">
+                            <el-steps :active="4">
                                 <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
                                 <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
@@ -267,7 +267,7 @@
                     <template v-else>
                         <!-- 客户未付款 -->
                         <div class="item lefter">
-                            <el-steps active="3">
+                            <el-steps :active="3">
                                 <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
                                 <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
@@ -284,7 +284,7 @@
                     <template v-if="orderInfo.payComplateTime">
                         <!-- 客户付款 -->
                         <div class="item lefter">
-                            <el-steps active="4">
+                            <el-steps :active="4">
                                 <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
                                 <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
@@ -299,7 +299,7 @@
                     <template v-else>
                         <!-- 客户未付款 -->
                         <div class="item lefter">
-                            <el-steps active="3">
+                            <el-steps :active="3">
                                 <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
                                 <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
@@ -316,7 +316,7 @@
                     <template v-if="orderInfo.payComplateTime">
                         <!-- 客户付款 -->
                         <div class="item lefter">
-                            <el-steps active="4">
+                            <el-steps :active="4">
                                 <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
                                 <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
@@ -331,7 +331,7 @@
                     <template v-else>
                         <!-- 客户未付款 -->
                         <div class="item lefter">
-                            <el-steps active="3">
+                            <el-steps :active="3">
                                 <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                                 <el-step title="订单关闭" :description="`商户关闭订单${orderInfo.closeTime}`"></el-step>
                                 <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
@@ -346,7 +346,7 @@
                 <template v-else-if="orderInfo.closeReason == 3">
                     <!-- 拼团失败 -->
                     <div class="item lefter">
-                        <el-steps active="3">
+                        <el-steps :active="3">
                             <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                             <el-step title="订单关闭" :description="`拼团活动关闭${orderInfo.closeTime}`"></el-step>
                             <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
@@ -360,7 +360,7 @@
                 <template v-else-if="orderInfo.closeReason == 4">
                     <!-- 商户关闭拼团 -->
                     <div class="item lefter">
-                        <el-steps active="3">
+                        <el-steps :active="3">
                             <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                             <el-step title="订单关闭" :description="`商户关闭拼团${orderInfo.closeTime}`"></el-step>
                             <el-step class="close" title="结束" :description="orderInfo.closeTime"></el-step>
@@ -374,7 +374,7 @@
                 <template v-else-if="orderInfo.closeReason == 5">
                     <!-- 客户拒收 -->
                     <div class="item lefter">
-                        <el-steps active="5">
+                        <el-steps :active="5">
                             <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                             <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
                             <el-step title="商户发货" :description="orderInfo.sendTime"></el-step>
@@ -416,7 +416,7 @@
             <template v-else-if="orderState == 4">
                 <!-- 部分发货 -->
                 <div class="item lefter">
-                    <el-steps active="3">
+                    <el-steps :active="3">
                         <el-step title="用户下单" :description="orderInfo.createTime"></el-step>
                         <el-step title="用户付款" :description="orderInfo.payComplateTime"></el-step>
                         <template v-if="orderInfo.deliveryWay == 4">

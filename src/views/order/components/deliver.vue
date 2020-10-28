@@ -815,10 +815,10 @@ export default {
 
           if(this.orderInfo.deliveryWay == 4) {
             this.$nextTick(() => {
-              document.querySelector('.disabledCheckAll thead .el-checkbox').setAttribute('class', 'el-checkbox is-disabled')
-              document.querySelector('.disabledCheckAll thead .el-checkbox__input').setAttribute('class', 'el-checkbox__input is-disabled')
-              document.querySelector('.disabledCheckAll thead .el-checkbox__original').setAttribute('disabled', 'disabled')
-              document.querySelector('.disabledCheckAll thead').addEventListener('click', function () {
+              document.querySelector('.disabledCheckAll thead .el-checkbox') && document.querySelector('.disabledCheckAll thead .el-checkbox').setAttribute('class', 'el-checkbox is-disabled')
+              document.querySelector('.disabledCheckAll thead .el-checkbox__input') && document.querySelector('.disabledCheckAll thead .el-checkbox__input').setAttribute('class', 'el-checkbox__input is-disabled')
+              document.querySelector('.disabledCheckAll thead .el-checkbox__original') && document.querySelector('.disabledCheckAll thead .el-checkbox__original').setAttribute('disabled', 'disabled')
+              document.querySelector('.disabledCheckAll thead') && document.querySelector('.disabledCheckAll thead').addEventListener('click', function () {
                 event.stopImmediatePropagation()
               }, true)
             })
