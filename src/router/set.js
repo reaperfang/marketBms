@@ -1,6 +1,6 @@
 import Layout from '@/components/layout/Layout'
 
-export default [
+const setArr = [
     {
         path: '/set',
         component: Layout,
@@ -194,13 +194,19 @@ export default [
                 name: 'rechargeRecord',
                 hidden: true,
                 meta: { title: '充值/查看余额', noCache: true, tabTitle: '配送设置' , navType: 4 }
-                },
-            {
-                 path: 'authorize',
-                 component: () => import('@/views/set/authorize'),
-                 name: 'authorize',
-                 meta: { title: '授权管理', noCache: true, tabTitle: '综合服务', navType:2  },
-             }
+            }
         ]
     }
 ]
+
+//如果不是生产环境，则设置路由中增加 综合服务
+if(process.env.NODE_ENV !== "prod") {
+    setArr[0].children.push({
+        path: 'authorize',
+        component: () => import('@/views/set/authorize'),
+        name: 'authorize',
+        meta: { title: '授权管理', noCache: true, tabTitle: '综合服务', navType:2  },
+    })
+}
+
+export default setArr
