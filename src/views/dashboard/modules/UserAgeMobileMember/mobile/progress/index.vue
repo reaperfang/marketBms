@@ -93,7 +93,7 @@ export default {
 						type: "pie",
 						// clockWise: true,
 						//radius: ['60', '70'],//设置圆环的半径
-						radius: screen.width > 1600 ? ["50", "60"] : screen.width == 1600 ? ["40", "50"] : screen.width == 1440 ? ["40", "50"] : ["35", "45"], //设置圆环的半径
+						radius: screen.width > 1600 ? ["50", "60"] : ["40", "50"], //设置圆环的半径
 						itemStyle: {
 							normal: {
 								label: {

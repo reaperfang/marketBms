@@ -50,7 +50,7 @@ export default {
 				// },
 				//radius: [60, 70],
 				radius: [50, 60],
-				offsetY: screen.width > 1600 ? 90 : screen.width == 1600 ? 75 : screen.width == 1440 ? 75 : screen.width <= 1366 ? 69 : 75,
+				offsetY: screen.width > 1600 ? 90 : screen.width == 1600 ? 75 : screen.width == 1440 ? 75 : screen.width <= 1366 ? 73 : 75,
 				labelLine: {
 					normal: {
 						length: 5,
@@ -131,11 +131,14 @@ export default {
 		}
 	},
 	mounted() {
+		console.log(screen.width)
 		if (screen.width == 1440){
 			this.chartSettings.radius = [32, 42]
 		}else if (screen.width == 1600){
 			this.chartSettings.radius = [35, 45]
-		}else {
+		} else if (screen.width <= 1366) {
+			this.chartSettings.radius = [30, 40]
+		} else {
 			console.log(screen.width)
 		}
 		if (window.screen.height < 900) {
