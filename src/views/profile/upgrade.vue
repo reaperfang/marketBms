@@ -55,7 +55,7 @@
         <p class="u_title">移动商城</p>
         <div class="u_item">
           <div class="u_t p4">
-            <p>专业版1</p>
+            <p>专业版</p>
             <span class="u_cont">升级请联系当地分司或致电400-660-5555</span>
             <span v-if="status=='1'">有效期至：{{time}}</span>
           </div>
@@ -142,36 +142,35 @@ export default {
   name: "upgrade",
   data() {
     return {
-      status: "0"
+      status: "0",
+      time: null
     };
   },
   computed: {
-    time() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
-      let time = new Date();
-      time.setTime(
-        shopInfo.createTime + 3600 * 1000 * 24 * (shopInfo.lifeTime - 1)
-      );
-      time = utils.formatDate(time, "yyyy-MM-dd hh:mm:ss");
-      return time;
-    }
+    // time() {
+    //   let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+    //   let time = new Date();
+    //   time.setTime(
+    //     shopInfo.createTime + 3600 * 1000 * 24 * (shopInfo.lifeTime - 1)
+    //   );
+    //   time = utils.formatDate(time, "yyyy-MM-dd hh:mm:ss");
+    //   return time;
+    // }
   },
   created() {
     this.show();
   },
   methods: {
     show() {
-      this._apis.client
-        .checkCreditRule({
-          id: JSON.parse(localStorage.getItem("shopInfos")).id
-        })
-        .then(data => {
+      this.$store.dispatch('getShopInfo').then(data => {
           if (data.isOpenResell == 1) {
             //专业版开启，时间显示在专业版本上
             this.status = "1";
           }else{
             this.status = "0";
           }
+          // console.log(data.shopExpireTime)
+          this.time = data.shopExpireTime;
         })
         .catch(error => {
           console.error(error);

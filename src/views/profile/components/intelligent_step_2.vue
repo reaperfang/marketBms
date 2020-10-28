@@ -311,7 +311,7 @@
 
           setTimeout(() => {
             this.getConfigureStatus(function () {
-              console.log(_this.configureTextArray.length);
+              // console.log(_this.configureTextArray.length);
               /*  0 失败 1 成功  */
               if(result === 0) {
                 let time = 750 * _this.configureTextArray.length || 1000;

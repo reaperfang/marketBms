@@ -111,7 +111,7 @@ export default {
     //   }
     // },
     getRebusinessTypes(){
-       this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+       this.$store.dispatch('getShopInfo').then( data => {
           if(data.isOpenResell == 1){
             this.isOpenResell = true
           }else{
@@ -128,17 +128,19 @@ export default {
       for(var i = 0; i < arr.length; i++){
           var ai = arr[i];
           if(!map[ai.meta.tabTitle]){
+            if (!ai.hidden) {
               dest.push({
-            tabTitle: ai.meta.tabTitle,
-                  id: ai.id,
-                  name: ai.name,
-                  data: [ai]
+              tabTitle: ai.meta.tabTitle,
+                id: ai.id,
+                name: ai.name,
+                data: [ai]
               });
               map[ai.meta.tabTitle] = ai;
+            }
           }else{
               for(var j = 0; j < dest.length; j++){
                   var dj = dest[j];
-                  if(dj.tabTitle == ai.meta.tabTitle){
+                  if(dj.tabTitle == ai.meta.tabTitle && !ai.hidden){
                       dj.data.push(ai);
                       break;
                   }
@@ -159,7 +161,7 @@ export default {
         children.forEach(val => {
           val.path = _path + '/' + val.path
         })
-
+        console.log('children',children)
         if(children.some(val => val.meta.tabTitle)) {
           children = this.handleTabTitle(children)
         }

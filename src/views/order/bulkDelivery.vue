@@ -97,6 +97,7 @@ export default {
     .bulk-delivery {
         background-color: #fff;
         padding: 20px;
+        border-radius: 4px;
         >.title {
             font-size: 16px;
         }

@@ -60,7 +60,7 @@
         </div>
       </el-table>
       <div class="multiple_selection" v-if="tableData.length">
-        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus" :disabled="selectDisabled">全选</el-checkbox>
+        <el-checkbox :indeterminate="isIndeterminate" class="selectAll" @change="selectAll" v-model="selectStatus" :disabled="selectDisabled">全选</el-checkbox>
         <el-button size="mini" @click="clearInvalidData">删除已选失效数据</el-button>
         <el-popover popper-class="icon-info-popover" placement="top" trigger="hover">
           <div>删除已选失效数据的作用：<br/>将已选中，但因商品售罄、活动结束等原因变<br/>为“失效”状态的全部数据取消勾选</div>
@@ -69,13 +69,14 @@
       </div>
       <div class="pagination" v-if="tableData.length">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.pageNum) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
         ></el-pagination>
       </div>
     </div>

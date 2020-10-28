@@ -16,7 +16,7 @@
     <div class="p_container">
         <div class="pane_container">
             <p class="p_title">商品总况：</p>
-            <div class="p_blocks">
+            <div class="p_blocks" v-loading="loading1">
                 <div class="p_item" v-for="item in Condition" :key="item.id" >
                     <img :src="item.url" alt="" class="fl">
                     <div class="fr">
@@ -28,7 +28,7 @@
             <div class="title_line clearfix">
                 <p class="fl" style="font-size: 16px;line-height:16px;margin-top:15px;">热销TOP5商品榜单：</p>
             </div>
-            <ct1Table  :hotData="hotData"></ct1Table>
+            <ct1Table  :hotData="hotData" v-loading="loading2"></ct1Table>
             <div class="c_line">
                 <span class="c_title">商品详情：</span>
                 <span>
@@ -39,7 +39,7 @@
                         <!--<el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>-->
                         <!--<el-radio-button class="btn_bor" label="4">自定义</el-radio-button>-->
                     <!--</el-radio-group>-->
-					<div class="radio-group">
+					<div class="radio-group" style="margin-right: 10px;">
 						<span @click="changeDayM(7)" :class="dateType == 7 ? 'active' : ''">最近7天</span>
 						<span @click="changeDayM(15)" :class="dateType == 15 ? 'active' : ''">最近15天</span>
 						<span @click="changeDayM(30)" :class="dateType == 30 ? 'active' : ''">最近30天</span>
@@ -64,7 +64,7 @@
 				</div>
             </div>
 
-            <ct2Table style="margin-top: 15px" :listObj="listObj" @getProductDetails="getProductDetails"></ct2Table>
+            <ct2Table style="margin-top: 15px" :listObj="listObj" @getProductDetails="getProductDetails" v-loading="loading3"></ct2Table>
         </div>
     </div>
 </div>
@@ -101,7 +101,10 @@ export default {
             Condition:[],
             hotData:[],
             listObj:[],
-            isPc:false
+            isPc:false,
+            loading1: true,
+            loading2: true,
+            loading3: true,
         }
     },
     computed: {},
@@ -133,6 +136,7 @@ export default {
             let data ={
                 channel:this.visitSourceType,
             }
+            this.loading1 = true;
             this._apis.data.generalCondition(data).then(response => {
                 this.Condition.forEach(e => {
                     switch (e.id){
@@ -154,8 +158,10 @@ export default {
                          break;
                     }                        
                 });
+                this.loading1 = false;
             }).catch(error => {
                 this.$message.error(error);
+                this.loading1 = false;
             });
         },
 
@@ -164,6 +170,7 @@ export default {
             let data ={
                 channel:this.visitSourceType
             }
+            this.loading2 = true;
             this._apis.data.hotGoods(data).then(response => {
                 this.hotData = []
                 let arr = Object.keys(response) 
@@ -174,8 +181,10 @@ export default {
                         this.hotData.push(goodsObj)
                     }                
                 }
+                this.loading2 = false;
             }).catch(error => {
                 this.$message.error(error);
+                this.loading2 = false;
             });
         },
 
@@ -187,10 +196,13 @@ export default {
                 startTime:this.startTime,
                 endTime:this.endTime,
             }
+            this.loading3 = true;
             this._apis.data.productDetails(data).then(response => {
                 response && (this.listObj = response)
+                this.loading3 = false;
         }).catch(error => {
           this.$message.error(error);
+          this.loading3 = false;
         });
         },
         changeDayM(val){
@@ -244,21 +256,22 @@ export default {
     margin-bottom:20px;
     .fr_channel{
         float:left;
-        margin-left:30px;
+        // margin-left:30px;
     }
 }
 .p_container{
     padding: 20px;
     background-color: #fff;
+    border-radius: 4px;
     .pane_container{
         color: #3D434A;
-        padding: 23px 38px;
+        // padding: 23px 38px;
         .p_title{
             font-size: 16px;
 			line-height: 16px;
         }
         .p_blocks{
-            width: 1140px;
+            max-width: 1140px;
             display: flex;
             flex-wrap: wrap;
             margin-top: 15px;

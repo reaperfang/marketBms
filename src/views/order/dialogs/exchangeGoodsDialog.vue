@@ -3,7 +3,7 @@
         <div class="container">
             <p>是否需要用户退回商品：</p>
             <el-radio v-model="exchangeConfirmation" :label="1">需要退货</el-radio>
-            <el-radio v-model="exchangeConfirmation" :label="0">无需退货</el-radio>
+            <el-radio class="mgl_30" v-model="exchangeConfirmation" :label="0">无需退货</el-radio>
             <div class="footer">
                 <!-- <el-button @click="visible = false">取消</el-button> -->
                 <el-button @click="submit" type="primary">确定</el-button>

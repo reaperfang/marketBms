@@ -1,16 +1,31 @@
+import { isJsonStr, isObject } from "@/utils/base.js";
 const getters = {
   sidebar: state => state.app.sidebar,
   device: state => state.app.device,
   token: state => state.user.token,
-  userInfo: state => state.userInfo || localStorage.getItem('userInfo'),
-  roles: state => state.user.roles,
-  shopInfos: state => state.user.shopInfos,
+  // userInfo: state => state.user.userInfo || localStorage.getItem('userInfo'),
+  userInfo: state => {
+    let userInfo = state.user.userInfo || localStorage.getItem('userInfo')
+    if (isObject(userInfo)) return userInfo
+    if (!isJsonStr(userInfo)) return null
+    userInfo = JSON.parse(userInfo);
+    return userInfo
+  },
   shopName: state => {
     if(state.user.shopInfos && state.user.shopInfos.shopName) return state.user.shopInfos.shopName
     else {
       let shopInfos = JSON.parse(localStorage.getItem('shopInfos'))
       return shopInfos.shopName
     }
+  },
+  roles: state => state.user.roles,
+  // shopInfos: state => state.user.shopInfos || localStorage.getItem('shopInfos'),
+  shopInfos: state => {
+    let shopInfos = state.user.shopInfos || localStorage.getItem('shopInfos')
+    if (isObject(shopInfos)) return shopInfos
+    if (!isJsonStr(shopInfos)) return null
+    shopInfos = JSON.parse(shopInfos);
+    return shopInfos
   },
   permission_routers: state => state.permission.routers,
   permission_routers_tree: state => state.permission.routers && state.permission.routers.filter(val => !val.hidden && val.children),
@@ -20,7 +35,7 @@ const getters = {
 
   shopInfo: state => state.shop.shopInfo,   //店铺信息
   colorStyle: state => state.shop.colorStyle,   //店铺风格
-
+  
   currentComponentId: state => state.decorate.currentComponentId,   //当前装修组件id
   componentDataIds: state => state.decorate.componentDataIds,   //装修组件顺序列表
   componentDataMap: state => state.decorate.componentDataMap,   //装修组件数据映射

@@ -16,7 +16,7 @@
               <p>目前快递鸟电子面单仅支持以下快递公司：顺丰速运、EMS、宅急送、圆通速递、百世快递、中通快递、韵达速递、申通快递、德邦快递、优速快递、京东快递、信丰物流、安能快递、国通快递、天天快递、跨越速运、邮政快递包裹、中铁快运、邮政国内标快、远成快运、全一快递、速尔快递、品骏快递。</p>
           </el-popover>
       </p> -->
-      <el-form :inline="true" :model="formInline" class="form-inline">
+      <el-form :inline="true" :model="formInline" class="form-inline input_style">
         <div class="row justify-between">
           <div class="col">
             <el-form-item label="电子面单名称">
@@ -66,20 +66,21 @@
           style="width: 100%"
           :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '500'}"
         >
-          <el-table-column prop="name" label="电子面单名称" width="180"></el-table-column>
-          <el-table-column prop="expressCompany" label="快递公司" width="180"></el-table-column>
-          <el-table-column prop="updateTime" sortable label="编辑时间"></el-table-column>
-          <el-table-column label="操作" fixed="right">
+          <el-table-column prop="name" label="电子面单名称" min-width="180" fixed="left" class-name="table-padding"></el-table-column>
+          <el-table-column prop="expressCompany" label="快递公司" min-width="160" align="center"></el-table-column>
+          <el-table-column prop="updateTime" sortable label="编辑时间" min-width="160" align="center"></el-table-column>
+          <el-table-column label="操作" :width="operationColumnW" fixed="right" header-align="center" class-name="table-padding">
             <template slot-scope="scope">
-              <div class="operate-box">
-                <span v-permission="['设置', '普通快递', '电子面单', '查看']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode + '&detail=' + true)">查看</span>
-                <span  v-if="!authHide" v-permission="['设置', '普通快递', '电子面单', '编辑']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode)">编辑</span>
-                <span v-if="!authHide"  v-permission="['设置', '普通快递', '电子面单', '删除']" @click="deleteElectronicFaceSheet(scope.row)">删除</span>
+              <div class="operate-box table-operate">
+                <span class="table-btn" v-permission="['设置', '普通快递', '电子面单', '查看']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode + '&detail=' + true)">查看</span>
+                <span class="table-btn"  v-if="!authHide" v-permission="['设置', '普通快递', '电子面单', '编辑']" @click="$router.push('/set/newElectronicFaceSheet?id=' + scope.row.id + '&expressCompanyCode=' + scope.row.expressCompanyCode)">编辑</span>
+                <span class="table-btn table-warning" v-if="!authHide"  v-permission="['设置', '普通快递', '电子面单', '删除']" @click="deleteElectronicFaceSheet(scope.row)">删除</span>
               </div>
             </template>
           </el-table-column>
         </el-table>
         <pagination
+          style="margin-top: 10px;"
           v-show="total>0"
           :total="total"
           :page.sync="listQuery.startIndex"
@@ -114,8 +115,19 @@ export default {
         endTime: ''
       },
       loading: false,
-      popVisible: false
+      popVisible: false,
+      operationColumnW: 72 //操作列宽度
     };
+  },
+  watch: {
+    'tableData': {
+        handler(newVal, oldVal) { //计算操作栏宽度
+            this.$nextTick(() => {
+                this.operationColumnW = this.utils.getOperationColumnW();
+            })
+        },
+        deep: true
+    }
   },
   created() {
     this.getList();
@@ -133,7 +145,7 @@ export default {
           this.getList()
       },
     deleteElectronicFaceSheet(row) {
-      this.confirm({title: '提示', text: '删除后无法撤销，确定删除吗？'}).then(() => {
+      this.confirm({text: '删除后无法撤销，确定删除吗？'}).then(() => {
           this._apis.order.deleteElectronicFaceSheet({id: row.id, expressCompanyCode: row.expressCompanyCode}).then((res) => {
               this.getList()
               this.$message.success('删除成功！');
@@ -212,7 +224,7 @@ export default {
   color: $grayColor;
 }
 .table-box {
-  padding-bottom: 20px;
+  padding-bottom: 20px !important;
 }
 .table-box .table {
     margin-left: 0;

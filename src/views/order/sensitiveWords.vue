@@ -57,7 +57,7 @@ export default {
     },
     methods: {
         deleteSensitive(item) {
-            this.confirm({title: '提示', icon: true, text: '是否确认删除'}).then(() => {
+            this.confirm({icon: true, text: '是否确认删除'}).then(() => {
                 this._apis.order.deleteSensitiveWord({id: item.id}).then((res) => {
                 this.getList()
                 this.visible = false
@@ -92,7 +92,7 @@ export default {
             //this.listLoading = true
 
             this._apis.order.getSensitiveWordList().then((res) => {
-                console.log(res)
+                // console.log(res)
                 this.sensitiveList = res
             }).catch(error => {
                 //this.listLoading = false
@@ -117,6 +117,7 @@ export default {
     .sensitive-words {
         background-color: #fff;
         padding: 20px;
+        height:100%;
         .title {
             .words-label {
                 font-size: 16px;

@@ -1,10 +1,10 @@
 <template>
   <div class="authorize">
-    <section class="header">
+    <section class="header bor-radius">
       <h2>第三方平台授权</h2>
       <el-button @click="getCode" class="border-button">获取授权码</el-button>
     </section>
-    <section class="container">
+    <section class="container bor-radius" v-calcMinHeight="236" style="margin-bottom: 0;">
       <h2>授权记录</h2>
       <el-table
         v-loading="loading"
@@ -15,6 +15,7 @@
         :header-cell-style="{background:'rgba(208, 214, 228, .2)', color:'#44434B', fontSize: '14px', fontWeight: '500'}">
         <el-table-column
             prop=""
+            min-width="100" fixed="left" class-name="table-padding"
             label="序号">
             <template slot-scope="scope">
                 {{scope.$index + 1}}
@@ -22,6 +23,7 @@
         </el-table-column>
         <el-table-column
             prop="platformType"
+            align="center"
             label="平台名称">
             <template slot-scope="scope">
                 {{scope.row.platformType | platformTypeFilter}}
@@ -29,6 +31,7 @@
         </el-table-column>
         <el-table-column
             prop=""
+            align="center"
             label="授权店铺">
             <template slot-scope="scope">
                 {{scope.row.shopName}}
@@ -36,29 +39,32 @@
         </el-table-column>
         <el-table-column
             prop="authCode"
+            align="center"
             label="授权码">
         </el-table-column>
         <el-table-column
             prop="createTime"
+            align="center"
             label="授权时间"
-            width="155">
+            width="160">
         </el-table-column>
         <el-table-column
             prop="enable"
+            align="center"
             label="授权状态">
             <template slot-scope="scope">
                 {{scope.row.enable | enableFilter}}
             </template>
         </el-table-column>
-        <el-table-column label="操作" fixed="right">
+        <el-table-column label="操作" width="116" fixed="right" header-align="center" class-name="table-padding">
             <template slot-scope="scope">
-                <div class="operate-box">
-                    <span v-if="scope.row.enable == 1" @click="cancelAuth(scope.row)">{{scope.row.enable == 1 ? '解除授权' : ''}}</span>
+                <div class="operate-box table-operate">
+                    <span class="table-btn table-warning" v-if="scope.row.enable == 1" @click="cancelAuth(scope.row)">{{scope.row.enable == 1 ? '解除授权' : ''}}</span>
                 </div>
             </template>
         </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
+    <pagination style="margin-top: 10px;" v-show="total>0" :total="total" :page.sync="listQuery.startIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
     </section>
   </div>
 </template>
@@ -89,7 +95,7 @@ export default {
   },
   computed: {
     cid(){
-        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        let shopInfo = this.$store.getters.shopInfos
         return shopInfo.id
     }
   },
@@ -116,7 +122,7 @@ export default {
   methods: {
     getShopAuthList() {
       store.dispatch('getShopAuthList').then(() => {
-        const localMsfList = localStorage.getItem('shopInfos');
+        const localMsfList = this.$store.getters.shopInfos;
         let msfList = [];
         let enable = 0
 
@@ -166,7 +172,7 @@ export default {
         enable = 1
       }
 
-      this.confirm({title: '解除授权', icon: true, customClass: 'auth-manage cancel-auth', text, width: '500px'}).then(() => {
+      this.confirm({icon: true, customClass: 'auth-manage cancel-auth', text, width: '500px'}).then(() => {
         this._apis.set.cancelAuth({
           id: row.id,
           cid: this.cid,
@@ -190,9 +196,9 @@ export default {
         return
       }
       this.showCodeDialog = true
-      this._apis.set.getShopCode().then((res) => {
+      this._apis.shopInfo.getShopCode().then((res) => {
           this.shopCode = res
-          let text = `<h2>${this.shopCode}</h2><p class="message">用户绑定授权平台、数据对接，一经授权不得修改</p>`
+          let text = `${this.shopCode}<br/><span class="message">用户绑定授权平台、数据对接，一经授权不得修改</span>`
           let beforeClose = (action, instance, done) => {
             let code = this.shopCode;
 
@@ -215,7 +221,7 @@ export default {
             }
           }
           
-          this.confirm({title: '授权码', customClass: 'auth-manage confirm-code', text, confirmText: '复制', width: '500px', beforeClose}).then(() => {
+          this.confirm({ customClass: 'auth-manage confirm-code', text, confirmText: '复制', width: '500px', beforeClose}).then(() => {
             this.showCodeDialog = false     
           }).catch(() => {
             this.showCodeDialog = false
@@ -247,14 +253,14 @@ export default {
     },
     getList() {
       this.loading = true
-      this._apis.set.getAuthPageList().then((res) => {
+      this._apis.shopInfo.getAuthPageList().then((res) => {
         this.loading = false
         this.total = +res.total
         res.list.forEach(val => {
           val.shopName = this.shopName
         })
         this.list = res.list
-          console.log(res)
+          // console.log(res)
       }).catch(error => {
           this.loading = false
           this.$message.error({
@@ -264,8 +270,7 @@ export default {
       })
     },
     getShopInfo(){
-      let id = this.cid
-      this._apis.set.getShopInfo({id:id}).then(response =>{
+      this.$store.dispatch('getShopInfo').then(response =>{
         this.shopName = response.shopName
         this.getList()
       }).catch(error =>{
@@ -318,5 +323,8 @@ export default {
         }
       }
     }
+  }
+  /deep/ .el-message-box__message{
+    display: block !important;
   }
 </style>

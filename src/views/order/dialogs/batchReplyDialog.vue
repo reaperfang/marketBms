@@ -10,8 +10,8 @@
             </el-input>
             <!-- <RichEditor @editorValueUpdate="editorValueUpdate" :myConfig="myConfig"></RichEditor> -->
             <div class="footer">
-                <el-button @click="visible = false">取消</el-button>
                 <el-button @click="submit" :loading="submitLoading" type="primary">确定</el-button>
+                <el-button @click="visible = false">取消</el-button>
             </div>
         </div>
     </DialogBase>

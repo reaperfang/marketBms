@@ -133,13 +133,12 @@ export default {
       return this.$store.getters.shopInfo || {};
     },
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     }
   },
   created() {
     this.$store.dispatch('getShopInfo');
-    this.$store.dispatch('getShopStyle');
     this.$store.commit("clearEditor");
     this.getQrcode();
     this.getMiniAppQrcode();
@@ -239,7 +238,7 @@ export default {
     //获取小程序太阳码
     getMiniAppQrcode(){
       this.openMiniAppcodeLoading = true;
-      this._apis.profile
+      this._apis.shopInfo
         .getSmallQRcode({id:this.cid}).then(response => {
           this.miniAppcode = `data:image/png;base64,${response}`;
           this.openMiniAppcodeLoading = false;

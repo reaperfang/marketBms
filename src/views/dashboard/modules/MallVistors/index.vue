@@ -39,7 +39,7 @@ export default {
 	components: { vline, gridtitle },
 	data: function() {
 		return {
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			cid: this.$store.getters.shopInfos.id,
 			chartData: {
 				columns: ["日期", "访客"],
 				rows: [
@@ -159,7 +159,7 @@ export default {
 				rows: this.getRows(val)
 			};
 
-			console.log("this.chartData test", this.chartData);
+			// console.log("this.chartData test", this.chartData);
 		},
 		getRows(val) {
 			let result = [];

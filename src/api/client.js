@@ -585,24 +585,24 @@ export function getBalanceLists(data) {
         data
     })
 }
-//保存积分通用规则
-export function saveCreditRule(data) {
-    return request({
-        target:'SHOP-API-102-PROCESSOR',
-        method: 'post',
-        apiType: 'manager',
-        data
-    })
-}
-//查询积分通用规则
-export function checkCreditRule(data) {
-    return request({
-        target:'SHOP-API-100-PROCESSOR',
-        method: 'post',
-        apiType: 'manager',
-        data
-    })
-}
+// //保存积分通用规则
+// export function saveCreditRule(data) {
+//     return request({
+//         target:'SHOP-API-102-PROCESSOR',
+//         method: 'post',
+//         apiType: 'manager',
+//         data
+//     })
+// }
+// //查询积分通用规则
+// export function checkCreditRule(data) {
+//     return request({
+//         target:'SHOP-API-100-PROCESSOR',
+//         method: 'post',
+//         apiType: 'manager',
+//         data
+//     })
+// }
 //导出客户
 export function exportToLocal(data) {
     return request({

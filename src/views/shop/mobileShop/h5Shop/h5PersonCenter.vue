@@ -68,6 +68,9 @@ export default {
     fetch() {
       this.loading = true;
       this._apis.shop.getUserCenterPage({pageTag: 1}).then((response)=>{
+        if(!response || !response.pageData) {
+          return;
+        }
         const string = utils.uncompileStr(response.pageData);
         if(string.indexOf('moduleList') < 0) {
           return;

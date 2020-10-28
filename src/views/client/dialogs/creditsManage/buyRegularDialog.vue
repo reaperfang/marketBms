@@ -7,10 +7,10 @@
           <el-switch class="fl" v-model="enable" active-color="#66CCAC"></el-switch>
         </div>
         <div v-if="enable" class="giveBottom">
-          <div>购买获得积分，订单售后结束后按规则发放积分</div>
+          <div>购买获得积分，订单售后期结束可正常使用积分</div>
           <div>
             <span>赠送积分的商品：</span>
-            <el-radio v-model="isAllProduct" label="0">全部商品</el-radio>
+            <el-radio v-model="isAllProduct" label="0" @change="toggleAllProduct">全部商品</el-radio>
             <el-radio v-model="isAllProduct" label="1" @change="showDialog">指定商品</el-radio>
             <el-button style="margin-left: 10px" @click="dialogVisible2 = true" v-if="selectedList.length !== 0">查看已选商品</el-button>
           </div>
@@ -127,6 +127,7 @@
         title="已选商品"
         :visible.sync="dialogVisible2"
         width="45%"
+        @close="close3"
         v-if="dialogVisible2"
     >
         <div>
@@ -147,7 +148,7 @@
                 <el-table-column prop="goodsInfo.stock" label="商品库存"></el-table-column>
                 <el-table-column label="操作" width="80">
                   <template slot-scope="scope">
-                      <span class="edit_span pointer" @click="deleteRow(scope.row)">删除</span>
+                      <span class="edit_span pointer" @click="deleteRow(scope.row, scope.$index)">删除</span>
                   </template>
               </el-table-column>
             </el-table>
@@ -187,10 +188,13 @@ export default {
       distinguish: null,
       total: 0,
       pageSize: 10,
+      resultPageSize: 600,  //回显的列表数据条数，不能用10.不然设置的数据刷新页面重新请求就只能看到10条了。跟产品申鹏展沟通暂定为600条。
       startIndex: 1,
       btnLoading: false,
       dialogVisible2: false,
-      selectedList: []
+      selectedList: [],
+      selections: [],
+      oldSelect: []
     };
   },
   methods: {
@@ -201,8 +205,8 @@ export default {
         return true
       }
     },
-    deleteRow(row) {
-      this.selectedList.splice(row, 1);
+    deleteRow(row, index) {
+      this.selectedList.splice(index, 1);
       //删除的设为可选
       this.skuList.map((item) => {
         if(item.goodsInfo.id == row.goodsInfo.id) {
@@ -217,9 +221,6 @@ export default {
     },
     getRowKeys(row) {
       return row.goodsInfo.id
-    },
-    handelSelect(val,row) {
-      this.selections.push(row);
     },
     handleSizeChange(val) {
       this.getSkuList(1, val);
@@ -273,8 +274,8 @@ export default {
         });
         return;
       }
-      if(params.sceneRule.isAllProduct) {
-        params.selectedList = [];
+      if(this.enable && params.sceneRule.isAllProduct) {
+        params.sceneRule.selectProducts = [];
         this._apis.client
           .editCreditRegular(params)
           .then(response => {
@@ -289,7 +290,7 @@ export default {
           .catch(error => {
             this.btnLoading = false;
             this.visible = false;
-            console.log(error);
+            console.error(error);
           });
           return;
       }
@@ -307,7 +308,7 @@ export default {
           .catch(error => {
             this.btnLoading = false;
             this.visible = false;
-            console.log(error);
+            console.error(error);
           });
     },
     showDialog(val) {
@@ -317,9 +318,14 @@ export default {
           this.getSkuList(this.startIndex, this.pageSize);
         }
       }else{
-        this.selectProducts = [];
+        this.selectedList = [];
       }
     },
+    // toggleAllProduct(val) {
+    //   if(Number(val) == 0) {
+    //     this.selectedList = [];
+    //   }
+    // },
     transTreeData(data, pid) {
       var result = [],
         temp;
@@ -353,7 +359,7 @@ export default {
           this.categoryOptions = [].concat(arr);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     getSkuList(startIndex, pageSize) {
@@ -382,7 +388,7 @@ export default {
           this.total = response.total;
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     handleSearch() {
@@ -395,15 +401,20 @@ export default {
       this.getSkuList(this.startIndex, this.pageSize);
     },
     submit2() {
-      let selections = this.$refs.skuTable.selection;
-      if(selections.length !== 0) {
+      this.selections = this.$refs.skuTable.selection;
+      if(this.selections.length !== 0) {
         this.dialogVisible2 = true;
-        this.selectedList = this.selectedList.concat(selections);
-        this.$nextTick(() => {
-          this.skuList.forEach(row => {
-            this.$refs.skuTable.toggleRowSelection(row,false);
-          });
-        })  
+        if(this.selectedList.length > 0) {
+          this.oldSelect = this.selectedList;
+        }
+
+        const selectedList = this.selectedList.concat(this.selections);
+        const selectedListObj = {};
+        selectedList.forEach((item) => {
+          selectedListObj[item.goodsInfo.id] = item;
+        })
+        this.selectedList = Object.values(selectedListObj);
+
       }else{
         this.$message({
           message: '请选择商品',
@@ -429,13 +440,14 @@ export default {
         });
         //this.payAmount = sceneRule.yesDistinguish.payAmount;
         if(ids.length > 0) {
-          this._apis.client.getSkuList({status: 1, ids: ids, startIndex:1, pageSize: this.pageSize}).then((response) => {
+          this._apis.client.getSkuList({status: 1, ids: ids, startIndex:1, pageSize: this.resultPageSize}).then((response) => {
             this.selectedList = response.list;
+            this.oldSelect = this.selectedList;
             this.selectedList.map(item => {
               item.goodsInfo.specs = item.goodsInfo.specs.replace(/{|}|"|"/g, "");
             })
           }).catch((error) => {
-            console.log(error);
+            console.error(error);
           })
         }
       }
@@ -450,6 +462,7 @@ export default {
       this.$nextTick(() => {
         this.otherVisible = false;
         this.dialogVisible2 = false;
+        //this.oldSelect = [];
         this.skuList.map((item) => {
           this.selectedList.map((i) => {
             if(i.goodsInfo.id == item.goodsInfo.id) {
@@ -459,6 +472,25 @@ export default {
         })
       }); 
     }
+    // cancel3() {
+    //   this.dialogVisible2 = false;
+    //   if(this.oldSelect.length > 0) {
+    //     this.selectedList = this.oldSelect;
+    //     this.$nextTick(() => {
+    //       this.skuList.forEach(row => {
+    //         this.$refs.skuTable.toggleRowSelection(row,false);
+    //       });
+    //     }) 
+    //   }else if(this.oldSelect.length == 0 && this.selectedList.length > 0){
+    //     this.selectedList = [];
+    //     this.$nextTick(() => {
+    //       this.skuList.forEach(row => {
+    //         this.$refs.skuTable.toggleRowSelection(row,false);
+    //       });
+    //     }) 
+    //   }
+    // },
+    
   },
   computed: {
     visible: {

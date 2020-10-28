@@ -14,7 +14,7 @@
       </div>
 
   </div>
-  <div class="p_container">
+  <div class="p_container" v-calcHeight="60+40+92">
     <div class="pane_container">
 		<div class="p_line">
 			<!--<el-radio-group v-model="dateType" @change="changeDay">-->
@@ -23,7 +23,7 @@
 				<!--<el-radio-button class="btn_bor" label="30">最近30天</el-radio-button>-->
 				<!--<el-radio-button class="btn_bor" label="4">自定义时间</el-radio-button>-->
 			<!--</el-radio-group>-->
-			<div class="radio-group">
+			<div class="radio-group" style="margin-right: 10px;">
 				<span @click="changeDay(7)" :class="dateType == 7 ? 'active' : ''">最近7天</span>
 				<span @click="changeDay(15)" :class="dateType == 15 ? 'active' : ''">最近15天</span>
 				<span @click="changeDay(30)" :class="dateType == 30 ? 'active' : ''">最近30天</span>
@@ -45,7 +45,7 @@
 				></el-date-picker>
 			</div>
 		</div>
-      <div class="chart_container">
+      <div class="chart_container" v-loading="loading">
         <div class="path_line clearfix" v-if="dataObj.uv">
           <div class="p_l">
             <p>第一步</p>
@@ -173,7 +173,8 @@ export default {
       dateType: 7,
       dataObj: {},
       channel: "0",
-      isPc:false
+      isPc:false,
+      loading: true
     };
   },
   created() {
@@ -207,13 +208,16 @@ export default {
         //visitSourceType: this.visitSourceType,
         channel: this.channel
       };
+      this.loading = true;
       this._apis.data
         .transformation(data)
         .then(response => {
           this.dataObj = response;
+          this.loading = false;
         })
         .catch(error => {
           this.$message.error(error);
+          this.loading = false;
         });
     },
     changeTime(val) {
@@ -270,8 +274,8 @@ export default {
 .p_container {
   padding: 20px;
   background-color: #fff;
+  border-radius: 4px;
   .pane_container {
-     height: 600px;
     .p_line {
 		padding-bottom: 30px;
 		border-bottom: 1px dashed #d3d3d3;

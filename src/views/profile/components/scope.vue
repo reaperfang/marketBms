@@ -54,7 +54,7 @@ export default {
       return  business && business.length <= 0 ? true : false
     },
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     }
   },
@@ -97,7 +97,7 @@ export default {
         sellCategory: this.form.sellCategory
       }
       return new Promise((resolve, reject) => {
-        this._apis.set.updateShopInfo(data).then(response =>{
+        this._apis.shopInfo.updateShopInfo(data).then(response =>{
           this.$store.dispatch('getShopInfo');  
           // // 需要同步调用步骤接口
           // this.$message.success("保存成功！");
@@ -129,7 +129,7 @@ export default {
     // 获取类目
     getCategoryInfoIds(arr, id) {
       try {
-        console.log('--getCategoryInfoIds--', this.operateCategoryList.find(val => val.id == id))
+        // console.log('--getCategoryInfoIds--', this.operateCategoryList.find(val => val.id == id))
         let parentId
         let parentIds = this.operateCategoryList.find(val => val.id == id)
         if (!parentIds) {
@@ -146,10 +146,7 @@ export default {
       }
     },
     getShopInfo() {
-      let id = this.cid;
-      this._apis.set
-        .getShopInfo({ id: id })
-        .then(response => {
+      this.$store.dispatch('getShopInfo').then(response => {
           let itemCatAr = [];
 
           this.getCategoryInfoIds(itemCatAr, response.sellCategoryId);
@@ -204,7 +201,7 @@ export default {
       });
     },
     itemCatHandleChange(value) {
-      console.log(value)
+      // console.log(value)
       let _value = [...value];
       let arr = this.form.business.map(id => {
         return this.operateCategoryList.find(val => val.id == id);
@@ -213,7 +210,7 @@ export default {
       // this.itemCatText = arr.map(val => val.name).join(" > ");
       this.form.sellCategoryId = _value.pop();
       this.form.sellCategory = arr[arr.length - 1].name;
-      console.log('---itemCatHandleChange---')
+      // console.log('---itemCatHandleChange---')
     },
   }
 }

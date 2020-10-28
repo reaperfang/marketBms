@@ -94,8 +94,7 @@
           v-if="!!scope.row.smsTemplateKey"
           v-model="scope.row.msgSms"
           @change="switchMessage3(scope.row.id,scope.row.msgSms)"
-          active-color="#13ce66"
-          inactive-color="#eee"
+          active-color="#13ce66" inactive-color="#CACACF"
           v-permission="['设置', '消息设置', '默认页面', '开启/关闭']">
           </el-switch>
           <el-tooltip
@@ -145,7 +144,7 @@ export default {
   },
   computed: {
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
   }, 
@@ -155,7 +154,7 @@ export default {
   },
   methods: {
     getShopMessage(){
-      this._apis.set.getShopMessage({msgReceiver:'1'}).then(response =>{
+      this._apis.shopInfo.getShopMessage({msgReceiver:'1'}).then(response =>{
         this.tableData = []
         response.map(item => {
           if(item.tcShopInfoMsgTemplateId != 21){
@@ -172,11 +171,10 @@ export default {
     },
 
     getShopInfo(){
-      let id = this.cid;
-      this._apis.set.getShopInfo({ id: id }).then(response => {
+      this.$store.dispatch('getShopInfo').then(response => {
         this.ruleForm.msgReceivePhone = response.msgReceivePhone
       }).catch(error =>{
-        console.log(error)
+        console.error(error)
       })
     },
 
@@ -202,14 +200,14 @@ export default {
       this.handleSwitch(query);
     },
     handleSwitch(query) {
-      this.$msgbox({
-        title: '确认提示',
-        message: '确认要进行此项操作吗？',
+      this.confirm({
+        text: '确认要进行此项操作吗？',
+        icon: true,
         showCancelButton: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       }).then(() => {
-        this._apis.set.setShopMessage(query).then(response =>{
+        this._apis.shopInfo.setShopMessage(query).then(response =>{
           this.$message({
             type: 'success',
             message: '操作成功！'
@@ -231,7 +229,7 @@ export default {
             id:this.cid,
             msgReceivePhone:this.ruleForm.msgReceivePhone
           }
-          this._apis.set.updateShopInfo(data).then(response =>{
+          this._apis.shopInfo.updateShopInfo(data).then(response =>{
             this.$message({
               type: 'success',
               message: '操作成功！'
@@ -274,13 +272,11 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .tabs{
-  background:#fff; 
   padding:10px 20px;
 }
 .main{
   width: 100%;
   padding: 0px 20px 50px 20px;
-  background: #fff;
 }
 .title{
   font-size: 14px;

@@ -51,7 +51,7 @@ export default {
     methods: {
         share() {
             this._apis.goods.shareOne({id: this.spuid, channelInfoId: 2}).then((res) => {
-                console.log(res)
+                // console.log(res)
                 this.content = res.content
                 this.name = res.name
                 this.productUrl = res.productUrl

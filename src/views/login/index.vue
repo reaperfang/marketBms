@@ -1,8 +1,10 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-      <img src="@/assets/images/chahua.png" alt="">
-      <div class="main">
+      <div class="pic fl">
+        <img src="@/assets/images/chahua.png" alt="">
+      </div>
+      <div class="main fl">
         <div class="title-container">
           <h3 class="title">移动商城用户营销系统</h3>
         </div>
@@ -63,7 +65,7 @@ export default {
   name: 'Login',
   computed: {
     isAdminUser(){
-      let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      let userInfo = this.$store.getters.userInfo
 
       if(userInfo && userInfo.type == "admin") {
         return true
@@ -147,11 +149,11 @@ export default {
       //   }
       // })
       if(this.loginForm.userName == '' || this.loginForm.password == '' ) {
-        console.log(111111111)
+        // console.log(111111111)
         this.errorMsg = '账号或密码不得为空'
         return
       }else {
-        console.log(222222222)
+        // console.log(222222222)
         this.login();
       }
     },
@@ -182,7 +184,7 @@ export default {
         this.loading = false
         this.autoLoginLoading = false
         this.shopList = []
-        let info = JSON.parse(localStorage.getItem('userInfo'))
+        let info = this.$store.getters.userInfo
         let arr = Object.keys(info.shopInfoMap) 
         if(arr.length == 0){//没有店铺时，提示去创建店铺
           this.dialogVisible = true
@@ -251,6 +253,7 @@ $light_block:#000;
     height: 47px;
     width: calc(100% - 30px);
     input {
+      width: 100% !important;
       background: transparent;
       border: 0px;
       border-bottom:1px solid #EEEEEE;
@@ -300,6 +303,9 @@ $bg_white:#fff;
     background-color:$bg_white;
     display: flex;
     flex: 1;
+    .pic {
+      width: 385px;
+    }
     .main{
       margin-left: 30px;
       width: 350px;

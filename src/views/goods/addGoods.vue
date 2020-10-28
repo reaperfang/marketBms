@@ -1,5 +1,5 @@
 <template>
-    <div class="add-goods">
+    <div class="add-goods mh">
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="商品信息" name="goodsDetails">
                 <component :is="current"></component>
@@ -35,7 +35,7 @@ export default {
         // 商品详情
         this.getGoodsDetail();
         // 获取分销商设置
-        this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+        this.$store.dispatch('getShopInfo').then( data => {
             if(data.isOpenResell == 1) this.resellConfigInfo = data.resellConfigInfo ? JSON.parse(data.resellConfigInfo) : null;
 
              // 来自分销
@@ -90,6 +90,8 @@ export default {
 <style lang="scss" scoped>
     .add-goods {
         background-color: #fff;
-        padding: 18px 21px;
+        padding: 20px;
+        padding-top:0;
+        border-radius: 4px;
     }
 </style>

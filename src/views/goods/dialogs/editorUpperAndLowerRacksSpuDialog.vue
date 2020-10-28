@@ -10,8 +10,7 @@
                         <el-switch
                             :disabled="item.activity"
                             v-model="item.status"
-                            active-color="#0cd4af"
-                            inactive-color="#c8c8ca">
+                            active-color="#13ce66" inactive-color="#CACACF">
                         </el-switch>
                         <span v-if="item.activity" class="message">该商品正在参加营销活动，活动结束/失效才可下架</span>
                     </div>

@@ -1,5 +1,3 @@
-import * as demo from "./demo"; //订单接口demo
-import * as demo2 from "./demo2"; //商铺接口demo
 import * as websocketDemo from "./websocketDemo"; //websocket测试demo
 import * as login from "./login"; //登录接口demo
 import * as shop from "./shop"; //店铺接口
@@ -15,15 +13,14 @@ import * as set from "./set"; //设置模块
 import * as profile from "./profile"; //帮助中心
 import * as industry from "./industry"; //行业
 import * as templatePay from "./templatePay"; //模板支付
-import * as map from "./map";
+import * as map from "./map"
+import * as shopInfo from "./shopInfo"
 import * as realSurvey from "./realSurvey" //实时概况
 
 import * as dashboard from "./dashboard" // 数据大屏
 
 
 export default {
-	demo,
-	demo2,
 	websocketDemo,
 	login,
 	goods,
@@ -40,6 +37,7 @@ export default {
 	industry,
 	templatePay,
 	map,
+	shopInfo,
 	realSurvey,
 	dashboard
 };

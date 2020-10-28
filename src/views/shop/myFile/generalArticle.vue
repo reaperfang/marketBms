@@ -84,7 +84,7 @@ export default {
   },
   computed:{
       cid(){
-          let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+          let shopInfo = this.$store.getters.shopInfos
           return shopInfo.id
       }
   },
@@ -147,12 +147,13 @@ export default {
     },
     beforeAvatarUpload(file){
       this.loading = true
-
+      console.log(file.name)
       const isJPG = file.type === 'image/jpg';
       // const isJPEG = file.type === 'image/jpeg';
       const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 0.5;
-      if (!(isJPG || isPNG) || !/\.jpg|\.png|\.JPG|\.PNG$/.test(file.name)) {
+      //if (!(isJPG || isPNG) || !/\.jpg|\.png|\.JPG|\.PNG$/.test(file.name)) {
+      if (!/\.jpg|\.png|\.JPG|\.PNG$/.test(file.name)) {
         this.$message.error('上传图片支持jpg,png格式!');
         this.loading = false;
         return false;
@@ -185,10 +186,10 @@ export default {
       this.ruleForm.fileCover= dialogData.filePath;
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      // console.log(file, fileList);
     },
     handlePreview(file) {
-      console.log(file);
+      // console.log(file);
     },
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
@@ -201,6 +202,8 @@ export default {
 .main{
   background:#fff;
   padding:20px;
+  padding-top:0;
+  height:100%;
 }
 .title{
   height: 50px;

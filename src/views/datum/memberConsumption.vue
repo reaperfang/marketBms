@@ -28,42 +28,54 @@
             :data="list"
             :header-cell-style="{background:'#F6F7FA', color:'#44434B'}"
             style="margin-top:30px;width: 100%" 
+            v-loading="loading"
             >
             <el-table-column
                 type="index"
                 label="排行"
-                width="80"
+                fixed="left"
+                class-name="table-padding"
+                width="100"
                 align="left">
             </el-table-column>
             <el-table-column
                 prop="name"
+                align="center"
                 label="会员昵称">
             </el-table-column>
             <el-table-column
                 prop="phone"
+                align="center"
+                min-width="140"
                 label="手机号">
             </el-table-column>
             <el-table-column
                 prop="levelName"
+                align="center"
                 label="等级"
             >
             </el-table-column>
             <el-table-column
                 prop="score"
+                min-width="140"
                 label="积分（余额）"
                 align="right"
             >
             </el-table-column>
             <el-table-column
                 prop="totalTradeMoney"
+                min-width="170"
                 label="消费金额（累计）"
                 align="right"
             >
             </el-table-column>
             <el-table-column
                 prop="orderCount"
+                min-width="160"
                 label="订单数（累计）"
                 align="right"
+                fixed="right"
+                class-name="table-padding"
             >
             </el-table-column>
             </el-table>
@@ -74,9 +86,9 @@
                     :current-page.sync="startIndex"
                     :page-sizes="[10, 20, 30, 40]"
                     :page-size="pageSize"
-                    layout="sizes, prev, pager, next"
+                    layout="prev, pager, next, sizes"
                     :total="total"
-                    :background="background">
+                    :background="true">
                 </el-pagination>
             </div>
         </div>
@@ -94,6 +106,7 @@ export default {
             startIndex:1,
             pageSize:10,
             visitSourceType:0,
+            loading: true
         }
     },
     created(){
@@ -108,11 +121,14 @@ export default {
                 orderBy:this.order == '0' ? null : this.order,
                 memberPhone:this.memberPhone
             };
+            this.loading = true;
             this._apis.data.memberConsumption(data).then(response => {
                 this.list = response.list;
                 this.total = response.total
+                this.loading = false;
             }).catch(error => {
                 this.$message.error(error);
+                this.loading = false;
             });
         },
 
@@ -146,22 +162,30 @@ export default {
 .p_container{
     padding: 20px;
     background-color: #fff;
+    min-height:100%;
+    border-radius: 4px;
     .pane_container{
         color: #3D434A;
         .i_line{
+            font-size: 0;
             .input_wrap{
                 // width: 320px;
                 display: inline-block;
-                margin-right: 26px;
+                margin-right: 20px;
             }
         }
     }
 }
+.page_styles {
+    margin: 40px 0 30px 0;
+}
 .p_container .input_wrap{
     vertical-align: middle;
 }
-/deep/ .el-table--small td, /deep/.el-table--small th{
-  padding:8px 10px;
+/deep/.el-input{
+    .el-input__inner{
+        width: 210px;
+    }
 }
 </style>
 

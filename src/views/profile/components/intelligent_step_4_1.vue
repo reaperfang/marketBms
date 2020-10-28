@@ -35,7 +35,7 @@
     },
     computed:{
       cid(){
-          let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+          let shopInfo = this.$store.getters.shopInfos
           return shopInfo.id
       },
     },
@@ -46,7 +46,7 @@
       /** 获取店铺微信绑定状态 */
       getBindStatus() {
         this._apis.profile.getwxBindStatus({ id: this.cid }).then(response => {
-          console.log('获取店铺微信绑定状态: ', response);
+          // console.log('获取店铺微信绑定状态: ', response);
           this.bindWechatAccount = response.bindWechatAccount;
           this.bindWechatApplet = response.bindWechatApplet;
           this.$emit('wechat-status', {bindWechatAccount: this.bindWechatAccount, bindWechatApplet: this.bindWechatApplet});

@@ -53,7 +53,11 @@
           <li v-for="(item, key) of ruleForm.itemList" :key="key">
             <div class="left">
               <div v-if="item.url" class="img_preview">
-                <img :src="item.url" alt="">
+                <el-image scroll-container=".props_form" :src="item.url" alt="" lazy>
+                  <div slot="placeholder" class="el-image__lazyloading">
+                      加载中...
+                  </div>
+                </el-image>
                 <i class="delete_btn" @click.stop="deleteImage(item)"></i>
                 <span @click="dialogVisible=true; currentAD=item; currentDialog='dialogSelectImageMaterial'">更换图片</span>
               </div>
@@ -253,7 +257,6 @@ export default {
 
     deleteItem(item) {
       this.confirm({
-        title: '提示',
         customClass: 'goods-custom',
         icon: true,
         text: '确定删除此图片广告吗？'

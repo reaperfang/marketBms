@@ -1,7 +1,7 @@
 <template>
     <div class="aftermarketDeliveryInformation">
         <!-- 普通快递 -->
-        <template v-if="orderAfterSale.deliveryWay == 1 || orderAfterSale.deliveryWay == 4">
+        <template v-if="orderAfterSale.deliveryWay == 1 || orderAfterSale.deliveryWay == 3 || orderAfterSale.deliveryWay == 4">
         <div v-if="orderAfterSale.returnExpressNo" class="delivery-information-header">
             用户退货
         </div>
@@ -44,6 +44,7 @@
                         :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
+                            class-name="table-padding"
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
@@ -51,7 +52,7 @@
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
-                                        <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
+                                        <p class="ellipsis">{{scope.row.goodsName}}</p>
                                         <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
@@ -191,6 +192,7 @@
                         :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                         <el-table-column
                             label="商品"
+                            class-name="table-padding"
                             width="380">
                             <template slot-scope="scope">
                                 <div class="row justity-between align-center">
@@ -198,7 +200,7 @@
                                         <img width="66" :src="scope.row.goodsImage" alt="">
                                     </div>
                                     <div class="col">
-                                        <p class="ellipsis" style="width: 300px">{{scope.row.goodsName}}</p>
+                                        <p class="ellipsis">{{scope.row.goodsName}}</p>
                                         <p class="goods-specs">{{scope.row.goodsSpces | goodsSpecsFilter}}</p>
                                     </div>
                                 </div>
@@ -345,7 +347,7 @@ export default {
                     str += _value[i] + ','
                 }
             }
-
+            str = str.replace(/^(.*)\,$/, '$1')
             return str
         },
         customerFilter(value) {
@@ -361,7 +363,7 @@ export default {
             if(value.memberReceiveGoodsTime) {
                 return '【用户签收】'
             } else if(expressNos) {
-                return '【用户发货】'
+                return '【商户发货】'
             } else {
                 return ''
             }
@@ -387,7 +389,7 @@ export default {
     },
     computed: {
         cid() {
-            let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+            let shopInfo = this.$store.getters.shopInfos;
             return shopInfo.id;
         },
         orderSendReceivedAddress() {
@@ -401,9 +403,7 @@ export default {
     methods: {
         getShopInfo() {
             let id = this.cid;
-            this._apis.set
-                .getShopInfo({ id: id })
-                .then(response => {
+            this.$store.dispatch('getShopInfo').then(response => {
                     console.log(response)
                     this.tenantName = response.tenantName
                 })
@@ -431,7 +431,11 @@ export default {
 
             if (this.isTrace == 0) {
                 this.currentDialog = "LogisticsDialog";
-                this.currentData = [];
+                this.currentData = {
+                        traces: [],
+                        deliveryWay:this.orderAfterSale.deliveryWay,
+                        thirdType: this.orderAfterSale.thirdType?this.orderAfterSale.thirdType:''
+                    }
                 this.reject = true;
                 this.expressNo = expressNo
                 this.expressCompanys = this.expressCompanys
@@ -443,7 +447,11 @@ export default {
                 .orderLogistics({ expressNo, id: id, isOrderAfter: 1 })
                 .then(res => {
                     this.currentDialog = "LogisticsDialog";
-                    this.currentData = res.traces || [];
+                    this.currentData = {
+                        traces:res.traces || [],
+                        deliveryWay:this.orderAfterSale.deliveryWay,
+                        thirdType: this.orderAfterSale.thirdType?this.orderAfterSale.thirdType:''
+                    }
                     this.expressCompanys = this.expressCompanys
                     this.dialogVisible = true;
                 })
@@ -459,7 +467,7 @@ export default {
             this._apis.order
                 .getIsTrace({ cid: this.cid })
                 .then(res => {
-                console.log(res);
+                // console.log(res);
                 this.isTrace = res.isTrace;
                 })
                 .catch(error => {
@@ -523,7 +531,6 @@ export default {
                     color: #44434B;
                     border-radius: 10px 10px 0 0;
                     padding: 0 20px;
-                    line-height: 50px;
                     display: flex;
                     justify-content: space-between;
                     .header-lefter {

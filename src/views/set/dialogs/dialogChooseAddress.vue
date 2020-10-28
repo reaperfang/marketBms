@@ -88,7 +88,7 @@ export default {
       }
     },
     shopInfo(){
-        return JSON.parse(localStorage.getItem('shopInfos'))
+        return this.$store.getters.shopInfos
      }
   },
   created(){
@@ -101,7 +101,7 @@ export default {
     },
     load() {
       if (!this.loading) {
-        console.log(222)
+        // console.log(222)
         this.getAddress()
       }
     },
@@ -141,12 +141,11 @@ export default {
 
 <style lang="scss" scoped>
 /deep/ .el-dialog {
-  border-radius: 10px;
+  border-radius: 3px;
   overflow: hidden;
 }
 /deep/ .el-dialog__header {
   background: rgba(246,247,250,1);
-  padding: 14px 20px;
 }
 /deep/ .el-dialog__title {
   color: #44434B;

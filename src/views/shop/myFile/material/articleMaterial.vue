@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head-wrapper">
-      <el-form :inline="true" :model="form" class="demo-form-inline">
+      <el-form :inline="true" :model="form" class="demo-form-inline input_style">
         <el-form-item label="创建时间">
           <el-date-picker
             v-model="form.timeValue"
@@ -25,7 +25,7 @@
       <el-button type="primary" plain @click="_routeTo('generalArticle')">新建图文素材</el-button>
       <el-button type="primary" plain @click="syncImage">同步图文</el-button>
     </div>
-    <div class="list">
+    <div class="list" v-calcMinHeight="273">
       <p class="list_top">图文素材<span>{{total*1}}</span>条</p>
       <div class="list_main">
         <div class="list_img">
@@ -54,12 +54,13 @@
       </div>
       <p class="pages">
           <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
           :total="total*1"
           class="page_nav">
           </el-pagination>
@@ -219,6 +220,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.list{
+  padding-bottom:30px;
+}
 .list_top{
   height: 80px;
   line-height: 80px;
@@ -316,8 +320,8 @@ export default {
 }
 .pages{
   width: 100%;
-  margin-top: 50px;
-  text-align: right;
+  margin-top: -10px;
+  text-align: center;
   .page_nav{
     display: inline-block;
   }

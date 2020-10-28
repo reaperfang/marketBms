@@ -2,7 +2,7 @@
 <template>
     <DialogBase :visible.sync="visible" @submit="submit" title="提示" :hasCancel="hasCancel">
         <div class="c_container">
-            <div>
+            <div class="c_cont">
                 <img src="../../assets/images/finance/icon_error.png" alt="">
                 <span>导出数据量超过1000条，建议分时间段导出。<br/>点击确定导出当前筛选下的前1000条数据，点击取消请重新筛选。</span>
             </div>
@@ -77,11 +77,21 @@ export default {
 </script>
 <style lang="scss" scoped>
 .c_container{
-    text-align: center;
-    span{
-        display: block;
-        font-size: 18px;
-        margin-top: 20px;
+    .c_cont{
+        display: flex;
+        img{
+            width: 30px;
+            height: 30px;
+            flex: 0 0 30px;
+        }
+        span{
+            flex: 1;
+            padding-left: 18px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #44434B;
+            line-height: 22px;
+        }
     }
 }
 </style>

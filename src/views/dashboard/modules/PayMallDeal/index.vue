@@ -75,7 +75,7 @@ export default {
 				// { progress: 70, barColor: "RGBA(255, 92, 49, 1)", city: "上海" },
 				// { progress: 95, barColor: "RGBA(245, 159, 0, 1)", city: "深圳" },
 			],
-			cid: JSON.parse(localStorage.getItem("shopInfos")).id,
+			cid: this.$store.getters.shopInfos.id,
 			payData: {},
 			defaultChart: [
 				{

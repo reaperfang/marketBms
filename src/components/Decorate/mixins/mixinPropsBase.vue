@@ -6,6 +6,8 @@ export default {
     return {
       currentComponentData: {},
       errorMark: false, //是否开启错误验证
+      preloadLength: 10, //预加载数据条数
+      deleteShow: false //预加载时先隐藏删除按钮
     }
   },
   created() {

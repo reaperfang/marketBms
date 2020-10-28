@@ -1,5 +1,5 @@
 <template>
-  <div class="new-template">
+  <div class="new-template mh bor-radius">
     <h2 class="">{{ setTitle }}</h2>
     <section>
       <div class="title">基础信息设置：</div>
@@ -230,7 +230,7 @@ export default {
   },
   methods: {
     showMoreAreaInfoList(item) {
-      console.log(11111)
+      // console.log(11111)
       this.currTemplate = item.areaInfoList
       this.currentDialog = 'DialogAreaShow'; 
       this.dialogVisible = true
@@ -416,13 +416,13 @@ export default {
               this.add()
             }
           } else {
-            console.log('error submit!!');
+            console.error('error submit!!');
             return false;
           }
         });
     },
     onSubmit(value) {
-      console.log(value);
+      // console.log(value);
       const areaInfoList = value
       this.tableData = [
         ...this.tableData,
@@ -472,7 +472,7 @@ export default {
                 if(receivedProvinceCode == '' && receivedCityCode == '' && receivedAreaCode == '') {
                   name = '默认运费（全国）'
                 } else {
-                  console.log('areaList',areaList)
+                  // console.log('areaList',areaList)
                   if (receivedAreaCode) {
                     name = areaList.find(area => area.code == receivedProvinceCode).citys.find(city => city.code == receivedCityCode).areas.find(area => area.code === receivedAreaCode).name
                   } else if (receivedCityCode) {
@@ -508,7 +508,7 @@ export default {
 .new-template {
   background-color: #fff;
   h2 {
-    padding: 18px 0 10px 20px;
+    padding: 20px 0 10px 20px;
     font-size:14px;
     font-weight:500;
     color:rgba(68,67,75,1);

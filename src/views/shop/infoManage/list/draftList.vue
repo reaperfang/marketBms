@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head-wrapper">
-      <el-form ref="ruleForm" :model="ruleForm" :inline="true">
+      <el-form ref="ruleForm" :model="ruleForm" :inline="true" class="input_style">
         <el-form-item label="资讯标题" prop="title">
           <el-input v-model="ruleForm.title" placeholder="请输入资讯标题" clearable></el-input>
         </el-form-item>
@@ -95,13 +95,14 @@
       </div>
       <div class="pagination" v-if="tableData.length">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(startIndex) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
           >
         </el-pagination>
       </div>
@@ -160,7 +161,6 @@ export default {
     /* 删除 */
     deleteInfo(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: `确定删除 [ ${item.title} ] 吗？`
@@ -177,7 +177,6 @@ export default {
     /* 发布 */
     release(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: `确定发布 [ ${item.title} ] 吗？`
@@ -194,7 +193,6 @@ export default {
     /* 批量删除 */
     batchDeleteInfo(item) {
       this.confirm({
-        title: '提示', 
         customClass: 'goods-custom', 
         icon: true, 
         text: `确定删除吗？`

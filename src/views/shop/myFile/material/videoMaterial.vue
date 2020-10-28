@@ -32,7 +32,7 @@
                 :src="item.filePath"
                 class="avatar video-avatar"
                 controls="controls">您的浏览器不支持视频播放</video>  -->
-                <img :src="item.fileCover" class="imgs" v-if="item.fileCover">
+                <img :src="getCover(item)" class="imgs" v-if="item.fileCover">
                 <div v-else class="imgs_cover"></div>
                 <span class="btn" @click="openVideo(item)"></span>
               </div>
@@ -45,19 +45,20 @@
               <p class="img_name">{{item.fileName}}</p>
             </div>
            </div>
-           <p>
-            <el-checkbox v-model="checkedAll" @change="allChecked">全选</el-checkbox>
-            <el-button type="warning" plain class="ml10" @click="deleteImages">批量删除</el-button>
-            <el-button type="warning" plain class="ml10" @click="moveGroups">移动分组</el-button>
+           <p style="margin-top: -30px;" class="table-select">
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll" @change="allChecked">全选</el-checkbox>
+            <el-button class="border-button" plain @click="deleteImages">批量删除</el-button>
+            <el-button class="border-button" plain @click="moveGroups">移动分组</el-button>
            </p>
            <p class="pages">
               <el-pagination
+              :background="true"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="currentPage"
               :page-sizes="[10, 20, 30, 40]"
               :page-size="pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
+              layout="prev, pager, next, sizes"
               :total="total*1"
               class="page_nav">
               </el-pagination>
@@ -121,13 +122,17 @@ export default {
       pageSize:10,
       total:0,
       groupId:'',
-      fromGroupId:''
+      fromGroupId:'',
+      isIndeterminate: false
     }
   },
   created() {
     this.getList()
   },
   methods: {
+    getCover(item) {
+      return location.protocol + `${process.env.DATA_API}/api-decoration-web/notify/image.do?wxp=`+item.fileCover.replace(/\&/g, "%26");
+    },
     //获取视频列表
     getList(id, cPage){
       id && (this.groupId = id)
@@ -164,6 +169,8 @@ export default {
           let data = Object.assign({checked:false}, item)
           this.list.push(data)
         })
+        this.checkedAll = false
+        this.isIndeterminate = false
         this.total = response.total
       }).catch((error)=>{
         this.$message.error(error);
@@ -343,6 +350,7 @@ export default {
           return this.list
         })
       }
+      this.isIndeterminate = false
     },
     handleChecked(val){
       if(val){
@@ -351,6 +359,20 @@ export default {
         })
       }else{
         this.checkedAll = false
+      }
+
+      if(this.checkedAll){
+        this.isIndeterminate = false
+      }else{
+        const arr=[]
+        this.list.map(item =>{
+          item.checked == true && arr.push(item.id)                
+        })
+        if(arr.length == 0){
+          this.isIndeterminate = false
+        }else{
+          this.isIndeterminate = true
+        }
       }
     },
   }
@@ -377,6 +399,7 @@ export default {
   justify-content: space-between;
   .list_img{
     width: 100%;
+    padding-bottom:30px;
     .imgs{
       display: flex;
       flex-flow: row wrap;
@@ -506,8 +529,8 @@ export default {
 }
 .pages{
   width: 100%;
-  margin-top: 50px;
-  text-align: right;
+  margin-top: 40px;
+  text-align: center;
   .page_nav{
     display: inline-block;
   }
@@ -516,7 +539,7 @@ export default {
   margin-left: 10px;
 }
 .search_w{
-  width: 250px;
+  width: 210px;
 }
 .inline{
   display: inline-block;

@@ -20,25 +20,25 @@
         :row-key="getRowKeys"
         style="width: 100%"
         ref="skuTable"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort="{prop: 'date', order: 'descending'}"
       >
-        <el-table-column type="selection" prop="choose" label="选择" :reserve-selection="true" :selectable="selectable"></el-table-column>
+        <el-table-column type="selection" prop="choose" label="选择" :reserve-selection="true" :selectable="selectable" width="34"></el-table-column>
         <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
-        <el-table-column prop="goodsInfo.name" label="商品名称"></el-table-column>
-        <el-table-column prop="goodsInfo.specs" label="规格"></el-table-column>
-        <el-table-column prop="goodsInfo.salePrice" label="商品价格"></el-table-column>
-        <el-table-column prop="goodsInfo.stock" label="商品库存"></el-table-column>
+        <el-table-column prop="goodsInfo.name" label="商品名称" width="150" fixed="left" class-name="table-padding"></el-table-column>
+        <el-table-column prop="goodsInfo.specs" label="规格" align="center" min-width="120"></el-table-column>
+        <el-table-column prop="goodsInfo.salePrice" label="商品价格" align="right" min-width="120"></el-table-column>
+        <el-table-column prop="goodsInfo.stock" label="商品库存" min-width="120" align="right" fixed="right" class-name="table-padding"></el-table-column>
       </el-table>
       <div class="page_styles">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(startIndex) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
         ></el-pagination>
       </div>
     </div>
@@ -61,16 +61,14 @@
                 :data="selectedList"
                 style="width: 100%"
                 ref="selectedTable"
-                border
-                :header-cell-style="{color:'#655EFF'}"
                 :default-sort="{prop: 'date', order: 'descending'}"
             >
                 <!-- <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column> -->
-                <el-table-column prop="goodsInfo.name" label="商品名称"></el-table-column>
-                <el-table-column prop="goodsInfo.specs" label="规格"></el-table-column>
-                <el-table-column prop="goodsInfo.salePrice" label="商品价格"></el-table-column>
-                <el-table-column prop="goodsInfo.stock" label="商品库存"></el-table-column>
-                <el-table-column label="操作">
+                <el-table-column prop="goodsInfo.name" label="商品名称" width="150" fixed="left" class-name="table-padding"></el-table-column>
+                <el-table-column prop="goodsInfo.specs" label="规格" min-width="120" align="center"></el-table-column>
+                <el-table-column prop="goodsInfo.salePrice" label="商品价格" min-width="120" align="right"></el-table-column>
+                <el-table-column prop="goodsInfo.stock" label="商品库存" min-width="100" align="right"></el-table-column>
+                <el-table-column label="操作" width="100" align="center" fixed="right" class-name="table-padding">
                   <template slot-scope="scope">
                       <span class="edit_span" @click="deleteRow(scope.row)">删除</span>
                   </template>
@@ -215,7 +213,7 @@ export default {
           this.categoryOptions = [].concat(arr);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     getSkuList(startIndex, pageSize) {
@@ -244,7 +242,7 @@ export default {
           this.total = response.total;
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     handleSearch() {
@@ -288,12 +286,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-/deep/ .el-dialog__header{
-    background: #f1f0ff;
-    border-radius: 10px 10px 0 0;
-}
 /deep/ .el-dialog{
-    border-radius: 10px;
+    border-radius: 3px;
 }
 /deep/.el-table__header{
   width: 100% !important;

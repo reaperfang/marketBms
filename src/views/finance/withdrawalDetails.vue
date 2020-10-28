@@ -5,7 +5,7 @@
       <a href="javascript:;"  class="withdraw" @click="_routeTo('withdrawSet')">提现规则设置</a>
       <el-form ref="ruleForm" :model="ruleForm" :inline="inline">
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="提现编号" style="width:124px;padding-right:4px;">
+          <el-select v-model="ruleForm.searchType" placeholder="提现编号" style="width:134px;padding-right:4px;">
             <el-option
               v-for="item in presentations"
               :key="item.value"
@@ -13,7 +13,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
         <el-form-item label="申请时间">
           <el-date-picker
@@ -38,7 +38,7 @@
           </el-select>
         </el-form-item>
          <el-form-item>
-          <el-select v-model="ruleForm.userType" style="width:124px;padding-right:4px;">
+          <el-select v-model="ruleForm.userType" style="width:135px;padding-right:4px;">
             <el-option
               v-for="item in userTypes"
               :key="item.value"
@@ -46,7 +46,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
+          <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:210px;"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit(1)" v-permission="['财务', '提现明细', '默认页面', '查询']">查询</el-button>
@@ -54,7 +54,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="293">
       <div class="total">
          <!-- <el-button type="primary" @click="_routeTo('withdrawSet')">提现规则设置</el-button> -->
           <!-- <el-button type="primary" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button> -->
@@ -75,13 +75,14 @@
         >
         <el-table-column
         type="selection"
-        width="55">
+        width="34">
         </el-table-column>
         <el-table-column
           prop="cashoutSn"
           label="提现编号"
           align="left"
-          width="200px">
+          fixed="left" class-name="table-padding"
+          width="220px">
         </el-table-column>
          <el-table-column
           prop="nickName"
@@ -109,50 +110,46 @@
         </el-table-column>
         <el-table-column
           prop="tradeDetailSn"
-          align="right"
+          align="center"
+          width="190"
           label="交易流水号">
         </el-table-column>
         <el-table-column
           prop="applyTime"
           label="申请时间"
           align="center"
-          width="200px"
+          width="160px"
           sortable = "custom">
         </el-table-column>
         <el-table-column
         label="操作"
-        align="center">
+        fixed="right" 
+        class-name="table-padding" :width="operationColumnW">
           <template slot-scope="scope">
-            <el-button 
-              @click="handleClick(scope.row)"  
-              type="text" size="small" 
-              v-permission="['财务', '提现明细', '默认页面', '查看']"
-              class="fsize"
-            >
-              查看
-            </el-button> 
-            <span v-if="scope.row.status == 0">
-              <span class="c_line">|</span>
-              <el-button 
-                type="text" 
-                size="small" 
-                @click="examine(scope.row)" 
-                v-permission="['财务', '提现明细', '默认页面', '审核']"
-                class="fsize"
-              >
-                审核
-              </el-button>
-            </span>
-            <span v-else class="placeholders"></span>
+            <div class="table-operate">
+              <span 
+                @click="handleClick(scope.row)"  
+                v-permission="['财务', '提现明细', '默认页面', '查看']"
+                class="fsize table-btn"
+              >查看</span> 
+                <span
+                  v-if="scope.row.status == 0"
+                  @click="examine(scope.row)" 
+                  v-permission="['财务', '提现明细', '默认页面', '审核']"
+                  class="fsize table-btn"
+                >
+                  审核
+                </span>
+              <!-- <span v-else class="placeholders"></span> -->
+            </div>
           </template>
         </el-table-column>
       </el-table>
-      <div class="page_styles">
-      <div class="checkAudit" v-if="dataList.length != 0">
-        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
+      <div class="checkAudit table-select" v-if="dataList.length != 0" style="margin: 20px 0 0 20px;">
+        <el-checkbox :indeterminate="isIndeterminate" class="selectAll" @change="selectAll" v-model="selectStatus">全选</el-checkbox>
         <el-button  class="border-button" @click="batchCheck" v-permission="['财务', '提现明细', '默认页面', '批量审核']">批量审核</el-button>
       </div>
-        
+      <div class="page_styles">
          <el-pagination
           v-if="dataList.length != 0"
           @size-change="handleSizeChange"
@@ -160,9 +157,9 @@
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1"
-          :background="background">
+          :background="true">
         </el-pagination>
       </div>
     </div>
@@ -220,7 +217,8 @@ export default {
       dialogVisible: false,
       currentData:{},
       multipleSelection:[],
-      loading:true
+      loading:true,
+      operationColumnW: 72 //操作列宽度
     }
   },
   props: {
@@ -229,7 +227,16 @@ export default {
       default: true
     },
   },
-  watch: { },
+  watch: {
+    'dataList': {
+        handler(newVal, oldVal) { //计算操作栏宽度
+            this.$nextTick(() => {
+                this.operationColumnW = this.utils.getOperationColumnW();
+            })
+        },
+        deep: true
+    }
+  },
   computed:{
     presentations(){
       return financeCons.presentations;
@@ -359,9 +366,15 @@ export default {
     handleSelectionChange(val){
       this.multipleSelection = val;
       if(val.length !=0 && val.length == this.dataList.length ){
-        this.selectStatus = true; 
+        this.selectStatus = true;
+        this.isIndeterminate = false; 
       }else{
         this.selectStatus = false;
+        if(val.length !=0){
+					this.isIndeterminate = true;
+				}else{
+					this.isIndeterminate = false;
+				}
       }
     },
     //批量审核
@@ -449,8 +462,8 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
-  padding: 15px 20px;
+  border-radius: 4px;
+  padding: 20px;
   .withdraw{
     text-align: right;
     display: block;
@@ -463,7 +476,7 @@ export default {
   width: 100%;
   background: #fff;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
   
   .total{
     display: flex;
@@ -472,7 +485,7 @@ export default {
       font-size: 16px;
       color: #B6B5C8;
       display: block;
-      margin-top:15px;
+      // margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -515,9 +528,6 @@ export default {
 /deep/ .el-table-column--selection .cell {
     padding-left: 20px;
     padding-right: 10px;
-}
-/deep/.el-table--small td{
-  padding:16px 0;
 }
 
 .fsize{

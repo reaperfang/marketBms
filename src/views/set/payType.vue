@@ -1,6 +1,6 @@
 /*支付方式 */
 <template>
-    <div class="main">
+    <div class="main mh bor-radius">
         <div class="pay_item">
           <div class="left_cont">
             <img src="@/assets/images/set/set-pay1.png"/>
@@ -17,8 +17,7 @@
             <el-switch
               v-model="wechatPay"
               @change="handleWechatPay"
-              active-color="#13ce66"
-              inactive-color="#eee"
+              active-color="#13ce66" inactive-color="#CACACF"
               v-permission="['设置', '支付方式', '默认页面', '开启/关闭']">
             </el-switch>
             <a class="wxinfo_set" @click="_routeTo('wxSet')" v-permission="['设置', '支付方式', '默认页面', '设置支付信息']">设置支付信息</a>
@@ -36,8 +35,7 @@
             <el-switch
               v-model="aliPay"
               @change="handleAliPay"
-              active-color="#13ce66"
-              inactive-color="#eee"
+              active-color="#13ce66" inactive-color="#CACACF"
               v-permission="['设置', '支付方式', '默认页面', '开启/关闭']">
             </el-switch>
             <a class="wxinfo_set" @click="_routeTo('zfbSet')" v-permission="['设置', '支付方式', '默认页面', '设置支付信息']">设置支付信息</a>
@@ -55,8 +53,7 @@
             <el-switch
               v-model="balanceOfAccountPay"
               @change="handleBalanceOfAccountPay"
-              active-color="#13ce66"
-              inactive-color="#eee"
+              active-color="#13ce66" inactive-color="#CACACF"
               v-permission="['设置', '支付方式', '默认页面', '开启/关闭']">
             </el-switch>
           </div>
@@ -73,21 +70,24 @@
             <el-switch
               v-model="payOnDelivery"
               @change="handlePayOnDelivery"
-              active-color="#13ce66"
-              inactive-color="#eee"
+              active-color="#13ce66" inactive-color="#CACACF"
               v-permission="['设置', '支付方式', '默认页面', '开启/关闭']">
             </el-switch>
           </div>
         </div>
         <el-dialog
-          title="提示"
           :visible.sync="dialogVisible"
           width="30%">
+          <div class="content">
+            <p ><img src="../../assets/images/tips.png" alt=""></p>
           <span>未设置支付信息</span>
+          
+          </div>
           <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="_routeTo(pageName)">去设置</el-button>
             <el-button @click="dialogVisible = false">取 消</el-button>
           </span>
+          
         </el-dialog>
     </div>    
 </template>
@@ -118,7 +118,7 @@ export default {
   },
   computed:{
       cid(){
-          let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+          let shopInfo = this.$store.getters.shopInfos
           return shopInfo.id
       }
   },
@@ -137,8 +137,7 @@ export default {
     //   return false
     // },
     getShopInfo(){
-      let id = this.cid
-      this._apis.set.getShopInfo({id:id}).then(response =>{
+      this.$store.dispatch('getShopInfo').then(response =>{
         let count = 0
         if (response.wechatPay) count++
         if (response.alipayPay) count++
@@ -175,9 +174,8 @@ export default {
     // 处理关闭微信支付开关逻辑
     handleCloseWechatPay() {
       if (this.isOnlyOpenAkindPayWay) {
-        const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
+        const html = '您需要至少开启一种支付方式<br/><span style="color:#44434B;font-size:12px;">保证买家完成订单付款！</span>'
         this.confirm({
-          title: '提示', 
           iconWarning: true, 
           customClass: 'goods-custom',
           text: html,
@@ -187,9 +185,9 @@ export default {
           this.wechatPay = true
         });
       } else {
-        const html = '<p style="font-size:18px;color: #443D4A;line-height: 28px;">您确定要关闭微信支付吗？</p><p style="color:rgba(146,146,155,1);font-size:16px;line-height: 28px;">关闭后买家将无法使用微信支付完成订单付款。</p>'
+        const html = '您确定要关闭微信支付吗？<br/><span style="color:#44434B;font-size:12px;">关闭后买家将无法使用微信支付完成订单付款。</span>'
         this.confirm({
-          title: '提示', 
+          title: '', 
           iconWarning: true, 
           customClass: 'goods-custom',
           text: html,
@@ -225,9 +223,8 @@ export default {
     },
     handleCloseAliPay() {
       if (this.isOnlyOpenAkindPayWay) {
-        const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
-        this.confirm({
-          title: '提示', 
+        const html = '您需要至少开启一种支付方式<br/><span style="color:#44434B;font-size:12px;">保证买家完成订单付款！</span>'
+        this.confirm({ 
           iconWarning: true, 
           text: html,
           confirmText: '我知道了',
@@ -236,9 +233,9 @@ export default {
           this.aliPay = true
         });
       } else {
-        const html = '<p style="font-size:18px;color: #443D4A;line-height: 28px;">您确定要关闭支付宝支付吗？</p><p style="color:rgba(146,146,155,1);font-size:16px;line-height: 28px;">关闭后买家将无法使用支付宝支付完成订单付款。</p>'
+        const html = '您确定要关闭支付宝支付吗？<br/><span style="color:#44434B;font-size:12px;">关闭后买家将无法使用支付宝支付完成订单付款。</span>'
         this.confirm({
-          title: '提示', 
+          title: '', 
           iconWarning: true, 
           customClass: 'goods-custom',
           text: html,
@@ -288,9 +285,8 @@ export default {
     },
     handleCloseBalanceOfAccountPay() {
       if (this.isOnlyOpenAkindPayWay) {
-        const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
-        this.confirm({
-          title: '提示', 
+        const html = '您需要至少开启一种支付方式<br/><span style="color:#44434B;font-size:12px;">保证买家完成订单付款！</span>'
+        this.confirm({ 
           iconWarning: true, 
           text: html,
           confirmText: '我知道了',
@@ -299,9 +295,9 @@ export default {
           this.balanceOfAccountPay = true
         });
       } else {
-        const html = '<p style="font-size:18px;color: #443D4A;line-height: 28px;">您确定要关闭账户余额吗？</p><p style="color:rgba(146,146,155,1);font-size:16px;line-height: 28px;">关闭后买家将无法使用余额支付完成订单付款。</p>'
+        const html = '您确定要关闭账户余额吗？<br/><span style="color:#44434B;font-size:12px;">关闭后买家将无法使用余额支付完成订单付款。</span>'
         this.confirm({
-          title: '提示', 
+          title: '', 
           iconWarning: true, 
           customClass: 'goods-custom',
           text: html,
@@ -345,9 +341,8 @@ export default {
     },
     handleClosePayOnDelivery() {
       if (this.isOnlyOpenAkindPayWay) {
-        const html = '<p>您需要至少开启一种支付方式</p><p>保证买家完成订单付款！</p>'
+        const html = '您需要至少开启一种支付方式<br/><span style="color:#44434B;font-size:12px;">保证买家完成订单付款！</span>'
         this.confirm({
-          title: '提示', 
           iconWarning: true, 
           text: html,
           confirmText: '我知道了',
@@ -356,9 +351,9 @@ export default {
           this.payOnDelivery = true
         });
       } else {
-        const html = '<p style="font-size:18px;color: #443D4A;line-height: 28px;">您确定要关闭货到付款吗？</p><p style="color:rgba(146,146,155,1);font-size:16px;line-height: 28px;">关闭后买家将无法使用货到付款完成订单付款。</p>'
+        const html = '您确定要关闭货到付款吗？<br/><span style="color:#44434B;font-size:12px;line-height: 28px;">关闭后买家将无法使用货到付款完成订单付款。</span>'
         this.confirm({
-          title: '提示', 
+          title: '', 
           iconWarning: true, 
           customClass: 'goods-custom',
           text: html,
@@ -400,7 +395,7 @@ export default {
       }
     },
     isOpenPrompt(query = {}) {
-      console.log('query',query, query.hasOwnProperty('balanceOfAccountPay'))
+      // console.log('query',query, query.hasOwnProperty('balanceOfAccountPay'))
       // wechatPay
       // aliPay
       // balanceOfAccountPay
@@ -416,7 +411,7 @@ export default {
       let id = this.cid
       let query = Object.assign({id:id},data)
       const isOpen = this.isOpenPrompt(query)
-      this._apis.set.updateShopInfo(query).then(response =>{
+      this._apis.shopInfo.updateShopInfo(query).then(response =>{
         console.log(123213131321, isOpen)
         if (isOpen) this.$message.success('开启成功')
         else this.$message.success('关闭成功');
@@ -439,7 +434,7 @@ export default {
 .main{
   width: 100%;
   background: #fff;
-  padding: 20px 20px 300px 20px;
+  padding: 20px 20px 40px 20px;
 }
 .pay_item{
   width: 100%;
@@ -482,4 +477,29 @@ export default {
 .links:hover{
   color:#655EFF;
 }
+.content{
+  font-size: 14px;
+  display: flex;
+  line-height: 30px;
+  img{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+  }
+  span{
+    display: inline-block;
+    font-weight: 500;
+    padding-left: 15px;
+  }
+}
+/deep/ .el-dialog__header{
+  background: #fff;
+}
+// /deep/ .el-dialog__body{
+//   span{
+//     display: inline-block;
+//     color: #44434b;
+//     font-weight: 500;
+//   }
+// }
 </style>

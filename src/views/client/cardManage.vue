@@ -93,7 +93,7 @@ export default {
     },
     computed:{
         cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
             return shopInfo.id
         }
     },
@@ -139,7 +139,7 @@ export default {
                 this.cardNames = [].concat(response);
                 this.cardNames.unshift({name:'全部', id: '001'})
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         addCardBg() {
@@ -155,7 +155,7 @@ export default {
                     type: 'success'
                 });
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         //检测是否有背景图片
@@ -173,7 +173,7 @@ export default {
                 }
             }).catch((error) => {
                 this.imgLoading = false;
-                console.log(error);
+                console.error(error);
             })
         }
     },
@@ -194,8 +194,10 @@ export default {
     padding: 5px 10px;
 }
 .c_container{
-    padding: 20px;
+    padding: 0 20px 20px 20px;
     background-color: #fff;
+    min-height:100%;
+    border-radius: 4px;
 }
 .marL20{
     margin-left: 20px;

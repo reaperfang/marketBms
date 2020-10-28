@@ -47,26 +47,31 @@
                 :data="couponList"
                 style="width: 100%"
                 ref="couponListTable"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                @selection-change="handleSelectionChangeCouponList"
                 :default-sort="{prop: 'date', order: 'descending'}"
                 v-loading="loading"
             >
                 <el-table-column
                     type="selection"
-                    width="55">
+                    width="34">
                 </el-table-column>
                 <el-table-column
                     prop="name"
-                    label="优惠券名称">
+                    label="优惠券名称"
+                    width="150" fixed="left" class-name="table-padding">
                 </el-table-column>
                 <el-table-column
-                    label="优惠方式">
+                    label="优惠方式"
+                    align="center"
+                    min-width="130">
                     <template slot-scope="scope">
                         {{scope.row.useType == 0?`减免${scope.row.useTypeFullcut}元`:`折扣${scope.row.useTypeDiscount}`}}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="使用门槛">
+                    label="使用门槛"
+                    align="center"
+                    min-width="130">
                     <template slot-scope="scope">
                         {{scope.row.useCondition == -1?'无极限':`订单满${scope.row.useCondition}元`}}
                     </template>
@@ -74,12 +79,14 @@
                 <el-table-column
                     prop="ownNum"
                     label="数量"
-                    width="80"
+                    align="right"
+                    min-width="90"
                 >
                 </el-table-column>
                 <el-table-column
                     label="冻结数量"
                     width="150"
+                    align="center" fixed="right" class-name="table-padding"
                     >
                     <template slot-scope="scope">
                         <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.ownNum"></el-input-number>
@@ -88,7 +95,7 @@
             </el-table>
             <div class="a_line">
                 <div class="fl">
-                    <el-checkbox v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
+                    <el-checkbox :indeterminate="isIndeterminateCouponList" v-model="checkAll" @change="handleChangeAll">全选</el-checkbox>
                 </div>
                 <div class="fr">
                     共{{couponList.length}}条数据
@@ -111,26 +118,31 @@
                 :data="codeList"
                 style="width: 100%"
                 ref="codeListTable"
-                :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
+                @selection-change="handleSelectionChangeCodeList"
                 :default-sort="{prop: 'date', order: 'descending'}"
                 v-loading="loading"
             >
                 <el-table-column
                     type="selection"
-                    width="55">
+                    width="34">
                 </el-table-column>
                 <el-table-column
                     prop="name"
-                    label="优惠券名称">
+                    label="优惠券名称"
+                    width="150" fixed="left" class-name="table-padding">
                 </el-table-column>
                 <el-table-column
-                    label="优惠方式">
+                    label="优惠方式"
+                    align="center"
+                    min-width="130">
                     <template slot-scope="scope">
                         {{scope.row.useType == 0?`减免${scope.row.useTypeFullcut}元`:`折扣${scope.row.useTypeDiscount}`}}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="使用门槛">
+                    label="使用门槛"
+                    align="center"
+                    min-width="130">
                     <template slot-scope="scope">
                         {{scope.row.useCondition == -1?'无极限':`订单满${scope.row.useCondition}元`}}
                     </template>
@@ -138,12 +150,14 @@
                 <el-table-column
                     prop="ownNum"
                     label="数量"
-                    width="80"
+                    align="right"
+                    min-width="90"
                 >
                 </el-table-column>
                 <el-table-column
                     label="冻结数量"
                     width="150"
+                    align="center" fixed="right" class-name="table-padding"
                     >
                     <template slot-scope="scope">
                         <el-input-number v-model="scope.row.frozenNum" :min="1" :max="scope.row.ownNum"></el-input-number>
@@ -152,7 +166,7 @@
             </el-table>
             <div class="a_line">
                 <div class="fl">
-                    <el-checkbox v-model="checkAll2" @change="handleChangeAll2">全选</el-checkbox>
+                    <el-checkbox :indeterminate="isIndeterminateCodeList" v-model="checkAll2" @change="handleChangeAll2">全选</el-checkbox>
                 </div>
                 <div class="fr">
                     共{{codeList.length}}条数据
@@ -195,7 +209,9 @@ export default {
             checkAll2: false,
             selectedCoupons: [],
             selectedCodes: [],
-            canSubmit: true
+            canSubmit: true,
+            isIndeterminateCouponList: false,
+            isIndeterminateCodeList: false
         }
     },
     methods: {
@@ -227,11 +243,25 @@ export default {
             this.couponList.forEach(row => {
                 this.$refs.couponListTable.toggleRowSelection(row,val);
             });
+            this.isIndeterminateCouponList = false;
+        },
+        handleSelectionChangeCouponList(val) {
+            // console.log(val)
+            let checkedCount = val.length;
+            this.checkAll = (checkedCount === this.couponList.length) && (checkedCount !== 0);
+            this.isIndeterminateCouponList = checkedCount > 0 && checkedCount < this.couponList.length;
         },
         handleChangeAll2(val) {
             this.codeList.forEach(row => {
                 this.$refs.codeListTable.toggleRowSelection(row,val);
             });
+            this.isIndeterminateCodeList = false;
+        },
+        handleSelectionChangeCodeList(val) {
+            // console.log(val)
+            let checkedCount = val.length;
+            this.checkAll2 = (checkedCount === this.codeList.length) && (checkedCount !== 0);
+            this.isIndeterminateCodeList = checkedCount > 0 && checkedCount < this.codeList.length;
         },
         changeCoupon(val) {
             if(val) {
@@ -367,7 +397,7 @@ export default {
                     this._apis.client.frozenCoupons({couponList: arr, memberId:this.data.id, frozenType: 1}).then((response) => {
                         //console.log(response);
                     }).catch((error) => {
-                        console.log(error);
+                        console.error(error);
                     });
                 }
                 //优惠码加入黑名单
@@ -382,7 +412,7 @@ export default {
                     this._apis.client.frozenCoupons({couponList: arr, memberId:this.data.id, frozenType: 1}).then((response) => {
                         //console.log(response);
                     }).catch((error) => {
-                        console.log(error);
+                        console.error(error);
                     })
                 }
                 //电商加入黑名单
@@ -395,7 +425,7 @@ export default {
                     });
                     this.$emit('refreshPage');
                 }).catch((error) => {
-                    console.log(error);
+                    console.error(error);
                     this.btnLoading = false;
                     this.visible = false;
                 })
@@ -410,7 +440,7 @@ export default {
                 this.couponId = this.checks[0].id;
                 this.codeId = this.checks[1].id;
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         addCouponSel() {
@@ -454,7 +484,7 @@ export default {
                     this.$set(item, 'frozenNum',1);
                 })
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         getAllCodes() {
@@ -464,7 +494,7 @@ export default {
                     this.$set(item, 'frozenNum', 1);
                 })
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
     },
@@ -501,12 +531,7 @@ export default {
 /deep/ .el-table .cell{
   padding-left: 16px;
 }
-/deep/ .el-table__body-wrapper{
-    overflow: auto;
-    height: 502px;
-}
 /deep/ .el-dialog__header{
-    background: #f1f0ff;
     border-radius: 10px 10px 0 0;
 }
 /deep/ .el-input-number--small .el-input-number__decrease{

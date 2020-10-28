@@ -181,7 +181,7 @@
                     <el-tooltip class="item" effect="light" placement="top">
                         <div slot="content">SKU编码：SKU(Stock Keeping Unit)库存量单元 --- <br/>
                             SKU是商品下的一个分类属性（商品下一个颜色或者尺<br/>
-                            码），单的说： SPU就是一个iPhone6s, SKU就是银色<br/>
+                            码），简单的说： SPU就是一个iPhone6s, SKU就是银色<br/>
                             iPhone6s、粉色iPhone6s。
                         </div>
                         <i class="el-icon-warning-outline sku-code"></i>
@@ -313,6 +313,7 @@
                                         <p class="spec-message" v-if="item.focus && !item.list || (item.focus && item.list && !item.list.length)">暂无匹配项，您可新增规格值到列表</p>
                                         <div class="add-specs-value-footer">
                                             <el-button v-if="item.list && item.list.length" @click="specValueSubmit(false, index)" type="primary">确定</el-button>
+                                            <el-button v-if="item.list && item.list.length" @click="specValueSubmit(false, index)">取消</el-button>
                                         </div>
                                     </div>
                                     <el-button v-show="addedSpecs.length" slot="reference" @click="addSpecValue(false, index)" :disabled="editor && ruleForm.activity">添加规格值</el-button>
@@ -713,21 +714,21 @@ export default {
         const validSpecialChar = (rule, value, callback) => {
             const reg5 = /[§]/g
             let str = value && String(value).replace(reg5, '')
-            console.log('str5', typeof str,str)
+            // console.log('str5', typeof str,str)
             if (reg5.test(value)) {
                 return callback(new Error('当前输入有误，请您重新输入'));
             }
             const reg = /[，。？！：；·…~&@#,?!:;、……～＆＠＃“”‘’〝〞 "'＂＇´.＇()【】《》＜＞<>〈〉{}［］()()_¯＿￣`ˋ/／\\＼ˊ¨­ˇ．ˉ〃—-‖∶-]|[！$@#￥%……&*（）——+=-·，。、；‘《》？：“【】{}|、\v\f\n\r\t]/g
             str = String(str).replace(reg, '')
-            console.log('str', typeof str,str)
+            // console.log('str', typeof str,str)
             if (!str) return callback();
             const reg2 = /[\u4e00-\u9fa5]/g
             str = String(str).replace(reg2, '')
-            console.log('str2', typeof str,str)
+            // console.log('str2', typeof str,str)
             if (!str) return callback();
             const reg3 = /[\s\w]+/gi
             str = String(str).replace(reg3, '')
-            console.log('str3', typeof str,str)
+            // console.log('str3', typeof str,str)
             // console.log('str2', str === '', !(str === ''))
             if (!str) return callback();
             for (let s of str ) {
@@ -948,7 +949,7 @@ export default {
         }
     },
     created() {
-        console.log('activity', this.ruleForm.activity);
+        // console.log('activity', this.ruleForm.activity);
         var that = this
         // this.getOperateCategoryList().then(res => {
         //     this.getCategoryList()
@@ -1013,7 +1014,7 @@ export default {
             this._globalEvent.$emit('addGoodsEvent', true);
         }
 
-        console.log(this.$refs.fenleiCascader)
+        // console.log(this.$refs.fenleiCascader)
     },
     computed: {
         editor() {
@@ -1024,7 +1025,7 @@ export default {
             }
         },
         cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
             return shopInfo.id
         },
         imagesLength() {
@@ -1343,7 +1344,7 @@ export default {
             }
         },
         visibleChange(flag) {
-            console.log(flag)
+            // console.log(flag)
             if(flag) {
                 this.leimuSelected = true
             } else {
@@ -1369,7 +1370,7 @@ export default {
             this.ruleForm.videoUrl = ''
         },
         beforeUpload(file) {
-            console.log(file)
+            // console.log(file)
             if(file.size > 2097152) {
                 this.$message({
                     message: '文件最大支持2M',
@@ -1581,7 +1582,7 @@ export default {
                     pId.push(item.parentId)
                 })
                 pId.forEach(id => {
-                    console.log(this.flatSpecsList)
+                    // console.log(this.flatSpecsList)
                     let item = this.flatSpecsList.find(flatItem => flatItem.id == id)
                     names.push(item.name)
                 })
@@ -1592,6 +1593,7 @@ export default {
                 })
                 return {
                     label: valArr.join(','),
+                    labelArr: valArr,
                     costPrice: '',
                     salePrice: '',
                     stock: '',
@@ -1649,6 +1651,36 @@ export default {
                 }
             })
 
+            let getLabelList = (labels) => {
+                let arr = []
+                
+                let getLabelStr = (arr) => {
+                    let str = ''
+
+                    if(arr && arr.length) {
+                        arr.forEach((item, index) => {
+                            if(index != arr.length - 1) {
+                                str += item + ','
+                            } else {
+                                str += item
+                            }
+                        })
+                    }
+
+                    return str
+                }
+
+                if(labels && labels.length) {
+                    labels.forEach((item, index) => {
+                        let _arr = labels.slice(0, index + 1)
+
+                        arr.push(getLabelStr(_arr))
+                    })
+                }
+
+                return arr
+            }
+
             let computeRowspan = (prevSpecs, leftSpecs) => {
                 let prevSpecsStr = prevSpecs.join(',')
                 let number = 0
@@ -1657,14 +1689,21 @@ export default {
                 if(leftSpecs && leftSpecs.length) {
                     _list.forEach((val, index) => {
                         let label = val.label
+                        let labelList = getLabelList(val.labelArr)
 
                         // if(label.indexOf(prevSpecsStr + ',') != -1) {
                         //     indexArr.push(index)
                         //     number++
                         // }
-                        let reg = new RegExp("^" + prevSpecsStr + "\\,")
 
-                        if(reg.test(label)) {
+                        // let reg = new RegExp("^" + prevSpecsStr + "\\,")
+
+                        // if(reg.test(label)) {
+                        //     indexArr.push(index)
+                        //     number++
+                        // }
+
+                        if(labelList.find(item => item == prevSpecsStr)) {
                             indexArr.push(index)
                             number++
                         }
@@ -1839,7 +1878,7 @@ export default {
                     visible: !this.addedSpecs[index].visible
                 }))
             }
-            console.log(this.addedSpecs)
+            // console.log(this.addedSpecs)
         },
         addSpecClick(item) {
             if(this.addedSpecs.find(val => val.id == item.id)) {
@@ -1973,18 +2012,13 @@ export default {
         },
         //获取普通快递在店铺是否设置开启状态
         getExpressAndDeliverySet(name){
-            const params = {
-                "id": this.cid
-            };
-            this._apis.goods
-            .getExpressAndDeliverySet(params)
-            .then(res => {
+            this.$store.dispatch('getShopInfo').then(res => {
                 //如果普通快递未开启则提示去设置
                 if(name == 'express' && res.isOpenOrdinaryExpress == 0){
                     this.isExpressSet = false;
                 }
                 //如果商家配送未开启则提示去设置
-                if(name == 'delivery' && res.isOpenMerchantDeliver == 0){
+                if(name == 'delivery' && (res.isOpenMerchantDeliver == 0 && res.isOpenTh3Deliver == 0)){
                     this.isDeliverySet = false;
                 }
                 //如果上门自提未开启则提示去设置
@@ -2160,13 +2194,13 @@ export default {
         },
         deleteSpec(index) {
             if(this.ruleForm.goodsInfos[index].activity) {
-                this.confirm({title: '立即删除', icon: true, text: '当前商品正在参与营销活动，活动有效期内商品不得“删除”。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
+                this.confirm({icon: true, text: '当前商品正在参与营销活动，活动有效期内商品不得“删除”。', showCancelButton: false, confirmText: '我知道了'}).then(() => {
 
                 })
                 return
             }
-            this.confirm({title: '立即删除', icon: true, text: '是否确认删除？'}).then(() => {
-                console.log(index)
+            this.confirm({icon: true, text: '是否确认删除？'}).then(() => {
+                // console.log(index)
                 let _goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
                 let __goodsInfos
 
@@ -2198,7 +2232,7 @@ export default {
                 code: !(this.ruleForm.isSyncProduct == 1 && this.authHide) ? '' : this.ruleForm.goodsInfos[index].code
             }))
             this.$refs[`uploadImage_${index}`].clearFiles()
-            console.log(this.ruleForm.goodsInfos)
+            // console.log(this.ruleForm.goodsInfos)
         },
         specHandleRemove(index) {
             let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
@@ -2478,6 +2512,7 @@ export default {
                     res.goodsInfos.forEach(val => {
                         let label = Object.values(JSON.parse(val.specs)).join(',')
                         val.label = label
+                        val.labelArr = Object.values(JSON.parse(val.specs))
                         val.editorDisabled = true
                         val.showCodeSpan = false
                     })
@@ -2544,12 +2579,12 @@ export default {
                         this.categoryValue = arr
                         this.ruleForm.itemCat = itemCatAr
                         if(this.ruleForm.images) {
-                            console.log(this.ruleForm.images.split(','))
+                            // console.log(this.ruleForm.images.split(','))
                             this.fileList = this.ruleForm.images.split(',') && this.ruleForm.images.split(',').length ? this.ruleForm.images.split(',').map(val => ({
                                 name: '',
                                 url: val
                             })) : []
-                            console.log(this.fileList)
+                            // console.log(this.fileList)
                         }
                         if(this.ruleForm.goodsInfos && this.ruleForm.goodsInfos.length) {
                             let goodsInfos = JSON.parse(JSON.stringify(this.ruleForm.goodsInfos))
@@ -2676,7 +2711,7 @@ export default {
             // let productCategoryInfoId = this.ruleForm.productCategoryInfoId
             // let rootId = this.getRootId(productCategoryInfoId)
             this._apis.goodsOperate.fetchSpecsList({productCategoryId: this.ruleForm.productCategoryInfoId, enable: 1}).then(res => {
-                console.log(res)
+                // console.log(res)
                 res.forEach(val => {
                     val.level = '1'
                     val.newSpecValue = ''
@@ -2920,7 +2955,7 @@ export default {
                     // this.$refs.ruleForm.validateField('name');
                     this.$message.error("商品名称过长")
                   }
-                    console.log('error submit!!');
+                    console.error('error submit!!');
                     return false;
                 }
             });
@@ -3106,7 +3141,7 @@ export default {
                         pId.push(item.parentId)
                     })
                     pId.forEach(id => {
-                        console.log(this.flatSpecsList)
+                        // console.log(this.flatSpecsList)
                         let item = this.flatSpecsList.find(flatItem => flatItem.id == id)
                         names.push(item.name)
                     })
@@ -3137,7 +3172,7 @@ export default {
                     }
                 })
                 this.ruleForm.goodsInfos = _results
-                console.log(_results)
+                // console.log(_results)
             } else {
                 this.ruleForm.goodsInfos = []
             }
@@ -3151,7 +3186,7 @@ export default {
                 // 设置自动上架时间
                 this.ruleForm.autoSaleTime = value
             } else if(this.selectSpecificationsCurrentDialog == 'SelectSpecifications') {
-                console.log('SelectSpecifications', value)
+                // console.log('SelectSpecifications', value)
                 this.specIds = value
                 this.selectSpecificationsHandler(value)
             } else if(this.currentDialog == 'AddSpecifications') {
@@ -3180,7 +3215,7 @@ export default {
             this.imageDialogVisible = true;
         },
         handleRemove(file, fileList) {
-            console.log(file, fileList);
+            // console.log(file, fileList);
             let url = file.url
             this.fileList.splice(this.fileList.findIndex(val => val.url == url), 1)
             this.ruleForm.images = fileList.map(val => {
@@ -3192,7 +3227,7 @@ export default {
             this.hideUpload = this.imagesLength >= 6
         },
         centerFileUrl(response, file, fileList){
-            console.log(response, file, fileList)
+            // console.log(response, file, fileList)
             if(fileList.every(val => val.status == 'success')){
                 this.$message.success('文件上传成功');
                 if(fileList.length > 1 && fileList.every(val => val.status == 'success')) {

@@ -18,15 +18,14 @@
         :data="skuList"
         style="width: 100%"
         ref="skuTable"
-        :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
         :default-sort="{prop: 'date', order: 'descending'}"
       >
-        <el-table-column type="selection" prop="choose" label="选择"></el-table-column>
-        <el-table-column prop="goodsInfo.id" label="SKU"></el-table-column>
-        <el-table-column prop="goodsInfo.name" label="商品名称"></el-table-column>
-        <el-table-column prop="goodsInfo.specs" label="规格"></el-table-column>
-        <el-table-column prop="goodsInfo.salePrice" label="商品价格"></el-table-column>
-        <el-table-column prop="goodsInfo.stock" label="商品库存"></el-table-column>
+        <el-table-column type="selection" prop="choose" label="选择" width="34"></el-table-column>
+        <el-table-column prop="goodsInfo.id" label="SKU" width="150" fixed="left" class-name="table-padding"></el-table-column>
+        <el-table-column prop="goodsInfo.name" label="商品名称" align="center" min-width="150"></el-table-column>
+        <el-table-column prop="goodsInfo.specs" label="规格" min-width="120" align="center"></el-table-column>
+        <el-table-column prop="goodsInfo.salePrice" label="商品价格" min-width="120" align="right"></el-table-column>
+        <el-table-column prop="goodsInfo.stock" label="商品库存" min-width="120" align="right" fixed="right" class-name="table-padding"></el-table-column>
       </el-table>
     </div>
   </DialogBase>
@@ -89,7 +88,7 @@ export default {
           this.categoryOptions = [].concat(arr);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
           // this.$notify.error({
           //   title: "错误",
           //   message: error
@@ -113,7 +112,7 @@ export default {
           this.skuList = [].concat(response.list);
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
           // this.$notify.error({
           //   title: "错误",
           //   message: error

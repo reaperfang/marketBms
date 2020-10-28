@@ -10,11 +10,15 @@ export default {
     dragable: {
       type: Boolean,
       default: true
+    },
+    bodyClass: {
+      type: String
     }
   },
   data() {
     return {
-      dataLoaded: false  //组件数据加载完成
+      dataLoaded: false,  //组件数据加载完成
+      preloadLength: 10 //预加载数据条数
     }
   },
   computed: {

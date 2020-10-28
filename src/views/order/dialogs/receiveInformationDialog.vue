@@ -3,7 +3,7 @@
     :visible.sync="visible"
     @submit="submit"
     :title="title"
-    width="780px"
+    width="640px"
     :showFooter="showFooter"
   >
     <div class="receive-information-dialog" v-if="sendGoods == 'send'">
@@ -116,6 +116,8 @@ export default {
         } else {
           if(this.ruleForm.sendName.length > 50) {
             callback(new Error("发货人姓名不能超过50个字符"));
+          }else if(!/^[a-zA-Z0-9\s\u4e00-\u9fa5]*$/.test(this.ruleForm.sendName)){
+            callback("发货人姓名中含有特殊字符请修改");
           }else {
             callback();
           }
@@ -131,6 +133,8 @@ export default {
         } else {
           if(this.ruleForm.receivedName.length > 50) {
             callback(new Error("收货人姓名不能超过50个字符"));
+          }else if(!/^[a-zA-Z0-9\s\u4e00-\u9fa5]*$/.test(this.ruleForm.receivedName)){
+            callback("收货人姓名中含有特殊字符请修改");
           }else {
             callback();
           }
@@ -247,7 +251,7 @@ export default {
       this.submitFlag = false;
     },
     getMapClickPoi(poi, tencentCode) {
-      console.log(poi);
+      // console.log(poi);
       this.submitFlag = true
       this.ruleForm.provinceCode = poi.provinceCode;
       this.ruleForm.cityCode = poi.cityCode;
@@ -264,7 +268,6 @@ export default {
       this.$refs.mapSearch.handlePropSearch(this.ruleForm.address);
     },
     getDetail() {
-      console.log(this.data)
       //如果是发货，则回显对应发货的信息
       if (this.sendGoods == "send") {
         this.submitFlag = !!this.data.sendLongitude;
@@ -340,7 +343,9 @@ export default {
                 receivedPhone: this.ruleForm.receivedPhone,
                 receivedName: this.ruleForm.receivedName,
                 receivedLat: this.ruleForm.lat,
-                receivedLng: this.ruleForm.lng
+                receivedLng: this.ruleForm.lng,
+                receivedLatitude: this.ruleForm.lat,
+                receivedLongitude: this.ruleForm.lng
               };
             } else if (this.sendGoods == "send") {
 
@@ -356,7 +361,9 @@ export default {
                 sendPhone: this.ruleForm.sendPhone,
                 sendName: this.ruleForm.sendName,
                 sendLat: this.ruleForm.lat,
-                sendLng: this.ruleForm.lng
+                sendLng: this.ruleForm.lng,
+                sendLatitude: this.ruleForm.lat,
+                sendLongitude: this.ruleForm.lng
               };
 
               // this._apis.order
@@ -412,15 +419,37 @@ export default {
             [this.sendGoods == 'send' ? 'sendLatitude': 'receivedLatitude']: this.ruleForm.lat,
             [this.sendGoods == 'send' ? 'sendLongitude': 'receivedLongitude']: this.ruleForm.lng
           }
-          if(!this.$route.query.afterSale) {
-            params = Object.assign({}, params, {
-              orderIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
-              orderSendInfoIds: this.$route.query._ids ? this.$route.query._ids.split(',').map(id => id) : this._ids,
-            })
+          if(this.$route.name == 'deliverGoods'){//发货页面
+            if(!this.$route.query.afterSale) {
+              params = Object.assign({}, params, {
+                orderIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
+                orderSendInfoIds: this.$route.query._ids ? this.$route.query._ids.split(',').map(id => id) : this._ids,
+                orderId:this.$route.query.ids || this.$route.query.id
+              })
+            } else {
+               params = Object.assign({}, params, {
+                orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id)
+              })
+            }
+          }else if(this.$route.name == 'orderDetail'){//订单详情页
+              params = Object.assign({}, params, {
+                orderIds: [this.data.id],
+                orderId:this.data.id,
+                isSyncUpdateOrder:1
+              })
           } else {
-            params = Object.assign({}, params, {
-              orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id)
-            })
+            if(!this.$route.query.afterSale) {
+              params = Object.assign({}, params, {
+                orderIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
+                orderSendInfoIds: this.$route.query._ids ? this.$route.query._ids.split(',').map(id => id) : this._ids,
+                orderId:this.$route.query.ids || this.$route.query.id
+              })
+            } else {
+               params = Object.assign({}, params, {
+                orderAfterIds: (this.$route.query.ids || this.$route.query.id).split(',').map(id => id),
+                //orderId: this.$route.query._ids ? this.$route.query._ids : this._ids
+              })
+            }
           }
           try {
             if(this.$refs.mapSearch.poi) {
@@ -434,12 +463,20 @@ export default {
           this._apis.order
             .updateReceiveAndSend(params)
             .then(res => {
-              if(this.list) {
-                this.$emit('getDetail', this.multipleSelection, JSON.parse(JSON.stringify(this.list)))
+            if(this.$route.name == 'deliverGoods') {
+                if(this.list) {
+                    this.$emit('getDetail', this.multipleSelection, JSON.parse(JSON.stringify(this.list)))
+                  } else {
+                    this.$emit('getDetail', this.multipleSelection)
+                  }
               } else {
-                this.$emit('getDetail', this.multipleSelection)
-              }
-              this.$emit("submit");
+                if(this.list) {
+                    this.$emit('getDetail', this.multipleSelection, JSON.parse(JSON.stringify(this.list)))
+                  } else {
+                    this.$emit('getDetail', this.multipleSelection)
+                  }
+              } 
+              this.$emit('submit');
               this.visible = false;
               this.$message.success("修改成功！");
             })
@@ -448,7 +485,7 @@ export default {
               this.$message.error(error);
             });
         } else {
-          console.log("error submit!!");
+          console.error("error submit!!");
           return false;
         }
       });
@@ -472,7 +509,7 @@ export default {
       return "是否确认删除？";
     },
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
     getAddress() {
@@ -519,7 +556,6 @@ export default {
 <style lang="scss" scoped>
 .receive-information-dialog {
   height: 670px;
-  margin: 0 50px;
   .wrapper {
     height: 300px;
     width: 100%;
@@ -585,13 +621,6 @@ export default {
 }
 /deep/.el-form-item {
   margin-bottom: 24px;
-}
-/deep/ .el-dialog__header {
-    background: #F6F7FA!important;
-    height: 50px;
-    line-height: 50px;
-    padding: 0 20px;
-    color: #44434B;
 }
 /deep/ .el-dialog {
   border-radius:3px!important;

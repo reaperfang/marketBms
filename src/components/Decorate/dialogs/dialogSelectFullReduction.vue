@@ -1,6 +1,6 @@
 /* 选择满减满折弹框 */
 <template>
-  <DialogBase :visible.sync="visible" width="816px" :title="'选择满减满折活动'" @submit="submit">
+  <DialogBase :visible.sync="visible" width="816px" :title="'选择满减满折活动'" :showFooter="false">
     <div class="select_dialog">
       <div class="head-wrapper">
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="65px" :inline="true">
@@ -70,7 +70,7 @@
         </div>
       </el-table>
       <div class="multiple_selection" v-if="tableData.length">
-        <el-checkbox class="selectAll" @change="selectAll" v-model="selectStatus" :disabled="selectDisabled">全选</el-checkbox>
+        <el-checkbox :indeterminate="isIndeterminate" class="selectAll" @change="selectAll" v-model="selectStatus" :disabled="selectDisabled">全选</el-checkbox>
         <el-button size="mini" @click="clearInvalidData">删除已选失效数据</el-button>
         <el-popover popper-class="icon-info-popover" placement="top" trigger="hover">
           <div>删除已选失效数据的作用：<br/>将已选中，但因商品售罄、活动结束等原因变<br/>为“失效”状态的全部数据取消勾选</div>
@@ -79,16 +79,21 @@
       </div>
       <div class="pagination" v-if="tableData.length">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(ruleForm.pageNum) || 1"
           :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
           :page-size="pageSize*1"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
         ></el-pagination>
       </div>
     </div>
+    <span class="dialog-footer fcc">
+          <el-button type="primary" @click="submit">确 认</el-button>
+          <el-button @click="visible = false">取 消</el-button>
+      </span>
   </DialogBase>
 </template>
 
@@ -111,6 +116,16 @@ export default {
     };
   },
   methods: {
+    /* 向父组件提交选中的数据 */
+    submit() {
+
+      if(this.multipleSelection.length > 10) {
+        this.$message.warning('最多添加10个活动')
+        return;
+      }
+      this.visible = false;
+      this.$emit('dialogDataSelected',  this.multipleSelection);
+    },
     fetch() {
       this.loading = true;
       this._apis.shop.getFullReductionList(this.ruleForm).then((response)=>{
@@ -149,4 +164,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dialog-footer {
+    margin-top:40px;
+  }
+  .dialog-footer .el-button{
+    padding: 9px 20px;
+    margin-left: 30px;
+    span{
+      letter-spacing: 5px;
+      margin-right: -4px;
+    }
+  }
+  .el-button:first-child {
+      display: block;
+      margin-left: 0;
+  }
 </style>

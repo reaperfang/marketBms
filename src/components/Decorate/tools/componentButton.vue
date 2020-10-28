@@ -35,7 +35,6 @@ export default {
         }
   },
   created(){
-    this.$store.dispatch('getShopStyle');
     this.decorate();
   },
   methods:{

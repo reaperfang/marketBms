@@ -58,7 +58,6 @@ export default {
   },
   created() {
     this.init();
-    this.$store.dispatch('getShopStyle');
   },
   computed: {
     baseInfo() {

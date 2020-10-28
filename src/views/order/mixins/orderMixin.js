@@ -93,7 +93,7 @@ export const deliveryWay2 = {
         })
         //如果没有子帐号配置权限，则默认自己是配送员
         if(!this.distributorSet){
-            const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+            const userInfo = this.$store.getters.userInfo;
             res.list = [
                 {
                     "id": 1,
@@ -219,7 +219,7 @@ export const common = {
   },
   computed: {
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
   },
