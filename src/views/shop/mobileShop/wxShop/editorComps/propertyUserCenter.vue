@@ -140,7 +140,9 @@
 import dialogSelectJumpPage from '@/views/shop/dialogs/decorateDialogs/dialogSelectJumpPage';
 import dialogSelectImageMaterial from '@/components/dialogs/selectImageMaterial/index';
 import vuedraggable from "vuedraggable";
-let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+
+import store from '@/store';
+let shopInfo = store.getters.shopInfos
 const cid = shopInfo && shopInfo.id || ''
 export default {
   name: 'propertyUserCenter',
@@ -363,7 +365,7 @@ export default {
 
     //删除自定义
     deleteCustom(val, index) {
-      this.confirm({title: '提示', icon: true, text: '是否确认删除'}).then(() => {
+      this.confirm({icon: true, text: '是否确认删除'}).then(() => {
           const delNum = parseInt(val.title.substring(3));
           this.ruleForm.moduleList.splice(index, 1);
           this.ruleForm.moduleList.forEach((item) => {
@@ -554,6 +556,7 @@ export default {
             height: 34px !important;
           }
           .m-colorPicker {
+            height: 34px;
             padding: 4px;
             margin-right: 5px;
             border:1px solid rgba(204,204,204,1);

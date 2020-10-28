@@ -57,7 +57,7 @@ export default {
                     }).catch((error) => {
                         this.btnLoading = false;
                         this.visible = false;
-                        console.log(error);
+                        console.error(error);
                     })
                 }else{
                     this.btnLoading = false;
@@ -78,7 +78,7 @@ export default {
                     this.$set(item, 'alias', `${item.alias} ${item.name}`);
                 })
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         },
         handleChange() {

@@ -1,5 +1,5 @@
 <template>
-    <div class="m_container">
+    <div class="m_container mh">
         <div class="pane_container head-wrapper">
                 <el-form  :inline="true">
                     <el-form-item label="交易时间">
@@ -73,6 +73,7 @@
                     @sizeChange="sizeChange"
                     @currentChange="currentChange"
                     @changeSort="changeSort"
+                    :loading="loading"
                     :nowPage="nowPage"
                 >
                 </channel-table>               
@@ -81,8 +82,7 @@
                 <p>运营建议：</p>
                 <p class="proposal"><b>转化率{{note.label}} ：</b>{{note.suggest}}</p>
             </div>
-            <div class="contents"></div>
-           <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div>
+           <!-- <div v-if ="form.loads == true" class="loadings"><img src="../../assets/images/loading.gif" alt=""></div> -->
     <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component>
     </div>
 </template>
@@ -127,6 +127,7 @@ export default {
             dialogVisible: false,
             currentData:{},
             totalNum:0,
+            loading: true
         }
     },
     mounted(){
@@ -145,12 +146,14 @@ export default {
                 return
             }
             this.form.loads = true
+            this.loading = true
             this.form.startIndex = num || this.form.startIndex
             this.nowPage = this.form.startIndex;
             this._apis.data.channelConversion(this.form).then(response => {
                 this.listObj = response;
                 this.totalNum = response.totalSize || 0;
                 this.form.loads = false
+                this.loading = false
                 //切换成功支付转化率获取运营建议
                 for(let item of this.productiveness){
                     if(item.value == this.form.changeRatioRange){
@@ -164,6 +167,7 @@ export default {
             }).catch(error => {
                 this.form.loads = false;
                 this.$message.error(error);
+                this.loading = false
             });
         },
         // 重置
@@ -226,7 +230,7 @@ export default {
                 }
                 this.productiveness = vipcake
             }).catch(error =>{
-                console.log('error',error)
+                console.error('error',error)
             })
         },
         //查看详情
@@ -260,7 +264,11 @@ export default {
 * @Description  产研-电商中台  bugID: CYDSZT-3504
 *
 */
-
+.el-radio-group{
+  label {
+    margin-left: 0;
+  }
+}
 /deep/.el-checkbox.is-bordered{
     border: none;
 }
@@ -285,7 +293,8 @@ export default {
 }
 .m_container{
     background-color: #fff;
-    padding: 10px 20px;
+    padding: 20px;
+    border-radius: 4px;
     .el-button--small{
         border: 1px solid #655EFF;
         color: #655EFF;
@@ -297,14 +306,13 @@ export default {
 	}
     .pane_container{
         color:#3D434A;
-        padding: 10px;
+        // padding: 10px;
         .input_wrap{
             display: inline-block;
             width: 450px;
         }
         .input_wrap2{
             display: inline-block;
-            width: 140px;
         }
         .input_wrap3{
             display: inline-block;
@@ -326,7 +334,7 @@ export default {
 }
 .marT20s{
     position: relative;
-    top:10px;
+    padding-top:10px;
 }
 .buttonfl{
     -webkit-box-pack: end;

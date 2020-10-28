@@ -177,6 +177,16 @@ export function getListFs(data) {
   })
 }
 
+//三方配送 --------
+export function getListTd(data) {
+  return request({
+    target: 'THIRD-DELIVERY-RECORD-LIST-PROCESSOR',
+    method: 'post',
+    apiType: 'finance',
+    data
+  })
+}
+
 //电子面单与物流查询导出
 export function exportFs(data) {
   return request({
@@ -187,14 +197,15 @@ export function exportFs(data) {
   })
 }
 
-// export function getListLi(data) {
-//   return request({
-//     target: 'FINANCIAL-EXPRESS-QUERY-PROCESSOR',
-//     method: 'post',
-//     apiType: 'finance',
-//     data
-//   })
-// }
+//三方配送导出
+export function exportTd(data) {
+  return request({
+    target: 'THIRD-DELIVERY-RECORD-EXPORT-PROCESSOR',
+    method: 'post',
+    apiType: 'finance',
+    data
+  })
+}
 
 //短信成本 ------
 export function smsStatistics(data) {

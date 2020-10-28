@@ -18,7 +18,7 @@
         cid: '',
         iframeWin: null,
         isLoaded: false,
-        tenantId: localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).tenantInfoId
+        tenantId: this.$store.getters.userInfo && this.$store.getters.userInfo.tenantInfoId
       }
     },
     created() {
@@ -37,7 +37,7 @@
       // 利用watch方法检测路由变化：
       $route: function (to, from) {
         // 拿到目标参数 to.params.id 去再次请求数据接口
-        console.log(to.params.id);
+        // console.log(to.params.id);
         this.sendMessage('push')
       },
       deep: true
@@ -48,10 +48,10 @@
     methods: {
       init() {
         this.token = getToken('authToken')
-        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'));
-        let userName = JSON.parse(localStorage.getItem('userInfo')) && encodeURI(JSON.parse(localStorage.getItem('userInfo')).userName);
+        let shopInfo = this.$store.getters.shopInfos;
+        let userName = this.$store.getters.userInfo && encodeURI(this.$store.getters.userInfo.userName);
         // 营销需要，常用参数
-        let bossProductId = JSON.parse(localStorage.getItem('shopInfos')) && JSON.parse(localStorage.getItem('shopInfos')).bossProductId;
+        let bossProductId = this.$store.getters.shopInfos && this.$store.getters.shopInfos.bossProductId;
         this.cid = shopInfo && shopInfo.id || '';
 
         if (this.$route.query.paths) {

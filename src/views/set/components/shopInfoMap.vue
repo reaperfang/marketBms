@@ -20,11 +20,11 @@
           <el-pagination 
             v-if="pois.length > 0"
             class="pagination"
-            background
+            :background="true"
             small
             :pager-count="5"
             :total="totalNum" 
-            layout="prev, pager, next"
+            layout="prev, pager, next, sizes"
             @current-change="handleCurrentChange"
             :current-page.sync="page"
             :page-size="pageSize"
@@ -167,7 +167,7 @@ export default {
     addMarkers(results) {
       const self = this
       const pois = results.data
-      console.log('--addMarkers--', pois)
+      // console.log('--addMarkers--', pois)
       if (pois.length <= 0) return false
       // let latlngBounds = new qq.maps.LatLngBounds();
       for (var i = 0; i < pois.length; i++) {
@@ -180,7 +180,7 @@ export default {
           // 'decoration': decoration,
           'map': self.mapObj
         }))
-        console.log('makerAdd', makerAdd)
+        // console.log('makerAdd', makerAdd)
         qq.maps.event.addListener(makerAdd, 'click', function(e) {    
           self.info.close();
           self.openInfoWindow(self.info, makerAdd, self.mapObj, poi)
@@ -192,14 +192,14 @@ export default {
     },
     // 设置根据地区经纬度变化改变当前地图中心
     setPanTo(lng, lat) {
-      console.log('-lng, lat---',lng, lat)
+      // console.log('-lng, lat---',lng, lat)
       const oLatLng = new qq.maps.LatLng(lat, lng)
       this.mapObj.panTo(oLatLng)
       this.mapObj.zoomTo(17)
     },
     // 通过address 获取经纬度 待api开发
     getGeocoderByAddress() {
-      console.log('-----获取经纬度----')
+      // console.log('-----获取经纬度----')
       // const lng = 116.307015
       // const lat = 39.982915
       this._apis.map.getGeocoderAddress({ address: this.address }).then((res) => {
@@ -207,7 +207,7 @@ export default {
         const lat = res.result.location.lat
         this.setPanTo(lng, lat)
       }).catch((err) => {
-        console.log(err)
+        console.error(err)
       })
     },
     handleClickPoi(item, index) {

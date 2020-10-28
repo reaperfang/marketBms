@@ -185,7 +185,6 @@ export default {
       if(this.operateType == 1) {
         if (!this.multipleSelection.length) {
           this.confirm({
-            title: "提示",
             icon: true,
             text: '请选择需要批量改价的商品'
           })
@@ -245,7 +244,7 @@ export default {
         .catch(error => {});
     },
     submit(value) {
-      console.log(value);
+      // console.log(value);
       this.allUpdatePrice(value);
     },
     allUpdatePrice(params) {

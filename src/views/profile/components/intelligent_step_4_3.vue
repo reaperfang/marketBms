@@ -81,7 +81,7 @@
     },
     computed: {
       shopInfos() {
-        return localStorage.getItem("shopInfos") ? JSON.parse(localStorage.getItem("shopInfos")) : null
+        return this.$store.getters.shopInfos || null
       }
     },
     created() {
@@ -104,6 +104,8 @@
 
         try {
           this.$emit("update-completed-loading", true);
+          const latitude = this.form.lat ? { latitude: this.form.lat } : null
+          const longitude = this.form.lng ? { latitude: this.form.lng } : null
           const params = {
             id: this.shopInfos.id,
             shopName: this.form.shopName,
@@ -112,15 +114,17 @@
             cityCode: this.form.addressCode[1],
             areaCode: this.form.addressCode[2],
             sendAddress: this.form.sendAddress,
-            latitude: this.form.lat,
-            longitude: this.form.lng,
+            ...latitude,
+            ...longitude
           };
-          const formResult = await this._apis.set.updateShopInfo(params);
+          // 与后端沟通后，经纬度如果为空不能传给后端
+          const formResult = await this._apis.shopInfo.updateShopInfo(params);
+          
           // changeStep 更改步骤 1 选择行业 2 预览模板 3 启用模板 4 基础建设
           // status 状态 0 未完成 1 已完成
           const stepResult = await this._apis.profile.intelligentUpdateStep({changeStep: 4, status: 1});
           // 店铺名更新
-          let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+          let shopInfo = this.$store.getters.shopInfos;
           shopInfo.shopName = this.form.shopName;
           let setRes = await this.$store.dispatch("setShopInfos", shopInfo);
           await this.$store.dispatch('getShopInfo');
@@ -131,7 +135,7 @@
           this.$message.error(e || "出错了，请稍后再试~");
           console.error(e)
         } finally {
-          console.log("update-shopInfo: finally");
+          // console.log("update-shopInfo: finally");
           this.$emit("update-completed-loading", false);
         }
       },
@@ -195,13 +199,13 @@
           }
         } catch (e) {
           this.$message.error(e || "出错了，请稍后再试~");
-          console.log(e);
+          console.error(e);
         }
       },
 
       /**  地图  */
       getMapClickPoi(poi) {
-        console.log('poi----getMapClickPoi', poi);
+        // console.log('poi----getMapClickPoi', poi);
         if (!poi) return false;
         this.form.sendAddress = poi.address;
         this.form.lat = poi.location.lat;
@@ -230,7 +234,7 @@
         // this.form.lng = this.shopInfos.longitude || "";
         try {
           let id = this.shopInfos.id;
-          let result = await this._apis.set.getShopInfo({id});
+          let result = await this._apis.shopInfo.getShopInfo({id});
           this.form.shopName = result.shopName || "";
           this.form.phone = result.phone || "";
           this.form.sendAddress = result.sendAddress || "";

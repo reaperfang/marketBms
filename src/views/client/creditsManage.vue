@@ -58,7 +58,7 @@
                 <div class="c_block">
                     <el-switch
                         v-model="isSwitch"
-                        active-color="#66CCAC"
+                        active-color="#13ce66" inactive-color="#CACACF"
                         @change="handleSwitch"
                     ></el-switch>
                     <span class="marR20">积分获取上限</span>
@@ -170,8 +170,8 @@ export default {
                 formObj.scoreToCashOrderMoney = formObj.scoreEnableOrderAchieveCash=="1" ? formObj.scoreToCashOrderMoney:-1;
                 // formObj.scoreToCashOrderRate = formObj.scoreToCashOrderRate == "" ? -1:formObj.scoreToCashOrderRate;
                 formObj.scoreToCashOrderRate = formObj.scoreEnableOrderHighCash == "1" ? formObj.scoreToCashOrderRate:-1;
-                formObj.id = JSON.parse(localStorage.getItem('shopInfos')).id;
-                this._apis.client.saveCreditRule(formObj).then((response) => {
+                formObj.id = this.$store.getters.shopInfos.id;
+                this._apis.shopInfo.updateShopInfo(formObj).then((response) => {
                     this.$message({
                         message: "保存积分规则成功",
                         type: 'success'
@@ -189,31 +189,33 @@ export default {
                     type: 'warning'
                 });
             }else{
-                this._apis.client.saveCreditRule({scoreUpper: this.isSwitch?'1':'0', scoreUpperCount: this.ruleForm.scoreUpperCount, id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {                 
+                this._apis.shopInfo.updateShopInfo({scoreUpper: this.isSwitch?'1':'0', scoreUpperCount: this.ruleForm.scoreUpperCount, id: this.$store.getters.shopInfos.id}).then((response) => {            
+                    this.$store.dispatch('getShopInfo');     
                     this.$message({
                         message: "每日最高获得积分数保存成功",
                         type: 'success'
                     });
                 }).catch((error) => {
-                    console.log(error);
+                    console.error(error);
                 })
             }
         },
         handleSwitch(val) {
             if(!val) {
                 this.ruleForm.scoreUpperCount = "";
-                this._apis.client.saveCreditRule({scoreUpper: this.isSwitch?'1':'0', id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
+                this._apis.shopInfo.updateShopInfo({scoreUpper: this.isSwitch?'1':'0', id: this.$store.getters.shopInfos.id}).then((response) => {
+                    this.$store.dispatch('getShopInfo');
                     this.$message({
                         message: "关闭成功",
                         type: 'success'
                     });
                 }).catch((error) => {
-                    console.log(error);
+                    console.error(error);
                 })
             }
         },
         checkCreditRule() {
-            this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then((response) => {
+            this.$store.dispatch('getShopInfo').then((response) => {
                 this.ruleForm.scoreToCash = response.scoreToCash.toString();
                 this.ruleForm.scorePercentage = response.scoreToCash == 1 ? response.scorePercentage:'';
                 this.ruleForm.scorePercentageMoney = response.scoreToCash == 1 ? response.scorePercentageMoney:'';
@@ -225,7 +227,7 @@ export default {
                 this.ruleForm.scoreUpperCount = response.scoreUpperCount;
                 this.isSwitch = response.scoreUpper == 1? true:false;
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             })
         }
     },
@@ -236,8 +238,11 @@ export default {
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
 .c_container{
-    padding: 19px 20px 50px 20px;
+    padding: 20px;
+    padding-top:0;
     background-color: #fff;
+    min-height:100%;
+    border-radius: 4px;
     .marL20{
         margin-left: 20px;
     }

@@ -69,14 +69,14 @@
     methods:{
       /** 微信绑定状态 */
       wechatStatus(data) {
-        console.log('wechatStatus: ', data);
+        // console.log('wechatStatus: ', data);
         this.bindWechatAccount = data.bindWechatAccount;
         this.bindWechatApplet = data.bindWechatApplet;
       },
 
       /** 微信支付状态 */
       wechatPayStatus(data) {
-        console.log('payStatus: ', data);
+        // console.log('payStatus: ', data);
         this.wechatPay = data;
       },
 

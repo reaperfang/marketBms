@@ -9,8 +9,8 @@
       <el-switch
         v-model="openNav"
         active-color="#13ce66"
-        @change="switchStatusChange"
-        inactive-color="#ff4949">
+        inactive-color="#CACACF"
+        @change="switchStatusChange">
       </el-switch>
     </div>
     <component :is="'h5NavEdit'" :apiNavData="apiNavData" @submitNavData="submit" @resetNavData="resetData"></component>
@@ -41,7 +41,7 @@ export default {
       return this.$store.getters.shopInfo || {};
     },
     cid(){
-        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        let shopInfo = this.$store.getters.shopInfos
         return shopInfo.id
     }
   },
@@ -63,10 +63,11 @@ export default {
 
     /* 开关状态切换 */
     switchStatusChange(value) {
-      this._apis.shop.changeSwitchStatus({
+      this._apis.shopInfo.updateShopInfo({
         id:this.cid, 
         shopNavigation: value === true ? 1 : 0
       }).then((response)=>{
+        this.$store.dispatch('getShopInfo');
         this.$message.success('修改成功！')
       }).catch((error)=>{
         this.$message.error(error);

@@ -168,11 +168,12 @@ export default {
 .top_part1{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
-  padding: 15px 20px;
+  border-radius: 4px;
+  padding: 20px;
     .title{
-      height: 74px;
-      line-height: 74px;
+      // height: 74px;
+      height: 52px;
+      // line-height: 74px;
       display: flex;
       flex: 1;
       flex-direction:row;

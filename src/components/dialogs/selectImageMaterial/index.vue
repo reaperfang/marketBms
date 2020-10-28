@@ -90,7 +90,7 @@ export default {
       return this.imageMax > 1
     },
     cid(){
-        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        let shopInfo = this.$store.getters.shopInfos
         return shopInfo.id
     }
   },
@@ -192,8 +192,6 @@ export default {
     margin-top:40px;
   }
   .dialog-footer .el-button{
-    padding: 9px 20px;
-    margin-left: 30px;
     span{
       letter-spacing: 5px;
       margin-right: -4px;

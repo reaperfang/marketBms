@@ -1,5 +1,5 @@
 <template>
-  <div class="new-electronic-faceSheet">
+  <div class="new-electronic-faceSheet mh bor-radius">
     <div v-if="!$route.query.detail" class="title">{{$route.query.id ? '编辑' : '新建'}}电子面单</div>
     <div class="content">
       <div class="row justify-between">
@@ -118,7 +118,7 @@ export default {
       };
       const validateSpecificationSize = (rule, value, callback) => {
         // let mobile = /^[1][3578][0-9]{9}$/
-        console.log(111)
+        // console.log(111)
         // if (!mobile.test(value)) {
           return callback(new Error("格式错误，请重新输入正确的手机号码"));
         // } else {
@@ -239,7 +239,7 @@ export default {
         }
       },
       handleOpenVisible(val) {
-        console.log(val, this.ruleForm.expressCompanyCode)
+        // console.log(val, this.ruleForm.expressCompanyCode)
         if (!val) return false
         if (this.ruleForm.expressCompanyCode) {
           this.isChooseExpressCompany = true
@@ -289,7 +289,7 @@ export default {
       chooseExpressCompany(val) {
         let expressCompanyCode = this.ruleForm.expressCompanyCode
         let expressCompany = this.expressCompanyList.find(val => val.expressCode == expressCompanyCode)
-        console.log(expressCompany);
+        // console.log(expressCompany);
         if (expressCompany.isClientNumber * 1 === 1) {
           this.isShowPwa = true
         } else {
@@ -354,7 +354,7 @@ export default {
               this.editor()
             }
           } else {
-            console.log('error submit!!');
+            console.error('error submit!!');
             return false;
           }
         });
@@ -363,7 +363,7 @@ export default {
         this._apis.order
         .getElectronicFaceSheetDetail({expressCompanyCode: this.$route.query.expressCompanyCode})
         .then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.expressCompanyAccount) {
             this.isShowPwa = true
           } else {
@@ -374,7 +374,7 @@ export default {
           this.getExpressElectronicSize(res.expressCompanyCode)
         })
         .catch(error => {
-          console.log('error',error)
+          console.error('error',error)
           this.visible = false;
           this.$message.error(error);
         });

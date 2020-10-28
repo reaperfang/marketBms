@@ -1,5 +1,5 @@
 <template>
-  <div class="deliver-goods">
+  <div class="deliver-goods mh bor-radius">
     <div class="deliver-goods-header">
       <div class="item">发货</div>
       <div class="item">
@@ -19,7 +19,7 @@
           <div class="content">
             <el-table
               :row-key="getRowKeys"
-              :class="{isIE: utils.isIE(), disabledCheckAll: orderInfo.deliveryWay != 4,'disabled-table': checkboxAllTableMark}"
+              :class="{isIE: utils.isIE(), disabledCheckAll: orderInfo.deliveryWay != 4 && orderInfo.deliveryWay != 3,'disabled-table': checkboxAllTableMark}"
               ref="table"
               :data="tableData"
               style="width: 100%"
@@ -28,16 +28,16 @@
              >
               <el-table-column 
                 type="selection" 
-                width="51"
+                width="34"
                 :selectable="selectable"
                 :reserve-selection="true"
               ></el-table-column>
-              <el-table-column label="序号" width="180">
+              <el-table-column label="序号" width="100" fixed="left" class-name="table-padding">
                 <template slot-scope="scope">
                   <span>{{scope.$index + 1}}</span>
                 </template>
               </el-table-column>
-              <el-table-column label="商品" width="380">
+              <el-table-column label="商品">
                 <template slot-scope="scope">
                   <div class="goods-detail">
                     <div class="goods-detail-item">
@@ -50,14 +50,14 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="goodsCount" label="应发数量">
+              <el-table-column prop="goodsCount" label="应发数量" align="right" width="120">
                 <template slot-scope="scope">{{scope.row.goodsCount - scope.row.cacheSendCount}}</template>
               </el-table-column>
-              <el-table-column prop="sendCount" label="本次发货数量">
+              <el-table-column prop="sendCount" label="本次发货数量" fixed="right" align="center" class-name="table-padding">
                 <template slot-scope="scope">
                   <el-input
                     :class="{'send-input': scope.row.errorMessage}"
-                    :disabled="orderInfo.deliveryWay == 4 || scope.row.goodsCount - scope.row.cacheSendCount == 0"
+                    :disabled="orderInfo.deliveryWay == 4 || orderInfo.deliveryWay == 3 || scope.row.goodsCount - scope.row.cacheSendCount == 0"
                     type="number"
                     step="1"
                     :max="scope.row.goodsCount - scope.row.cacheSendCount"
@@ -105,7 +105,12 @@
                 <i class="deliver-icon"></i>
                 <span>发货信息</span>
               </div>
-              <div class="blue pointer" @click="changeSendInfo">修改发货信息</div>
+              <template v-if="orderInfo.deliveryWay == 3">
+                <div class="blue pointer" :class="{disabled: orderInfo.deliveryWay == 3}">修改发货信息</div>
+              </template>
+              <template v-else>
+                <div class="blue pointer" @click="changeSendInfo">修改发货信息</div>
+              </template>
             </div>
             <div class="content">
               <div class="item">
@@ -251,9 +256,26 @@
             </el-form-item>
           </el-form>
         </div>
+        <!-- 配送方式 第三方配送 -->
+        <div class="logistics deliver-goods-logistics" v-if="orderInfo.deliveryWay == 3">
+          <el-form
+            :model="ruleForm"
+            :rules="rules"
+            ref="ruleForm"
+            label-width="100px"
+            class="demo-ruleForm"
+           >
+            <el-form-item label="配送方式">
+              <span>第三方配送</span>
+            </el-form-item>
+            <el-form-item label="备注" prop="desc">
+              <el-input type="textarea" v-model="ruleForm.sendRemark" placeholder="非必填，请输入，不超过100个字符" maxlength="100"></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
       </div>
       <div class="footer">
-        <el-button v-if="orderInfo.deliveryWay == 1 || orderInfo.deliveryWay == 4" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
+        <el-button v-if="orderInfo.deliveryWay == 1 || orderInfo.deliveryWay == 3 || orderInfo.deliveryWay == 4" :loading="sending" type="primary" @click="sendGoodsHandler('ruleForm')">发 货</el-button>
         <el-button v-if="orderInfo.deliveryWay == 2" :loading="sending" type="primary" @click="sendGoodsHandler('ruleFormStore')">发 货</el-button>
       </div>
     </div>
@@ -285,7 +307,7 @@ import { validatePhone } from "@/utils/validate.js"
 import utils from "@/utils"
 
 import { asyncRouterMap } from '@/router'
-import { common, deliveryWay1, deliveryWay2 } from '@/views/order/mixins/orderMixin'
+import { common, deliveryWay1, deliveryWay2 } from '@/views/order/mixins/sendGoodsMixin'
 
 export default {
   mixins: [common, deliveryWay1, deliveryWay2],
@@ -397,20 +419,6 @@ export default {
     // }
   },
   methods: {
-    //检测是否有配置子帐号的权限
-    checkSet(){
-        const setConfig = asyncRouterMap.filter(item => item.name === 'set');
-        if(setConfig.length == 0){
-            this.distributorSet = false;
-            return;
-        }
-        const subaccountManage = setConfig[0].children.filter(item => item.name === 'subaccountManage');
-        if(subaccountManage.length == 0){
-            this.distributorSet = false;
-            return;
-        }
-        this.distributorSet = true;
-    },
     //新页面打开角色管理
     gotoRoleManage() {
         let routeData = this.$router.resolve({ path: '/set/roleManage' });
@@ -441,53 +449,12 @@ export default {
       }, 500)
     },
     selectable(row, index) {
-      if(this.orderInfo.deliveryWay == 4 || (row.goodsCount - row.cacheSendCount == 0)) {
+      if(this.orderInfo.deliveryWay == 4 || this.orderInfo.deliveryWay == 3 || (row.goodsCount - row.cacheSendCount == 0)) {
         this.checkboxAllTableMark = true
         return false
       }
        this.checkboxAllTableMark = false
        return true
-    },
-    checkExpress() {
-      let expressName
-
-      if(this.ruleForm.expressNos) {
-        this.ruleForm.expressNos = ''
-      }
-      if(this.ruleForm.other) {
-        this.ruleForm.other = ''
-      }
-      if(this.ruleForm.expressCompanyCode == 'other') {
-            expressName = 'other'
-          } else {
-            expressName = this.expressCompanyList.find(
-              val => val.expressCompanyCode == this.ruleForm.expressCompanyCode
-            ).expressCompany;
-          }
-      this._apis.order
-        .checkExpress({expressName})
-        .then(res => {
-          this.express = res;
-          if(this.express == null) {
-              this.$set(this.rules, "expressNos", [
-                { required: true, message: "请输入快递单号", trigger: "blur" }
-              ]);
-          } else {
-            this.$set(this.rules, "expressNos", [
-                { required: false, message: "请输入快递单号", trigger: "blur" }
-              ]);
-          }
-
-          this._list.splice(0, 1, Object.assign({}, this._list[0], {
-            expressCompanyCodes: this.ruleForm.expressCompanyCode,
-            express: res
-          }))
-          console.log(this._list)
-        })
-        .catch(error => {
-          this.visible = false;
-          this.$message.error(error);
-        });
     },
     fetchOrderAddress(address) {
       this.orderInfo.sendName = address.name;
@@ -586,7 +553,7 @@ export default {
 
           //如果是普通快递
           if(formName == 'ruleForm'){
-            if(this.orderInfo.deliveryWay != 4) {
+            if(this.orderInfo.deliveryWay != 4 && this.orderInfo.deliveryWay != 3) {
               if(this.ruleForm.expressCompanyCode == 'other') {
                 this.ruleForm.expressCompany = this.ruleForm.other
               } else {
@@ -634,7 +601,7 @@ export default {
           
           if(formName == 'ruleForm'){
             //如果是普通快递
-            if(this.orderInfo.deliveryWay != 4) {
+            if(this.orderInfo.deliveryWay != 4 && this.orderInfo.deliveryWay != 3) {
               obj.deliveryWay = 1;
               obj.expressCompanys = this.ruleForm.expressCompany; // 快递公司名称
               obj.expressNos = this.ruleForm.expressNos; // 快递单号
@@ -647,11 +614,19 @@ export default {
                 }
               }
             } else {
-              //上门自提
-              obj.deliveryWay = 4;
-              obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
-              obj.verifyCode = this.orderInfo.verifyCode
-              obj.pickId = this.orderInfo.pickId
+              if(this.orderInfo.deliveryWay == 4) {
+                //上门自提
+                obj.deliveryWay = 4;
+                obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
+                obj.verifyCode = this.orderInfo.verifyCode
+                obj.pickId = this.orderInfo.pickId
+              } else if(this.orderInfo.deliveryWay == 3) {
+                //第三方配送
+                obj.deliveryWay = 3;
+                obj.sendRemark = this.ruleForm.sendRemark; // 发货备注
+                obj.receivedLongitude = this.orderInfo.receivedLongitude || this.orderInfo.receivedLng
+                obj.receivedLatitude = this.orderInfo.receivedLatitude || this.orderInfo.receivedLat
+              }
             }
           }else if(formName == 'ruleFormStore'){ //如果是商家配送
             obj.deliveryWay = 2;
@@ -665,12 +640,15 @@ export default {
               obj
             ]
           };
+          if(this.orderInfo.deliveryWay == 3) {
+            params.thirdPartType = 1
+          }
           this.params = params
           if(this.orderInfo.deliveryWay == 1 && this.express != null && !this.express.sizeSpecs) {
             try {
               let res = await this._apis.order.getExpressSpec({ companyCode: this.ruleForm.expressCompanyCode, cid: this.cid })
 
-              console.log(res)
+              // console.log(res)
               if(res && res.length) {
                 this._list[0].sizeList = res.map(item => ({
                   ...item,
@@ -694,13 +672,40 @@ export default {
             this.orderSendGoodsHander(params)
           }
         } else {
-          console.log("error submit!!");
+          console.error("error submit!!");
           return false;
         }
       });
     },
     orderSendGoodsHander(params) {
-      this._apis.order
+      if(this.orderInfo.deliveryWay == 3) {
+        this._apis.order
+        .sendGoods3(params)
+        .then(res => {
+          this.$message.success('发货成功');
+          this.sending = false
+          this.$router.push({
+            path: '/order/deliverGoodsSuccess',
+            query: {
+              id: this.$route.query._ids,
+              orderId: this.$route.query.ids || this.$route.query.id,
+              type: 'deliverGoods',
+              deliveryWay: 3
+            }
+          })
+        })
+        .catch(error => {
+          if(error && (error.code == 2155)) {
+            this.confirm({text: '达达账户余额不足，请充值后再发货。', confirmText: '去充值'}).then(() => {
+                this.$router.push('/set/recharge')
+            })
+          } else {
+            this.$message.error(error.msg);
+          }
+          this.sending = false
+        });
+      } else {
+        this._apis.order
         .orderSendGoods(params)
         .then(res => {
           this.$message.success('发货成功');
@@ -719,20 +724,7 @@ export default {
           this.$message.error(error);
           this.sending = false
         });
-    },
-    changeReceivedInfo() {
-      this.currentDialog = "ReceiveInformationDialog";
-      this.currentData = this.orderInfo;
-      this.sendGoods = "received";
-      this.title = "修改收货信息";
-      this.dialogVisible = true;
-    },
-    changeSendInfo() {
-      this.currentDialog = "ReceiveInformationDialog";
-      this.currentData = this.orderInfo;
-      this.sendGoods = "send";
-      this.title = "修改发货信息";
-      this.dialogVisible = true;
+      }
     },
     onSubmit(value) {
       this.orderInfo = Object.assign({}, this.orderInfo, value);
@@ -808,7 +800,7 @@ export default {
             }
             this._ids = [this.orderInfo.id]
             if(!this.orderInfo.sendAddress) {
-              if(this.orderInfo.deliveryWay == 1 || this.orderInfo.deliveryWay == 2) {
+              if(this.orderInfo.deliveryWay == 1 || this.orderInfo.deliveryWay == 2 || this.orderInfo.deliveryWay == 3) {
                 this.fetchOrderAddress(_address);
               } else if(this.orderInfo.deliveryWay == 4) {
                 this.fetchPickInfo(this.orderInfo.pickId)
@@ -839,7 +831,7 @@ export default {
     },
     async fetchAddress(list) {
         try {
-          let res = await this._apis.order.fetchOrderAddress({ id: this.cid, cid: this.cid })
+          let res = await this.$store.dispatch('getShopInfo')
 
           if(res) {
             list.forEach(item => {
@@ -945,6 +937,9 @@ export default {
           .take-in-icon {
             background: url(../../../assets/images/order/take-in-icon.png);
           }
+          .disabled {
+            color: #9fa29f;
+          }
         }
         .content {
           padding: 20px;
@@ -1040,25 +1035,9 @@ export default {
     color: #444a51;
     text-decoration: underline;
 }
-/deep/ .el-table td, /deep/ .el-table th {
-    text-align: center;
-    &:nth-child(2) {
-        text-align: left;
-    }
-    &:nth-child(3) {
-        text-align: left;
-    }
-}
 .el-table-column--selection .cell {
     padding-left: 20px;
     padding-right: 15px;
-}
-/deep/ .el-table table .cell {
-  padding-left: 0;
-  padding-right: 0;
-}
-/deep/ .el-table table tbody tr td:nth-child(2) {
-  padding-left: 10px;
 }
 /deep/ .el-table thead tr th {
   border-bottom: none;

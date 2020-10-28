@@ -5,24 +5,24 @@
         <el-table
             :data="scoreList"
             style="width: 100%"
-            :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
             :default-sort="{prop: 'date', order: 'descending'}"
           >
-            <el-table-column prop="updateUserName" label="操作人"></el-table-column>
-            <el-table-column prop="createTime" label="操作时间"></el-table-column>
-            <el-table-column prop="businessTypeName" label="交易类型"></el-table-column>
-            <el-table-column prop="remarks" label="原因"></el-table-column>
-            <el-table-column prop="changeScore" label="数量"></el-table-column>
+            <el-table-column prop="updateUserName" label="操作人" width="120" fixed="left" class-name="table-padding"></el-table-column>
+            <el-table-column prop="createTime" label="操作时间" align="center" min-width="150"></el-table-column>
+            <el-table-column prop="businessTypeName" label="交易类型" align="center" min-width="120"></el-table-column>
+            <el-table-column prop="remarks" label="原因" align="center" min-width="120"></el-table-column>
+            <el-table-column prop="changeScore" label="数量" min-width="125" align="right" fixed="right" class-name="table-padding"></el-table-column>
         </el-table>
         <div class="page_styles">
             <el-pagination
+            :background="true"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="Number(startIndex) || 1"
             :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
             :page-size="pageSize*1"
             :total="total*1"
-            layout="total, sizes, prev, pager, next, jumper"
+            layout="prev, pager, next, sizes"
         ></el-pagination>
         </div>
     </div>
@@ -57,13 +57,17 @@ export default {
               "yyyy-MM-dd hh:mm:ss"
             );
             if(v.changeScore !== 0) {
-              v.changeScore = v.changeType == 1?"-" + v.changeScore:"+" + v.changeScore;
+              if(v.changeType == 1 || v.changeType == 5 || v.changeType == 6) {
+                v.changeScore = "-" + v.changeScore
+              }else{
+                v.changeScore = "+" + v.changeScore
+              }
             }
           });
             this.scoreList = [].concat(list);
             this.total = response.total;
         }).catch((error) => {
-          console.log(error);
+          console.error(error);
         })
     },
     handleSizeChange(val) {

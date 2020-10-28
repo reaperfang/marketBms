@@ -553,26 +553,26 @@ export function orderSendInfoImportAfterSaleBatchDelever(data) {
     })
 }
 
- //修改发货地址
- export function orderUpdateAddress(data) {
-  return request({
-    //token: '09255c7724fe9b8df952aa2f7e3ec718768b8ae62e74d1ef2214c0aead86a36b',
-    target: 'SHOP-API-102-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+//  //修改发货地址
+//  export function orderUpdateAddress(data) {
+//   return request({
+//     //token: '09255c7724fe9b8df952aa2f7e3ec718768b8ae62e74d1ef2214c0aead86a36b',
+//     target: 'SHOP-API-102-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
- //修改发货地址
- export function fetchOrderAddress(data) {
-  return request({
-    target: 'SHOP-API-100-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+//  //修改发货地址
+//  export function fetchOrderAddress(data) {
+//   return request({
+//     target: 'SHOP-API-100-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
  //电子面单 获取快递公司
  export function getElectronicFaceSheetExpressCompanyList(data) {
@@ -748,6 +748,34 @@ export function getShopSendAddress(data) {
 export function editorExpressSize(data) {
   return request({
     target: 'EDIT-EXPRESS-ELECTRONIC-SHEET-PROCESSOR',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}
+//查看第三方配送时骑手轨迹 ORDER-EXPRESS-INFO-LIST-PROCESSOR
+export function getDistributorTrack(data) {
+  return request({
+    target: 'ORDER-DISTRIBUTION-INFO-LIST-PROCESSOR',
+    method: 'post',
+    apiType: 'order',
+    data
+  })
+}
+//第三方订单发货
+export function sendGoods3(data) {
+  return request({
+    target: 'ORDER-SENDINFO-BATCHV2-PROCESS',
+    method: 'post',
+    apiType: 'order',
+    data,
+    sendGoods3: true
+  })
+}
+//重新发单
+export function reOrder(data) {
+  return request({
+    target: 'REISSUE-ORDER0SENDINFO-PROCESS',
     method: 'post',
     apiType: 'order',
     data

@@ -13,7 +13,7 @@
                 <span class="member-sn">用户ID：{{orderDetail.orderInfo.memberSn}}</span>
             </div>
         </div>
-        <orderState :orderInfo="orderDetail.orderInfo" :orderState="orderDetail.orderInfo.orderStatus" :payWay="orderDetail.orderInfo.payWay" :closeReaosn="orderDetail.orderInfo.closeReaosn" @orderStatusSuccess="getDetail" class="order-state"></orderState>
+        <orderState :orderInfo="orderDetail.orderInfo" :orderSendInfo="orderDetail.orderSendInfo" :orderState="orderDetail.orderInfo.orderStatus" :payWay="orderDetail.orderInfo.payWay" :closeReaosn="orderDetail.orderInfo.closeReaosn" @orderStatusSuccess="getDetail" class="order-state"></orderState>
         <div class="message">
             <el-tabs v-model="activeName">
                 <el-tab-pane label="订单信息" name="order">
@@ -114,7 +114,7 @@ export default {
         })
 
         // 获取分销商设置
-        this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+        this.$store.dispatch('getShopInfo').then( data => {
             if(data.isOpenResell == 1) this.resellConfigInfo = data.resellConfigInfo ? JSON.parse(data.resellConfigInfo) : null;
         }).catch((error) => {
             console.error(error);
@@ -155,6 +155,10 @@ export default {
                     return '自动发货'
                 case 12:
                     return '核销验证'
+                case 13:
+                    return '重新发单'
+                case 14:
+                    return '自动发单'
             }
         },
         channelInfoIdFilter(code) {
@@ -207,7 +211,7 @@ export default {
     },
     methods: {
         sendGoods() {
-            console.log('sendGoods')
+            // console.log('sendGoods')
         },
         reducePriceHandler() {
             this._apis.order.orderPriceChange({id: this.orderDetail.orderInfo.id, 
@@ -223,11 +227,10 @@ export default {
         getDetail() {
             return new Promise((resolve, reject) => {
                 let id = this.$route.query.id
-
                 this._apis.order.fetchOrderDetail({id}).then((res) => {
                     res.orderInfo && (res.orderInfo.consultType = res.orderInfo.consultType || 2)
                     this.orderDetail = res
-                    console.log(typeof res)
+                    // console.log(typeof res)
                     resolve(res)
                 }).catch(error => {
                     this.$message.error(error);
@@ -256,6 +259,7 @@ export default {
             height: 60px;
             line-height: 60px;
             padding: 0 20px;
+            border-radius: 4px;
             .lefter {
                 span {
                     border-right: 1px solid #cacfcb;
@@ -274,6 +278,7 @@ export default {
             margin-top: 20px;
             padding: 20px;
             padding-top: 5px;
+            border-radius: 4px;
         }
         .goods-detail {
             display: flex;
@@ -283,6 +288,7 @@ export default {
             background-color: #fff;
             margin-top: 20px;
             padding: 20px;
+            border-radius: 4px;
             .header {
                 padding-bottom: 20px;
                 font-size: 16px;

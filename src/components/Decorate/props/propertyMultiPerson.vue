@@ -10,12 +10,16 @@
      <el-form-item :label="ruleForm.addType === 1 ? '选择活动' : ''" prop="goods">
         <p class="prop-message" style="margin: 9px 0 8px 0;" v-if="ruleForm.addType === 1">建议最多添加30个活动</p>  
         <div class="goods_list" prop="goods" v-loading="loading">
-          <ul>
+          <ul ref="listScroll">
             <template>
               <template v-for="(item, key) of displayList">
                 <li :key="key" :title="item.activeName">
-                  <img :src="item.mainImage" alt="">
-                  <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1"></i>
+                  <el-image :src="item.mainImage" alt="" lazy>
+                    <div slot="placeholder" class="el-image__lazyloading">
+                        加载中...
+                    </div>
+                  </el-image>
+                  <i class="delete_btn" @click.stop="deleteItem(item)" v-if="ruleForm.addType === 1" v-show="deleteShow"></i>
                 </li>
               </template>
             </template>
@@ -287,17 +291,18 @@ export default {
             return;
         }
         if(newValue == 2) {
-          this.fetch();
+          this.fetch(false);
         }else{
           this.displayList = [];
-          this.fetch();
+          this.fetch(false);
         }
     },
     'ruleForm.showNumber'(newValue, oldValue) {
+      console.log(newValue, oldValue)
         if(newValue === oldValue) {
             return;
         }
-        this.fetch();
+        this.fetch(false);
     },
     'ruleForm.sortRule'(newValue, oldValue) {
         if(newValue === oldValue) {
@@ -345,7 +350,7 @@ export default {
     },
 
     //根据ids拉取数据
-    fetch(bNeedUpdateMiddle = true) {
+    async fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
         if(componentData) {
             bNeedUpdateMiddle && this.syncToMiddle();
@@ -395,13 +400,42 @@ export default {
             }
 
             this.loading = true;
+            //优先加载
+            if((componentData.addType == 1 && params.activityList.length > this.preloadLength) || (componentData.addType == 2 && params.num > this.preloadLength)) {
+                const paramsLoad = this.utils.deepClone(params);
+                if(componentData.addType == 1){
+                    paramsLoad.activityList.splice(this.preloadLength);
+                }else{
+                    paramsLoad.num = this.preloadLength;
+                }
+                await this._apis.shop.getMultiPersonListByIds(paramsLoad).then((response)=>{
+                    this.createList(response);
+                    this.loading = false;
+                    this.deleteShow = false;
+                }).catch((error)=>{
+                    console.error(error);
+                    this.displayList = [];
+                });
+            }
+
             this._apis.shop.getMultiPersonListByIds(params).then((response)=>{
                 this.createList(response);
                 this.loading = false;
+                this.deleteShow = true;
+                //如果有记录的列表滚动位置，预加载功能全部数据完成后回到该位置
+                this.$nextTick(() => {
+                  if(this.listScrollTop) {
+                    this.$refs.listScroll.scrollTo({
+                      top: this.listScrollTop
+                    });
+                    this.listScrollTop = null;
+                  }
+                })
             }).catch((error)=>{
                 console.error(error);
                 this.displayList = [];
                 this.loading = false;
+                this.deleteShow = true;
             });
         }
     },

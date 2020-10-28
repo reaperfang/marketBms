@@ -63,7 +63,7 @@ export default {
                     });
                 })
             } else {
-                console.log('error submit!!');
+                console.error('error submit!!');
                 return false;
             }
             });

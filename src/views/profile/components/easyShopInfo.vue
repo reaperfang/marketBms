@@ -164,7 +164,7 @@ export default {
       })
     },
     setShopName() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       let name = shopInfo.shopName;
       if (name != this.form.shopName) {
         shopInfo.shopName = this.form.shopName;
@@ -183,7 +183,7 @@ export default {
       // }
       const data = this.getReqData()
       return new Promise((resolve, reject) => {
-        this._apis.set.updateShopInfo(data).then(response =>{
+        this._apis.shopInfo.updateShopInfo(data).then(response =>{
           this.setShopName()    
           this.$store.dispatch('getShopInfo');    
           // this.$nextTick(()=> {
@@ -192,7 +192,7 @@ export default {
           // })
           resolve(response)
         }).catch(error =>{
-          console.log('updateShopInfo:error', error)
+          console.error('updateShopInfo:error', error)
           // this.$message.error('保存失败');
           reject(reject)
         }).finally(() => {

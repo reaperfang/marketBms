@@ -4,10 +4,14 @@
       <el-form-item label="选择活动" prop="promotions">
         <p class="prop-message" style="margin: 9px 0 8px 0;">建议最多添加30个活动</p>
         <div class="goods_list" v-loading="loading">
-          <ul>
+          <ul ref="listScroll">
             <li v-for="(item, key) of displayList" :key="key" :title="item.name">
-              <img :src="item.activityPic" alt="">
-              <i class="delete_btn" @click.stop="deleteItem(item)"></i>
+              <el-image :src="item.activityPic" alt="" lazy>
+                <div slot="placeholder" class="el-image__lazyloading">
+                    加载中...
+                </div>
+              </el-image>
+              <i class="delete_btn" @click.stop="deleteItem(item)" v-show="deleteShow"></i>
             </li>
             <li class="add_button" @click="dialogVisible=true; currentDialog='dialogSelectNyuan'">
               <i class="inner"></i>
@@ -247,22 +251,49 @@ export default {
   },
   methods: {
     //根据ids拉取数据
-    fetch(bNeedUpdateMiddle = true) {
+    async fetch(bNeedUpdateMiddle = true) {
       const componentData = this.ruleForm;
         if(componentData) {
            bNeedUpdateMiddle && this.syncToMiddle();
             const ids = componentData.ids;
             if(Array.isArray(ids) && ids.length){
                 this.loading = true;
+
+                //优先加载
+                if(ids.length > this.preloadLength) {
+                    const paramsLoad = this.utils.deepClone(ids);
+                    paramsLoad.splice(this.preloadLength);
+                    await this._apis.shop.getNyuanListByIds({
+                        baleIds: paramsLoad.join(',')
+                    }).then((response)=>{
+                        this.createList(response);
+                        this.loading = false;
+                        this.deleteShow = false;
+                    }).catch((error)=>{
+                        this.displayList = [];
+                    });
+                }
+
                 this._apis.shop.getNyuanListByIds({
                     baleIds : ids.join(',')
                 }).then((response)=>{
                     this.createList(response);
                     this.loading = false;
+                    this.deleteShow = true;
+                    //如果有记录的列表滚动位置，预加载功能全部数据完成后回到该位置
+                    this.$nextTick(() => {
+                      if(this.listScrollTop) {
+                        this.$refs.listScroll.scrollTo({
+                          top: this.listScrollTop
+                        });
+                        this.listScrollTop = null;
+                      }
+                    })
                 }).catch((error)=>{
                     console.error(error);
                     this.displayList = [];
                     this.loading = false;
+                    this.deleteShow = true;
                 });
             }else{
                 this.displayList = [];

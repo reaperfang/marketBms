@@ -1,15 +1,15 @@
 <template>
-  <div class="bulk-delivery">
+  <div class="bulk-delivery mh">
     <div class="title">订单批量发货</div>
     <div class="container">
       <section>
         <div class="title">1. 选择您要进行发货的商品并填写物流信息</div>
         <div class="checkbox-box">
-          <i @click="allcheckHandler" class="checkbox" :class="{checked: allchecked, disabledChecked: list[0] && list[0].deliveryWay == 4}"></i>商品清单
+          <i @click="allcheckHandler" class="checkbox" :class="{checked: allchecked, disabledChecked: list[0] && (list[0].deliveryWay == 4 || list[0].deliveryWay == 3)}"></i>商品清单
         </div>
         <div class="goods-item" v-for="(item, index) in list" :key="index">
           <div class="item-title">
-            <span v-if="list[0] && list[0].deliveryWay != 4">商品清单</span>
+            <span v-if="list[0] && (list[0].deliveryWay != 4 && list[0].deliveryWay != 3)">商品清单</span>
             <span>订单编号 {{item.orderCode}}</span>
             <i v-if="list.length > 1" @click="deleteOrder(index)" class="el-icon-delete"></i>
           </div>
@@ -18,7 +18,7 @@
               <div class="col table-title-left" style="width: 590px; margin-right: 40px;">
                 <div class="row align-center row-margin">
                   <div class="col">
-                    <i @click="changeAll(item)" class="checkbox" :class="{checked: item.checked, disabledChecked: list[0] && list[0].deliveryWay == 4}"></i>
+                    <i @click="changeAll(item)" class="checkbox" :class="{checked: item.checked, disabledChecked: list[0] && (list[0].deliveryWay == 4 || list[0].deliveryWay == 3)}"></i>
                   </div>
                   <div class="col table-title-left-goods" style="width: 310px;">商品</div>
                   <div class="col table-title-left-yingfa" style="width: 60px;">应发数量</div>
@@ -40,7 +40,7 @@
                   :key="i"
                 >
                   <div class="col">
-                    <i @click="select(index, i)" class="checkbox" :class="{checked: goods.checked, disabledChecked: list[0] && list[0].deliveryWay == 4 || goods.goodsCount - goods.cacheSendCount == 0}"></i>
+                    <i @click="select(index, i)" class="checkbox" :class="{checked: goods.checked, disabledChecked: list[0] && (list[0].deliveryWay == 4 || list[0].deliveryWay == 3) || goods.goodsCount - goods.cacheSendCount == 0}"></i>
                   </div>
                   <div class="col goodsItem-left" style="width: 310px;">
                     <div class="row align-center">
@@ -56,7 +56,7 @@
                   <div class="col send-count" style="width: 60px;">{{goods.goodsCount -goods.cacheSendCount}}</div>
                   <div class="col" style="width: 100px;">
                     <el-input
-                      :disabled="item.deliveryWay == 4 || goods.goodsCount - goods.cacheSendCount == 0"
+                      :disabled="item.deliveryWay == 4 || item.deliveryWay == 3 || goods.goodsCount - goods.cacheSendCount == 0"
                       type="number"
                       min="1"
                       @input="inputHandler(index, i)"
@@ -89,7 +89,7 @@
                     </template>
                   </div>
                   <div class="col">
-                    <template v-if="list[0] && list[0].deliveryWay != 4">
+                    <template v-if="list[0] && (list[0].deliveryWay != 4 && list[0].deliveryWay != 3)">
                       <el-form :model="item" label-width="70px" class="demo-ruleForm" v-if="item.deliveryWay == 1">
                         <el-form-item label="快递公司" prop="expressCompanys" class="expressCompanys">
                           <el-select filterable @change="checkExpress(index)" v-model="item.expressCompanyCodes" placeholder="请选择">
@@ -138,7 +138,15 @@
                       </el-form>
                     </template>
                     <template v-else>
-                      <p style="width: 285px; text-align: center; margin-top: 29px;">{{(item.deliveryDate ? item.deliveryDate.split(' ')[0] : '') + ' ' + item.deliveryTime}}</p>
+                      <template v-if="list[0] && list[0].deliveryWay == 4">
+                        <p style="width: 285px; text-align: center; margin-top: 29px;">{{(item.deliveryDate ? item.deliveryDate.split(' ')[0] : '') + ' ' + item.deliveryTime}}</p>
+                      </template>
+                      <template v-else-if="list[0] && list[0].deliveryWay == 3">
+                        <p style="width: 285px; text-align: center; margin-top: 29px;">
+                          <span style="margin-right: 20px;">配送方式</span>
+                          <span>第三方配送</span>
+                        </p>
+                      </template>
                     </template>
                   </div>
                 </div>
@@ -156,7 +164,12 @@
                 <i class="deliver-icon"></i>
                 <span>发货信息</span>
               </div>
-              <div @click="changeSendInfo" class="blue pointer">修改发货信息</div>
+              <template v-if="list[0] && list[0].deliveryWay == 3">
+                <div class="blue pointer" :class="{disabled: list[0] && list[0].deliveryWay == 3}">修改发货信息</div>
+              </template>
+              <template v-else>
+                <div @click="changeSendInfo" class="blue pointer" :class="{disabled: list[0] && list[0].deliveryWay == 3}">修改发货信息</div>
+              </template>
             </div>
             <div class="content">
               <div class="item">
@@ -206,25 +219,14 @@ import { validatePhone } from "@/utils/validate.js"
 
 import { asyncRouterMap } from '@/router'
 import SelectSizeDialog from "@/views/order/dialogs/selectSizeDialog";
-import { common, deliveryWay1 } from '@/views/order/mixins/orderMixin'
+import { commonMore, deliveryWay1More, deliveryWay2More } from '@/views/order/mixins/sendGoodsMixin'
 
 export default {
-  mixins: [common, deliveryWay1],
+  mixins: [commonMore, deliveryWay1More, deliveryWay2More],
   data() {
     return {
       list: [],
-      currentDialog: "",
-      dialogVisible: false,
-      currentData: "",
-      sendGoods: "",
-      title: "",
-      distributorList: [], //每个订单对应的筛选后的配送员列表
-      distributorListFilter: [], //配送员列表
-      distributorNameFirst: true, //配送员名字第一次输入标记
-      distributorPhoneFirst: true, //配送员联系方式第一次输入标记
-      distributorSet: false,
       allchecked: true,
-      ajax: true,
     };
   },
   created() {
@@ -280,176 +282,6 @@ export default {
       } else {
         this.distributorList[index] = this.distributorListFilter;
       }
-    },
-    selectFocus(e, index){
-      const value = e.target.value;
-      const input = this.$refs['searchSelect'+index][0].$children[0].$refs.input;
-      this.$nextTick(() => {
-        input.setAttribute('placeholder', '请输入或选择');
-        input.value = value;
-        input.setAttribute('maxlength', 20);
-        input.selectionStart=input.selectionEnd=input.value.length
-      })
-    },
-    selectBlur(val, index){
-      //失去焦点时如果input中有值，且发生了变化，则需要根据name查询出对应的数据
-      if(this.list[index].distributorValue != '' && this.list[index].distributorValue != this.list[index].distributorName){
-        let arr = this.distributorListFilter.filter((item) => {
-          if (item.name === this.list[index].distributorValue) {
-            return true
-          }
-        })
-        //如果未查询到，则把没有id，只记录配送员名字
-        if(arr.length == 0){
-          this.list[index].distributorName = this.list[index].distributorValue;
-          this.list[index].distributorId = '';
-        }else{
-          this.list[index].distributorName = arr[0].name;
-          this.list[index].distributorId = arr[0].id;
-          this.list[index].phone = arr[0].phone;
-          this.list[index].showErrorPhone = false;
-        }
-        //第一次，检测其他订单中配送员相关信息是否有为空的，如果有，则直接按当前的给自动填充上
-        if(this.distributorNameFirst){
-          this.distributorNameFirst = false;
-          this.list.forEach((items, indexs) => {
-            if(indexs != index){
-              items.distributorValue = this.list[index].distributorName;
-              items.distributorName = this.list[index].distributorName;
-              items.distributorId = this.list[index].distributorId;
-              items.showErrorDistributorName = false;
-              this.distributorList[indexs] = this.distributorListFilter.filter((item) => {
-                  if (item.name.includes(items.distributorValue) || item.name.toUpperCase().includes(items.distributorValue.toUpperCase())) {
-                    return true
-                  }
-              })
-              if(arr.length != 0){
-                this.distributorPhoneFirst = false;
-                items.phone = this.list[index].phone;
-                items.showErrorPhone = false;
-              }
-            }
-          })
-        }
-      }
-      if(this.list[index].distributorValue != ''){
-        this.list[index].showErrorDistributorName = false;
-      }else{
-        this.list[index].showErrorDistributorName = true;
-      }
-    },
-    selectChange(val, index){
-      this.list[index].showErrorDistributorName = false;
-      this.list[index].showErrorPhone = false;
-      //选择后，把筛选列表重置
-      this.distributorList[index] = this.distributorListFilter.filter((item) => {
-          if (item.name.includes(val) || item.name.toUpperCase().includes(val.toUpperCase())) {
-            return true
-          }
-      })
-      //根据name查询出对应数据，把选择的name和id给到相关字段
-      let arr = this.distributorListFilter.filter((item) => {
-          if (item.name === val) {
-            return true
-          }
-        })
-      this.list[index].distributorName = arr[0].name;
-      this.list[index].distributorId = arr[0].id;
-      this.list[index].phone = arr[0].phone;
-
-      //第一次检测其他订单中配送员相关信息是否有为空的，如果有，则直接按当前的给自动填充上
-      if(this.distributorNameFirst){
-        this.distributorNameFirst = false;
-        this.distributorPhoneFirst = false;
-        this.list.forEach((items, indexs) => {
-          if(indexs != index){
-            items.distributorValue = this.list[index].distributorName;
-            items.distributorName = this.list[index].distributorName;
-            items.distributorId = this.list[index].distributorId;
-            this.distributorList[indexs] = this.distributorListFilter.filter((item) => {
-                  if (item.name.includes(items.distributorValue) || item.name.toUpperCase().includes(items.distributorValue.toUpperCase())) {
-                    return true
-                  }
-              })
-            items.phone = this.list[index].phone;
-            items.showErrorDistributorName = false;
-            items.showErrorPhone = false;
-          }
-        })
-      }
-    },
-    visibleChange(val, index){
-      if(!val){
-        let input = this.$refs['searchSelect'+index][0].$children[0].$refs.input;
-        input.blur();
-      }else{
-          let input = this.$refs['searchSelect'+index][0].$children[0].$refs.input;
-          let value = input.value;
-          this.$nextTick(() => {
-                input.value = value;
-          })
-      }
-    },
-    distributorPhoneBlur(e, index){
-      let value = e.target.value;
-      if(value == ''){
-        this.list[index].showErrorPhone = true;
-        this.list[index].errorMessagePhone = '请输入手机号码';
-      }else if(!validatePhone(value)){
-        this.list[index].showErrorPhone = true;
-        this.list[index].errorMessagePhone = '请输入正确的手机号码';
-      }else{
-        this.list[index].showErrorPhone = false;
-        //第一次，检测其他订单中配送员手机号是否有为空的，如果有，则直接按当前的给自动填充上
-        if(this.distributorPhoneFirst){
-          this.distributorPhoneFirst = false;
-          this.list.forEach((items, indexs) => {
-            if(indexs != index){
-              items.phone = value;
-              items.showErrorPhone = false;
-            }
-          })
-        }
-      }
-    },
-    //获取配送员列表
-    getDistributorList(length){
-        this._apis.order
-            .getDistributorList({
-                "shopInfoId": this.cid,
-                "roleName": "配送员",
-                "startIndex": 1,
-                "pageSize": 1000
-            })
-            .then(res => {
-            res.list.forEach((item) => {
-              item.name = item.userName;
-              item.phone = item.mobile;
-            })
-            //如果没有子帐号配置权限，则默认自己是配送员
-            if(!this.distributorSet){
-                const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-                res.list = [
-                    {
-                        "id": 1,
-                        "name": userInfo.userName,
-                        "phone": userInfo.mobile
-                    }
-                ];
-                this.distributorNameFirst = false;
-                this.list.forEach((item) => {
-                  item.distributorValue = userInfo.userName;
-                  item.distributorName = userInfo.userName;
-                  item.phone = userInfo.mobile;
-                })
-            }
-            this.distributorListFilter = res.list;
-            for(let i = 0; i < length; i++){
-              this.distributorList.push(res.list);
-            }
-            
-            })
-            .catch(error => {});
     },
     otherInput(index) {
       let item = this.list[index]
@@ -533,70 +365,6 @@ export default {
         }
       })
     },
-    checkExpress(index) {
-      let expressCompanyCodes
-      let expressName
-
-      expressCompanyCodes = this.list[index].expressCompanyCodes
-
-      if(expressCompanyCodes == 'other') {
-        expressName = 'other'
-      } else {
-        expressName = this.expressCompanyList.find(val => val.expressCompanyCode == expressCompanyCodes).expressCompany
-      }
-
-      this._apis.order
-        .checkExpress({expressName})
-        .then(res => {
-          this.list.splice(index, 1, Object.assign({}, this.list[index], {
-            express: res
-          }))
-
-          // 批量填充
-          if(index == 0) {
-            let list = JSON.parse(JSON.stringify(this.list))
-            let expressCompanyCodes = list[0].expressCompanyCodes
-            let express = list[0].express
-
-            list.forEach((val, index) => {
-              if(index != 0) {
-                val.expressCompanyCodes = expressCompanyCodes
-                val.express = express
-                val.expressNos = ''
-                val.showErrorExpressCompany = false
-                val.errorMessageExpressCompany = ''
-              }
-            })
-
-            this.list = list
-          }
-
-          if(res) {
-            this.list.splice(index, 1, Object.assign({}, this.list[index], {
-              expressNos: '',
-              express: res,
-              showErrorExpressCompany: false,
-              errorMessageExpressCompany: ''
-            }))
-          } else {
-            this.list.splice(index, 1, Object.assign({}, this.list[index], {
-              expressNos: '',
-              express: res,
-              showErrorExpressCompany: false,
-              errorMessageExpressCompany: '',
-            }))
-          }
-        })
-        .catch(error => {
-          this.visible = false;
-          this.$message.error(error.message);
-        });
-
-        // this.list.splice(index, 1, Object.assign({}, this.list[index], {
-        //   showErrorExpressCompany: false,
-        //   errorMessageExpressCompany: ''
-        // }))
-    },
     deleteOrder(index) {
       this.list.splice(index, 1);
     },
@@ -648,7 +416,6 @@ export default {
             .filter(val => val.checked).length
         ) {
           this.confirm({
-            title: "提示",
             icon: true,
             text: "请选择您要进行发货的商品"
           });
@@ -836,7 +603,7 @@ export default {
           
         })
         this.list = _list
-        console.log(_list)
+        // console.log(_list)
         if(isWrong) {
           this.$nextTick(() => {
             document.querySelector('.error-message').scrollIntoView()
@@ -846,6 +613,13 @@ export default {
           })
           return
         }
+
+        // if(true) {
+        //   this.confirm({title: '提示', text: '达达账户余额不足，请充值后再发货', confirmText: '去充值'}).then(() => {
+              //this.$router.push('/set/recharge')
+        //   })
+        //   return
+        // }
 
         // if(this.list && this.list[0] && this.list[0].deliveryWay == 1) {
         //   if(!this.shopAddressInfo) {
@@ -863,7 +637,7 @@ export default {
         params = {
           sendInfoDtoList: _list.map(item => {
             let expressCompanys = "";
-            console.log(this.expressCompanyList);
+            // console.log(this.expressCompanyList);
             if(item.deliveryWay == 1){ //如果为普通快递在对快递单号等进行处理
               if (item.expressCompanyCodes == "other") {
                 expressCompanys = item.other;
@@ -926,6 +700,11 @@ export default {
               //obj.distributorId = item.distributorId;
               obj.distributorPhone = item.phone;
             }
+            if(item.deliveryWay == 3) {
+              obj.deliveryWay = 3;
+              obj.receivedLongitude = item.receivedLongitude || item.receivedLng
+              obj.receivedLatitude = item.receivedLatitude || item.receivedLat
+            }
             if(item.deliveryWay == 4) {
               obj.deliveryWay = 4;
               obj.verifyCode = item.verifyCode
@@ -934,6 +713,9 @@ export default {
             return obj;
           })
         };
+        if(this.list[0] && this.list[0].deliveryWay == 3) {
+          params.thirdPartType = 1
+        }
         this.params = params
         let _arr = []
 
@@ -964,7 +746,7 @@ export default {
             //   this._list.splice(index, 1)
             // }
           }
-          console.log(this._list)
+          // console.log(this._list)
           this._list = this._list.filter(val => val.express != null && !val.express.sizeSpecs && val.sizeList && val.sizeList.length)
 
           var __result = [];
@@ -987,7 +769,7 @@ export default {
             this.title = '提示'
             this.dialogVisible = true
           } else {
-            this.orderSendGoodsHander(params)
+            this.orderSendGoodsHander(params, _list.length)
           }
         });
 
@@ -996,23 +778,54 @@ export default {
         console.error(e);
       }
     },
-    orderSendGoodsHander(params) {
-      this._apis.order
+    orderSendGoodsHander(params, _length) {
+      if(this.list[0] && this.list[0].deliveryWay == 3) {
+        this._apis.order
+        .sendGoods3(params)
+        .then(res => {
+          let successNumber = res.success && +res.success || 0
+          let errorNumber = res.error && +res.error || 0
+
+          this.$message.success(`本次批量发货${successNumber + errorNumber}单，成功${successNumber}单，失败${errorNumber}单`);
+          this.sending = false
+          
+          let printIds = this.list.filter(val => !val.express).map(val => val.orderId).join(',')
+
+          this.$router.push({
+            path: "/order/deliverGoodsSuccess",
+            query: {
+              ids: this.$route.query._ids,
+              orderId: this.$route.query.ids,
+              type: "orderBulkDelivery",
+              printIds,
+              deliveryWay: 3,
+              length: _length,
+              successNumber: res.success
+            }
+          });
+        })
+        .catch(error => {
+          if(error && (error.code == 2155)) {
+            let successNumber = error.data && error.data.success && +error.data.success || 0
+            let errorNumber = error.data && error.data.error && +error.data.error || 0
+
+            this.$message.success(`本次批量发货${successNumber + errorNumber}单，成功${successNumber}单，失败${errorNumber}单`);
+            this.confirm({text: '达达账户余额不足，请充值后再发货。', icon: true,confirmText: '去充值', showClose: false, closeOnClickModal: false, cancelButtonText: '返回'}).then(() => {
+                this.$router.push('/set/recharge')
+            }).catch(action => {
+              this.$router.push('/order/deliveryManagement')
+            });
+          } else {
+            this.$message.error(error.msg);
+          }
+          this.sending = false
+        });
+      } else {
+        this._apis.order
         .orderSendGoods(params)
         .then(res => {
-          this.$message.success('发货成功');
           this.sending = false
-          // this.$router.push(
-          //   "/order/deliverGoodsSuccess?ids=" +
-          //     this.list.map(val => val.id).join(",") +
-          //     "&type=orderBulkDelivery"
-          // );
-
-          // this.$router.push(
-          //   "/order/deliverGoodsSuccess?ids=" +
-          //     res.success.map(val => val.orderInfoId).join(",") +
-          //     "&type=orderBulkDelivery"
-          // );
+          
           let printIds = this.list.filter(val => !val.express).map(val => val.orderId).join(',')
 
           this.$router.push({
@@ -1033,6 +846,7 @@ export default {
           this.$message.error(error);
           this.sending = false
         });
+      }
     },
     select(index, i) {
       if(this.list[0].deliveryWay == 4 || this.list[index].orderItemList[i].goodsCount - this.list[index].orderItemList[i].cacheSendCount == 0) {
@@ -1072,14 +886,6 @@ export default {
       });
 
       this.list = _list;
-    },
-    changeSendInfo() {
-      this.currentDialog = "ReceiveInformationDialog";
-      this.currentData = this.list[0];
-      this.isReceived = false;
-      this.title = "修改发货信息";
-      this.sendGoods = "send";
-      this.dialogVisible = true;
     },
     getDetail(selection, list) {
       this._apis.order
@@ -1166,9 +972,7 @@ export default {
             //获取配送员列表
             this.getDistributorList(res.length);
           }
-          // this._apis.order
-          //   .fetchOrderAddress({ id: this.cid, cid: this.cid })
-          //   .then(response => {
+          // this.$store.dispatch('getShopInfo').then(response => {
           //     this.list.forEach(res => {
           //       if(!res.sendAddress) {
           //         res.sendName = response.senderName;
@@ -1194,7 +998,7 @@ export default {
           
           res.forEach(item => {
             if(!item.sendAddress) {
-              if(item.deliveryWay == 1 || item.deliveryWay == 2) {
+              if(item.deliveryWay == 1 || item.deliveryWay == 2 || item.deliveryWay == 3) {
                 if(_orderItem) {
                   item.sendName = _orderItem.sendName;
                   item.sendPhone = _orderItem.sendPhone;
@@ -1268,6 +1072,7 @@ export default {
   padding: 20px;
   color: #333333;
   font-size: 14px;
+  border-radius: 4px;
   > .title {
     font-size: 16px;
   }
@@ -1371,6 +1176,9 @@ export default {
       }
       .take-in-icon {
         background: url(../../assets/images/order/take-in-icon.png);
+      }
+      .disabled {
+        color: #9fa29f;
       }
     }
     .content {

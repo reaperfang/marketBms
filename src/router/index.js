@@ -13,7 +13,6 @@ import client from './client';
 import datum from './datum';
 import profile from './profile';
 import apply from './apply';
-
 export const asyncRouterMap = [  //异步路由表
 	// ...demo,
   ...profile,
@@ -91,6 +90,13 @@ const routerConfig = {
   scrollBehavior: () => ({ y: 0 }),
   routes: syncRouterMap
 };
+
+// vue-router ≥3.0版本回调形式以及改成promise api的形式了，返回的是一个promise，如果路由地址跳转相同, 且没有捕获到错误，控制台始终会出现错误警告 （注：3.0以下版本则不会出现以下警告！！！，因路由回调问题…）
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+  return originalPush.call(this, location).catch(err => err)
+}
 
 let router = new Router(routerConfig);
 router.selfAddRoutes = function (params){  //解决控制台路由警告提示  https://www.cnblogs.com/fqh123/p/11571688.html

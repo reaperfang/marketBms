@@ -1,6 +1,6 @@
 /*新建子账号 */
 <template>
-    <div class="main">
+    <div class="main mh bor-radius">
         <h1>创建子账号
           <span class="note">注：子账号的默认初始密码为：子账号的手机号码后4位+@A</span>
         </h1>
@@ -97,10 +97,10 @@ export default {
           return this.$route.params.data
       },
       userInfo(){
-        return JSON.parse(localStorage.getItem('userInfo'))
+        return this.$store.getters.userInfo
      },
      cid(){
-        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        let shopInfo = this.$store.getters.shopInfos
         return shopInfo.id
      },
   },

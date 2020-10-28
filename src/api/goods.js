@@ -477,15 +477,15 @@ export function commisionGoodsSet(data) {
     token
   })
 }
-//通过店铺查询获取普通快递、商家配送是否设置开启状态
-export function getExpressAndDeliverySet(data) {
-  return request({
-    target: 'SHOP-API-100-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// //通过店铺查询获取普通快递、商家配送是否设置开启状态
+// export function getExpressAndDeliverySet(data) {
+//   return request({
+//     target: 'SHOP-API-100-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 //修改商品排列序号
 export function editGoodSortId(data) {
   return request({

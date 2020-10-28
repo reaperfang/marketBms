@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     getMapClickPoi(poi) {
-      console.log(poi)
+      // console.log(poi)
     },
     search() {
       this.$refs.mapSearch.handlePropSearch(this.address)

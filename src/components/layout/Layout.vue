@@ -8,7 +8,7 @@
         <img :src="require('@/assets/images/logo.png')" class="logo" v-else>
       </div>
       <ul v-calcHeight="74" style="overflow:auto">
-        <li :class="{active: index == current}" @click="menuHandler(index)" v-show="!item.hidden && item.children"
+        <li :class="{active: index == current}" @click="menuHandler(index)" v-show="!item.hidden && item.children && hasShowChildren(item.children)"
           v-for="(item, index) in permission_routers_tree" :key="index">
           <i v-if="index != current" class="icons" :class="{[item.meta.icon]: true}"></i>
           <i v-else class="icons" :class="{[item.meta.activeIcon]: true}"></i>
@@ -106,7 +106,7 @@ export default {
       }
     },
     cid(){
-        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        let shopInfo = this.$store.getters.shopInfos
         return shopInfo.id
     },
     shopInfo() {
@@ -151,7 +151,7 @@ export default {
 
       let basePath = currentBar.path
       let children = currentBar.children
-      console.log('children',children)
+      // console.log('children',children)
       if(children && children.length) {
         let _path = this.getNoHideChildPath(children)
 
@@ -166,7 +166,20 @@ export default {
     },
     isExternalLink(routePath) {
       return isExternal(routePath)
-    }
+    },
+    hasShowChildren(item) {
+      for (let i = 0; i < item.length; i++) {
+        const tmp = {...item[i]}
+        if (tmp.children) {
+          const result = hasShowChildren(tmp.children)
+          console.log('result',result)
+          return result
+        } else {
+          if (!tmp.hidden) return true
+        }
+      }
+      return false
+    },
   },
   watch: {
     '$store.state.menu.current': function(index) {

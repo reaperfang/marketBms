@@ -4,7 +4,8 @@ import store from '@/store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
-import { getToken } from '@/system/auth' // getToken from cookie
+import { isLogin, getAuthList } from '@/system/user.js' // getToken from cookie
+// import { getShopInfos } from '@/system/shop.js' // getToken from cookie
 
 
 
@@ -22,28 +23,19 @@ function hasPermission(msfList, route) {
 const whiteList = ['/login', '/auth-redirect','/datashop']// no redirect whitelist
 
 let flag = 0
-function isLogin() {
-  const shopInfos = localStorage.getItem('shopInfos');
-  const userInfo = localStorage.getItem('userInfo');
-  const token = store.getters.token
-  if (!shopInfos || !userInfo || !token) {
-    return false
-  }
-  return true
-}
 router.beforeEach((to, from, next) => {
-  console.log('go router')
+  // console.log('go router')
   NProgress.start() // start progress bar
-  //  if (true) { // determine if there has token
+  //  if (true) { // determine if there has token  
   if(isLogin()){
-    const localMsfList = localStorage.getItem('shopInfos');
-    let msfList = [];
+    // const localMsfList = getShopInfo();
+    let msfList = getAuthList()
     let enable = 0
 
-    enable = +localStorage.getItem('anotherAuthEnable')
-    if(localMsfList && JSON.parse(localMsfList) && JSON.parse(localMsfList).data && JSON.parse(localMsfList).data.msfList) {
-      msfList = JSON.parse(localMsfList).data.msfList
-    }
+    enable = +localStorage.getItem('anotherAuthEnable') // 订单导入权限
+    // if(localMsfList && JSON.parse(localMsfList) && JSON.parse(localMsfList).data && JSON.parse(localMsfList).data.msfList) {
+    //   msfList = JSON.parse(localMsfList).data.msfList
+    // }
     /* has token*/
     if (to.path === '/login') {
       if(msfList.length) {
@@ -55,10 +47,11 @@ router.beforeEach((to, from, next) => {
       }
     } else {
         if(flag == 0){
+          store.dispatch('getShopStyle');
           store.dispatch('GenerateRoutes', {data: msfList, enable}).then(() => { // 根据roles权限生成可访问的路由表
             if(store.getters.addRouters.length != 0){
               router.selfAddRoutes(store.getters.addRouters) // 动态添加可访问路由表
-              console.log('GenerateRoutes',to)
+              // console.log('GenerateRoutes',to)
               next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
             }else{
               next({ path: '/401'})
@@ -98,4 +91,5 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach(() => {
   NProgress.done() // finish progress bar
+  console.log('enter: afterEach')
 })

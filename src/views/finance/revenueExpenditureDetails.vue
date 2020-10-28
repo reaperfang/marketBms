@@ -5,7 +5,7 @@
     <div class="top_part head-wrapper">
       <el-form :model="ruleForm" ref="ruleForm" :inline="inline">
         <el-form-item>
-          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:130px;padding-right:4px;">
+          <el-select v-model="ruleForm.searchType" placeholder="交易流水号" style="width:135px;padding-right:4px;">
             <el-option
               v-for="item in revenueExpenditureTerms"
               :key="item.value"
@@ -16,7 +16,7 @@
           <el-input v-model="ruleForm.searchValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
-          <el-select v-model="ruleForm.businessType" style="width:210px;" placeholder="全部">
+          <el-select v-model="ruleForm.businessType" placeholder="全部">
             <el-option
               v-for="item in rebusinessTypes"
               :key="item.value"
@@ -27,7 +27,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="支付方式">
-          <el-select v-model="ruleForm.payWay" style="width:210px;" placeholder="全部">
+          <el-select v-model="ruleForm.payWay" placeholder="全部">
             <el-option
               v-for="item in payTypeList"
               :key="item.value"
@@ -37,7 +37,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="收支类型">
-          <el-select v-model="ruleForm.tradeType" style="width:150px;" placeholder="全部">
+          <el-select v-model="ruleForm.tradeType"  placeholder="全部">
             <el-option
               v-for="item in tradeTypes"
               :key="item.value"
@@ -69,7 +69,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="262">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
@@ -91,7 +91,8 @@
           :render-header="renderTradeDetailSn"
           align="left"
           width="220px"
-          fixed
+          class-name="table-padding"
+          fixed="left"
           >
         </el-table-column>
         <el-table-column
@@ -158,7 +159,8 @@
           label="交易时间"
           sortable="custom"
           align="center"
-          width="200px"
+          width="180px"
+          class-name="table-padding"
           fixed="right"
           >
         </el-table-column>
@@ -171,9 +173,9 @@
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1"
-          :background="background">
+          :background="true">
         </el-pagination>
       </div>
       <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData"></component> 
@@ -252,7 +254,7 @@ export default {
   methods: {
     renderTradeDetailSn(){
       return(
-        <div style="height:49px;line-height:49px;">
+        <p>
           <span style="font-weight:bold;vertical-align:middle;">交易流水号</span>
           <el-popover
             placement="top-start"
@@ -262,12 +264,12 @@ export default {
             content="本系统所有收入和支出相应的交易流水号">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
-        </div>
+        </p>
       )
     },
     renderBusinessType(){
       return(
-        <div style="height:49px;line-height:49px;">
+        <p>
           <span style="font-weight:bold;vertical-align:middle;">业务类型</span>
           <el-popover
             placement="top-start"
@@ -277,12 +279,12 @@ export default {
             content="本系统所有产生收入和支出相应的操作">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
-        </div>
+        </p>
       )
     },
     renderRelationSn(){
       return(
-        <div style="height:49px;line-height:49px;">
+        <p>
           <span style="font-weight:bold;vertical-align:middle;">关联单据编号</span>
           <el-popover
             placement="top-start"
@@ -292,19 +294,19 @@ export default {
             content="订单编号、售后单编号、提现编号">
             <i slot="reference" class="el-icon-warning-outline" style="vertical-align:middle;"></i>
           </el-popover>
-        </div>
+        </p>
       )
     },
     renderTradeTypen(){
        return(
-        <div>
+        <p>
           <span style="font-weight:bold;vertical-align:middle;">收支类型</span>
-        </div>
+        </p>
       )
     },
 
     getRebusinessTypes(){
-       this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+       this.$store.dispatch('getShopInfo').then( data => {
           if(data.isOpenResell == 1){
             this.types = financeCons.rebusinessTypes
           }else{
@@ -432,14 +434,14 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
-  padding: 15px 20px;
+  border-radius: 4px;
+  padding: 20px;
 }
 .under_part{
   width: 100%;
   background: #fff;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
   .total{
     display: flex;
     justify-content: space-between;
@@ -447,7 +449,7 @@ export default {
       font-size: 16px;
       color: #B6B5C8;
       display: block;
-      margin-top:15px;
+      // margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -464,11 +466,5 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
-}
-/deep/ .el-table--small td{
-  padding:16px 10px;
-}
-/deep/.el-table--small th{
-  padding:0px;
 }
 </style>

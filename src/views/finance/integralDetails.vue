@@ -15,7 +15,7 @@
           <el-input v-model="ruleForm.userValue" placeholder="请输入" style="width:226px;"></el-input>
         </el-form-item>
         <el-form-item label="业务类型">
-          <el-select v-model="ruleForm.businessTypeId" style="width:140px;" placeholder="全部">
+          <el-select v-model="ruleForm.businessTypeId"  placeholder="全部">
             <el-option
               v-for="item in idbusinessTypes"
               :key="item.value"
@@ -42,7 +42,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="under_part">
+    <div class="under_part bor-radius" v-calcMinHeight="211">
       <div class="total">
         <span>全部 <em>{{total}}</em> 项</span>
         <el-tooltip content="当前最多支持导出1000条数据" placement="top">
@@ -61,18 +61,22 @@
         <el-table-column
           prop="scoreDetailSn"
           label="积分流水号"
+          fixed="left" class-name="table-padding"
           width="200px">
         </el-table-column>
         <el-table-column
           prop="memberSn"
+          align="center"
           label="用户ID">
         </el-table-column>
         <el-table-column
           prop='nickName'
+          align="center"
           label="用户昵称">
         </el-table-column>
         <el-table-column
           prop="businessTypeId"
+          align="center"
           label="业务类型">
           <template slot-scope="scope">
             {{idbusinessTypes[scope.row.businessTypeId] && idbusinessTypes[scope.row.businessTypeId].label}}
@@ -83,8 +87,8 @@
           label="变动积分"
           align="right">
           <template slot-scope="scope">
-            <span v-if="scope.row.changeType == 1 || scope.row.changeType == 3"> - </span>
-            <span v-else> + </span>
+            <span v-if="scope.row.changeType == 1 || scope.row.changeType == 5 || scope.row.changeType == 6"> - </span>
+            <span v-if="scope.row.changeType == 0 || scope.row.changeType == 3 || scope.row.changeType == 4"> + </span>
             {{scope.row.changeScore}}
           </template>
         </el-table-column>
@@ -98,12 +102,15 @@
           label="交易时间"
           sortable = "custom"
           align="center"
-          width="200px">
+          width="160px">
         </el-table-column>
         <el-table-column
           prop="remarks"
           label="备注"
-          align="right">
+          class-name="table-padding"
+          width="190px"
+          fixed="right"
+          align="center">
         </el-table-column>
       </el-table>
       <div class="page_styles">
@@ -114,9 +121,9 @@
           :current-page="Number(ruleForm.startIndex) || 1"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="ruleForm.pageSize*1"
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next, sizes"
           :total="total*1"
-          :background="background">
+          :background="true">
         </el-pagination>
       </div>
 		<exportTipDialog :data=currentData  :dialogVisible.sync="dialogVisible"></exportTipDialog>
@@ -272,14 +279,14 @@ export default {
 .top_part{
   width: 100%;
   background: #fff;
-  border-radius: 3px;
-  padding: 15px 20px;
+  border-radius: 4px;
+  padding: 20px;
 }
 .under_part{
   width: 100%;
   background: #fff;
   margin-top: 20px;
-  padding: 15px 20px;
+  padding: 20px;
   .total{
     display: flex;
     justify-content: space-between;
@@ -287,7 +294,7 @@ export default {
       font-size: 16px;
       color: #B6B5C8;
       display: block;
-      margin-top:15px;
+      // margin-top:15px;
       em{
         font-style: normal;
         color: #000;
@@ -304,8 +311,5 @@ export default {
 }
 /deep/.el-table .ascending .sort-caret.ascending{
   border-bottom-color:#44434B;
-}
-/deep/ .el-table--small td, /deep/.el-table--small th{
-  padding:16px 10px;
 }
 </style>

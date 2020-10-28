@@ -1,5 +1,5 @@
 <template>
-  <div class="addSelfLift">
+  <div class="addSelfLift mh bor-radius">
     <h2>{{ setTitle }}</h2>
     <el-form class="ruleForm" ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px">
        <div class="form-area">
@@ -295,7 +295,7 @@ export default {
       return  str ? `【 ${str}】` : ''
     },
     cid(){
-        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        let shopInfo = this.$store.getters.shopInfos
         return shopInfo.id
     },
     getTimeSlot() {
@@ -366,13 +366,13 @@ export default {
         // 解决safari不兼容上面的时间格式问题
         start = new Date(start.replace(/-/g, '/'))
         end = new Date(end.replace(/-/g, '/'))
-        console.log(start, end)
+        // console.log(start, end)
         return {
           start,
           end
         }
       })
-      console.log('formatSubscribeTimeHourRanges:timePeriods', timePeriods)
+      // console.log('formatSubscribeTimeHourRanges:timePeriods', timePeriods)
       return timePeriods
     },
     // 格式化  以天为单位，每周重复的时间值(逗号分隔)：1,2,3,4,5,6,7
@@ -393,7 +393,7 @@ export default {
           end: ''
         }
       ]
-      console.log('-----res.subscribeTimeHourRanges--', res.subscribeTimeHourRanges)
+      // console.log('-----res.subscribeTimeHourRanges--', res.subscribeTimeHourRanges)
       this.ruleForm.timePeriods = this.formatSubscribeTimeHourRanges(res.subscribeTimeHourRanges) || defaultVal // 每天重复的小时时间段(~和逗号分隔): 00:00:00~00:01:00,00:08:00~00:09:00,00:13:00~00:14:00
       const weeks = this.formatSubscribeTimeWeekDays(res.subscribeTimeWeekDays) || [] // 以天为单位，每周重复的时间值(逗号分隔)：1,2,3,4,5,6,7
       this.ruleForm.weeks = weeks
@@ -432,7 +432,7 @@ export default {
       return date >= 10 ? date : `0${date}`
     },
     getPrevVal(form, index, key) {
-      console.log(form,index, key)
+      // console.log(form,index, key)
       if (index < 0) return null
       let prev =  form && form[index] && form[index][key]
       while(index >= 0 && !prev) {
@@ -443,7 +443,7 @@ export default {
       return prev
     },
     getNextVal(form, index, key) {
-      console.log(form,index, key)
+      // console.log(form,index, key)
       if (index >= form.length) return null
       let next = form && form[index] && form[index][key]
       while(index < form.length && !next) {
@@ -490,7 +490,7 @@ export default {
       const curr = this.getTimestamp(value)
       const len = ruleForm.length
       let isValid = true
-      console.log('validateTimeRangesStart',curr, this.getTimestamp(ruleForm[index].end))
+      // console.log('validateTimeRangesStart',curr, this.getTimestamp(ruleForm[index].end))
       if (index > 0) {
         let prev = this.getPrevVal(ruleForm, index - 1, 'start')
         if (prev) {
@@ -535,7 +535,7 @@ export default {
       const curr = this.getTimestamp(value)
       const len = ruleForm.length
       let isValid = true
-      console.log('validateTimeRangesEnd',curr, this.getTimestamp(ruleForm[index].start))
+      // console.log('validateTimeRangesEnd',curr, this.getTimestamp(ruleForm[index].start))
       if (index > 0) {
         let prev = this.getPrevVal(ruleForm, index - 1, 'end')
         if (prev) {
@@ -623,7 +623,7 @@ export default {
       this.visible3 = false
     },
     handleRepeatCycleChange(val) {
-      console.log('---val--', val)
+      // console.log('---val--', val)
       // if (val === 1) {
       //   this.ruleForm.weeks = []
       //   this.tempWeeks = []
@@ -730,7 +730,7 @@ export default {
       this.isLoading = true
       let isValidWeeks = true
       this.errWeekMsg = ''
-      console.log('handleSubmit:before')
+      // console.log('handleSubmit:before')
       if (this.ruleForm.repeatCycle === 2) {
         if (this.ruleForm.weeks.length <= 0) {
           this.errWeekMsg = '请点击编辑，选择重复日'
@@ -749,22 +749,23 @@ export default {
           this.isLoading = true
           const id = this.$route.query && this.$route.query.id
           const req = this.getReqData()
-          console.log('req',req)
+          // console.log('req',req)
           const p1 = id ? this._apis.set.editSelfLiftById(req) : this._apis.set.addSelfLift(req)
           p1.then((res) => {
             let txt = ''
             if (!id) {
               const url = `${location.protocol}//${location.host}/bp/set/addSelfLift`
-              txt = `<p style="font-size:16px;color:rgba(68,67,75,1);">保存成功</p><p style="font-size:12px;color:rgba(68,67,75,1);"><a href="${url}" style="color:#655EFF;text-decoration: underline;">继续新建自提点</a></p>`
+              txt = `<span class="success" style="font-size:16px;color:rgba(68,67,75,1);">保存成功！</span><span class="prompt" style="font-size:12px;color:rgba(68,67,75,1);"><a href="${url}" style="color:#655EFF;text-decoration: underline;">继续新建自提点</a></span>`
             } else {
-              txt = `<p style="font-size:16px;color:rgba(68,67,75,1);">保存成功</p>`
+              txt = `<span class="success" style="font-size:16px;color:rgba(68,67,75,1);">保存成功！</span>`
             }
             this.confirm({
-              title: "提示",
+              title: "",
               iconSuccess: true,
               text: txt,
               showConfirmButton: false,
               confirmText: '我知道了',
+              customClass: 'setting-custom',
               showCancelButton: false
             }).catch(() => {
               this.$router.push({ path: '/set/selfLift'})
@@ -776,7 +777,7 @@ export default {
           })
 
         } else {
-          console.log('error submit!!');
+          console.error('error submit!!');
           this.isLoading = false
           return false;
         }
@@ -786,7 +787,7 @@ export default {
       this.isMapChoose = false
     },
     getMapClickPoi(poi) {
-      console.log('poi----getMapClickPoi', poi)
+      // console.log('poi----getMapClickPoi', poi)
       if (!poi) return false 
       this.ruleForm.address = poi.address
       this.ruleForm.lat = poi.location.lat

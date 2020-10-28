@@ -92,7 +92,7 @@ export default {
           this.getOptionsData(data[i].childFileGroupInfoList);
         }
       }
-      console.log('data:', data);
+      // console.log('data:', data);
       return data;
     },
 

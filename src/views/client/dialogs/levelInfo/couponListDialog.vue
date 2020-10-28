@@ -12,7 +12,6 @@
           :data="couponList"
           style="width: 100%"
           ref="couponTable"
-          :header-cell-style="{background:'#ebeafa', color:'#655EFF'}"
           :default-sort="{prop: 'date', order: 'descending'}"
         >
           <el-table-column type="selection"></el-table-column>
@@ -24,13 +23,14 @@
         </el-table>
         <div class="page_styles">
             <el-pagination
+              :background="true"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="Number(pageNum) || 1"
               :page-sizes="[5, 10, 20, 50, 100, 200, 500]"
               :page-size="pageSize*1"
               :total="total*1"
-              layout="total, sizes, prev, pager, next, jumper"
+              layout="prev, pager, next, sizes"
         ></el-pagination>
         </div>
       </div>
@@ -74,7 +74,7 @@ export default {
               })
             }
         }).catch((error) => {
-          console.log(error);
+          console.error(error);
             // this.$notify.error({
             //     title: '错误',
             //     message: error

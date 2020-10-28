@@ -76,7 +76,7 @@ export default {
   },
   computed:{
       cid(){
-          let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+          let shopInfo = this.$store.getters.shopInfos
           return shopInfo.id
       }
   },
@@ -85,8 +85,7 @@ export default {
   },
   methods: {
     getShopInfo(){
-      let id = this.cid
-      this._apis.set.getShopInfo({id:id}).then(response =>{
+      this.$store.dispatch('getShopInfo').then(response =>{
         this.form = response
         this.form.cashOutUpper != null  && (this.cashOutUpperChecked = true)
         this.form.cashOutLower != null  && (this.cashOutLowerChecked = true)
@@ -145,7 +144,7 @@ export default {
               }else{
                 this.loading = true
                 let data = Object.assign({id:id},this.form)
-                this._apis.set.updateShopInfo(data).then(response =>{
+                this._apis.shopInfo.updateShopInfo(data).then(response =>{
                   this.loading = false
                   this.$message.success('保存成功！');
                 }).catch(error =>{

@@ -1,6 +1,6 @@
 import Layout from '@/components/layout/Layout'
 
-export default [
+const setArr = [
     {
         path: '/set',
         component: Layout,
@@ -134,12 +134,6 @@ export default [
                 meta: { title: '新建角色', noCache: true, tabTitle: '权限管理', navType:4  },
                 hidden: true
             },
-            // {
-            //     path: 'authorize',
-            //     component: () => import('@/views/set/authorize'),
-            //     name: 'authorize',
-            //     meta: { title: '授权管理', noCache: true, tabTitle: '综合服务', navType:2  },
-            // },
             {
                 path: 'newTemplate',
                 component: () => import('@/views/set/newTemplate'),
@@ -162,6 +156,13 @@ export default [
                 meta: { title: '新建', noCache: true, tabTitle: '配送设置' ,navType:4},
             },
             {
+                path: 'newElectronicFaceSheet',
+                component: () => import('@/views/set/newElectronicFaceSheet'),
+                name: 'newElectronicFaceSheet',
+                hidden: true,
+                meta: { title: '查看', noCache: true, tabTitle: '配送设置' ,navType:4},
+            },
+            {
                 path: 'selfLift',
                 component: () => import('@/views/set/selfLift'),
                 name: 'selfLift',
@@ -181,12 +182,31 @@ export default [
                 hidden: true,
                 meta: { title: '编辑', noCache: true, tabTitle: '配送设置' ,navType:5},
             },
-            // {
-            //      path: 'authorize',
-            //      component: () => import('@/views/set/authorize'),
-            //      name: 'authorize',
-            //      meta: { title: '授权管理', noCache: true, tabTitle: '综合服务', navType:2  },
-            //  }
+            {
+                path: 'recharge',
+                component: () => import('@/views/set/recharge'),
+                name: 'recharge',
+                hidden: true,
+                meta: { title: '充值/查看余额', noCache: true, tabTitle: '配送设置' , navType: 4 }
+            },{
+                path: 'rechargeRecord',
+                component: () => import('@/views/set/rechargeRecord'),
+                name: 'rechargeRecord',
+                hidden: true,
+                meta: { title: '充值/查看余额', noCache: true, tabTitle: '配送设置' , navType: 4 }
+            }
         ]
     }
 ]
+
+//如果不是生产环境，则设置路由中增加 综合服务
+if(process.env.NODE_ENV !== "prod") {
+    setArr[0].children.push({
+        path: 'authorize',
+        component: () => import('@/views/set/authorize'),
+        name: 'authorize',
+        meta: { title: '授权管理', noCache: true, tabTitle: '综合服务', navType:2  },
+    })
+}
+
+export default setArr

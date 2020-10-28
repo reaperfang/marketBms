@@ -3,13 +3,13 @@
         <el-dialog
         title=""
         :visible.sync="showShopsDialog"
-        width="740px"
+        width="760px"
         :before-close="handleClose"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         :show-close="showClose"
         style="margin-top:5vh;">
-        <span slot="title" class="dialog_title">
+        <span slot="title" class="el-dialog__title">
             我的店铺
         </span>
         <div class="content"  v-loading="loading">
@@ -33,7 +33,7 @@
               :page-size="pageSize*1"
               layout="prev, pager, next"
               :total="total*1"
-              :background="background">
+              :background="true">
             </el-pagination>
           </p>
         </div>
@@ -49,7 +49,7 @@ export default {
   name: 'shopsDialog',
   computed: {
     isAdminUser(){
-      let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      let userInfo = this.$store.getters.userInfo
       if(userInfo && userInfo.type == "admin") {
         return true
       }
@@ -84,7 +84,7 @@ export default {
   methods: {
     //获取店铺列表
     getShopList(){
-      let userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      let userInfo = this.$store.getters.userInfo 
       let tid = '',id = '',type = ''
       if(userInfo){
         tid = userInfo.tenantInfoId
@@ -98,7 +98,7 @@ export default {
         tenantInfoId:tid,
         shopUserId: type == 'admin' ? '' : id
       }
-      this._apis.profile.getShopList(obj).then(response => {
+      this._apis.shopInfo.getShopList(obj).then(response => {
         this.total = response.total
         this.shopLists = response.list
         this.loading = false
@@ -137,7 +137,7 @@ export default {
             localStorage.setItem('userInfo',JSON.stringify(info));//更新本地存储的账号信息
             this.saveShop(shop)
           }).catch(error =>{
-            console.log('error',error)
+            console.error('error',error)
           })
         }
       }else{
@@ -147,7 +147,7 @@ export default {
 
     //保存当前选择店铺的信息
     saveShop(shop){
-      this._apis.set.getShopInfo({cid:shop.id,id:shop.id}).then(response =>{
+      this._apis.shopInfo.getShopInfo({cid:shop.id,id:shop.id}).then(response =>{
           let shopInfo;
           this.newShopList.map(item =>{
             item.id == shop.id && (shopInfo = item)
@@ -156,7 +156,9 @@ export default {
         // console.log("切换店铺后的店铺信息 ：", shopInfo);
         this.$store.dispatch('setShopInfos',shopInfo).then(() => {
             this.$store.dispatch('getShopInfo')
-            this._globalEvent.$emit('refreshProfile')
+            // console.log('saveShop',this.$route.path)
+            const fromPath = this.$route.path
+            if (fromPath === '/profile/profile') this._globalEvent.$emit('refreshProfile')
             this.getShopAuthList()
             this.handleClose()
             this.$store.commit('setStoreGuide', shop.storeGuide)
@@ -170,7 +172,7 @@ export default {
             this.$message.error(error);
           })
       }).catch(error => {
-        console.log(error)
+        console.error(error)
       })
     },
 
@@ -271,9 +273,9 @@ export default {
   }
 
 }
-/deep/ .el-dialog__header{
-  background:rgba(101,94,255,0.09) !important;
-}
+// /deep/ .el-dialog__header{
+//   background:rgba(101,94,255,0.09) !important;
+// }
 .p_center{
   text-align: center;
 }

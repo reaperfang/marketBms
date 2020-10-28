@@ -104,7 +104,7 @@ export default {
 
   computed: {
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
     swiper() {
@@ -147,7 +147,6 @@ export default {
       if (this.step === 6) {
         this.isDisabled = true
         this.confirm({
-          title: "提示",
           iconSuccess: true,
           text: '引导步骤已完成',
           confirmText: '确定',
@@ -166,13 +165,13 @@ export default {
         storeGuide
       }
       return new Promise((resolve, reject) => {
-        this._apis.set.updateShopInfo(data).then(response =>{
+        this._apis.shopInfo.updateShopInfo(data).then(response =>{
           this.$store.dispatch('getShopInfo');
           this.$store.commit('setStoreGuide', storeGuide)
           resolve(response)
         }).catch(error =>{
           reject(error)
-          console.log('updateShopInfo:error', error)
+          console.error('updateShopInfo:error', error)
           // this.$message.error('保存失败');
         })
       })
@@ -198,10 +197,10 @@ export default {
       return this.currentTemplate && this.currentTemplate.id === id
     },
     test(){
-      console.log('parent')
+      // console.log('parent')
     },
     test2() {
-      console.log('children')
+      // console.log('children')
     },
     choose(item) {
       this.currentTemplate = item
@@ -209,7 +208,7 @@ export default {
     /* 放大 */
     plus() {
       this.mode = 'plus';
-      console.log(this.$refs.bigImage, this.$refs.bigImage.clientWidth)
+      // console.log(this.$refs.bigImage, this.$refs.bigImage.clientWidth)
       if (this.$refs.bigImage.clientWidth <= this.maxWidth * 0.9) {
         this.zoomRatio += 0.1;
       }
@@ -239,7 +238,7 @@ export default {
           //   this._apis.templatePay.getOrcode({
           //     orderSource: 1,
           //     orderType: 1,
-          //     shopName: JSON.parse(localStorage.getItem('shopInfos')).shopName,
+          //     shopName: this.$store.getters.shopInfos.shopName,
           //     templateChargeType: item.chargeType,
           //     templateId: item.id,
           //     templateName: item.name,
@@ -265,9 +264,8 @@ export default {
               pageTemplateId: item.id
             }).then(response => {
               this.confirm({
-                title: '提示',
                 customClass: 'goods-custom',
-                // icon: true,
+                icon: true,
                 text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
               }).then(() => {
                 this._routeTo('m_templateEdit', {id: item.id});
@@ -275,9 +273,8 @@ export default {
             })
           } else {
             this.confirm({
-              title: '提示',
               customClass: 'goods-custom',
-              // icon: true,
+              icon: true,
               text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
             }).then(() => {
               this._routeTo('m_templateEdit', {id: item.id});
@@ -323,7 +320,7 @@ export default {
       }
       this.preLoadObj.src = data[this.imgNow][name];
       this.preLoadObj.onerror = function () {
-        console.log("图片加载失败");
+        console.warn("图片加载失败");
         _self.imgNow++;
         if (_self.imgNow < data.length) {  //  如果还没有加载到最后一张
           _self.preload(data, name);          //  递归调用自己
@@ -363,7 +360,6 @@ export default {
             pageTemplateId: id
           }).then(response => {
             this.confirm({
-              title: '提示',
               showCancelButton: false,
               customClass: 'goods-custom',
               icon: true,
@@ -376,7 +372,6 @@ export default {
           })
         } else {
           this.confirm({
-            title: '提示',
             showCancelButton: false,
             icon: true,
             text: `您已选择${this.currentTemplate.name}模板，为了保证商城的完整性， 需要您对当前模板进行信息编辑。`,
@@ -431,13 +426,17 @@ export default {
       }
       li {
         &.img {
-          min-width: 225px;
+          max-width: 100%;
+          width: 225px;
           height: 300px;
-          text-align: center;
+          display: flex;
+          justify-content: center;
+          align-items: center;
           img {
-            width: 225px;
-            height: 300px;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
+            flex: 1;
           }
         }
         &.desc {

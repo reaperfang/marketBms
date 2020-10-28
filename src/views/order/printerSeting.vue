@@ -155,7 +155,7 @@
 							}
 							delete params.status;
 							this._apis.order.connectPrinter(params).then(res => {
-								console.log(res)
+								// console.log(res)
 								if(res != null) {
 									this.dialogVisible1 = true;
 									this.ylyURL = res;
@@ -169,14 +169,14 @@
 								this.$message.error(error);
 							})
 						} else {
-							console.log('error submit!!');
+							console.error('error submit!!');
 							return false;
 						}
 					});
 				})
 			},
 			getPrinterDetail(){
-				console.log('进来了')
+				// console.log('进来了')
 				this._apis.order.getPrinterSetDetail().then(res => {
 					if(!!res){
 						this.printerDetail = res;

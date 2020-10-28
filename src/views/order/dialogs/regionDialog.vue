@@ -168,7 +168,7 @@ export default {
                 return false;
             }
             let isReturn = false
-            console.log('- binding.arg--', binding.arg)
+            // console.log('- binding.arg--', binding.arg)
             if (binding.arg) {
             binding.arg.map(item => {
                 if (document.querySelector('#' + item).contains(e.target)) {
@@ -200,7 +200,7 @@ export default {
       const { provinceList } = this.getProvinceList()
       const { cityList } = this.getCityList()
       const areaList = this.getAreaList()
-      console.log('provinceList',provinceList)
+      // console.log('provinceList',provinceList)
       // console.log('cityList',cityList)
       // console.log('areaList',areaList)
       arr = arr.concat(provinceList,cityList,areaList)
@@ -272,7 +272,7 @@ export default {
       return index >= 0 ? true : false
     },
     openChildNode(e) {
-      console.log('openChildNode')
+      // console.log('openChildNode')
     },
     pushAll() {
       let i = 0;
@@ -336,7 +336,7 @@ export default {
       let receivedAreaCode = ''
       let isIndeterminate = indeterminate
       let name = ''
-      console.log('----', halfCheckedNodes)
+      // console.log('----', halfCheckedNodes)
       if (halfCheckedNodes && halfCheckedNodes.length > 0) {
         let i = 0
         while(i < halfCheckedNodes.length) {
@@ -590,7 +590,7 @@ export default {
           count++
         }
       })
-      console.log(count, isAllChecked,(count === 0 || count === this.region.length))
+      // console.log(count, isAllChecked,(count === 0 || count === this.region.length))
       this.checkedAll = isAllChecked
       this.isAllIndeterminate = count === 0 || count === this.region.length ? false : true
     },
@@ -666,7 +666,7 @@ export default {
       return index
     },
     handleClose(tag) {
-      console.log(tag)
+      // console.log(tag)
       // 为省级
       if (tag.province) {
         const index = this.getOriginalProvinceNode(tag.province)
@@ -773,9 +773,9 @@ export default {
         delete item.isIndeterminate
         return item
       })
-      console.log('province',province)
-      console.log('city',city)
-      console.log('city',area)
+      // console.log('province',province)
+      // console.log('city',city)
+      // console.log('city',area)
       arr = arr.concat(province,city,area)
       return arr
     },
@@ -853,14 +853,14 @@ export default {
       }
       this.region = tempItem;
       this.currOneNode = item
-      console.log('titleMouseover',item)
+      // console.log('titleMouseover',item)
       this.checkboxChange(item)
       this.defaultCheckedCode = this.getDefaultCheckedCodeByNode(item)
     },
 
     //鼠标移出
     titleMouseout() {
-      console.log('--titleMouseout--')
+      // console.log('--titleMouseout--')
       // const tempItem = [...this.region];
       // for (let one of tempItem) {
       //   one.checked = false;

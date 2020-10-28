@@ -1,7 +1,7 @@
 // 店铺相关接口
 import request from '@/system/request'
 const qs = require('qs');
-
+import store from "@/store";
 
 // 页面管理&草稿箱列表(分页)
 export function getPageList(data) {
@@ -383,25 +383,25 @@ export function getPagesByTemplateId(data) {
   })
 }
 
-//获取店铺信息
-export function getShopInfo(data) {
-  return request({
-    target: 'SHOP-API-100-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// //获取店铺信息
+// export function getShopInfo(data) {
+//   return request({
+//     target: 'SHOP-API-100-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
-//改变店铺切换状态
-export function changeSwitchStatus(data) {
-  return request({
-    target: 'SHOP-API-102-PROCESSOR',
-    method: 'post',
-    apiType: 'manager',
-    data
-  })
-}
+// //改变店铺切换状态
+// export function changeSwitchStatus(data) {
+//   return request({
+//     target: 'SHOP-API-102-PROCESSOR',
+//     method: 'post',
+//     apiType: 'manager',
+//     data
+//   })
+// }
 
   //优惠券B端选择
   export function getCouponList(data) {
@@ -710,7 +710,7 @@ export function changeSwitchStatus(data) {
 
     //获取H5店铺状态
   export function getH5StoreStatus(data) {
-      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      let shopInfo = store.getters.shopInfos
       let cid = shopInfo && shopInfo.id || ''
       return request({
         url: '/v1/b/app-h5-store/get/status',
@@ -726,7 +726,7 @@ export function changeSwitchStatus(data) {
 
   //获取H5店铺域名列表
   export function getH5StoreDomainList(data) {
-      let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+      let shopInfo = store.getters.shopInfos
       let cid = shopInfo && shopInfo.id || ''
       return request({
         url: '/v1/b/app-h5-store/get-list',

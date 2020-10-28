@@ -83,7 +83,7 @@ export default {
     }
   },
   create() {
-    console.log('wx',wx)
+    // console.log('wx',wx)
   },
   methods: {
     colorChange (data, oldHue) {

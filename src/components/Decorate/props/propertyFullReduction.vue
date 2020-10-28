@@ -13,13 +13,13 @@
             <i class="el-icon-plus"></i>
             <span>选择活动</span>
           </div>
-          <p class="message">建议最多添加5个活动</p>
+          <p class="message">最多添加10个活动</p>
         </div>
         <div v-loading="loading" class="goods_groups">
           <el-tag
             v-for="tag in displayList"
             :key="tag.name"
-            closable
+            :closable="deleteShow ? true : false"
             style="margin-right:5px;"
             type="success" @close="deleteItem(tag)">
             {{tag.name}}
@@ -97,15 +97,18 @@ export default {
          bNeedUpdateMiddle && this.syncToMiddle();
           if(Array.isArray(componentData.ids) && componentData.ids.length){
               this.loading = true;
+
               this._apis.shop.getFullReductionListByIds({
                   ids: componentData.ids.join(',')
               }).then((response)=>{
                   this.createList(response);
                   this.loading = false;
+                  this.deleteShow = true;
               }).catch((error)=>{
                   console.error(error);
                   this.displayList = [];
                   this.loading = false;
+                  this.deleteShow = true;
               });
           }else{
               this.displayList = [];

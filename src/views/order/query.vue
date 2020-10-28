@@ -1,7 +1,7 @@
 <template>
   <div class="query">
     <section class="search">
-      <el-form :inline="true" :model="listQuery" ref="formInline" class="form-inline">
+      <el-form :inline="true" :model="listQuery" ref="formInline" class="form-inline input_style">
         <el-form-item label>
           <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
             <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
@@ -13,7 +13,7 @@
           </el-input>
         </el-form-item>
         <el-form-item label  class="searchTimeType">
-          <el-select class="date-picker-select" v-model="listQuery.searchTimeType" placeholder>
+          <el-select class="w_135" v-model="listQuery.searchTimeType" placeholder>
             <el-option label="下单时间" value="createTime"></el-option>
             <el-option label="完成时间" value="complateTime"></el-option>
             <el-option label="发货时间" value="sendTime"></el-option>
@@ -113,7 +113,7 @@
         <!-- <p class="explain">当前最多只支持导出1000条数据</p> -->
       </div>
     </section>
-    <section>
+    <section v-calcMinHeight="299">
       <div class="export-header">
         <p class="statistics">
           已选择
@@ -208,7 +208,7 @@ export default {
           searchValue2: resellerPhone
       })
     }
-    console.log(this.$route.query.id);
+    // console.log(this.$route.query.id);
     this._globalEvent.$on("checkedLength", number => {
       this.checkedLength = number;
     });
@@ -233,6 +233,14 @@ export default {
               isPay
           })
       }
+
+    if(this.$route.query.isAbnormal) {
+          let isAbnormal = +this.$route.query.isAbnormal
+
+          this.listQuery = Object.assign({}, this.listQuery, {
+              isAbnormal
+          })
+      }
     /**从分销跳转过来的 */
     if(this.$route.query.orderCode){
       this.listQuery.searchValue= this.$route.query.orderCode;
@@ -242,7 +250,7 @@ export default {
   methods: {
     checkCreditRule() {
       // 获取分销商设置
-      this._apis.client.checkCreditRule({id: JSON.parse(localStorage.getItem('shopInfos')).id}).then( data => {
+      this.$store.dispatch('getShopInfo').then( data => {
 
           if(data.isOpenResell == 1) this.resellConfigInfo = data.resellConfigInfo ? JSON.parse(data.resellConfigInfo) : null;
       }).catch((error) => {
@@ -251,26 +259,26 @@ export default {
     },
     batchSendGoods() {
       if(!this.$refs['shop'].list.filter(val => val.checked).length) {
-            this.confirm({title: '提示', icon: true, text: '请选择需要发货的订单'})
+            this.confirm({icon: true, text: '请选择需要发货的订单'})
             return
         }
         if(this.$refs['shop'].list.filter(val => val.checked).some(val => val.orderStatus != 3 && val.orderStatus != 4)) {
-          this.confirm({title: '提示', icon: true, text: '请选择待发货或者部分发货的订单'})
+          this.confirm({icon: true, text: '请选择待发货或者部分发货的订单'})
             return
         }
         this.$router.push('/order/orderBulkDelivery?ids=' + this.$refs['shop'].list.filter(val => val.checked).map(val => val.id).join(','))
     },
     batchSupplementaryLogistics() {
       if(!this.$refs['shop'].list.filter(val => val.checked).length) {
-          this.confirm({title: '提示', icon: true, text: '请先勾选当前页需要补填物流信息的订单。'})
+          this.confirm({icon: true, text: '请先勾选当前页需要补填物流信息的订单。'})
           return
       }
       if(this.$refs['shop'].list.filter(val => val.checked).some(val => val.deliveryWay == 1) && this.$refs['shop'].list.filter(val => val.checked).some(val => val.deliveryWay == 2)){
-          this.confirm({title: '提示', icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量补填物流。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量补填物流。'})
+          this.confirm({icon: true, showCancelButton: false, confirmText: '我知道了', text: '勾选单据同时包含商家配送和普通快递的两种单据，无法批量补填物流。<br/>请先筛选出商家配送或普通快递配送的单据，再进行批量补填物流。'})
           return;
       }
       if(this.$refs['shop'].list.filter(val => val.checked).filter(val => val.isFillUp != 1).length) {
-        this.confirm({title: '提示', icon: true, showCancelButton: false, text: '您勾选的订单包括不能补填物流信息的订单，请重新选择。'})
+        this.confirm({ticon: true, showCancelButton: false, text: '您勾选的订单包括不能补填物流信息的订单，请重新选择。'})
         return
       }
       this.$router.push('/order/batchSupplementaryLogistics?ids=' + this.$refs['shop'].list.filter(val => val.checked).map(val => val.id).join(','))
@@ -305,7 +313,7 @@ export default {
           let message
 
           if(res > 1000) {
-            this.confirm({title: '提示', icon: true, text: '导出数据量超出1000条，建议分时间段导出。<br />点击确定导出当前筛选下的前1000条数据<br />点击取消请重新筛选'}).then(() => {
+            this.confirm({ icon: true, text: '导出数据量超出1000条，建议分时间段导出。<br />点击确定导出当前筛选下的前1000条数据<br />点击取消请重新筛选'}).then(() => {
                 _params = Object.assign({}, _params, {
                   isExport: 1
                 })
@@ -341,7 +349,7 @@ export default {
     onSubmit() {
       this.checkedList = [];
 
-      console.log(this.listQuery)
+      // console.log(this.listQuery)
       this.listQuery = Object.assign({}, this.listQuery, {
         startIndex: 1,
         pageSize: 20,
@@ -456,38 +464,27 @@ export default {
     margin-bottom: 20px;
     border-radius: 4px;
     .statistics {
-      color: #e0dee8;
+      color: #92929b;
       span {
-        color: #45444c;
+        color: #44434B;
       }
     }
+  }
+  section:last-child {
+    margin-bottom: 0;
   }
   .search{
     padding-bottom:0px;
   }
 }
-/deep/ .el-input {
-  width: auto;
-}
 .resetting {
   color: #fd932b;
   margin-right: 7px;
 }
-/deep/ .input-with-select .el-input__inner {
-  width: 139px;
-}
 /deep/ .el-date-editor {
-  margin-left: -6px;
-  border-radius: 0 0 4px 4px;
-}
-/deep/ .date-picker-select {
-  width: 100px;
-}
-/deep/ .date-picker-select .el-input__inner {
-  border-radius: 4px 0 0 4px;
-}
-/deep/ .date-picker-select .el-input__inner:focus {
-  border-color: #dcdfe6;
+  margin-left: -5px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 /deep/ .searchTimeType .el-form-item__content {
         display: flex;

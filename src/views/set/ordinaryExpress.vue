@@ -1,34 +1,43 @@
 /*普通快递 */
 <template>
-  <div>
+  <div class="bgf mh bor-radius">
     <el-tabs v-model="currentTab" @tab-click="handleClick" class="tabs">
-      <el-tab-pane name="courierSettings" >
-        <span slot="label" v-permission="['设置','普通快递','快递设置']">快递设置</span>
-        <component v-if="currentTab === 'courierSettings'"  v-permission="['设置','普通快递','快递设置']" :is="currentTab"></component>
-      </el-tab-pane>
-      <el-tab-pane name="quickDelivery">
-        <span slot="label" v-permission="['设置','普通快递','运费模版']">运费模版</span>
-        <component v-if="currentTab === 'quickDelivery'"  v-permission="['设置','普通快递','运费模版']" :is="currentTab"></component>
-      </el-tab-pane>
-      <el-tab-pane name="electronicFaceSheet">
-        <span slot="label" v-permission="['设置','普通快递','电子面单']">电子面单</span>
-        <component v-if="currentTab === 'electronicFaceSheet'" v-permission="['设置','普通快递','电子面单']" :is="currentTab"></component>
+      <el-tab-pane
+        v-for="(item, index) in authsList"
+        :key="index"
+        :name="item.name" >
+        <span slot="label">{{ item.title }}</span>
+        <component :is="currentTab"></component>
       </el-tab-pane>
     </el-tabs>
   </div>     
 </template>
 
 <script>
-// import preSale from './components/preSale'
-// import afterSale from './components/afterSale'
 import courierSettings from './components/courierSettings'
 import quickDelivery from './components/quickDelivery'
 import electronicFaceSheet from './components/electronicFaceSheet'
+import { isExistAuth } from '@/system/user.js'
 export default {
   name: 'ordinaryExpress',
   data() {
     return {
       currentTab: 'courierSettings',
+      authsList: [],
+      tabsList: [
+      {
+        name: 'courierSettings',
+        authList: ['设置','普通快递','快递设置'],
+        title: '快递设置'
+      },{
+        name: 'quickDelivery',
+        authList: ['设置','普通快递','运费模版'],
+        title: '运费模版'
+      },{
+        name: 'electronicFaceSheet',
+        authList: ['设置','普通快递','电子面单'],
+        title: '电子面单'
+      }]
     }
   },
   components: {
@@ -38,7 +47,7 @@ export default {
   },
   watch: {
     currentTab(curr) {
-      console.log(curr)
+      // console.log(curr)
       // this.init()
     }
   },
@@ -48,50 +57,32 @@ export default {
   destroyed() {
   },
   methods: {
-    hasPermission(auth) {
-      const localMsfList = localStorage.getItem('shopInfos');
-      let msfList = [];
-      if(localMsfList && JSON.parse(localMsfList) && JSON.parse(localMsfList).data && JSON.parse(localMsfList).data.msfList) {
-        msfList = JSON.parse(localMsfList).data.msfList
+    setCurrentTab() {
+      const currentTab = this.$route.query.currentTab
+      // console.log('--currentTab---', currentTab)
+      if (currentTab) {
+        this.currentTab = currentTab
+      } else {
+        this.currentTab = this.authsList && this.authsList.length > 0 ? this.authsList[0].name : null
       }
-      if(msfList){
-        if (auth) {
-          return msfList.some(item => auth == item.name ) || auth == '概况首页' || auth == '概况' || auth == '账号信息'
-        }else{
-          return true
+    },
+    filterAuth() {
+      const authsList = []
+      const tabsList = this.tabsList
+      for(let i = 0; i < tabsList.length; i++) {
+        if (isExistAuth(tabsList[i].authList)) {
+          authsList.push(tabsList[i])
         }
-      }else {
-        return auth == '概况首页' || auth == '概况' || auth == '账号信息' ? true : false
       }
+      this.authsList = authsList
     },
     init() {
       // this.currentTab = 'quickDelivery'
       // this.$nextTick(() => {
-        const currentTab = this.$route.query.currentTab
-        console.log('--currentTab---', currentTab)
-        if (currentTab) {
-          this.currentTab = currentTab
-        } else {
-          const auths = [
-          {
-            name: 'courierSettings',
-            title: '快递设置'
-          },{
-            name: 'quickDelivery',
-            title: '运费模版'
-          }, {
-            name: 'electronicFaceSheet',
-            title: '电子面单'
-          }]
-          for(let i = 0; i < auths.length; i++) {
-            console.log(this.hasPermission(auths[i].title))
-            if (this.hasPermission(auths[i].title)) {
-            console.log(auths[i].name)
-              this.currentTab = auths[i].name
-              break
-            }
-          }
-        }
+      // 过滤掉未授权的
+      this.filterAuth()
+      // 设置默认值
+      this.setCurrentTab()
       // })
     },
     handleClick(comp) {
@@ -108,24 +99,31 @@ export default {
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+.bgf {
+  background: #fff;
+}
 .tabs{
   >>> .el-tabs__item {
-    padding: 0;
-    height: 57px;
-    line-height: 57px;
-    span {
-      padding: 0 20px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #44434B;
+    &.is-active {
+      color: #655EFF;
     }
   }
   >>> .el-tabs__header {
-    background-color: #fff;
     margin:0;
-    padding: 0 0 15px;
+    padding: 0 20px 0 20px;
   }
+  >>> .el-tabs--top .el-tabs__item.is-top:nth-child(2) {
+    padding-left: 0;
+  }
+
 }
 .main{
   width: 100%;
   padding: 20px;
-  background: #fff;
 }
 </style>

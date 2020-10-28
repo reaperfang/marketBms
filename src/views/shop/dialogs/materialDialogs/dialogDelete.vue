@@ -1,8 +1,10 @@
 <template>
-  <DialogBase :visible.sync="visible" width="500px" :title="'删除提示'" @submit="submit">
+  <DialogBase :visible.sync="visible" width="500px" :title="''" @submit="submit">
       <div class="content">
-        <p>删除将不能恢复，</p>
-        <p>确定要删除吗？</p>
+        <img src="../../../../assets/images/tips.png" alt="">
+        <div class="dialog_cont">
+          <span>删除将不能恢复，确定要删除吗？</span>
+        </div>
       </div>
   </DialogBase>
 </template>
@@ -60,6 +62,32 @@ export default {
   line-height: 30px;
   font-size: 14px;
   color: #443D4A;
-  text-align: center;
+  display: flex;
+  img{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+  }
+  .dialog_cont{
+    padding-left: 16px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #44434b;
+    font-family: PingFangSC-Medium, PingFang SC;
+  }
 }
+/deep/ .el-dialog__header{
+  background: #fff;
+}
+/deep/ .el-dialog__body{
+  padding: 10px 40px 0px;
+}
+/deep/ .el-dialog__footer{
+  padding: 60px 40px 35px 0px;
+  /deep/ .dialog-footer{
+    justify-content: flex-end;
+  }
+}
+
 </style>

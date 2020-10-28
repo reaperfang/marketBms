@@ -20,11 +20,11 @@
           <el-pagination
             v-if="pois.length > 0"
             class="pagination"
-            background
+            :background="true"
             small
             :pager-count="5"
-            :total="totalNum"
-            layout="prev, pager, next"
+            :total="totalNum" 
+            layout="prev, pager, next, sizes"
             @current-change="handleCurrentChange"
             :current-page.sync="page"
             :page-size="pageSize"
@@ -55,7 +55,7 @@ export default {
     },
     height: {
       type: Number,
-      default: 330
+      default: 322
     }
   },
   data() {
@@ -96,13 +96,13 @@ export default {
       })
     },
     getPoiDetail(poi) {
-      console.log(poi)
+      // console.log(poi)
       this.poi = poi
       const tencentCode = poi && poi.ad_info && poi.ad_info.adcode
       const data = Object.assign({}, poi)
       if (tencentCode) {
         this.getParentAreaCode(tencentCode).then(response =>{
-          console.log('---response--',response)
+          // console.log('---response--',response)
           delete data.ad_info
           data.provinceCode = response.provinceCode
           data.cityCode = response.cityCode
@@ -161,18 +161,18 @@ export default {
             this.isLoded = true
             const latLng = event.latLng
             self.getGeocoder({ location: `${latLng.lat},${latLng.lng}` }).then((res) => {
-              console.log('--getGeocoder---',res)
+              // console.log('--getGeocoder---',res)
               const poi = {
                 address: `${res.result.address}${res.result.formatted_addresses.recommend}`,
                 location:res.result.location,
                 title: res.result.formatted_addresses.recommend,
                 ad_info: res.result.ad_info
               }
-              console.log('----item----', poi)
+              // console.log('----item----', poi)
               self.getPoiDetail(poi)
               self.openInfoWindow(self.info, null, self.mapObj, poi)
             }).catch((err) => {
-              console.log(err)
+              console.error(err)
             }).finally(() => {
               this.isLoded = false
             })
@@ -249,7 +249,7 @@ export default {
       }
 
       this.getSearch(data).then((response) => {
-        console.log(1111)
+        // console.log(1111)
         this.totalNum = response.count >= 200 ? 200 : response.count
         this.pois = response.data || []
         if (this.pois.length > 0) {
@@ -261,12 +261,12 @@ export default {
           this.setPanTo(lng, lat, 4)
         }
       }).catch((err) => {
-        console.log(err)
+        console.error(err)
         this.$message.error('查询失败')
       })
     },
     handlePropSearch(keyword) {
-      console.log('----keyword---', keyword)
+      // console.log('----keyword---', keyword)
       this.keyword = keyword
       if (!keyword) {
         this.totalNum = 0
@@ -294,7 +294,7 @@ export default {
     addMarkers(results) {
       const self = this
       const pois = results.data
-      console.log('--addMarkers--', pois)
+      // console.log('--addMarkers--', pois)
       if (pois.length <= 0) return false
       // let latlngBounds = new qq.maps.LatLngBounds();
       for (var i = 0; i < pois.length; i++) {
@@ -307,10 +307,10 @@ export default {
           // 'decoration': decoration,
           'map': self.mapObj
         }))
-        console.log('makerAdd', makerAdd)
+        // console.log('makerAdd', makerAdd)
         qq.maps.event.addListener(makerAdd, 'click', function(e) {
           self.info.close();
-          console.log('-----item-----', poi)
+          // console.log('-----item-----', poi)
 
           const tencentCode = poi && poi.ad_info && poi.ad_info.adcode
           if (tencentCode) {
@@ -318,7 +318,7 @@ export default {
             self.getPoiDetail(poi)
           } else {
             self.getGeocoder({ location: `${poi.location.lat},${poi.location.lng}` }).then((res) => {
-              console.log('--getGeocoder---',res)
+              // console.log('--getGeocoder---',res)
               const poi = {
                 address: `${res.result.address}${res.result.formatted_addresses.recommend}`,
                 location:res.result.location,
@@ -326,10 +326,10 @@ export default {
                 ad_info: res.result.ad_info
               }
               self.openInfoWindow(self.info, makerAdd, self.mapObj, poi)
-              console.log('--------', poi)
+              // console.log('--------', poi)
               self.getPoiDetail(poi)
             }).catch((err) => {
-              console.log(err)
+              console.error(err)
             }).finally(() => {
             })
           }
@@ -342,20 +342,20 @@ export default {
     },
     // 设置根据地区经纬度变化改变当前地图中心
     setPanTo(lng, lat, zoom = 17) {
-      console.log('-lng, lat---',lng, lat)
+      // console.log('-lng, lat---',lng, lat)
       const oLatLng = new qq.maps.LatLng(lat, lng)
       this.mapObj.panTo(oLatLng)
       this.mapObj.zoomTo(zoom)
     },
     // 通过address 获取经纬度
     getGeocoderByAddress() {
-      console.log('-----获取经纬度----')
+      // console.log('-----获取经纬度----')
       this._apis.map.getGeocoderAddress({ address: this.address }).then((res) => {
         const lng = res.result.location.lng
         const lat = res.result.location.lat
         this.setPanTo(lng, lat, 12)
       }).catch((err) => {
-        console.log(err)
+        console.error(err)
       })
     },
     handleClickPoi(item, index) {
@@ -373,7 +373,7 @@ export default {
         this.getPoiDetail(poi)
       } else {
         this.getGeocoder({ location: `${poi.location.lat},${poi.location.lng}` }).then((res) => {
-          console.log('--getGeocoder---',res)
+          // console.log('--getGeocoder---',res)
           const poi = {
             address: `${res.result.address}${res.result.formatted_addresses.recommend}`,
             location:res.result.location,
@@ -381,10 +381,10 @@ export default {
             ad_info: res.result.ad_info
           }
           this.openInfoWindow(this.info, this.markers[index], this.mapObj, poi)
-          console.log('--------', poi)
+          // console.log('--------', poi)
           this.getPoiDetail(poi)
         }).catch((err) => {
-          console.log(err)
+          console.error(err)
         }).finally(() => {
         })
       }
@@ -393,7 +393,7 @@ export default {
   },
   watch: {
     address(curr) {
-      console.log('----watch---',curr)
+      // console.log('----watch---',curr)
       if (curr) {
         if(!this.mapLoaded) {
           this._globalEvent.$on('mapLoaded', ()=>{

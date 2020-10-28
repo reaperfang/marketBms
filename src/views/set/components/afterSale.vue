@@ -8,8 +8,7 @@
             <el-form-item label="买家物流签收" prop="memberAutoConfirmReceive">
               <el-switch
                 v-model="memberAutoReceive"
-                active-color="#13ce66"
-                inactive-color="#cacfcb"
+                active-color="#13ce66" inactive-color="#CACACF"
                 class="item-switch1"
                 >
               </el-switch>
@@ -29,8 +28,7 @@
             <el-form-item label="卖家物流签收" prop="shopAutoConfirmReceive">
               <el-switch
                 v-model="shopAutoReceive"
-                active-color="#13ce66"
-                inactive-color="#cacfcb"
+                active-color="#13ce66" inactive-color="#CACACF"
                 class="item-switch1"
                 >
               </el-switch>
@@ -52,8 +50,7 @@
             <el-form-item label="订单完成" prop="orderAutoFinished">
               <el-switch
                 v-model="autoFinished"
-                active-color="#13ce66"
-                inactive-color="#cacfcb"
+                active-color="#13ce66" inactive-color="#CACACF"
                 class="item-switch1"
                 >
               </el-switch>
@@ -236,7 +233,7 @@ export default {
   },
   computed:{
       cid(){
-          let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+          let shopInfo = this.$store.getters.shopInfos
           return shopInfo.id
       }
   },
@@ -247,8 +244,7 @@ export default {
 
   methods: {
     getShopInfo(){
-      let id = this.cid
-      this._apis.set.getShopInfo({id:id}).then(response =>{
+      this.$store.dispatch('getShopInfo').then(response =>{
         this.form.memberAutoConfirmReceive = response.memberAutoConfirmReceive,
         this.form.shopAutoConfirmReceive = response.shopAutoConfirmReceive,
         this.form.orderAutoFinished = response.orderAutoFinished,
@@ -262,7 +258,7 @@ export default {
         this.memberAutoReceive = Boolean(response.isMemberAutoConfirmReceive),
         this.autoFinished = Boolean(response.isOrderAutoFinished)
       }).catch(error =>{
-        console.log(error)
+        console.error(error)
       })
     },
     
@@ -301,7 +297,8 @@ export default {
           isShopAutoConfirmReceive : this.form.isShopAutoConfirmReceive ,
           isOrderAutoFinished : this.form.isOrderAutoFinished 
         }
-        this._apis.set.updateShopInfo(data).then(response =>{
+        this._apis.shopInfo.updateShopInfo(data).then(response =>{
+          this.$store.dispatch('getShopInfo'); 
           this.loading = false
           this.$message.success('保存成功！');
           // this.logistics()

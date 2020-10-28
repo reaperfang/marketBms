@@ -120,13 +120,14 @@
       <div v-show="Number(total) > 0" class="pagination"
            v-if="templateList.length || (!templateList.length && startIndex != 1)">
         <el-pagination
+          :background="true"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="Number(startIndex) || 1"
           :page-size="pageSize*1"
           :page-sizes="[12]"
           :total="total*1"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="prev, pager, next, sizes"
         >
         </el-pagination>
       </div>
@@ -321,7 +322,7 @@
         }
         this.preLoadObj.src = data[this.imgNow][name];
         this.preLoadObj.onerror = function () {
-          console.log("图片加载失败");
+          console.warn("图片加载失败");
           _self.imgNow++;
           if (_self.imgNow < data.length) {  //  如果还没有加载到最后一张
             _self.preload(data, name);          //  递归调用自己
@@ -331,8 +332,8 @@
           }
         }
         this.preLoadObj.onload = function () {
-          console.log(this.clientWidth)
-          console.log(this.clientHeight)
+          // console.log(this.clientWidth)
+          // console.log(this.clientHeight)
           _self.imgNow++;
           if (_self.imgNow < data.length) {  //  如果还没有加载到最后一张
             _self.preload(data, name);          //  递归调用自己
@@ -386,7 +387,7 @@
               this._apis.templatePay.getOrcode({
                 orderSource: 1,
                 orderType: 2,
-                shopName: JSON.parse(localStorage.getItem('shopInfos')).shopName,
+                shopName: this.$store.getters.shopInfos.shopName,
                 templateChargeType: item.chargeType,
                 templateId: item.id,
                 templateName: item.name,
@@ -396,15 +397,14 @@
                 this.dialogVisible = true;
                 this.tempInfo = item
               }).catch((err)=> {
-                console.log('aaa', err);
+                console.error(err);
                 this.$message.error(err)
               }).finally(() => {this.isLoading = false})
             } else {
               this.isLoading = false;
               this.confirm({
-                title: '提示',
                 customClass: 'goods-custom',
-                // icon: true,
+                icon: true,
                 text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
               }).then(() => {
                 this._routeTo('m_templateEdit', {id: item.id});
@@ -416,23 +416,21 @@
                 pageTemplateId: item.id
               }).then(response => {
                 this.confirm({
-                  title: '提示',
                   customClass: 'goods-custom',
-                  // icon: true,
+                  icon: true,
                   text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
                 }).then(() => {
                   this._routeTo('m_templateEdit', {id: item.id});
                 })
               }).catch((err)=> {
-                console.log('aaa', err);
+                console.error(err);
                 this.$message.error(err)
               }).finally(() => {this.isLoading = false})
             } else {
               this.isLoading = false;
               this.confirm({
-                title: '提示',
                 customClass: 'goods-custom',
-                // icon: true,
+                icon: true,
                 text: `部分私有数据需要您自行配置<br/>我们为您预置了这些组件的装修样式！`
               }).then(() => {
                 this._routeTo('m_templateEdit', {id: item.id});
@@ -519,6 +517,7 @@
     justify-content: start;
     align-items: start;
     flex-flow: row wrap;
+    border-radius: 0 0 4px 4px;
 
     &-tags {
       display: flex;
@@ -658,7 +657,8 @@
     // min-width:1650px;
     margin-top: 20px;
     background: #fff;
-    padding-bottom: 20px;
+    padding-bottom: 50px;
+    border-radius: 4px;
 
     ul {
       display: flex;
@@ -666,14 +666,14 @@
       justify-content: flex-start;
       flex-wrap: wrap;
       background: #fff;
-      padding: 20px;
-      padding-right: 0;
+      padding: 10px 0 0 20px;
       box-sizing: border-box;
+      border-radius: 4px;
 
       li {
         width: 255px;
         margin-right: 10px;
-        margin-bottom: 10px;
+        margin-top: 10px;
 
         .inner {
           width: 255px !important;

@@ -2,7 +2,7 @@
     <div class="after-sales">
         <div class="search">
             <!-- <div class="top">说明：当前已开启订单自动发货，自动发货后请尽快补充物流信息，您也可以到</div> -->
-            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline">
+            <el-form ref="form" :inline="true" :model="listQuery" class="form-inline input_style">
                 <el-form-item>
                     <el-input placeholder="请输入内容" v-model="listQuery.searchValue" class="input-with-select">
                         <el-select v-model="listQuery.searchType" slot="prepend" placeholder="请输入">
@@ -73,16 +73,19 @@
                 :header-cell-style="{background:'#F6F7FA', color:'#44434B'}">
                 <el-table-column
                     type="selection"
-                    width="55">
+                    width="34">
                 </el-table-column>
                 <el-table-column
                     prop="orderAfterSaleCode"
                     label="售后单编号"
+                    fixed="left" 
+                    class-name="table-padding"
                     width="250">
                 </el-table-column>
                 <el-table-column
                     prop="memberName"
                     label="用户昵称"
+                    align="center"
                     width="120">
                 </el-table-column>
                 <!-- <el-table-column
@@ -109,14 +112,18 @@
                 </el-table-column> -->
                 <el-table-column
                     prop="receivedName"
+                    align="center"
                     label="收货人">
                 </el-table-column>
                 <el-table-column
                     prop="receivedPhone"
+                    align="center"
+                    width="110"
                     label="收货人电话">
                 </el-table-column>
                 <el-table-column
                     prop="status"
+                    align="center"
                     label="状态">
                     <template slot-scope="scope">
                         <span>{{scope.row.status | statusFilter}}</span>
@@ -124,18 +131,20 @@
                 </el-table-column>
                 <el-table-column
                     prop="updateTime"
+                    align="center"
+                    width="160"
                     label="最新发货时间">
                 </el-table-column>
-                <el-table-column label="操作" :width="computeWidth" fixed="right">
+                <el-table-column label="操作" :width="computeWidth" fixed="right" header-align="center" class-name="table-padding">
                     <template slot-scope="scope">
-                        <div class="operate-box">
-                            <span v-permission="['订单', '发货管理', '售后发货', '查看']" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.orderAfterSaleId)">查看</span>
-                            <span v-permission="['订单', '发货管理', '售后发货', '发货']" v-if="scope.row.status == 2" @click="$router.push(`/order/orderAfterDeliverGoods?ids=${scope.row.orderAfterSaleId}&afterSale=true&_ids=${scope.row.id}`)">发货</span>
+                        <div class="operate-box table-operate">
+                            <span class="table-btn" v-permission="['订单', '发货管理', '售后发货', '查看']" @click="$router.push('/order/afterSalesDetails?id=' + scope.row.orderAfterSaleId)">查看</span>
+                            <span class="table-btn" v-permission="['订单', '发货管理', '售后发货', '发货']" v-if="scope.row.status == 2" @click="$router.push(`/order/orderAfterDeliverGoods?ids=${scope.row.orderAfterSaleId}&afterSale=true&_ids=${scope.row.id}`)">发货</span>
                         </div>
                     </template>
                 </el-table-column>
             </el-table>
-            <div v-show="!loading" class="footer">
+            <div v-show="!loading" class="footer table-select">
                 <el-checkbox :indeterminate="isIndeterminate" @change="checkedAllChange" v-model="checkedAll">全选</el-checkbox>
                 <el-button v-permission="['订单', '发货管理', '售后发货', '批量导入发货']" @click="$router.push('/order/batchImportAndDelivery?afterSale=true')" class="border-button">批量导入发货</el-button>
                 <el-button v-permission="['订单', '发货管理', '售后发货', '批量发货']" @click="batchSendGoods" class="border-button">批量发货</el-button>
@@ -201,14 +210,14 @@ export default {
     },
     computed:{
         cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
             return shopInfo.id
         },
         computeWidth() {
             if(this.tableData.some(item => item.status == 2)) {
-                return '100'
+                return '117'
             } else {
-                return '60'
+                return '72'
             }
         }
     },
@@ -258,7 +267,7 @@ export default {
         },
         batchSendGoods() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择需要发货的售后单'})
+                this.confirm({icon: true, text: '请选择需要发货的售后单'})
                 return
             }
             // if(this.multipleSelection.some(val => val.deliveryWay == 1) && this.multipleSelection.some(val => val.deliveryWay == 2)){
@@ -270,7 +279,7 @@ export default {
             //     return;
             // }
             if(this.multipleSelection.some(val => val.status != 2)) {
-            this.confirm({title: '提示', icon: true, text: '请选择待发货的售后单'})
+            this.confirm({icon: true, text: '请选择待发货的售后单'})
                 return
             }
             this.$router.push(`/order/afterSaleBulkDelivery?ids=${this.multipleSelection.map(val => val.orderAfterSaleId).join(',')}&afterSale=true`)
@@ -278,7 +287,7 @@ export default {
         //批量打印配送单
         batchPrintDistributionSlip() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择需要打印配送单的售后单'})
+                this.confirm({ icon: true, text: '请选择需要打印配送单的售后单'})
                 return
             }
             // if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
@@ -286,7 +295,7 @@ export default {
             //     return;
             // }
             if(this.multipleSelection.some(val => (val.status != 3 && val.status != 4))) {
-                this.confirm({title: '提示', icon: true, text: '没有完成发货，不能批量打印配送单。'})
+                this.confirm({icon: true, text: '没有完成发货，不能批量打印配送单。'})
                 return
             }
             let ids = this.multipleSelection.map(val => val.orderAfterSaleId).join(',')
@@ -307,7 +316,7 @@ export default {
         },
         batchPrintElectronicForm() {
             if(!this.multipleSelection.length) {
-                this.confirm({title: '提示', icon: true, text: '请选择需要打印电子面单的售后单'})
+                this.confirm({icon: true, text: '请选择需要打印电子面单的售后单'})
                 return
             }
             // if(utils.unique(this.multipleSelection.map(val => val.deliveryWay)).length > 1) {
@@ -315,7 +324,7 @@ export default {
             //     return;
             // }
             if(this.multipleSelection.some(val => (!val.isSupportElectronicSheet))) {
-                this.confirm({title: '提示', icon: true, text: '含有不支持打印电子面单的售后单，不能批量打印电子面单。'})
+                this.confirm({ icon: true, text: '含有不支持打印电子面单的售后单，不能批量打印电子面单。'})
                 return
             }
             let ids = this.multipleSelection.map(val => val.orderAfterSaleId).join(',')
@@ -353,7 +362,7 @@ export default {
         handleSelectionChange(val) {
             this.multipleSelection = val;
             let checkedCount = val.length;
-            this.checkedAll = checkedCount === this.tableData.length;
+            this.checkedAll = (checkedCount === this.tableData.length) && (checkedCount !== 0);
             this.isIndeterminate = checkedCount > 0 && checkedCount < this.tableData.length;
         },
         getList() {
@@ -438,6 +447,7 @@ export default {
     .content {
         background-color: #fff;
         padding: 20px;
+        padding-bottom:0;
         //margin: 0 20px;
         padding-top: 0;
         p {
@@ -449,8 +459,7 @@ export default {
             }
         }
         .footer {
-            padding: 20px;
-            padding-left: 10px;
+            padding: 20px 20px 10px 20px;
         }
     }
 }
@@ -533,21 +542,8 @@ export default {
             background-color: #fff;
         }
     }
-    /deep/ .el-table .cell {
-        padding-left: 0;
-        padding-right: 20px;
-    }
     /deep/ .input-with-select .el-input-group__prepend {
         background-color: #fff;
-    }
-    /deep/.el-table td:nth-child(1){
-         padding-left:20px;
-         .cell {
-            text-overflow: clip;
-         }
-     }
-     /deep/ .el-table--small td, /deep/  .el-table--small th {
-        padding: 16px 0;
     }
     /deep/ .el-form--inline .el-form-item {
         margin-bottom: 20px;

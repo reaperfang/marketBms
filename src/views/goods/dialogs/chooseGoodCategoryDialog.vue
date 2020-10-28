@@ -105,7 +105,7 @@ export default {
       },
     },
     cid() {
-      let shopInfo = JSON.parse(localStorage.getItem("shopInfos"));
+      let shopInfo = this.$store.getters.shopInfos;
       return shopInfo.id;
     },
   },
@@ -272,7 +272,7 @@ export default {
           .fetchCategoryList({ enable: 1 })
           .then((res) => {
             let arr = this.transTreeData(res, 0);
-            console.log(arr);
+            // console.log(arr);
             arr.forEach((val) => {
               if (val.children && val.children.length > 0) {
                 val.isHasChild = true;
@@ -380,10 +380,6 @@ export default {
 <style lang="scss" scoped>
 /deep/ .el-dialog {
   height: 619px;
-  .el-dialog__title {
-    font-size: 22px;
-    color: rgba(68, 67, 75, 1);
-  }
   .el-icon-search {
     width: 32px;
     background: rgba(146, 146, 155, 0.2);

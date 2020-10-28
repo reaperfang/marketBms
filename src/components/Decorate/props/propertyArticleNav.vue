@@ -54,7 +54,11 @@
           <li v-for="(item, key) of ruleForm.itemList" :key="key">
             <div class="left" v-if="ruleForm.templateType === 1">
               <div v-if="item.url" class="img_preview">
-                <img :src="item.url" alt="">
+                <el-image scroll-container=".props_form" :src="item.url" alt="" lazy>
+                  <div slot="placeholder" class="el-image__lazyloading">
+                      加载中...
+                  </div>
+                </el-image>
                 <i class="delete_btn" @click.stop="deleteImage(item)"></i>
                 <span @click="dialogVisible=true; currentNav=item; currentDialog='dialogSelectImageMaterial'">更换图片</span>
               </div>
@@ -96,7 +100,7 @@
     </div>
 
      <!-- 动态弹窗 -->
-    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected" @seletedPage="seletedPage"></component>
+    <component v-if="dialogVisible" :is="currentDialog" :dialogVisible.sync="dialogVisible" @imageSelected="imageSelected" @seletedPage="seletedPage" :customLinkDisabled="false"></component>
   </el-form>
 </template>
 
@@ -192,7 +196,6 @@ export default {
 
     deleteItem(item) {
       this.confirm({
-        title: '提示',
         customClass: 'goods-custom',
         icon: true,
         text: '确定删除此图文导航吗？'

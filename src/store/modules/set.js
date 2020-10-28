@@ -14,7 +14,7 @@ const set = {
     // 店铺授权平台列表
     getShopAuthList({ commit, state }) {
       return new Promise((resolve, reject) => {
-        this._apis.set.getShopAuthList().then(res => {
+        this._apis.shopInfo.getShopAuthList().then(res => {
           let enable = 0
           let item = res.find(val => val.platformType == 1)
 

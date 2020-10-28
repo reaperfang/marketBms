@@ -1,9 +1,9 @@
 <template>
-  <DialogBase :visible.sync="visible" @submit="submit" title="评价获取积分规则" :hasCancel="hasCancel">
+  <DialogBase :visible.sync="visible" @submit="submit" title="评价获取积分规则" :hasCancel="hasCancel" :showFooter="false">
     <div class="c_container">
       <div class="clearfix">
         <span class="fl marR20">评价获取积分规则</span>
-        <el-switch class="fl" v-model="enable" active-color="#66CCAC"></el-switch>
+        <el-switch class="fl" v-model="enable" active-color="#13ce66" inactive-color="#CACACF"></el-switch>
       </div>
       <div v-if="enable" class="giveBottom">
         <div>
@@ -101,6 +101,12 @@
           <span>积分</span>
         </div>
       </div>
+    </div>
+    <div>
+      <span slot="footer" class="dialog-footer fcc">
+          <el-button type="primary" @click="submit">确 认</el-button>
+          <el-button v-if="hasCancel" @click="visible = false">取 消</el-button>
+      </span>
     </div>
   </DialogBase>
 </template>
@@ -214,9 +220,10 @@ export default {
             type: 'success'
           });
           this.$emit('refreshPage');
+          this.visible = false;
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     },
     getInfo() {

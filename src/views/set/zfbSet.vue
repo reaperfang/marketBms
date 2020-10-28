@@ -1,6 +1,6 @@
 /*支付宝设置 */
 <template>
-    <div class="main">
+    <div class="main mh bor-radius">
         <h1>支付宝支付信息设置</h1>
         <el-form ref="form" :model="form" :rules="rules">
             <el-form-item label="应用ID(AppID):" prop="appid" label-width="300px">
@@ -59,11 +59,11 @@ export default {
   },
   computed:{
         cid(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
             return shopInfo.id
         },
         shopName(){
-            let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+            let shopInfo = this.$store.getters.shopInfos
             return shopInfo.shopName
         }
     },
@@ -158,8 +158,8 @@ export default {
         id:id,
         alipayBinding:1
       }
-      this._apis.set.updateShopInfo(query).then(response =>{
-        
+      this._apis.shopInfo.updateShopInfo(query).then(response =>{
+        this.$store.dispatch('getShopInfo');
       }).catch(error =>{
         this.$message.error(error);
       })
@@ -173,9 +173,8 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .main{
     width: 100%;
-    height: 100%;
     background: #fff;
-    padding:20px 20px 0px 20px;
+    padding:20px;
     h1{
         font-size: 16px;
         margin-bottom: 30px;

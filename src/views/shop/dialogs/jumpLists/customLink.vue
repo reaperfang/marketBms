@@ -52,7 +52,7 @@ export default {
     seletedChange(newValue) {
 
       this.$refs.ruleForm.validate(valid => {
-        let shopInfo = JSON.parse(localStorage.getItem('shopInfos'))
+        let shopInfo = this.$store.getters.shopInfos
         let cid = shopInfo && shopInfo.id || ''
         if (valid) {
 

@@ -111,6 +111,7 @@ export default {
     .printing-electronic-form {
         background-color: #fff;
         padding: 20px;
+        border-radius: 4px;
         .printing-electronic-form-title {
             font-size: 16px;
             margin-bottom: 20px;

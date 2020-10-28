@@ -5,6 +5,7 @@
 let mixin = {
     data() {
         return {
+			isIndeterminate: false, //全选状态
 			selectDisabled: false, //控制全选可不可用
 			selectKeyArr: [
 				'id',
@@ -59,6 +60,8 @@ let mixin = {
 				})
 				this.selectStatus = true;
 			}
+
+			this.isIndeterminate = false;
 		},
 
 		//全选状态更新
@@ -89,8 +92,14 @@ let mixin = {
             })
 			if (nowPageSelectedLength && nowPageSelectedLength == selectedTable.length) {
 				this.selectStatus = true;
+				this.isIndeterminate = false;
 			} else {
 				this.selectStatus = false;
+				if(nowPageSelectedLength){
+					this.isIndeterminate = true;
+				}else{
+					this.isIndeterminate = false;
+				}
 			}
 		}
 	}
