@@ -91,4 +91,18 @@ export default {
 		}
 	}
 }
+@media screen and (max-width: 1366px) and (max-height: 768px){
+	.wrap {
+		.item-row {
+			height: 70px;
+		}
+	}
+}
+@media screen and (max-width: 1280px) and (max-height: 800px){
+	.wrap {
+		.item-row {
+			height: 70px;
+		}
+	}
+}
 </style>

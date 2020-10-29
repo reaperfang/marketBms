@@ -104,5 +104,14 @@ export default {
 		}
 	}
 }
-
+@media screen and (max-width: 1366px) and (max-height: 768px){
+	.icon-user {
+		margin-top: 45px;
+	}
+}
+@media screen and (max-width: 1280px) and (max-height: 800px){
+	.icon-user {
+		margin-top: 45px;
+	}
+}
 </style>

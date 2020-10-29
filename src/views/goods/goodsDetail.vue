@@ -386,21 +386,33 @@
                 <el-checkbox :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.isShowSaleCount">商品详情/列表显示已售出数量</el-checkbox>
                     <span class="prompt">库存为0时，商品会自动放到“已售罄"列表里，保存有效库存数字后，买家看到的商品可售库存同步更新</span>
             </el-form-item>
-            <el-form-item label="单位计量" prop="productUnit">
-                <el-select v-model="ruleForm.productUnit" placeholder="请选择" :disabled="ruleForm.other || !ruleForm.productCategoryInfoId" clearable>
-                    <el-option
-                        v-for="item in unitList"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id">
-                    </el-option>
-                </el-select>
-                <!-- <el-button class="border-button new-units">新增单位</el-button> -->
-                <div style="margin-top: 21px;">
-                    <el-checkbox :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.other">其他</el-checkbox>
-                    <el-input :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.otherUnit" placeholder="请输入计量单位"></el-input>
-                </div>
-            </el-form-item>
+			<el-row>
+				<el-col :span="8">
+					<el-form-item label="单位计量" prop="productUnit">
+						<el-select v-model="ruleForm.productUnit" placeholder="请选择" @change="clearOther" :disabled="ruleForm.other || !ruleForm.productCategoryInfoId" clearable>
+							<el-option
+								v-for="item in unitList"
+								:key="item.id"
+								:label="item.name"
+								:value="item.id">
+							</el-option>
+						</el-select>
+						<!-- <el-button class="border-button new-units">新增单位</el-button> -->
+						<!--<div v-if="!ruleForm.other" style="margin-top: 21px">
+							<el-checkbox :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.other">其他</el-checkbox>
+							<el-input :disabled="!ruleForm.productCategoryInfoId" maxlength="10" v-model="ruleForm.otherUnit" @input="changeInputOther(ruleForm.otherUnit)" placeholder="请输入计量单位"></el-input>
+						</div>-->
+					</el-form-item>
+				</el-col>
+				<el-col :span="12">
+					<el-form-item label="" prop="otherUnit">
+						<div>
+							<el-checkbox :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.other">其他</el-checkbox>
+							<el-input :disabled="!ruleForm.productCategoryInfoId || ruleForm.productUnit != ''" maxlength="10" v-model="ruleForm.otherUnit" placeholder="请输入计量单位"></el-input>
+						</div>
+					</el-form-item>
+				</el-col>
+			</el-row>
             <!-- <el-form-item label="商品品牌" prop="productBrandInfoId">
                 <el-select :disabled="!ruleForm.productCategoryInfoId" v-model="ruleForm.productBrandInfoId" placeholder="请选择">
                     <el-option
@@ -891,7 +903,10 @@ export default {
                 ],
                 volume:[
                     {validator:singleSpecValidator, trigger: 'blur' }
-                ]
+                ],
+				otherUnit:[
+					{ pattern: /^([A-Za-z]|[\u4E00-\u9FA5])+$/, message: '仅支持汉字和字母输入，不超过10个字符，请重新输入', trigger: 'blur' },
+				]
 
             },
             uploadUrl: `${process.env.DATA_API}/web-file/file-server/api_file_remote_upload.do`,
@@ -1110,6 +1125,18 @@ export default {
         });
     },
     methods: {
+		clearOther() {
+			if (this.ruleForm.productUnit != '') {
+				this.ruleForm.otherUnit = ''
+			}
+		},
+		/*changeInputOther(val) {
+			this.$message.closeAll()
+			if (!/^([A-Za-z]|[\u4E00-\u9FA5])+$/.test(val).test(val)) {
+				this.$message.error('仅支持汉字和字母输入，不超过10个字符，请重新输入')
+				return false
+			}
+		},*/
         validateGoodsInfos(obj){
             if(obj){
                 if(obj.costPrice == '') {

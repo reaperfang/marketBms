@@ -49,8 +49,8 @@ export default {
 			chartExtend: {
 				color: ["#3FCEEF"],
 				grid: {
-					top: "30px",
-					bottom: "7px"
+					top: screen.width==1280 || screen.width==1366 ? "10px" : "30px",
+					bottom: screen.width==1280 || screen.width==1366 ? "0px" : "7px"
 				},
 				xAxis: {
 					axisLine: {
@@ -63,6 +63,7 @@ export default {
 						interval: 0,
 						rotate: 35,
 						show: true,
+						fontSize: screen.width==1280 || screen.width==1366 ? 8 : screen.width==1440 || screen.width==1600 ? 10 : 12
 					},
 
 				},
@@ -77,6 +78,9 @@ export default {
 							color: "rgba(255,255,255,0.8)"
 						},
 						show: false,
+					},
+					axisLabel: {
+						fontSize: screen.width==1280 || screen.width==1366 ? 8 : screen.width==1440 || screen.width==1600 ? 10 : 12
 					}
 				},
 				tooltip: {

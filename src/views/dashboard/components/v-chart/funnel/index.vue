@@ -15,13 +15,20 @@ export default {
 	props: ["barColor", "progress", "city", "chartData"],
 	name: "TEMPLATE",
 	data() {
-		return {};
+		return {
+			// screenWidth: document.body.clientWidth,
+		};
 	},
 	mounted() {
 		//this.showChart(this.chartData);
 		window.addEventListener("resize", ev => {
 			this.chart.resize();
 		});
+		// window.onresize = () => {
+		// return (() => {
+		// 	this.screenWidth = document.body.clientWidth;
+		// })()
+		// }
 	},
 	methods: {
 		showChart(val) {
@@ -37,8 +44,8 @@ export default {
 					borderRadius: 4,
 					color: "#FFFFFF",
 					verticalAlign: "center",
-					offset: screen.width<1920 ? [-10, 32, 0, 0] : [15, 32, 0, 0],
-					fontSize: screen.width<1920 ? 10: 12,
+					offset: screen.width==1280 || screen.width==1366 ? [-10, 52, 0, 0] : screen.width==1440 || screen.width==1600 ? [-10, 32, 0, 0] : [15, 32, 0, 0],
+					fontSize: screen.width==1280 ? 9 : screen.width==1920 ? 12: 10,
 					//   padding: [3, 10, 5, 10],
 					formatter: function(d) {
 						if (d.value) {
@@ -57,10 +64,13 @@ export default {
 					borderRadius: 4,
 					color: "#FFFFFF",
 					verticalAlign: "center",
-					offset: [screen.width==1600 ?45 : 50, 0, 0, 0],
-					fontSize: screen.width<1920 ? 10: 12,
+					offset: screen.width==1600 ? [45, 0, 0, 0] : [50, 0, 0, 0],
+					fontSize: screen.width==1280 ? 9 : screen.width==1920 ? 12: 10,
 					//   padding: [3, 10, 5, 10],
 					formatter: function(d) {
+						if(screen.width==1280 || screen.width==1366) {
+						 	d.data.label.offset = d.name=="下单转化率" ? [25, 30, 0, 0] : [44, 3, 0, 0];
+						}
 						if (d.value) {
 							//   var ins = "{img1|} " + "{words|" + d.data.itemValue + "}";
 							var ins = d.data.name + d.data.itemValue;
@@ -132,14 +142,14 @@ export default {
 							borderWidth: 0
 						},
 
-						top: screen.width > 1600 ? 25 : 10,
+						top: screen.width==1280 ? 20 : screen.width==1920 ? 25 : 10,
 						// bottom:30,
 						type: "funnel",
-						height: "150",
-						gap: 20,
+						height: screen.width==1280 || screen.width==1366 ? "100" : "150",
+						gap: screen.width==1280 || screen.width==1366 ? 11 : 20,
 						minSize: 150,
-						left: "20%",
-						width: "60%",
+						left: screen.width==1280 || screen.width==1366 ? "23%" : "20%",
+						width: screen.width==1280 || screen.width==1366 ? "48%" : "60%",
 						label: {
 							show: true,
 							position: "inside",
@@ -218,7 +228,7 @@ export default {
 						name: "youcejiantou",
 						type: "pictorialBar",
 						symbolPosition: "center",
-						symbolSize: ["65", "55"],
+						symbolSize: screen.width==1280 || screen.width==1366 ? ["65", "40"] : ["65", "55"],
 						symbol: "image://" + dashboard.rightArrow,
 						symbolClip: true,
 						xAxisIndex: "1",
@@ -226,6 +236,7 @@ export default {
 						//-999900
 						data: [
 							{
+								symbolOffset: screen.width==1280 || screen.width==1366 ? ["-15%", "80%"] : [0, 0],
 								value: screen.width == 1440 ? 354 : 361,
 								itemValue:
 									youcejiantouData.order_c_uv_7dco == -999900
@@ -237,6 +248,7 @@ export default {
 								name: "下单转化率",
 							},
 							{
+								symbolOffset: screen.width==1280 || screen.width==1366 ? ["0%", "12%"] : [0, 0],
 								value: 348,
 								itemValue:
 									youcejiantouData.paid_c_order_7dco + "%",
@@ -248,12 +260,15 @@ export default {
 
 					// left
 					{
-						symbolOffset: [52, 35, 0, 0],
+						// 图形偏移
+						symbolOffset: screen.width==1280 || screen.width==1366 ? ["30%", "70%"] : [52, 35, 0, 0],
 						type: "pictorialBar",
 						symbolPosition: "center",
-						symbolSize: ["75", "116"],
+						symbolSize: screen.width==1280 || screen.width==1366 ? ["75", "75"] : ["75", "116"],
 						// symbol: leftArrow,
+						//图形类型
 						symbol: "image://" + dashboard.leftArrow,
+						//裁剪图形
 						symbolClip: false,
 						xAxisIndex: "1",
 						barCategoryGap: "10%",
@@ -278,6 +293,23 @@ export default {
 			this.chart.clear();
 			this.chart.setOption(option);
 		}
+	},
+	watch: {
+		// screenWidth: {
+		// 	immediate: true,
+		// 	handler: function (newVal) {
+		// 		console.log(newVal)
+		// 		if(newVal == 1280) {
+		// 			console.log(this,'this')
+		// 		}else if(newVal == 1360) {
+
+		// 		}else if(newVal == 1440) {
+					
+		// 		}else if(newVal == 1600) {
+
+		// 		}
+		// 	}
+		// }
 	},
 	components: {}
 };

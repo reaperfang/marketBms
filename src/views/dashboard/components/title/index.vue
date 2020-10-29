@@ -90,4 +90,24 @@ export default {
 		}
 	}
 }
+@media screen and (max-width: 1280px) and (max-height: 800px) {
+	.grid-titile {
+		margin: 6px 6px 0 6px;
+		height: 23px;
+		span {
+			font-size: 12px;
+			margin: 0 10px;
+		}
+	}
+}
+@media screen and (max-width: 1366px) and (max-height: 768px) {
+	.grid-titile {
+		margin: 6px 6px 0 6px;
+		height: 23px;
+		span {
+			font-size: 12px;
+			margin: 0 10px;
+		}
+	}
+}
 </style>
