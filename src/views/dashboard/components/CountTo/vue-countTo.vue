@@ -538,6 +538,27 @@ export default {
 		}
 	}
 }
+@media screen and (max-width: 1440px) and (max-height: 900px){
+	.item-amount {
+		.box {
+
+			.flex-end {
+			}
+
+			.box-item {
+				width: 48px;
+				.box-item-start {
+				}
+
+				.number-item {
+					width: 48px;
+					.line {
+					}
+				}
+			}
+		}
+	}
+}
 @media screen and (max-width: 1366px) and (max-height: 768px){
 	.item-amount {
 		height: 70px;
