@@ -120,6 +120,7 @@ export default {
 	height: 100%;
 	overflow-y: scroll;
 	background: #000b23;
+	min-width: 1280px;
 
 	.row-2,
 	.row-3 {
@@ -276,9 +277,9 @@ export default {
 
 	.mall {
 		overflow-y: auto;
-		min-width: 1366px;
+		min-width: 1280px;
 		max-height: 900px;
-		font-size: 12px!important;
+		/*font-size: 12px!important;*/
 
 	}
 
@@ -494,5 +495,11 @@ export default {
 			}
 		}
 	}
+}
+@media screen and (max-width: 1366px) and (max-height: 768px) {
+	@import "src/views/dashboard/mediaCss/1366&768";
+}
+@media screen and (max-width: 1280px) and (max-height: 800px) {
+	@import "src/views/dashboard/mediaCss/1280&800";
 }
 </style>

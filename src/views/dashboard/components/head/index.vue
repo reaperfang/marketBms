@@ -197,7 +197,7 @@ export default {
 	position: relative;
 	height: 80px;
 
-	padding: 15px 20px 20px 20px;
+	padding: 10px 20px 15px 20px;
 
 	background: url("../../../../assets/images/dashboard/head/bg/default.png")
 		no-repeat;
@@ -264,6 +264,45 @@ export default {
 		}
 		.right{
 			margin-top: -5px;
+		}
+	}
+}
+@media screen and (max-width: 1366px) and (max-height: 768px){
+	.head{
+		height: 67px;
+		.left {
+			align-self: flex-start;
+			span {
+				font-size: 12px;
+				font-weight: 500;
+				color: #ffffff;
+				margin-right: 5px;
+			}
+		}
+		.content{
+			font-size: 32px;
+			width: 270px
+		}
+		.right{
+			.refresh,
+			.fullscreen {
+				display: inline-block;
+				width: 75px;
+				height: 22px;
+				background: rgba(71, 225, 255, 0.08);
+				border-radius: 2px;
+				text-align: center;
+				padding: 3px;
+				img {
+					margin-right: 3px;
+				}
+				span {
+					font-size: 12px;
+					transform:scale(0.9);
+					color: #ffffff;
+				}
+				cursor: pointer;
+			}
 		}
 	}
 }

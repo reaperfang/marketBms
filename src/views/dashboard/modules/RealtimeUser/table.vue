@@ -15,7 +15,7 @@
 					<span class="time-text">{{ scope.row.time_rt }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column prop="op_rt" label="操作" width="100">
+			<el-table-column prop="op_rt" label="操作" width="70">
 			</el-table-column>
 			<el-table-column label="商品">
 				<template slot-scope="scope">
@@ -195,25 +195,28 @@ export default {
 // 	border-color: red;
 // }
 
-/* @media screen and(max-width: 1440px) and(max-height: 900px){
+@media screen and(max-width: 1920px) and(max-height: 1080px){
 	.realtime-user {
-		table th,tr .cell{
+		/* margin-top: -6px!important; */
+		.el-table__header th .cell{
 			font-size: 12px;
-			transform: scale(0.83);
+		}
+		.el-table__body td .cell{
+			font-size: 12px;
 		}
 	}
 	.el-table--small th {
 		padding: 0;
 	}
-} */
+}
 
 @media screen and(max-width: 1600px) and(max-height: 900px){
 	.realtime-user {
-		table th .cell{
+		.el-table__header th .cell{
 			font-size: 12px;
 			transform: scale(0.83);
 		}
-		table td .cell{
+		.el-table__body td .cell{
 			font-size: 12px;
 			transform: scale(0.83);
 		}
@@ -223,10 +226,16 @@ export default {
 	}
 }
 
-@media screen and(max-width: 1920px) and(max-height: 1080px){
+@media screen and(max-width: 1440px) and(max-height: 900px){
 	.realtime-user {
-		table th .cell{
+		.el-table__header th .cell{
 			font-size: 12px;
+			transform: scale(0.83);
+		}
+		.el-table__body td .cell{
+			font-size: 12px;
+			transform: scale(0.83);
+			height: 17px;
 		}
 	}
 	.el-table--small th {
@@ -234,4 +243,39 @@ export default {
 	}
 }
 
+@media screen and(max-width: 1366px){
+	.realtime-user {
+		.el-table .cell {
+			line-height: 15px;
+		}
+		.el-table__header th .cell{
+			font-size: 12px;
+			transform: scale(0.83);
+		}
+		.el-table__body td .cell{
+			font-size: 12px;
+			transform: scale(0.83);
+			transform-origin: top;
+			height: 13px;
+		}
+	}
+}
+
+@media screen and(max-width: 1280px){
+	/* .realtime-user {
+		.el-table .cell {
+			line-height: 15px;
+		}
+		.el-table__header th .cell{
+			font-size: 12px;
+			transform: scale(0.83);
+		}
+		.el-table__body td .cell{
+			font-size: 12px;
+			transform: scale(0.83);
+			transform-origin: top;
+			height: 13px;
+		}
+	} */
+}
 </style>

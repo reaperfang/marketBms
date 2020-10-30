@@ -150,5 +150,14 @@ export default {
 		}
 	}
 }
-
+@media screen and (max-width: 1366px) and (max-height: 768px){
+	.icon-agesex {
+		margin-top: 32px;
+	}
+}
+@media screen and (max-width: 1280px) and (max-height: 800px){
+	.icon-agesex {
+		margin-top: 32px;
+	}
+}
 </style>

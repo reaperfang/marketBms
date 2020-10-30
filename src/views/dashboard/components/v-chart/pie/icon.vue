@@ -115,4 +115,20 @@ export default {
 		}
 	}
 }
+@media screen and (max-width: 1366px) and (max-height: 768px){
+	.icon-pie-t {
+		height: 54px;
+		.p-start {
+			font-size: 17px;
+		}
+	}
+}
+@media screen and (max-width: 1280px) and (max-height: 800px){
+	.icon-pie-t {
+		height: 54px;
+		.p-start {
+			font-size: 17px;
+		}
+	}
+}
 </style>

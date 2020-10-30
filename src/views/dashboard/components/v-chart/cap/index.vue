@@ -498,4 +498,120 @@ export default {
 		color: #ffffff;
 	}
 }
+@media screen and (max-width: 1366px) and (max-height: 768px){
+	.panel-content-cap {
+		.chartContent {
+			.text-mult {
+			}
+
+			.circle-hover {
+			}
+			.circle-45 {
+				position: absolute;
+				top: 42px;
+				right: 90px;
+				width: 40px;
+				height: 40px;
+			}
+			.circle-55 {
+				position: absolute;
+				top: 25px;
+				left: 116px;
+				right: 140px;
+				width: 46px;
+				height: 46px;
+			}
+			.circle-65 {
+				position: absolute;
+				top: 45px;
+				left: 57px;
+				right: 200px;
+				width: 54px;
+				height: 54px;
+			}
+			.circle-70 {
+				position: absolute;
+				top: 75px;
+				right: 122px;
+				width: 60px;
+				height: 60px;
+			}
+			.circle-90 {
+				position: absolute;
+				top: 65px;
+				right: 22px;
+				width: 72px;
+				height: 72px;
+			}
+			span {
+				font-size: 12px;
+				padding: 5px 8px;
+			}
+		}
+
+		.time-text {
+		}
+
+		.empty {
+		}
+	}
+}
+@media screen and (max-width: 1280px) and (max-height: 800px){
+	.panel-content-cap {
+		.chartContent {
+			.text-mult {
+			}
+
+			.circle-hover {
+			}
+			.circle-45 {
+				position: absolute;
+				top: 42px;
+				right: 90px;
+				width: 40px;
+				height: 40px;
+			}
+			.circle-55 {
+				position: absolute;
+				top: 25px;
+				left: 116px;
+				right: 140px;
+				width: 46px;
+				height: 46px;
+			}
+			.circle-65 {
+				position: absolute;
+				top: 45px;
+				left: 57px;
+				right: 200px;
+				width: 54px;
+				height: 54px;
+			}
+			.circle-70 {
+				position: absolute;
+				top: 75px;
+				right: 122px;
+				width: 60px;
+				height: 60px;
+			}
+			.circle-90 {
+				position: absolute;
+				top: 65px;
+				right: 22px;
+				width: 72px;
+				height: 72px;
+			}
+			span {
+				font-size: 12px;
+				padding: 5px 8px;
+			}
+		}
+
+		.time-text {
+		}
+
+		.empty {
+		}
+	}
+}
 </style>

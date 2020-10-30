@@ -50,7 +50,7 @@ export default {
 				// },
 				//radius: [60, 70],
 				radius: [50, 60],
-				offsetY: screen.width > 1600 ? 90 : 75,
+				offsetY: screen.width > 1600 ? 90 : screen.width == 1600 ? 75 : screen.width == 1440 ? 75 : screen.width <= 1366 ? 73 : 75,
 				labelLine: {
 					normal: {
 						length: 5,
@@ -69,16 +69,16 @@ export default {
 						borderWidth: 0,
 						borderRadius: 4,
 						padding: [0, -50],
-						height: 40,
-						fontSize: 13,
+						height: screen.width > 1366 ? 40 : 35,
+						fontSize: screen.width > 1366 ? 13 : 12,
 						align: "center",
 						// color: "#FFFFFF",
 						rich: {
 							b: {
-								fontSize: 12,
-								lineHeight: 20,
+								fontSize: screen.width > 1366 ? 12 : 9,
+								lineHeight: screen.width > 1366 ? 20 : 20,
 								color: "#FFFFFF",
-								padding: [0, 0, 5, 0]
+								padding: screen.width > 1366 ? [0, 0, 5, 0] : [0, 0, 5, 0],
 								//borderRadius: 100
 								// padding: [3, 3, 0, -16]
 							},
@@ -131,12 +131,15 @@ export default {
 		}
 	},
 	mounted() {
+		console.log(screen.width)
 		if (screen.width == 1440){
 			this.chartSettings.radius = [32, 42]
 		}else if (screen.width == 1600){
 			this.chartSettings.radius = [35, 45]
-		}else {
-			// console.log(screen.width)
+		} else if (screen.width <= 1366) {
+			this.chartSettings.radius = [30, 40]
+		} else {
+			console.log(screen.width)
 		}
 		if (window.screen.height < 900) {
 			this.chartSettings.radius = [35, 45]
