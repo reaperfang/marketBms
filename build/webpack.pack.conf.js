@@ -60,7 +60,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         compress: {
           warnings: false,
           // drop_console: true,
-          // pure_funcs: ['console.log']
+          drop_debugger: true, //打包后删除debugger
+          pure_funcs: process.env.NODE_ENV === 'prod' ? ['console.log'] : [] //生产环境打包后删除console.log
         }
       },
       sourceMap: config[process.env.NODE_ENV].productionSourceMap,
