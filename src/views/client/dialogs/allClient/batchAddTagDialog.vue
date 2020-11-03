@@ -4,6 +4,7 @@
             <p class="c_info">当前选中共{{data.checkedItem.length}}个用户，批量添加以下标签：</p>
             <el-checkbox-group
                 v-model="checkedItems"
+                v-loading="loading"
                 :max="5">
                 <el-checkbox v-for="tag in tagNames" :label="tag" :key="tag">{{tag}}</el-checkbox>
             </el-checkbox-group>
@@ -27,7 +28,8 @@ export default {
             hasCancel: true,
             checkedItems:[],
             tagList:[],
-            btnLoading: false
+            btnLoading: false,
+            loading: false
         }
     },
     methods: {
@@ -72,10 +74,13 @@ export default {
             
         },
         getLabels() {
+            this.loading = true;
             this._apis.client.getLabels({tagType:0}).then((response) => {
+                this.loading = false;
                 this.tagList = [].concat(response); 
             }).catch((error) => {
                 console.error(error);
+                this.loading = false;
             })
         }
     },

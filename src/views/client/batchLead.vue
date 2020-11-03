@@ -119,7 +119,7 @@
             </el-form>
         </div>
         <div class="btn_cont">
-            <el-button type="primary" @click="doubleCheck" v-permission="['用户', '用户标签', '默认页面', '保存']">保 存</el-button>
+            <el-button type="primary" @click="doubleCheck" :loading="btnloading" v-permission="['用户', '用户标签', '默认页面', '保存']">保 存</el-button>
             <el-button @click="_routeTo('clientLabel')">取 消</el-button>
         </div>
         <component :is="currentDialog" :dialogVisible.sync="dialogVisible" :data="currentData" @getSelected="getSelected"></component>
@@ -181,7 +181,8 @@ export default {
             currentData:{},
             selectedIds: "",
             canSubmit: true,
-            isRepeat: ""
+            isRepeat: "",
+            btnloading: false
         }
     },
     methods: {
@@ -253,10 +254,13 @@ export default {
         },
         doubleCheck() {
             if(this.ruleForm.tagName !== "") {
+                this.btnloading = true;
                 this._apis.client.labelDoubleCheck({tagName: this.ruleForm.tagName}).then((response) => {
+                    this.btnloading = false;
                     this.saveLabel(response);
                 }).catch((error) => {
                     console.error(error);
+                    this.btnloading = false;
                 })
             }else{
                 this.$message({

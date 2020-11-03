@@ -365,6 +365,7 @@ export default {
       }else{
         this.ruleForm.startIndex = num || this.ruleForm.startIndex
         let query = this.init();
+        this.loading = true
         this._apis.finance.getListRe(query).then((response)=>{
           this.dataList = response.list
           this.total = response.total || 0
