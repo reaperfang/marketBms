@@ -6,6 +6,8 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 import { isLogin, getAuthList } from '@/system/user.js' // getToken from cookie
 // import { getShopInfos } from '@/system/shop.js' // getToken from cookie
+import { asyncRouterMapCopy, syncRouterMap } from '@/router'
+
 
 
 
@@ -14,10 +16,33 @@ NProgress.configure({ showSpinner: false })// NProgress Configuration
 function hasPermission(msfList, route) {
   if (route && route.path) {
     let title =  route.meta.title;
-    return msfList.some(item => title == item.name) || route.name == 'profile' || route.path == '/401' || route.path == '/login' || route.matched[0].path == '/shop' || route.name == 'accountInfo' || route.name == 'passwordChange' || route.name == 'guidePrompt' || route.name == 'shopGuide' || route.name == 'intelligent' || route.name == 'intelligentGuide'
+    return msfList.some(item => title == item.name) || route.name == 'profile' || route.path == '/401' || route.path == '/404' || route.path == '/login' || (route.matched[0] && route.matched[0].path == '/shop') || route.name == 'accountInfo' || route.name == 'passwordChange' || route.name == 'guidePrompt' || route.name == 'shopGuide' || route.name == 'intelligent' || route.name == 'intelligentGuide'
   } else {
     return true
   }
+}
+
+//组合所有路由的path
+function eachRouterList(routerList, pathArr, paths) {
+  routerList.forEach(item => {
+    let path = item.path;
+    if(paths){
+      path = paths + path;
+    }
+    if(item.children){
+      eachRouterList(item.children, pathArr, path);
+    }else{
+      pathArr.push(path.replace(/\//g,''));
+    }
+  })
+}
+
+//是否包含路由
+function hasRouter(routerList, route) {
+  let pathArr = [];
+  eachRouterList(routerList, pathArr);
+  const path = route.path.replace(/\//g,'');
+  return pathArr.includes(path)
 }
 
 const whiteList = ['/login', '/auth-redirect','/datashop']// no redirect whitelist
@@ -65,17 +90,17 @@ router.beforeEach((to, from, next) => {
         //   })
         // })
       } else {
-        // 没有动态改变权限的需求可直接next() 删除下方权限判断 ↓
-        if(from.name == 'profile'){
-          if (hasPermission(msfList, to)) {
-            next()
-          } else {
-            next({ path: '/401'})
-            // next({ path: '/401', replace: true, query: { noGoBack: true }})
+        //如果有路由权限，则直接进入
+        if (hasPermission(msfList, to)) {
+          next()
+        } else { //如果没有路由权限，则在判断是404错误页面或者是401无权限
+          const allRouter = [...asyncRouterMapCopy, ...syncRouterMap];
+          if(hasRouter(allRouter, to)) {
+            next({ path: '/401', replace: true})
+          }else { //跳转至404错误页面
+            next({ path: '/404', replace: true})
           }
         }
-        next()
-        // 可删 ↑
       }
     }
   } else {

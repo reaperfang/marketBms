@@ -27,6 +27,9 @@ export const asyncRouterMap = [  //异步路由表
   ...set
 ]
 
+//由于asyncRouterMap会根据权限变化，所以优先克隆一份完整的路由，以便路由守卫中判断路由是否存在，跳转404页面时使用
+export const asyncRouterMapCopy = [...asyncRouterMap]
+
 export const syncRouterMap = [ //同步路由表
   {
     path: '',
@@ -84,6 +87,7 @@ export const syncRouterMap = [ //同步路由表
     // meta: { title: '新建商品', noCache: true, tabTitle: '商品管理' ,navType:2},
   },
 ]
+
 
 const routerConfig = {
   mode: 'history',
