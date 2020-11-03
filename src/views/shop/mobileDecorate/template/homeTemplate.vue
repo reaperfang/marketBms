@@ -436,7 +436,7 @@
               })
             }
           }
-        }).catch(() => {this.isLoading = false})
+        }).catch((error) => {this.isLoading = false;console.error(error)})
       },
 
       /* 关闭支付模板 */

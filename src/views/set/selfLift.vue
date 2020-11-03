@@ -194,6 +194,7 @@ export default {
         this._apis.set.editSelfLiftById(req).then((res) => {
           resolve(res)
         }).catch((err) => {
+          console.error(error)
           reject(err)
         })
       })
@@ -332,6 +333,7 @@ export default {
         this._apis.set.getSelfLiftList(req).then((res) => {     
           resolve(res)
         }).catch((err) => {
+          console.error(error)
           reject(err)
         })
       })
@@ -371,6 +373,7 @@ export default {
         this._apis.shop.getHomePage({pageTag:0}).then(response => {
           resolve(response)
         }).catch(error => {
+          console.error(error)
           reject(error)
         });
       })

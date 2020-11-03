@@ -575,6 +575,7 @@ export default {
                 this.total = +res.total
                 this.loading = false
             }).catch(error => {
+                console.error(error)
                 this.loading = false
             })
         },

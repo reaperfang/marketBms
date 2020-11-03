@@ -199,6 +199,9 @@ export default {
             return  new Promise((resolve, reject) => {
                 this._apis.goods.getCategoryDetail({id}).then(res => {
                     resolve(res)
+                }).catch(error => {
+                    console.error(error);
+                    reject(error);
                 })
             })
         },

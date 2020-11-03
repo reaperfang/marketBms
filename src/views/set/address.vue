@@ -160,6 +160,7 @@ export default {
         this._apis.set.getAddressList(req).then((res) => {
           resolve(res)
         }).catch((err) => {
+          console.error(error);
         reject(err)
         })
       })
@@ -212,6 +213,7 @@ export default {
           this.$store.dispatch('getShopInfo');
           resolve(response)
         }).catch(error =>{
+          console.error(error)
           reject(error)
         })
       })
@@ -314,6 +316,7 @@ export default {
         this._apis.set.getAddressDefaultSender({ isBindShopsend: 1 }).then((response) => {
           resolve(response)
         }).catch((err) => {
+          console.error(error)
           reject(err)
         })
       })
@@ -324,6 +327,7 @@ export default {
         this._apis.set.getAddressDefaultSender({ isBindThirdsend: 1 }).then((response) => {
           resolve(response)
         }).catch((err) => {
+          console.error(error)
           reject(err)
         })
       })
@@ -398,6 +402,7 @@ export default {
         this._apis.set.delAddressById({ id, isBindThirdsend }).then((res) => {
           resolve(res)
         }).catch((err) => {
+          console.error(error)
           reject(err)
         })
       })

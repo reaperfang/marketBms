@@ -190,6 +190,7 @@ export default {
                 //this.$refs['order'].loading = false
                 //loading.close();
             }).catch(error => {
+                console.error(error)
                 //loading.close();
                 // this.$message.error(error);
                 this.loading = false

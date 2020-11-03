@@ -95,6 +95,7 @@ export default {
                 // console.log(res)
                 this.sensitiveList = res
             }).catch(error => {
+                console.error(error)
                 //this.listLoading = false
             })
         },

@@ -110,6 +110,7 @@ export default {
         }
         this._globalEvent.$emit('goodsGroupPageSettingResetLoading', true);
       }).catch((error)=>{
+        console.error(error)
         this._globalEvent.$emit('goodsGroupPageSettingResetLoading', false);
       });
     },

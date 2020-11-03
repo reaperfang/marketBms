@@ -288,6 +288,7 @@ export default {
               this.$message.error(error);
             })
           }else{
+            console.error(error)
             this.loading = false
             // this.$message.error('输入框不能为空，保存失败');
           }

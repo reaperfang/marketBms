@@ -236,7 +236,7 @@ export default {
                     closeOnClickModal:false
                 }).then(() => {
                     this.$router.push({path:'/order/printerSeting',query:this.$route.query})
-                }).catch(() => {});
+                }).catch((error) => {console.error(error)});
             });
         }
     }

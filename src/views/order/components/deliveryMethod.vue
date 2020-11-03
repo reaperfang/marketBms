@@ -77,7 +77,7 @@
                             this.timeSlotArr = res.subscribeTimeHourRanges.split(',');
                         }
                     })
-                    .catch(error => {})
+                    .catch(error => {console.error(error)})
                 }
             }
         }

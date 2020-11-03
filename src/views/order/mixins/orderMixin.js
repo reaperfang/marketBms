@@ -117,7 +117,7 @@ export const deliveryWay2 = {
             this.distributorList = res.list;
         }
         })
-        .catch(error => {});
+        .catch(error => {console.error(error)});
     },
     selectFocus(e){
       const value = e.target.value;

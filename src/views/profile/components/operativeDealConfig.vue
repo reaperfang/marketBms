@@ -91,6 +91,7 @@ export default {
             }, 500)
             resolve(response)
           }).catch((err) => {
+            console.error(error)
             reject(err)
           })
       })
@@ -184,6 +185,7 @@ export default {
         }
       })
       .catch(errMsg => {
+        console.error(errMsg)
         this.isHasSms = false
       });
     },

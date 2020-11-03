@@ -452,6 +452,7 @@ export default {
           this.provinceList = response
         })
         .catch(error => {
+          console.error(error)
           this.loading = false;
         });
     },

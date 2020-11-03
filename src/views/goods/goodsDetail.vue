@@ -2685,6 +2685,7 @@ export default {
 
 
             }).catch(error => {
+                console.error(error)
             })
         },
         flatTreeArray(array = [], childrenKey = 'childrenList') {

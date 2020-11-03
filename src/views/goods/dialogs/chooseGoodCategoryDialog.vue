@@ -139,7 +139,7 @@ export default {
             });
           }
         })
-        .catch((err) => {});
+        .catch((err) => {console.error(error)});
     },
     searchCategory(key) {
       let reg,
@@ -290,6 +290,7 @@ export default {
             resolve(res.list);
           })
           .catch((error) => {
+            console.error(error)
             reject(error);
           });
       });

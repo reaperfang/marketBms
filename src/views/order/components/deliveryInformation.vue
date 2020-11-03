@@ -342,6 +342,7 @@ export default {
           this.isTrace = res.isTrace;
         })
         .catch(error => {
+          console.error(error)
           // this.$notify.error({
           //   title: "错误",
           //   message: error
@@ -534,7 +535,7 @@ export default {
             this.dialogVisible = true;
           })
           .catch(error => {
-
+            console.error(error)
           });
       }
     },

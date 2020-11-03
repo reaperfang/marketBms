@@ -118,6 +118,7 @@ export default {
         }
         this.total = res.total
       }).catch((err) => {
+        console.error(err)
         // this.$message.error(err || '获取数据失败')
       }).finally(() => {
         this.loading = false

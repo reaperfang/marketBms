@@ -152,6 +152,7 @@ export default {
         this.submitLoadinig = false;
         this.$store.dispatch('getShopStyle');
       }).catch((error)=>{
+        console.error(error)
         this.submitLoadinig = false;
       });
     }

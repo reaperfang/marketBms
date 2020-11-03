@@ -370,6 +370,7 @@ export default {
           this.total = response.total || 0
           this.loading = false
         }).catch((error)=>{
+          console.error(error);
           this.loading = false
         })
       }

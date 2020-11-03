@@ -382,6 +382,7 @@ export default {
                 this.tableData = res.list
                 this.loading = false
             }).catch(error => {
+                console.error(error)
                 this.visible = false
                 // this.$notify.error({
                 //     title: '错误',

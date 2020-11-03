@@ -557,6 +557,11 @@ table.yuan-table{
   color: $globalMainColor;
 }
 
+//改进度条颜色
+#nprogress .bar{
+  background: #655eff !important;
+}
+
 // 按钮
 .border-button {
   color: $globalMainColor!important;

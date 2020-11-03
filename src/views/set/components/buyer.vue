@@ -166,6 +166,7 @@ export default {
         })
         this.loading = false
       }).catch(error =>{
+        console.error(error)
         this.loading = false
       })
     },

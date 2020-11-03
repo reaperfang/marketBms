@@ -939,6 +939,8 @@ export default {
                   .checkExpress({expressName})
                   .then(res => {
                     val.express = res
+                  }).catch(error => {
+                    console.error(error)
                   })
               }
               

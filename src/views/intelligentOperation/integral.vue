@@ -216,7 +216,7 @@ export default {
                   this.consumTimes = pages;
                 //   this.form.scorePaymentCountRange = value
             }).catch(error =>{
-               
+               console.error(error)
             })
         },
         // 重置

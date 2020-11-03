@@ -523,13 +523,17 @@ export default {
             duration: 0
           });
         }
-      });
+      }).catch(error => {
+        console.error(error)
+      })
     },
     // 待办提醒-商品售罄
     getOverviewSelling() {
       this._apis.overview.overviewSelling({}).then(response => {
         this.toBeSoldOut = response;
-      });
+      }).catch(error => {
+        console.error(error)
+      })
     },
     //常用功能跳转
     linkTo(item) {
@@ -608,7 +612,7 @@ export default {
         .then(response => {
           this.productNews = response.list;
         })
-        .catch(error => {});
+        .catch(error => {console.error(error)});
     },
     //获取帮助中心
     getHelpNews(){
@@ -617,7 +621,7 @@ export default {
         .then(response => {
           this.helpNews = response.list;
         })
-        .catch(error => {});
+        .catch(error => {console.error(error)});
     },
 
     //点击资讯/公告详情
