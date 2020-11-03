@@ -147,7 +147,7 @@ export const deliveryWay2 = {
             this.distributorList = res.list;
           }
         })
-        .catch(error => { });
+        .catch(error => {console.error(error)});
     },
     selectFocus(e) {
       const value = e.target.value;
@@ -318,6 +318,7 @@ export const deliveryWay1More = {
           }
         })
         .catch(error => {
+          console.error(error)
           this.visible = false;
           this.$message.error(error.message);
         });
@@ -512,7 +513,7 @@ export const deliveryWay2More = {
           }
           
           })
-          .catch(error => {});
+          .catch(error => {console.error(error)});
     },
   },
   components: {

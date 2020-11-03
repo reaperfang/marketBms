@@ -209,6 +209,7 @@ export default {
             }, 500)
             resolve(response)
           }).catch((err) => {
+            console.error(error)
             reject(err)
           })
       })

@@ -525,7 +525,7 @@ export default {
                     this.getDistributorList();
                 }
             }).catch(error => {
-
+                console.error(error)
             })
         },
         afterSaleOrderDetail() {
@@ -537,7 +537,7 @@ export default {
                 this.orderInfo = res.orderInfo
                 this.orderSendInfo = res.orderSendInfo
             }).catch(error => {
-
+                console.error(error)
             })
         },
         getOrderDetail() {

@@ -130,6 +130,7 @@ export default {
             callback && callback(response);
             this.loading = false;
         }).catch((error)=>{
+            console.error(error)
             callback && callback(false);
             this.loading = false;
         });

@@ -91,6 +91,7 @@ export default {
         this._apis.map.getParentAreaCode({ tencentCode }).then(response =>{
           resolve(response)
         }).catch(error =>{
+          console.error(error)
           resolve(reject)
         })
       })
@@ -185,6 +186,7 @@ export default {
         this._apis.map.getGeocoder(data).then(response =>{
           resolve(response)
         }).catch(error =>{
+          console.error(error)
           reject(error)
         })
       })
@@ -209,6 +211,7 @@ export default {
         this._apis.map.getSearch(data).then((response)=> {
           resolve(response)
         }).catch((err) => {
+          console.error(error)
           reject(err)
         })
       })

@@ -254,6 +254,8 @@
 						this.qrCodeInfo = res
 						this.dialogVisible = true
 						this.tempInfo = item
+					}).catch(error => {
+						console.error(error)
 					})
 				} else {
 					this.confirm({

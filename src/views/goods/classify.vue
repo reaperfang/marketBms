@@ -86,7 +86,7 @@ export default {
             }).then((res) => {
                 this.onoff = res.onoff
             }).catch(error => {
-
+                console.error(error);
             })
         },
         resetForm(formName) {
@@ -101,6 +101,7 @@ export default {
                 this.categoryData = res
                 this.loading = false
             }).catch(error => {
+                console.error(error);
                 this.loading = false
             })
         },
@@ -317,7 +318,7 @@ export default {
             this._apis.goods.enableCategory({id: node.data.id, enable: _enable}).then((res) => {
                 this.getTreeList()
             }).catch(error => {
-
+                console.error(error);
             })
         },
         recommend(node, data) {
@@ -331,7 +332,7 @@ export default {
             this._apis.goods.recommend({cid: this.cid, id: node.data.id, isRecommend}).then((res) => {
                 this.getTreeList()
             }).catch(error => {
-
+                console.error(error);
             })
         },
         delete(node, data) {
@@ -388,6 +389,7 @@ export default {
                 this.flatArr = this.flatTreeArray(JSON.parse(JSON.stringify(arr)))
                 this.loading = false
             }).catch(error => {
+                console.error(error);
                 this.loading = false
             })
         }

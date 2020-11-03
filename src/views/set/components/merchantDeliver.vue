@@ -549,6 +549,8 @@ export default {
         }).then((res) => {
           this.ruleForm.lng = res.result.location.lng
           this.ruleForm.lat = res.result.location.lat
+        }).catch(eror => {
+          console.error(error)
         })
       }
     },
@@ -811,6 +813,7 @@ export default {
           this.$store.dispatch('getShopInfo');    
           resolve(response)
         }).catch(error =>{
+          console.error(error)
           reject(error)
         })
       })
@@ -920,6 +923,7 @@ export default {
       }).catch(error =>{
         this.isOpen = false
         this.$message.error('保存失败');
+        console.error(error)
         // this.loading = false
       })
     },
@@ -1195,6 +1199,7 @@ export default {
           });
         }
       }).catch(err => {
+        console.error(err)
         this.$message.error('保存失败');
       }).finally(() => {
         this.isLoading = false

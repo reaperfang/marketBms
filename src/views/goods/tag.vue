@@ -184,7 +184,7 @@ export default {
             });
           })
           .catch(error => {
-            
+            console.error(error)
           });
       })
     },
@@ -204,7 +204,7 @@ export default {
             });
           })
           .catch(error => {
-            
+            console.error(error)
           });
       })
     },
@@ -234,7 +234,7 @@ export default {
             type: 'success'
           });
       }).catch(error => {
-
+        console.error(error)
       })
     },
     deleteTag(row) {
@@ -249,7 +249,7 @@ export default {
             });
           })
           .catch(error => {
-            
+            console.error(error)
           });
       })
     },

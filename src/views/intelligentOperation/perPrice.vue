@@ -248,6 +248,8 @@ export default {
             }else{
                 this._apis.data.historyExport(data).then(response => {
                     window.location.href = response
+                }).catch(error => {
+                    console.error(error)
                 })
             }    
         },

@@ -824,7 +824,7 @@ export default {
             })
           }
         })
-        .catch(error => {});
+        .catch(error => {console.error(error)});
     },
     getDetail(selectArr) {
       this._orderDetail(selectArr);

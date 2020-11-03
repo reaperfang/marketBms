@@ -241,7 +241,9 @@ export default {
 
           this.categoryOptions = arr;
         })
-        .catch(error => {});
+        .catch(error => {
+          console.error(error);
+        });
     },
     submit(value) {
       // console.log(value);
@@ -326,6 +328,7 @@ export default {
           this.loading = false;
         })
         .catch(error => {
+          console.error(error);
           this.loading = false;
           // this.$notify.error({
           //     title: '错误',

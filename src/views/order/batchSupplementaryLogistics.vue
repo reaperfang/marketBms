@@ -414,7 +414,7 @@ export default {
             }
             
             })
-            .catch(error => {});
+            .catch(error => {console.error(error)});
     },
     otherInput(index) {
       let item = this.list[index]
@@ -869,6 +869,8 @@ export default {
                     .checkExpress({expressName})
                     .then(res => {
                       val.express = res
+                    }).catch(error => {
+                      console.error(error)
                     })
                 }
 

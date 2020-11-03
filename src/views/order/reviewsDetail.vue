@@ -405,7 +405,7 @@ export default {
           this.orderProductComment = res.orderProductComment;
           this.recordList = res.recordList;
         })
-        .catch(error => {});
+        .catch(error => {console.error(error)});
     }
   },
   components: {

@@ -147,6 +147,7 @@ export default {
         this.total = response.total
         this.loading = false
       }).catch(error =>{
+        console.error(error);
         this.loading = false
         // this.$message.error(error);
       })

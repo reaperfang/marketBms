@@ -106,6 +106,7 @@ export default {
         this._apis.map.getSearch(data).then((response)=> {
           resolve(response)
         }).catch((err) => {
+          console.error(error)
           reject(err)
         })
       })

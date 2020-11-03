@@ -207,6 +207,7 @@ export default {
                             this.createList(response);
                             this.loading = false;
                         }).catch((error)=>{
+                            console.error(error)
                             this.displayList = [];
                         });
                     }

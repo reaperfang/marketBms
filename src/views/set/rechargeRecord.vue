@@ -55,6 +55,7 @@
 						this.price = response.deliverBalance
 					})
 					.catch(error => {
+						console.error(error)
 						this.loading = false;
 					});
 			}

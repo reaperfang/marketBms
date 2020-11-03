@@ -189,6 +189,7 @@ export default {
             }, 500)
             resolve(response)
           }).catch((err) => {
+            console.error(error)
             reject(err)
           })
       })
@@ -270,6 +271,8 @@ export default {
               }).then(() => {
                 this._routeTo('m_templateEdit', {id: item.id});
               })
+            }).catch(error => {
+              console.error(error)
             })
           } else {
             this.confirm({
@@ -307,6 +310,7 @@ export default {
           this.preload(this.templateList, 'photoDetailsUrl');
           resolve(response)
         }).catch((err) => {
+          console.error(error)
           reject(err)
         })
       })
@@ -369,6 +373,8 @@ export default {
               this.hasBeenComplete(id)
               // this._routeTo('m_templateEdit', { id });
             })
+          }).catch(error => {
+            console.error(error)
           })
         } else {
           this.confirm({

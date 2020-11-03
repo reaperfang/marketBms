@@ -82,6 +82,7 @@ export default {
             }, 500)
             resolve(response)
           }).catch((err) => {
+            console.error(error);
             reject(err)
           })
       })
@@ -103,6 +104,7 @@ export default {
           // this.$message.success("保存成功！");
           resolve(response)
         }).catch(error =>{
+          console.error(error);
           reject(error)
         })
       })
@@ -195,6 +197,7 @@ export default {
             resolve(res.list);
           })
           .catch(error => {
+            console.error(error)
             // this.$message.error(error);
             reject(error);
           });

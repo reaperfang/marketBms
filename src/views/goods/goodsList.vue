@@ -633,6 +633,7 @@ export default {
                     // }
                 })
             }).catch(error => {
+                console.error(error)
                 //this.loading = false
             })
         })
@@ -1327,7 +1328,7 @@ export default {
 
                 this.categoryOptions = arr
             }).catch(error => {
-
+                console.error(error)
             })
         },
         getProductCatalogTreeList() {
@@ -1431,6 +1432,8 @@ export default {
                     this.currentDialog = 'EditorUpperAndLowerRacksSpu'
                     this.dialogVisible = true
                 })
+            }).catch(error => {
+                console.error(error)
             })
         },
         moreManageHandler() {
@@ -1479,6 +1482,7 @@ export default {
             this._apis.goods.fetchSpuGoodsList().then((res) => {
                 this.allTotal = +res.total
             }).catch(error => {
+                console.error(error)
                 //this.loading = false
             })
         },
@@ -1537,6 +1541,7 @@ export default {
                     // }
                 })
             }).catch(error => {
+                console.error(error)
                 //this.loading = false
             })
         },
@@ -1548,7 +1553,7 @@ export default {
                 let promise = this._apis.goods.getCategoryDetail({id}).then((res) => {
                     val.categoryName = res.name
                 }).catch(error => {
-
+                    console.error(error)
                 })
 
                 arr.push(promise)
@@ -1582,6 +1587,7 @@ export default {
                                 }
                             }
                         }).catch(error => {
+                            console.error(error)
                             //this.loading = false
                         })
                         this.visible = false
