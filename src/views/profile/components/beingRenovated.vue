@@ -189,7 +189,7 @@ export default {
             }, 500)
             resolve(response)
           }).catch((err) => {
-            console.error(error)
+            console.error(err)
             reject(err)
           })
       })
@@ -310,7 +310,7 @@ export default {
           this.preload(this.templateList, 'photoDetailsUrl');
           resolve(response)
         }).catch((err) => {
-          console.error(error)
+          console.error(err)
           reject(err)
         })
       })

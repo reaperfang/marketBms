@@ -139,7 +139,7 @@ export default {
             });
           }
         })
-        .catch((err) => {console.error(error)});
+        .catch((err) => {console.error(err)});
     },
     searchCategory(key) {
       let reg,

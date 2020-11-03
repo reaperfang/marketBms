@@ -194,7 +194,7 @@ export default {
         this._apis.set.editSelfLiftById(req).then((res) => {
           resolve(res)
         }).catch((err) => {
-          console.error(error)
+          console.error(err)
           reject(err)
         })
       })
@@ -333,7 +333,7 @@ export default {
         this._apis.set.getSelfLiftList(req).then((res) => {     
           resolve(res)
         }).catch((err) => {
-          console.error(error)
+          console.error(err)
           reject(err)
         })
       })

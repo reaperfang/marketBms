@@ -525,7 +525,7 @@ export default {
         this._apis.set.getAddressDefaultSender({ isBindShopsend: 1 }).then((response) => {
           resolve(response)
         }).catch((err) => {
-          console.error(error)
+          console.error(err)
           reject(err)
         })
       })
@@ -536,7 +536,7 @@ export default {
         this._apis.set.getAddressDefaultSender({ isBindThirdsend: 1 }).then((response) => {
           resolve(response)
         }).catch((err) => {
-          console.error(error)
+          console.error(err)
           reject(err)
         })
       })

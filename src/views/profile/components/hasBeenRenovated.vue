@@ -146,7 +146,7 @@ export default {
         this.isBindGzh = response && response.bindWechatAccount === 1 || false
         this.isBindXcx = response && response.bindWechatApplet === 1 || false
       }).catch((err) => {
-        console.error(error);
+        console.error(err);
         this.$message({ message: error, type: 'error' });
       })
     },
@@ -156,7 +156,7 @@ export default {
         // console.log('getSmallQRcode',response)
         this.smallQRcode = response ? `data:image/png;base64,${response}` : ''
       }).catch((err) => {
-        console.error(error);
+        console.error(err);
         this.$message({ message: error, type: 'error' });
       })
     },
@@ -205,7 +205,7 @@ export default {
             }, 500)
             resolve(response)
           }).catch((err) => {
-            console.error(error)
+            console.error(err)
             reject(err)
           })
       })

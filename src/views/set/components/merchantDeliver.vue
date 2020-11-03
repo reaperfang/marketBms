@@ -550,7 +550,7 @@ export default {
           this.ruleForm.lng = res.result.location.lng
           this.ruleForm.lat = res.result.location.lat
         }).catch(eror => {
-          console.error(error)
+          console.error(eror)
         })
       }
     },
