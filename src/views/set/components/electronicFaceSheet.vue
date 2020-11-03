@@ -181,6 +181,7 @@ export default {
           this.loading = false
         })
         .catch(error => {
+          console.error(error)
           this.visible = false;
           // this.$message.error(error);
           this.loading = false

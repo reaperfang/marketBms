@@ -530,6 +530,7 @@ export default {
                         });
                 this.$emit('submit')
             }).catch(error => {
+                console.error(error)
                 this.$message.error({
                     message: error,
                     type: 'error'
@@ -565,6 +566,7 @@ export default {
                         });
                 this.$emit('submit')
             }).catch(error => {
+                console.error(error)
                 this.$message.error({
                     message: error,
                     type: 'error'

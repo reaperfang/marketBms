@@ -45,6 +45,7 @@ export default {
         this.showTab = true
       }
     }).catch((error)=>{
+      console.error(error);
     })
   },
   destroyed() {

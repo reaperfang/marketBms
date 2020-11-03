@@ -96,6 +96,7 @@ export default {
           this.$store.dispatch('getShopInfo');    
           resolve(response)
         }).catch(error =>{
+          console.error(error)
           reject(error)
         })
       })

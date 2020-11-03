@@ -269,6 +269,7 @@ export default {
                         this.loading = false;
                         this.deleteShow = false;
                     }).catch((error)=>{
+                      console.error(error)
                         this.displayList = [];
                     });
                 }

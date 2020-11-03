@@ -134,6 +134,8 @@ export default {
         getReasons(){
             this._apis.data.getReasons().then(response => {
                 this.reasons = response
+            }).catch(error => {
+                console.error(error)
             })
         },
         // 获取维权全部数据
@@ -194,6 +196,8 @@ export default {
             }else{
                 this._apis.data.exportOfrights(this.form).then(response => {
                     window.location.href = response
+                }).catch(error => {
+                    console.error(error)
                 })
             }
         },

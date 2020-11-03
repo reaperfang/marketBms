@@ -163,6 +163,7 @@ export default {
         })
         this.total = response.total
       }).catch(error =>{
+        console.error(error)
         this.loading = false
       })
     },

@@ -94,7 +94,6 @@ export default {
                 }
             }
             this._apis.client.editCreditRegular(params).then((response) => {
-                console.log(1);
                 this.$message({
                     message: '保存成功',
                     type: 'success'

@@ -448,6 +448,7 @@ export default {
             resolve(response);
           })
           .catch(error => {
+            console.error(error)
             reject(error);
           });
       });

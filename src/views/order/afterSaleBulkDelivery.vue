@@ -453,7 +453,7 @@ export default {
             }
             
             })
-            .catch(error => {});
+            .catch(error => {console.error(error)});
     },
     checkExpress(index) {
       let expressCompanyCodes

@@ -52,7 +52,7 @@ export default {
 
                 this.categoryOptions = arr
             }).catch(error => {
-
+                console.error(error)
             })
         },
         submit() {
@@ -75,6 +75,7 @@ export default {
                     this.onSubmit()
                     this.visible = false
                 }).catch(error => {
+                    console.error(error)
                     this.visible = false
                 })
             }).catch(error => {
